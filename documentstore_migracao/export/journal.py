@@ -1,14 +1,13 @@
 """ module to export journal data """
 
-import requests
-
 from xylose.scielodocument import Journal
 from documentstore_migracao import config
+from documentstore_migracao.utils import request
 
 
 def ext_identifiers():
 
-    journals_id = requests.get(
+    journals_id = request.get(
         "%s/journal/identifiers/" % config.AM_URL_API,
         params={"collection": config.SCIELO_COLLECTION},
     ).json()
@@ -18,7 +17,7 @@ def ext_identifiers():
 
 def ext_journal(issn):
 
-    journal = requests.get(
+    journal = request.get(
         "%s/journal" % config.AM_URL_API,
         params={"collection": config.SCIELO_COLLECTION, "issn": issn},
     ).json()

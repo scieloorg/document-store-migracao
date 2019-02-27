@@ -26,7 +26,7 @@ def configure_logger():
                     "class": "logging.handlers.RotatingFileHandler",
                     "formatter": "default",
                     "filename": os.path.join(config.LOGGER_PATH, "migracao.log"),
-                    "maxBytes": 1024,
+                    "maxBytes": 10 * 1024,
                     "backupCount": 3,
                 },
             },

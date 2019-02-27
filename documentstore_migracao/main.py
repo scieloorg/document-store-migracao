@@ -5,7 +5,7 @@ import sys
 import os, logging
 
 
-from documentstore_migracao.processing import extrated, reading
+from documentstore_migracao.processing import extrated, reading, conversion
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +17,29 @@ def main():
     parser = argparse.ArgumentParser(description="Document Store (Kernel) - Migração")
 
     parser.add_argument(
-        "--all", "-a", default="True", help="Processa todos os periodicos"
+        "--extrateFiles",
+        "-e",
+        action="store_true",
+        help="Baixa todos os XML dos periodicos",
+    )
+    parser.add_argument(
+        "--readFiles",
+        "-r",
+        action="store_true",
+        help="Processa somente os arquivos XML baixados",
+    )
+    parser.add_argument(
+        "--conversionFiles",
+        "-c",
+        action="store_true",
+        help="Converte somente os arquivos XML baixados",
     )
 
     parser.add_argument(
         "--issn-journal", "-j", help="Processa somente o journal informado"
+    )
+    parser.add_argument(
+        "--pathFile", "-p", help="Transformar somente o arquivos XML imformado"
     )
 
     parser.add_argument("--version", "-v", action="version", version=packtools_version)
@@ -34,19 +52,20 @@ def main():
     logger = logging.getLogger()
     logger.setLevel(level)
 
+    if args.readFiles:
+        reading.reading_article_ALLxml()
 
-    reading.reading_article_xml()
+    elif args.conversionFiles:
+        conversion.conversion_article_ALLxml()
 
+    elif args.extrateFiles:
+        extrated.extrated_all_data()
 
-#    if args.issn_journal:
-#        extrated.extrated_jornal_data(args.issn_journal)
-#        return
+    elif args.pathFile:
+        conversion.conversion_article_xml(args.pathFile)
 
-#    if args.all:
-#        extrated.extrated_all_data()
-#        return
-
-
+    elif args.issn_journal:
+        extrated.extrated_jornal_data(args.issn_journal)
 
 
 if __name__ == "__main__":
