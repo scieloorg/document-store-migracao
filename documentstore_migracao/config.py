@@ -11,14 +11,3 @@ SUCCESS_PROCESSING_PATH = os.path.join(BASE_PATH, "xml/sucess")
 LOGGER_PATH = os.path.join(BASE_PATH, "")
 
 INITIAL_PATH = [LOGGER_PATH, SOURCE_PATH, SUCCESS_PROCESSING_PATH, CONVERSION_PATH]
-
-
-TAG_HTML_FROM_TO = {
-    "div": "sec",
-    "img": "graphic",
-    "li": "list-item",
-    "ol": "list",
-    "ul": "list",
-    "i": "italic",
-    "b": "bold",
-}

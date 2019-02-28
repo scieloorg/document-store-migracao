@@ -2,18 +2,18 @@
 
 import re
 import logging
-import unicodedata
 
+from html.parser import HTMLParser
 from lxml import etree
-from documentstore_migracao import config
+from documentstore_migracao.utils.convert_html_body import ConvertHTMLBody
 
 logger = logging.getLogger(__name__)
 
 
 def str2objXML(string):
-    return etree.fromstring(
-        "<div>%s</div>" % (unicodedata.normalize("NFKD", " ".join(string.split())))
-    )
+    parser = HTMLParser()
+    txt = parser.unescape(" ".join(string.split()))
+    return etree.fromstring("<div>%s</div>" % (txt))
 
 
 def find_medias(obj_xml):
@@ -40,11 +40,7 @@ def find_medias(obj_xml):
 def parcer_body_xml(obj_xml):
 
     txt_body = getattr(obj_xml.find("body/p"), "text", "")
-    regex = r"(<\s*\/?\s*)(%s)(\s*([^>]*)?\s*>)"
-
-    for tag, new_tag in config.TAG_HTML_FROM_TO.items():
-        txt_body = re.sub(regex % tag, r"\1%s\3" % new_tag, txt_body)
-
-    html = str2objXML(txt_body)
+    convert = ConvertHTMLBody(txt_body)
+    html = convert.get_body_element()
 
     return html

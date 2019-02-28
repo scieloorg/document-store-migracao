@@ -5,7 +5,6 @@ from lxml import etree
 from documentstore_migracao.utils import files, xml
 from documentstore_migracao import config
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -15,6 +14,7 @@ def conversion_article_xml(file_xml_path):
         article = files.read_file(file_xml_path)
 
         obj_xml = etree.fromstring(article)
+
         obj_html_body = xml.parcer_body_xml(obj_xml)
 
         remove = obj_xml.find("body/p")
