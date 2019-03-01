@@ -65,7 +65,7 @@ def main():
         conversion.conversion_article_xml(args.pathFile)
 
     elif args.issn_journal:
-        extrated.extrated_jornal_data(args.issn_journal)
+        extrated.extrated_selected_journal(args.issn_journal)
 
 
 if __name__ == "__main__":

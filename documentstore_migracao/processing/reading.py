@@ -12,21 +12,16 @@ logger = logging.getLogger(__name__)
 def reading_article_xml(file_xml_path, move_success=True):
 
     article = files.read_file(file_xml_path)
-    try:
-        obj_xml = etree.fromstring(article)
-        medias = xml.find_medias(obj_xml)
+    obj_xml = etree.fromstring(article)
+    medias = xml.find_medias(obj_xml)
 
-        if medias:
-            logger.info("%s possui midias", file_xml_path)
-
-    except Exception as ex:
-        logger.error(file_xml_path)
-        logger.exception(ex)
-
-        move_success = False
+    if medias:
+        logger.info("%s possui midias", file_xml_path)
 
     if move_success:
-        move_xml_conversion2success(file_xml_path.replce(config.CONVERSION_PATH, ""))
+        files.move_xml_conversion2success(
+            file_xml_path.replace(config.CONVERSION_PATH, "")
+        )
 
 
 def reading_article_ALLxml():
@@ -41,4 +36,5 @@ def reading_article_ALLxml():
             )
 
         except Exception as ex:
+            logger.error(file_xml)
             logger.exception(ex)

@@ -6,7 +6,7 @@ from copy import deepcopy
 logger = logging.getLogger(__name__)
 
 
-class ConvertHTMLBody:
+class Convert2SPSBody:
 
     parser_tags = ("p", "div", "img", "li", "ol", "ul", "i", "b", "a")
 
@@ -31,7 +31,7 @@ class ConvertHTMLBody:
 
     def parser_div(self, node):
         node.tag = "sec"
-        _id = node.attrib.pop("id", "node")
+        _id = node.attrib.pop("id", None)
         node.attrib.clear()
         if _id:
             node.set("id", _id)
@@ -64,11 +64,16 @@ class ConvertHTMLBody:
 
     def parser_a(self, node):
         _attrib = deepcopy(node.attrib)
-        href = _attrib.pop("href", "")
+        try:
+            href = _attrib.pop("href")
+        except KeyError:
+            logger.info("Tag 'a' sem href removendo node do xml")
+            node.getparent().remove(node)
+            return
 
         if "mailto" in href:
             node.tag = "email"
-            note.text = href.replace("mailto:", "")
+            node.text = href.replace("mailto:", "")
             _attrib = {}
 
         elif "http://" in href:

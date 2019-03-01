@@ -21,8 +21,8 @@ def setup_processing_folder():
 def move_xml_conversion2success(xml_file):
 
     shutil.move(
-        os.path.join(config.CONVERSION_PATH, xml_souce),
-        os.path.join(config.SUCCESS_PROCESSING, xml_success),
+        os.path.join(config.CONVERSION_PATH, xml_file),
+        os.path.join(config.SUCCESS_PROCESSING_PATH, xml_file),
     )
 
 
