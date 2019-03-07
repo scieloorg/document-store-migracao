@@ -8,5 +8,7 @@ before_install:
     - pip install --upgrade setuptools pip
     - pip install -r requirements.txt
 install: python setup.py install
-script: python setup.py test -q
-
+script:
+  - coverage run setup.py test
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
