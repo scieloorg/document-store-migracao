@@ -12,7 +12,11 @@ logger = logging.getLogger(__name__)
 
 def str2objXML(string):
     _string = unicodedata.normalize("NFKD", " ".join(string.split()))
-    return etree.fromstring("<div>%s</div>" % (string))
+    try:
+        return etree.fromstring("<div>%s</div>" % (string))
+    except etree.XMLSyntaxError as e:
+        logger.exception(e)
+        return etree.fromstring("<div></div>")
 
 
 def find_medias(obj_xml):
