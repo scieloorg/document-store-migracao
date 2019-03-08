@@ -20,19 +20,20 @@ def reading_article_xml(file_xml_path, move_success=True):
 
     if move_success:
         files.move_xml_conversion2success(
-            file_xml_path.replace(config.CONVERSION_PATH, "")
+            file_xml_path.replace(config.get("CONVERSION_PATH"), "")
         )
 
 
 def reading_article_ALLxml():
 
     logger.info("Iniciando Leituras do xmls")
-    list_files_xmls = files.list_dir(config.CONVERSION_PATH)
+    list_files_xmls = files.list_dir(config.get("CONVERSION_PATH"))
     for file_xml in list_files_xmls:
 
         try:
             reading_article_xml(
-                os.path.join(config.CONVERSION_PATH, file_xml), move_success=False
+                os.path.join(config.get("CONVERSION_PATH"), file_xml),
+                move_success=False,
             )
 
         except Exception as ex:

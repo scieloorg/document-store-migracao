@@ -8,27 +8,27 @@ logger = logging.getLogger(__name__)
 
 def ext_identifiers(issn_journal):
     articles_id = request.get(
-        "%s/article/identifiers/" % config.AM_URL_API,
-        params={"collection": config.SCIELO_COLLECTION, "issn": issn_journal},
+        "%s/article/identifiers/" % config.get("AM_URL_API"),
+        params={"collection": config.get("SCIELO_COLLECTION"), "issn": issn_journal},
     ).json()
     return articles_id
 
 
 def ext_article(code, **ext_params):
     params = ext_params
-    params.update({"collection": config.SCIELO_COLLECTION, "code": code})
+    params.update({"collection": config.get("SCIELO_COLLECTION"), "code": code})
 
-    article = request.get("%s/article" % config.AM_URL_API, params=params)
+    article = request.get("%s/article" % config.get("AM_URL_API"), params=params)
     return article
 
 
 def ext_article_json(code, **ext_params):
-    article = ext_article(code).json()
+    article = ext_article(code, **ext_params).json()
     return article
 
 
 def ext_article_txt(code, **ext_params):
-    article = ext_article(code, body="true", format="xmlrsps").text
+    article = ext_article(code, body="true", format="xmlrsps", **ext_params).text
     return article
 
 

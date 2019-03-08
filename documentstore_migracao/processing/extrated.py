@@ -16,7 +16,8 @@ def extrated_journal_data(obj_journal):
 
         logger.info("\t Salvando arquivo '%s'", name_article)
         files.write_file(
-            os.path.join(config.SOURCE_PATH, "%s.xml" % name_article), xml_article
+            os.path.join(config.get("SOURCE_PATH"), "%s.xml" % name_article),
+            xml_article,
         )
     logger.info("\t Total de %s artigos", len(list_articles))
 

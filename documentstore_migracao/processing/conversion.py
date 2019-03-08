@@ -19,7 +19,7 @@ def conversion_article_xml(file_xml_path):
     remove.getparent().replace(remove, obj_html_body)
 
     new_file_xml_path = os.path.join(
-        config.CONVERSION_PATH, os.path.split(file_xml_path)[1]
+        config.get("CONVERSION_PATH"), os.path.split(file_xml_path)[1]
     )
     files.write_file(new_file_xml_path, etree.tostring(obj_xml).decode("utf-8"))
 
@@ -27,11 +27,11 @@ def conversion_article_xml(file_xml_path):
 def conversion_article_ALLxml():
 
     logger.info("Iniciando Conversão do xmls")
-    list_files_xmls = files.list_dir(config.SOURCE_PATH)
+    list_files_xmls = files.list_dir(config.get("SOURCE_PATH"))
     for file_xml in list_files_xmls:
 
         try:
-            conversion_article_xml(os.path.join(config.SOURCE_PATH, file_xml))
+            conversion_article_xml(os.path.join(config.get("SOURCE_PATH"), file_xml))
 
         except Exception as ex:
             logger.error(file_xml)

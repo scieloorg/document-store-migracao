@@ -8,8 +8,8 @@ from documentstore_migracao.utils import request
 def ext_identifiers():
 
     journals_id = request.get(
-        "%s/journal/identifiers/" % config.AM_URL_API,
-        params={"collection": config.SCIELO_COLLECTION},
+        "%s/journal/identifiers/" % config.get("AM_URL_API"),
+        params={"collection": config.get("SCIELO_COLLECTION")},
     ).json()
     return journals_id
 
@@ -17,8 +17,8 @@ def ext_identifiers():
 def ext_journal(issn):
 
     journal = request.get(
-        "%s/journal" % config.AM_URL_API,
-        params={"collection": config.SCIELO_COLLECTION, "issn": issn},
+        "%s/journal" % config.get("AM_URL_API"),
+        params={"collection": config.get("SCIELO_COLLECTION"), "issn": issn},
     ).json()
     return Journal(journal[0])
 

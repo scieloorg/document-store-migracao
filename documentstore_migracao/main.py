@@ -10,7 +10,7 @@ from documentstore_migracao.processing import extrated, reading, conversion
 logger = logging.getLogger(__name__)
 
 
-def main():
+def process(args):
     """ method to main process """
 
     packtools_version = pkg_resources.get_distribution("documentstore-migracao").version
@@ -45,7 +45,7 @@ def main():
     parser.add_argument("--version", "-v", action="version", version=packtools_version)
     parser.add_argument("--loglevel", default="WARNING")
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     # CHANGE LOGGER
     level = getattr(logging, args.loglevel.upper())
@@ -67,6 +67,13 @@ def main():
     elif args.issn_journal:
         extrated.extrated_selected_journal(args.issn_journal)
 
+    return 0
+
+
+def main():
+    """ method main to script setup.py """
+    sys.exit(process(sys.argv[1:]))
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(process(sys.argv[1:]))

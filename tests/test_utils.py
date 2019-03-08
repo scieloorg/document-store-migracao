@@ -5,14 +5,12 @@ from lxml import etree
 
 from documentstore_migracao.utils import files, xml, request
 from documentstore_migracao.utils.convert_html_body import Convert2SPSBody
-
-
-SAMPLES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "samples")
+from . import SAMPLES_PATH
 
 
 class TestUtilsFiles(unittest.TestCase):
     def test_list_dir(self):
-        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), 4)
+        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), 6)
 
     def test_read_file(self):
         data = files.read_file(
