@@ -225,6 +225,8 @@ class HTML2SPSPipeline(object):
     class TdPPipe(plumber.Pipe):
         def parser_node(self, node):
             etree.strip_tags(node, "p")
+            etree.strip_tags(node, "span")
+            etree.strip_tags(node, "small")
             _attrib = deepcopy(node.attrib)
 
             # REMOVE WIDTH AND HEIGHT

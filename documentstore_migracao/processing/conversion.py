@@ -13,6 +13,7 @@ def conversion_article_xml(file_xml_path):
 
     obj_xml = etree.fromstring(article)
     obj_xml.set("specific-use", "sps-1.8")
+    obj_xml.set("dtd-version", "1.1")
 
     obj_html_body = xml.parser_body_xml(obj_xml)
 
