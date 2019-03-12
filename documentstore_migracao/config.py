@@ -1,4 +1,5 @@
 import os
+from packtools.catalogs import XML_CATALOG
 
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 
@@ -17,6 +18,10 @@ INITIAL_PATH = [
     _default["SUCCESS_PROCESSING_PATH"],
     _default["CONVERSION_PATH"],
 ]
+
+DOC_TYPE_XML = """<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.0 20120330//EN" "JATS-journalpublishing1.dtd">"""
+
+os.environ["XML_CATALOG_FILES"] = XML_CATALOG
 
 
 def get(config):

@@ -12,16 +12,28 @@ def conversion_article_xml(file_xml_path):
     article = files.read_file(file_xml_path)
 
     obj_xml = etree.fromstring(article)
+    obj_xml.set("specific-use", "sps-1.8")
+
     obj_html_body = xml.parser_body_xml(obj_xml)
 
     # sobrecreve o html escapado anterior pelo novo xml tratado
-    remove = obj_xml.find("body/p")
+    remove = obj_xml.find("body")
     remove.getparent().replace(remove, obj_html_body)
 
     new_file_xml_path = os.path.join(
         config.get("CONVERSION_PATH"), os.path.split(file_xml_path)[1]
     )
-    files.write_file(new_file_xml_path, etree.tostring(obj_xml).decode("utf-8"))
+    files.write_file(
+        new_file_xml_path,
+        etree.tostring(
+            obj_xml,
+            doctype=config.DOC_TYPE_XML,
+            pretty_print=True,
+            xml_declaration=True,
+            encoding="utf-8",
+            method="xml",
+        ).decode("utf-8"),
+    )
 
 
 def conversion_article_ALLxml():

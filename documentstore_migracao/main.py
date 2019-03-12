@@ -5,7 +5,7 @@ import sys
 import os, logging
 
 
-from documentstore_migracao.processing import extrated, reading, conversion
+from documentstore_migracao.processing import extrated, reading, conversion, validation
 
 logger = logging.getLogger(__name__)
 
@@ -26,13 +26,19 @@ def process(args):
         "--readFiles",
         "-r",
         action="store_true",
-        help="Processa somente os arquivos XML baixados",
+        help="Processa todos os arquivos XML baixados",
     )
     parser.add_argument(
         "--conversionFiles",
         "-c",
         action="store_true",
-        help="Converte somente os arquivos XML baixados",
+        help="Converte todos os arquivos XML baixados",
+    )
+    parser.add_argument(
+        "--validationFiles",
+        "-V",
+        action="store_true",
+        help="Converte todos os arquivos XML baixados",
     )
 
     parser.add_argument(
@@ -41,8 +47,11 @@ def process(args):
     parser.add_argument(
         "--pathFile", "-p", help="Transformar somente o arquivos XML imformado"
     )
+    parser.add_argument(
+        "--valideFile", "-v", help="Valida somente o arquivos XML imformado"
+    )
 
-    parser.add_argument("--version", "-v", action="version", version=packtools_version)
+    parser.add_argument("--version", action="version", version=packtools_version)
     parser.add_argument("--loglevel", default="WARNING")
 
     args = parser.parse_args(args)
@@ -61,8 +70,14 @@ def process(args):
     elif args.extrateFiles:
         extrated.extrated_all_data()
 
+    elif args.validationFiles:
+        validation.validator_article_ALLxml()
+
     elif args.pathFile:
         conversion.conversion_article_xml(args.pathFile)
+
+    elif args.valideFile:
+        validation.validator_article_xml(args.valideFile)
 
     elif args.issn_journal:
         extrated.extrated_selected_journal(args.issn_journal)

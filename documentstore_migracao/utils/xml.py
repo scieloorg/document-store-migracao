@@ -5,7 +5,7 @@ import logging
 import unicodedata
 
 from lxml import etree
-from documentstore_migracao.utils.convert_html_body import Convert2SPSBody
+from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
 
 logger = logging.getLogger(__name__)
 
@@ -13,10 +13,10 @@ logger = logging.getLogger(__name__)
 def str2objXML(string):
     _string = unicodedata.normalize("NFKD", " ".join(string.split()))
     try:
-        return etree.fromstring("<div>%s</div>" % (string))
+        return etree.fromstring("<body>%s</body>" % (string))
     except etree.XMLSyntaxError as e:
         logger.exception(e)
-        return etree.fromstring("<div></div>")
+        return etree.fromstring("<body></body>")
 
 
 def find_medias(obj_xml):
@@ -43,7 +43,7 @@ def find_medias(obj_xml):
 def parser_body_xml(obj_xml):
 
     txt_body = getattr(obj_xml.find("body/p"), "text", "")
-    convert = Convert2SPSBody(txt_body)
-    html = convert.get_body_element()
+    convert = HTML2SPSPipeline()
+    html = convert.deploy(txt_body)
 
-    return html
+    return html[1]

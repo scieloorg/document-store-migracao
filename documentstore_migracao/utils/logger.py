@@ -10,7 +10,7 @@ def configure_logger():
             "version": 1,
             "formatters": {
                 "default": {
-                    "format": "%(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s",
+                    "format": "%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s",
                     "datefmt": "%Y-%m-%d %H:%M:%S",
                 }
             },
@@ -26,7 +26,7 @@ def configure_logger():
                     "class": "logging.handlers.RotatingFileHandler",
                     "formatter": "default",
                     "filename": os.path.join(config.get("LOGGER_PATH"), "migracao.log"),
-                    "maxBytes": 10 * 1024,
+                    "maxBytes": 100 * 1024 * 1024,
                     "backupCount": 3,
                 },
             },
