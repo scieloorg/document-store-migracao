@@ -114,10 +114,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.ImgPipe())
 
         nodes = transformed.findall('.//graphic')
+
         self.assertEqual(len(nodes), 2)
         for node, href in zip(nodes, ["a04qdr04.gif", "a04qdr08.gif"]):
             with self.subTest(node=node):
-                self.assertEqual(href, node.attrib["{http://www.w3.org/1999/xlink}href"])
+                self.assertEqual(
+                    href, node.attrib["{http://www.w3.org/1999/xlink}href"]
+                )
                 self.assertEqual(len(node.attrib), 1)
 
     def test_pipe_li(self):

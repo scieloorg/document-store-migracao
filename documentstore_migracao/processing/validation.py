@@ -21,8 +21,9 @@ def validator_article_xml(file_xml_path, print_error=True):
             if print_error:
                 logger.error("%s - %s - %s", error.level, error.line, error.message)
 
-            result.setdefault(error.message, 0)
-            result[error.message] += 1
+            message = error.message[:60]
+            result.setdefault(message, 0)
+            result[message] += 1
 
     return result
 
@@ -33,7 +34,7 @@ def validator_article_ALLxml():
     list_files_xmls = files.list_dir(config.get("CONVERSION_PATH"))
 
     result = {}
-    for file_xml in list_files_xmls[:10]:
+    for file_xml in list_files_xmls:
 
         try:
             errors = validator_article_xml(
@@ -49,5 +50,5 @@ def validator_article_ALLxml():
             raise
 
     analase = sorted(result.items(), key=lambda x: x[1], reverse=True)
-    for k_result, v_result in result.items():
+    for k_result, v_result in analase:
         logger.error("%s - %s", k_result, v_result)

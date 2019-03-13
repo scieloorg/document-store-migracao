@@ -21,6 +21,7 @@ class HTML2SPSPipeline(object):
             self.SetupPipe(),
             self.FontPipe(),
             self.RemoveEmptyPipe(),
+            self.RemoveStyleAttributesPipe(),
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
@@ -35,6 +36,7 @@ class HTML2SPSPipeline(object):
             self.APipe(),
             self.StrongPipe(),
             self.TdCleanPipe(),
+            self.BlockquotePipe(),
         )
 
     class SetupPipe(plumber.Pipe):
@@ -67,6 +69,24 @@ class HTML2SPSPipeline(object):
             logger.info("Total de %s tags em branco removidas", count)
             return data
 
+    class RemoveStyleAttributesPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+
+            count = 0
+            for node in xml.xpath("*"):
+                _attrib = deepcopy(node.attrib)
+                style = _attrib.pop("style", None)
+                if style:
+                    count += 1
+                    logger.debug("removendo style da tag '%s'", node.tag)
+
+                node.attrib.clear()
+                node.attrib.update(_attrib)
+
+            logger.info("Total de %s tags com style", count)
+            return data
+
     class BRPipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
@@ -83,6 +103,8 @@ class HTML2SPSPipeline(object):
             node.attrib.clear()
             if _id:
                 node.set("id", _id)
+
+            etree.strip_tags(node, "big")
 
         def transform(self, data):
             raw, xml = data
@@ -156,6 +178,7 @@ class HTML2SPSPipeline(object):
         def parser_node(self, node):
             etree.strip_tags(node, "break")
             node.tag = "italic"
+            node.attrib.clear()
 
         def transform(self, data):
             raw, xml = data
@@ -166,6 +189,10 @@ class HTML2SPSPipeline(object):
     class BPipe(plumber.Pipe):
         def parser_node(self, node):
             node.tag = "bold"
+            etree.strip_tags(node, "break")
+            etree.strip_tags(node, "span")
+            etree.strip_tags(node, "p")
+            node.attrib.clear()
 
         def transform(self, data):
             raw, xml = data
@@ -174,7 +201,6 @@ class HTML2SPSPipeline(object):
             return data
 
     class APipe(plumber.Pipe):
-
         def parser_node(self, node):
             _attrib = deepcopy(node.attrib)
             try:
@@ -184,12 +210,18 @@ class HTML2SPSPipeline(object):
                 node.getparent().remove(node)
                 return
 
-            if "mailto" in href:
+            if "mailto" in href or "@" in href:
                 node.tag = "email"
                 node.text = href.replace("mailto:", "")
                 _attrib = {}
 
-            elif href.startswith('http'):
+            elif (
+                href.startswith("http")
+                or href.startswith("/")
+                or href.startswith("../")
+                or href.startswith("www")
+                or href.startswith("file")
+            ):
                 node.tag = "ext-link"
                 _attrib.update(
                     {"ext-link-type": "uri", "{http://www.w3.org/1999/xlink}href": href}
@@ -199,13 +231,10 @@ class HTML2SPSPipeline(object):
 
                 root = node.getroottree()
                 ref_node = root.findall("//*[@id='%s']" % href)
-
-                _attrib.update(
-                    {
-                        "rid": href.replace("#", ""),
-                        "ref-type": ref_node and ref_node.tag or "author-notes",
-                    }
-                )
+                if ref_node:
+                    _attrib.update(
+                        {"rid": href.replace("#", ""), "ref-type": ref_node.tag}
+                    )
 
             node.attrib.clear()
             node.attrib.update(_attrib)
@@ -219,6 +248,9 @@ class HTML2SPSPipeline(object):
     class StrongPipe(plumber.Pipe):
         def parser_node(self, node):
             node.tag = "bold"
+            node.attrib.clear()
+            etree.strip_tags(node, "span")
+            etree.strip_tags(node, "p")
 
         def transform(self, data):
             raw, xml = data
@@ -253,6 +285,8 @@ class HTML2SPSPipeline(object):
     class EmPipe(plumber.Pipe):
         def parser_node(self, node):
             node.tag = "italic"
+            node.attrib.clear()
+            etree.strip_tags(node, "break")
 
         def transform(self, data):
             raw, xml = data
@@ -268,6 +302,16 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "u", self.parser_node)
+            return data
+
+    class BlockquotePipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.tag = "disp-quote"
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "blockquote", self.parser_node)
             return data
 
     def deploy(self, raw):
