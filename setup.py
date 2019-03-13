@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 import os, setuptools
 
+
+def fix(item):
+    if '==' in item:
+        return item.replace('==', '>=')
+    if item.startswith('-e'):
+        return item[item.rfind('=')+1:]
+    return item
+
+
 setup_path = os.path.dirname(__file__)
 
 with open(os.path.join(setup_path, "README.md")) as readme:
@@ -8,6 +17,7 @@ with open(os.path.join(setup_path, "README.md")) as readme:
 
 with open(os.path.join(setup_path, "requirements.txt")) as f:
     install_requires = f.read().splitlines()
+    install_requires = [fix(item) for item in install_requires]
 
 
 setuptools.setup(
@@ -26,7 +36,7 @@ setuptools.setup(
     python_requires=">=3.6",
     install_requires=install_requires,
     test_suite="tests",
-    classifiers=(
+    classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Environment :: Other Environment",
         "License :: OSI Approved :: BSD License",
@@ -34,7 +44,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3 :: Only",
         "Operating System :: OS Independent",
-    ),
+    ],
     entry_points="""\
         [console_scripts]
             documentstore_migracao=documentstore_migracao.main:main
