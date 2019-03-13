@@ -120,6 +120,7 @@ class HTML2SPSPipeline(object):
     class LiPipe(plumber.Pipe):
         def parser_node(self, node):
             node.tag = "list-item"
+            node.attrib.clear()
 
         def transform(self, data):
             raw, xml = data
