@@ -68,6 +68,7 @@ class TestExportArticle(unittest.TestCase):
             "S0036-36341997000100001", body="true", format="xmlrsps"
         )
 
+    @unittest.skip("acesso ao article meta")    
     @patch("documentstore_migracao.export.article.ext_identifiers")
     def test_get_all_articles_notXML(self, mk_ext_identifiers):
 
