@@ -171,6 +171,7 @@ class HTML2SPSPipeline(object):
             return data
 
     class APipe(plumber.Pipe):
+
         def parser_node(self, node):
             _attrib = deepcopy(node.attrib)
             try:
@@ -185,7 +186,7 @@ class HTML2SPSPipeline(object):
                 node.text = href.replace("mailto:", "")
                 _attrib = {}
 
-            elif "http://" in href:
+            elif href.startswith('http'):
                 node.tag = "ext-link"
                 _attrib.update(
                     {"ext-link-type": "uri", "{http://www.w3.org/1999/xlink}href": href}

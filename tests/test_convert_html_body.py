@@ -4,7 +4,7 @@ from unittest.mock import patch
 from lxml import etree
 
 from documentstore_migracao.utils import files, xml, request
-from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
+from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline, _process
 from . import SAMPLES_PATH
 
 
@@ -133,82 +133,209 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                     text,
                     etree.tostring(node))
                 self.assertEqual(len(node.attrib), 0)
-"""
-
-    def test_pipe_li(self):
-        node = self.etreeXML.find(".//li")
-        data = self.etreeXML, node
-        self.pipeline.LiPipe().transform(data)
-
-        self.assertEqual(node.tag, "list-item")
 
     def test_pipe_ol(self):
-        node = self.etreeXML.find(".//ol")
-        data = self.etreeXML, node
-        self.pipeline.OlPipe().transform(data)
+        text = """
+            <root>
+            <ol>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <b>li</b> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <b>li</b> 2</li>
+            </ol>
+            <ol>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <b>li</b> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <b>li</b> 2</li>
+            </ol>
+            </root>
+        """
+        raw, transformed = self._transform(text, self.pipeline.OlPipe())
 
-        self.assertEqual("order", node.attrib["list-type"])
+        nodes = transformed.findall('.//list')
+        self.assertEqual(len(nodes), 2)
+        for node in nodes:
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 1)
+                self.assertEqual(node.attrib['list-type'], 'order')
 
     def test_pipe_ul(self):
-        node = self.etreeXML.find(".//ul")
-        data = self.etreeXML, node
-        self.pipeline.UlPipe().transform(data)
+        text = """
+            <root>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <b>li</b> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <b>li</b> 2</li>
+            </ul>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <b>li</b> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <b>li</b> 2</li>
+            </ul>
+            </root>
+        """
+        raw, transformed = self._transform(text, self.pipeline.UlPipe())
 
-        self.assertEqual("bullet", node.attrib["list-type"])
+        nodes = transformed.findall('.//list')
+        self.assertEqual(len(nodes), 2)
+        for node in nodes:
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 1)
+                self.assertEqual(node.attrib['list-type'], 'bullet')
 
     def test_pipe_i(self):
-        node = self.etreeXML.find(".//i")
-        data = self.etreeXML, node
-        self.pipeline.IPipe().transform(data)
+        text = """
+            <root>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <i>texto 1</i> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <i>texto <b>2</b></i> 2</li>
+            </ul>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <i><b>texto S</b></i> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <i><b>texto</b> G</i> 2</li>
+            </ul>
+            </root>
+        """
+        raw, transformed = self._transform(text, self.pipeline.IPipe())
 
-        self.assertEqual(node.tag, "italic")
+        nodes = transformed.findall('.//italic')
+        self.assertEqual(len(nodes), 4)
+        texts = [
+            b'<italic>texto 1</italic> 1',
+            b'<italic>texto <b>2</b></italic> 2',
+            b'<italic><b>texto S</b></italic> 1',
+            b'<italic><b>texto</b> G</italic> 2',
+        ]
+        for node, text in zip(nodes, texts):
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 0)
+                self.assertEqual(text, etree.tostring(node))
 
     def test_pipe_b(self):
-        node = self.etreeXML.find(".//b")
-        data = self.etreeXML, node
-        self.pipeline.BPipe().transform(data)
+        text = """
+            <root>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <b>texto 1</b> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <b>texto <sup>2</sup></b> 2</li>
+            </ul>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <b><sup>texto S</sup></b> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <b><sup>texto</sup> G</b> 2</li>
+            </ul>
+            </root>
+            """
+        raw, transformed = self._transform(text, self.pipeline.BPipe())
 
-        self.assertEqual(node.tag, "bold")
+        nodes = transformed.findall('.//bold')
+        self.assertEqual(len(nodes), 4)
+        texts = [
+            b'<bold>texto 1</bold> 1',
+            b'<bold>texto <sup>2</sup></bold> 2',
+            b'<bold><sup>texto S</sup></bold> 1',
+            b'<bold><sup>texto</sup> G</bold> 2',
+        ]
+        for node, text in zip(nodes, texts):
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 0)
+                self.assertEqual(text, etree.tostring(node))
 
-    def test_pipe_a_mail(self):
-        node = self.etreeXML.find(".//font[@size='2']/a")
-        data = self.etreeXML, node
-        self.pipeline.APipe().transform(data)
+    """
+    def test_pipe_a_mailto(self):
+        text = ''
+            '<root>'
+            '<p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>'
+            '<p><a href="mailto:x@scielo.org"><img src="mail.gif"/></a></p>'
+            '<p><a href="mailto:a04qdr04@scielo.org">Enviar e-mail para a04qdr04</a></p>'
+            '<p><a href="mailto:a04qdr08@scielo.org">Enviar e-mail para mim</a></p>'
+            '</root>'
+        raw, transformed = self._transform(text, self.pipeline.APipe())
 
-        self.assertEqual(node.text, "lugope2@hotmail.com.mx")
+        nodes = transformed.findall('.//p')
+        self.assertEqual(len(nodes), 4)
+        texts = [
+            b'<p>Enviar e-mail para A <email>a@scielo.org</email></p>',
+            b'<p><img src="mail.gif"/> <email>x@scielo.org</email></p>',
+            b'<p>Enviar e-mail para a04qdr04 <email>a04qdr04@scielo.org</email></p>',
+            b'<p>Enviar e-mail para mim <email>a04qdr08@scielo.org</email></p>',
+        ]
+        for node, text in zip(nodes, texts):
+            with self.subTest(node=node):
+                self.assertEqual(text, etree.tostring(node).strip())
+
 
     def test_pipe_a_anchor(self):
+        text = ''
+            '<root>'
+            '<p><a href="a"/></p>'
+            '<p><a href="x"><img src="mail.gif"/></a></p>'
+            '<p><a href="a04qdr04">Enviar <b>e-mail</b> para a04qdr04</a></p>'
+            '<p><a href="a04qdr08">Enviar e-mail para mim</a></p>'
+            '</root>'
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+
+        nodes = transformed.findall('.//p')
+        self.assertEqual(len(nodes), 4)
+        texts = [
+            b'<p>Enviar e-mail para A <email>a@scielo.org</email></p>',
+            b'<p><img src="mail.gif"/> <email>x@scielo.org</email></p>',
+            b'<p>Enviar e-mail para a04qdr04 <email>a04qdr04@scielo.org</email></p>',
+            b'<p>Enviar e-mail para mim <email>a04qdr08@scielo.org</email></p>',
+        ]
+        for node, text in zip(nodes, texts):
+            with self.subTest(node=node):
+                self.assertEqual(text, etree.tostring(node).strip())
+
         node = self.etreeXML.find(".//font[@size='1']/a")
         data = self.etreeXML, node
         self.pipeline.APipe().transform(data)
 
         self.assertEqual(node.attrib["rid"], "home")
 
+    """
     def test_pipe_a_hiperlink(self):
-        node = self.etreeXML.find(".//font[@size='3']/a")
-        data = self.etreeXML, node
-        self.pipeline.APipe().transform(data)
 
-        self.assertEqual(node.attrib["ext-link-type"], "uri")
+        text = [
+            '<root>',
+            '<p><a href="https://new.scielo.br"/></p>',
+            '<p><a href="https://www.google.com"><img src="mail.gif"/></a></p>',
+            '<p><a href="https://www.bbc.com">BBC</a></p>',
+            '<p><a href="http://www.bbc.com">Enviar <b>e-mail para</b> mim</a></p>',
+            '</root>',
+        ]
+        text = ''.join(text)
+        raw, transformed = self._transform(text, self.pipeline.APipe())
 
-    def test_pipe_a_keyError(self):
-        node = self.etreeXML.find(".//font[@size='4']/a")
-        data = self.etreeXML, node
-        with self.assertLogs("documentstore_migracao.utils.convert_html_body") as log:
-            self.pipeline.APipe().transform(data)
+        nodes = transformed.findall('.//ext-link')
+        self.assertEqual(len(nodes), 4)
+        data = [
+            ('https://new.scielo.br', b''),
+            ('https://www.google.com', b'<img src="mail.gif"/>'),
+            ('https://www.bbc.com', b'BBC'),
+            ('http://www.bbc.com', b'Enviar <b>e-mail para</b> mim'),
+        ]
+        for node, item in zip(nodes, data):
+            link, content = item
+            with self.subTest(node=node):
+                self.assertIn(content, etree.tostring(node).strip())
+                self.assertEqual(link, node.attrib['{http://www.w3.org/1999/xlink}href'])
+                self.assertEqual('uri', node.attrib['ext-link-type'])
+                self.assertEqual(len(node.attrib), 2)
 
-        has_message = False
-        for log_message in log.output:
-            if "Tag 'a' sem href removendo node do xml" in log_message:
-                has_message = True
-        self.assertTrue(has_message)
+    def test_pipe_remove_a_without_href(self):
+        text = '<root><a>Teste</a></root>'
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+        self.assertIsNone(transformed.find('.//a'))
 
-    def test_process(self):
-        obj = HTML2SPSPipeline().deploy(self.xml_txt)
-        
-        tags = ("div", "img", "li", "ol", "ul", "i", "b", "a")
-        for tag in tags:
+    def test__process(self):
+        def f(node):
+            node.tag = node.tag.upper()
+            return node
+
+        apply_change = ("div", "img", "i")
+
+        tags = ("div", "img", "i", "p")
+        expected_tags = ("DIV", "IMG", "I", "p")
+        text = '<root><div>bla</div><img>bla</img><p>bla</p><i>bla</i></root>'
+        tree = etree.fromstring(text)
+        for tag, expected_tag in zip(tags, expected_tags):
             with self.subTest(tag=tag):
-                expected = obj.obj_xml.findall(".//%s" % tag)
-                self.assertFalse(expected)
-"""
+                if tag in apply_change:
+                    _process(tree, tag, f)
+
+                found = tree.findall(".//%s" % expected_tag)
+                self.assertIsNotNone(found)
