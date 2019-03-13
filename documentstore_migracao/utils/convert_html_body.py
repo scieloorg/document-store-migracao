@@ -109,7 +109,6 @@ class HTML2SPSPipeline(object):
             src = _attrib.pop("src")
 
             node.attrib.clear()
-            node.attrib.update(_attrib)
             node.set("{http://www.w3.org/1999/xlink}href", src)
 
         def transform(self, data):

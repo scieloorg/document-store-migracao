@@ -4,7 +4,7 @@ from unittest.mock import patch
 from lxml import etree
 
 from documentstore_migracao.utils import files, xml, request
-from documentstore_migracao.utils.convert_html_body import Convert2SPSBody
+from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
 from . import SAMPLES_PATH
 
 
@@ -50,7 +50,7 @@ class TestUtilsXML(unittest.TestCase):
 
         self.assertFalse(len(medias))
 
-    def test_parser_body_xml(self):
+    def test_pipe_body_xml(self):
         with open(os.path.join(SAMPLES_PATH, "S0036-36341997000100003.xml"), "r") as f:
             text = f.read()
 
@@ -72,90 +72,116 @@ class TestUtilsRequest(unittest.TestCase):
         mk_requests.get.assert_called_once_with("http://api.test.com", **expected)
 
 
-class TestConvert2SPSBody(unittest.TestCase):
+class TestHTML2SPSPipeline(unittest.TestCase):
+    def get_tree(self, text):
+        return etree.fromstring(text)
+
     def setUp(self):
         filename = os.path.join(SAMPLES_PATH, "example_convert_html.xml")
         with open(filename, "r") as f:
             self.xml_txt = f.read()
-
         self.etreeXML = etree.fromstring(self.xml_txt)
-        self.convert = Convert2SPSBody("<samples />")
+        self.convert = HTML2SPSPipeline()
 
     def test_create_instance(self):
         expected_text = "<p>La nueva epoca de la revista<italic>Salud Publica de Mexico </italic></p>"
-        obj = Convert2SPSBody(expected_text)
+        pipeline = HTML2SPSPipeline()
+        raw, xml = pipeline.SetupPipe().transform(expected_text)
+        self.assertIn(expected_text, str(etree.tostring(xml)))
 
-        self.assertIn(expected_text, str(etree.tostring(obj.obj_xml)))
+    def test_pipe_p(self):
+        text = '<root><p align="x">bla</p><p baljlba="1"/></root>'
+        raw = self.get_tree(text)
+        data = text, raw
+        raw, transformed = self.convert.PPipe().transform(data)
+        self.assertEqual(raw, text)
+        self.assertEqual(b"<root><p>bla</p><p/></root>", etree.tostring(transformed))
 
-    def test_parser_p(self):
-        node = self.etreeXML.find(".//p")
-        self.convert.parser_p(node)
-        self.assertEqual(node.attrib, {})
+    def test_pipe_div(self):
+        text = '<root><div align="x" id="intro">bla</div><div baljlba="1"/></root>'
+        raw = self.get_tree(text)
+        data = text, raw
+        raw, transformed = self.convert.DivPipe().transform(data)
+        self.assertEqual(raw, text)
+        self.assertEqual(b'<root><sec id="intro">bla</sec><sec/></root>', etree.tostring(transformed))
 
-    def test_parser_div(self):
-        node = self.etreeXML.find(".//div")
-        self.convert.parser_div(node)
-        self.assertEqual(node.attrib["id"], "home")
+    def test_pipe_img(self):
+        text = '<root><img align="x" src="a04qdr04.gif"/><img align="x" src="a04qdr08.gif"/></root>'
+        raw = self.get_tree(text)
+        data = text, raw
+        raw, transformed = self.convert.ImgPipe().transform(data)
+        self.assertEqual(raw, text)
+        nodes = transformed.findall('.//graphic')
+        self.assertEqual(len(nodes), 2)
+        for node, href in zip(nodes, ["a04qdr04.gif", "a04qdr08.gif"]):
+            with self.subTest(node=node):
+                self.assertEqual(href, node.attrib["{http://www.w3.org/1999/xlink}href"])
+                self.assertEqual(len(node.attrib), 1)
 
-    def test_parser_img(self):
-        node = self.etreeXML.find(".//img")
-        self.convert.parser_img(node)
 
-        self.assertIn("class", node.attrib.keys())
-        self.assertIn("a04qdr04.gif", node.attrib["{http://www.w3.org/1999/xlink}href"])
+"""
 
-    def test_parser_li(self):
+    def test_pipe_li(self):
         node = self.etreeXML.find(".//li")
-        self.convert.parser_li(node)
+        data = self.etreeXML, node
+        self.convert.LiPipe().transform(data)
 
         self.assertEqual(node.tag, "list-item")
 
-    def test_parser_ol(self):
+    def test_pipe_ol(self):
         node = self.etreeXML.find(".//ol")
-        self.convert.parser_ol(node)
+        data = self.etreeXML, node
+        self.convert.OlPipe().transform(data)
 
         self.assertEqual("order", node.attrib["list-type"])
 
-    def test_parser_ul(self):
+    def test_pipe_ul(self):
         node = self.etreeXML.find(".//ul")
-        self.convert.parser_ul(node)
+        data = self.etreeXML, node
+        self.convert.UlPipe().transform(data)
 
         self.assertEqual("bullet", node.attrib["list-type"])
 
-    def test_parser_i(self):
+    def test_pipe_i(self):
         node = self.etreeXML.find(".//i")
-        self.convert.parser_i(node)
+        data = self.etreeXML, node
+        self.convert.IPipe().transform(data)
 
         self.assertEqual(node.tag, "italic")
 
-    def test_parser_b(self):
+    def test_pipe_b(self):
         node = self.etreeXML.find(".//b")
-        self.convert.parser_b(node)
+        data = self.etreeXML, node
+        self.convert.BPipe().transform(data)
 
         self.assertEqual(node.tag, "bold")
 
-    def test_parser_a_mail(self):
+    def test_pipe_a_mail(self):
         node = self.etreeXML.find(".//font[@size='2']/a")
-        self.convert.parser_a(node)
+        data = self.etreeXML, node
+        self.convert.APipe().transform(data)
 
         self.assertEqual(node.text, "lugope2@hotmail.com.mx")
 
-    def test_parser_a_anchor(self):
+    def test_pipe_a_anchor(self):
         node = self.etreeXML.find(".//font[@size='1']/a")
-        self.convert.parser_a(node)
+        data = self.etreeXML, node
+        self.convert.APipe().transform(data)
 
         self.assertEqual(node.attrib["rid"], "home")
 
-    def test_parser_a_hiperlink(self):
+    def test_pipe_a_hiperlink(self):
         node = self.etreeXML.find(".//font[@size='3']/a")
-        self.convert.parser_a(node)
+        data = self.etreeXML, node
+        self.convert.APipe().transform(data)
 
         self.assertEqual(node.attrib["ext-link-type"], "uri")
 
-    def test_parser_a_keyError(self):
+    def test_pipe_a_keyError(self):
         node = self.etreeXML.find(".//font[@size='4']/a")
+        data = self.etreeXML, node
         with self.assertLogs("documentstore_migracao.utils.convert_html_body") as log:
-            self.convert.parser_a(node)
+            self.convert.APipe().transform(data)
 
         has_message = False
         for log_message in log.output:
@@ -164,11 +190,11 @@ class TestConvert2SPSBody(unittest.TestCase):
         self.assertTrue(has_message)
 
     def test_process(self):
-        obj = Convert2SPSBody(self.xml_txt)
-        obj.process()
-
+        obj = HTML2SPSPipeline().deploy(self.xml_txt)
+        
         tags = ("div", "img", "li", "ol", "ul", "i", "b", "a")
         for tag in tags:
             with self.subTest(tag=tag):
                 expected = obj.obj_xml.findall(".//%s" % tag)
                 self.assertFalse(expected)
+"""
