@@ -29,10 +29,12 @@ class HTML2SPSPipeline(object):
             self.OlPipe(),
             self.UlPipe(),
             self.IPipe(),
+            self.EmPipe(),
+            self.UPipe(),
             self.BPipe(),
             self.APipe(),
             self.StrongPipe(),
-            self.TdPPipe(),
+            self.TdCleanPipe(),
         )
 
     class SetupPipe(plumber.Pipe):
@@ -152,6 +154,7 @@ class HTML2SPSPipeline(object):
 
     class IPipe(plumber.Pipe):
         def parser_node(self, node):
+            etree.strip_tags(node, "break")
             node.tag = "italic"
 
         def transform(self, data):
@@ -222,11 +225,12 @@ class HTML2SPSPipeline(object):
             _process(xml, "strong", self.parser_node)
             return data
 
-    class TdPPipe(plumber.Pipe):
+    class TdCleanPipe(plumber.Pipe):
         def parser_node(self, node):
             etree.strip_tags(node, "p")
             etree.strip_tags(node, "span")
             etree.strip_tags(node, "small")
+            etree.strip_tags(node, "dir")
             _attrib = deepcopy(node.attrib)
 
             # REMOVE WIDTH AND HEIGHT
@@ -243,6 +247,26 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "td", self.parser_node)
+            return data
+
+    class EmPipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.tag = "italic"
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "em", self.parser_node)
+            return data
+
+    class UPipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.tag = "underline"
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "u", self.parser_node)
             return data
 
     def deploy(self, raw):
