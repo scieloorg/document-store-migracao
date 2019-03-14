@@ -20,7 +20,7 @@ class HTML2SPSPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
-            self.FontPipe(),
+            self.DeprecatedHTMLTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.BRPipe(),
@@ -45,11 +45,13 @@ class HTML2SPSPipeline(object):
             xml = utils_xml.str2objXML(data)
             return data, xml
 
-    class FontPipe(plumber.Pipe):
+    class DeprecatedHTMLTagsPipe(plumber.Pipe):
+        TAGS = ['font', 'small', 'big', 'dir', 'span']
+
         def transform(self, data):
             raw, xml = data
-
-            etree.strip_tags(xml, "font")
+            for tag in self.TAGS:
+                etree.strip_tags(xml, tag)
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):

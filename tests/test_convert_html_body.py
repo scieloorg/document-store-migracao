@@ -93,13 +93,6 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, xml = pipeline.SetupPipe().transform(expected_text)
         self.assertIn(expected_text, str(etree.tostring(xml)))
 
-    def test_pipe_font(self):
-        text = '<root><p><font size="1">bla</font></p><p/></root>'
-        raw, transformed = self._transform(text, self.pipeline.FontPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b"<root><p>bla</p><p/></root>")
-
     def test_pipe_remove_empty(self):
         text = '<root><p>texto<br/><hr/></p><p> <img align="x" src="a04qdr04.gif"/></p><p/><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>'
         raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
@@ -444,6 +437,38 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertEqual(
             etree.tostring(transformed),
             b'<root><p><disp-quote>Teste</disp-quote></p></root>'
+        )
+
+    def test_pipe_remove_deprecated_small(self):
+        text = '<root><p><small>Teste</small></p></root>'
+        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p>Teste</p></root>'
+        )
+
+    def test_pipe_remove_deprecated_big(self):
+        text = '<root><p><big>Teste</big></p></root>'
+        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p>Teste</p></root>'
+        )
+
+    def test_pipe_remove_deprecated_dir(self):
+        text = '<root><p><dir>Teste</dir></p></root>'
+        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p>Teste</p></root>'
+        )
+
+    def test_pipe_remove_deprecated_font(self):
+        text = '<root><p><font>Teste</font></p></root>'
+        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p>Teste</p></root>'
         )
 
     def test__process(self):
