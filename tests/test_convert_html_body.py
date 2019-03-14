@@ -93,6 +93,30 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, xml = pipeline.SetupPipe().transform(expected_text)
         self.assertIn(expected_text, str(etree.tostring(xml)))
 
+    def test_pipe_font(self):
+        text = '<root><p><font size="1">bla</font></p><p/></root>'
+        raw, transformed = self._transform(text, self.pipeline.FontPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"<root><p>bla</p><p/></root>")
+
+    """
+    def test_pipe_remove_empty(self):
+        text = '<root><p>texto</p><p> </p><p/><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>'
+        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p>texto</p><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>')
+    """
+
+    def test_pipe_remove_attribute_style(self):
+        text = '<root><p style="x">texto</p><caption style="x"/> <td style="bla"/></root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveStyleAttributesPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p>texto</p><caption style="x"/> <td style="bla"/></root>')
+
     def test_pipe_p(self):
         text = '<root><p align="x">bla</p><p baljlba="1"/></root>'
         raw, transformed = self._transform(text, self.pipeline.PPipe())
@@ -237,6 +261,90 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 0)
                 self.assertEqual(text, etree.tostring(node))
 
+    def test_pipe_u(self):
+        text = """
+            <root>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <u>texto 1</u> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <u>texto <sup>2</sup></u> 2</li>
+            </ul>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <u><sup>texto S</sup></u> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <u><sup>texto</sup> G</u> 2</li>
+            </ul>
+            </root>
+            """
+        raw, transformed = self._transform(text, self.pipeline.UPipe())
+
+        nodes = transformed.findall('.//underline')
+        self.assertEqual(len(nodes), 4)
+        texts = [
+            b'<underline>texto 1</underline> 1',
+            b'<underline>texto <sup>2</sup></underline> 2',
+            b'<underline><sup>texto S</sup></underline> 1',
+            b'<underline><sup>texto</sup> G</underline> 2',
+        ]
+        for node, text in zip(nodes, texts):
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 0)
+                self.assertEqual(text, etree.tostring(node))
+
+    def test_pipe_em(self):
+        text = """
+            <root>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <em>texto 1</em> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <em>texto <sup>2</sup></em> 2</li>
+            </ul>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <em><sup>texto S</sup></em> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <em><sup>texto</sup> G</em> 2</li>
+            </ul>
+            </root>
+            """
+        raw, transformed = self._transform(text, self.pipeline.EmPipe())
+
+        nodes = transformed.findall('.//italic')
+        self.assertEqual(len(nodes), 4)
+        texts = [
+            b'<italic>texto 1</italic> 1',
+            b'<italic>texto <sup>2</sup></italic> 2',
+            b'<italic><sup>texto S</sup></italic> 1',
+            b'<italic><sup>texto</sup> G</italic> 2',
+        ]
+        for node, text in zip(nodes, texts):
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 0)
+                self.assertEqual(text, etree.tostring(node))
+
+    def test_pipe_strong(self):
+        text = """
+            <root>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <strong>texto 1</strong> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <strong>texto <sup>2</sup></strong> 2</li>
+            </ul>
+            <ul>
+            <li align="x" src="a04qdr04.gif">Texto dentro de <strong><sup>texto S</sup></strong> 1</li>
+            <li align="x" src="a04qdr08.gif">Texto dentro de <strong><sup>texto</sup> G</strong> 2</li>
+            </ul>
+            </root>
+            """
+        raw, transformed = self._transform(text, self.pipeline.StrongPipe())
+
+        nodes = transformed.findall('.//bold')
+        self.assertEqual(len(nodes), 4)
+        texts = [
+            b'<bold>texto 1</bold> 1',
+            b'<bold>texto <sup>2</sup></bold> 2',
+            b'<bold><sup>texto S</sup></bold> 1',
+            b'<bold><sup>texto</sup> G</bold> 2',
+        ]
+        for node, text in zip(nodes, texts):
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 0)
+                self.assertEqual(text, etree.tostring(node))
+
     """
     def test_pipe_a_mailto(self):
         text = ''
@@ -323,6 +431,14 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         text = '<root><a>Teste</a></root>'
         raw, transformed = self._transform(text, self.pipeline.APipe())
         self.assertIsNone(transformed.find('.//a'))
+
+    def test_pipe_td(self):
+        text = '<root><td width="" height="" style="style"><p>Teste</p></td></root>'
+        raw, transformed = self._transform(text, self.pipeline.TdCleanPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><td style="style">Teste</td></root>'
+        )
 
     def test__process(self):
         def f(node):
