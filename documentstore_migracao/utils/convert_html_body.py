@@ -38,6 +38,7 @@ class HTML2SPSPipeline(object):
             self.StrongPipe(),
             self.TdCleanPipe(),
             self.BlockquotePipe(),
+            self.HrPipe(),
         )
 
     class SetupPipe(plumber.Pipe):
@@ -46,7 +47,7 @@ class HTML2SPSPipeline(object):
             return data, xml
 
     class DeprecatedHTMLTagsPipe(plumber.Pipe):
-        TAGS = ['font', 'small', 'big', 'dir', 'span']
+        TAGS = ["font", "small", "big", "dir", "span"]
 
         def transform(self, data):
             raw, xml = data
@@ -276,7 +277,8 @@ class HTML2SPSPipeline(object):
                 _attrib = self._parser_node_mailto(node, _attrib, href)
 
             elif (
-                href.startswith("http")
+                href.startswith("htt")
+                or href.startswith("ftp")
                 or href.startswith("/")
                 or href.startswith("../")
                 or href.startswith("www")
@@ -286,6 +288,8 @@ class HTML2SPSPipeline(object):
 
             elif "#" in href:
                 _attrib = self._parser_node_anchor(node, _attrib, href)
+
+            etree.strip_tags(node, "break")
 
             node.attrib.clear()
             node.attrib.update(_attrib)
@@ -374,6 +378,16 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "blockquote", self.parser_node)
+            return data
+
+    class HrPipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.attrib.clear()
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "hr", self.parser_node)
             return data
 
     def deploy(self, raw):
