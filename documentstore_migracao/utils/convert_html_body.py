@@ -51,7 +51,14 @@ class HTML2SPSPipeline(object):
         def transform(self, data):
             raw, xml = data
             for tag in self.TAGS:
-                etree.strip_tags(xml, tag)
+                nodes = xml.findall('.//'+tag)
+                if len(nodes) > 0:
+                    etree.strip_tags(xml, tag)
+                nodes = xml.findall('.//'+tag)
+                if len(nodes) > 0:
+                    logger.info("DEVERIA TER REMOVIDO:%s ", tag)
+                    for item in nodes:
+                        logger.info(etree.tostring(item))
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
