@@ -1,6 +1,8 @@
 """ module to export journal data """
 
 from xylose.scielodocument import Journal
+from articlemeta.client import RestfulClient
+
 from documentstore_migracao import config
 from documentstore_migracao.utils import request
 
@@ -31,3 +33,9 @@ def get_all_journal():
         journals.append(ext_journal(d_journal["code"]))
 
     return journals
+
+
+def get_journals():
+
+    cl = RestfulClient()
+    return cl.journals(collection=config.get("SCIELO_COLLECTION"))

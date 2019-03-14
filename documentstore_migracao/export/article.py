@@ -1,9 +1,11 @@
 """ module to export article data """
 import logging
+from articlemeta.client import RestfulClient
 from documentstore_migracao import config
 from documentstore_migracao.utils import request
 
 logger = logging.getLogger(__name__)
+client = RestfulClient()
 
 
 def ext_identifiers(issn_journal):
@@ -12,6 +14,12 @@ def ext_identifiers(issn_journal):
         params={"collection": config.get("SCIELO_COLLECTION"), "issn": issn_journal},
     ).json()
     return articles_id
+
+
+def get_articles(issn_journal):
+    return client.documents(
+        collection=config.get("SCIELO_COLLECTION"), issn=issn_journal
+    )
 
 
 def ext_article(code, **ext_params):
@@ -35,12 +43,13 @@ def ext_article_txt(code, **ext_params):
 
 def get_all_articles_notXML(issn):
     articles = []
-    articles_id = ext_identifiers(issn)
-    for d_articles in articles_id["objects"]:
-        article = ext_article_json(d_articles["code"])
-        if article["version"] != "xml":
-            logger.info("\t Arquivo XML '%s' extraido", d_articles["code"])
-            articles.append((d_articles["code"], ext_article_txt(d_articles["code"])))
+    articles_id = get_articles(issn)
+    for article in articles_id:
+        if article.data["version"] != "xml":
+            logger.info("\t Arquivo XML '%s' extraido", article.data["code"])
+            articles.append(
+                (article.data["code"], ext_article_txt(article.data["code"]))
+            )
 
     return articles
 

@@ -34,7 +34,7 @@ def list_dir(path):
 def read_file(path):
 
     logger.debug("Lendo arquivo: %s", path)
-    text = ''
+    text = ""
     with open(path, "r", encoding="utf-8") as f:
         text = f.read()
 

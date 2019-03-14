@@ -20,10 +20,7 @@ def extrated_journal_data(obj_journal):
             logger.info("\t Salvando arquivo '%s'", name_article)
             file_path = os.path.join(config.get("SOURCE_PATH"), "%s.xml" % name_article)
             logger.info("\t Salvando arquivo '%s'", file_path)
-            files.write_file(
-                file_path,
-                xml_article,
-            )
+            files.write_file(file_path, xml_article)
     logger.info("\t Total de %s artigos", len(list_articles))
 
 
@@ -38,7 +35,7 @@ def extrated_selected_journal(issn):
 def extrated_all_data():
 
     logger.info("Iniciando extração")
-    list_journais = journal.get_all_journal()
+    list_journais = journal.get_journals()
     for obj_journal in list_journais:
 
         extrated_journal_data(obj_journal)

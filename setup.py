@@ -3,10 +3,10 @@ import os, setuptools
 
 
 def fix(item):
-    if '==' in item:
-        return item.replace('==', '>=')
-    if item.startswith('-e'):
-        return item[item.rfind('=')+1:]
+    if "==" in item:
+        return item.replace("==", ">=")
+    if item.startswith("-e"):
+        return item[item.rfind("=") + 1 :]
     return item
 
 
