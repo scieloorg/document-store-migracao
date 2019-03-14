@@ -53,21 +53,35 @@ class HTML2SPSPipeline(object):
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
+        EXCEPTIONS = ['br', 'img', 'hr']
+
+        def remove_empty_tags(self, xml):
+            removed_tags = []
+            for node in xml.xpath("//*"):
+                if node.tag not in self.EXCEPTIONS:
+                    if not node.findall('*'):
+                        text = node.text or ''
+                        text = text.strip()
+                        if not text:
+                            removed_tags.append(node.tag)
+                            node.getparent().remove(node)
+            return removed_tags
+
         def transform(self, data):
             raw, xml = data
-
-            count = 0
-            for node in xml.xpath("*"):
-                text = node.text
-                children = node.getchildren()
-
-                if not (text and text.strip()) and not len(children):
-                    node.getparent().remove(node)
-
-                    count += 1
-                    logger.debug("removendo tag em branco '%s'", node.tag)
-
-            logger.info("Total de %s tags em branco removidas", count)
+            total_removed_tags = []
+            remove = True
+            while remove:
+                removed_tags = self.remove_empty_tags(xml)
+                total_removed_tags.extend(removed_tags)
+                remove = len(removed_tags) > 0
+            if len(total_removed_tags) > 0:
+                logger.info(
+                    "Total de %s tags vazias removidas",
+                    len(total_removed_tags))
+                logger.info(
+                    "Tags removidas:%s ",
+                    ', '.join(sorted(list(set(total_removed_tags)))))
             return data
 
     class RemoveStyleAttributesPipe(plumber.Pipe):
@@ -77,7 +91,7 @@ class HTML2SPSPipeline(object):
         def transform(self, data):
             raw, xml = data
             count = 0
-            for node in xml.xpath("*"):
+            for node in xml.xpath(".//*"):
                 if node.tag in self.EXCEPT_FOR:
                     continue
                 _attrib = deepcopy(node.attrib)
