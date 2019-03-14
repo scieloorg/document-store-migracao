@@ -9,16 +9,21 @@ logger = logging.getLogger(__name__)
 
 
 def extrated_journal_data(obj_journal):
-
+    list_articles = []
     logger.info("\t coletando dados do periodico '%s'", obj_journal.title)
-    list_articles = article.get_all_articles_notXML(obj_journal.scielo_issn)
-    for name_article, xml_article in list_articles:
-
-        logger.info("\t Salvando arquivo '%s'", name_article)
-        files.write_file(
-            os.path.join(config.get("SOURCE_PATH"), "%s.xml" % name_article),
-            xml_article,
-        )
+    identifiers = article.get_article_identifiers(obj_journal.scielo_issn)
+    for identifier in identifiers:
+        name_article = identifier
+        xml_article = article.get_not_xml_article(identifier)
+        if xml_article:
+            list_articles.append(name_article)
+            logger.info("\t Salvando arquivo '%s'", name_article)
+            file_path = os.path.join(config.get("SOURCE_PATH"), "%s.xml" % name_article)
+            logger.info("\t Salvando arquivo '%s'", file_path)
+            files.write_file(
+                file_path,
+                xml_article,
+            )
     logger.info("\t Total de %s artigos", len(list_articles))
 
 

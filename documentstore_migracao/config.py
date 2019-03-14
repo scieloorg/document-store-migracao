@@ -8,7 +8,7 @@ _default = dict(
     AM_URL_API="http://articlemeta.scielo.org/api/v1",
     SOURCE_PATH=os.path.join(BASE_PATH, "xml/source"),
     CONVERSION_PATH=os.path.join(BASE_PATH, "xml/conversion"),
-    SUCCESS_PROCESSING_PATH=os.path.join(BASE_PATH, "xml/sucess"),
+    SUCCESS_PROCESSING_PATH=os.path.join(BASE_PATH, "xml/success"),
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
 )
 
