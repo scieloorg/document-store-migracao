@@ -71,20 +71,22 @@ class HTML2SPSPipeline(object):
             return data
 
     class RemoveStyleAttributesPipe(plumber.Pipe):
+        EXCEPT_FOR = ['caption', 'col', 'colgroup', 'style-content', 'table',
+                      'tbody', 'td', 'tfoot', 'th', 'thead', 'tr']
+
         def transform(self, data):
             raw, xml = data
-
             count = 0
             for node in xml.xpath("*"):
+                if node.tag in self.EXCEPT_FOR:
+                    continue
                 _attrib = deepcopy(node.attrib)
                 style = _attrib.pop("style", None)
                 if style:
                     count += 1
                     logger.debug("removendo style da tag '%s'", node.tag)
-
                 node.attrib.clear()
                 node.attrib.update(_attrib)
-
             logger.info("Total de %s tags com style", count)
             return data
 
@@ -277,20 +279,24 @@ class HTML2SPSPipeline(object):
             return data
 
     class TdCleanPipe(plumber.Pipe):
+        UNEXPECTED_INNER_TAGS = ["p", "span", "small", "dir"]
+        EXPECTED_ATTRIBUTES = ['abbr', 'align', 'axis', 'char', 'charoff',
+                                'colspan', 'content-type', 'headers',
+                                'id',
+                                'rowspan',
+                                'scope',
+                                'style',
+                                'valign',
+                                'xml:base'
+        ]
+
         def parser_node(self, node):
-            etree.strip_tags(node, "p")
-            etree.strip_tags(node, "span")
-            etree.strip_tags(node, "small")
-            etree.strip_tags(node, "dir")
-            _attrib = deepcopy(node.attrib)
-
-            # REMOVE WIDTH AND HEIGHT
-            _attrib.pop("width", None)
-            _attrib.pop("height", None)
-
-            for key in _attrib.keys():
-                _attrib[key] = _attrib[key].lower()
-
+            for tag in self.UNEXPECTED_INNER_TAGS:
+                etree.strip_tags(node, tag)
+            _attrib = {}
+            for key in node.attrib.keys():
+                if key in self.EXPECTED_ATTRIBUTES:
+                    _attrib[key] = node.attrib[key].lower()
             node.attrib.clear()
             node.attrib.update(_attrib)
 
