@@ -3,6 +3,7 @@ import plumber
 from lxml import etree
 from copy import deepcopy
 from documentstore_migracao.utils import xml as utils_xml
+from documentstore_migracao import config
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +107,10 @@ class HTML2SPSPipeline(object):
 
             etree.strip_tags(node, "big")
 
+            parent = node.getparent()
+            if not parent.tag in config.ALLOYED_TAGS_TO_P:
+                logger.warning("Tag `p` in `%s`", parent.tag)
+
         def transform(self, data):
             raw, xml = data
 
@@ -201,6 +206,30 @@ class HTML2SPSPipeline(object):
             return data
 
     class APipe(plumber.Pipe):
+        def _parser_node_mailto(self, node, href):
+            node.tag = "email"
+            node.text = href.replace("mailto:", "")
+            _attrib = {}
+            return _attrib
+
+        def _parser_node_link(self, node, href):
+            _attrib = {}
+            node.tag = "ext-link"
+            _attrib.update(
+                {"ext-link-type": "uri", "{http://www.w3.org/1999/xlink}href": href}
+            )
+            return _attrib
+
+        def _parser_node_anchor(self, node, href):
+            _attrib = {}
+            node.tag = "xref"
+
+            root = node.getroottree()
+            ref_node = root.findall("//*[@id='%s']" % href)
+            if ref_node:
+                _attrib.update({"rid": href.replace("#", ""), "ref-type": ref_node.tag})
+            return _attrib
+
         def parser_node(self, node):
             _attrib = deepcopy(node.attrib)
             try:
@@ -211,9 +240,7 @@ class HTML2SPSPipeline(object):
                 return
 
             if "mailto" in href or "@" in href:
-                node.tag = "email"
-                node.text = href.replace("mailto:", "")
-                _attrib = {}
+                _attrib.update(self._parser_node_mailto(node, href))
 
             elif (
                 href.startswith("http")
@@ -222,19 +249,10 @@ class HTML2SPSPipeline(object):
                 or href.startswith("www")
                 or href.startswith("file")
             ):
-                node.tag = "ext-link"
-                _attrib.update(
-                    {"ext-link-type": "uri", "{http://www.w3.org/1999/xlink}href": href}
-                )
-            elif "#" in href:
-                node.tag = "xref"
+                _attrib.update(self._parser_node_link(node, href))
 
-                root = node.getroottree()
-                ref_node = root.findall("//*[@id='%s']" % href)
-                if ref_node:
-                    _attrib.update(
-                        {"rid": href.replace("#", ""), "ref-type": ref_node.tag}
-                    )
+            elif "#" in href:
+                _attrib.update(self._parser_node_anchor(node, href))
 
             node.attrib.clear()
             node.attrib.update(_attrib)

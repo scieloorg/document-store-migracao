@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 def conversion_article_xml(file_xml_path):
     article = files.read_file(file_xml_path)
 
+    logger.info("file: %s", file_xml_path)
     obj_xml = etree.fromstring(article)
     obj_xml.set("specific-use", "sps-1.8")
     obj_xml.set("dtd-version", "1.1")

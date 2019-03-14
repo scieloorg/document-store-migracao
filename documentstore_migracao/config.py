@@ -23,6 +23,39 @@ DOC_TYPE_XML = """<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Pu
 
 os.environ["XML_CATALOG_FILES"] = XML_CATALOG
 
+ALLOYED_TAGS_TO_P = [
+    "abstract",
+    "ack",
+    "annotation",
+    "app",
+    "app-group",
+    "author-comment",
+    "author-notes",
+    "bio",
+    "body",
+    "boxed-text",
+    "caption",
+    "def",
+    "disp-quote",
+    "fig",
+    "fn",
+    "glossary",
+    "list-item",
+    "note",
+    "notes",
+    "open-access",
+    "ref-list",
+    "sec",
+    "speech",
+    "statement",
+    "supplementary-material",
+    "support-description",
+    "table-wrap-foot",
+    "td",
+    "th",
+    "trans-abstract",
+]
+
 
 def get(config):
     return os.environ.get(config, _default.get(config, ""))
