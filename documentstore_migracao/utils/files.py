@@ -34,16 +34,14 @@ def list_dir(path):
 def read_file(path):
 
     logger.debug("Lendo arquivo: %s", path)
-    file = open(path, "r", encoding="utf-8")
-    text = file.read()
-    file.close()
+    text = ''
+    with open(path, "r", encoding="utf-8") as f:
+        text = f.read()
 
     return text
 
 
 def write_file(path, source):
-
     logger.debug("Gravando arquivo: %s", path)
-    file = open(path, "w", encoding="utf-8")
-    file.write(source)
-    file.close()
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(source)

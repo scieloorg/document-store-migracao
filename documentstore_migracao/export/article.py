@@ -28,12 +28,12 @@ def ext_article_json(code, **ext_params):
 
 
 def ext_article_txt(code, **ext_params):
+    logger.info("\t Arquivo XML '%s' extraido", code)
     article = ext_article(code, body="true", format="xmlrsps", **ext_params).text
     return article
 
 
 def get_all_articles_notXML(issn):
-
     articles = []
     articles_id = ext_identifiers(issn)
     for d_articles in articles_id["objects"]:
@@ -43,3 +43,15 @@ def get_all_articles_notXML(issn):
             articles.append((d_articles["code"], ext_article_txt(d_articles["code"])))
 
     return articles
+
+
+def get_article_identifiers(issn):
+    identifiers = ext_identifiers(issn)
+    if identifiers:
+        return [document["code"] for document in identifiers["objects"]]
+
+
+def get_not_xml_article(identifier):
+    article = ext_article_json(identifier)
+    if article["version"] != "xml":
+        return ext_article_txt(identifier)
