@@ -53,14 +53,14 @@ class HTML2SPSPipeline(object):
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
-        EXCEPTIONS = ['br', 'img', 'hr']
+        EXCEPTIONS = ["br", "img", "hr"]
 
         def remove_empty_tags(self, xml):
             removed_tags = []
             for node in xml.xpath("//*"):
                 if node.tag not in self.EXCEPTIONS:
-                    if not node.findall('*'):
-                        text = node.text or ''
+                    if not node.findall("*"):
+                        text = node.text or ""
                         text = text.strip()
                         if not text:
                             removed_tags.append(node.tag)
@@ -77,16 +77,28 @@ class HTML2SPSPipeline(object):
                 remove = len(removed_tags) > 0
             if len(total_removed_tags) > 0:
                 logger.info(
-                    "Total de %s tags vazias removidas",
-                    len(total_removed_tags))
+                    "Total de %s tags vazias removidas", len(total_removed_tags)
+                )
                 logger.info(
                     "Tags removidas:%s ",
-                    ', '.join(sorted(list(set(total_removed_tags)))))
+                    ", ".join(sorted(list(set(total_removed_tags)))),
+                )
             return data
 
     class RemoveStyleAttributesPipe(plumber.Pipe):
-        EXCEPT_FOR = ['caption', 'col', 'colgroup', 'style-content', 'table',
-                      'tbody', 'td', 'tfoot', 'th', 'thead', 'tr']
+        EXCEPT_FOR = [
+            "caption",
+            "col",
+            "colgroup",
+            "style-content",
+            "table",
+            "tbody",
+            "td",
+            "tfoot",
+            "th",
+            "thead",
+            "tr",
+        ]
 
         def transform(self, data):
             raw, xml = data
@@ -188,6 +200,7 @@ class HTML2SPSPipeline(object):
         def parser_node(self, node):
             node.tag = "list"
             node.set("list-type", "bullet")
+            node.attrib.pop("list", None)
 
         def transform(self, data):
             raw, xml = data
@@ -222,22 +235,23 @@ class HTML2SPSPipeline(object):
             return data
 
     class APipe(plumber.Pipe):
-        def _parser_node_mailto(self, node, href):
+        def _parser_node_mailto(self, node, _attrib, href):
             node.tag = "email"
             node.text = href.replace("mailto:", "")
             _attrib = {}
             return _attrib
 
-        def _parser_node_link(self, node, href):
-            _attrib = {}
+        def _parser_node_link(self, node, _attrib, href):
             node.tag = "ext-link"
+
+            # Remove Traget in link
+            _attrib.pop("target", None)
             _attrib.update(
                 {"ext-link-type": "uri", "{http://www.w3.org/1999/xlink}href": href}
             )
             return _attrib
 
-        def _parser_node_anchor(self, node, href):
-            _attrib = {}
+        def _parser_node_anchor(self, node, _attrib, href):
             node.tag = "xref"
 
             root = node.getroottree()
@@ -256,7 +270,7 @@ class HTML2SPSPipeline(object):
                 return
 
             if "mailto" in href or "@" in href:
-                _attrib.update(self._parser_node_mailto(node, href))
+                _attrib = self._parser_node_mailto(node, _attrib, href)
 
             elif (
                 href.startswith("http")
@@ -265,10 +279,10 @@ class HTML2SPSPipeline(object):
                 or href.startswith("www")
                 or href.startswith("file")
             ):
-                _attrib.update(self._parser_node_link(node, href))
+                _attrib = self._parser_node_link(node, _attrib, href)
 
             elif "#" in href:
-                _attrib.update(self._parser_node_anchor(node, href))
+                _attrib = self._parser_node_anchor(node, _attrib, href)
 
             node.attrib.clear()
             node.attrib.update(_attrib)
@@ -294,14 +308,21 @@ class HTML2SPSPipeline(object):
 
     class TdCleanPipe(plumber.Pipe):
         UNEXPECTED_INNER_TAGS = ["p", "span", "small", "dir"]
-        EXPECTED_ATTRIBUTES = ['abbr', 'align', 'axis', 'char', 'charoff',
-                                'colspan', 'content-type', 'headers',
-                                'id',
-                                'rowspan',
-                                'scope',
-                                'style',
-                                'valign',
-                                'xml:base'
+        EXPECTED_ATTRIBUTES = [
+            "abbr",
+            "align",
+            "axis",
+            "char",
+            "charoff",
+            "colspan",
+            "content-type",
+            "headers",
+            "id",
+            "rowspan",
+            "scope",
+            "style",
+            "valign",
+            "xml:base",
         ]
 
         def parser_node(self, node):
