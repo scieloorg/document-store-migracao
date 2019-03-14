@@ -63,8 +63,9 @@ class HTML2SPSPipeline(object):
                         text = node.text or ""
                         text = text.strip()
                         if not text:
-                            removed_tags.append(node.tag)
-                            node.getparent().remove(node)
+                            if node.getparent():
+                                removed_tags.append(node.tag)
+                                node.getparent().remove(node)
             return removed_tags
 
         def transform(self, data):
