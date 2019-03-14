@@ -440,12 +440,11 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
     def test_pipe_remove_deprecated_small(self):
-        text = '<root><p><small>Teste</small></p></root>'
+        text = '<root><p><bold><small>   Teste</small></bold></p></root>'
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>Teste</p></root>'
-        )
+            b'<root><p><bold>   Teste</bold></p></root>')
 
     def test_pipe_remove_deprecated_big(self):
         text = '<root><p><big>Teste</big></p></root>'
