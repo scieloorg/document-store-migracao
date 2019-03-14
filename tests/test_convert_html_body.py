@@ -100,22 +100,20 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             etree.tostring(transformed),
             b"<root><p>bla</p><p/></root>")
 
-    """
     def test_pipe_remove_empty(self):
-        text = '<root><p>texto</p><p> </p><p/><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>'
+        text = '<root><p>texto<br/><hr/></p><p> <img align="x" src="a04qdr04.gif"/></p><p/><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>'
         raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>texto</p><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>')
-    """
+            b'<root><p>texto<br/><hr/></p><p> <img align="x" src="a04qdr04.gif"/></p><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>')
 
     def test_pipe_remove_attribute_style(self):
-        text = '<root><p style="x">texto</p><caption style="x"/> <td style="bla"/></root>'
+        text = '<root><p style="x">texto <b style="x"></b></p> <td style="bla"><caption style="x"/></td></root>'
         raw, transformed = self._transform(
             text, self.pipeline.RemoveStyleAttributesPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>texto</p><caption style="x"/> <td style="bla"/></root>')
+            b'<root><p>texto <b/></p> <td style="bla"><caption style="x"/></td></root>')
 
     def test_pipe_p(self):
         text = '<root><p align="x">bla</p><p baljlba="1"/></root>'
@@ -438,6 +436,14 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertEqual(
             etree.tostring(transformed),
             b'<root><td style="style">Teste</td></root>'
+        )
+
+    def test_pipe_blockquote(self):
+        text = '<root><p><blockquote>Teste</blockquote></p></root>'
+        raw, transformed = self._transform(text, self.pipeline.BlockquotePipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p><disp-quote>Teste</disp-quote></p></root>'
         )
 
     def test__process(self):
