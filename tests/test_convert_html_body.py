@@ -148,14 +148,14 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_li(self):
         text = '<root><li align="x" src="a04qdr04.gif">Texto dentro de <b>li</b> 1</li><li align="x" src="a04qdr08.gif">Texto dentro de <b>li</b> 2</li></root>'
-        expected = [b'Texto dentro de <b>li</b> 1', b'Texto dentro de <b>li</b> 2']
+        expected = [b'<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>', b'<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>']
         raw, transformed = self._transform(text, self.pipeline.LiPipe())
 
         nodes = transformed.findall('.//list-item')
         self.assertEqual(len(nodes), 2)
         for node, text in zip(nodes, expected):
             with self.subTest(node=node):
-                self.assertIn(
+                self.assertEqual(
                     text,
                     etree.tostring(node))
                 self.assertEqual(len(node.attrib), 0)

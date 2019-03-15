@@ -20,6 +20,20 @@ def replace_node_content(xml, node, new_text):
 
     return xml
 
+
+def wrap_node(node, elem_wrap='p'):
+    tag = node.tag
+    p = etree.Element(elem_wrap)
+    _node = deepcopy(node)
+    p.append(_node)
+    etree.strip_tags(p, tag)
+    for n in node.findall("*"):
+        node.remove(n)
+    node.text = ""
+    node.append(p)
+    return node
+
+
 class HTML2SPSPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
@@ -209,9 +223,16 @@ class HTML2SPSPipeline(object):
             return data
 
     class LiPipe(plumber.Pipe):
+        ALLOWED_CHILDREN = ('label', 'title', 'p', 'def-list', 'list')
+
         def parser_node(self, node):
             node.tag = "list-item"
             node.attrib.clear()
+            tags = {n.tag for n in node.findall('*')}
+            not_allowed = [tag for tag in tags
+                           if tag not in self.ALLOWED_CHILDREN]
+            if len(not_allowed) > 0:
+                node = wrap_node(node, 'p')
 
         def transform(self, data):
             raw, xml = data
