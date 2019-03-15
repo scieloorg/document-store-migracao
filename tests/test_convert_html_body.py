@@ -108,6 +108,14 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             etree.tostring(transformed),
             b'<root><p>texto <b/></p> <td style="bla"><caption style="x"/></td></root>')
 
+    def test_pipe_br(self):
+        text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td></root>'
+        raw, transformed = self._transform(text, self.pipeline.BRPipe())
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td></root>')
+
     def test_pipe_p(self):
         text = '<root><p align="x">bla</p><p baljlba="1"/></root>'
         raw, transformed = self._transform(text, self.pipeline.PPipe())
