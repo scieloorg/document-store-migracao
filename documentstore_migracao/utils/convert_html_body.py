@@ -20,6 +20,7 @@ def replace_node_content(xml, node, new_text):
 
     return xml
 
+
 class HTML2SPSPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
@@ -56,10 +57,10 @@ class HTML2SPSPipeline(object):
         def transform(self, data):
             raw, xml = data
             for tag in self.TAGS:
-                nodes = xml.findall('.//'+tag)
+                nodes = xml.findall(".//" + tag)
                 if len(nodes) > 0:
                     etree.strip_tags(xml, tag)
-                nodes = xml.findall('.//'+tag)
+                nodes = xml.findall(".//" + tag)
                 if len(nodes) > 0:
                     logger.info("DEVERIA TER REMOVIDO:%s ", tag)
                     for item in nodes:
@@ -133,14 +134,25 @@ class HTML2SPSPipeline(object):
 
     class BRPipe(plumber.Pipe):
         ALLOWED_IN = [
-            'aff', 'alt-title', 'article-title', 'chem-struct', 'disp-formula',
-            'product', 'sig', 'sig-block', 'subtitle', 'td', 'th', 'title',
-            'trans-subtitle', 'trans-title'
+            "aff",
+            "alt-title",
+            "article-title",
+            "chem-struct",
+            "disp-formula",
+            "product",
+            "sig",
+            "sig-block",
+            "subtitle",
+            "td",
+            "th",
+            "title",
+            "trans-subtitle",
+            "trans-title",
         ]
 
         def replace_CHANGE_BR_by_close_p_open_p(self, xml):
             _xml = etree.tostring(xml)
-            _xml = _xml.replace(b'<CHANGE_BR/>', b'</p><p>')
+            _xml = _xml.replace(b"<CHANGE_BR/>", b"</p><p>")
             return etree.fromstring(_xml)
 
         def transform(self, data):
@@ -149,11 +161,11 @@ class HTML2SPSPipeline(object):
             nodes = xml.findall("*[br]")
             for node in nodes:
                 if node.tag in self.ALLOWED_IN:
-                    for br in node.findall('br'):
-                        br.tag = 'break'
-                elif node.tag == 'p':
-                    for br in node.findall('br'):
-                        br.tag = 'CHANGE_BR'
+                    for br in node.findall("br"):
+                        br.tag = "break"
+                elif node.tag == "p":
+                    for br in node.findall("br"):
+                        br.tag = "CHANGE_BR"
                         changed = True
             etree.strip_tags(xml, "br")
             if changed:
@@ -287,6 +299,10 @@ class HTML2SPSPipeline(object):
 
         def _parser_node_anchor(self, node, _attrib, href):
             node.tag = "xref"
+
+            # remover name e title
+            _attrib.pop("title", None)
+            _attrib.pop("name", None)
 
             root = node.getroottree()
             ref_node = root.findall("//*[@id='%s']" % href)

@@ -20,7 +20,10 @@ def conversion_article_xml(file_xml_path):
 
     # sobrecreve o html escapado anterior pelo novo xml tratado
     remove = obj_xml.find("body")
-    remove.getparent().replace(remove, obj_html_body)
+    if remove:
+        remove.getparent().replace(remove, obj_html_body)
+    else:
+        logger.warning("Arquivo sem Body: %s", file_xml_path)
 
     new_file_xml_path = os.path.join(
         config.get("CONVERSION_PATH"), os.path.split(file_xml_path)[1]
@@ -50,4 +53,3 @@ def conversion_article_ALLxml():
         except Exception as ex:
             logger.error(file_xml)
             logger.exception(ex)
-            raise
