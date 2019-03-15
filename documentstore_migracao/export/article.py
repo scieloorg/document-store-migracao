@@ -54,13 +54,6 @@ def get_all_articles_notXML(issn):
     return articles
 
 
-def get_article_identifiers(issn):
-    identifiers = ext_identifiers(issn)
-    if identifiers:
-        return [document["code"] for document in identifiers["objects"]]
-
-
-def get_not_xml_article(identifier):
-    article = ext_article_json(identifier)
-    if article["version"] != "xml":
-        return ext_article_txt(identifier)
+def get_not_xml_article(article):
+    if article.data["version"] != "xml":
+        return ext_article_txt(article.data["code"])

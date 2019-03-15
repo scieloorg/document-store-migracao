@@ -19,3 +19,11 @@ def environ(**kwargs):
             os.environ[k] = oldval
         for k in todel:
             del os.environ[k]
+
+
+def AnyType(cls):
+    class AnyType(cls):
+        def __eq__(self, other):
+            return isinstance(other, cls)
+
+    return AnyType()
