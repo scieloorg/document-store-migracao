@@ -16,6 +16,10 @@ def _process(xml, tag, func):
     logger.info("Total de %s tags '%s' processadas", len(nodes), tag)
 
 
+def replace_node_content(xml, node, new_text):
+
+    return xml
+
 class HTML2SPSPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
@@ -128,13 +132,32 @@ class HTML2SPSPipeline(object):
             return data
 
     class BRPipe(plumber.Pipe):
+        ALLOWED_IN = [
+            'aff', 'alt-title', 'article-title', 'chem-struct', 'disp-formula',
+            'product', 'sig', 'sig-block', 'subtitle', 'td', 'th', 'title',
+            'trans-subtitle', 'trans-title'
+        ]
+
+        def replace_CHANGE_BR_by_close_p_open_p(self, xml):
+            _xml = etree.tostring(xml)
+            _xml = _xml.replace(b'<CHANGE_BR/>', b'</p><p>')
+            return etree.fromstring(_xml)
+
         def transform(self, data):
             raw, xml = data
-
-            nodes = xml.findall(".//br")
+            changed = False
+            nodes = xml.findall("*[br]")
             for node in nodes:
-                node.tag = "break"
-
+                if node.tag in self.ALLOWED_IN:
+                    for br in node.findall('br'):
+                        br.tag = 'break'
+                elif node.tag == 'p':
+                    for br in node.findall('br'):
+                        br.tag = 'CHANGE_BR'
+                        changed = True
+            etree.strip_tags(xml, "br")
+            if changed:
+                return data[0], self.replace_CHANGE_BR_by_close_p_open_p(xml)
             return data
 
     class PPipe(plumber.Pipe):
