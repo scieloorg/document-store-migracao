@@ -33,7 +33,7 @@ setuptools.setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]
     ),
     include_package_data=False,
-    python_requires=">=3.6",
+    python_requires=">=3.5",
     install_requires=install_requires,
     test_suite="tests",
     classifiers=[
