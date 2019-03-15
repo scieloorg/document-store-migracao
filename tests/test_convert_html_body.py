@@ -478,6 +478,39 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b'<root><p>Teste</p></root>'
         )
 
+    def test_remove_exceding_style_tags(self):
+        text = '<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>'
+        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p/><p><b>A</b></p><p>Teste</p></root>'
+        )
+
+    def test_remove_exceding_style_tags_2(self):
+        text = '<root><p><b><i>dado<u></u></i></b></p></root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p><b><i>dado</i></b></p></root>'
+        )
+
+    def test_remove_exceding_style_tags_3(self):
+        text = '<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
+        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste</p></root>'
+        )
+
+    def test_remove_exceding_style_tags_4(self):
+        text = '<root><p><b>   <img src="x"/></b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
+        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>'
+        )
+
     def test__process(self):
         def f(node):
             node.tag = node.tag.upper()
