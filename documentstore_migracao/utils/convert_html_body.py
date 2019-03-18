@@ -21,7 +21,7 @@ def replace_node_content(xml, node, new_text):
     return xml
 
 
-def wrap_node(node, elem_wrap='p'):
+def wrap_node(node, elem_wrap="p"):
     tag = node.tag
     p = etree.Element(elem_wrap)
     _node = deepcopy(node)
@@ -87,8 +87,8 @@ class HTML2SPSPipeline(object):
         def transform(self, data):
             raw, xml = data
             for tag in self.TAGS:
-                for node in xml.findall('.//'+tag):
-                    text = ''.join(node.itertext()).strip()
+                for node in xml.findall(".//" + tag):
+                    text = "".join(node.itertext()).strip()
                     if not text:
                         node.tag = "STRIPTAG"
             etree.strip_tags(xml, "STRIPTAG")
@@ -248,16 +248,15 @@ class HTML2SPSPipeline(object):
             return data
 
     class LiPipe(plumber.Pipe):
-        ALLOWED_CHILDREN = ('label', 'title', 'p', 'def-list', 'list')
+        ALLOWED_CHILDREN = ("label", "title", "p", "def-list", "list")
 
         def parser_node(self, node):
             node.tag = "list-item"
             node.attrib.clear()
-            tags = {n.tag for n in node.findall('*')}
-            not_allowed = [tag for tag in tags
-                           if tag not in self.ALLOWED_CHILDREN]
+            tags = {n.tag for n in node.findall("*")}
+            not_allowed = [tag for tag in tags if tag not in self.ALLOWED_CHILDREN]
             if len(not_allowed) > 0:
-                node = wrap_node(node, 'p')
+                node = wrap_node(node, "p")
 
         def transform(self, data):
             raw, xml = data

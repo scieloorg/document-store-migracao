@@ -117,7 +117,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td></root>')
+            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td></root>',
+        )
 
     def test_pipe_p(self):
         text = '<root><p align="x">bla</p><p baljlba="1"/></root>'
@@ -149,16 +150,17 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_li(self):
         text = '<root><li align="x" src="a04qdr04.gif">Texto dentro de <b>li</b> 1</li><li align="x" src="a04qdr08.gif">Texto dentro de <b>li</b> 2</li></root>'
-        expected = [b'<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>', b'<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>']
+        expected = [
+            b"<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>",
+            b"<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>",
+        ]
         raw, transformed = self._transform(text, self.pipeline.LiPipe())
 
         nodes = transformed.findall(".//list-item")
         self.assertEqual(len(nodes), 2)
         for node, text in zip(nodes, expected):
             with self.subTest(node=node):
-                self.assertEqual(
-                    text,
-                    etree.tostring(node))
+                self.assertEqual(text, etree.tostring(node))
                 self.assertEqual(len(node.attrib), 0)
 
     def test_pipe_ol(self):
@@ -451,67 +453,63 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
     def test_pipe_remove_deprecated_small(self):
-        text = '<root><p><bold><small>   Teste</small></bold></p></root>'
+        text = "<root><p><bold><small>   Teste</small></bold></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p><bold>   Teste</bold></p></root>')
+            etree.tostring(transformed), b"<root><p><bold>   Teste</bold></p></root>"
+        )
 
     def test_pipe_remove_deprecated_big(self):
-        text = '<root><p><big>Teste</big></p></root>'
+        text = "<root><p><big>Teste</big></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>Teste</p></root>'
-        )
+        self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_pipe_remove_deprecated_dir(self):
-        text = '<root><p><dir>Teste</dir></p></root>'
+        text = "<root><p><dir>Teste</dir></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>Teste</p></root>'
-        )
+        self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_pipe_remove_deprecated_font(self):
-        text = '<root><p><font>Teste</font></p></root>'
+        text = "<root><p><font>Teste</font></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>Teste</p></root>'
-        )
+        self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_remove_exceding_style_tags(self):
-        text = '<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        text = "<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>"
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p/><p><b>A</b></p><p>Teste</p></root>'
+            etree.tostring(transformed), b"<root><p/><p><b>A</b></p><p>Teste</p></root>"
         )
 
     def test_remove_exceding_style_tags_2(self):
-        text = '<root><p><b><i>dado<u></u></i></b></p></root>'
+        text = "<root><p><b><i>dado<u></u></i></b></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe())
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p><b><i>dado</i></b></p></root>'
+            etree.tostring(transformed), b"<root><p><b><i>dado</i></b></p></root>"
         )
 
     def test_remove_exceding_style_tags_3(self):
-        text = '<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        text = "<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>"
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste</p></root>'
+            b"<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste</p></root>",
         )
 
     def test_remove_exceding_style_tags_4(self):
         text = '<root><p><b>   <img src="x"/></b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>'
+            b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>',
         )
 
     def test__process(self):
