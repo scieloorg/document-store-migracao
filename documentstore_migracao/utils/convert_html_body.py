@@ -21,7 +21,6 @@ def replace_node_content(xml, node, new_text):
     return xml
 
 
-
 def wrap_node(node, elem_wrap='p'):
     tag = node.tag
     p = etree.Element(elem_wrap)
@@ -40,6 +39,7 @@ class HTML2SPSPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.DeprecatedHTMLTagsPipe(),
+            self.RemoveExcedingStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.BRPipe(),
@@ -79,6 +79,19 @@ class HTML2SPSPipeline(object):
                     logger.info("DEVERIA TER REMOVIDO:%s ", tag)
                     for item in nodes:
                         logger.info(etree.tostring(item))
+            return data
+
+    class RemoveExcedingStyleTagsPipe(plumber.Pipe):
+        TAGS = ("b", "i", "em", "strong", "u")
+
+        def transform(self, data):
+            raw, xml = data
+            for tag in self.TAGS:
+                for node in xml.findall('.//'+tag):
+                    text = ''.join(node.itertext()).strip()
+                    if not text:
+                        node.tag = "STRIPTAG"
+            etree.strip_tags(xml, "STRIPTAG")
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
@@ -250,6 +263,7 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "li", self.parser_node)
+
             return data
 
     class OlPipe(plumber.Pipe):
