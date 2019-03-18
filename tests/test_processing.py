@@ -2,23 +2,20 @@ import os
 import unittest
 from unittest.mock import patch, ANY
 
-from xylose.scielodocument import Journal
+from xylose.scielodocument import Journal, Article
 from documentstore_migracao.processing import extrated, conversion, reading
 
-from . import utils, SAMPLES_PATH, SAMPLES_JOURNAL, SAMPLES_XML_ARTICLE
+from . import utils, SAMPLES_PATH, SAMPLES_JOURNAL, SAMPLES_XML_ARTICLE, SAMPLES_ARTICLE
 
 
 class TestProcessingExtrated(unittest.TestCase):
     def setUp(self):
         self.obj_journal = Journal(SAMPLES_JOURNAL)
 
-    @unittest.skip("acesso ao article meta")
-    @patch("documentstore_migracao.processing.extrated.article.get_all_articles_notXML")
-    def test_extrated_journal_data(self, mk_get_all_articles_notXML):
+    @patch("documentstore_migracao.processing.extrated.article.get_articles")
+    def test_extrated_journal_data(self, mk_get_articles):
 
-        mk_get_all_articles_notXML.return_value = [
-            ("S0036-36341997000100001", SAMPLES_XML_ARTICLE)
-        ]
+        mk_get_articles.return_value = [Article(SAMPLES_ARTICLE)]
         with utils.environ(SOURCE_PATH="/tmp"):
             extrated.extrated_journal_data(self.obj_journal)
 
@@ -30,14 +27,13 @@ class TestProcessingExtrated(unittest.TestCase):
     def test_extrated_selected_journal(self, mk_extrated_journal_data):
 
         extrated.extrated_selected_journal(SAMPLES_JOURNAL["issns"])
-        # mk_extrated_journal_data.assert_called_once_with(self.obj_journal)
-        self.assertTrue(True)
+        mk_extrated_journal_data.assert_called_once_with(ANY)
 
-    @patch("documentstore_migracao.processing.extrated.journal.get_all_journal")
+    @patch("documentstore_migracao.processing.extrated.journal.get_journals")
     @patch("documentstore_migracao.processing.extrated.extrated_journal_data")
-    def test_extrated_all_data(self, mk_extrated_journal_data, mk_get_all_journal):
+    def test_extrated_all_data(self, mk_extrated_journal_data, mk_get_journals):
 
-        mk_get_all_journal.return_value = [self.obj_journal]
+        mk_get_journals.return_value = [self.obj_journal]
         extrated.extrated_all_data()
         mk_extrated_journal_data.assert_called_once_with(self.obj_journal)
 

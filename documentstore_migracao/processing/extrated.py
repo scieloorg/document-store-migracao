@@ -9,22 +9,22 @@ logger = logging.getLogger(__name__)
 
 
 def extrated_journal_data(obj_journal):
-    list_articles = []
+    count = 0
     logger.info("\t coletando dados do periodico '%s'", obj_journal.title)
-    identifiers = article.get_article_identifiers(obj_journal.scielo_issn)
-    for identifier in identifiers:
-        name_article = identifier
-        xml_article = article.get_not_xml_article(identifier)
+
+    articles = article.get_articles(obj_journal.scielo_issn)
+    for _article in articles:
+        xml_article = article.get_not_xml_article(_article)
         if xml_article:
-            list_articles.append(name_article)
-            logger.info("\t Salvando arquivo '%s'", name_article)
-            file_path = os.path.join(config.get("SOURCE_PATH"), "%s.xml" % name_article)
-            logger.info("\t Salvando arquivo '%s'", file_path)
-            files.write_file(
-                file_path,
-                xml_article,
+            count += 1
+
+            file_path = os.path.join(
+                config.get("SOURCE_PATH"), "%s.xml" % _article.data["code"]
             )
-    logger.info("\t Total de %s artigos", len(list_articles))
+            logger.info("\t Salvando arquivo '%s'", file_path)
+            files.write_file(file_path, xml_article)
+
+    logger.info("\t Total de %s artigos", count)
 
 
 def extrated_selected_journal(issn):
@@ -38,7 +38,7 @@ def extrated_selected_journal(issn):
 def extrated_all_data():
 
     logger.info("Iniciando extração")
-    list_journais = journal.get_all_journal()
+    list_journais = journal.get_journals()
     for obj_journal in list_journais:
 
         extrated_journal_data(obj_journal)

@@ -98,15 +98,18 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>texto<br/><hr/></p><p> <img align="x" src="a04qdr04.gif"/></p><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>')
+            b'<root><p>texto<br/><hr/></p><p> <img align="x" src="a04qdr04.gif"/></p><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>',
+        )
 
     def test_pipe_remove_attribute_style(self):
         text = '<root><p style="x">texto <b style="x"></b></p> <td style="bla"><caption style="x"/></td></root>'
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveStyleAttributesPipe())
+            text, self.pipeline.RemoveStyleAttributesPipe()
+        )
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>texto <b/></p> <td style="bla"><caption style="x"/></td></root>')
+            b'<root><p>texto <b/></p> <td style="bla"><caption style="x"/></td></root>',
+        )
 
     def test_pipe_br(self):
         text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td></root>'
@@ -114,29 +117,28 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td></root>')
+            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td></root>',
+        )
 
     def test_pipe_p(self):
         text = '<root><p align="x">bla</p><p baljlba="1"/></root>'
         raw, transformed = self._transform(text, self.pipeline.PPipe())
 
-        self.assertEqual(
-            etree.tostring(transformed),
-            b"<root><p>bla</p><p/></root>")
+        self.assertEqual(etree.tostring(transformed), b"<root><p>bla</p><p/></root>")
 
     def test_pipe_div(self):
         text = '<root><div align="x" id="intro">bla</div><div baljlba="1"/></root>'
         raw, transformed = self._transform(text, self.pipeline.DivPipe())
 
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><sec id="intro">bla</sec><sec/></root>')
+            etree.tostring(transformed), b'<root><sec id="intro">bla</sec><sec/></root>'
+        )
 
     def test_pipe_img(self):
         text = '<root><img align="x" src="a04qdr04.gif"/><img align="x" src="a04qdr08.gif"/></root>'
         raw, transformed = self._transform(text, self.pipeline.ImgPipe())
 
-        nodes = transformed.findall('.//graphic')
+        nodes = transformed.findall(".//graphic")
 
         self.assertEqual(len(nodes), 2)
         for node, href in zip(nodes, ["a04qdr04.gif", "a04qdr08.gif"]):
@@ -148,16 +150,17 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_li(self):
         text = '<root><li align="x" src="a04qdr04.gif">Texto dentro de <b>li</b> 1</li><li align="x" src="a04qdr08.gif">Texto dentro de <b>li</b> 2</li></root>'
-        expected = [b'<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>', b'<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>']
+        expected = [
+            b"<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>",
+            b"<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>",
+        ]
         raw, transformed = self._transform(text, self.pipeline.LiPipe())
 
-        nodes = transformed.findall('.//list-item')
+        nodes = transformed.findall(".//list-item")
         self.assertEqual(len(nodes), 2)
         for node, text in zip(nodes, expected):
             with self.subTest(node=node):
-                self.assertEqual(
-                    text,
-                    etree.tostring(node))
+                self.assertEqual(text, etree.tostring(node))
                 self.assertEqual(len(node.attrib), 0)
 
     def test_pipe_ol(self):
@@ -175,12 +178,12 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         """
         raw, transformed = self._transform(text, self.pipeline.OlPipe())
 
-        nodes = transformed.findall('.//list')
+        nodes = transformed.findall(".//list")
         self.assertEqual(len(nodes), 2)
         for node in nodes:
             with self.subTest(node=node):
                 self.assertEqual(len(node.attrib), 1)
-                self.assertEqual(node.attrib['list-type'], 'order')
+                self.assertEqual(node.attrib["list-type"], "order")
 
     def test_pipe_ul(self):
         text = """
@@ -197,12 +200,12 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         """
         raw, transformed = self._transform(text, self.pipeline.UlPipe())
 
-        nodes = transformed.findall('.//list')
+        nodes = transformed.findall(".//list")
         self.assertEqual(len(nodes), 2)
         for node in nodes:
             with self.subTest(node=node):
                 self.assertEqual(len(node.attrib), 1)
-                self.assertEqual(node.attrib['list-type'], 'bullet')
+                self.assertEqual(node.attrib["list-type"], "bullet")
 
     def test_pipe_i(self):
         text = """
@@ -219,13 +222,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         """
         raw, transformed = self._transform(text, self.pipeline.IPipe())
 
-        nodes = transformed.findall('.//italic')
+        nodes = transformed.findall(".//italic")
         self.assertEqual(len(nodes), 4)
         texts = [
-            b'<italic>texto 1</italic> 1',
-            b'<italic>texto <b>2</b></italic> 2',
-            b'<italic><b>texto S</b></italic> 1',
-            b'<italic><b>texto</b> G</italic> 2',
+            b"<italic>texto 1</italic> 1",
+            b"<italic>texto <b>2</b></italic> 2",
+            b"<italic><b>texto S</b></italic> 1",
+            b"<italic><b>texto</b> G</italic> 2",
         ]
         for node, text in zip(nodes, texts):
             with self.subTest(node=node):
@@ -247,13 +250,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             """
         raw, transformed = self._transform(text, self.pipeline.BPipe())
 
-        nodes = transformed.findall('.//bold')
+        nodes = transformed.findall(".//bold")
         self.assertEqual(len(nodes), 4)
         texts = [
-            b'<bold>texto 1</bold> 1',
-            b'<bold>texto <sup>2</sup></bold> 2',
-            b'<bold><sup>texto S</sup></bold> 1',
-            b'<bold><sup>texto</sup> G</bold> 2',
+            b"<bold>texto 1</bold> 1",
+            b"<bold>texto <sup>2</sup></bold> 2",
+            b"<bold><sup>texto S</sup></bold> 1",
+            b"<bold><sup>texto</sup> G</bold> 2",
         ]
         for node, text in zip(nodes, texts):
             with self.subTest(node=node):
@@ -275,13 +278,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             """
         raw, transformed = self._transform(text, self.pipeline.UPipe())
 
-        nodes = transformed.findall('.//underline')
+        nodes = transformed.findall(".//underline")
         self.assertEqual(len(nodes), 4)
         texts = [
-            b'<underline>texto 1</underline> 1',
-            b'<underline>texto <sup>2</sup></underline> 2',
-            b'<underline><sup>texto S</sup></underline> 1',
-            b'<underline><sup>texto</sup> G</underline> 2',
+            b"<underline>texto 1</underline> 1",
+            b"<underline>texto <sup>2</sup></underline> 2",
+            b"<underline><sup>texto S</sup></underline> 1",
+            b"<underline><sup>texto</sup> G</underline> 2",
         ]
         for node, text in zip(nodes, texts):
             with self.subTest(node=node):
@@ -303,13 +306,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             """
         raw, transformed = self._transform(text, self.pipeline.EmPipe())
 
-        nodes = transformed.findall('.//italic')
+        nodes = transformed.findall(".//italic")
         self.assertEqual(len(nodes), 4)
         texts = [
-            b'<italic>texto 1</italic> 1',
-            b'<italic>texto <sup>2</sup></italic> 2',
-            b'<italic><sup>texto S</sup></italic> 1',
-            b'<italic><sup>texto</sup> G</italic> 2',
+            b"<italic>texto 1</italic> 1",
+            b"<italic>texto <sup>2</sup></italic> 2",
+            b"<italic><sup>texto S</sup></italic> 1",
+            b"<italic><sup>texto</sup> G</italic> 2",
         ]
         for node, text in zip(nodes, texts):
             with self.subTest(node=node):
@@ -331,13 +334,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             """
         raw, transformed = self._transform(text, self.pipeline.StrongPipe())
 
-        nodes = transformed.findall('.//bold')
+        nodes = transformed.findall(".//bold")
         self.assertEqual(len(nodes), 4)
         texts = [
-            b'<bold>texto 1</bold> 1',
-            b'<bold>texto <sup>2</sup></bold> 2',
-            b'<bold><sup>texto S</sup></bold> 1',
-            b'<bold><sup>texto</sup> G</bold> 2',
+            b"<bold>texto 1</bold> 1",
+            b"<bold>texto <sup>2</sup></bold> 2",
+            b"<bold><sup>texto S</sup></bold> 1",
+            b"<bold><sup>texto</sup> G</bold> 2",
         ]
         for node, text in zip(nodes, texts):
             with self.subTest(node=node):
@@ -397,118 +400,116 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertEqual(node.attrib["rid"], "home")
 
     """
+
     def test_pipe_a_hiperlink(self):
 
         text = [
-            '<root>',
+            "<root>",
             '<p><a href="https://new.scielo.br"/></p>',
             '<p><a href="https://www.google.com"><img src="mail.gif"/></a></p>',
             '<p><a href="https://www.bbc.com">BBC</a></p>',
             '<p><a href="http://www.bbc.com">Enviar <b>e-mail para</b> mim</a></p>',
-            '</root>',
+            "</root>",
         ]
-        text = ''.join(text)
+        text = "".join(text)
         raw, transformed = self._transform(text, self.pipeline.APipe())
 
-        nodes = transformed.findall('.//ext-link')
+        nodes = transformed.findall(".//ext-link")
         self.assertEqual(len(nodes), 4)
         data = [
-            ('https://new.scielo.br', b''),
-            ('https://www.google.com', b'<img src="mail.gif"/>'),
-            ('https://www.bbc.com', b'BBC'),
-            ('http://www.bbc.com', b'Enviar <b>e-mail para</b> mim'),
+            ("https://new.scielo.br", b""),
+            ("https://www.google.com", b'<img src="mail.gif"/>'),
+            ("https://www.bbc.com", b"BBC"),
+            ("http://www.bbc.com", b"Enviar <b>e-mail para</b> mim"),
         ]
         for node, item in zip(nodes, data):
             link, content = item
             with self.subTest(node=node):
                 self.assertIn(content, etree.tostring(node).strip())
-                self.assertEqual(link, node.attrib['{http://www.w3.org/1999/xlink}href'])
-                self.assertEqual('uri', node.attrib['ext-link-type'])
+                self.assertEqual(
+                    link, node.attrib["{http://www.w3.org/1999/xlink}href"]
+                )
+                self.assertEqual("uri", node.attrib["ext-link-type"])
                 self.assertEqual(len(node.attrib), 2)
 
     def test_pipe_remove_a_without_href(self):
-        text = '<root><a>Teste</a></root>'
+        text = "<root><a>Teste</a></root>"
         raw, transformed = self._transform(text, self.pipeline.APipe())
-        self.assertIsNone(transformed.find('.//a'))
+        self.assertIsNone(transformed.find(".//a"))
 
     def test_pipe_td(self):
         text = '<root><td width="" height="" style="style"><p>Teste</p></td></root>'
         raw, transformed = self._transform(text, self.pipeline.TdCleanPipe())
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><td style="style">Teste</td></root>'
+            etree.tostring(transformed), b'<root><td style="style">Teste</td></root>'
         )
 
     def test_pipe_blockquote(self):
-        text = '<root><p><blockquote>Teste</blockquote></p></root>'
+        text = "<root><p><blockquote>Teste</blockquote></p></root>"
         raw, transformed = self._transform(text, self.pipeline.BlockquotePipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p><disp-quote>Teste</disp-quote></p></root>'
+            b"<root><p><disp-quote>Teste</disp-quote></p></root>",
         )
 
     def test_pipe_remove_deprecated_small(self):
-        text = '<root><p><bold><small>   Teste</small></bold></p></root>'
+        text = "<root><p><bold><small>   Teste</small></bold></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p><bold>   Teste</bold></p></root>')
+            etree.tostring(transformed), b"<root><p><bold>   Teste</bold></p></root>"
+        )
 
     def test_pipe_remove_deprecated_big(self):
-        text = '<root><p><big>Teste</big></p></root>'
+        text = "<root><p><big>Teste</big></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>Teste</p></root>'
-        )
+        self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_pipe_remove_deprecated_dir(self):
-        text = '<root><p><dir>Teste</dir></p></root>'
+        text = "<root><p><dir>Teste</dir></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>Teste</p></root>'
-        )
+        self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_pipe_remove_deprecated_font(self):
-        text = '<root><p><font>Teste</font></p></root>'
+        text = "<root><p><font>Teste</font></p></root>"
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>Teste</p></root>'
-        )
+        self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_remove_exceding_style_tags(self):
-        text = '<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        text = "<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>"
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p/><p><b>A</b></p><p>Teste</p></root>'
+            etree.tostring(transformed), b"<root><p/><p><b>A</b></p><p>Teste</p></root>"
         )
 
     def test_remove_exceding_style_tags_2(self):
-        text = '<root><p><b><i>dado<u></u></i></b></p></root>'
+        text = "<root><p><b><i>dado<u></u></i></b></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe())
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p><b><i>dado</i></b></p></root>'
+            etree.tostring(transformed), b"<root><p><b><i>dado</i></b></p></root>"
         )
 
     def test_remove_exceding_style_tags_3(self):
-        text = '<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        text = "<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>"
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste</p></root>'
+            b"<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste</p></root>",
         )
 
     def test_remove_exceding_style_tags_4(self):
         text = '<root><p><b>   <img src="x"/></b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveExcedingStyleTagsPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+        )
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>'
+            b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>',
         )
 
     def test__process(self):
@@ -520,7 +521,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
         tags = ("div", "img", "i", "p")
         expected_tags = ("DIV", "IMG", "I", "p")
-        text = '<root><div>bla</div><img>bla</img><p>bla</p><i>bla</i></root>'
+        text = "<root><div>bla</div><img>bla</img><p>bla</p><i>bla</i></root>"
         tree = etree.fromstring(text)
         for tag, expected_tag in zip(tags, expected_tags):
             with self.subTest(tag=tag):

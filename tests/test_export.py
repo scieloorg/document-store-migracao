@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch, ANY
-from xylose.scielodocument import Journal
+from xylose.scielodocument import Journal, Article
 from documentstore_migracao.export import journal, article
-from . import SAMPLES_JOURNAL
+from . import SAMPLES_JOURNAL, SAMPLES_ARTICLE
 
 
 @patch("documentstore_migracao.export.journal.request.get")
@@ -68,16 +68,10 @@ class TestExportArticle(unittest.TestCase):
             "S0036-36341997000100001", body="true", format="xmlrsps"
         )
 
-    @unittest.skip("acesso ao article meta")    
-    @patch("documentstore_migracao.export.article.ext_identifiers")
-    def test_get_all_articles_notXML(self, mk_ext_identifiers):
+    @patch("documentstore_migracao.export.article.get_articles")
+    def test_get_all_articles_notXML(self, mk_get_articles):
 
         obj_journal = Journal(SAMPLES_JOURNAL)
-        mk_ext_identifiers.return_value = {
-            "objects": [
-                {"code": "S0036-36341997000100001"},
-                {"code": "S2237-96222017000400783"},
-            ]
-        }
+        mk_get_articles.return_value = [Article(SAMPLES_ARTICLE)]
         result = article.get_all_articles_notXML("0036-3634")
         self.assertEqual(result[0][0], "S0036-36341997000100001")

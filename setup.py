@@ -3,10 +3,10 @@ import os, setuptools
 
 
 def fix(item):
-    if '==' in item:
-        return item.replace('==', '>=')
-    if item.startswith('-e'):
-        return item[item.rfind('=')+1:]
+    if "==" in item:
+        return item.replace("==", ">=")
+    if item.startswith("-e"):
+        return item[item.rfind("=") + 1 :]
     return item
 
 
@@ -33,7 +33,7 @@ setuptools.setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]
     ),
     include_package_data=False,
-    python_requires=">=3.6",
+    python_requires=">=3.5",
     install_requires=install_requires,
     test_suite="tests",
     classifiers=[
