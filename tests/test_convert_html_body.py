@@ -111,6 +111,11 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b'<root><p>texto <b/></p> <td style="bla"><caption style="x"/></td></root>',
         )
 
+    def test_pipe_hr(self):
+        text = '<root><hr style="x" /></root>'
+        raw, transformed = self._transform(text, self.pipeline.HrPipe())
+        self.assertEqual(etree.tostring(transformed), b"<root><hr/></root>")
+
     def test_pipe_br(self):
         text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td></root>'
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
@@ -347,59 +352,34 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 0)
                 self.assertEqual(text, etree.tostring(node))
 
-    """
     def test_pipe_a_mailto(self):
-        text = ''
-            '<root>'
-            '<p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>'
-            '<p><a href="mailto:x@scielo.org"><img src="mail.gif"/></a></p>'
-            '<p><a href="mailto:a04qdr04@scielo.org">Enviar e-mail para a04qdr04</a></p>'
-            '<p><a href="mailto:a04qdr08@scielo.org">Enviar e-mail para mim</a></p>'
-            '</root>'
+        text = """<root>
+        <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
+        <p><a href="mailto:x@scielo.org"><img src="mail.gif" /></a></p>
+        <p><a href="mailto:a04qdr04@scielo.org">Enviar e-mail para a04qdr04</a></p>
+        <p><a href="mailto:a04qdr08@scielo.org">Enviar e-mail para mim</a></p>
+        </root>"""
         raw, transformed = self._transform(text, self.pipeline.APipe())
 
-        nodes = transformed.findall('.//p')
+        nodes = transformed.findall(".//p/p")
         self.assertEqual(len(nodes), 4)
         texts = [
-            b'<p>Enviar e-mail para A <email>a@scielo.org</email></p>',
-            b'<p><img src="mail.gif"/> <email>x@scielo.org</email></p>',
-            b'<p>Enviar e-mail para a04qdr04 <email>a04qdr04@scielo.org</email></p>',
-            b'<p>Enviar e-mail para mim <email>a04qdr08@scielo.org</email></p>',
+            b"<p>Enviar e-mail para A<email>a@scielo.org</email></p>",
+            b'<p><img src="mail.gif"/><email>x@scielo.org</email></p>',
+            b"<p>Enviar e-mail para a04qdr04<email>a04qdr04@scielo.org</email></p>",
+            b"<p>Enviar e-mail para mim<email>a04qdr08@scielo.org</email></p>",
         ]
         for node, text in zip(nodes, texts):
             with self.subTest(node=node):
                 self.assertEqual(text, etree.tostring(node).strip())
-
 
     def test_pipe_a_anchor(self):
-        text = ''
-            '<root>'
-            '<p><a href="a"/></p>'
-            '<p><a href="x"><img src="mail.gif"/></a></p>'
-            '<p><a href="a04qdr04">Enviar <b>e-mail</b> para a04qdr04</a></p>'
-            '<p><a href="a04qdr08">Enviar e-mail para mim</a></p>'
-            '</root>'
-        raw, transformed = self._transform(text, self.pipeline.APipe())
-
-        nodes = transformed.findall('.//p')
-        self.assertEqual(len(nodes), 4)
-        texts = [
-            b'<p>Enviar e-mail para A <email>a@scielo.org</email></p>',
-            b'<p><img src="mail.gif"/> <email>x@scielo.org</email></p>',
-            b'<p>Enviar e-mail para a04qdr04 <email>a04qdr04@scielo.org</email></p>',
-            b'<p>Enviar e-mail para mim <email>a04qdr08@scielo.org</email></p>',
-        ]
-        for node, text in zip(nodes, texts):
-            with self.subTest(node=node):
-                self.assertEqual(text, etree.tostring(node).strip())
-
-        node = self.etreeXML.find(".//font[@size='1']/a")
+        node = self.etreeXML.find(".//font[@size='1']")
         data = self.etreeXML, node
         self.pipeline.APipe().transform(data)
 
-        self.assertEqual(node.attrib["rid"], "home")
-
-    """
+        text = b'<font size="1">\n            <xref ref-type="a" rid="home">\n                <sup>Hospital (1)</sup>\n            </xref>\n        </font>'
+        self.assertEqual(text, etree.tostring(node).strip())
 
     def test_pipe_a_hiperlink(self):
 

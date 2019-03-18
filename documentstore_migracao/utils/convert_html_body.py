@@ -316,8 +316,12 @@ class HTML2SPSPipeline(object):
 
     class APipe(plumber.Pipe):
         def _parser_node_mailto(self, node, _attrib, href):
-            node.tag = "email"
-            node.text = href.replace("mailto:", "")
+
+            email = etree.Element("email")
+            email.text = href.replace("mailto:", "")
+
+            node.tag = "p"
+            node.append(email)
             _attrib = {}
             return _attrib
 
@@ -339,9 +343,11 @@ class HTML2SPSPipeline(object):
             _attrib.pop("name", None)
 
             root = node.getroottree()
-            ref_node = root.findall("//*[@id='%s']" % href)
+            ref_node = root.findall("//*[@id='%s']" % href.replace("#", ""))
             if ref_node:
-                _attrib.update({"rid": href.replace("#", ""), "ref-type": ref_node.tag})
+                _attrib.update(
+                    {"rid": href.replace("#", ""), "ref-type": ref_node[0].tag}
+                )
             return _attrib
 
         def parser_node(self, node):
