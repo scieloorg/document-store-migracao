@@ -59,6 +59,7 @@ class HTML2SPSPipeline(object):
             self.BlockquotePipe(),
             self.HrPipe(),
             self.GraphicChildrenPipe(),
+            self.RemoveCommentPipe(),
         )
 
     class SetupPipe(plumber.Pipe):
@@ -489,6 +490,17 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "graphic", self.parser_node)
+            return data
+
+    class RemoveCommentPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+
+            comments = xml.xpath("//comment()")
+            for comment in comments:
+                parent = comment.getparent()
+                parent.remove(comment)
+            logger.info("Total de %s 'comentarios' processadas", len(comments))
             return data
 
     def deploy(self, raw):
