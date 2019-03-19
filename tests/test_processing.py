@@ -54,17 +54,17 @@ class TestProcessingConversion(unittest.TestCase):
 
             self.assertEqual(len(mk_conversion_article_xml.mock_calls), 6)
 
-    @unittest.skip("test_conversion_article_ALLxml_with_exception")
-    @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
-    def test_conversion_article_ALLxml_with_exception(self, mk_conversion_article_xml):
+    # @unittest.skip("test_conversion_article_ALLxml_with_exception")
+    # @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
+    # def test_conversion_article_ALLxml_with_exception(self, mk_conversion_article_xml):
 
-        mk_conversion_article_xml.side_effect = KeyError("Test Error - CONVERSION")
-        with utils.environ(SOURCE_PATH=SAMPLES_PATH):
+    #     mk_conversion_article_xml.side_effect = KeyError("Test Error - CONVERSION")
+    #     with utils.environ(SOURCE_PATH=SAMPLES_PATH):
 
-            with self.assertRaises(KeyError) as cm:
-                conversion.conversion_article_ALLxml()
+    #         with self.assertRaises(KeyError) as cm:
+    #             conversion.conversion_article_ALLxml()
 
-                self.assertEqual("Test Error - CONVERSION", str(cm.exception))
+    #             self.assertEqual("Test Error - CONVERSION", str(cm.exception))
 
 
 class TestProcessingReading(unittest.TestCase):

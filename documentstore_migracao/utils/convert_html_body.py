@@ -58,6 +58,7 @@ class HTML2SPSPipeline(object):
             self.TdCleanPipe(),
             self.BlockquotePipe(),
             self.HrPipe(),
+            self.GraphicChildrenPipe(),
         )
 
     class SetupPipe(plumber.Pipe):
@@ -474,6 +475,20 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "hr", self.parser_node)
+            return data
+
+    class GraphicChildrenPipe(plumber.Pipe):
+        TAGS = ("sub", "ext-link", "xref", "italic", "bold", "sup")
+
+        def parser_node(self, node):
+            parent = node.getparent()
+            if parent.tag in self.TAGS:
+                parent.getparent().replace(parent, node)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "graphic", self.parser_node)
             return data
 
     def deploy(self, raw):
