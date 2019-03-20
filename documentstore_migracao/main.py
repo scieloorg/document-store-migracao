@@ -85,6 +85,66 @@ def process(args):
     return 0
 
 
+def migrate_journals():
+    """
+    JSON -> Kernel
+    - Ler Dados
+    - Normalizar dados para o Kernel
+        - Isis2Json -> Xylose
+        - SciELO Manager -> JSON
+    - Inserir no MongoDB do Kernel
+    """
+    parser = argparse.ArgumentParser(description="Document Store (Kernel) - Journal Migration")
+    parser.add_argument(
+        "--data_origin",
+        "-d",
+        help="Data origin: ISIS Bases (i) or SciELO Manager (m)",
+        choices=['i', 'm'],
+    )
+    parser.add_argument(
+        "--extract",
+        "-e",
+        action='store_true',
+        help="Extract data from ISIS Bases (default: don't extract)",
+    )
+    parser.add_argument(
+        '--logging_file',
+        '-o',
+        help='Full path to the log file'
+    )
+    parser.add_argument(
+        '--logging_level',
+        '-l',
+        default="INFO",
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        help='Loggin level'
+    )
+    args = parser.parse_args()
+    # args2 = parser.parse_args()
+
+    # CHANGE LOGGER
+    level = getattr(logging, args.logging_level.upper())
+    logger = logging.getLogger()
+    logger.setLevel(level)
+
+    if args.data_origin == 'i':
+        # import pdb; pdb.set_trace()
+        if args.extract:
+            print("Extract ISIS Data")
+            print("Save ISIS Data to JSON")
+        print("Reading JSON")
+        print("Load Xylose")
+        print("Normalize data to Kernel")
+    elif args.data_origin == 'm':
+        print("Connect to Manager Database")
+        print("Reading Database")
+        print("Normalize data to Kernel")
+    else:
+        parser.error("Choose (i)SIS Bases or SciELO (m)anager\n")
+
+    print("Saving data to Kernel")
+
+
 def main():
     """ method main to script setup.py """
     sys.exit(process(sys.argv[1:]))
