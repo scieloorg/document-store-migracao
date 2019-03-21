@@ -10,6 +10,7 @@ _default = dict(
     CONVERSION_PATH=os.path.join(BASE_PATH, "xml/conversion"),
     SUCCESS_PROCESSING_PATH=os.path.join(BASE_PATH, "xml/success"),
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
+    ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
 )
 
 
