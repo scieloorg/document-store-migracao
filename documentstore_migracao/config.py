@@ -11,6 +11,7 @@ _default = dict(
     SUCCESS_PROCESSING_PATH=os.path.join(BASE_PATH, "xml/success"),
     GENERATOR_PATH=os.path.join(BASE_PATH, "xml/html"),
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
+    ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
 )
 
 
