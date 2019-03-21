@@ -6,6 +6,8 @@ import os, logging
 
 
 from documentstore_migracao.processing import extrated, reading, conversion, validation
+from documentstore_migracao import exceptions, config
+from documentstore_migracao.export import journal as export_journal
 
 logger = logging.getLogger(__name__)
 
@@ -120,18 +122,20 @@ def migrate_journals():
         help='Loggin level'
     )
     args = parser.parse_args()
-    # args2 = parser.parse_args()
 
     # CHANGE LOGGER
     level = getattr(logging, args.logging_level.upper())
     logger = logging.getLogger()
     logger.setLevel(level)
+    os.environ["SOURCE_PATH"] = os.path.join(config.BASE_PATH, "json/source")
 
     if args.data_origin == 'i':
-        # import pdb; pdb.set_trace()
         if args.extract:
-            print("Extract ISIS Data")
-            print("Save ISIS Data to JSON")
+            try:
+                export_journal.extract_journals_from_isis()
+            except exceptions.ExtractError as exc:
+                logger.error(str(exc))
+                sys.exit(1)
         print("Reading JSON")
         print("Load Xylose")
         print("Normalize data to Kernel")
