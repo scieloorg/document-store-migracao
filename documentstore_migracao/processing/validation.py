@@ -3,7 +3,7 @@ import logging
 
 from packtools import XMLValidator
 
-from documentstore_migracao.utils import files
+from documentstore_migracao.utils import files, dicts
 from documentstore_migracao import config
 
 logger = logging.getLogger(__name__)
@@ -22,8 +22,8 @@ def validator_article_xml(file_xml_path, print_error=True):
                 logger.error("%s - %s - %s", error.level, error.line, error.message)
 
             message = error.message[:60]
-            result.setdefault(message, 0)
-            result[message] += 1
+            data = {"count": 1, "files": (error.line, file_xml_path)}
+            dicts.merge(result, message, data)
 
     return result
 
@@ -41,14 +41,12 @@ def validator_article_ALLxml():
                 os.path.join(config.get("CONVERSION_PATH"), file_xml), False
             )
             for k_error, v_error in errors.items():
-                result.setdefault(k_error, 0)
-
-                result[k_error] += v_error
+                dicts.merge(result, k_error, v_error)
 
         except Exception as ex:
             logger.exception(ex)
             raise
 
-    analase = sorted(result.items(), key=lambda x: x[1], reverse=True)
+    analase = sorted(result.items(), key=lambda x: x[1]["count"], reverse=True)
     for k_result, v_result in analase:
-        logger.error("%s - %s", k_result, v_result)
+        logger.error("%s - %s", k_result, v_result["count"])
