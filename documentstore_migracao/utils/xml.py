@@ -1,17 +1,15 @@
 """ module to methods xml file """
 
-import re
 import logging
-import unicodedata
-
 from lxml import etree
 from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
+from documentstore_migracao.utils.string import normalize
 
 logger = logging.getLogger(__name__)
 
 
 def str2objXML(string):
-    _string = unicodedata.normalize("NFKD", " ".join(string.split()))
+    _string = normalize(string)
     try:
         return etree.fromstring("<body>%s</body>" % (string))
     except etree.XMLSyntaxError as e:

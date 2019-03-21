@@ -23,15 +23,13 @@ def replace_node_content(xml, node, new_text):
 
 def wrap_node(node, elem_wrap="p"):
     tag = node.tag
+
     p = etree.Element(elem_wrap)
     _node = deepcopy(node)
     p.append(_node)
     etree.strip_tags(p, tag)
-    for n in node.findall("*"):
-        node.remove(n)
-    node.text = ""
-    node.append(p)
-    return node
+
+    return p
 
 
 class HTML2SPSPipeline(object):
@@ -46,7 +44,7 @@ class HTML2SPSPipeline(object):
             self.PPipe(),
             self.DivPipe(),
             self.ImgPipe(),
-            self.LiPipe(),
+            # self.LiPipe(),
             self.OlPipe(),
             self.UlPipe(),
             self.IPipe(),
@@ -68,7 +66,7 @@ class HTML2SPSPipeline(object):
             return data, xml
 
     class DeprecatedHTMLTagsPipe(plumber.Pipe):
-        TAGS = ["font", "small", "big", "dir", "span"]
+        TAGS = ["font", "small", "big", "dir", "span", "s"]
 
         def transform(self, data):
             raw, xml = data
@@ -255,10 +253,14 @@ class HTML2SPSPipeline(object):
         def parser_node(self, node):
             node.tag = "list-item"
             node.attrib.clear()
-            tags = {n.tag for n in node.findall("*")}
-            not_allowed = [tag for tag in tags if tag not in self.ALLOWED_CHILDREN]
-            if len(not_allowed) > 0:
-                node = wrap_node(node, "p")
+
+            c_not_allowed = [
+                c_node
+                for c_node in node.getchildren()
+                if c_node.tag not in self.ALLOWED_CHILDREN
+            ]
+            for c_node in c_not_allowed:
+                node.replace(c_node, wrap_node(c_node, "p"))
 
         def transform(self, data):
             raw, xml = data
@@ -345,11 +347,13 @@ class HTML2SPSPipeline(object):
             _attrib.pop("name", None)
 
             root = node.getroottree()
-            ref_node = root.findall("//*[@id='%s']" % href.replace("#", ""))
-            if ref_node:
-                _attrib.update(
-                    {"rid": href.replace("#", ""), "ref-type": ref_node[0].tag}
-                )
+            list_tags = ["div", "sec", "table"]
+            for tag in list_tags:
+                ref_node = root.findall("//%s[@id='%s']" % (tag, href.replace("#", "")))
+                if ref_node:
+                    _attrib.update(
+                        {"rid": href.replace("#", ""), "ref-type": ref_node[0].tag}
+                    )
             return _attrib
 
         def parser_node(self, node):
@@ -479,12 +483,74 @@ class HTML2SPSPipeline(object):
             return data
 
     class GraphicChildrenPipe(plumber.Pipe):
-        TAGS = ("sub", "ext-link", "xref", "italic", "bold", "sup")
+        TAGS = (
+            "addr-line",
+            "alternatives",
+            "alt-title",
+            "article-title",
+            "attrib",
+            "award-id",
+            "bold",
+            "chapter-title",
+            "code",
+            "collab",
+            "comment",
+            "compound-kwd-part",
+            "compound-subject-part",
+            "conf-theme",
+            "data-title",
+            "def-head",
+            "disp-formula",
+            "element-citation",
+            "fixed-case",
+            "funding-source",
+            "inline-formula",
+            "italic",
+            "label",
+            "license-p",
+            "meta-value",
+            "mixed-citation",
+            "monospace",
+            "named-content",
+            "overline",
+            "p",
+            "part-title",
+            "private-char",
+            "product",
+            "roman",
+            "sans-serif",
+            "sc",
+            "see",
+            "see-also",
+            "sig",
+            "sig-block",
+            "source",
+            "std",
+            "strike",
+            "styled-content",
+            "sub",
+            "subject",
+            "subtitle",
+            "sup",
+            "supplement",
+            "support-source",
+            "td",
+            "term",
+            "term-head",
+            "textual-form",
+            "th",
+            "title",
+            "trans-source",
+            "trans-subtitle",
+            "trans-title",
+            "underline",
+            "verse-line",
+        )
 
         def parser_node(self, node):
             parent = node.getparent()
             if parent.tag in self.TAGS:
-                parent.getparent().replace(parent, node)
+                node.tag = "inline-graphic"
 
         def transform(self, data):
             raw, xml = data

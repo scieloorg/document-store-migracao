@@ -2,7 +2,7 @@ import os
 import logging
 
 from lxml import etree
-from documentstore_migracao.utils import files, xml
+from documentstore_migracao.utils import files, xml, string
 from documentstore_migracao import config
 
 logger = logging.getLogger(__name__)
@@ -30,14 +30,16 @@ def conversion_article_xml(file_xml_path):
     )
     files.write_file(
         new_file_xml_path,
-        etree.tostring(
-            obj_xml,
-            doctype=config.DOC_TYPE_XML,
-            pretty_print=True,
-            xml_declaration=True,
-            encoding="utf-8",
-            method="xml",
-        ).decode("utf-8"),
+        string.remove_spaces(
+            etree.tostring(
+                obj_xml,
+                doctype=config.DOC_TYPE_XML,
+                pretty_print=True,
+                xml_declaration=True,
+                encoding="utf-8",
+                method="xml",
+            ).decode("utf-8")
+        ),
     )
 
 
