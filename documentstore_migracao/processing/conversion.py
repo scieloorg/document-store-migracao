@@ -34,15 +34,17 @@ def conversion_article_xml(file_xml_path):
     )
     files.write_file(
         new_file_xml_path,
-        string.remove_spaces(
-            etree.tostring(
-                obj_xml,
-                doctype=config.DOC_TYPE_XML,
-                pretty_print=True,
-                xml_declaration=True,
-                encoding="utf-8",
-                method="xml",
-            ).decode("utf-8")
+        xml.prettyPrint_format(
+            string.remove_spaces(
+                etree.tostring(
+                    obj_xml,
+                    doctype=config.DOC_TYPE_XML,
+                    pretty_print=True,
+                    xml_declaration=True,
+                    encoding="utf-8",
+                    method="xml",
+                ).decode("utf-8")
+            )
         ),
     )
 

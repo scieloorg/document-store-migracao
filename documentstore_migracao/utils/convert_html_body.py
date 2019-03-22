@@ -1,5 +1,6 @@
 import logging
 import plumber
+import html
 from lxml import etree
 from copy import deepcopy
 from documentstore_migracao.utils import xml as utils_xml
@@ -44,7 +45,7 @@ class HTML2SPSPipeline(object):
             self.PPipe(),
             self.DivPipe(),
             self.ImgPipe(),
-            # self.LiPipe(),
+            self.LiPipe(),
             self.OlPipe(),
             self.UlPipe(),
             self.IPipe(),
@@ -58,6 +59,8 @@ class HTML2SPSPipeline(object):
             self.HrPipe(),
             self.GraphicChildrenPipe(),
             self.RemoveCommentPipe(),
+            self.BodyAllowedTagPipe(),
+            self.HTMLEscapingPipe(),
         )
 
     class SetupPipe(plumber.Pipe):
@@ -261,6 +264,13 @@ class HTML2SPSPipeline(object):
             ]
             for c_node in c_not_allowed:
                 node.replace(c_node, wrap_node(c_node, "p"))
+
+            if node.text:
+                p = etree.Element("p")
+                p.text = node.text
+
+                node.insert(0, p)
+                node.text = ""
 
         def transform(self, data):
             raw, xml = data
@@ -551,6 +561,8 @@ class HTML2SPSPipeline(object):
             parent = node.getparent()
             if parent.tag in self.TAGS:
                 node.tag = "inline-graphic"
+            else:
+                etree.strip_tags(parent.getparent(), parent.tag)
 
         def transform(self, data):
             raw, xml = data
@@ -567,6 +579,60 @@ class HTML2SPSPipeline(object):
                 parent = comment.getparent()
                 parent.remove(comment)
             logger.info("Total de %s 'comentarios' processadas", len(comments))
+            return data
+
+    class HTMLEscapingPipe(plumber.Pipe):
+        def parser_node(self, node):
+            text = node.text
+            if text:
+                node.text = html.escape(text)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "*", self.parser_node)
+            return data
+
+    class BodyAllowedTagPipe(plumber.Pipe):
+        TAGS = (
+            "address",
+            "alternatives",
+            "array",
+            "boxed-text",
+            "chem-struct-wrap",
+            "code",
+            "fig",
+            "fig-group",
+            "graphic",
+            "media",
+            "preformat",
+            "supplementary-material",
+            "table-wrap",
+            "table-wrap-group",
+            "disp-formula",
+            "disp-formula-group",
+            "def-list",
+            "list",
+            "tex-math",
+            "mml:math",
+            "p",
+            "related-article",
+            "related-object",
+            "disp-quote",
+            "speech",
+            "statement",
+            "verse-group",
+            "sec",
+            "sig-block",
+        )
+
+        def transform(self, data):
+            raw, xml = data
+
+            for children in xml.getchildren():
+                if not children.tag in self.TAGS:
+                    xml.remove(children)
+
             return data
 
     def deploy(self, raw):
