@@ -1,9 +1,12 @@
+import os
 import unittest
 from copy import deepcopy
 from unittest.mock import patch, ANY
 from xylose.scielodocument import Journal, Article
 from documentstore_migracao.export import journal, article
-from . import SAMPLES_JOURNAL, SAMPLES_ARTICLE
+from documentstore_migracao import exceptions, config
+from documentstore_migracao.export.journal import extract_journals_from_isis
+from . import SAMPLES_JOURNAL, SAMPLES_ARTICLE, SAMPLES_PATH, utils
 
 
 @patch("documentstore_migracao.export.journal.request.get")
@@ -114,3 +117,27 @@ class TestExportArticle(unittest.TestCase):
         obj = Article(copy_SAMPLES_ARTICLE)
         article.get_not_xml_article(obj)
         mk_ext_article_txt.assert_not_called()
+
+
+class ExportJournalFromIsisTest(unittest.TestCase):
+    def setUp(self):
+        self.journal_sample_mst = os.path.join(
+            SAMPLES_PATH, "base-isis-sample", "title", "title.mst"
+        )
+        self.journal_sample = os.path.join(
+            SAMPLES_PATH, "base-isis-sample", "title", "title.json"
+        )
+        self.source_path = config.get("SOURCE_PATH")
+
+    def test_raise_extract_exception_if_jython_is_not_in_path(self):
+        with utils.environ(PATH=""):
+            self.assertRaises(exceptions.ExtractError, extract_journals_from_isis)
+
+    def test_raise_extract_exception_if_base_not_found(self):
+        with utils.environ(ISIS_BASE_PATH="", SOURCE_PATH=self.source_path):
+            self.assertRaises(exceptions.ExtractError, extract_journals_from_isis)
+
+    def test_raise_extract_exception_if_source_folder_is_not_accessible(self):
+        with utils.environ(ISIS_BASE_PATH=self.journal_sample_mst, SOURCE_PATH=""):
+            self.assertRaises(exceptions.ExtractError, extract_journals_from_isis)
+
