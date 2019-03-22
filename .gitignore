@@ -100,11 +100,14 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# editors
+.vscode/
+
 # mypy
 .mypy_cache/
 xml/*
 .DS_Store
 */*/.DS_Store
-
+json/*
 
 
