@@ -4,10 +4,16 @@ import argparse
 import sys
 import os, logging
 
-
-from documentstore_migracao.processing import extrated, reading, conversion, validation, pipeline
 from documentstore_migracao import exceptions, config
 from documentstore_migracao.export import journal as export_journal
+from documentstore_migracao.processing import (
+    extrated,
+    reading,
+    conversion,
+    validation,
+    generation,
+    pipeline,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +48,12 @@ def process(args):
         action="store_true",
         help="Converte todos os arquivos XML baixados",
     )
+    parser.add_argument(
+        "--generationFiles",
+        "-G",
+        action="store_true",
+        help="Gera os html de todos os arquivos XML convertidos",
+    )
 
     parser.add_argument(
         "--issn-journal", "-j", help="Processa somente o journal informado"
@@ -74,6 +86,9 @@ def process(args):
 
     elif args.validationFiles:
         validation.validator_article_ALLxml()
+
+    elif args.generationFiles:
+        generation.article_ALL_html_generator()
 
     elif args.pathFile:
         conversion.conversion_article_xml(args.pathFile)
