@@ -50,3 +50,6 @@ def validator_article_ALLxml():
     analase = sorted(result.items(), key=lambda x: x[1]["count"], reverse=True)
     for k_result, v_result in analase:
         logger.error("%s - %s", k_result, v_result["count"])
+        if "graphic" in k_result:
+            for line, file in dicts.group(v_result["files"], 2):
+                logger.error("\t %s - %s", line, file)

@@ -2,6 +2,7 @@
 
 import logging
 from lxml import etree
+from xml.dom.minidom import parseString
 from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
 from documentstore_migracao.utils.string import normalize
 
@@ -45,3 +46,7 @@ def parser_body_xml(obj_xml):
     html = convert.deploy(txt_body)
 
     return html[1]
+
+
+def prettyPrint_format(xml_string):
+    return parseString(xml_string).toprettyxml()
