@@ -1,24 +1,33 @@
 #!/usr/bin/env python3
 import os, setuptools
 
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, "README.md")) as f:
+    README = f.read()
+with open(os.path.join(here, "CHANGES.txt")) as f:
+    CHANGES = f.read()
 
-def fix(item):
-    if "==" in item:
-        return item.replace("==", ">=")
-    if item.startswith("-e"):
-        return item[item.rfind("=") + 1 :]
-    return item
+requires = [
+    "pyramid",
+    "pyramid_jinja2",
+    "pyramid_debugtoolbar",
+    "waitress",
+    "legendarium==2.0.2",
+    "requests==2.21.0",
+    "articlemetaapi==1.26.5",
+    "picles.plumber==0.11",
+    "lxml==4.3.1",
+    "packtools",
+    "paginate",
+]
 
-
-setup_path = os.path.dirname(__file__)
-
-with open(os.path.join(setup_path, "README.md")) as readme:
-    long_description = readme.read()
-
-with open(os.path.join(setup_path, "requirements.txt")) as f:
-    install_requires = f.read().splitlines()
-    install_requires = [fix(item) for item in install_requires]
-
+tests_require = [
+    "WebTest >= 1.3.1",  # py3 compat
+    "pytest",  # includes virtualenv
+    "pytest-cov",
+    "coverage==4.5.2",
+    "nose==1.3.7",
+]
 
 setuptools.setup(
     name="documentstore-migracao",
@@ -26,15 +35,16 @@ setuptools.setup(
     author="Cesar Augustp",
     author_email="cesar.bruschetta@scielo.org",
     description="",
-    long_description=long_description,
+    long_description=README + "\n\n" + CHANGES,
     long_description_content_type="text/markdown",
     license="2-clause BSD",
     packages=setuptools.find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]
     ),
-    include_package_data=False,
+    include_package_data=True,
+    extras_require={"testing": tests_require},
+    install_requires=requires,
     python_requires=">=3.5",
-    install_requires=install_requires,
     test_suite="tests",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
@@ -43,11 +53,16 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3 :: Only",
+        "Framework :: Pyramid",
+        "Topic :: Internet :: WWW/HTTP",
+        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         "Operating System :: OS Independent",
     ],
     entry_points="""\
         [console_scripts]
             documentstore_migracao=documentstore_migracao.main:main
             migrate_journals=documentstore_migracao.main:migrate_journals
+        [paste.app_factory]
+            main=documentstore_migracao.webserver:main
     """,
 )

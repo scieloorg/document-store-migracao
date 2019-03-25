@@ -1,0 +1,18 @@
+{% extends "layout.jinja2" %}
+
+{% block content%}
+<div class="content">
+    <h1> Lista de XMLS Convertidos</h1>
+
+    <ul class="list-group">
+    {% for item in xmls %}
+      <li class="list-group-item active">
+        <a href="{{ request.route_path('render_html_converted', file_xml=item) }}"> Arquivo xml: {{item}}</a>
+      </li>
+    {% endfor %}
+    </ul>
+
+    {{ h.render_pagination(xmls)|safe }}
+
+</div>
+{% endblock content %}
