@@ -21,7 +21,7 @@ def list_converted_xml_view(request):
         items_per_page=20,
         item_count=len(list_files_xmls),
     )
-    return {"xmls": xmls}
+    return {"xmls": xmls, "page_title": "Lista de XMLS Convertidos"}
 
 
 @view_config(route_name="render_html_converted")
@@ -39,12 +39,12 @@ def render_html_converted_view(request):
         print_css="/static/css/scielo-bundle-print.css",
         js="/static/js/scielo-article-min.js",
     )
-
-    _, trans_result = tuple(html_generator)[0]
+    # import pdb;pdb.set_trace()
+    html = html_generator.generate(request.matchdict["language"])
 
     return Response(
         etree.tostring(
-            trans_result,
+            html,
             doctype=u"<!DOCTYPE html>",
             pretty_print=True,
             encoding="utf-8",

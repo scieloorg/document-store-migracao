@@ -15,6 +15,6 @@ def main(global_config, **settings):
         cache_max_age=3600,
     )
     config.add_route("list_converted_xml", "/")
-    config.add_route("render_html_converted", "/html/:file_xml")
+    config.add_route("render_html_converted", "/html/:language/:file_xml")
     config.scan()
     return config.make_wsgi_app()

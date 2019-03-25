@@ -2,6 +2,7 @@ import os
 
 from mako.template import Template
 from documentstore_migracao import config
+from documentstore_migracao.utils import dicts
 
 
 def render_pagination(items):
@@ -17,3 +18,14 @@ def render_pagination(items):
     )
     result = template.render(**{"items": items, "links": links})
     return result
+
+
+def parse_name_file(filename):
+
+    fname, languages, fext = filename.split(".")
+    return {"name": "%s.%s" % (fname, fext), "languages": languages.split("-")}
+
+
+def grouper_items(items):
+
+    return dicts.grouper(len(items) // 2, items)

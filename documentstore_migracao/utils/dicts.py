@@ -1,4 +1,5 @@
 """ module to dicts function """
+from itertools import zip_longest
 
 
 def merge(result, key, values):
@@ -20,3 +21,8 @@ def group(lst, n):
     [(0, 1, 2), (3, 4, 5), (6, 7, 8)]
     """
     return zip(*[lst[i::n] for i in range(n)])
+
+
+def grouper(n, iterable, padvalue=None):
+    "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
+    return zip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
