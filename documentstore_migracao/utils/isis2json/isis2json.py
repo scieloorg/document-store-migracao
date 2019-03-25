@@ -20,7 +20,6 @@
 
 ############################
 # this script works with Python or Jython (versions >=2.5 and <3)
-
 import sys
 import argparse
 from uuid import uuid4
@@ -66,8 +65,11 @@ def iterMstRecords(master_file_name, isis_json_type):
                     if subfield_key == '*':
                         content['_'] = subfield.getContent()
                     else:
-                        subfield_occurrences = content.setdefault(subfield_key,[])
-                        subfield_occurrences.append(subfield.getContent())
+                        if subfield_key in "_tlabcde":
+                            content.setdefault(subfield_key, subfield.getContent())
+                        else:
+                            subfield_occurrences = content.setdefault(subfield_key,[])
+                            subfield_occurrences.append(subfield.getContent())
                 field_occurrences.append(content)
             elif isis_json_type == 1:
                 content = []
