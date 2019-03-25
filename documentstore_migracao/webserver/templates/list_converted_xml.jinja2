@@ -3,16 +3,30 @@
 {% block content%}
 <div class="content">
     <h1> Lista de XMLS Convertidos</h1>
+    <div class="row">
+        {% for col in h.grouper_items(xmls) %}
+            <div class="col-md-6">
+                <ul class="list-group">
+                {% for item in col %}
+                {% if item %}
+                  <li class="list-group-item">
+                    {% set data_file = h.parse_name_file(item) %}
+                    Arquivo xml: {{data_file.name}}
 
-    <ul class="list-group">
-    {% for item in xmls %}
-      <li class="list-group-item active">
-        <a href="{{ request.route_path('render_html_converted', file_xml=item) }}"> Arquivo xml: {{item}}</a>
-      </li>
-    {% endfor %}
-    </ul>
-
-    {{ h.render_pagination(xmls)|safe }}
+                    {% for lang in data_file.languages %}
+                        <a href="{{ request.route_path('render_html_converted', file_xml=item, language=lang ) }}"
+                           target="blank" class="badge badge-success">{{lang}}</a>
+                    {% endfor %}
+                  </li>
+                {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mt-5">
+        {{ h.render_pagination(xmls)|safe }}
+    </div>
 
 </div>
 {% endblock content %}

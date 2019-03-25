@@ -50,3 +50,11 @@ def parser_body_xml(obj_xml):
 
 def prettyPrint_format(xml_string):
     return parseString(xml_string).toprettyxml()
+
+
+def get_languages(obj_xml):
+    """The language of the main document plus all translations.
+    """
+    return obj_xml.xpath(
+        '/article/@xml:lang | //sub-article[@article-type="translation"]/@xml:lang'
+    )

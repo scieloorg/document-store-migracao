@@ -25,9 +25,14 @@ def conversion_article_xml(file_xml_path):
     else:
         logger.warning("Arquivo sem Body: %s", file_xml_path)
 
+    languages = "-".join(xml.get_languages(obj_xml))
+    _, fname = os.path.split(file_xml_path)
+    fname, fext = fname.rsplit(".", 1)
+
     new_file_xml_path = os.path.join(
-        config.get("CONVERSION_PATH"), os.path.split(file_xml_path)[1]
+        config.get("CONVERSION_PATH"), "%s.%s.%s" % (fname, languages, fext)
     )
+
     files.write_file(
         new_file_xml_path,
         xml.prettyPrint_format(
