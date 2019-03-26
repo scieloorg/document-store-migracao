@@ -3,16 +3,15 @@
 import logging
 from lxml import etree
 from xml.dom.minidom import parseString
-from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
-from documentstore_migracao.utils.string import normalize
+from documentstore_migracao.utils import string, convert_html_body
 
 logger = logging.getLogger(__name__)
 
 
-def str2objXML(string):
-    _string = normalize(string)
+def str2objXML(str):
+    _string = string.normalize(str)
     try:
-        return etree.fromstring("<body>%s</body>" % (string))
+        return etree.fromstring("<body>%s</body>" % (str))
     except etree.XMLSyntaxError as e:
         # import pdb;pdb.set_trace()
         # logger.exception(e)
@@ -43,7 +42,7 @@ def find_medias(obj_xml):
 def parser_body_xml(obj_body):
 
     txt_body = getattr(obj_body.find("./p"), "text", "")
-    convert = HTML2SPSPipeline()
+    convert = convert_html_body.HTML2SPSPipeline()
     html = convert.deploy(txt_body)
 
     return html[1]

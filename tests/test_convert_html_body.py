@@ -51,12 +51,12 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertEqual(etree.tostring(transformed), b"<root><hr/></root>")
 
     def test_pipe_br(self):
-        text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td></root>'
+        text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
 
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td></root>',
+            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td><sec/></root>',
         )
 
     def test_pipe_p(self):
@@ -94,16 +94,18 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         <li><p>Texto dentro de <b>li</b> 1</p></li>
         <li align="x" src="a04qdr08.gif"><p>Texto dentro de <b>li</b> 2</p></li>
         <li><b>Texto dentro de 3</b></li>
+        <li>Texto dentro de 4</li>
         </root>"""
         expected = [
             b"<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>",
             b"<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>",
             b"<list-item><p>Texto dentro de 3</p></list-item>",
+            b"<list-item><p>Texto dentro de 4</p></list-item>",
         ]
         raw, transformed = self._transform(text, self.pipeline.LiPipe())
 
         nodes = transformed.findall(".//list-item")
-        self.assertEqual(len(nodes), 3)
+        self.assertEqual(len(nodes), 4)
         for node, text in zip(nodes, expected):
             with self.subTest(node=node):
                 self.assertEqual(text, etree.tostring(node).strip())
@@ -360,6 +362,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.APipe())
         self.assertIsNone(transformed.find(".//a"))
 
+    def test_pipe_a_href_error(self):
+        text = "<root><a href='error'>Teste</a></root>"
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+        self.assertEqual(
+            etree.tostring(transformed).strip(), b"<root><a>Teste</a></root>"
+        )
+
     def test_pipe_td(self):
         text = '<root><td width="" height="" style="style"><p>Teste</p></td></root>'
         raw, transformed = self._transform(text, self.pipeline.TdCleanPipe())
@@ -457,6 +466,14 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertEqual(
             etree.tostring(transformed),
             b"""<root><p><bold><p>nova imagem</p><inline-graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></bold></p></root>""",
+        )
+
+    def test_pipe_graphicChildren_block(self):
+        text = """<root><p><block><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></block></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
         )
 
     def test_pipe_remove_comments(self):

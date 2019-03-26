@@ -35,6 +35,30 @@ class TestMainProcess(unittest.TestCase):
         process(["--readFiles"])
         mk_reading_article_ALLxml.assert_called_once_with()
 
+    @patch("documentstore_migracao.processing.validation.validator_article_ALLxml")
+    def test_arg_validationFiles(self, mk_validator_article_ALLxml):
+
+        process(["--validationFiles"])
+        mk_validator_article_ALLxml.assert_called_once_with()
+
+    @patch("documentstore_migracao.processing.generation.article_ALL_html_generator")
+    def test_arg_generationFiles(self, mk_article_ALL_html_generator):
+
+        process(["--generationFiles"])
+        mk_article_ALL_html_generator.assert_called_once_with()
+
+    @patch("documentstore_migracao.processing.validation.validator_article_xml")
+    def test_arg_valideFile(self, mk_validator_article_xml):
+
+        process(["--valideFile", "/tmp/example.xml"])
+        mk_validator_article_xml.assert_called_once_with("/tmp/example.xml")
+
+    def test_not_arg(self):
+
+        with self.assertRaises(SystemExit) as cm:
+            process([])
+            self.assertEqual("Vc deve escolher algum parametro", str(cm.exception))
+
 
 class TestMainMain(unittest.TestCase):
     @patch("documentstore_migracao.main.process")
