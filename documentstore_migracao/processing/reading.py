@@ -1,9 +1,11 @@
 import os
 import logging
+import json
+from typing import List
 
 from lxml import etree
 from documentstore_migracao.utils import files, xml
-from documentstore_migracao import config
+from documentstore_migracao import config, exceptions
 
 
 logger = logging.getLogger(__name__)
@@ -39,3 +41,15 @@ def reading_article_ALLxml():
         except Exception as ex:
             logger.error(file_xml)
             logger.exception(ex)
+
+
+def read_journals_from_json(file_path: str = "title.json") -> List[dict]:
+    """Ler um arquivo json contendo uma lista de periódicos e
+    retorna os dados dos periódicos em formato de tipos Python
+
+    :param `file_path`: Complemento de path para o arquivo json de periódicos
+    """
+
+    json_path = os.path.join(config.get("SOURCE_PATH"), file_path)
+
+    return json.loads(files.read_file(json_path))
