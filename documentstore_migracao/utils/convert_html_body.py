@@ -203,6 +203,39 @@ class HTML2SPSPipeline(object):
             return data
 
     class PPipe(plumber.Pipe):
+        TAGS = [
+            "abstract",
+            "ack",
+            "annotation",
+            "app",
+            "app-group",
+            "author-comment",
+            "author-notes",
+            "bio",
+            "body",
+            "boxed-text",
+            "caption",
+            "def",
+            "disp-quote",
+            "fig",
+            "fn",
+            "glossary",
+            "list-item",
+            "note",
+            "notes",
+            "open-access",
+            "ref-list",
+            "sec",
+            "speech",
+            "statement",
+            "supplementary-material",
+            "support-description",
+            "table-wrap-foot",
+            "td",
+            "th",
+            "trans-abstract",
+        ]
+
         def parser_node(self, node):
             _id = node.attrib.pop("id", None)
             node.attrib.clear()
@@ -212,7 +245,7 @@ class HTML2SPSPipeline(object):
             etree.strip_tags(node, "big")
 
             parent = node.getparent()
-            if not parent.tag in config.ALLOYED_TAGS_TO_P:
+            if not parent.tag in self.TAGS:
                 logger.warning("Tag `p` in `%s`", parent.tag)
 
         def transform(self, data):

@@ -39,9 +39,9 @@ def find_medias(obj_xml):
     return media
 
 
-def parser_body_xml(obj_xml):
+def parser_body_xml(obj_body):
 
-    txt_body = getattr(obj_xml.find("body/p"), "text", "")
+    txt_body = getattr(obj_body.find("./p"), "text", "")
     convert = HTML2SPSPipeline()
     html = convert.deploy(txt_body)
 

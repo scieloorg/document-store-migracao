@@ -16,14 +16,12 @@ def conversion_article_xml(file_xml_path):
     obj_xml.set("specific-use", "sps-1.8")
     obj_xml.set("dtd-version", "1.1")
 
-    obj_html_body = xml.parser_body_xml(obj_xml)
+    for index, body in enumerate(obj_xml.xpath("//body"), start=1):
+        logger.info("Processando body numero: %s" % index)
 
-    # sobrecreve o html escapado anterior pelo novo xml tratado
-    remove = obj_xml.find("body")
-    if remove:
-        remove.getparent().replace(remove, obj_html_body)
-    else:
-        logger.warning("Arquivo sem Body: %s", file_xml_path)
+        obj_html_body = xml.parser_body_xml(body)
+        # sobrecreve o html escapado anterior pelo novo xml tratado
+        body.getparent().replace(body, obj_html_body)
 
     languages = "-".join(xml.get_languages(obj_xml))
     _, fname = os.path.split(file_xml_path)
