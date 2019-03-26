@@ -135,7 +135,7 @@ class ExportJournalFromIsisTest(unittest.TestCase):
 
     def test_raise_extract_exception_if_base_not_found(self):
         with utils.environ(ISIS_BASE_PATH="", SOURCE_PATH=self.source_path):
-            self.assertRaises(exceptions.EnvironmentError, extract_journals_from_isis)
+            self.assertRaises(exceptions.FetchEnvVariableError, extract_journals_from_isis)
 
     def test_raise_extract_exception_if_source_folder_is_not_accessible(self):
         with utils.environ(ISIS_BASE_PATH=self.journal_sample_mst, SOURCE_PATH=""):

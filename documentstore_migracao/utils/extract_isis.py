@@ -20,7 +20,7 @@ def run(base, base_format="mst"):
     OUTPUT_FILE = "%s/%s.json" % (config.get("SOURCE_PATH"), base)
 
     if not config.get("ISIS_BASE_PATH"):
-        raise exceptions.EnvironmentError(
+        raise exceptions.FetchEnvVariableError(
             "Missing ISIS base path environment variable"
         )
 
