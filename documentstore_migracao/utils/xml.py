@@ -14,7 +14,8 @@ def str2objXML(string):
     try:
         return etree.fromstring("<body>%s</body>" % (string))
     except etree.XMLSyntaxError as e:
-        logger.exception(e)
+        # import pdb;pdb.set_trace()
+        # logger.exception(e)
         return etree.fromstring("<body></body>")
 
 

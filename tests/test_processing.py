@@ -29,12 +29,12 @@ class TestProcessingExtrated(unittest.TestCase):
             self.assertTrue(os.path.isfile("/tmp/S0036-36341997000100001.xml"))
             os.remove("/tmp/S0036-36341997000100001.xml")
 
-    @unittest.skip("test_extrated_journal_data")
     @patch("documentstore_migracao.processing.extrated.extrated_journal_data")
     def test_extrated_selected_journal(self, mk_extrated_journal_data):
 
-        extrated.extrated_selected_journal(SAMPLES_JOURNAL["issns"])
-        mk_extrated_journal_data.assert_called_once_with(ANY)
+        with utils.environ(SCIELO_COLLECTION="spa"):
+            extrated.extrated_selected_journal(SAMPLES_JOURNAL["issns"])
+            mk_extrated_journal_data.assert_called_once_with(ANY)
 
     @patch("documentstore_migracao.processing.extrated.journal.get_journals")
     @patch("documentstore_migracao.processing.extrated.extrated_journal_data")
@@ -61,17 +61,16 @@ class TestProcessingConversion(unittest.TestCase):
 
             self.assertEqual(len(mk_conversion_article_xml.mock_calls), 6)
 
-    # @unittest.skip("test_conversion_article_ALLxml_with_exception")
-    # @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
-    # def test_conversion_article_ALLxml_with_exception(self, mk_conversion_article_xml):
+    @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
+    def test_conversion_article_ALLxml_with_exception(self, mk_conversion_article_xml):
 
-    #     mk_conversion_article_xml.side_effect = KeyError("Test Error - CONVERSION")
-    #     with utils.environ(SOURCE_PATH=SAMPLES_PATH):
+        mk_conversion_article_xml.side_effect = KeyError("Test Error - CONVERSION")
+        with utils.environ(SOURCE_PATH=SAMPLES_PATH):
 
-    #         with self.assertRaises(KeyError) as cm:
-    #             conversion.conversion_article_ALLxml()
-
-    #             self.assertEqual("Test Error - CONVERSION", str(cm.exception))
+            conversion.conversion_article_ALLxml()
+            # with self.assertRaises(KeyError) as cm:
+            #     conversion.conversion_article_ALLxml()
+            #     self.assertEqual("Test Error - CONVERSION", str(cm.exception))
 
 
 class TestProcessingReading(unittest.TestCase):

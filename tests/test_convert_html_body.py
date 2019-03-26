@@ -1,75 +1,9 @@
 import os
 import unittest
-from unittest.mock import patch
 from lxml import etree
 
-from documentstore_migracao.utils import files, xml, request
 from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline, _process
 from . import SAMPLES_PATH
-
-
-class TestUtilsFiles(unittest.TestCase):
-    def test_list_dir(self):
-        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), 6)
-
-    def test_read_file(self):
-        data = files.read_file(
-            os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
-        )
-        self.assertIn("0036-3634", data)
-
-    def test_write_file(self):
-        expected_text = "<a><b>bar</b></a>"
-        filename = "foo_test.txt"
-
-        try:
-            files.write_file(filename, expected_text)
-
-            with open(filename, "r") as f:
-                text = f.read()
-        finally:
-            os.remove(filename)
-
-        self.assertEqual(expected_text, text)
-
-
-class TestUtilsXML(unittest.TestCase):
-    def test_str2objXML(self):
-
-        expected_text = "<a><b>bar</b></a>"
-        obj = xml.str2objXML(expected_text)
-
-        self.assertIn(expected_text, str(etree.tostring(obj)))
-
-    def test_find_medias(self):
-
-        with open(os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml"), "r") as f:
-            text = f.read()
-        obj = etree.fromstring(text)
-        medias = xml.find_medias(obj)
-
-        self.assertFalse(len(medias))
-
-    def test_pipe_body_xml(self):
-        with open(os.path.join(SAMPLES_PATH, "S0036-36341997000100003.xml"), "r") as f:
-            text = f.read()
-
-        obj = etree.fromstring(text)
-        html = xml.parser_body_xml(obj)
-        tags = ("div", "img", "li", "ol", "ul", "i", "b", "a")
-        for tag in tags:
-            with self.subTest(tag=tag):
-                expected = html.findall(".//%s" % tag)
-                self.assertFalse(expected)
-
-
-class TestUtilsRequest(unittest.TestCase):
-    @patch("documentstore_migracao.utils.request.requests")
-    def test_get(self, mk_requests):
-
-        expected = {"params": {"collection": "spa"}}
-        request.get("http://api.test.com", **expected)
-        mk_requests.get.assert_called_once_with("http://api.test.com", **expected)
 
 
 class TestHTML2SPSPipeline(unittest.TestCase):
@@ -126,10 +60,12 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
     def test_pipe_p(self):
-        text = '<root><p align="x">bla</p><p baljlba="1"/></root>'
+        text = '<root><p align="x" id="y">bla</p><p baljlba="1"/></root>'
         raw, transformed = self._transform(text, self.pipeline.PPipe())
 
-        self.assertEqual(etree.tostring(transformed), b"<root><p>bla</p><p/></root>")
+        self.assertEqual(
+            etree.tostring(transformed), b'<root><p id="y">bla</p><p/></root>'
+        )
 
     def test_pipe_div(self):
         text = '<root><div align="x" id="intro">bla</div><div baljlba="1"/></root>'
@@ -154,18 +90,23 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 1)
 
     def test_pipe_li(self):
-        text = """<root><li><p>Texto dentro de <b>li</b> 1</p></li><li align="x" src="a04qdr08.gif"><p>Texto dentro de <b>li</b> 2</p></li></root>"""
+        text = """<root>
+        <li><p>Texto dentro de <b>li</b> 1</p></li>
+        <li align="x" src="a04qdr08.gif"><p>Texto dentro de <b>li</b> 2</p></li>
+        <li><b>Texto dentro de 3</b></li>
+        </root>"""
         expected = [
             b"<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>",
             b"<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>",
+            b"<list-item><p>Texto dentro de 3</p></list-item>",
         ]
         raw, transformed = self._transform(text, self.pipeline.LiPipe())
 
         nodes = transformed.findall(".//list-item")
-        self.assertEqual(len(nodes), 2)
+        self.assertEqual(len(nodes), 3)
         for node, text in zip(nodes, expected):
             with self.subTest(node=node):
-                self.assertEqual(text, etree.tostring(node))
+                self.assertEqual(text, etree.tostring(node).strip())
                 self.assertEqual(len(node.attrib), 0)
 
     def test_pipe_ol(self):
@@ -523,6 +464,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.RemoveCommentPipe())
         self.assertEqual(
             etree.tostring(transformed), b"""<root><x>TEXT 1</x><y>TEXT 2 </y></root>"""
+        )
+
+    def test_pipe_BodyAllowedTagPipe(self):
+        text = """<body><p>TEXT 1</p><hr/><p>TEXT 2</p></body>"""
+        raw, transformed = self._transform(text, self.pipeline.BodyAllowedTagPipe())
+        self.assertEqual(
+            etree.tostring(transformed), b"""<body><p>TEXT 1</p><p>TEXT 2</p></body>"""
         )
 
     def test__process(self):

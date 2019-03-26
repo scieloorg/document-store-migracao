@@ -1,5 +1,6 @@
 import os
 import unittest
+from copy import deepcopy
 from unittest.mock import patch, ANY
 from xylose.scielodocument import Journal, Article
 from documentstore_migracao.export import journal, article
@@ -39,6 +40,12 @@ class TestExportJournal(unittest.TestCase):
         result = journal.get_all_journal()
         self.assertEqual(result[0], obj_journal)
 
+    @patch("documentstore_migracao.export.article.RestfulClient.journals")
+    def test_get_journals(self, mk_journals, mk_r):
+
+        journal.get_journals()
+        mk_journals.assert_called_once_with(collection=ANY)
+
 
 class TestExportArticle(unittest.TestCase):
     @patch("documentstore_migracao.export.article.request.get")
@@ -74,10 +81,42 @@ class TestExportArticle(unittest.TestCase):
     @patch("documentstore_migracao.export.article.get_articles")
     def test_get_all_articles_notXML(self, mk_get_articles):
 
-        obj_journal = Journal(SAMPLES_JOURNAL)
         mk_get_articles.return_value = [Article(SAMPLES_ARTICLE)]
         result = article.get_all_articles_notXML("0036-3634")
         self.assertEqual(result[0][0], "S0036-36341997000100001")
+
+    @patch("documentstore_migracao.export.article.get_articles")
+    def test_get_all_articles_notXML_not_xml(self, mk_get_articles):
+
+        copy_SAMPLES_ARTICLE = deepcopy(SAMPLES_ARTICLE)
+        copy_SAMPLES_ARTICLE["version"] = "xml"
+
+        mk_get_articles.return_value = [Article(copy_SAMPLES_ARTICLE)]
+        result = article.get_all_articles_notXML("0036-3634")
+        self.assertEqual(result, [])
+
+    @patch("documentstore_migracao.export.article.RestfulClient.documents")
+    def test_ext_article(self, mk_documents):
+
+        result = article.get_articles("1234-5678")
+        mk_documents.assert_called_once_with(collection=ANY, issn="1234-5678")
+
+    @patch("documentstore_migracao.export.article.ext_article_txt")
+    def test_get_not_xml_article(self, mk_ext_article_txt):
+
+        obj = Article(SAMPLES_ARTICLE)
+        article.get_not_xml_article(obj)
+        mk_ext_article_txt.assert_called_once_with("S0036-36341997000100001")
+
+    @patch("documentstore_migracao.export.article.ext_article_txt")
+    def test_get_not_xml_article(self, mk_ext_article_txt):
+
+        copy_SAMPLES_ARTICLE = deepcopy(SAMPLES_ARTICLE)
+        copy_SAMPLES_ARTICLE["version"] = "xml"
+
+        obj = Article(copy_SAMPLES_ARTICLE)
+        article.get_not_xml_article(obj)
+        mk_ext_article_txt.assert_not_called()
 
 
 class ExportJournalFromIsisTest(unittest.TestCase):
