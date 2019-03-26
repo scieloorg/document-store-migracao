@@ -19,8 +19,10 @@ def run(base, base_format="mst"):
     BASE_FILE = "%s/%s/%s.%s" % (config.get("ISIS_BASE_PATH"), base, base, base_format)
     OUTPUT_FILE = "%s/%s.json" % (config.get("SOURCE_PATH"), base)
 
-    if config.get("ISIS_FILE_PATH"):
-        BASE_FILE = config.get("ISIS_FILE_PATH")
+    if not config.get("ISIS_BASE_PATH"):
+        raise exceptions.EnvironmentError(
+            "Missing ISIS base path environment variable"
+        )
 
     command = "jython %s -t 3 -p 'v' -o %s %s" % (
         ISIS2JSON_PATH,
