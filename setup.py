@@ -48,5 +48,6 @@ setuptools.setup(
     entry_points="""\
         [console_scripts]
             documentstore_migracao=documentstore_migracao.main:main
+            migrate_journals=documentstore_migracao.main:migrate_journals
     """,
 )

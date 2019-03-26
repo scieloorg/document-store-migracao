@@ -6,6 +6,8 @@ import os, logging
 
 
 from documentstore_migracao.processing import extrated, reading, conversion, validation
+from documentstore_migracao import exceptions, config
+from documentstore_migracao.export import journal as export_journal
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +85,68 @@ def process(args):
         extrated.extrated_selected_journal(args.issn_journal)
 
     return 0
+
+
+def migrate_journals():
+    """
+    JSON -> Kernel
+    - Ler Dados
+    - Normalizar dados para o Kernel
+        - Isis2Json -> Xylose
+        - SciELO Manager -> JSON
+    - Inserir no MongoDB do Kernel
+    """
+    parser = argparse.ArgumentParser(description="Document Store (Kernel) - Journal Migration")
+    parser.add_argument(
+        "--data_origin",
+        "-d",
+        help="Data origin: ISIS Bases (i) or SciELO Manager (m)",
+        choices=['i', 'm'],
+    )
+    parser.add_argument(
+        "--extract",
+        "-e",
+        action='store_true',
+        help="Extract data from ISIS Bases (default: don't extract)",
+    )
+    parser.add_argument(
+        '--logging_file',
+        '-o',
+        help='Full path to the log file'
+    )
+    parser.add_argument(
+        '--logging_level',
+        '-l',
+        default="INFO",
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        help='Loggin level'
+    )
+    args = parser.parse_args()
+
+    # CHANGE LOGGER
+    level = getattr(logging, args.logging_level.upper())
+    logger = logging.getLogger()
+    logger.setLevel(level)
+    os.environ["SOURCE_PATH"] = os.path.join(config.BASE_PATH, "json/source")
+
+    if args.data_origin == 'i':
+        if args.extract:
+            try:
+                export_journal.extract_journals_from_isis()
+            except exceptions.ExtractError as exc:
+                logger.error(str(exc))
+                sys.exit(1)
+        print("Reading JSON")
+        print("Load Xylose")
+        print("Normalize data to Kernel")
+    elif args.data_origin == 'm':
+        print("Connect to Manager Database")
+        print("Reading Database")
+        print("Normalize data to Kernel")
+    else:
+        parser.error("Choose (i)SIS Bases or SciELO (m)anager\n")
+
+    print("Saving data to Kernel")
 
 
 def main():

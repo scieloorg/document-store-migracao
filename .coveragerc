@@ -11,3 +11,4 @@ exclude_lines =
 ignore_errors = True
 omit =
     tests/*
+    documentstore_migracao/utils/isis2json/*
