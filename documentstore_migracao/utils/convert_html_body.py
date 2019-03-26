@@ -17,11 +17,6 @@ def _process(xml, tag, func):
     logger.info("Total de %s tags '%s' processadas", len(nodes), tag)
 
 
-def replace_node_content(xml, node, new_text):
-
-    return xml
-
-
 def wrap_node(node, elem_wrap="p"):
     tag = node.tag
 
@@ -77,11 +72,11 @@ class HTML2SPSPipeline(object):
                 nodes = xml.findall(".//" + tag)
                 if len(nodes) > 0:
                     etree.strip_tags(xml, tag)
-                nodes = xml.findall(".//" + tag)
-                if len(nodes) > 0:
-                    logger.info("DEVERIA TER REMOVIDO:%s ", tag)
-                    for item in nodes:
-                        logger.info(etree.tostring(item))
+                # nodes = xml.findall(".//" + tag)
+                # if len(nodes) > 0:
+                #     logger.info("DEVERIA TER REMOVIDO:%s ", tag)
+                #     for item in nodes:
+                #         logger.info(etree.tostring(item))
             return data
 
     class RemoveExcedingStyleTagsPipe(plumber.Pipe):
@@ -197,6 +192,7 @@ class HTML2SPSPipeline(object):
                     for br in node.findall("br"):
                         br.tag = "CHANGE_BR"
                         changed = True
+
             etree.strip_tags(xml, "br")
             if changed:
                 return data[0], self.replace_CHANGE_BR_by_close_p_open_p(xml)

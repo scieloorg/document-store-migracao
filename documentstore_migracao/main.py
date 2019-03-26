@@ -97,6 +97,9 @@ def process(args):
     elif args.issn_journal:
         extrated.extrated_selected_journal(args.issn_journal)
 
+    else:
+        raise SystemExit("Vc deve escolher algum parametro")
+
     return 0
 
 

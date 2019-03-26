@@ -106,7 +106,7 @@ class TestExportArticle(unittest.TestCase):
         mk_ext_article_txt.assert_called_once_with("S0036-36341997000100001")
 
     @patch("documentstore_migracao.export.article.ext_article_txt")
-    def test_get_not_xml_article(self, mk_ext_article_txt):
+    def test_get_not_xml_article_xml(self, mk_ext_article_txt):
 
         copy_SAMPLES_ARTICLE = deepcopy(SAMPLES_ARTICLE)
         copy_SAMPLES_ARTICLE["version"] = "xml"

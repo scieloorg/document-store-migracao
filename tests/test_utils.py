@@ -9,7 +9,7 @@ from . import SAMPLES_PATH
 
 class TestUtilsFiles(unittest.TestCase):
     def test_list_dir(self):
-        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), 6)
+        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), 7)
 
     def test_read_file(self):
         data = files.read_file(

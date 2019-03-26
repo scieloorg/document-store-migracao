@@ -1,0 +1,3055 @@
+<?xml version="1.0" ?>
+<!DOCTYPE article
+  PUBLIC '-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN'
+  'JATS-journalpublishing1.dtd'>
+<article article-type="research-article" dtd-version="1.1" specific-use="sps-1.8" xml:lang="pt" xmlns:xlink="http://www.w3.org/1999/xlink">
+	
+ 
+	<front>
+		
+ 
+		<journal-meta>
+			
+ 
+			<journal-id journal-id-type="publisher-id">aa</journal-id>
+			
+ 
+			<journal-title-group>
+				
+ 
+				<journal-title>Acta Amazonica</journal-title>
+				
+ 
+				<abbrev-journal-title abbrev-type="publisher">Acta Amaz.</abbrev-journal-title>
+				
+ 
+			</journal-title-group>
+			
+ 
+			<issn pub-type="ppub">0044-5967</issn>
+			
+ 
+			<issn pub-type="epub">1809-4392</issn>
+			
+ 
+			<publisher>
+				
+ 
+				<publisher-name>Instituto Nacional de Pesquisas da Amazônia</publisher-name>
+				
+ 
+				<publisher-loc>Manaus, AM, Brazil</publisher-loc>
+				
+ 
+			</publisher>
+			
+ 
+		</journal-meta>
+		
+ 
+		<article-meta>
+			
+ 
+			<article-id pub-id-type="publisher-id">S0044-59672003000300001</article-id>
+			
+ 
+			<article-id pub-id-type="doi">10.1590/S0044-59672003000300001</article-id>
+			
+ 
+			<title-group>
+				
+ 
+				<article-title>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</article-title>
+				
+ 
+				<trans-title-group xml:lang="en">
+					
+ 
+					<trans-title>Arbuscular mycorrhizal colonization and nutrient concentration of three cultivars of banana on a central Amazonian oxisol</trans-title>
+					
+ 
+				</trans-title-group>
+				
+ 
+			</title-group>
+			
+ 
+			<contrib-group>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Oliveira</surname>
+						
+ 
+						<given-names>Arlem Nascimento de</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff01"/>
+					
+ 
+				</contrib>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Oliveira</surname>
+						
+ 
+						<given-names>Luiz Antonio de</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff02"/>
+					
+ 
+				</contrib>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Figueiredo</surname>
+						
+ 
+						<given-names>Antenor Francisco de</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff03"/>
+					
+ 
+				</contrib>
+				
+ 
+			</contrib-group>
+			
+ 
+			<aff id="aff01">
+				
+ 
+				<addr-line>
+					
+ 
+					<named-content content-type="state"/>
+					
+ 
+				</addr-line>
+				
+ 
+				<institution content-type="orgname">Universidade Federal do Amazonas</institution>
+				
+ 
+				<country country="BR">Brazil</country>
+				
+ 
+				<email>arlem@inpa.gov.br</email>
+				
+ 
+			</aff>
+			
+ 
+			<aff id="aff03">
+				
+ 
+				<addr-line>
+					
+ 
+					<named-content content-type="state"/>
+					
+ 
+				</addr-line>
+				
+ 
+				<institution content-type="orgname">Universidade Federal do Amazonas</institution>
+				
+ 
+				<institution content-type="orgdiv1">Departamento de Produção Animal e Vegetal </institution>
+				
+ 
+				<country country="BR">Brazil</country>
+				
+ 
+			</aff>
+			
+ 
+			<aff id="aff02">
+				
+ 
+				<addr-line>
+					
+ 
+					<named-content content-type="state"/>
+					
+ 
+				</addr-line>
+				
+ 
+				<institution content-type="orgname">Universidade Federal do Amazonas</institution>
+				
+ 
+				<country country="BR">Brazil</country>
+				
+ 
+				<email>luizoli@inpa.gov.br</email>
+				
+ 
+			</aff>
+			
+ 
+			<pub-date pub-type="epub-ppub">
+				
+ 
+				<year>2003</year>
+				
+ 
+			</pub-date>
+			
+ 
+			<volume>33</volume>
+			
+ 
+			<issue>3</issue>
+			
+ 
+			<fpage>345</fpage>
+			
+ 
+			<lpage>352</lpage>
+			
+ 
+			<history>
+				
+ 
+				<date date-type="received">
+					
+ 
+					<day>14</day>
+					
+ 
+					<month>12</month>
+					
+ 
+					<year>1999</year>
+					
+ 
+				</date>
+				
+ 
+				<date date-type="accepted">
+					
+ 
+					<day>05</day>
+					
+ 
+					<month>03</month>
+					
+ 
+					<year>2003</year>
+					
+ 
+				</date>
+				
+ 
+			</history>
+			
+ 
+			<permissions>
+				
+ 
+				<license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/4.0/" xml:lang="en">
+					
+ 
+					<license-p>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</license-p>
+					
+ 
+				</license>
+				
+ 
+			</permissions>
+			
+ 
+			<abstract>
+				
+ 
+				<p>A adaptação das plantas à baixa fertilidade dos solos amazônicos é uma alternativa de baixo insumo que satisfaz à maioria dos produtores regionais. Essa adaptação pode estar relacionada às micorrizas arbusculares, que podem aumentar a capacidade das plantas em absorverem os nutrientes do solo. O estudo foi conduzido num plantio de bananeiras sobre um Latossolo amarelo na Faculdade de Ciências Agrárias (Fundação Universidade do Amazonas), objetivando verificar a colonização de fungos micorrízicos e teores de nutrientes foliares das cultivares de bananeira Maçã, Pacovan e Prata, durante três meses de avaliações (Dezembro/98, Janeiro e Fevereiro/99). Coletou-se amostras de raízes para avaliar as taxas de colonização e amostras foliares para verificar os teores de macro e micronutrientes. As médias da colonização radicular por fungos micorrízicos foram de 60,7% na cultivar Maçã, 55,2% na Pacovan e 53,6% na Prata. Na amostragem feita em dezembro de 1998, a cultivar Maçã apresentou menor colonização micorrízica (48,3% das raízes), do que a Pacovan (73,6%) e Prata (67,8%). No mês de janeiro de 1999 essa situação se inverteu: a Maçã apresentou a maior colonização micorrízica (75,3%) quando comparada com a da Pacovan (47,8%) e Prata (40,3%). As cultivares não apresentaram diferenças entre si quanto às concentrações de P e Fe, mas houve uma variação significativa entre elas quanto aos teores de Ca, Mg, K, Zn, Cu e Mn. A colonização radicular por fungos micorrízicos correlacionou-se positivamente com os teores de Ca, K e Zn na cultivar Maçã e, Cu na cultivar Prata. Estas correlações positivas permitem inferir que a associação micorrízica foi importante no estímulo às absorções de Ca, K e Zn pela cultivar Maçã e Cu pela Prata nas bananeiras de cinco anos na fase de produção comercial.</p>
+				
+ 
+			</abstract>
+			
+ 
+			<trans-abstract xml:lang="en">
+				
+ 
+				<p>Plant adaptation to low fertility of Amazonian soils is a low input alternative which satisfies most of the regional producers. Adaptation can be related to arbuscular mycorrhizae, that can increase the plant's capacity to absorb soil nutrients. This study was carried out in a banana plantation on a yellow Oxisol in the Agrarian Sciences Faculty (University of Amazonas Foundation), to verify the mycorrhizal colonization and the plant's nutrient status in the banana cultivars Maçã, Pacovan and Prata, during three months of evaluations (December/98, January and February/99). Samples of roots were collected to evaluate the rates of mycorrhizal colonization and leaves to verify the macro and micronutrient concentrations. The average of mycorrhizal colonization were 60.7% in the cultivar Maçã, 55.2% in Pacovan and 53.6% in Prata. Sampling done in December 1998 showed that the cultivar Maçã had lower fungal colonization (48.3% of the roots) than Pacovan (73.6%) and Prata (67.8%). In January 1999 the situation was inverted: Maçã presented the highest colonization (75.3%) when compared with Pacovan (47.8%) and Prata (40.3%). No difference in P and Fe concentrations was observed among cultivars, but there was significant variation among them for Ca, Mg, K, Zn, Cu and Mn. The mycorrhizal colonization was correlated positively with Ca, K and Zn in the cultivar Maçã, and Cu in Prata. These positive correlations allow us to infer that the mycorrhizal association was important to stimulate Ca, K and Zn absorption in the cultivar Maçã, and Cu in Prata in the commercial production stage of five years old banana trees.</p>
+				
+ 
+			</trans-abstract>
+			
+ 
+			<kwd-group kwd-group-type="author-generated" xml:lang="en">
+				
+ 
+				<kwd>Soil fertility</kwd>
+				
+ 
+				<kwd>Plant Nutrition</kwd>
+				
+ 
+				<kwd>Arbuscular mycorrhizal fungi</kwd>
+				
+ 
+				<kwd>Microbial ecology</kwd>
+				
+ 
+				<kwd>Plant-microorganisms association</kwd>
+				
+ 
+			</kwd-group>
+			
+ 
+			<kwd-group kwd-group-type="author-generated" xml:lang="pt">
+				
+ 
+				<kwd>Fertilidade do solo</kwd>
+				
+ 
+				<kwd>Nutrição de plantas</kwd>
+				
+ 
+				<kwd>Fungos micorrízicos arbusculares</kwd>
+				
+ 
+				<kwd>Ecologia microbiana</kwd>
+				
+ 
+				<kwd>Associação planta-microrganismos</kwd>
+				
+ 
+			</kwd-group>
+			
+ 
+			<counts>
+				
+ 
+				<fig-count count="0"/>
+				
+ 
+				<table-count count="0"/>
+				
+ 
+				<equation-count count="0"/>
+				
+ 
+				<ref-count count="30"/>
+				
+ 
+				<page-count count="8"/>
+				
+ 
+			</counts>
+			
+ 
+		</article-meta>
+		
+ 
+	</front>
+	
+ 
+	<body>
+		<p>
+			<bold>
+				<sup>
+					<xref>1</xref>
+				</sup>
+			</bold>
+		</p>
+		 
+		<p>
+			<bold>Arbuscular mycorrhizal colonization and nutrient concentration of three cultivars of banana on a central Amazonian oxisol </bold>
+		</p>
+		 
+		<p>
+			<bold>
+				Arlem Nascimento de Oliveira
+				<sup>I</sup>
+				; Luiz Antonio de Oliveira
+				<sup>II</sup>
+				; Antenor Francisco de Figueiredo
+				<sup>III</sup>
+			</bold>
+		</p>
+		 
+		<p>
+			<sup>I</sup>
+			M.Sc em Ciências Agrárias, Universidade Federal do Amazonas - UFAM (email: 
+			<p>
+				arlem@inpa.gov.br
+				<email>arlem@inpa.gov.br</email>
+			</p>
+			) 
+		</p>
+		<p>
+			<sup>II</sup>
+			Pesquisador do Instituto Nacional de Pesquisas da Amazônia - INPA, C. Postal 478, 69011-970, Manaus, Amazonas (email: 
+			<p>
+				luizoli@inpa.gov.br
+				<email>luizoli@inpa.gov.br)</email>
+			</p>
+			), Bolsista do CNPq e Professor dos cursos de PG do INPA e UFAM 
+		</p>
+		<p>
+			<sup>III</sup>
+			Professor Dr. do Departamento de Produção Animal e Vegetal - DPAV/FCA/UFAM, Av. Gal. Rodrigo Otávio Jordão Ramos, 3000, Manaus, Amazonas 
+		</p>
+		 
+		<p>
+			<bold>RESUMO </bold>
+		</p>
+		 
+		<p> A adaptação das plantas à baixa fertilidade dos solos amazônicos é uma alternativa de baixo insumo que satisfaz à maioria dos produtores regionais. Essa adaptação pode estar relacionada às micorrizas arbusculares, que podem aumentar a capacidade das plantas em absorverem os nutrientes do solo. O estudo foi conduzido num plantio de bananeiras sobre um Latossolo amarelo na Faculdade de Ciências Agrárias (Fundação Universidade do Amazonas), objetivando verificar a colonização de fungos micorrízicos e teores de nutrientes foliares das cultivares de bananeira Maçã, Pacovan e Prata, durante três meses de avaliações (Dezembro/98, Janeiro e Fevereiro/99). Coletou-se amostras de raízes para avaliar as taxas de colonização e amostras foliares para verificar os teores de macro e micronutrientes. As médias da colonização radicular por fungos micorrízicos foram de 60,7% na cultivar Maçã, 55,2% na Pacovan e 53,6% na Prata. Na amostragem feita em dezembro de 1998, a cultivar Maçã apresentou menor colonização micorrízica (48,3% das raízes), do que a Pacovan (73,6%) e Prata (67,8%). No mês de janeiro de 1999 essa situação se inverteu: a Maçã apresentou a maior colonização micorrízica (75,3%) quando comparada com a da Pacovan (47,8%) e Prata (40,3%). As cultivares não apresentaram diferenças entre si quanto às concentrações de P e Fe, mas houve uma variação significativa entre elas quanto aos teores de Ca, Mg, K, Zn, Cu e Mn. A colonização radicular por fungos micorrízicos correlacionou-se positivamente com os teores de Ca, K e Zn na cultivar Maçã e, Cu na cultivar Prata. Estas correlações positivas permitem inferir que a associação micorrízica foi importante no estímulo às absorções de Ca, K e Zn pela cultivar Maçã e Cu pela Prata nas bananeiras de cinco anos na fase de produção comercial. </p>
+		 
+		<p>
+			<bold>Palavras-chave:</bold>
+			 Fertilidade do solo, Nutrição de plantas, Fungos micorrízicos arbusculares, Ecologia microbiana, Associação planta-microrganismos. 
+		</p>
+		 
+		<p>
+			<bold>ABSTRACT </bold>
+		</p>
+		 
+		<p>Plant adaptation to low fertility of Amazonian soils is a low input alternative which satisfies most of the regional producers. Adaptation can be related to arbuscular mycorrhizae, that can increase the plant&amp;#x27;s capacity to absorb soil nutrients. This study was carried out in a banana plantation on a yellow Oxisol in the Agrarian Sciences Faculty (University of Amazonas Foundation), to verify the mycorrhizal colonization and the plant&amp;#x27;s nutrient status in the banana cultivars Maçã, Pacovan and Prata, during three months of evaluations (December/98, January and February/99). Samples of roots were collected to evaluate the rates of mycorrhizal colonization and leaves to verify the macro and micronutrient concentrations. The average of mycorrhizal colonization were 60.7% in the cultivar Maçã, 55.2% in Pacovan and 53.6% in Prata. Sampling done in December 1998 showed that the cultivar Maçã had lower fungal colonization (48.3% of the roots) than Pacovan (73.6%) and Prata (67.8%). In January 1999 the situation was inverted: Maçã presented the highest colonization (75.3%) when compared with Pacovan (47.8%) and Prata (40.3%). No difference in P and Fe concentrations was observed among cultivars, but there was significant variation among them for Ca, Mg, K, Zn, Cu and Mn. The mycorrhizal colonization was correlated positively with Ca, K and Zn in the cultivar Maçã, and Cu in Prata. These positive correlations allow us to infer that the mycorrhizal association was important to stimulate Ca, K and Zn absorption in the cultivar Maçã, and Cu in Prata in the commercial production stage of five years old banana trees. </p>
+		 
+		<p>
+			<bold>Key-Words:</bold>
+			 Soil fertility, Plant Nutrition, Arbuscular mycorrhizal fungi, Microbial ecology, Plant-microorganisms association. 
+		</p>
+		 
+		<p>
+			<bold>INTRODUÇÃO</bold>
+		</p>
+		 
+		<p>A bananeira é uma espécie perene de grande importância e uso corrente na região, onde faz parte de sistemas agroflorestais, de cultivos puros e quintais caseiros, oferecendo ao produtor uma fonte rica em vitaminas e sais minerais, como o potássio, bem como uma possibilidade contínua de receita ao longo do ano (Alves, 1991). No entanto, apesar de extensivamente cultivada, a bananeira requer alta quantidade de insumo agrícola para uma produção satisfatória (Medina, 1995). A adubação mineral desta cultura passa a ser de fundamental importância, principalmente Ca, Mg, P e K, elementos requeridos em grandes quantidades (Alves, 1991). </p>
+		 
+		<p>
+			Uma alternativa para diminuir o uso destes elementos é proporcionar às plantas, melhores condições de absorção dos nutrientes do solo. As micorrizas arbusculares (MAs) se enquadram neste contexto, pois aumentam a área de absorção das raízes das plantas, através das hifas e micélio do fungo, permitindo uma exploração mais eficaz do solo (Schawab 
+			<italic>et al</italic>
+			., 1991; Siqueira, 1991; Tisdall, 1994). As micorrizas arbusculares têm sido bastante estudadas, mostrando-se importantes para a absorção de nutrientes pelas plantas (Colozzi-Filho &amp; Balota, 1994; Oliveira 
+			<italic>et al.</italic>
+			, 1999), principalmente fósforo (Tinker, 1975; Islam &amp; Ayanaba, 1981). Oliveira 
+			<italic>et al</italic>
+			. (1999) verificaram correlações positivas entre a colonização radicular e os teores de Ca, Mg, P e K no tecido foliar de oito espécies florestais da Amazônia, nutrientes considerados vitais para o crescimento e desenvolvimento das bananeiras (Alves, 1991). 
+		</p>
+		 
+		<p>
+			Grande número de espécies da Amazônia é colonizado naturalmente pelas micorrizas arbusculares (St. John, 1980; Oliveira 
+			<italic>et al</italic>
+			., 1998; Oliveira 
+			<italic>et al</italic>
+			., 1999). Contudo, poucos estudos relatam a associação com bananeiras (Declerck
+			<italic> et al</italic>
+			., 1995; Jaizme-Vega &amp; Azcón, 1995; Melo 
+			<italic>et al</italic>
+			., 1997). 
+		</p>
+		 
+		<p>O presente estudo visou obter informações sobre a ocorrência e o grau de micotrofismo de três cultivares de bananeira de importância regional, bem como verificar a existência de correlações entre as taxas de colonização micorrízica e os teores de macro e micronutrientes no tecido foliar das plantas ao nível de campo. </p>
+		 
+		<p>
+			<bold>MATERIAL E MÉTODOS</bold>
+			 
+		</p>
+		 
+		<p>O estudo foi conduzido em condições de campo em área experimental da Faculdade de Ciências Agrárias da Universidade do Amazonas, Manaus, AM, em um Latossolo amarelo de textura argilosa com bananeiras em fase de produção econômica (cinco anos de idade). As bananeiras (cultivares) se encontravam em um plantio a pleno sol, espaçadas entre si por 3 x 3 m. Em Dezembro/98, Janeiro e Fevereiro/99, foram selecionadas de forma aleatória, seis plantas de cada cultivar como repetições, das quais coletou-se a cada mês, aproximadamente 300 mg de raízes com cerca de 2 mm de diâmetro para determinação do grau de colonização radicular pelas MAs. Coletou-se amostras de folhas e solos para determinações respectivas dos teores de nutrientes foliares e da fertilidade rizosférica das plantas em cada época de avaliação. O solo próximo aos caules das plantas foi escavado, procurando-se atingir as raízes finas de três pontos por planta. Parte do solo próximo a cada amostra de raízes foi coletado, com os três pontos perfazendo uma amostra composta de raízes e de solo. </p>
+		 
+		<p>
+			As raízes, solo rizosférico e folhas foram levados para os laboratórios de microbiologia e de análises de solo e plantas do INPA/CPCA, para as análises microbiológicas e químicas. As raízes foram clarificadas com KOH a 10% e coradas em lactoglicerol contendo azul de tripano, segundo a técnica de Kormanick 
+			<italic>et al</italic>
+			. (1980) e pelas metodologias descritas em Schenck (1982). Usou-se o método da lâmina para quantificar a taxa de colonização radicular conforme Giovanetti &amp; Mosse (1980), dispondo-se de 60 segmentos de raiz por planta, cada um com aproximadamente 1 cm de comprimento. 
+		</p>
+		 
+		<p>As amostras foliares foram coletadas da terceira folha emitida, sendo a cartucho considerada folha zero. Retirou-se duas faixas do limbo de 10 cm de largura de ambos os lados, conforme Medina (1995). As folhas foram analisadas quimicamente quanto aos teores de macro e micronutrientes, usando-se a metodologia descrita em EMBRAPA (1988). As determinações foram feitas para o fósforo, potássio, cálcio, magnésio, ferro, zinco, cobre e manganês. </p>
+		 
+		<p>
+			As amostras de solo foram obtidas da rizosfera de cada cultivar, à profundidade de 0-10 cm, formando uma amostra composta para todo o experimento para fins da análise química segundo EMBRAPA (1997). As análises químicas consistiram das seguintes determinações: pH (H
+			<sub>2</sub>
+			O), Ca, Mg e Al (KCl 1N), P (extração pelo Mehlich 1 e leitura por colorimetria), K, Mn, Zn e Fe (Mehlich 1, absorção atômica). Essa amostra apresentou as seguintes características: pH (H
+			<sub>2</sub>
+			O) = 4,6; Al = 0,5 cmol
+			<sub>c</sub>
+			 kg
+			<sup>-1</sup>
+			; K = 0,36 cmol
+			<sub>c</sub>
+			 kg
+			<sup>-1</sup>
+			; Ca = 1,3 cmol
+			<sub>c</sub>
+			 kg
+			<sup>-1</sup>
+			; Mg = 0,3 cmol
+			<sub>c</sub>
+			 kg
+			<sup>-1</sup>
+			; P = 244 mg kg
+			<sup>-1</sup>
+			; Zn = 3,8 mg kg
+			<sup>-1</sup>
+			; Mn = 4,5 mg kg
+			<sup>-1</sup>
+			; Fe = 146 mg kg
+			<sup>-1</sup>
+			; Cu = 1,2 mg kg
+			<sup>-1</sup>
+			. 
+		</p>
+		 
+		<p>O delineamento experimental adotado foi o inteiramente casualizado em esquema fatorial 3 x 3, onde os fatores representaram três cultivares de bananeiras (Maçã, Pacovan e Prata) e três épocas de coleta (Dezembro/98, Janeiro e Fevereiro/99). </p>
+		 
+		<p>Empregou-se o teste de Tukey ao nível de 5% de probabilidade para estabelecer as diferenças entre as médias dos tratamentos que se mostraram diferentes pelo teste F de Snedecor (Gomez &amp;amp; Gomez, 1984). Realizou-se ainda, análises de regressão simples para determinação do grau de correlação entre as colonizações por fungos micorrízicos nas raízes das três cultivares e macro (Ca, Mg, K, P) e micronutrientes (Zn, Cu, Fe e Mn), perfazendo um total de 24 correlações. </p>
+		 
+		<p>
+			<bold>RESULTADOS E DISCUSSÃO </bold>
+		</p>
+		 
+		<p>Colonização radicular por fungos micorrízicos</p>
+		 
+		<p>
+			Os índices de colonização radicular em geral, variaram de 40,3 a 75,3% (
+			<xref>Tab. 1</xref>
+			). Observou-se que houve diferença estatística entre as cultivares nos meses de Dezembro e Janeiro, mas não no mês de Fevereiro. Em Dezembro, as raízes da cultivar Pacovan foram mais colonizadas pelos fungos micorrízicos em relação às da cultivar Maçã. Em Janeiro houve uma inversão, com as raízes da Maçã apresentando-se mais micorrizadas. Observou-se também, uma variação significativa entre as três épocas de amostragem dentro de cada cultivar. A micorrização das raízes da cultivar Maçã foi maior em Janeiro/99 em comparação à ocorrida em Dezembro/98. Com relação às outras duas cultivares, a maior micorrização das raízes ocorreu em Dezembro/98. 
+		</p>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a01tab01.gif"/>
+		</p>
+		 
+		<p>As variações de colonização por fungos micorrízicos arbusculares entre as cultivares nos meses de dezembro e janeiro podem ser devido às diferenças das mesmas quanto à emissão de novas raízes durante esse período. As chuvas se intensificam na região a partir de novembro, com os meses de dezembro e janeiro sendo, geralmente, os mais chuvosos (Ribeiro, 1976), mais propícios para a formação de novas raízes, necessárias para a colonização pelos fungos micorrízicos. </p>
+		 
+		<p>
+			A média geral de colonização micorrízica foi de 56,5%, semelhante às encontradas em outros trabalhos (Iyer 
+			<italic>et al</italic>
+			., 1988; Melo 
+			<italic>et al</italic>
+			., 1997; Oliveira 
+			<italic>et al</italic>
+			., 1999). Melo 
+			<italic>et al.</italic>
+			 (1997) encontraram colonizações micorrízicas em bananeiras que variaram de 54,7 a 58,7% em quatro solos contendo entre 22 e 53 mg de P kg
+			<sup>-1</sup>
+			. 
+		</p>
+		 
+		<p>
+			As médias das colonizações das raízes por fungos micorrízicos nas cultivares variaram de 53,6% (Prata) e 60,7% (Maçã) (
+			<xref>Tab. 1</xref>
+			). Comparativamente, os valores médios de colonização observados para a cultivar Pacovan aproximaram-se dos obtidos por Melo 
+			<italic>et al</italic>
+			. (1997), que registraram taxas de colonização de 50% para esta cultivar em bananais no Vale do São Francisco. 
+		</p>
+		 
+		<p>
+			<bold>Teores de nutrientes da parte aérea</bold>
+			 
+		</p>
+		 
+		<p>
+			Não houve diferenças significativas entre as cultivares quanto aos teores de P e Fe na parte aérea (
+			<xref>Tab. 2</xref>
+			), havendo variações dos demais nutrientes dependendo da cultivar avaliada. As cultivares Prata e Pacovan apresentaram elevados teores de K, Mg e Zn, com a cultivar Prata também se destacando quanto aos micronutrientes Cu e Mn em relação às demais. 
+		</p>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a01tab02.gif"/>
+		</p>
+		 
+		<p>
+			Conforme Rodriguez-Gómez (1980), consideram-se satisfatórios níveis de K superiores a 3,35% (33,5 g kg
+			<sup>-1</sup>
+			) no limbo foliar. Portanto, nas condições experimentais, este elemento se apresentou em concentração superior nas três cultivares (3,59 a 4,94%, equivalentes a 35,9 a 49,4 g kg
+			<sup>-1</sup>
+			) ao nível mencionado pelo autor, contribuindo como parte constituinte dos tecidos, uma vez que a bananeira tem elevada necessidade de K durante o seu ciclo (Medina, 1995). Esses teores de K podem ter contribuído para uma menor absorção de Ca pelas plantas, uma vez que este foi verificado em baixa concentração no tecido foliar (
+			<xref>Tab. 2</xref>
+			). Segundo Epstein (1975), a absorção de K pelas plantas pode diminuir a absorção de cátions como o Ca e o Mg. 
+		</p>
+		 
+		<p>
+			Observou-se que as concentrações de K foram sempre superiores às de Ca, Mg e P. Este comportamento está de acordo com os estudos realizados por Boland (1980) e Rodriguez-Gómez (1980), que verificaram concentrações de K superiores em relação aos requeridos pelos demais macronutrientes. Segundo Padovani (1986), os níveis nutricionais satisfatórios para a cultura da banana em relação ao Ca, Mg e P correspondem a 1,40% (14,0 g kg
+			<sup>-1</sup>
+			), 0,60% (6,0 g kg
+			<sup>-1</sup>
+			) e 0,45% (4,5 g kg
+			<sup>-1</sup>
+			), respectivamente. Com base nesses valores, observa-se que no presente estudo, os teores de Ca, Mg e P mostraram-se em concentrações inferiores aos níveis ideais sugeridos pelo autor. 
+		</p>
+		 
+		<p>
+			Quanto aos micronutrientes, a cultivar Prata mostrou-se mais eficiente na absorção de Cu e Mn, diferindo estatisticamente das outras cultivares (
+			<xref>Tab. 2</xref>
+			). O Zn foi observado com menor concentração no tecido foliar da cultivar Maçã. Com relação ao Fe, não houve diferença estatística entre as cultivares. Este comportamento geral em termos de demanda micronutricional está em consonância com Rodriguez-Gómez (1980). Contudo, conforme esse autor, a composição química satisfatória de micronutrientes no limbo foliar da bananeira corresponde a 94,0 mg kg
+			<sup>-1</sup>
+			 de Fe, 26,0 mg kg
+			<sup>-1</sup>
+			 de Zn, 11 mg kg
+			<sup>-1</sup>
+			 de Cu e 243 mg kg
+			<sup>-1</sup>
+			 de Mn. Diante dos resultados obtidos, verificou-se que os níveis de Fe, Zn, Cu e, principalmente o Mn, no tecido das plantas (
+			<xref>Tab. 2</xref>
+			) estão abaixo dos citados como satisfatórios por esse autor. 
+		</p>
+		 
+		<p>
+			<bold>Correlações entre as taxas de colonizações micorrízicas e os nutrientes foliares </bold>
+			 
+		</p>
+		 
+		<p>
+			De acordo com o valor de r, do total de 24 correlações entre as taxas de colonizações por fungos micorrízicos e os teores de macro e micronutrientes nas folhas, apenas quatro foram linearmente significativas, sendo para o Ca, K e Zn na cultivar Maçã e Cu na cultivar Prata (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/aa/v33n3/a01fig01.gif">Fig. 1</ext-link>
+			). Oliveira 
+			<italic>et al</italic>
+			. (1999) também verificaram correlações linearmente positivas entre os fungos micorrízicos e o Ca no piquiá (
+			<italic>Caryocar villosum</italic>
+			 Aubl.) e o Zn no marupá (
+			<italic>Simaruba amara </italic>
+			Aubl.) em um Podzólico da Amazônia. 
+		</p>
+		 
+		<p>A micorrização exerce efeito acentuado sobre os teores de outros nutrientes além do P (Colozzi-Filho &amp;amp; Siqueira, 1986). Os efeitos positivos observados em relação ao K e Mg em outros trabalhos (Silveira, 1992) reforçam os dados obtidos no presente estudo. Desse modo, os fungos micorrízicos associados às raízes da cultivar Maçã a torna mais eficiente na absorção do Ca, K e Zn do solo e, a Prata na absorção do Cu. Segundo Colozzi-Filho &amp;amp; Balota (1994), o Cu, por ser um elemento de baixo coeficiente de difusão, tem sua absorção comumente favorecida pela associação micorrízica. </p>
+		 
+		<p>
+			A absorção dos demais macro e micronutrientes não se correlacionou com as colonizações radiculares, embora outros trabalhos tenham indicado alguma influência (Colozzi-Filho &amp;amp; Siqueira, 1986; Colozzi-Filho &amp;amp; Balota, 1994; Oliveira 
+			<italic>et al</italic>
+			., 1999). 
+		</p>
+		 
+		<p>A ausência de correlações com os demais nutrientes não significa falta de contribuição, pois o aspecto &amp;quot;eficiência&amp;quot; dos fungos não foi considerado. Diferenças de eficiência dos fungos micorrízicos são muito comentadas na literatura (Saggin-Júnior &amp;amp; Siqueira, 1996) e nesses casos, podem apresentar porcentagens semelhantes de colonizações nas raízes mas favorecerem diferentemente na absorção de nutrientes, conforme foi observado por Bonetti (1984) em siratro, com relação ao fósforo. Como o presente estudo foi realizado em condições naturais de campo com a população autóctone de fungos micorrízicos, é de se esperar que as raízes das bananeiras tenham sido colonizadas por diferentes fungos micorrízicos, o que implica diferentes eficiências. Assim, a falta de correlação com os demais nutrientes não significa ausência de contribuição na absorção, pois mesmo nesses casos ela pode ocorrer. </p>
+		 
+		<p>No caso do P e Fe, é possível que a falta de correlação esteja relacionada à baixa capacidade das cultivares em absorverem esses elementos. Seus teores estavam elevados no solo, mas nos tecidos das plantas estavam abaixo dos considerados satisfatórios por Padovani (1986) para o P e, por Rodriguez-Gómez (1980) para o Fe. </p>
+		 
+		<p>
+			<bold>CONCLUSÕES</bold>
+			 
+		</p>
+		 
+		<p>a) Os teores foliares de Ca, Mg, K, Zn, Cu e Mn variaram significativamente entre as cultivares de banana Maçã, Pacovan e Prata quando cultivadas num latossolo da Amazônia. </p>
+		 
+		<p>b) A associação com fungos micorrízicos contribuiu para as absorções de Ca, K e Zn pela cultivar Maçã e, Cu pela cultivar Prata, em bananeiras de cinco anos na fase de produção comercial. </p>
+		 
+		<p>
+			<bold>BIBLIOGRAFIA CITADA</bold>
+		</p>
+		 
+		<p>
+			Alves, E.J. 1991. 
+			<italic>A cultura da banana no Brasil e proposições para o seu melhoramento</italic>
+			. EMBRAPA/CNPMF, Cruz das Almas, BA. 40p.          
+		</p>
+		 
+		<p>
+			Boland, D.E. 1980. Some aspects of banana leaf analysis in Jamaica. 
+			<italic>Fruits</italic>
+			, 35: 355-359.          
+		</p>
+		 
+		<p>
+			Bonetti, R. 1984. Efeito de micorrizas vesiculares arbusculares na nodulação, crescimento e absorção de fósforo e nitrogênio em siratro. 
+			<italic>R. Bras. Ci. Solo</italic>
+			, 8:189-192.          
+		</p>
+		 
+		<p>
+			Colozzi-Filho, A.; Balota, E.L. 1994. Micorrizas arbusculares. 
+			<italic>In</italic>
+			: Hungria, M.; Araújo, R.S. (Eds.). 
+			<italic>Manual de métodos empregados em estudos em Microbiologia Agrícola</italic>
+			. EMBRAPA, Brasília. p. 383-418.          
+		</p>
+		 
+		<p>
+			Colozzi-Filho, A.; Siqueira, J.O. 1986. Micorrizas vesículo-arbusculares em mudas de cafeeiro. I. Efeito da inoculação e adubação fosfatada no crescimento e nutrição. 
+			<italic>R. Bras. Ci. Solo</italic>
+			, 10:199-205.          
+		</p>
+		 
+		<p>
+			Declerck, S.; Plenchette, C.; Strullu, D.G. 1995. Mycorrhizal dependency of banana (
+			<italic>Musa acuminata</italic>
+			, AAA group) cultivar. 
+			<italic>Plant and Soil</italic>
+			, 176:183-187.          
+		</p>
+		 
+		<p>
+			EMBRAPA. 1988. 
+			<italic>Análise foliar: laboratório de análise de solos e plantas</italic>
+			. Centro Nacional de Pesquisas de Seringueira e Dendê, Manaus. 8p.          
+		</p>
+		 
+		<p>
+			EMBRAPA. 1997. 
+			<italic>Manual de métodos de análise de solos. </italic>
+			2.ed. Serviço Nacional de Levantamento e Conservação do Solo. EMBRAPA, Rio de Janeiro, 212p.          
+		</p>
+		 
+		<p>
+			Epstein, E. 1975. 
+			<italic>Nutrição mineral das plantas. Princípios e Perspectivas</italic>
+			. Universidade de São Paulo, Rio de Janeiro, 341p.          
+		</p>
+		 
+		<p>
+			Giovannetti, M.; Mosse, B. 1980. An evaluation of techniques for measuring vesicular arbuscular mycorrhizal infection in roots. 
+			<italic>New Phytol</italic>
+			., 84:489-500.          
+		</p>
+		 
+		<p>
+			Gomez, K.A.; Gomez, A.A. 1984. 
+			<italic>Statistical procedures for agricultural research</italic>
+			. 2
+			<sup>nd</sup>
+			 ed. John Wiley &amp; Sons, New York, 680p.          
+		</p>
+		 
+		<p>
+			Islam, R.; Ayanaba, A. 1981. Effect of seed inoculation and pre-infecting cowpea (
+			<italic>Vigna unguiculata</italic>
+			) with 
+			<italic>Glomus mosseae</italic>
+			 on growth and seed yield of the plants under field conditions. 
+			<italic>Plant and Soil</italic>
+			, 61:341-350.          
+		</p>
+		 
+		<p>
+			Iyer, R.; Moosa, H.; Sastry, R.K. 1988. Vesicular-arbuscular mycorrhizal association in banana. 
+			<italic>Current Science</italic>
+			, 57:153-155.          
+		</p>
+		 
+		<p>
+			Jaizme-Vega, M.C.; Azcón, R. 1995. Responses of some tropical and subtropical cultures to endomycorrhizal fungi. 
+			<italic>Micorrhiza</italic>
+			, 5:213-217.          
+		</p>
+		 
+		<p>
+			Kormanick, P.P.; Bryan, W.C.; Schultz, R.C. 1980. Procedures and equipment for staining large numbers of plant root samples for endomycorrhizal assay. 
+			<italic>Can. J. Microbiol</italic>
+			. 26:536-538.          
+		</p>
+		 
+		<p>
+			Medina, J.C. 1995. Cultura da banana. 
+			<italic>In:</italic>
+			 Medina, J.C.; Bleinroth, E.W.; de Martin, Z.J.; Travaglini, D.A.; Okada, M.; Quast, D.G.; Hashizune, T.; Moretti, V.A.; Neto, L.C.B.; Almeida, L.A.S.B.; Renesto, O.V. (Eds.). 
+			<italic>Banana</italic>
+			. 2.ed. ITAL, Campinas, p. 1-132.          
+		</p>
+		 
+		<p>
+			Melo, A.M.Y.; Maia, L.C.; Morgado, L.B. 1997. Fungos micorrízicos arbusculares em bananeiras cultivadas no Vale do Submédio São Francisco. 
+			<italic>Acta Bot. Bras</italic>
+			., 11:115-121.          
+		</p>
+		 
+		<p>
+			Oliveira, L.A.; Guitton, L.T.; Moreira, F.W. 1999. Relações entre as colonizações por fungos micorrízicos arbusculares e teores de nutrientes foliares em oito espécies florestais da Amazônia. 
+			<italic>Acta Amazonica</italic>
+			, 29:183-193.          
+		</p>
+		 
+		<p>
+			Oliveira, A.N.; Oliveira, L.A.; Moreira, F.W. 1998. Micorrizas arbusculares em cupuaçu e guaraná de um sistema agroflorestal de terra firme no Município de Manaus, AM. 
+			<italic>In</italic>
+			: 
+			<italic>FertBio</italic>
+			, 7., 1998, Caxambú. 
+			<italic>Resumos.</italic>
+			 Caxambú: Sociedade Brasileira de Microbiologia, p. 617.          
+		</p>
+		 
+		<p>
+			Padovani, M.I. 1986. 
+			<italic>Banana: um mercado crescente para este alimento milenar</italic>
+			. Ed. Ícone, São Paulo. 104p.          
+		</p>
+		 
+		<p>
+			Ribeiro, M.N.G. 1976. Aspectos climáticos de Manaus. 
+			<italic>Acta Amazonica</italic>
+			, 6:229-233.          
+		</p>
+		 
+		<p>
+			Rodriguez-Goméz, M. 1980. Estudios preliminares sobre la nutrición com potasio de los bananales en America Central. 
+			<italic>Fruits</italic>
+			, 35:283-291.          
+		</p>
+		 
+		<p>
+			Saggin-Júnior, O.J.; Siqueira, J.O. 1996. Micorrizas arbusculares em cafeeiro. 
+			<italic>In</italic>
+			: Siqueira, J.O. (Ed.). 
+			<italic>Avanços em fundamentos e aplicação de micorrizas</italic>
+			. Universidade Federal de Lavras, Lavras, MG, p.203-254.          
+		</p>
+		 
+		<p>
+			Schenck, N.C. 1982. 
+			<italic>Methods and Principles of Mycorrhizal Research</italic>
+			. The Amer. Phytopat. Soc. Publ., St. Paul, MN, USA. 224p.          
+		</p>
+		 
+		<p>
+			Schwab, S.M.; Menge, J.A.; Tinker, P.B. 1991. Regulation of nutrient transfer between host and fungus in vesicular-arbuscular mycorrhizas. 
+			<italic>New Phytol</italic>
+			., 117:387-398.          
+		</p>
+		 
+		<p>
+			Silveira, A.P.D. 1992. Micorrizas. 
+			<italic>In</italic>
+			: Cardoso, E.J.B.N.; Tsai, S.M.; Neves, M.C.P., eds. 
+			<italic>Microbiologia do Solo</italic>
+			. Sociedade Brasileira de Ciência do Solo, Campinas, p. 257-282.          
+		</p>
+		 
+		<p>
+			Siqueira, J.O. 1991. Fisiologia e bioquímica de micorrizas vesículo-arbusculares: alguns aspectos da relação fungo-planta e absorção de fósforo. 
+			<italic>In</italic>
+			: 
+			<italic>Reunião Brasileira de Micorrizas</italic>
+			, 4, Mendes. 
+			<italic>Anais.</italic>
+			 EMBRAPA, Centro Nacional de Pesquisas em Biologia do Solo, Itaguaí, RJ. p. 1-27.          
+		</p>
+		 
+		<p>
+			St. John, T.V. 1980. Uma lista de espécies de plantas tropicais brasileiras naturalmente infectadas com micorriza vesicular-arbuscular. 
+			<italic>Acta Amazonica</italic>
+			, 10:229-234.          
+		</p>
+		 
+		<p>
+			Tinker, P.B.H. 1975. Effects of vesicular-arbuscular mycorrhiza on higher plants. 
+			<italic>Symp. Soc. Expo. Biol</italic>
+			., 29:325-349.          
+		</p>
+		 
+		<p>
+			Tisdall, J.M. 1994. Possible role of soil microorganisms in aggregation in soils. 
+			<italic>Plant and Soil</italic>
+			, 159:115-121.          
+		</p>
+		 
+		<p>Recebido: 14/12/1999 </p>
+		<p> Aceito: 05/03/2003</p>
+		 
+		<p> </p>
+		<p>
+			<xref>1</xref>
+			 Pesquisa financiada pelos Projetos CNPq n. 520814/96.7 (RE) e PPD/PPG-7 n. 0869/95. 
+		</p>
+	</body>
+	
+ 
+	<back>
+		
+ 
+		<ref-list>
+			
+ 
+			<ref id="B1">
+				
+ 
+				<mixed-citation>
+					Alves, E.J. 1991. 
+					<italic>A cultura da banana no Brasil e proposições para o seu melhoramento</italic>
+					. EMBRAPA/CNPMF, Cruz das Almas, BA. 40p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>A cultura da banana no Brasil e proposições para o seu melhoramento</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1991</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Alves</surname>
+							
+ 
+							<given-names>E.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B2">
+				
+ 
+				<mixed-citation>
+					Boland, D.E. 1980. Some aspects of banana leaf analysis in Jamaica. 
+					<italic>Fruits</italic>
+					, 35: 355-359.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Some aspects of banana leaf analysis in Jamaica</article-title>
+					
+ 
+					<source>Fruits,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>355</fpage>
+					
+ 
+					<lpage>359</lpage>
+					
+ 
+					<volume>35</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Boland</surname>
+							
+ 
+							<given-names>D.E.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B3">
+				
+ 
+				<mixed-citation>
+					Bonetti, R. 1984. Efeito de micorrizas vesiculares arbusculares na nodulação, crescimento e absorção de fósforo e nitrogênio em siratro. 
+					<italic>R. Bras. Ci. Solo</italic>
+					, 8:189-192.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Efeito de micorrizas vesiculares arbusculares na nodulação, crescimento e absorção de fósforo e nitrogênio em siratro</article-title>
+					
+ 
+					<source>R. Bras. Ci. Solo,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1984</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>189</fpage>
+					
+ 
+					<lpage>192</lpage>
+					
+ 
+					<volume>8</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Bonetti</surname>
+							
+ 
+							<given-names>R.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B4">
+				
+ 
+				<mixed-citation>
+					Colozzi-Filho, A.; Balota, E.L. 1994. Micorrizas arbusculares. 
+					<italic>In</italic>
+					: Hungria, M.; Araújo, R.S. (Eds.). 
+					<italic>Manual de métodos empregados em estudos em Microbiologia Agrícola</italic>
+					. EMBRAPA, Brasília. p. 383-418.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Manual de métodos empregados em estudos em Microbiologia Agrícola</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1994</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>383</fpage>
+					
+ 
+					<lpage>418</lpage>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Colozzi-Filho</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Balota</surname>
+							
+ 
+							<given-names>E.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Hungria</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Araújo</surname>
+							
+ 
+							<given-names>R.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B5">
+				
+ 
+				<mixed-citation>
+					Colozzi-Filho, A.; Siqueira, J.O. 1986. Micorrizas vesículo-arbusculares em mudas de cafeeiro. I. Efeito da inoculação e adubação fosfatada no crescimento e nutrição. 
+					<italic>R. Bras. Ci. Solo</italic>
+					, 10:199-205.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Micorrizas vesículo-arbusculares em mudas de cafeeiro: I. Efeito da inoculação e adubação fosfatada no crescimento e nutrição</article-title>
+					
+ 
+					<source>R. Bras. Ci. Solo,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1986</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>199</fpage>
+					
+ 
+					<lpage>205</lpage>
+					
+ 
+					<volume>10</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Colozzi-Filho</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Siqueira</surname>
+							
+ 
+							<given-names>J.O.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B6">
+				
+ 
+				<mixed-citation>
+					Declerck, S.; Plenchette, C.; Strullu, D.G. 1995. Mycorrhizal dependency of banana (
+					<italic>Musa acuminata</italic>
+					, AAA group) cultivar. 
+					<italic>Plant and Soil</italic>
+					, 176:183-187.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Mycorrhizal dependency of banana (Musa acuminata, AAA group) cultivar</article-title>
+					
+ 
+					<source>Plant and Soil,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>183</fpage>
+					
+ 
+					<lpage>187</lpage>
+					
+ 
+					<volume>176</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Declerck</surname>
+							
+ 
+							<given-names>S.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Plenchette</surname>
+							
+ 
+							<given-names>C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Strullu</surname>
+							
+ 
+							<given-names>D.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B7">
+				
+ 
+				<mixed-citation>
+					EMBRAPA. 1988. 
+					<italic>Análise foliar: laboratório de análise de solos e plantas</italic>
+					. Centro Nacional de Pesquisas de Seringueira e Dendê, Manaus. 8p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Análise foliar: laboratório de análise de solos e plantas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1988</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B8">
+				
+ 
+				<mixed-citation>
+					EMBRAPA. 1997. 
+					<italic>Manual de métodos de análise de solos. </italic>
+					2.ed. Serviço Nacional de Levantamento e Conservação do Solo. EMBRAPA, Rio de Janeiro, 212p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Manual de métodos de análise de solos</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1997</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B9">
+				
+ 
+				<mixed-citation>
+					Epstein, E. 1975. 
+					<italic>Nutrição mineral das plantas. Princípios e Perspectivas</italic>
+					. Universidade de São Paulo, Rio de Janeiro, 341p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Nutrição mineral das plantas. Princípios e Perspectivas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1975</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Epstein</surname>
+							
+ 
+							<given-names>E.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B10">
+				
+ 
+				<mixed-citation>
+					Giovannetti, M.; Mosse, B. 1980. An evaluation of techniques for measuring vesicular arbuscular mycorrhizal infection in roots. 
+					<italic>New Phytol</italic>
+					., 84:489-500.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>An evaluation of techniques for measuring vesicular arbuscular mycorrhizal infection in roots</article-title>
+					
+ 
+					<source>New Phytol.,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>489</fpage>
+					
+ 
+					<lpage>500</lpage>
+					
+ 
+					<volume>84</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Giovannetti</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Mosse</surname>
+							
+ 
+							<given-names>B.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B11">
+				
+ 
+				<mixed-citation>
+					Gomez, K.A.; Gomez, A.A. 1984. 
+					<italic>Statistical procedures for agricultural research</italic>
+					. 2
+					<sup>nd</sup>
+					 ed. John Wiley &amp; Sons, New York, 680p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Statistical procedures for agricultural research</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1984</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Gomez</surname>
+							
+ 
+							<given-names>K.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Gomez</surname>
+							
+ 
+							<given-names>A.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B12">
+				
+ 
+				<mixed-citation>
+					Islam, R.; Ayanaba, A. 1981. Effect of seed inoculation and pre-infecting cowpea (
+					<italic>Vigna unguiculata</italic>
+					) with 
+					<italic>Glomus mosseae</italic>
+					 on growth and seed yield of the plants under field conditions. 
+					<italic>Plant and Soil</italic>
+					, 61:341-350.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Effect of seed inoculation and pre-infecting cowpea (Vigna unguiculata) with Glomus mosseae on growth and seed yield of the plants under field conditions</article-title>
+					
+ 
+					<source>Plant and Soil,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1981</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>341</fpage>
+					
+ 
+					<lpage>350</lpage>
+					
+ 
+					<volume>61</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Islam</surname>
+							
+ 
+							<given-names>R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Ayanaba</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B13">
+				
+ 
+				<mixed-citation>
+					Iyer, R.; Moosa, H.; Sastry, R.K. 1988. Vesicular-arbuscular mycorrhizal association in banana. 
+					<italic>Current Science</italic>
+					, 57:153-155.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Vesicular-arbuscular mycorrhizal association in banana</article-title>
+					
+ 
+					<source>Current Science,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1988</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>153</fpage>
+					
+ 
+					<lpage>155</lpage>
+					
+ 
+					<volume>57</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Iyer</surname>
+							
+ 
+							<given-names>R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Moosa</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sastry</surname>
+							
+ 
+							<given-names>R.K.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B14">
+				
+ 
+				<mixed-citation>
+					Jaizme-Vega, M.C.; Azcón, R. 1995. Responses of some tropical and subtropical cultures to endomycorrhizal fungi. 
+					<italic>Micorrhiza</italic>
+					, 5:213-217.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Responses of some tropical and subtropical cultures to endomycorrhizal fungi</article-title>
+					
+ 
+					<source>Micorrhiza,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>213</fpage>
+					
+ 
+					<lpage>217</lpage>
+					
+ 
+					<volume>5</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Jaizme-Vega</surname>
+							
+ 
+							<given-names>M.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Azcón</surname>
+							
+ 
+							<given-names>R.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B15">
+				
+ 
+				<mixed-citation>
+					Kormanick, P.P.; Bryan, W.C.; Schultz, R.C. 1980. Procedures and equipment for staining large numbers of plant root samples for endomycorrhizal assay. 
+					<italic>Can. J. Microbiol</italic>
+					. 26:536-538.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Procedures and equipment for staining large numbers of plant root samples for endomycorrhizal assay</article-title>
+					
+ 
+					<source>Can. J. Microbiol.</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>536</fpage>
+					
+ 
+					<lpage>538</lpage>
+					
+ 
+					<volume>26</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Kormanick</surname>
+							
+ 
+							<given-names>P.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Bryan</surname>
+							
+ 
+							<given-names>W.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Schultz</surname>
+							
+ 
+							<given-names>R.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B16">
+				
+ 
+				<mixed-citation>
+					Medina, J.C. 1995. Cultura da banana. 
+					<italic>In:</italic>
+					 Medina, J.C.; Bleinroth, E.W.; de Martin, Z.J.; Travaglini, D.A.; Okada, M.; Quast, D.G.; Hashizune, T.; Moretti, V.A.; Neto, L.C.B.; Almeida, L.A.S.B.; Renesto, O.V. (Eds.). 
+					<italic>Banana</italic>
+					. 2.ed. ITAL, Campinas, p. 1-132.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Banana</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1</fpage>
+					
+ 
+					<lpage>132</lpage>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Medina</surname>
+							
+ 
+							<given-names>J.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Medina</surname>
+							
+ 
+							<given-names>J.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Bleinroth</surname>
+							
+ 
+							<given-names>E.W.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>de Martin</surname>
+							
+ 
+							<given-names>Z.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Travaglini</surname>
+							
+ 
+							<given-names>D.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Okada</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Quast</surname>
+							
+ 
+							<given-names>D.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Hashizune</surname>
+							
+ 
+							<given-names>T.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Moretti</surname>
+							
+ 
+							<given-names>V.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Neto</surname>
+							
+ 
+							<given-names>L.C.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Almeida</surname>
+							
+ 
+							<given-names>L.A.S.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Renesto</surname>
+							
+ 
+							<given-names>O.V.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B17">
+				
+ 
+				<mixed-citation>
+					Melo, A.M.Y.; Maia, L.C.; Morgado, L.B. 1997. Fungos micorrízicos arbusculares em bananeiras cultivadas no Vale do Submédio São Francisco. 
+					<italic>Acta Bot. Bras</italic>
+					., 11:115-121.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Fungos micorrízicos arbusculares em bananeiras cultivadas no Vale do Submédio São Francisco</article-title>
+					
+ 
+					<source>Acta Bot. Bras.,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1997</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>115</fpage>
+					
+ 
+					<lpage>121</lpage>
+					
+ 
+					<volume>11</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Melo</surname>
+							
+ 
+							<given-names>A.M.Y.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Maia</surname>
+							
+ 
+							<given-names>L.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Morgado</surname>
+							
+ 
+							<given-names>L.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B18">
+				
+ 
+				<mixed-citation>
+					Oliveira, L.A.; Guitton, L.T.; Moreira, F.W. 1999. Relações entre as colonizações por fungos micorrízicos arbusculares e teores de nutrientes foliares em oito espécies florestais da Amazônia. 
+					<italic>Acta Amazonica</italic>
+					, 29:183-193.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Relações entre as colonizações por fungos micorrízicos arbusculares e teores de nutrientes foliares em oito espécies florestais da Amazônia</article-title>
+					
+ 
+					<source>Acta Amazonica,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1999</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>183</fpage>
+					
+ 
+					<lpage>193</lpage>
+					
+ 
+					<volume>29</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Oliveira</surname>
+							
+ 
+							<given-names>L.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Guitton</surname>
+							
+ 
+							<given-names>L.T.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Moreira</surname>
+							
+ 
+							<given-names>F.W.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B19">
+				
+ 
+				<mixed-citation>
+					Oliveira, A.N.; Oliveira, L.A.; Moreira, F.W. 1998. Micorrizas arbusculares em cupuaçu e guaraná de um sistema agroflorestal de terra firme no Município de Manaus, AM. 
+					<italic>In</italic>
+					: 
+					<italic>FertBio</italic>
+					, 7., 1998, Caxambú. 
+					<italic>Resumos.</italic>
+					 Caxambú: Sociedade Brasileira de Microbiologia, p. 617.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Micorrizas arbusculares em cupuaçu e guaraná de um sistema agroflorestal de terra firme no Município de Manaus, AM</article-title>
+					
+ 
+					<source>FertBio</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1998</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>617</fpage>
+					
+ 
+					<volume>7</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Oliveira</surname>
+							
+ 
+							<given-names>A.N.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Oliveira</surname>
+							
+ 
+							<given-names>L.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Moreira</surname>
+							
+ 
+							<given-names>F.W.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B20">
+				
+ 
+				<mixed-citation>
+					Padovani, M.I. 1986. 
+					<italic>Banana: um mercado crescente para este alimento milenar</italic>
+					. Ed. Ícone, São Paulo. 104p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Banana: mercado crescente para este alimento milenar</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1986</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Padovani</surname>
+							
+ 
+							<given-names>M.I.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B21">
+				
+ 
+				<mixed-citation>
+					Ribeiro, M.N.G. 1976. Aspectos climáticos de Manaus. 
+					<italic>Acta Amazonica</italic>
+					, 6:229-233.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Aspectos climáticos de Manaus</article-title>
+					
+ 
+					<source>Acta Amazonica,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1976</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>229</fpage>
+					
+ 
+					<lpage>233</lpage>
+					
+ 
+					<volume>6</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Ribeiro</surname>
+							
+ 
+							<given-names>M.N.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B22">
+				
+ 
+				<mixed-citation>
+					Rodriguez-Goméz, M. 1980. Estudios preliminares sobre la nutrición com potasio de los bananales en America Central. 
+					<italic>Fruits</italic>
+					, 35:283-291.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Estudios preliminares sobre la nutrición com potasio de los bananales en America Central</article-title>
+					
+ 
+					<source>Fruits,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>283</fpage>
+					
+ 
+					<lpage>291</lpage>
+					
+ 
+					<volume>35</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Rodriguez-Goméz</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B23">
+				
+ 
+				<mixed-citation>
+					Saggin-Júnior, O.J.; Siqueira, J.O. 1996. Micorrizas arbusculares em cafeeiro. 
+					<italic>In</italic>
+					: Siqueira, J.O. (Ed.). 
+					<italic>Avanços em fundamentos e aplicação de micorrizas</italic>
+					. Universidade Federal de Lavras, Lavras, MG, p.203-254.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Avanços em fundamentos e aplicação de micorrizas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1996</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>203</fpage>
+					
+ 
+					<lpage>254</lpage>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Saggin-Júnior</surname>
+							
+ 
+							<given-names>O.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Siqueira</surname>
+							
+ 
+							<given-names>J.O.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Siqueira</surname>
+							
+ 
+							<given-names>J.O.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B24">
+				
+ 
+				<mixed-citation>
+					Schenck, N.C. 1982. 
+					<italic>Methods and Principles of Mycorrhizal Research</italic>
+					. The Amer. Phytopat. Soc. Publ., St. Paul, MN, USA. 224p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Methods and Principles of Mycorrhizal Research</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1982</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Schenck</surname>
+							
+ 
+							<given-names>N.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B25">
+				
+ 
+				<mixed-citation>
+					Schwab, S.M.; Menge, J.A.; Tinker, P.B. 1991. Regulation of nutrient transfer between host and fungus in vesicular-arbuscular mycorrhizas. 
+					<italic>New Phytol</italic>
+					., 117:387-398.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Regulation of nutrient transfer between host and fungus in vesicular-arbuscular mycorrhizas</article-title>
+					
+ 
+					<source>New Phytol.,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1991</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>387</fpage>
+					
+ 
+					<lpage>398</lpage>
+					
+ 
+					<volume>117</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Schwab</surname>
+							
+ 
+							<given-names>S.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Menge</surname>
+							
+ 
+							<given-names>J.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Tinker</surname>
+							
+ 
+							<given-names>P.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B26">
+				
+ 
+				<mixed-citation>
+					Silveira, A.P.D. 1992. Micorrizas. 
+					<italic>In</italic>
+					: Cardoso, E.J.B.N.; Tsai, S.M.; Neves, M.C.P., eds. 
+					<italic>Microbiologia do Solo</italic>
+					. Sociedade Brasileira de Ciência do Solo, Campinas, p. 257-282.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Microbiologia do Solo</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1992</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>257</fpage>
+					
+ 
+					<lpage>282</lpage>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Silveira</surname>
+							
+ 
+							<given-names>A.P.D.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Cardoso</surname>
+							
+ 
+							<given-names>E.J.B.N.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Tsai</surname>
+							
+ 
+							<given-names>S.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Neves</surname>
+							
+ 
+							<given-names>M.C.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B27">
+				
+ 
+				<mixed-citation>
+					Siqueira, J.O. 1991. Fisiologia e bioquímica de micorrizas vesículo-arbusculares: alguns aspectos da relação fungo-planta e absorção de fósforo. 
+					<italic>In</italic>
+					: 
+					<italic>Reunião Brasileira de Micorrizas</italic>
+					, 4, Mendes. 
+					<italic>Anais.</italic>
+					 EMBRAPA, Centro Nacional de Pesquisas em Biologia do Solo, Itaguaí, RJ. p. 1-27.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="confproc">
+					
+ 
+					<source>Anais</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1991</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1</fpage>
+					
+ 
+					<lpage>27</lpage>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Siqueira</surname>
+							
+ 
+							<given-names>J.O.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B28">
+				
+ 
+				<mixed-citation>
+					St. John, T.V. 1980. Uma lista de espécies de plantas tropicais brasileiras naturalmente infectadas com micorriza vesicular-arbuscular. 
+					<italic>Acta Amazonica</italic>
+					, 10:229-234.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Uma lista de espécies de plantas tropicais brasileiras naturalmente infectadas com micorriza vesicular-arbuscular</article-title>
+					
+ 
+					<source>Acta Amazonica,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>229</fpage>
+					
+ 
+					<lpage>234</lpage>
+					
+ 
+					<volume>10</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>St. John</surname>
+							
+ 
+							<given-names>T.V.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B29">
+				
+ 
+				<mixed-citation>
+					Tinker, P.B.H. 1975. Effects of vesicular-arbuscular mycorrhiza on higher plants. 
+					<italic>Symp. Soc. Expo. Biol</italic>
+					., 29:325-349.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Effects of vesicular-arbuscular mycorrhiza on higher plants</article-title>
+					
+ 
+					<source>Symp. Soc. Expo. Biol.,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1975</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>325</fpage>
+					
+ 
+					<lpage>349</lpage>
+					
+ 
+					<volume>29</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Tinker</surname>
+							
+ 
+							<given-names>P.B.H.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B30">
+				
+ 
+				<mixed-citation>
+					Tisdall, J.M. 1994. Possible role of soil microorganisms in aggregation in soils. 
+					<italic>Plant and Soil</italic>
+					, 159:115-121.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Possible role of soil microorganisms in aggregation in soils</article-title>
+					
+ 
+					<source>Plant and Soil,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1994</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>115</fpage>
+					
+ 
+					<lpage>121</lpage>
+					
+ 
+					<volume>159</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Tisdall</surname>
+							
+ 
+							<given-names>J.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+		</ref-list>
+		
+ 
+	</back>
+	
+
+</article>

@@ -22,7 +22,13 @@ def render_pagination(items):
 
 def parse_name_file(filename):
 
-    fname, languages, fext = filename.split(".")
+    s_filename = filename.split(".")
+    if len(s_filename) <= 3:
+        fname, fext = s_filename[-2:]
+        languages = "pt"
+    else:
+        fname, languages, fext = s_filename[-3:]
+
     return {"name": "%s.%s" % (fname, fext), "languages": languages.split("-")}
 
 

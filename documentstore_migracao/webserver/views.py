@@ -39,7 +39,7 @@ def render_html_converted_view(request):
         print_css="/static/css/scielo-bundle-print.css",
         js="/static/js/scielo-article-min.js",
     )
-    # import pdb;pdb.set_trace()
+
     html = html_generator.generate(request.matchdict["language"])
 
     return Response(
