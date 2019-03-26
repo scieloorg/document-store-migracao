@@ -13,10 +13,12 @@
                     {% set data_file = h.parse_name_file(item) %}
                     Arquivo xml: {{data_file.name}}
 
-                    {% for lang in data_file.languages %}
-                        <a href="{{ request.route_path('render_html_converted', file_xml=item, language=lang ) }}"
-                           target="blank" class="badge badge-success">{{lang}}</a>
-                    {% endfor %}
+                    <div class="float-right">
+                        {% for lang in data_file.languages %}
+                            <a href="{{ request.route_path('render_html_converted', file_xml=item, language=lang ) }}"
+                               target="blank" class="badge badge-success">{{lang}}</a>
+                        {% endfor %}
+                    </div>
                   </li>
                 {% endif %}
                 {% endfor %}
