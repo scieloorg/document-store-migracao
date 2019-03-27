@@ -4,12 +4,12 @@ from unittest.mock import patch
 from lxml import etree
 from documentstore_migracao.utils import files, xml, request, dicts
 
-from . import SAMPLES_PATH
+from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
 
 
 class TestUtilsFiles(unittest.TestCase):
     def test_list_dir(self):
-        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), 7)
+        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), COUNT_SAMPLES_FILES)
 
     def test_read_file(self):
         data = files.read_file(

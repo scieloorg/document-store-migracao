@@ -23,7 +23,7 @@ def render_pagination(items):
 def parse_name_file(filename):
 
     s_filename = filename.split(".")
-    if len(s_filename) <= 3:
+    if len(s_filename) < 3:
         fname, fext = s_filename[-2:]
         languages = "pt"
     else:
