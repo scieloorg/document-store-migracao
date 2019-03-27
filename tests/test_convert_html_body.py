@@ -492,6 +492,69 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>',
         )
 
+    def test_pipe_remove_graphicChildren_sub(self):
+        text = """<root><p><sub><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></sub></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
+        )
+
+    def test_pipe_remove_graphicChildren_sub(self):
+        text = """<root><p><sub><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></sub></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
+        )
+
+    def test_pipe_remove_graphicChildren_extlink(self):
+        text = """<root><p><ext-link><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></ext-link></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
+        )
+
+    def test_pipe_remove_graphicChildren_xref(self):
+        text = """<root><p><xref><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></xref></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
+        )
+
+    def test_pipe_remove_graphicChildren_italic(self):
+        text = """<root><p><italic><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></italic></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
+        )
+
+    def test_pipe_remove_graphicChildren_bold(self):
+        text = """<root><p><bold><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></bold></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
+        )
+
+    def test_pipe_remove_graphicChildren_sup(self):
+        text = """<root><p><sup><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></sup></p></root>"""
+        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
+        )
+
+    def test_pipe_remove_comments(self):
+        text = """<root><!-- COMMENT 1 --><x>TEXT 1</x><y>TEXT 2 <!-- COMMENT 2 --></y></root>"""
+        raw, transformed = self._transform(text, self.pipeline.RemoveCommentPipe())
+        self.assertEqual(
+            etree.tostring(transformed), b"""<root><x>TEXT 1</x><y>TEXT 2 </y></root>"""
+        )
+
     def test__process(self):
         def f(node):
             node.tag = node.tag.upper()

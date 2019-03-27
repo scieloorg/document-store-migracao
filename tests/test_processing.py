@@ -54,17 +54,17 @@ class TestProcessingConversion(unittest.TestCase):
 
             self.assertEqual(len(mk_conversion_article_xml.mock_calls), 6)
 
-    @unittest.skip("test_conversion_article_ALLxml_with_exception")
-    @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
-    def test_conversion_article_ALLxml_with_exception(self, mk_conversion_article_xml):
+    # @unittest.skip("test_conversion_article_ALLxml_with_exception")
+    # @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
+    # def test_conversion_article_ALLxml_with_exception(self, mk_conversion_article_xml):
 
-        mk_conversion_article_xml.side_effect = KeyError("Test Error - CONVERSION")
-        with utils.environ(SOURCE_PATH=SAMPLES_PATH):
+    #     mk_conversion_article_xml.side_effect = KeyError("Test Error - CONVERSION")
+    #     with utils.environ(SOURCE_PATH=SAMPLES_PATH):
 
-            with self.assertRaises(KeyError) as cm:
-                conversion.conversion_article_ALLxml()
+    #         with self.assertRaises(KeyError) as cm:
+    #             conversion.conversion_article_ALLxml()
 
-                self.assertEqual("Test Error - CONVERSION", str(cm.exception))
+    #             self.assertEqual("Test Error - CONVERSION", str(cm.exception))
 
 
 class TestProcessingReading(unittest.TestCase):
@@ -96,3 +96,21 @@ class TestProcessingReading(unittest.TestCase):
                 if "Test Error - READING" in log_message:
                     has_message = True
             self.assertTrue(has_message)
+
+class TestReadingJournals(unittest.TestCase):
+    def setUp(self):
+        self.journals_json_path = os.path.join(
+            SAMPLES_PATH, "base-isis-sample", "title"
+        )
+
+    def test_should_load_file_successfull(self):
+        with utils.environ(SOURCE_PATH=self.journals_json_path):
+            data = reading.read_journals_from_json("title.json")
+
+            self.assertTrue(type(data), list)
+            self.assertEqual(
+                data[0].get("v140")[0]["_"],
+                "Colégio Brasileiro de Cirurgia Digestiva - CBCD",
+            )
+
+            self.assertEqual(len(data), 3)

@@ -53,4 +53,4 @@ def conversion_article_ALLxml():
         except Exception as ex:
             logger.error(file_xml)
             logger.exception(ex)
-            raise
+            # raise
