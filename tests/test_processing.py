@@ -5,7 +5,14 @@ from unittest.mock import patch, ANY
 from xylose.scielodocument import Journal, Article
 from documentstore_migracao.processing import extrated, conversion, reading
 
-from . import utils, SAMPLES_PATH, SAMPLES_JOURNAL, SAMPLES_XML_ARTICLE, SAMPLES_ARTICLE
+from . import (
+    utils,
+    SAMPLES_PATH,
+    SAMPLES_JOURNAL,
+    SAMPLES_XML_ARTICLE,
+    SAMPLES_ARTICLE,
+    SAMPLE_KERNEL_JOURNAL,
+)
 
 
 class TestProcessingExtrated(unittest.TestCase):
@@ -97,6 +104,7 @@ class TestProcessingReading(unittest.TestCase):
                     has_message = True
             self.assertTrue(has_message)
 
+
 class TestReadingJournals(unittest.TestCase):
     def setUp(self):
         self.journals_json_path = os.path.join(
@@ -114,3 +122,22 @@ class TestReadingJournals(unittest.TestCase):
             )
 
             self.assertEqual(len(data), 3)
+
+
+class TestConversionJournalJson(unittest.TestCase):
+    def setUp(self):
+        self.json_journal = {
+            "v100": [{"_": "sample"}],
+            "v68": [{"_": "spl"}],
+            "v940": [{"_": "20190128"}],
+            "v50": [{"_": "C"}],
+            "v400": [{"_": "10000-000A"}],
+        }
+
+    def test_should_return_a_bundle(self):
+        journal = conversion.conversion_journal_to_bundle(self.json_journal)
+        self.assertEqual(SAMPLE_KERNEL_JOURNAL, journal)
+
+    def test_should_return_a_list_of_bundle(self):
+        journals = conversion.conversion_journals_to_kernel([self.json_journal])
+        self.assertEqual([SAMPLE_KERNEL_JOURNAL], journals)
