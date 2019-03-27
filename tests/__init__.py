@@ -411,3 +411,5 @@ SAMPLE_KERNEL_JOURNAL = {
     "id": "10000-000A",
     "_id": "10000-000A",
 }
+
+COUNT_SAMPLES_FILES = 8

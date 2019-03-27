@@ -1,9 +1,15 @@
 import os
 import unittest
-from unittest.mock import patch, ANY
+from unittest.mock import patch, ANY, call
 
 from xylose.scielodocument import Journal, Article
-from documentstore_migracao.processing import extrated, conversion, reading, generation
+from documentstore_migracao.processing import (
+    extrated,
+    conversion,
+    reading,
+    generation,
+    validation,
+)
 
 from . import (
     utils,
@@ -11,6 +17,7 @@ from . import (
     SAMPLES_JOURNAL,
     SAMPLES_XML_ARTICLE,
     SAMPLES_ARTICLE,
+    COUNT_SAMPLES_FILES,
     SAMPLE_KERNEL_JOURNAL,
 )
 
@@ -73,7 +80,9 @@ class TestProcessingConversion(unittest.TestCase):
             conversion.conversion_article_ALLxml()
             mk_conversion_article_xml.assert_called_with(ANY)
 
-            self.assertEqual(len(mk_conversion_article_xml.mock_calls), 7)
+            self.assertEqual(
+                len(mk_conversion_article_xml.mock_calls), COUNT_SAMPLES_FILES
+            )
 
     @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
     def test_conversion_article_ALLxml_with_exception(self, mk_conversion_article_xml):
@@ -100,7 +109,9 @@ class TestProcessingReading(unittest.TestCase):
         with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
             reading.reading_article_ALLxml()
             mk_reading_article_xml.assert_called_with(ANY, move_success=False)
-            self.assertEqual(len(mk_reading_article_xml.mock_calls), 7)
+            self.assertEqual(
+                len(mk_reading_article_xml.mock_calls), COUNT_SAMPLES_FILES
+            )
 
     @patch("documentstore_migracao.processing.reading.reading_article_xml")
     def test_reading_article_ALLxml_with_exception(self, mk_reading_article_xml):
@@ -141,7 +152,9 @@ class TestProcessingGeneration(unittest.TestCase):
         with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
             generation.article_ALL_html_generator()
             mk_article_html_generator.assert_called_with(ANY)
-            self.assertEqual(len(mk_article_html_generator.mock_calls), 7)
+            self.assertEqual(
+                len(mk_article_html_generator.mock_calls), COUNT_SAMPLES_FILES
+            )
 
     @patch("documentstore_migracao.processing.generation.article_html_generator")
     def test_reading_article_ALLxml_with_exception(self, mk_article_html_generator):
@@ -157,6 +170,7 @@ class TestProcessingGeneration(unittest.TestCase):
                 if "Test Error - Generation" in log_message:
                     has_message = True
             self.assertTrue(has_message)
+
 
 class TestReadingJournals(unittest.TestCase):
     def setUp(self):
@@ -194,3 +208,71 @@ class TestConversionJournalJson(unittest.TestCase):
     def test_should_return_a_list_of_bundle(self):
         journals = conversion.conversion_journals_to_kernel([self.json_journal])
         self.assertEqual([SAMPLE_KERNEL_JOURNAL], journals)
+
+
+class TestProcessingValidation(unittest.TestCase):
+    def test_validator_article_xml(self):
+
+        result = validation.validator_article_xml(
+            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml")
+        )
+        self.assertIn(
+            "Element p is not declared in p list of possible children", result.keys()
+        )
+
+    def test_validator_article_xml_not_print(self):
+
+        result = validation.validator_article_xml(
+            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), False
+        )
+        self.assertIn(
+            "Element p is not declared in p list of possible children", result.keys()
+        )
+
+    def test_validator_article_xml_valid(self):
+
+        result = validation.validator_article_xml(
+            os.path.join(SAMPLES_PATH, "0034-8910-rsp-48-2-0347-valid.xml"), False
+        )
+        self.assertEqual({}, result)
+
+    @patch("documentstore_migracao.processing.validation.validator_article_xml")
+    def test_validator_article_ALLxml(self, mk_validator_article_xml):
+        mk_validator_article_xml.return_value = {
+            "Element p is not declared in p list of possible children": {
+                "count": 2,
+                "files": (
+                    410,
+                    os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"),
+                    419,
+                    os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"),
+                ),
+            }
+        }
+        list_files_xmls = [
+            "S0044-59672003000300001.pt.xml",
+            "S0102-86501998000100007.xml",
+            "S0102-86501998000100002.xml",
+            "S0036-36341997000100003.xml",
+            "S0036-36341997000100002.xml",
+            "S0036-36341997000100001.xml",
+        ]
+        calls = [
+            call(os.path.join(SAMPLES_PATH, file_xml), False)
+            for file_xml in list_files_xmls
+        ]
+
+        with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
+            validation.validator_article_ALLxml()
+            mk_validator_article_xml.assert_has_calls(calls, any_order=True)
+
+    @patch("documentstore_migracao.processing.validation.validator_article_xml")
+    def test_validator_article_ALLxml_with_exception(self, mk_validator_article_xml):
+
+        mk_validator_article_xml.side_effect = KeyError("Test Error - Validation")
+        with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
+
+            with self.assertRaises(KeyError) as cm:
+                validation.validator_article_ALLxml()
+
+                self.assertEqual("Test Error - Validation", str(cm.exception))

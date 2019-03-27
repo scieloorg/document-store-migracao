@@ -2,7 +2,7 @@ import unittest
 from webtest import TestApp
 from pyramid import testing
 from documentstore_migracao.webserver import views, main
-from . import utils, SAMPLES_PATH
+from . import utils, SAMPLES_PATH, COUNT_SAMPLES_FILES
 
 
 class ViewTests(unittest.TestCase):
@@ -18,7 +18,7 @@ class ViewTests(unittest.TestCase):
         with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
             info = views.list_converted_xml_view(request)
             self.assertEqual(info["page_title"], "Lista de XMLS Convertidos")
-            self.assertEqual(len(info["xmls"]), 7)
+            self.assertEqual(len(info["xmls"]), COUNT_SAMPLES_FILES)
 
     def test_render_html_converted_view(self):
         request = testing.DummyRequest()
