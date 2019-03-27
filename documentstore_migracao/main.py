@@ -5,7 +5,7 @@ import sys
 import os, logging
 
 
-from documentstore_migracao.processing import extrated, reading, conversion, validation
+from documentstore_migracao.processing import extrated, reading, conversion, validation, pipeline
 from documentstore_migracao import exceptions, config
 from documentstore_migracao.export import journal as export_journal
 
@@ -121,25 +121,17 @@ def migrate_journals():
         choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
         help='Loggin level'
     )
+
     args = parser.parse_args()
 
     # CHANGE LOGGER
     level = getattr(logging, args.logging_level.upper())
     logger = logging.getLogger()
     logger.setLevel(level)
-    os.environ["SOURCE_PATH"] = os.path.join(config.BASE_PATH, "json/source")
 
-    if args.data_origin == 'i':
-        if args.extract:
-            try:
-                export_journal.extract_journals_from_isis()
-            except exceptions.ExtractError as exc:
-                logger.error(str(exc))
-                sys.exit(1)
-        print("Reading JSON")
-        print("Load Xylose")
-        print("Normalize data to Kernel")
-    elif args.data_origin == 'm':
+    if args.data_origin == "i":
+        pipeline.process_isis_journal(extract=args.extract)
+    elif args.data_origin == "m":
         print("Connect to Manager Database")
         print("Reading Database")
         print("Normalize data to Kernel")
