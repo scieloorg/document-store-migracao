@@ -14,12 +14,14 @@ _default = dict(
     ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
 )
 
+
 def get(config: str):
     """Recupera configurações do sistema, caso a configuração não
     esteja definida como uma variável de ambiente deve-se retornar a
     configuração padrão.
     """
     return os.environ.get(config, _default.get(config, ""))
+
 
 INITIAL_PATH = [
     get("LOGGER_PATH"),
@@ -32,3 +34,13 @@ INITIAL_PATH = [
 DOC_TYPE_XML = """<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "JATS-journalpublishing1.dtd">"""
 
 os.environ["XML_CATALOG_FILES"] = XML_CATALOG
+
+os.environ["CLASSPATH"] = "".join(
+    [
+        os.path.join(BASE_PATH, "documentstore_migracao/utils/isis2json/lib/Bruma.jar"),
+        ":",
+        os.path.join(
+            BASE_PATH, "documentstore_migracao/utils/isis2json/lib/jyson-1.0.1.jar"
+        ),
+    ]
+)
