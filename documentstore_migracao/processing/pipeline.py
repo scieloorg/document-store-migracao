@@ -14,6 +14,13 @@ def process_isis_journal(extract=False):
 
     if extract:
         try:
+            if not "Bruma" in os.environ.get(
+                "CLASSPATH", ""
+            ) or not "jyson" in os.environ.get("CLASSPATH", ""):
+                raise exceptions.ExtractError(
+                    "As bibliotecas Bruma e Jyson precisam estar no CLASSPATH"
+                )
+
             export_journal.extract_journals_from_isis()
         except (exceptions.ExtractError, exceptions.FetchEnvVariableError) as exc:
             logger.error(str(exc))
