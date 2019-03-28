@@ -2,8 +2,12 @@ import os
 import logging
 
 from lxml import etree
+from typing import List
+
 from documentstore_migracao.utils import files, xml
 from documentstore_migracao import config
+from xylose.scielodocument import Journal
+from documentstore_migracao.utils import xylose_converter
 
 logger = logging.getLogger(__name__)
 
@@ -54,3 +58,21 @@ def conversion_article_ALLxml():
             logger.error(file_xml)
             logger.exception(ex)
             # raise
+
+
+def conversion_journal_to_bundle(journal: dict) -> None:
+    """Transforma um objeto Journal (xylose) para o formato
+    de dados equivalente ao persistido pelo Kernel em um banco
+    mongodb"""
+
+    _journal = Journal(journal)
+    _bundle = xylose_converter.journal_to_kernel(_journal)
+    return _bundle
+
+
+def conversion_journals_to_kernel(journals: list) -> list:
+    """Transforma uma lista de periódicos não normalizados em
+    uma lista de periódicos em formato Kernel"""
+
+    logger.info("Convertendo %d periódicos para formato Kernel" % (len(journals)))
+    return [conversion_journal_to_bundle(journal) for journal in journals]
