@@ -4,8 +4,7 @@ import argparse
 import sys
 import os, logging
 
-from documentstore_migracao import exceptions, config
-from documentstore_migracao.export import journal as export_journal
+
 from documentstore_migracao.processing import (
     extrated,
     reading,

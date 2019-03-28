@@ -3,7 +3,6 @@ import logging
 
 from lxml import etree
 from typing import List
-
 from documentstore_migracao.utils import files, xml, string
 from documentstore_migracao import config
 from xylose.scielodocument import Journal

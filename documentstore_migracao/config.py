@@ -14,14 +14,12 @@ _default = dict(
     ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
 )
 
-
 def get(config: str):
     """Recupera configurações do sistema, caso a configuração não
     esteja definida como uma variável de ambiente deve-se retornar a
     configuração padrão.
     """
     return os.environ.get(config, _default.get(config, ""))
-
 
 INITIAL_PATH = [
     get("LOGGER_PATH"),
