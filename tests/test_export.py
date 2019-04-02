@@ -6,6 +6,7 @@ from xylose.scielodocument import Journal, Article
 from documentstore_migracao.export import journal, article
 from documentstore_migracao import exceptions, config
 from documentstore_migracao.export.journal import extract_journals_from_isis
+from documentstore_migracao.export.issue import extract_issues_from_isis
 from . import SAMPLES_JOURNAL, SAMPLES_ARTICLE, SAMPLES_PATH, utils
 
 
@@ -140,3 +141,26 @@ class ExportJournalFromIsisTest(unittest.TestCase):
     def test_raise_extract_exception_if_source_folder_is_not_accessible(self):
         with utils.environ(ISIS_BASE_PATH=self.journal_sample_mst, SOURCE_PATH=""):
             self.assertRaises(exceptions.ExtractError, extract_journals_from_isis)
+
+
+class ExportIssuesFromIsisTest(unittest.TestCase):
+    def setUp(self):
+        self.journal_sample_mst = os.path.join(
+            SAMPLES_PATH, "base-isis-sample", "issue", "issue.mst"
+        )
+        self.journal_sample = os.path.join(
+            SAMPLES_PATH, "base-isis-sample", "issue", "issue.json"
+        )
+        self.source_path = config.get("SOURCE_PATH")
+
+    def test_raise_extract_exception_if_jython_is_not_in_path(self):
+        with utils.environ(PATH="", ISIS_BASE_PATH=self.journal_sample_mst):
+            self.assertRaises(exceptions.ExtractError, extract_issues_from_isis)
+
+    def test_raise_extract_exception_if_base_not_found(self):
+        with utils.environ(ISIS_BASE_PATH="", SOURCE_PATH=self.source_path):
+            self.assertRaises(exceptions.FetchEnvVariableError, extract_issues_from_isis)
+
+    def test_raise_extract_exception_if_source_folder_is_not_accessible(self):
+        with utils.environ(ISIS_BASE_PATH=self.journal_sample_mst, SOURCE_PATH=""):
+            self.assertRaises(exceptions.ExtractError, extract_issues_from_isis)
