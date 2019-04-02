@@ -398,4 +398,18 @@ SAMPLES_XML_ARTICLE = open(
     os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml"), "r"
 ).read()
 
+SAMPLE_KERNEL_JOURNAL = {
+    "created": "2019-01-28T00:00:00.000000Z",
+    "updated": "2019-01-28T00:00:00.000000Z",
+    "items": [],
+    "metadata": {
+        "title": [["2019-01-28T00:00:00.000000Z", "sample"]],
+        "acronym": [["2019-01-28T00:00:00.000000Z", "spl"]],
+        "status": [["2019-01-28T00:00:00.000000Z", {"status": "current"}]],
+        "scielo_issn": [["2019-01-28T00:00:00.000000Z", "10000-000A"]],
+    },
+    "id": "10000-000A",
+    "_id": "10000-000A",
+}
+
 COUNT_SAMPLES_FILES = 8

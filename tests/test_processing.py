@@ -18,6 +18,7 @@ from . import (
     SAMPLES_XML_ARTICLE,
     SAMPLES_ARTICLE,
     COUNT_SAMPLES_FILES,
+    SAMPLE_KERNEL_JOURNAL,
 )
 
 
@@ -169,6 +170,44 @@ class TestProcessingGeneration(unittest.TestCase):
                 if "Test Error - Generation" in log_message:
                     has_message = True
             self.assertTrue(has_message)
+
+
+class TestReadingJournals(unittest.TestCase):
+    def setUp(self):
+        self.journals_json_path = os.path.join(
+            SAMPLES_PATH, "base-isis-sample", "title"
+        )
+
+    def test_should_load_file_successfull(self):
+        with utils.environ(SOURCE_PATH=self.journals_json_path):
+            data = reading.read_journals_from_json("title.json")
+
+            self.assertTrue(type(data), list)
+            self.assertEqual(
+                data[0].get("v140")[0]["_"],
+                "Colégio Brasileiro de Cirurgia Digestiva - CBCD",
+            )
+
+            self.assertEqual(len(data), 3)
+
+
+class TestConversionJournalJson(unittest.TestCase):
+    def setUp(self):
+        self.json_journal = {
+            "v100": [{"_": "sample"}],
+            "v68": [{"_": "spl"}],
+            "v940": [{"_": "20190128"}],
+            "v50": [{"_": "C"}],
+            "v400": [{"_": "10000-000A"}],
+        }
+
+    def test_should_return_a_bundle(self):
+        journal = conversion.conversion_journal_to_bundle(self.json_journal)
+        self.assertEqual(SAMPLE_KERNEL_JOURNAL, journal)
+
+    def test_should_return_a_list_of_bundle(self):
+        journals = conversion.conversion_journals_to_kernel([self.json_journal])
+        self.assertEqual([SAMPLE_KERNEL_JOURNAL], journals)
 
 
 class TestProcessingValidation(unittest.TestCase):
