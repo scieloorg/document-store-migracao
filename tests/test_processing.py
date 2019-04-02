@@ -147,9 +147,12 @@ class TestProcessingGeneration(unittest.TestCase):
             self.assertIn("S0044-59672003000300001", text)
 
     @patch("documentstore_migracao.processing.generation.article_html_generator")
-    def test_reading_article_ALLxml(self, mk_article_html_generator):
+    def test_article_ALL_html_generator(self, mk_article_html_generator):
 
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
+        with utils.environ(
+                CONVERSION_PATH=SAMPLES_PATH,
+                VALID_XML_PATH=''
+                ):
             generation.article_ALL_html_generator()
             mk_article_html_generator.assert_called_with(ANY)
             self.assertEqual(
@@ -157,10 +160,13 @@ class TestProcessingGeneration(unittest.TestCase):
             )
 
     @patch("documentstore_migracao.processing.generation.article_html_generator")
-    def test_reading_article_ALLxml_with_exception(self, mk_article_html_generator):
+    def test_article_ALL_html_generator_with_exception(self, mk_article_html_generator):
 
         mk_article_html_generator.side_effect = KeyError("Test Error - Generation")
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
+        with utils.environ(
+                CONVERSION_PATH=SAMPLES_PATH,
+                VALID_XML_PATH=''
+                ):
 
             with self.assertLogs("documentstore_migracao.processing.generation") as log:
                 generation.article_ALL_html_generator()
@@ -241,13 +247,17 @@ class TestProcessingValidation(unittest.TestCase):
         mk_validator_article_xml.return_value = {
             "Element p is not declared in p list of possible children": {
                 "count": 2,
-                "files": (
-                    410,
-                    os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"),
-                    419,
-                    os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"),
-                ),
-            }
+                "lineno": [410, 419],
+                "filename": {
+                    os.path.join(
+                        SAMPLES_PATH, "S0044-59672003000300001.pt.xml")
+                    },
+                "message": ["Element p is not declared in p"
+                            " list of possible children",
+                            "Element p is not declared in p"
+                            " list of possible children"
+                           ]
+                },
         }
         list_files_xmls = [
             "S0044-59672003000300001.pt.xml",

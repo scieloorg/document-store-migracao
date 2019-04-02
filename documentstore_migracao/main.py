@@ -39,13 +39,25 @@ def process(args):
         "--conversionFiles",
         "-c",
         action="store_true",
-        help="Converte todos os arquivos XML baixados",
+        help="Converte todos os arquivos XML de 'source'",
     )
     parser.add_argument(
         "--validationFiles",
         "-V",
         action="store_true",
-        help="Converte todos os arquivos XML baixados",
+        help="Valida todos os arquivos XML de 'source'",
+    )
+    parser.add_argument(
+        "--move_to_processed_source",
+        "-MS",
+        action="store_true",
+        help="Move os arquivos válidos de 'source' para 'processed_source'",
+    )
+    parser.add_argument(
+        "--move_to_valid_xml",
+        "-MC",
+        action="store_true",
+        help="Move os arquivos válidos de 'conversion' para 'valid_xml'",
     )
     parser.add_argument(
         "--generationFiles",
@@ -84,7 +96,8 @@ def process(args):
         extrated.extrated_all_data()
 
     elif args.validationFiles:
-        validation.validator_article_ALLxml()
+        validation.validator_article_ALLxml(
+            args.move_to_processed_source, args.move_to_valid_xml)
 
     elif args.generationFiles:
         generation.article_ALL_html_generator()

@@ -29,7 +29,7 @@ def reading_article_xml(file_xml_path, move_success=True):
 def reading_article_ALLxml():
 
     logger.info("Iniciando Leituras do xmls")
-    list_files_xmls = files.list_dir(config.get("CONVERSION_PATH"))
+    list_files_xmls = files.xml_files_list(config.get("CONVERSION_PATH"))
     for file_xml in list_files_xmls:
 
         try:
