@@ -5,7 +5,7 @@ from lxml import etree
 from typing import List
 from documentstore_migracao.utils import files, xml, string
 from documentstore_migracao import config
-from xylose.scielodocument import Journal
+from xylose.scielodocument import Journal, Issue
 from documentstore_migracao.utils import xylose_converter
 
 logger = logging.getLogger(__name__)
@@ -82,3 +82,33 @@ def conversion_journals_to_kernel(journals: list) -> list:
 
     logger.info("Convertendo %d periódicos para formato Kernel" % (len(journals)))
     return [conversion_journal_to_bundle(journal) for journal in journals]
+
+
+def filter_issues(issues: List[Issue]) -> List[Issue]:
+    """Filtra as issues em formato xylose sempre removendo
+    os press releases e possibilitando a aplicação do filtro
+    para as issues do tipo ahead of print"""
+
+    filters = [
+        lambda issue: not issue.type == "pressrelease",
+        lambda issue: not issue.type == "ahead",
+    ]
+
+    for f in filters:
+        issues = list(filter(f, issues))
+
+    return issues
+
+
+def conversion_issues_to_xylose(issues: list) -> List[Issue]:
+    """Converte uma lista de issues em formato JSON para uma
+    lista de issues em formato xylose"""
+
+    return [Issue({"issue": issue}) for issue in issues]
+
+
+def conversion_issues_to_kernel(issues: List[Issue]) -> List[dict]:
+    """Converte uma lista de issues em formato xylose para uma lista
+    de issues em formato Kernel"""
+
+    return [xylose_converter.issue_to_kernel(issue) for issue in issues]

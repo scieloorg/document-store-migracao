@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest.mock import patch, ANY, call
 
-from xylose.scielodocument import Journal, Article
+from xylose.scielodocument import Journal, Issue, Article
 from documentstore_migracao.processing import (
     extrated,
     conversion,
@@ -19,6 +19,7 @@ from . import (
     SAMPLES_ARTICLE,
     COUNT_SAMPLES_FILES,
     SAMPLE_KERNEL_JOURNAL,
+    SAMPLE_KERNEL_ISSUE,
 )
 
 
@@ -294,3 +295,44 @@ class TestReadingIssues(unittest.TestCase):
 
             self.assertEqual(len(data), 8)
 
+
+class TestConversionIssuesJson(unittest.TestCase):
+    def setUp(self):
+        self.issues_json = [
+            {
+                "v32": [{"_": "5"}],
+                "v31": [{"_": "40"}],
+                "v35": [{"_": "2448-167X"}],
+                "v65": [{"_": "20190129"}],
+                "v41": [{"_": "pr"}],
+            },
+            {
+                "v32": [{"_": "5"}],
+                "v31": [{"_": "40"}],
+                "v35": [{"_": "2448-167X"}],
+                "v65": [{"_": "20190129"}],
+                "v41": [{"_": "ahead"}],
+            },
+        ]
+
+    def test_should_convert_issues_to_xylose(self):
+        issues = conversion.conversion_issues_to_xylose(self.issues_json)
+
+        for issue in issues:
+            with self.subTest(issue=issue):
+                self.assertTrue(isinstance(issue, Issue))
+
+    def test_should_convert_issues_to_bundle(self):
+        issues = conversion.conversion_issues_to_xylose(self.issues_json)
+        issues_as_kernel = conversion.conversion_issues_to_kernel(issues)
+
+        for issue in issues_as_kernel:
+            with self.subTest(issue=issue):
+                self.assertIn("_id", issue)
+
+        self.assertEqual(SAMPLE_KERNEL_ISSUE, issues_as_kernel[0])
+
+    def test_should_filter_remove_pressreleases_and_ahead(self):
+        issues = conversion.conversion_issues_to_xylose(self.issues_json)
+        issues = conversion.filter_issues(issues)
+        self.assertEqual(0, len(issues))
