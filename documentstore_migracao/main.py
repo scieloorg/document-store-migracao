@@ -158,10 +158,51 @@ def migrate_journals():
     print("Saving data to Kernel")
 
 
+def migrate_issues(args):
+    parser = argparse.ArgumentParser(description="Document Store (Kernel) - ISSUES Migration")
+    parser.add_argument(
+        "--data_origin",
+        "-d",
+        help="Data origin: ISIS Bases (i) or SciELO Manager (m)",
+        choices=['i', 'm'],
+    )
+    parser.add_argument(
+        "--extract",
+        "-e",
+        action='store_true',
+        help="Extract data from ISIS Bases (default: don't extract)",
+    )
+    parser.add_argument(
+        '--logging_file',
+        '-o',
+        help='Full path to the log file'
+    )
+    parser.add_argument("--loglevel", default="WARNING")
+
+    args = parser.parse_args(args)
+
+    level = getattr(logging, args.loglevel.upper())
+    logger = logging.getLogger()
+    logger.setLevel(level)
+
+    if args.data_origin == "i":
+        pipeline.process_isis_issue(extract=args.extract)
+    elif args.data_origin == "m":
+        print("Connect to Manager Database")
+        print("Reading Database")
+        print("Normalize data to Kernel")
+    else:
+        parser.error("Choose (i)SIS Bases or SciELO (m)anager\n")
+
+    print("Saving data to Kernel")
+
+
 def main():
     """ method main to script setup.py """
     sys.exit(process(sys.argv[1:]))
 
+def migrate_issues_main():
+    sys.exit(migrate_issues(sys.argv[1:]))
 
 if __name__ == "__main__":
     sys.exit(process(sys.argv[1:]))

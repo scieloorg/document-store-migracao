@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from documentstore_migracao.main import process, main
+from documentstore_migracao.main import process, main, migrate_issues
 
 
 class TestMainProcess(unittest.TestCase):
@@ -67,3 +67,24 @@ class TestMainMain(unittest.TestCase):
         mk_process.return_value = 0
         self.assertRaises(SystemExit, main)
         mk_process.assert_called_once_with(["test"])
+
+
+class TestMigrateIssueCommands(unittest.TestCase):
+    def test_data_source_is_required(self):
+        with self.assertRaises(SystemExit):
+            migrate_issues([])
+
+    @patch("documentstore_migracao.processing.pipeline.process_isis_issue")
+    def test_pipeline_interface_is_called_once(self, process_isis_issue_mock):
+        migrate_issues(["-d", "i"])
+        process_isis_issue_mock.assert_called_once_with(extract=False)
+
+    @patch("documentstore_migracao.processing.pipeline.process_isis_issue")
+    def test_pipeline_should_extract_if_extract_argument_is_passed(
+        self, process_isis_issue_mock
+    ):
+        migrate_issues(["-d", "i", "-e"])
+        process_isis_issue_mock.assert_called_once_with(extract=True)
+
+    def test_data_source_has_scielo_manager_data_flag(self):
+        migrate_issues(["-d", "m"])

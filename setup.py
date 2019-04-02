@@ -62,6 +62,7 @@ setuptools.setup(
         [console_scripts]
             documentstore_migracao=documentstore_migracao.main:main
             migrate_journals=documentstore_migracao.main:migrate_journals
+            migrate_issues=documentstore_migracao.main:migrate_issues_main
         [paste.app_factory]
             main=documentstore_migracao.webserver:main
     """,
