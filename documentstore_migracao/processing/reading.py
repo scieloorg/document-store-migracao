@@ -53,3 +53,15 @@ def read_journals_from_json(file_path: str = "title.json") -> List[dict]:
     json_path = os.path.join(config.get("SOURCE_PATH"), file_path)
 
     return json.loads(files.read_file(json_path))
+
+
+def read_issues_from_json(file_path: str = "issue.json") -> List[dict]:
+    """Ler um arquivo json contendo uma lista de issues e
+    retorna os dados das issues em formato de tipos Python
+
+    :param `file_path`: Complemento de path para o arquivo json de issue
+    """
+
+    json_path = os.path.join(config.get("SOURCE_PATH"), file_path)
+
+    return json.loads(files.read_file(json_path))

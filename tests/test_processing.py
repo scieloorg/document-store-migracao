@@ -276,3 +276,21 @@ class TestProcessingValidation(unittest.TestCase):
                 validation.validator_article_ALLxml()
 
                 self.assertEqual("Test Error - Validation", str(cm.exception))
+
+
+class TestReadingIssues(unittest.TestCase):
+    def setUp(self):
+        self.issues_json_path = os.path.join(SAMPLES_PATH, "base-isis-sample", "issue")
+
+    def test_should_load_file_successfull(self):
+        with utils.environ(SOURCE_PATH=self.issues_json_path):
+            data = reading.read_issues_from_json("issue.json")
+
+            self.assertTrue(type(data), list)
+            self.assertEqual(
+                data[0].get("v480")[0]["_"],
+                "Associação Brasileira de Divulgação Científica",
+            )
+
+            self.assertEqual(len(data), 8)
+
