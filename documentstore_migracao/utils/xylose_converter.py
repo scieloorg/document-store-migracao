@@ -1,9 +1,14 @@
 import logging
+import uuid
 from typing import List
 from datetime import datetime
-from xylose.scielodocument import Journal
+from xylose.scielodocument import Journal, Issue
 
 logger = logging.getLogger(__name__)
+
+
+def get_journal_principal_issn_from_issue(issue) -> str:
+    return issue.data.get("issue").get("v35")[0]["_"]
 
 
 def parse_date(date: str) -> str:
@@ -19,14 +24,20 @@ def parse_date(date: str) -> str:
     except ValueError:
         try:
             _date = (
-                datetime.strptime(date, "%Y-%m").isoformat(timespec="microseconds") + "Z"
+                datetime.strptime(date, "%Y-%m").isoformat(timespec="microseconds")
+                + "Z"
             )
         except ValueError:
             _date = (
                 datetime.strptime(date, "%Y").isoformat(timespec="microseconds") + "Z"
             )
-            
+
     return _date
+
+
+def date_to_datetime(date: str) -> datetime:
+    """Transforma datas no formato ISO em objetos datetime"""
+    return datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 def set_metadata(date: str, data: any) -> List[List]:
@@ -40,7 +51,6 @@ def journal_to_kernel(journal):
     """Transforma um objeto Journal (xylose) para o formato
     de dados equivalente ao persistido pelo Kernel em um banco
     mongodb"""
-
 
     # TODO: Virá algo do xylose para popular o campo de métricas?
 
@@ -144,5 +154,55 @@ def journal_to_kernel(journal):
 
     if _contact:
         _metadata["contact"] = set_metadata(_creation_date, _contact)
+
+    return _bundle
+
+
+def issue_to_kernel(issue):
+    """Transforma um objeto Issue (xylose) para o formato
+    de dados equivalente ao persistido pelo Kernel em um banco
+    mongodb"""
+
+    _id = [get_journal_principal_issn_from_issue(issue)]
+    _creation_date = parse_date(issue.publication_date)
+    _metadata = {}
+    _bundle = {
+        "created": _creation_date,
+        "updated": _creation_date,
+        "items": [],
+        "metadata": _metadata,
+    }
+
+    _year = str(date_to_datetime(_creation_date).year)
+    _metadata["publication_year"] = set_metadata(_creation_date, _year)
+    _id.append(_year)
+
+    if issue.volume:
+        _metadata["volume"] = set_metadata(_creation_date, issue.volume)
+        _id.append("v%s" % issue.volume)
+
+    if issue.number:
+        _metadata["number"] = set_metadata(_creation_date, issue.number)
+        _id.append("n%s" % issue.number)
+
+    if issue.type is "supplement":
+        _supplement = "0"
+
+        if issue.supplement_volume:
+            _supplement = issue.supplement_volume
+        elif issue.supplement_number:
+            _supplement = issue.supplement_number
+
+        _metadata["supplement"] = set_metadata(_creation_date, _supplement)
+        _id.append("s%s" % _supplement)
+
+    if issue.titles:
+        _titles = [
+            {"language": lang, "value": value} for lang, value in issue.titles.items()
+        ]
+        _metadata["titles"] = set_metadata(_creation_date, _titles)
+
+    _bundle["_id"] = "-".join(_id)
+    _bundle["id"] = "-".join(_id)
 
     return _bundle
