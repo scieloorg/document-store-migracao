@@ -252,3 +252,25 @@ class TestXyloseIssueConverter(unittest.TestCase):
             ],
             self.issue["metadata"]["titles"],
         )
+
+    def test_issue_has_publication_month(self):
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", "1"]],
+            self.issue["metadata"]["publication_month"],
+        )
+
+    def test_publication_season_start_and_end_is_equal(self):
+        self.issue_json["v43"] = [{"m": "Feb./Feb."}]
+        self.issue = issue_to_kernel(self._issue)
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", [2]]],
+            self.issue["metadata"]["publication_season"],
+        )
+
+    def test_publication_season_range_of_six_months(self):
+        self.issue_json["v43"] = [{"m": "Jan./Jun."}]
+        self.issue = issue_to_kernel(self._issue)
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", [1, 6]]],
+            self.issue["metadata"]["publication_season"],
+        )

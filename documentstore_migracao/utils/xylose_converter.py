@@ -174,7 +174,9 @@ def issue_to_kernel(issue):
     }
 
     _year = str(date_to_datetime(_creation_date).year)
+    _month = str(date_to_datetime(_creation_date).month)
     _metadata["publication_year"] = set_metadata(_creation_date, _year)
+    _metadata["publication_month"] = set_metadata(_creation_date, _month)
     _id.append(_year)
 
     if issue.volume:
@@ -201,6 +203,12 @@ def issue_to_kernel(issue):
             {"language": lang, "value": value} for lang, value in issue.titles.items()
         ]
         _metadata["titles"] = set_metadata(_creation_date, _titles)
+
+    if issue.start_month and issue.end_month:
+        _publication_season = [int(issue.start_month), int(issue.end_month)]
+        _metadata["publication_season"] = set_metadata(
+            _creation_date, sorted(set(_publication_season))
+        )
 
     _bundle["_id"] = "-".join(_id)
     _bundle["id"] = "-".join(_id)
