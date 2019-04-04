@@ -65,7 +65,7 @@ def iterMstRecords(master_file_name, isis_json_type):
                     if subfield_key == '*':
                         content['_'] = subfield.getContent()
                     else:
-                        if subfield_key in "_tlabcde":
+                        if subfield_key in "_tlabcdem":
                             content.setdefault(subfield_key, subfield.getContent())
                         else:
                             subfield_occurrences = content.setdefault(subfield_key,[])
