@@ -26,9 +26,10 @@ def move_xml_conversion2success(xml_file):
     )
 
 
-def list_dir(path):
-
-    return [f for f in os.listdir(path) if f.endswith(".xml")]
+def xml_files_list(path):
+    if path and os.path.isdir(path):
+        return [f for f in os.listdir(path) if f.endswith(".xml")]
+    return []
 
 
 def read_file(path):

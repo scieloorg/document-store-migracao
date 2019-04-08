@@ -54,7 +54,7 @@ def conversion_article_xml(file_xml_path):
 def conversion_article_ALLxml():
 
     logger.info("Iniciando Conversão do xmls")
-    list_files_xmls = files.list_dir(config.get("SOURCE_PATH"))
+    list_files_xmls = files.xml_files_list(config.get("SOURCE_PATH"))
     for file_xml in list_files_xmls:
 
         try:

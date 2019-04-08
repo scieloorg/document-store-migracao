@@ -8,8 +8,8 @@ from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
 
 
 class TestUtilsFiles(unittest.TestCase):
-    def test_list_dir(self):
-        self.assertEqual(len(files.list_dir(SAMPLES_PATH)), COUNT_SAMPLES_FILES)
+    def test_xml_files_list(self):
+        self.assertEqual(len(files.xml_files_list(SAMPLES_PATH)), COUNT_SAMPLES_FILES)
 
     def test_read_file(self):
         data = files.read_file(

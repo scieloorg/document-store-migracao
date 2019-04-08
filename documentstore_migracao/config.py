@@ -3,15 +3,36 @@ from packtools.catalogs import XML_CATALOG
 
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 
+"""
+SOURCE_PATH:
+    arquivos XML baixados do AM (body HTML)
+PROCESSED_SOURCE_PATH:
+    arquivos XML baixados do AM, mas que após convertidos para SPS e
+    validados sem erro, são movidos de SOURCE_PATH para PROCESSED_SOURCE_PATH
+CONVERSION_PATH:
+    arquivos XML resultantes da conversão de
+    "XML do AM" (SOURCE_PATH) para "XML SPS" (CONVERSION_PATH)
+VALID_XML_PATH:
+    arquivos "XML SPS" sem erros
+XML_ERRORS_PATH:
+    arquivos .err cujo conteúdo é XML + mensagens de erro
+SPS_PKG_PATH:
+    pacotes de XML validados e nomeados de acordo com SPS
+"""
+
 _default = dict(
     SCIELO_COLLECTION="spa",
     AM_URL_API="http://articlemeta.scielo.org/api/v1",
     SOURCE_PATH=os.path.join(BASE_PATH, "xml/source"),
     CONVERSION_PATH=os.path.join(BASE_PATH, "xml/conversion"),
     SUCCESS_PROCESSING_PATH=os.path.join(BASE_PATH, "xml/success"),
+    VALID_XML_PATH=os.path.join(BASE_PATH, "xml/xml_valid"),
+    XML_ERRORS_PATH=os.path.join(BASE_PATH, "xml/xml_errors"),
+    PROCESSED_SOURCE_PATH=os.path.join(BASE_PATH, "xml/source_processed"),
     GENERATOR_PATH=os.path.join(BASE_PATH, "xml/html"),
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
     ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
+    SPS_PKG_PATH=os.environ.get("SPS_PKG_PATH"),
 )
 
 
@@ -24,12 +45,10 @@ def get(config: str):
 
 
 INITIAL_PATH = [
-    get("LOGGER_PATH"),
-    get("SOURCE_PATH"),
-    get("SUCCESS_PROCESSING_PATH"),
-    get("CONVERSION_PATH"),
-    get("GENERATOR_PATH"),
+    get(k) for k, v in _default.items() if k.endswith('_PATH')
 ]
+INITIAL_PATH = [item for item in INITIAL_PATH if item is not None]
+
 
 DOC_TYPE_XML = """<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "JATS-journalpublishing1.dtd">"""
 

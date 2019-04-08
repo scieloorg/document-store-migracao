@@ -13,8 +13,8 @@ from documentstore_migracao import config
     route_name="list_converted_xml", renderer="templates/list_converted_xml.jinja2"
 )
 def list_converted_xml_view(request):
-
-    list_files_xmls = files.list_dir(config.get("CONVERSION_PATH"))
+    list_files_xmls = files.xml_files_list(config.get("CONVERSION_PATH"))
+    list_files_xmls += files.xml_files_list(config.get("VALID_XML_PATH"))
     xmls = Page(
         list_files_xmls,
         page=int(request.params.get("page", 1)),

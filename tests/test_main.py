@@ -39,7 +39,7 @@ class TestMainProcess(unittest.TestCase):
     def test_arg_validationFiles(self, mk_validator_article_ALLxml):
 
         process(["--validationFiles"])
-        mk_validator_article_ALLxml.assert_called_once_with()
+        mk_validator_article_ALLxml.assert_called_once_with(False, False)
 
     @patch("documentstore_migracao.processing.generation.article_ALL_html_generator")
     def test_arg_generationFiles(self, mk_article_ALL_html_generator):

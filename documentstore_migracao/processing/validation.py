@@ -1,7 +1,8 @@
 import os
 import logging
+import shutil
 
-from packtools import XMLValidator
+from packtools import XMLValidator, exceptions
 
 from documentstore_migracao.utils import files, dicts
 from documentstore_migracao import config
@@ -11,37 +12,66 @@ logger = logging.getLogger(__name__)
 
 def validator_article_xml(file_xml_path, print_error=True):
 
-    logger.info(file_xml_path)
-    xmlvalidator = XMLValidator.parse(file_xml_path)
-    is_valid, errors = xmlvalidator.validate()
-
     result = {}
+    logger.info(file_xml_path)
+    try:
+        xmlvalidator = XMLValidator.parse(file_xml_path)
+        is_valid, errors = xmlvalidator.validate()
+    except exceptions.XMLSPSVersionError as e:
+        result[str(e)] = {
+            "count": 1, "lineno": [1], "message": [str(e)],
+            "filename": {file_xml_path}}
+        return result
+
     if not is_valid:
         for error in errors:
             if print_error:
-                logger.error("%s - %s - %s", error.level, error.line, error.message)
+                logger.error(
+                    "%s - %s - %s", error.level, error.line, error.message)
 
             message = error.message[:80]
-            data = {"count": 1, "files": (error.line, file_xml_path)}
+            data = {
+                "count": 1, "lineno": [error.line],
+                "message": [error.message], "filename": {file_xml_path}}
             dicts.merge(result, message, data)
 
     return result
 
 
-def validator_article_ALLxml():
-
+def validator_article_ALLxml(move_to_processed_source=False, move_to_valid_xml=False):
     logger.info("Iniciando Validação dos xmls")
-    list_files_xmls = files.list_dir(config.get("CONVERSION_PATH"))
+    list_files_xmls = files.xml_files_list(config.get("CONVERSION_PATH"))
+
+    success_path = config.get("VALID_XML_PATH")
+    processed_source_path = config.get("PROCESSED_SOURCE_PATH")
+    errors_path = config.get("XML_ERRORS_PATH")
+    func = shutil.move if move_to_valid_xml else shutil.copyfile
 
     result = {}
     for file_xml in list_files_xmls:
+        filename = file_xml[:file_xml.find('.')]
+        converted_file = os.path.join(config.get("CONVERSION_PATH"), file_xml)
 
         try:
-            errors = validator_article_xml(
-                os.path.join(config.get("CONVERSION_PATH"), file_xml), False
-            )
+            errors = validator_article_xml(converted_file, False)
+
             for k_error, v_error in errors.items():
                 dicts.merge(result, k_error, v_error)
+
+            if errors_path:
+                err_file = os.path.join(errors_path, filename+'.err')
+                manage_error_file(errors, err_file, converted_file)
+
+            if not errors:
+                if success_path:
+                    func(converted_file, os.path.join(success_path, file_xml))
+
+                if move_to_processed_source and processed_source_path:
+                    source_file = os.path.join(
+                        config.get("SOURCE_PATH"), filename + '.xml')
+                    if os.path.isfile(source_file):
+                        shutil.move(
+                            source_file, processed_source_path, file_xml)
 
         except Exception as ex:
             logger.exception(ex)
@@ -53,3 +83,21 @@ def validator_article_ALLxml():
         # if "boxed-text" in k_result:
         #     for line, file in dicts.group(v_result["files"], 2):
         #         logger.error("\t %s - %s", line, file)
+
+
+def manage_error_file(errors, err_file, converted_file):
+    if os.path.isfile(err_file):
+        try:
+            os.unlink(err_file)
+        except:
+            pass
+    if errors:
+        msg = []
+        for err, data in errors.items():
+            msg.append(err)
+            msg.extend(
+                ['{}:{}'.format(ln, text)
+                 for ln, text in zip(data['lineno'], data['message'])])
+        files.write_file(
+            err_file,
+            files.read_file(converted_file) + '='*80 + '\n' + '\n'.join(msg))
