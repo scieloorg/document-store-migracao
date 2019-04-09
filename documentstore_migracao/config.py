@@ -31,6 +31,7 @@ _default = dict(
     XML_ERRORS_PATH=os.path.join(BASE_PATH, "xml/xml_errors"),
     PROCESSED_SOURCE_PATH=os.path.join(BASE_PATH, "xml/source_processed"),
     GENERATOR_PATH=os.path.join(BASE_PATH, "xml/html"),
+    DOWNLOAD_PATH=os.path.join(BASE_PATH, "xml/download"),
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
     ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
     SPS_PKG_PATH=os.environ.get("SPS_PKG_PATH"),

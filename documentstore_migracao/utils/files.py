@@ -5,6 +5,7 @@ import shutil
 import logging
 
 from documentstore_migracao import config
+from documentstore_migracao.utils import string
 
 logger = logging.getLogger(__name__)
 
@@ -16,11 +17,10 @@ def setup_processing_folder():
         create_dir(path)
 
 
-def move_xml_conversion2success(xml_file):
+def move_xml_to(xml_file, source_path, destiny_path):
 
     shutil.move(
-        os.path.join(config.get("CONVERSION_PATH"), xml_file),
-        os.path.join(config.get("SUCCESS_PROCESSING_PATH"), xml_file),
+        os.path.join(source_path, xml_file), os.path.join(destiny_path, xml_file)
     )
 
 
@@ -28,6 +28,14 @@ def create_dir(path):
     if not os.path.exists(path):
         logger.debug("Criando pasta : %s", path)
         os.makedirs(path)
+
+
+def create_path_by_file(path, file_xml_path):
+
+    filename, _ = string.extract_filename_ext_by_path(file_xml_path)
+    dest_path = os.path.join(path, filename)
+    create_dir(dest_path)
+    return dest_path
 
 
 def xml_files_list(path):

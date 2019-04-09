@@ -18,31 +18,29 @@ def reading_article_xml(file_xml_path, move_success=True):
     obj_xml = etree.fromstring(article)
 
     is_media = False
+    dest_path = None
     for index, body in enumerate(obj_xml.xpath("//body"), start=1):
         logger.info("Processando body numero: %s" % index)
         medias = xml.find_medias(body)
         if medias:
             is_media = True
-            logger.info("%s possui midias", file_xml_path)
+            dest_path = files.create_path_by_file(
+                config.get("DOWNLOAD_PATH"), file_xml_path
+            )
 
+            logger.info("%s possui %s midias", file_xml_path, len(medias))
             for media in medias:
-
-                # import pdb;pdb.set_trace()
-
                 request_file = request.get(
                     urljoin(config.get("STATIC_URL_FILE"), media)
                 )
-
-                filename, _ = string.extract_filename_ext_by_path(file_xml_path)
-                dest_path = os.path.join(config.get("CONVERSION_PATH"), filename)
-                files.create_dir(dest_path)
-
                 filename_m, ext_m = string.extract_filename_ext_by_path(media)
-                x = os.path.join(dest_path, "%s%s" % (filename_m, ext_m))
+                files.write_file_bynary(
+                    os.path.join(dest_path, "%s%s" % (filename_m, ext_m)),
+                    request_file.content,
+                )
 
-                files.write_file_bynary(x, request_file.content)
-
-    if is_media:
+    if is_media and dest_path:
+        filename, _ = string.extract_filename_ext_by_path(file_xml_path)
         files.write_file(
             os.path.join(dest_path, "%s.xml" % (filename)),
             xml.prettyPrint_format(
@@ -57,11 +55,6 @@ def reading_article_xml(file_xml_path, move_success=True):
                     ).decode("utf-8")
                 )
             ),
-        )
-
-    if move_success:
-        files.move_xml_conversion2success(
-            file_xml_path.replace(config.get("CONVERSION_PATH"), "")
         )
 
 

@@ -18,5 +18,6 @@ def remove_spaces(string):
 def extract_filename_ext_by_path(inputFilepath):
 
     filename_w_ext = os.path.basename(inputFilepath)
-    filename, file_extension = os.path.splitext(filename_w_ext)
+    c_filename, file_extension = os.path.splitext(filename_w_ext)
+    filename, _ = os.path.splitext(c_filename)
     return filename, file_extension

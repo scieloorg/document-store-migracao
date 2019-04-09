@@ -13,7 +13,6 @@ def str2objXML(str):
     try:
         return etree.fromstring("<body>%s</body>" % (str))
     except etree.XMLSyntaxError as e:
-        # import pdb;pdb.set_trace()
         # logger.exception(e)
         return etree.fromstring("<body></body>")
 
@@ -33,7 +32,7 @@ def find_medias(obj_body):
         img.set(src_txt, "%s%s" % (f_name, f_ext))
 
     # FILES
-    tags_a = obj_body.findall("a[@href]")
+    tags_a = obj_body.findall(".//a[@href]")
     for a in tags_a:
         href = a.attrib["href"]
         if href.startswith("/img/"):
