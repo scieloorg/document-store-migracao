@@ -18,23 +18,30 @@ def str2objXML(str):
         return etree.fromstring("<body></body>")
 
 
-def find_medias(obj_xml):
+def find_medias(obj_body):
 
-    html = obj_xml.find("body")
     media = []
     # IMG
-    imgs = html.findall(".//graphic")
+    imgs = obj_body.findall(".//graphic") + obj_body.findall(".//inline-graphic")
     for img in imgs:
-        logger.info("\t IMG %s", img.attrib["src"])
-        media.append(img.attrib["src"])
+        src_txt = "{http://www.w3.org/1999/xlink}href"
+        logger.info("\t IMG %s", img.attrib[src_txt])
+        path_img = img.attrib[src_txt]
+        media.append(path_img)
+
+        f_name, f_ext = string.extract_filename_ext_by_path(path_img)
+        img.set(src_txt, "%s%s" % (f_name, f_ext))
 
     # FILES
-    tags_a = html.findall("a[@href]")
+    tags_a = obj_body.findall("a[@href]")
     for a in tags_a:
         href = a.attrib["href"]
         if href.startswith("/img/"):
-            logger.info("\t FILE %s", a.attrib)
+            logger.info("\t FILE %s", href)
             media.append(href)
+
+            f_name, f_ext = string.extract_filename_ext_by_path(href)
+            img.set("href", "%s%s" % (f_name, f_ext))
 
     return media
 

@@ -25,19 +25,19 @@ def process(args):
 
     parser.add_argument(
         "--extrateFiles",
-        "-e",
+        "-E",
         action="store_true",
         help="Baixa todos os XML dos periodicos",
     )
     parser.add_argument(
         "--readFiles",
-        "-r",
+        "-R",
         action="store_true",
         help="Processa todos os arquivos XML baixados",
     )
     parser.add_argument(
         "--conversionFiles",
-        "-c",
+        "-C",
         action="store_true",
         help="Converte todos os arquivos XML de 'source'",
     )
@@ -70,8 +70,9 @@ def process(args):
         "--issn-journal", "-j", help="Processa somente o journal informado"
     )
     parser.add_argument(
-        "--pathFile", "-p", help="Transformar somente o arquivos XML imformado"
+        "--convetFile", "-c", help="Transformar somente o arquivos XML imformado"
     )
+    parser.add_argument("--readFile", "-r", help="Ler somente o arquivos XML imformado")
     parser.add_argument(
         "--valideFile", "-v", help="Valida somente o arquivos XML imformado"
     )
@@ -97,16 +98,20 @@ def process(args):
 
     elif args.validationFiles:
         validation.validator_article_ALLxml(
-            args.move_to_processed_source, args.move_to_valid_xml)
+            args.move_to_processed_source, args.move_to_valid_xml
+        )
 
     elif args.generationFiles:
         generation.article_ALL_html_generator()
 
-    elif args.pathFile:
-        conversion.conversion_article_xml(args.pathFile)
+    elif args.convetFile:
+        conversion.conversion_article_xml(args.convetFile)
 
     elif args.valideFile:
         validation.validator_article_xml(args.valideFile)
+
+    elif args.readFile:
+        reading.reading_article_xml(args.readFile, False)
 
     elif args.issn_journal:
         extrated.extrated_selected_journal(args.issn_journal)
@@ -126,30 +131,28 @@ def migrate_journals():
         - SciELO Manager -> JSON
     - Inserir no MongoDB do Kernel
     """
-    parser = argparse.ArgumentParser(description="Document Store (Kernel) - Journal Migration")
+    parser = argparse.ArgumentParser(
+        description="Document Store (Kernel) - Journal Migration"
+    )
     parser.add_argument(
         "--data_origin",
         "-d",
         help="Data origin: ISIS Bases (i) or SciELO Manager (m)",
-        choices=['i', 'm'],
+        choices=["i", "m"],
     )
     parser.add_argument(
         "--extract",
         "-e",
-        action='store_true',
+        action="store_true",
         help="Extract data from ISIS Bases (default: don't extract)",
     )
+    parser.add_argument("--logging_file", "-o", help="Full path to the log file")
     parser.add_argument(
-        '--logging_file',
-        '-o',
-        help='Full path to the log file'
-    )
-    parser.add_argument(
-        '--logging_level',
-        '-l',
+        "--logging_level",
+        "-l",
         default="INFO",
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-        help='Loggin level'
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Loggin level",
     )
 
     args = parser.parse_args()
