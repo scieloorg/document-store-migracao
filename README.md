@@ -1,9 +1,9 @@
 # Document Store (Kernel) - Migração
 
 
-[![Build Status](https://travis-ci.org/cesarbruschetta/document-store-migracao.svg?branch=master)](https://travis-ci.org/cesarbruschetta/document-store-migracao)
+[![Build Status](https://travis-ci.org/scieloorg/document-store-migracao.svg?branch=master)](https://travis-ci.org/scieloorg/document-store-migracao)
 
-[![codecov](https://codecov.io/gh/cesarbruschetta/document-store-migracao/branch/master/graph/badge.svg)](https://codecov.io/gh/cesarbruschetta/document-store-migracao)
+[![codecov](https://codecov.io/gh/scieloorg/document-store-migracao/branch/master/graph/badge.svg)](https://codecov.io/gh/scieloorg/document-store-migracao)
 
 
 ## Getting Started Pyramid
