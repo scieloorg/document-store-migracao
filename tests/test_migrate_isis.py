@@ -71,3 +71,42 @@ class TestJournalPipeline(unittest.TestCase):
         with self.assertLogs(level="DEBUG") as log:
             pipeline.import_journals("~/json/title.json")
             self.assertIn("DEBUG", log.output[0])
+
+
+class IsisCommandLineTests(unittest.TestCase):
+    @mock.patch("documentstore_migracao.main.extract_isis")
+    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")
+    def test_extract_subparser_requires_mst_file_path_and_output_file(
+        self, error_mock, extract_isis_mock
+    ):
+        main.migrate_isis("extract".split())
+        error_mock.assert_called_with(
+            "the following arguments are required: file, --output"
+        )
+
+    @mock.patch("documentstore_migracao.main.extract_isis")
+    def test_extract_subparser_should_call_extract_isis_command(
+        self, extract_isis_mock
+    ):
+        main.migrate_isis("extract /path/to/file.mst --output /jsons/file.json".split())
+        extract_isis_mock.create_output_dir.assert_called_once_with("/jsons/file.json")
+        extract_isis_mock.run.assert_called_once_with(
+            "/path/to/file.mst", "/jsons/file.json"
+        )
+
+    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")
+    def test_import_journals_requires_json_path_and_type_of_entity(self, error_mock):
+        main.migrate_isis("import".split())
+        error_mock.assert_called_with(
+            "the following arguments are required: file, --type"
+        )
+
+    @mock.patch("documentstore_migracao.main.pipeline.import_journals")
+    def test_import_journals_should_call_pipeline(self, import_journals_mock):
+        main.migrate_isis("import /jsons/file.json --type journal".split())
+        import_journals_mock.assert_called_once_with("/jsons/file.json")
+
+    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.print_help")
+    def test_should_print_help_if_arguments_does_not_match(self, print_help_mock):
+        main.migrate_isis([])
+        print_help_mock.assert_called()
