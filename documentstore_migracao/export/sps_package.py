@@ -1,3 +1,5 @@
+import os
+
 
 def parse_value(value):
     value = value.lower()
@@ -86,3 +88,12 @@ class SPS_Package:
         items = [self.issn, self.acron]
         items += [data[k] for k in labels if k in data_labels]
         return '-'.join(items)
+
+    def asset_package_name(self, original_document_filename, img_filename):
+        filename, ext = os.path.splitext(original_document_filename)
+        suffix = img_filename
+        if img_filename.startswith(filename):
+            suffix = img_filename[len(filename):]
+        return '-g'.join([self.package_name, suffix])
+
+
