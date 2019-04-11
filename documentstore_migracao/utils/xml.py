@@ -1,6 +1,7 @@
 """ module to methods xml file """
 
 import logging
+import itertools
 from lxml import etree
 from xml.dom.minidom import parseString
 from documentstore_migracao.utils import string, convert_html_body
@@ -17,11 +18,31 @@ def str2objXML(str):
         return etree.fromstring("<body></body>")
 
 
+def get_static_assets(xml_et):
+    """Returns an iterable with all static assets referenced by xml_et.
+    """
+    paths = [
+        ".//graphic[@xlink:href]",
+        ".//media[@xlink:href]",
+        ".//inline-graphic[@xlink:href]",
+        ".//supplementary-material[@xlink:href]",
+        ".//inline-supplementary-material[@xlink:href]",
+    ]
+
+    iterators = [
+        xml_et.iterfind(path, namespaces={"xlink": "http://www.w3.org/1999/xlink"})
+        for path in paths
+    ]
+
+    return itertools.chain(*iterators)
+
+
 def find_medias(obj_body):
 
     media = []
+
     # IMG
-    imgs = obj_body.findall(".//graphic") + obj_body.findall(".//inline-graphic")
+    imgs = get_static_assets(obj_body)
     for img in imgs:
         src_txt = "{http://www.w3.org/1999/xlink}href"
         logger.info("\t IMG %s", img.attrib[src_txt])
