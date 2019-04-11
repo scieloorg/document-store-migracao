@@ -48,3 +48,26 @@ class ExtractIsisTests(unittest.TestCase):
         path_exists_mock.return_value = True
         extract_isis.create_output_dir("/random/dir/file.json")
         makedirs_mock.assert_not_called()
+
+
+class TestJournalPipeline(unittest.TestCase):
+    def setUp(self):
+        self.journal_sample_mst = os.path.join(
+            SAMPLES_PATH, "base-isis-sample", "title", "title.mst"
+        )
+
+    @mock.patch("documentstore_migracao.processing.reading.read_json_file")
+    @mock.patch("documentstore_migracao.processing.pipeline.extract_isis")
+    def test_pipeline_must_run_extract_when_it_asked_for(
+        self, extract_isis_mock, read_json_file_mock
+    ):
+        pipeline.import_journals("~/json/title.json")
+        read_json_file_mock.assert_called_once_with("~/json/title.json")
+
+    @mock.patch("documentstore_migracao.processing.reading.read_json_file")
+    def test_pipeline_should_log_exceptions(self, read_json_file_mock):
+        read_json_file_mock.side_effect = FileNotFoundError
+
+        with self.assertLogs(level="DEBUG") as log:
+            pipeline.import_journals("~/json/title.json")
+            self.assertIn("DEBUG", log.output[0])
