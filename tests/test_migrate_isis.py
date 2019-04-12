@@ -120,6 +120,9 @@ class TestJournalPipeline(unittest.TestCase):
 
 
 class IsisCommandLineTests(unittest.TestCase):
+    def setUp(self):
+        self.session = Session
+
     @mock.patch("documentstore_migracao.main.extract_isis")
     @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")
     def test_extract_subparser_requires_mst_file_path_and_output_file(
@@ -144,13 +147,16 @@ class IsisCommandLineTests(unittest.TestCase):
     def test_import_journals_requires_json_path_and_type_of_entity(self, error_mock):
         main.migrate_isis("import".split())
         error_mock.assert_called_with(
-            "the following arguments are required: file, --type"
+            "the following arguments are required: --uri, --db, file, --type"
         )
 
     @mock.patch("documentstore_migracao.main.pipeline.import_journals")
     def test_import_journals_should_call_pipeline(self, import_journals_mock):
-        main.migrate_isis("import /jsons/file.json --type journal".split())
-        import_journals_mock.assert_called_once_with("/jsons/file.json")
+        main.migrate_isis(
+            """import /jsons/file.json --type journal
+            --uri mongodb://uri --db db-name""".split()
+        )
+        import_journals_mock.assert_called_once()
 
     @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.print_help")
     def test_should_print_help_if_arguments_does_not_match(self, print_help_mock):
