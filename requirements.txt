@@ -45,3 +45,4 @@ WebTest==2.0.33
 xylose==1.35.1
 zope.deprecation==4.4.0
 zope.interface==4.6.0
+-e git://github.com/scieloorg/document-store.git@9422e6c8b8c25d5980c0c441b77293a42aaf77ec#egg=documentstore

@@ -2,8 +2,8 @@
 import pkg_resources
 import argparse
 import sys
-import os, logging
-
+import os
+import logging
 
 from documentstore_migracao.processing import (
     extrated,
@@ -13,6 +13,7 @@ from documentstore_migracao.processing import (
     generation,
     pipeline,
 )
+from documentstore_migracao.utils import extract_isis
 
 logger = logging.getLogger(__name__)
 
@@ -121,62 +122,52 @@ def process(args):
 
     return 0
 
+def migrate_isis(sargs):
+    parser = argparse.ArgumentParser(description="ISIS database migration tool")
+    subparsers = parser.add_subparsers(title="Commands", metavar="", dest="command")
 
-def migrate_journals():
-    """
-    JSON -> Kernel
-    - Ler Dados
-    - Normalizar dados para o Kernel
-        - Isis2Json -> Xylose
-        - SciELO Manager -> JSON
-    - Inserir no MongoDB do Kernel
-    """
-    parser = argparse.ArgumentParser(
-        description="Document Store (Kernel) - Journal Migration"
+    extract_parser = subparsers.add_parser("extract", help="Extract mst files to json")
+    extract_parser.add_argument(
+        "mst_file_path",
+        metavar="file",
+        help="Path to MST file that will be extracted",
     )
-    parser.add_argument(
-        "--data_origin",
-        "-d",
-        help="Data origin: ISIS Bases (i) or SciELO Manager (m)",
-        choices=["i", "m"],
+    extract_parser.add_argument("--output", required=True, help="The output file path")
+
+    import_parser = subparsers.add_parser(
+        "import", help="Process JSON files then import into Kernel database"
     )
-    parser.add_argument(
-        "--extract",
-        "-e",
-        action="store_true",
-        help="Extract data from ISIS Bases (default: don't extract)",
+    import_parser.add_argument(
+        "import_file",
+        metavar="file",
+        help="JSON file path that contains mst extraction result, e.g: collection-title.json",
     )
-    parser.add_argument("--logging_file", "-o", help="Full path to the log file")
-    parser.add_argument(
-        "--logging_level",
-        "-l",
-        default="INFO",
-        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        help="Loggin level",
+    import_parser.add_argument(
+        "--type",
+        help="Type of JSON file that will load into Kernel database",
+        choices=["journal"],
+        required=True,
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(sargs)
 
-    # CHANGE LOGGER
-    level = getattr(logging, args.logging_level.upper())
-    logger = logging.getLogger()
-    logger.setLevel(level)
-
-    if args.data_origin == "i":
-        pipeline.process_isis_journal(extract=args.extract)
-    elif args.data_origin == "m":
-        print("Connect to Manager Database")
-        print("Reading Database")
-        print("Normalize data to Kernel")
+    if args.command == "extract":
+        extract_isis.create_output_dir(args.output)
+        extract_isis.run(args.mst_file_path, args.output)
+    elif args.command == "import":
+        if args.type == "journal":
+            pipeline.import_journals(args.import_file)
     else:
-        parser.error("Choose (i)SIS Bases or SciELO (m)anager\n")
-
-    print("Saving data to Kernel")
+        parser.print_help()
 
 
 def main():
     """ method main to script setup.py """
     sys.exit(process(sys.argv[1:]))
+
+
+def main_migrate_isis():
+    sys.exit(migrate_isis(sys.argv[1:]))
 
 
 if __name__ == "__main__":

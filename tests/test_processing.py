@@ -181,20 +181,19 @@ class TestProcessingGeneration(unittest.TestCase):
 class TestReadingJournals(unittest.TestCase):
     def setUp(self):
         self.journals_json_path = os.path.join(
-            SAMPLES_PATH, "base-isis-sample", "title"
+            SAMPLES_PATH, "base-isis-sample", "title", "title.json"
         )
 
     def test_should_load_file_successfull(self):
-        with utils.environ(SOURCE_PATH=self.journals_json_path):
-            data = reading.read_journals_from_json("title.json")
+        data = reading.read_json_file(self.journals_json_path)
 
-            self.assertTrue(type(data), list)
-            self.assertEqual(
-                data[0].get("v140")[0]["_"],
-                "Colégio Brasileiro de Cirurgia Digestiva - CBCD",
-            )
+        self.assertTrue(type(data), list)
+        self.assertEqual(
+            data[0].get("v140")[0]["_"],
+            "Colégio Brasileiro de Cirurgia Digestiva - CBCD",
+        )
 
-            self.assertEqual(len(data), 3)
+        self.assertEqual(len(data), 3)
 
 
 class TestConversionJournalJson(unittest.TestCase):
