@@ -44,6 +44,25 @@ migrate_isis extract /home/user/bases/title/title.mst --output /home/user/jsons/
 ```
 O comando acima executa a extração do arquivo `/home/user/bases/title/title.mst` e salva o seu resultado na pasta `/home/user/jsons/title.json`.
 
+##### Importando entidades para o MongoDB
+
+Esta é uma fase importante da etapa de migração onde as entidades previamente extraídas em formato JSON serão processadas e importadas no formato **Kernel** em uma base MongoDB. Para visualizar informações de ajuda digite:
+
+```shell
+migrate_isis import -h
+```
+
+Serão listadas todos os argumentos necessários para realizar a operação de importação. Um exemplo de importação segue o comando abaixo:
+
+```shell
+migrate_isis import /home/user/jsons/title.json --type journal --uri "mongodb://usuario:senha@localhost/?authSource=admin" --db document-store
+```
+
+- Este comando executa a importação do arquivo `/home/user/jsons/title.json`, que contem periódicos (`--type journal`), inserindo em uma base chamada *document-store* (`--db document-store`) com os devidos parâmetros para conexão com o banco (`--uri "mongodb://usuario:senha@localhost/?authSource=admin"`).
+
+
+#### Informações gerais
+
 Para visualizar todas as opções e a ajuda digite:
 ```shell
 migrate_isis --help
