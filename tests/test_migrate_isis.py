@@ -6,6 +6,9 @@ from documentstore_migracao.utils import extract_isis
 from documentstore_migracao.processing import pipeline
 from documentstore_migracao import exceptions, main, config
 from . import SAMPLES_PATH
+from .apptesting import Session
+from . import SAMPLE_KERNEL_JOURNAL
+from documentstore.exceptions import AlreadyExists
 
 
 class ExtractIsisTests(unittest.TestCase):
@@ -56,12 +59,14 @@ class TestJournalPipeline(unittest.TestCase):
             SAMPLES_PATH, "base-isis-sample", "title", "title.mst"
         )
 
+        self.session = Session()
+
     @mock.patch("documentstore_migracao.processing.reading.read_json_file")
     @mock.patch("documentstore_migracao.processing.pipeline.extract_isis")
     def test_pipeline_must_run_extract_when_it_asked_for(
         self, extract_isis_mock, read_json_file_mock
     ):
-        pipeline.import_journals("~/json/title.json")
+        pipeline.import_journals("~/json/title.json", self.session)
         read_json_file_mock.assert_called_once_with("~/json/title.json")
 
     @mock.patch("documentstore_migracao.processing.reading.read_json_file")
@@ -69,8 +74,49 @@ class TestJournalPipeline(unittest.TestCase):
         read_json_file_mock.side_effect = FileNotFoundError
 
         with self.assertLogs(level="DEBUG") as log:
-            pipeline.import_journals("~/json/title.json")
+            pipeline.import_journals("~/json/title.json", self.session)
             self.assertIn("DEBUG", log.output[0])
+
+    @mock.patch("documentstore_migracao.processing.reading.read_json_file")
+    @mock.patch(
+        "documentstore_migracao.processing.conversion.conversion_journals_to_kernel"
+    )
+    def test_should_import_journal(self, journals_to_kernel_mock, read_json_mock):
+        journals_to_kernel_mock.return_value = [SAMPLE_KERNEL_JOURNAL]
+        pipeline.import_journals("~/json/title.json", self.session)
+
+        expected = SAMPLE_KERNEL_JOURNAL["_id"]
+        self.assertEqual(expected, self.session.journals.fetch(expected).id())
+
+    @mock.patch("documentstore_migracao.processing.reading.read_json_file")
+    @mock.patch(
+        "documentstore_migracao.processing.conversion.conversion_journals_to_kernel"
+    )
+    def test_should_raise_already_exists_if_insert_journal_with_same_id(
+        self, journals_to_kernel_mock, read_json_mock
+    ):
+        journals_to_kernel_mock.return_value = [SAMPLE_KERNEL_JOURNAL]
+
+        with self.assertLogs(level="INFO") as log:
+            pipeline.import_journals("~/json/title.json", self.session)
+            pipeline.import_journals("~/json/title.json", self.session)
+            self.assertIn("pipeline", log[1][0])
+
+    @mock.patch("documentstore_migracao.processing.reading.read_json_file")
+    @mock.patch(
+        "documentstore_migracao.processing.conversion.conversion_journals_to_kernel"
+    )
+    def test_should_add_journal_in_changes(
+        self, journals_to_kernel_mock, read_json_mock
+    ):
+        journals_to_kernel_mock.return_value = [SAMPLE_KERNEL_JOURNAL]
+        pipeline.import_journals("~/json/title.json", self.session)
+
+        _id_expected = SAMPLE_KERNEL_JOURNAL["id"]
+        _changes = self.session.changes.filter()
+
+        self.assertEqual(1, len(_changes))
+        self.assertEqual(_id_expected, _changes[0]["id"])
 
 
 class IsisCommandLineTests(unittest.TestCase):
