@@ -13,6 +13,7 @@ from documentstore_migracao.processing import (
     validation,
     generation,
     pipeline,
+    constructor,
 )
 from documentstore_migracao.utils import extract_isis
 
@@ -67,6 +68,12 @@ def process(args):
         action="store_true",
         help="Gera os html de todos os arquivos XML convertidos",
     )
+    parser.add_argument(
+        "--constructionFiles",
+        "-CT",
+        action="store_true",
+        help="Altera os xmls ja convertidos ou validados",
+    )
 
     parser.add_argument(
         "--issn-journal", "-j", help="Processa somente o journal informado"
@@ -106,6 +113,9 @@ def process(args):
     elif args.generationFiles:
         generation.article_ALL_html_generator()
 
+    elif args.constructionFiles:
+        constructor.article_ALL_constructor()
+
     elif args.convetFile:
         conversion.conversion_article_xml(args.convetFile)
 
@@ -138,7 +148,6 @@ def mongodb_parser(args):
     parser.add_argument("--db", required=True, help="Database name to import registers")
 
     return parser
-
 
 def migrate_isis(sargs):
     parser = argparse.ArgumentParser(description="ISIS database migration tool")

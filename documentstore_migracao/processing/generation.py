@@ -42,8 +42,7 @@ def article_html_generator(file_xml_path):
 
 
 def article_ALL_html_generator():
-    paths = [config.get("CONVERSION_PATH"),
-             config.get("VALID_XML_PATH")]
+    paths = [config.get("CONVERSION_PATH"), config.get("VALID_XML_PATH")]
     paths = [path for path in paths if path]
     logger.info("Iniciando Geração dos HTMLs")
     for path in paths:
