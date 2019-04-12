@@ -41,10 +41,3 @@ def get_journals():
 
     cl = RestfulClient()
     return cl.journals(collection=config.get("SCIELO_COLLECTION"))
-
-
-def extract_journals_from_isis():
-    """Inicia a extração de dados a partir de uma base ISIS
-    """
-    logger.info("Iniciando extração journal")
-    extract_isis.run(base="title")

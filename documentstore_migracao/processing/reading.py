@@ -43,13 +43,8 @@ def reading_article_ALLxml():
             logger.exception(ex)
 
 
-def read_journals_from_json(file_path: str = "title.json") -> List[dict]:
-    """Ler um arquivo json contendo uma lista de periódicos e
-    retorna os dados dos periódicos em formato de tipos Python
+def read_json_file(file_path: str) -> List[dict]:
+    """Ler um arquivo JSON e retorna o resultado
+    em formato de estruturas Python"""
 
-    :param `file_path`: Complemento de path para o arquivo json de periódicos
-    """
-
-    json_path = os.path.join(config.get("SOURCE_PATH"), file_path)
-
-    return json.loads(files.read_file(json_path))
+    return json.loads(files.read_file(file_path))
