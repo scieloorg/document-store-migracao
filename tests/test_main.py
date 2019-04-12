@@ -26,7 +26,7 @@ class TestMainProcess(unittest.TestCase):
     @patch("documentstore_migracao.processing.conversion.conversion_article_xml")
     def test_arg_pathFile(self, mk_conversion_article_xml):
 
-        process(["--pathFile", "/tmp/example.xml"])
+        process(["--convetFile", "/tmp/example.xml"])
         mk_conversion_article_xml.assert_called_once_with("/tmp/example.xml")
 
     @patch("documentstore_migracao.processing.reading.reading_article_ALLxml")
@@ -52,6 +52,12 @@ class TestMainProcess(unittest.TestCase):
 
         process(["--valideFile", "/tmp/example.xml"])
         mk_validator_article_xml.assert_called_once_with("/tmp/example.xml")
+
+    @patch("documentstore_migracao.processing.reading.reading_article_xml")
+    def test_arg_readFile(self, mk_reading_article_xml):
+
+        process(["--readFile", "/tmp/example.xml"])
+        mk_reading_article_xml.assert_called_once_with("/tmp/example.xml", False)
 
     def test_not_arg(self):
 

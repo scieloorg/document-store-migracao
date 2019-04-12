@@ -1,6 +1,7 @@
 """ module to methods xml file """
 
 import logging
+import itertools
 from lxml import etree
 from xml.dom.minidom import parseString
 from documentstore_migracao.utils import string, convert_html_body
@@ -13,28 +14,54 @@ def str2objXML(str):
     try:
         return etree.fromstring("<body>%s</body>" % (str))
     except etree.XMLSyntaxError as e:
-        # import pdb;pdb.set_trace()
         # logger.exception(e)
         return etree.fromstring("<body></body>")
 
 
-def find_medias(obj_xml):
+def get_static_assets(xml_et):
+    """Returns an iterable with all static assets referenced by xml_et.
+    """
+    paths = [
+        ".//graphic[@xlink:href]",
+        ".//media[@xlink:href]",
+        ".//inline-graphic[@xlink:href]",
+        ".//supplementary-material[@xlink:href]",
+        ".//inline-supplementary-material[@xlink:href]",
+    ]
 
-    html = obj_xml.find("body")
+    iterators = [
+        xml_et.iterfind(path, namespaces={"xlink": "http://www.w3.org/1999/xlink"})
+        for path in paths
+    ]
+
+    return itertools.chain(*iterators)
+
+
+def find_medias(obj_body):
+
     media = []
+
     # IMG
-    imgs = html.findall(".//graphic")
+    imgs = get_static_assets(obj_body)
     for img in imgs:
-        logger.info("\t IMG %s", img.attrib["src"])
-        media.append(img.attrib["src"])
+        src_txt = "{http://www.w3.org/1999/xlink}href"
+        logger.info("\t IMG %s", img.attrib[src_txt])
+        path_img = img.attrib[src_txt]
+        media.append(path_img)
+
+        f_name, f_ext = string.extract_filename_ext_by_path(path_img)
+        img.set(src_txt, "%s%s" % (f_name, f_ext))
 
     # FILES
-    tags_a = html.findall("a[@href]")
+    tags_a = obj_body.findall(".//a[@href]")
     for a in tags_a:
         href = a.attrib["href"]
         if href.startswith("/img/"):
-            logger.info("\t FILE %s", a.attrib)
+            logger.info("\t FILE %s", href)
             media.append(href)
+
+            f_name, f_ext = string.extract_filename_ext_by_path(href)
+            img.set("href", "%s%s" % (f_name, f_ext))
 
     return media
 

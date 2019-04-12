@@ -26,19 +26,19 @@ def process(args):
 
     parser.add_argument(
         "--extrateFiles",
-        "-e",
+        "-E",
         action="store_true",
         help="Baixa todos os XML dos periodicos",
     )
     parser.add_argument(
         "--readFiles",
-        "-r",
+        "-R",
         action="store_true",
         help="Processa todos os arquivos XML baixados",
     )
     parser.add_argument(
         "--conversionFiles",
-        "-c",
+        "-C",
         action="store_true",
         help="Converte todos os arquivos XML de 'source'",
     )
@@ -71,8 +71,9 @@ def process(args):
         "--issn-journal", "-j", help="Processa somente o journal informado"
     )
     parser.add_argument(
-        "--pathFile", "-p", help="Transformar somente o arquivos XML imformado"
+        "--convetFile", "-c", help="Transformar somente o arquivos XML imformado"
     )
+    parser.add_argument("--readFile", "-r", help="Ler somente o arquivos XML imformado")
     parser.add_argument(
         "--valideFile", "-v", help="Valida somente o arquivos XML imformado"
     )
@@ -98,16 +99,20 @@ def process(args):
 
     elif args.validationFiles:
         validation.validator_article_ALLxml(
-            args.move_to_processed_source, args.move_to_valid_xml)
+            args.move_to_processed_source, args.move_to_valid_xml
+        )
 
     elif args.generationFiles:
         generation.article_ALL_html_generator()
 
-    elif args.pathFile:
-        conversion.conversion_article_xml(args.pathFile)
+    elif args.convetFile:
+        conversion.conversion_article_xml(args.convetFile)
 
     elif args.valideFile:
         validation.validator_article_xml(args.valideFile)
+
+    elif args.readFile:
+        reading.reading_article_xml(args.readFile, False)
 
     elif args.issn_journal:
         extrated.extrated_selected_journal(args.issn_journal)
@@ -116,7 +121,6 @@ def process(args):
         raise SystemExit("Vc deve escolher algum parametro")
 
     return 0
-
 
 def migrate_isis(sargs):
     parser = argparse.ArgumentParser(description="ISIS database migration tool")
