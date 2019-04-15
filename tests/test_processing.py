@@ -9,6 +9,7 @@ from documentstore_migracao.processing import (
     reading,
     generation,
     validation,
+    constructor,
 )
 
 from . import (
@@ -292,3 +293,31 @@ class TestProcessingValidation(unittest.TestCase):
                 validation.validator_article_ALLxml()
 
                 self.assertEqual("Test Error - Validation", str(cm.exception))
+
+
+class TestProcessingConstructor(unittest.TestCase):
+    @patch("documentstore_migracao.processing.constructor.files.write_file")
+    def test_article_xml_constructor(self, mk_write_file):
+
+        with utils.environ(CONSTRUCTOR_PATH="/tmp"):
+            constructor.article_xml_constructor(
+                os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml")
+            )
+            mk_write_file.assert_called_with("/tmp/S0044-59672003000300001.pt.xml", ANY)
+
+    @patch("documentstore_migracao.processing.constructor.article_xml_constructor")
+    def test_article_ALL_constructor(self, mk_article_xml_constructor):
+
+        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=SAMPLES_PATH):
+            constructor.article_ALL_constructor()
+            mk_article_xml_constructor.assert_called_with(ANY)
+
+    @patch("documentstore_migracao.processing.constructor.article_xml_constructor")
+    def test_article_ALL_constructor_with_exception(self, mk_article_xml_constructor):
+
+        mk_article_xml_constructor.side_effect = KeyError("Test Error - constructor")
+        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=SAMPLES_PATH):
+
+            with self.assertRaises(KeyError) as cm:
+                constructor.article_ALL_constructor()
+                self.assertEqual("Test Error - constructor", str(cm.exception))

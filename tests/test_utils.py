@@ -2,6 +2,7 @@ import os
 import unittest
 from unittest.mock import patch
 from lxml import etree
+from uuid import UUID
 from documentstore_migracao.utils import files, xml, request, dicts, string
 
 from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
@@ -156,3 +157,19 @@ class TestUtilsStrings(unittest.TestCase):
         )
         self.assertEqual(filename, "S0044-59672014000400003")
         self.assertEqual(extension, ".xml")
+
+    def test_uuid2str(self):
+        uuid = "585b0b68-aa1d-41ab-8f19-aaa37c516337"
+        self.assertEqual(string.uuid2str(UUID(uuid)), "FX6F3cbyYmmwvtGmMB7WCgr")
+
+    def test_str2uuid(self):
+        self.assertEqual(
+            string.str2uuid("FX6F3cbyYmmwvtGmMB7WCgr"),
+            UUID("585b0b68-aa1d-41ab-8f19-aaa37c516337"),
+        )
+
+    @patch("documentstore_migracao.utils.string.uuid4")
+    def test_generate_scielo_pid(self, mk_uuid4):
+        mk_uuid4.return_value = UUID("585b0b68-aa1d-41ab-8f19-aaa37c516337")
+
+        self.assertEqual(string.generate_scielo_pid(), "FX6F3cbyYmmwvtGmMB7WCgr")

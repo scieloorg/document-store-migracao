@@ -20,7 +20,7 @@ class ConstructorXMLPipeline(object):
             return data, xml
 
     class CreatePidPipe(plumber.Pipe):
-        PATHS = [".//article-meta", ".//front-stub"]
+        PATHS = [".//article-meta"]
 
         def _append_node(self, parent, new_node):
 
