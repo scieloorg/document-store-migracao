@@ -107,6 +107,18 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
             '1234-5678-acron-volume-05-fpage-lpage'
         )
 
+    def test_asset_package_name_f01(self):
+        self.assertEqual(
+            self.sps_package.asset_package_name('a01.htm', 'a01f01.jpg'),
+            '1234-5678-acron-volume-05-fpage-lpage-gf01.jpg'
+        )
+
+    def test_asset_package_name_any_img(self):
+        self.assertEqual(
+            self.sps_package.asset_package_name('a01.htm', 'img.jpg'),
+            '1234-5678-acron-volume-05-fpage-lpage-gimg.jpg'
+        )
+
 
 class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
     def setUp(self):
@@ -505,4 +517,3 @@ class Test_SPS_Package_Article_HTML(unittest.TestCase):
             self.sps_package.package_name,
             '1234-5678-acron-20-00006'
         )
-
