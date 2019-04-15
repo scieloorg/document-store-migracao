@@ -5,6 +5,7 @@ import sys
 import os
 import logging
 
+from documentstore import adapters
 from documentstore_migracao.processing import (
     extrated,
     reading,
@@ -122,20 +123,37 @@ def process(args):
 
     return 0
 
+
+def mongodb_parser(args):
+    """Parser utilizado para capturar informações sobre conexão
+    com o MongoDB"""
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        "--uri",
+        required=True,
+        help="""URI to connect at MongoDB where the import
+        will be done, e.g: "mongodb://user:password@mongodb-host/?authSource=admin" """,
+    )
+
+    parser.add_argument("--db", required=True, help="Database name to import registers")
+
+    return parser
+
+
 def migrate_isis(sargs):
     parser = argparse.ArgumentParser(description="ISIS database migration tool")
     subparsers = parser.add_subparsers(title="Commands", metavar="", dest="command")
 
     extract_parser = subparsers.add_parser("extract", help="Extract mst files to json")
     extract_parser.add_argument(
-        "mst_file_path",
-        metavar="file",
-        help="Path to MST file that will be extracted",
+        "mst_file_path", metavar="file", help="Path to MST file that will be extracted"
     )
     extract_parser.add_argument("--output", required=True, help="The output file path")
 
     import_parser = subparsers.add_parser(
-        "import", help="Process JSON files then import into Kernel database"
+        "import",
+        parents=[mongodb_parser(sargs)],
+        help="Process JSON files then import into Kernel database",
     )
     import_parser.add_argument(
         "import_file",
@@ -155,8 +173,11 @@ def migrate_isis(sargs):
         extract_isis.create_output_dir(args.output)
         extract_isis.run(args.mst_file_path, args.output)
     elif args.command == "import":
+        mongo = adapters.MongoDB(uri=args.uri, dbname=args.db)
+        Session = adapters.Session.partial(mongo)
+
         if args.type == "journal":
-            pipeline.import_journals(args.import_file)
+            pipeline.import_journals(args.import_file, session=Session())
     else:
         parser.print_help()
 
