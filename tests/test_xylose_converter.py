@@ -1,6 +1,10 @@
 import unittest
-from documentstore_migracao.utils.xylose_converter import journal_to_kernel, parse_date
-from xylose.scielodocument import Journal
+from documentstore_migracao.utils.xylose_converter import (
+    journal_to_kernel,
+    issue_to_kernel,
+    parse_date,
+)
+from xylose.scielodocument import Journal, Issue
 
 
 def get_metadata_item(bundle, field):
@@ -165,4 +169,102 @@ class TestXyloseJournalConverter(unittest.TestCase):
         self.assertEqual(
             "Rua de exemplo, 1, São Paulo, SP, Brasil",
             get_metadata_item(journal, "contact")["address"],
+        )
+
+
+class TestXyloseIssueConverter(unittest.TestCase):
+    def setUp(self):
+        self.issue_json = {"v65": [{"_": "20190129"}], "v35": [{"_": "2448-167X"}]}
+
+        self._issue = Issue({"issue": self.issue_json})
+        self.issue = issue_to_kernel(self._issue)
+
+    def test_issue_has_issn_in_id(self):
+        self.assertIn("2448-167X", self.issue["id"])
+        self.assertIn("2448-167X", self.issue["_id"])
+
+    def test_issue_has_year_in_id(self):
+        self.assertIn("2019", self.issue["id"])
+        self.assertIn("2019", self.issue["_id"])
+
+    def test_issue_should_be_created_date_equals_to_publication_date(self):
+        self.assertEqual("2019-01-29T00:00:00.000000Z", self.issue["created"])
+
+    def test_issue_should_be_updated_date_equals_to_publication_date(self):
+        self.assertEqual("2019-01-29T00:00:00.000000Z", self.issue["updated"])
+
+    def test_issue_has_volume(self):
+        self.issue_json["v31"] = [{"_": "21"}]
+        self.issue = issue_to_kernel(self._issue)
+
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", "21"]], self.issue["metadata"]["volume"]
+        )
+
+        self.assertIn("v21", self.issue["id"])
+        self.assertIn("v21", self.issue["_id"])
+
+    def test_issue_has_number(self):
+        self.assertIsNone(self.issue["metadata"].get("volume"))
+        self.issue_json["v32"] = [{"_": "1"}]
+        self.issue = issue_to_kernel(self._issue)
+
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", "1"]], self.issue["metadata"]["number"]
+        )
+
+        self.assertIn("n1", self.issue["id"])
+
+    def test_issue_has_supplement_when_supplement_volume_is_not_none(self):
+        self.issue_json["v131"] = [{"_": "3"}]
+        self.issue = issue_to_kernel(self._issue)
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", "3"]], self.issue["metadata"]["supplement"]
+        )
+
+        self.assertIn("s3", self.issue["id"])
+
+    def test_issue_has_supplement_when_supplement_number_is_not_none(self):
+        self.issue_json["v132"] = [{"_": "2"}]
+        self.issue = issue_to_kernel(self._issue)
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", "2"]], self.issue["metadata"]["supplement"]
+        )
+
+        self.assertIn("s2", self.issue["id"])
+        self.assertIn("s2", self.issue["_id"])
+
+    def test_issue_has_titles(self):
+        self.issue_json["v33"] = [{"l": "pt", "_": "Algum título"}]
+        self.issue = issue_to_kernel(self._issue)
+        self.assertEqual(
+            [
+                [
+                    "2019-01-29T00:00:00.000000Z",
+                    [{"language": "pt", "value": "Algum título"}],
+                ]
+            ],
+            self.issue["metadata"]["titles"],
+        )
+
+    def test_issue_has_publication_month(self):
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", "1"]],
+            self.issue["metadata"]["publication_month"],
+        )
+
+    def test_publication_season_start_and_end_is_equal(self):
+        self.issue_json["v43"] = [{"m": "Feb./Feb."}]
+        self.issue = issue_to_kernel(self._issue)
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", [2]]],
+            self.issue["metadata"]["publication_season"],
+        )
+
+    def test_publication_season_range_of_six_months(self):
+        self.issue_json["v43"] = [{"m": "Jan./Jun."}]
+        self.issue = issue_to_kernel(self._issue)
+        self.assertEqual(
+            [["2019-01-29T00:00:00.000000Z", [1, 6]]],
+            self.issue["metadata"]["publication_season"],
         )
