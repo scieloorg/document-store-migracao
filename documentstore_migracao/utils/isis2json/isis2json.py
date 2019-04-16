@@ -24,6 +24,7 @@ import sys
 import argparse
 from uuid import uuid4
 import os
+from string import ascii_lowercase, digits
 
 try:
     import json
@@ -39,6 +40,7 @@ ISIS_MFN_KEY = 'mfn'
 ISIS_ACTIVE_KEY = 'active'
 SUBFIELD_DELIMITER = '^'
 INPUT_ENCODING = 'cp1252'
+SUBFIELD_KEYS = "".join([ascii_lowercase, digits, "_"])
 
 def iterMstRecords(master_file_name, isis_json_type):
     try:
@@ -65,7 +67,7 @@ def iterMstRecords(master_file_name, isis_json_type):
                     if subfield_key == '*':
                         content['_'] = subfield.getContent()
                     else:
-                        if subfield_key in "_tlabcde":
+                        if subfield_key in SUBFIELD_KEYS:
                             content.setdefault(subfield_key, subfield.getContent())
                         else:
                             subfield_occurrences = content.setdefault(subfield_key,[])
