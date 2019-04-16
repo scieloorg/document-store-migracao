@@ -42,17 +42,15 @@ def article_html_generator(file_xml_path):
 
 
 def article_ALL_html_generator():
-    paths = [config.get("CONVERSION_PATH"), config.get("VALID_XML_PATH")]
-    paths = [path for path in paths if path]
+
     logger.info("Iniciando Geração dos HTMLs")
-    for path in paths:
-        list_files_xmls = files.xml_files_list(path)
-        for file_xml in list_files_xmls:
+    list_files_xmls = files.xml_files_list(config.get("CONSTRUCTOR_PATH"))
+    for file_xml in list_files_xmls:
 
-            try:
-                article_html_generator(os.path.join(path, file_xml))
+        try:
+            article_html_generator(os.path.join(path, file_xml))
 
-            except Exception as ex:
-                logger.error(file_xml)
-                logger.exception(ex)
-                # raise
+        except Exception as ex:
+            logger.error(file_xml)
+            logger.exception(ex)
+            # raise

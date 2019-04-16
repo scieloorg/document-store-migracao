@@ -4,18 +4,17 @@ import json
 from typing import List
 
 from requests.compat import urljoin
+from packtools import XML
 from lxml import etree
 from documentstore_migracao.utils import files, xml, request, string
 from documentstore_migracao import config, exceptions
-
 
 logger = logging.getLogger(__name__)
 
 
 def reading_article_xml(file_xml_path, move_success=True):
 
-    article = files.read_file(file_xml_path)
-    obj_xml = etree.fromstring(article)
+    obj_xml = XML(file_xml_path, no_network=False)
 
     is_media = False
     dest_path = None
@@ -61,12 +60,12 @@ def reading_article_xml(file_xml_path, move_success=True):
 def reading_article_ALLxml():
 
     logger.info("Iniciando Leituras do xmls")
-    list_files_xmls = files.xml_files_list(config.get("CONVERSION_PATH"))
+    list_files_xmls = files.xml_files_list(config.get("CONSTRUCTOR_PATH"))
     for file_xml in list_files_xmls:
 
         try:
             reading_article_xml(
-                os.path.join(config.get("CONVERSION_PATH"), file_xml),
+                os.path.join(config.get("CONSTRUCTOR_PATH"), file_xml),
                 move_success=False,
             )
 
