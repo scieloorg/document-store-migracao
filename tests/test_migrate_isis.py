@@ -3,11 +3,15 @@ import subprocess
 import unittest
 from unittest import mock
 from documentstore_migracao.utils import extract_isis
-from documentstore_migracao.processing import pipeline
+from documentstore_migracao.processing import pipeline, conversion
 from documentstore_migracao import exceptions, main, config
-from . import SAMPLES_PATH
 from .apptesting import Session
-from . import SAMPLE_KERNEL_JOURNAL
+from . import (
+    SAMPLES_PATH,
+    SAMPLE_KERNEL_JOURNAL,
+    SAMPLE_ISSUES_JSON,
+    SAMPLE_ISSUES_KERNEL,
+)
 from documentstore.exceptions import AlreadyExists
 
 
@@ -63,7 +67,7 @@ class TestJournalPipeline(unittest.TestCase):
 
     @mock.patch("documentstore_migracao.processing.reading.read_json_file")
     @mock.patch("documentstore_migracao.processing.pipeline.extract_isis")
-    def test_pipeline_must_run_extract_when_it_asked_for(
+    def test_pipeline_should_read_correct_json_file(
         self, extract_isis_mock, read_json_file_mock
     ):
         pipeline.import_journals("~/json/title.json", self.session)
@@ -162,3 +166,64 @@ class IsisCommandLineTests(unittest.TestCase):
     def test_should_print_help_if_arguments_does_not_match(self, print_help_mock):
         main.migrate_isis([])
         print_help_mock.assert_called()
+
+
+class TestIssuePipeline(unittest.TestCase):
+    def setUp(self):
+        self.issues_json = [
+            {
+                "v32": [{"_": "5"}],
+                "v31": [{"_": "40"}],
+                "v35": [{"_": "2448-167X"}],
+                "v41": [{"_": "pr"}],
+                "v65": [{"_": "20190129"}],
+            },
+            {
+                "v32": [{"_": "ahead"}],
+                "v31": [{"_": "40"}],
+                "v35": [{"_": "2448-167X"}],
+                "v65": [{"_": "20190129"}],
+            },
+        ]
+
+        self.session = Session()
+
+    def test_filter_should_remove_pressreleases_and_ahead_issues(self):
+        issues = conversion.conversion_issues_to_xylose(self.issues_json)
+        issues = pipeline.filter_issues(issues)
+        self.assertEqual(0, len(issues))
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_pipeline_should_read_correct_json_file(self, read_json_file_mock):
+        pipeline.import_issues("~/json/issues.json", self.session)
+        read_json_file_mock.assert_called_once_with("~/json/issues.json")
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_pipeline_should_insert_issue_in_database_and_register_change(
+        self, read_json_file_mock
+    ):
+        read_json_file_mock.return_value = SAMPLE_ISSUES_JSON
+        pipeline.import_issues("~/json/issues.json", self.session)
+        expected = SAMPLE_ISSUES_KERNEL[0]["_id"]
+
+        self.assertEqual(expected, self.session.documents_bundles.fetch(expected).id())
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_should_insert_issue_in_changes(self, read_json_file_mock):
+        read_json_file_mock.return_value = SAMPLE_ISSUES_JSON
+        pipeline.import_issues("~/json/issues.json", self.session)
+        _changes = self.session.changes.filter()
+
+        self.assertEqual(1, len(_changes))
+        self.assertEqual("0001-3714-1998-v29-n3", _changes[0]["id"])
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_should_raise_already_exception_if_try_to_insert_same_id_twice(
+        self, read_json_file_mock
+    ):
+        read_json_file_mock.return_value = SAMPLE_ISSUES_JSON
+
+        with self.assertLogs(level="INFO") as log:
+            pipeline.import_issues("~/json/issues.json", self.session)
+            pipeline.import_issues("~/json/issues.json", self.session)
+            self.assertIn("pipeline", log[1][0])
