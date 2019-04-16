@@ -27,14 +27,72 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, xml = pipeline.SetupPipe().transform(expected_text)
         self.assertIn(expected_text, str(etree.tostring(xml)))
 
-    def test_pipe_remove_empty(self):
-        text = '<root><p>texto<br/><hr/></p><p> <img align="x" src="a04qdr04.gif"/></p><p/><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+    def test_pipe_remove_empty_do_not_remove_img(self):
+        text = '<root><p> <img align="x" src="a04qdr04.gif"/> </p> </root>'
+        expected = '<root><p> <img align="x" src="a04qdr04.gif"/> </p> </root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveEmptyPipe())
+        resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>texto<br/><hr/></p><p> <img align="x" src="a04qdr04.gif"/></p><br/><hr/> <img align="x" src="a04qdr04.gif"/></root>',
+            expected.replace('>', '>[BREAK]').split('[BREAK]'),
+            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
         )
 
+    def test_pipe_remove_empty_do_not_remove_a(self):
+        text = '<root><p> <a align="x" src="a04qdr04.gif"/> </p> </root>'
+        expected = '<root><p> <a align="x" src="a04qdr04.gif"/> </p> </root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveEmptyPipe())
+        resultado = etree.tostring(transformed, encoding="unicode")
+        self.assertEqual(
+            expected.replace('>', '>[BREAK]').split('[BREAK]'),
+            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+        )
+
+    def test_pipe_remove_empty_do_not_remove_hr(self):
+        text = '<root><p> <hr align="x" src="a04qdr04.gif"/> </p> </root>'
+        expected = '<root><p> <hr align="x" src="a04qdr04.gif"/> </p> </root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveEmptyPipe())
+        resultado = etree.tostring(transformed, encoding="unicode")
+        self.assertEqual(
+            expected.replace('>', '>[BREAK]').split('[BREAK]'),
+            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+        )
+
+    def test_pipe_remove_empty_do_not_remove_br(self):
+        text = '<root><p> <br align="x" src="a04qdr04.gif"/> </p> </root>'
+        expected = '<root><p> <br align="x" src="a04qdr04.gif"/> </p> </root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveEmptyPipe())
+        resultado = etree.tostring(transformed, encoding="unicode")
+        self.assertEqual(
+            expected.replace('>', '>[BREAK]').split('[BREAK]'),
+            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+        )
+
+    def test_pipe_remove_empty_p(self):
+        text = '<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p> <p/> </root>'
+        expected = '<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p>  </root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveEmptyPipe())
+        resultado = etree.tostring(transformed, encoding="unicode")
+        self.assertEqual(
+            expected.replace('>', '>[BREAK]').split('[BREAK]'),
+            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+        )
+
+    def test_pipe_remove_empty_bold(self):
+        text = '<root><p>Colonização micorrízica e concentração de nutrientes <bold> </bold> em três cultivares de bananeiras em um latossolo amarelo</p> </root>'
+        expected = '<root><p>Colonização micorrízica e concentração de nutrientes  em três cultivares de bananeiras em um latossolo amarelo</p> </root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveEmptyPipe())
+
+        resultado = etree.tostring(transformed, encoding="unicode")
+        self.assertEqual(
+            expected.replace('>', '>[BREAK]').split('[BREAK]'),
+            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+        )
     def test_pipe_remove_attribute_style(self):
         text = '<root><p style="x">texto <b style="x"></b></p> <td style="bla"><caption style="x"/></td></root>'
         raw, transformed = self._transform(
