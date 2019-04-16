@@ -167,6 +167,16 @@ class IsisCommandLineTests(unittest.TestCase):
         main.migrate_isis([])
         print_help_mock.assert_called()
 
+    @mock.patch("documentstore_migracao.main.pipeline.import_issues")
+    def test_import_should_call_issues_pipeline_when_import_type_is_issue(
+        self, import_issues_mock
+    ):
+        main.migrate_isis(
+            """import /jsons/file.json --type issue
+            --uri mongodb://uri --db db-name""".split()
+        )
+        import_issues_mock.assert_called_once()
+
 
 class TestIssuePipeline(unittest.TestCase):
     def setUp(self):
