@@ -33,14 +33,14 @@ def reading_article_xml(file_xml_path, move_success=True):
                 request_file = request.get(
                     urljoin(config.get("STATIC_URL_FILE"), media)
                 )
-                filename_m, ext_m = string.extract_filename_ext_by_path(media)
-                files.write_file_bynary(
+                filename_m, ext_m = files.extract_filename_ext_by_path(media)
+                files.write_file_binary(
                     os.path.join(dest_path, "%s%s" % (filename_m, ext_m)),
                     request_file.content,
                 )
 
     if is_media and dest_path:
-        filename, _ = string.extract_filename_ext_by_path(file_xml_path)
+        filename, _ = files.extract_filename_ext_by_path(file_xml_path)
         files.write_file(
             os.path.join(dest_path, "%s.xml" % (filename)),
             xml.prettyPrint_format(

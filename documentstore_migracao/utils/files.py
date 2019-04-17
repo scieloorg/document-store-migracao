@@ -5,7 +5,6 @@ import shutil
 import logging
 
 from documentstore_migracao import config
-from documentstore_migracao.utils import string
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +14,14 @@ def setup_processing_folder():
     paths = config.INITIAL_PATH
     for path in paths:
         create_dir(path)
+
+
+def extract_filename_ext_by_path(inputFilepath):
+
+    filename_w_ext = os.path.basename(inputFilepath)
+    c_filename, file_extension = os.path.splitext(filename_w_ext)
+    filename, _ = os.path.splitext(c_filename)
+    return filename, file_extension
 
 
 def move_xml_to(xml_file, source_path, destiny_path):
@@ -30,9 +37,21 @@ def create_dir(path):
         os.makedirs(path)
 
 
+def make_empty_dir(path):
+    if os.path.isdir(path):
+        for item in os.listdir(path):
+            file_path = os.path.join(path, item)
+            try:
+                os.unlink(file_path)
+            except OSError:
+                raise
+    else:
+        os.makedirs(path)
+
+
 def create_path_by_file(path, file_xml_path):
 
-    filename, _ = string.extract_filename_ext_by_path(file_xml_path)
+    filename, _ = extract_filename_ext_by_path(file_xml_path)
     dest_path = os.path.join(path, filename)
     create_dir(dest_path)
     return dest_path
@@ -60,7 +79,7 @@ def write_file(path, source):
         f.write(source)
 
 
-def write_file_bynary(path, source):
+def write_file_binary(path, source):
     logger.debug("Gravando arquivo binario: %s", path)
     with open(path, "wb") as f:
         f.write(source)

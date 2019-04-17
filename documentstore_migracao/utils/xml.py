@@ -2,20 +2,44 @@
 
 import logging
 import itertools
+
 from lxml import etree
 from xml.dom.minidom import parseString
-from documentstore_migracao.utils import string, convert_html_body
+
+from documentstore_migracao import config
+from documentstore_migracao.utils import string, convert_html_body, files
+
 
 logger = logging.getLogger(__name__)
 
 
-def str2objXML(str):
-    _string = string.normalize(str)
+def str2objXML(_string):
+    _string = string.normalize(_string)
     try:
-        return etree.fromstring("<body>%s</body>" % (str))
+        return etree.fromstring("<body>%s</body>" % (_string))
     except etree.XMLSyntaxError as e:
-        # logger.exception(e)
+        logger.exception(e)
         return etree.fromstring("<body></body>")
+
+
+def file2objXML(file_path):
+    file_content = files.read_file(file_path)
+    file_content = ' '.join(file_content.split())
+    return etree.fromstring(file_content)
+
+
+def objXML2file(file_path, obj_xml, pretty=False):
+    files.write_file(
+        file_path,
+        etree.tostring(
+            obj_xml,
+            doctype=config.DOC_TYPE_XML,
+            xml_declaration=True,
+            encoding="utf-8",
+            method="xml",
+            pretty_print=pretty
+        ).decode("utf-8")
+    )
 
 
 def get_static_assets(xml_et):
@@ -49,7 +73,7 @@ def find_medias(obj_body):
         path_img = img.attrib[src_txt]
         media.append(path_img)
 
-        f_name, f_ext = string.extract_filename_ext_by_path(path_img)
+        f_name, f_ext = files.extract_filename_ext_by_path(path_img)
         img.set(src_txt, "%s%s" % (f_name, f_ext))
 
     # FILES
@@ -60,8 +84,8 @@ def find_medias(obj_body):
             logger.info("\t FILE %s", href)
             media.append(href)
 
-            f_name, f_ext = string.extract_filename_ext_by_path(href)
-            img.set("href", "%s%s" % (f_name, f_ext))
+            f_name, f_ext = files.extract_filename_ext_by_path(href)
+            a.set("href", "%s%s" % (f_name, f_ext))
 
     return media
 

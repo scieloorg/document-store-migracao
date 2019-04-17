@@ -18,6 +18,8 @@ XML_ERRORS_PATH:
     arquivos .err cujo conteúdo é XML + mensagens de erro
 SPS_PKG_PATH:
     pacotes de XML validados e nomeados de acordo com SPS
+INCOMPLETE_SPS_PKG_PATH:
+    pacotes de XML validados e nomeados de acordo com SPS, mas com ativos digitais faltantes
 """
 
 _default = dict(
@@ -34,7 +36,8 @@ _default = dict(
     DOWNLOAD_PATH=os.path.join(BASE_PATH, "xml/download"),
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
     ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
-    SPS_PKG_PATH=os.environ.get("SPS_PKG_PATH"),
+    SPS_PKG_PATH=os.path.join(BASE_PATH, "xml/sps_packages"),
+    INCOMPLETE_SPS_PKG_PATH=os.path.join(BASE_PATH, "xml/incomplete_sps_packages"),
     DATABASE_URI=os.environ.get("DATABASE_URI", "localhost:27017"),
     DATABASE_NAME=os.environ.get("DATABASE_NAME", "document-store"),
 )
