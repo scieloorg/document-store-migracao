@@ -93,19 +93,37 @@ class HTML2SPSPipeline(object):
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
-        EXCEPTIONS = ["br", "img", "hr"]
+        EXCEPTIONS = ["a", "br", "img", "hr"]
 
-        def remove_empty_tags(self, xml):
+        def _is_empty_element(self, node):
+            return node.findall("*") == [] and \
+                   not (node.text or '').strip()
+
+        def _remove_empty_element(self, node):
+            parent = node.getparent()
+            if parent is not None:
+                if node.tail:
+                    previous = node.getprevious()
+                    if previous is not None:
+                        if not previous.tail:
+                            previous.tail = ''
+                        previous.tail += node.tail
+                    else:
+                        if not parent.text:
+                            parent.text = ''
+                        parent.text += node.tail
+                parent.remove(node)
+                removed = node.tag
+                return removed
+
+        def _remove_empty_tags(self, xml):
             removed_tags = []
             for node in xml.xpath("//*"):
                 if node.tag not in self.EXCEPTIONS:
-                    if not node.findall("*"):
-                        text = node.text or ""
-                        text = text.strip()
-                        if not text:
-                            if node.getparent():
-                                removed_tags.append(node.tag)
-                                node.getparent().remove(node)
+                    if self._is_empty_element(node):
+                        removed = self._remove_empty_element(node)
+                        if removed:
+                            removed_tags.append(removed)
             return removed_tags
 
         def transform(self, data):
@@ -113,12 +131,13 @@ class HTML2SPSPipeline(object):
             total_removed_tags = []
             remove = True
             while remove:
-                removed_tags = self.remove_empty_tags(xml)
+                removed_tags = self._remove_empty_tags(xml)
                 total_removed_tags.extend(removed_tags)
                 remove = len(removed_tags) > 0
             if len(total_removed_tags) > 0:
                 logger.info(
-                    "Total de %s tags vazias removidas", len(total_removed_tags)
+                    "Total de %s tags vazias removidas",
+                    len(total_removed_tags)
                 )
                 logger.info(
                     "Tags removidas:%s ",
