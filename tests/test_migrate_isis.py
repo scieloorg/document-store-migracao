@@ -178,6 +178,33 @@ class IsisCommandLineTests(unittest.TestCase):
         )
         import_issues_mock.assert_called_once()
 
+    @mock.patch(
+        "documentstore_migracao.processing.pipeline.link_documents_bundles_with_journals"
+    )
+    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")
+    def test_merge_subparser_requires_json_paths_and_output_file(
+        self, error_mock, link_documents_bundles_with_journals_mock
+    ):
+        main.migrate_isis("link".split())
+        error_mock.assert_called_with(
+            "the following arguments are required: journals, issues, --output"
+        )
+
+    @mock.patch(
+        "documentstore_migracao.processing.pipeline.link_documents_bundles_with_journals"
+    )
+    def test_link_command_should_link_journals_and_bundles(
+        self, link_documents_bundles_with_journals_mock
+    ):
+        main.migrate_isis(
+            """link journals.json 
+            issues.json --output linked.json""".split()
+        )
+
+        link_documents_bundles_with_journals_mock.assert_called_once_with(
+            "journals.json", "issues.json", "linked.json"
+        )
+
 
 class TestIssuePipeline(unittest.TestCase):
     def setUp(self):
