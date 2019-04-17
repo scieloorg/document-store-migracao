@@ -24,13 +24,14 @@ def parse_date(date: str) -> str:
     except ValueError:
         try:
             _date = (
-                datetime.strptime(date, "%Y-%m").isoformat(timespec="microseconds") + "Z"
+                datetime.strptime(date, "%Y-%m").isoformat(timespec="microseconds")
+                + "Z"
             )
         except ValueError:
             _date = (
                 datetime.strptime(date, "%Y").isoformat(timespec="microseconds") + "Z"
             )
-            
+
     return _date
 
 
@@ -45,7 +46,6 @@ def journal_to_kernel(journal):
     """Transforma um objeto Journal (xylose) para o formato
     de dados equivalente ao persistido pelo Kernel em um banco
     mongodb"""
-
 
     # TODO: Virá algo do xylose para popular o campo de métricas?
 
@@ -215,3 +215,49 @@ def issue_to_kernel(issue):
     _bundle["id"] = "-".join(_id)
 
     return _bundle
+
+
+def get_journal_issns_from_issue(issue: Issue) -> List[str]:
+    """Busca por todos os issns de periódico disponíveis em uma
+    issue. Os ISSNs podem estar nos dois campos v35 e v435 com
+    ou sem repetição"""
+
+    issns = [get_journal_issn_in_issue(issue)]
+
+    if not "v435" in issue.data["issue"]:
+        return issns
+
+    issns.extend([issn["_"] for issn in issue.data["issue"]["v435"]])
+
+    return list(set(issns))
+
+
+def find_documents_bundles(journal: dict, issues: List[Issue]):
+    """Busca o id de todos os fascículos associados ao periódico. Um id
+    é encontrado quando pelo menos um ISSN relacionado ao fascículo também
+    está presente no periódico.
+    """
+
+    issues_ids = []
+    journal_issns = []
+    journal_issn_fields = ["electronic_issn", "print_issn", "scielo_issn"]
+    _metadata = journal["metadata"]
+
+    for field in journal_issn_fields:
+        try:
+            journal_issns.append(_metadata[field][0][-1])
+        except (KeyError, IndexError):
+            pass
+
+    journal_issns = list(set(journal_issns))
+
+    for issue in issues:
+        issue_issns = get_journal_issns_from_issue(issue)
+        has_matched_issns = list(
+            filter(lambda issn: issn in journal_issns, issue_issns)
+        )
+
+        if has_matched_issns:
+            issues_ids.append(issue_to_kernel(issue).get("id"))
+
+    return issues_ids
