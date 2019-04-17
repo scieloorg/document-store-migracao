@@ -179,6 +179,19 @@ class IsisCommandLineTests(unittest.TestCase):
         import_issues_mock.assert_called_once()
 
     @mock.patch(
+        "documentstore_migracao.main.pipeline.import_documents_bundles_link_with_journal"
+    )
+    def test_import_should_import_linked_journals_bundles(
+        self, import_documents_bundles_link_with_journal_mock
+    ):
+        main.migrate_isis(
+            """import /jsons/file.json --type documents-bundles-link
+            --uri mongodb://uri --db db-name""".split()
+        )
+
+        import_documents_bundles_link_with_journal_mock.assert_called_once()
+
+    @mock.patch(
         "documentstore_migracao.processing.pipeline.link_documents_bundles_with_journals"
     )
     @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")

@@ -187,7 +187,7 @@ def migrate_isis(sargs):
     import_parser.add_argument(
         "--type",
         help="Type of JSON file that will load into Kernel database",
-        choices=["journal", "issue"],
+        choices=["journal", "issue", "documents-bundles-link"],
         required=True,
     )
 
@@ -218,6 +218,10 @@ def migrate_isis(sargs):
             pipeline.import_journals(args.import_file, session=Session())
         elif args.type == "issue":
             pipeline.import_issues(args.import_file, session=Session())
+        elif args.type == "documents-bundles-link":
+            pipeline.import_documents_bundles_link_with_journal(
+                args.import_file, session=Session()
+            )
     elif args.command == "link":
         pipeline.link_documents_bundles_with_journals(
             args.journals, args.issues, args.output
