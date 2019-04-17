@@ -7,7 +7,7 @@ from documentstore_migracao.utils import extract_isis
 from documentstore_migracao.processing import reading, conversion
 from documentstore.interfaces import Session
 from documentstore.domain import utcnow
-from documentstore.exceptions import AlreadyExists
+from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore_migracao.utils.xylose_converter import find_documents_bundles
 
 logger = logging.getLogger(__name__)
@@ -92,6 +92,44 @@ def import_issues(json_file: str, session: Session):
             )
         except AlreadyExists as exc:
             logger.info(str(exc))
+
+
+def import_documents_bundles_link_with_journal(file_path: str, session: Session):
+    """Fachada responsável por ler o arquivo de link entre
+    journals e documents bundles e atualizar os journals com os
+    identificadores dos bundles
+    
+    O formato esperado para o arquivo de link é:
+    ```
+    {
+        "journal_id": ["bundle-id-1", "bundle-id-2"]
+    }
+    ```
+    """
+
+    links = reading.read_json_file(file_path)
+
+    for journal_id, bundles in links.items():
+        try:
+            _journal = session.journals.fetch(journal_id)
+
+            for bundle_id in bundles:
+                try:
+                    _journal.add_issue(bundle_id)
+                except AlreadyExists:
+                    logger.debug(
+                        "Bundle %s already exists in journal %s"
+                        % (bundle_id, journal_id)
+                    )
+
+            session.journals.update(_journal)
+            session.changes.add(
+                {"timestamp": utcnow(), "entity": "Journal", "id": _journal.id()}
+            )
+        except DoesNotExist:
+            logger.debug(
+                "Journal %s does not exists, cannot link bundles." % journal_id
+            )
 
 
 def link_documents_bundles_with_journals(

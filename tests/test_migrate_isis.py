@@ -317,3 +317,81 @@ class TestLinkDocumentsBundlesWithJournals(unittest.TestCase):
         open_mock = open_mock()
         open_mock.write.assert_called_once()
         self.assertIn("0001-3714", str(open_mock.write.call_args))
+
+class TestImportDocumentsBundlesLink(unittest.TestCase):
+    def setUp(self):
+        self.session = Session()
+        self.session.journals.add(
+            pipeline.ManifestDomainAdapter(manifest=SAMPLE_KERNEL_JOURNAL)
+        )
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_read_journal_bundle_file(self, read_json_file_mock):
+        read_json_file_mock.return_value = {}
+        pipeline.import_documents_bundles_link_with_journal(
+            "~/json/output.json", self.session
+        )
+        read_json_file_mock.assert_called_once_with("~/json/output.json")
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_should_update_journals_with_document_bundle_ids(self, read_json_file_mock):
+        read_json_file_mock.return_value = {"0001-3714": ["0001-3714-1998-v29-n3"]}
+
+        pipeline.import_documents_bundles_link_with_journal(
+            "~/json/output.json", self.session
+        )
+        _journal = self.session.journals.fetch("0001-3714")
+        _changes = self.session.changes.filter()
+
+        self.assertIn("0001-3714-1998-v29-n3", _journal.issues)
+        self.assertEqual(1, len(_changes))
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_should_not_update_journals_with_document_bundle(self, read_json_file_mock):
+        read_json_file_mock.return_value = {"0001-3714": []}
+
+        pipeline.import_documents_bundles_link_with_journal(
+            "~/json/output.json", self.session
+        )
+        _journal = self.session.journals.fetch("0001-3714")
+
+        self.assertEqual([], _journal.issues)
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_should_not_update_journals_with_duplicated_bundles(
+        self, read_json_file_mock
+    ):
+        read_json_file_mock.return_value = {
+            "0001-3714": ["issue-1", "issue-1", "issue-2"]
+        }
+
+        pipeline.import_documents_bundles_link_with_journal(
+            "~/json/output.json", self.session
+        )
+        _journal = self.session.journals.fetch("0001-3714")
+
+        self.assertEqual(["issue-1", "issue-2"], _journal.issues)
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    def test_should_log_dabase_exceptions(self, read_json_file_mock):
+        read_json_file_mock.side_effect = [
+            {"0001-3714": ["issue-1", "issue-1", "issue-2"]},
+            {"missing-journal": []},
+        ]
+
+        with self.assertLogs(level="DEBUG") as log:
+            pipeline.import_documents_bundles_link_with_journal(
+                "~/json/output.json", self.session
+            )
+            self.assertIn(
+                "Bundle issue-1 already exists in journal 0001-3714", log[-1][-1]
+            )
+
+        with self.assertLogs(level="DEBUG") as log:
+            pipeline.import_documents_bundles_link_with_journal(
+                "~/json/output.json", self.session
+            )
+            self.assertIn(
+                "Journal missing-journal does not exists, cannot link bundles.",
+                log[-1][-1],
+            )
