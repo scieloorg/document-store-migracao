@@ -11,6 +11,7 @@ from . import (
     SAMPLE_KERNEL_JOURNAL,
     SAMPLE_ISSUES_JSON,
     SAMPLE_ISSUES_KERNEL,
+    SAMPLE_JOURNALS_JSON,
 )
 from documentstore.exceptions import AlreadyExists
 
@@ -237,3 +238,55 @@ class TestIssuePipeline(unittest.TestCase):
             pipeline.import_issues("~/json/issues.json", self.session)
             pipeline.import_issues("~/json/issues.json", self.session)
             self.assertIn("pipeline", log[1][0])
+
+
+class TestLinkDocumentsBundlesWithJournals(unittest.TestCase):
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    @mock.patch(
+        "documentstore_migracao.processing.pipeline.extract_isis.create_output_dir"
+    )
+    @mock.patch("builtins.open")
+    def test_should_create_output_folder(
+        self, open_mock, create_output_dir_mock, read_json_file_mock
+    ):
+
+        read_json_file_mock.return_value = []
+        pipeline.link_documents_bundles_with_journals(
+            "~/title.json", "~/issues.json", "~/json/output.json"
+        )
+        create_output_dir_mock.return_value = None
+        create_output_dir_mock.assert_called_once()
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    @mock.patch(
+        "documentstore_migracao.processing.pipeline.extract_isis.create_output_dir"
+    )
+    @mock.patch("builtins.open")
+    def test_should_read_journals_and_issues(
+        self, open_mock, create_output_dir_mock, read_json_file_mock
+    ):
+        read_json_file_mock.side_effect = [SAMPLE_JOURNALS_JSON, SAMPLE_ISSUES_JSON]
+        pipeline.link_documents_bundles_with_journals(
+            "~/title.json", "~/issues.json", "~/json/output.json"
+        )
+        self.assertEqual(2, read_json_file_mock.call_count)
+
+    @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
+    @mock.patch(
+        "documentstore_migracao.processing.pipeline.extract_isis.create_output_dir"
+    )
+    @mock.patch("builtins.open")
+    def test_should_write_output_file(
+        self, open_mock, create_output_dir_mock, read_json_file_mock
+    ):
+        read_json_file_mock.side_effect = [SAMPLE_JOURNALS_JSON, SAMPLE_ISSUES_JSON]
+        open_mock.side_effect = mock.mock_open()
+
+        pipeline.link_documents_bundles_with_journals(
+            "~/title.json", "~/issues.json", "~/json/output.json"
+        )
+
+        open_mock.assert_called_once_with("~/json/output.json", "w")
+        open_mock = open_mock()
+        open_mock.write.assert_called_once()
+        self.assertIn("0001-3714", str(open_mock.write.call_args))
