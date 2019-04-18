@@ -412,4 +412,87 @@ SAMPLE_KERNEL_JOURNAL = {
     "_id": "10000-000A",
 }
 
+SAMPLE_ISSUES_JSON = [
+    {
+        "v6": [{"_": "001"}],
+        "v122": [{"_": "16"}],
+        "v130": [{"_": "Revista de Microbiologia"}],
+        "v230": [{"_": "Journal of the Brazilian Society for Microbiology"}],
+        "v91": [{"_": "19990226"}],
+        "v706": [{"_": "i"}],
+        "v30": [{"_": "Rev. Microbiol."}],
+        "mfn": 1,
+        "v701": [{"_": "1"}],
+        "v32": [{"_": "3"}],
+        "v43": [
+            {
+                "a": "1998",
+                "c": "São Paulo",
+                "l": "pt",
+                "m": "Set.",
+                "n": ["n. 3"],
+                "t": "Rev. Microbiol.",
+                "v": ["v. 29"],
+            },
+            {
+                "a": "1998",
+                "c": "São Paulo",
+                "l": "en",
+                "m": "Sept.",
+                "n": ["n. 3"],
+                "t": "Rev. Microbiol.",
+                "v": ["vol. 29"],
+            },
+            {
+                "a": "1998",
+                "c": "São Paulo",
+                "l": "es",
+                "m": "Sept.",
+                "n": ["n. 3"],
+                "t": "Rev. Microbiol.",
+                "v": ["v. 29"],
+            },
+        ],
+        "v65": [{"_": "19980900"}],
+        "v31": [{"_": "29"}],
+        "v42": [{"_": "1"}],
+        "v64": [{"a": "1998", "m": "09"}],
+        "v930": [{"_": "RM"}],
+        "v700": [{"_": "0"}],
+        "v36": [{"_": "19983"}],
+        "v35": [{"_": "0001-3714"}],
+        "v49": [
+            {"c": "RM110", "l": "en", "t": "Soil and Environmental Microbiology"},
+            {"c": "RM090", "l": "en", "t": "Medical Microbiology"},
+            {"c": "RM060", "l": "en", "t": "Micology"},
+            {"c": "RM020", "l": "en", "t": "Industrial Microbiology"},
+            {"c": "RM080", "l": "en", "t": "Virology"},
+            {"c": "RM120", "l": "en", "t": "Food Microbiology"},
+            {"c": "RM030", "l": "en", "t": "Veterinarian Microbiology"},
+            {"c": "RM100", "l": "en", "t": "Errata"},
+        ],
+        "v48": [
+            {"h": ["Sumário"], "l": "pt"},
+            {"h": ["Table of Contents"], "l": "en"},
+            {"h": ["Sumario"], "l": "es"},
+        ],
+    }
+]
+
+SAMPLE_ISSUES_KERNEL = [
+    {
+        "created": "1998-09-01T00:00:00.000000Z",
+        "updated": "1998-09-01T00:00:00.000000Z",
+        "items": [],
+        "metadata": {
+            "publication_year": [["1998-09-01T00:00:00.000000Z", "1998"]],
+            "publication_month": [["1998-09-01T00:00:00.000000Z", "9"]],
+            "volume": [["1998-09-01T00:00:00.000000Z", "29"]],
+            "number": [["1998-09-01T00:00:00.000000Z", "3"]],
+            "publication_season": [["1998-09-01T00:00:00.000000Z", [9]]],
+        },
+        "_id": "0001-3714-1998-v29-n3",
+        "id": "0001-3714-1998-v29-n3",
+    }
+]
 COUNT_SAMPLES_FILES = 9

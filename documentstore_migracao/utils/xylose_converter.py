@@ -1,9 +1,14 @@
 import logging
 from typing import List
 from datetime import datetime
-from xylose.scielodocument import Journal
+from xylose.scielodocument import Journal, Issue
 
 logger = logging.getLogger(__name__)
+
+
+def date_to_datetime(date: str) -> datetime:
+    """Transforma datas no formato ISO em objetos datetime"""
+    return datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 def parse_date(date: str) -> str:
@@ -144,5 +149,69 @@ def journal_to_kernel(journal):
 
     if _contact:
         _metadata["contact"] = set_metadata(_creation_date, _contact)
+
+    return _bundle
+
+
+def get_journal_issn_in_issue(issue) -> str:
+    """Retorna o ISSN ID de um periódico na
+    perspectiva da issue"""
+    return issue.data.get("issue").get("v35")[0]["_"]
+
+
+def issue_to_kernel(issue):
+    """Transforma um objeto Issue (xylose) para o formato
+    de dados equivalente ao persistido pelo Kernel em um banco
+    mongodb"""
+
+    _id = [get_journal_issn_in_issue(issue)]
+    _creation_date = parse_date(issue.publication_date)
+    _metadata = {}
+    _bundle = {
+        "created": _creation_date,
+        "updated": _creation_date,
+        "items": [],
+        "metadata": _metadata,
+    }
+
+    _year = str(date_to_datetime(_creation_date).year)
+    _month = str(date_to_datetime(_creation_date).month)
+    _metadata["publication_year"] = set_metadata(_creation_date, _year)
+    _metadata["publication_month"] = set_metadata(_creation_date, _month)
+    _id.append(_year)
+
+    if issue.volume:
+        _metadata["volume"] = set_metadata(_creation_date, issue.volume)
+        _id.append("v%s" % issue.volume)
+
+    if issue.number:
+        _metadata["number"] = set_metadata(_creation_date, issue.number)
+        _id.append("n%s" % issue.number)
+
+    if issue.type is "supplement":
+        _supplement = "0"
+
+        if issue.supplement_volume:
+            _supplement = issue.supplement_volume
+        elif issue.supplement_number:
+            _supplement = issue.supplement_number
+
+        _metadata["supplement"] = set_metadata(_creation_date, _supplement)
+        _id.append("s%s" % _supplement)
+
+    if issue.titles:
+        _titles = [
+            {"language": lang, "value": value} for lang, value in issue.titles.items()
+        ]
+        _metadata["titles"] = set_metadata(_creation_date, _titles)
+
+    if issue.start_month and issue.end_month:
+        _publication_season = [int(issue.start_month), int(issue.end_month)]
+        _metadata["publication_season"] = set_metadata(
+            _creation_date, sorted(set(_publication_season))
+        )
+
+    _bundle["_id"] = "-".join(_id)
+    _bundle["id"] = "-".join(_id)
 
     return _bundle

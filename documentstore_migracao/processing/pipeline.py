@@ -28,6 +28,22 @@ class ManifestDomainAdapter:
         return self._manifest
 
 
+def filter_issues(issues: list) -> list:
+    """Filtra as issues em formato xylose sempre removendo
+    os press releases e possibilitando a aplicação do filtro
+    para as issues do tipo ahead of print"""
+
+    filters = [
+        lambda issue: not issue.type == "pressrelease",
+        lambda issue: not issue.type == "ahead",
+    ]
+
+    for f in filters:
+        issues = list(filter(f, issues))
+
+    return issues
+
+
 def import_journals(json_file: str, session: Session):
     """Fachada com passo a passo de processamento e carga de periódicos
     em formato JSON para a base Kernel"""
@@ -50,3 +66,28 @@ def import_journals(json_file: str, session: Session):
                 logger.info(str(exc))
     except (FileNotFoundError, ValueError) as exc:
         logger.debug(str(exc))
+
+
+def import_issues(json_file: str, session: Session):
+    """Fachada com passo a passo de processamento e carga de fascículo
+    em formato JSON para a base Kernel"""
+
+    issues_as_json = reading.read_json_file(json_file)
+    issues_as_xylose = conversion.conversion_issues_to_xylose(issues_as_json)
+    issues_as_xylose = filter_issues(issues_as_xylose)
+    issues_as_kernel = conversion.conversion_issues_to_kernel(issues_as_xylose)
+
+    for issue in issues_as_kernel:
+        manifest = ManifestDomainAdapter(manifest=issue)
+
+        try:
+            session.documents_bundles.add(manifest)
+            session.changes.add(
+                {
+                    "timestamp": utcnow(),
+                    "entity": "DocumentsBundle",
+                    "id": manifest.id(),
+                }
+            )
+        except AlreadyExists as exc:
+            logger.info(str(exc))
