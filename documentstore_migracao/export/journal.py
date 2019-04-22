@@ -27,7 +27,7 @@ def ext_journal(issn):
     if journal:
         return Journal(journal[0])
     else:
-        raise Exception(
+        raise ValueError(
             "Journal nao encontrado: %s: %s" % (config.get("SCIELO_COLLECTION"), issn)
         )
 
