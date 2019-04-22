@@ -62,7 +62,7 @@ def inserting_document_store(session_db, storage) -> None:
 
         try:
             import_document_by_database(
-                os.path.join(config.get("DOWNLOAD_PATH"), folder), session_db, storage
+               os.path.join(config.get("DOWNLOAD_PATH"), folder), session_db, storage
             )
 
         except Exception as ex:
