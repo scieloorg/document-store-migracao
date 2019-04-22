@@ -48,7 +48,9 @@ def article_ALL_html_generator():
     for file_xml in list_files_xmls:
 
         try:
-            article_html_generator(os.path.join(path, file_xml))
+            article_html_generator(
+                os.path.join(config.get("CONSTRUCTOR_PATH"), file_xml)
+            )
 
         except Exception as ex:
             logger.error(file_xml)
