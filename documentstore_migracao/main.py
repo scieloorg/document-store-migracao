@@ -4,7 +4,7 @@ import argparse
 import sys
 import logging
 
-from documentstore import adapters
+from documentstore import adapters as ds_adapters
 from documentstore_migracao.processing import (
     extrated,
     reading,
@@ -14,7 +14,9 @@ from documentstore_migracao.processing import (
     generation,
     pipeline,
     constructor,
+    inserting,
 )
+from documentstore_migracao.object_store import minio, adapters as ob_adapters
 from documentstore_migracao.utils import extract_isis
 
 logger = logging.getLogger(__name__)
@@ -230,6 +232,65 @@ def migrate_isis(sargs):
         parser.print_help()
 
 
+def import_documents(sargs):
+    parser = argparse.ArgumentParser(
+        description="Document Store (Kernel) database migration tool"
+    )
+    subparsers = parser.add_subparsers(title="Commands", metavar="", dest="command")
+
+    import_parser = subparsers.add_parser(
+        "import", help="Process XML files then import into Kernel database"
+    )
+
+    # MINION OPTION
+    import_parser.add_argument(
+        "--minio_host",
+        required=True,
+        help="""Host to connect to Min.io ObjectStorage, e.g: "play.min.io:9000" """,
+    )
+    import_parser.add_argument(
+        "--minio_access_key", required=True, help="Access key to Min.io, e.g: minion"
+    )
+    import_parser.add_argument(
+        "--minio_secret_key", required=True, help="Secure key to Min.io, e.g: minion123"
+    )
+    import_parser.add_argument(
+        "--minio_is_secure",
+        default=False,
+        help="if connection wich to Min.io is secure, default False",
+        action="store_true",
+    )
+
+    # DOCUMENT_STORE OPTION
+    import_parser.add_argument(
+        "--uri",
+        required=True,
+        help="""URI to connect at MongoDB where the import
+        will be done, e.g: "mongodb://user:password@mongodb-host/?authSource=admin" """,
+    )
+
+    import_parser.add_argument(
+        "--db", required=True, help="Database name to import registers"
+    )
+
+    args = parser.parse_args(sargs)
+    if args.command == "import":
+        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
+        DB_Session = ds_adapters.Session.partial(mongo)
+
+        storage = minio.MinioStorage(
+            minio_host=args.minio_host,
+            minio_access_key=args.minio_access_key,
+            minio_secret_key=args.minio_secret_key,
+            minio_secure=args.minio_is_secure,
+        )
+
+        inserting.inserting_document_store(session_db=DB_Session(), storage=storage)
+
+    else:
+        parser.print_help()
+
+
 def main():
     """ method main to script setup.py """
     sys.exit(process(sys.argv[1:]))
@@ -237,6 +298,10 @@ def main():
 
 def main_migrate_isis():
     sys.exit(migrate_isis(sys.argv[1:]))
+
+
+def main_import_documents():
+    sys.exit(import_documents(sys.argv[1:]))
 
 
 if __name__ == "__main__":

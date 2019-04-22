@@ -58,8 +58,13 @@ def create_path_by_file(path, file_xml_path):
 
 
 def xml_files_list(path):
+    files = list_files(path)
+    return list(filter(lambda f: f.endswith(".xml"), files))
+
+
+def list_files(path):
     if path and os.path.isdir(path):
-        return [f for f in os.listdir(path) if f.endswith(".xml")]
+        return [f for f in os.listdir(path)]
     return []
 
 

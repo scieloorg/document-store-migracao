@@ -112,7 +112,7 @@ def get_languages(obj_xml):
 
 
 def get_document_publication_date_for_migration(obj_xml):
-    
+
     def format(item):
         if item:
             return item.zfill(2)
@@ -133,3 +133,23 @@ def get_document_publication_date_for_migration(obj_xml):
             items = [format(pubdate.findtext(elem_name))
                      for elem_name in ['year', 'month', 'day']]
             return '-'.join([item for item in items if item])
+
+
+def loadToXML(file):
+    """Parses `file` to produce an etree instance.
+
+    The XML can be retrieved given its filesystem path,
+    an URL or a file-object.
+    """
+    parser = etree.XMLParser(remove_blank_text=True, no_network=True)
+    xml = etree.parse(file, parser)
+    return xml
+
+
+def get_scielo_id(obj_xml):
+    """The scielo id of the main document.
+    """
+    scielo = obj_xml.xpath('//article-id[@pub-id-type="scielo-id"]')
+    if scielo:
+        return scielo[0].text
+

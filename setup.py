@@ -19,6 +19,7 @@ requires = [
     "lxml==4.3.1",
     "packtools",
     "paginate",
+    "minio",
 ]
 
 tests_require = [
@@ -62,6 +63,7 @@ setuptools.setup(
         [console_scripts]
             documentstore_migracao=documentstore_migracao.main:main
             migrate_isis=documentstore_migracao.main:main_migrate_isis
+            import_documents=documentstore_migracao.main:main_import_documents
         [paste.app_factory]
             main=documentstore_migracao.webserver:main
     """,
