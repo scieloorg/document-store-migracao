@@ -109,3 +109,27 @@ def get_languages(obj_xml):
     return obj_xml.xpath(
         '/article/@xml:lang | //sub-article[@article-type="translation"]/@xml:lang'
     )
+
+
+def get_document_publication_date_for_migration(obj_xml):
+    
+    def format(item):
+        if item:
+            return item.zfill(2)
+
+    pubdate_xpaths = (
+        'pub-date[@pub-type="epub"]',
+        'pub-date[@date-type="pub"]',
+        'pub-date',
+    )
+
+    article_meta = obj_xml.find('.//article-meta')
+    if article_meta is None:
+        raise ValueError('XML não possui article-meta')
+
+    for xpath in pubdate_xpaths:
+        pubdate = article_meta.find(xpath)
+        if pubdate is not None:
+            items = [format(pubdate.findtext(elem_name))
+                     for elem_name in ['year', 'month', 'day']]
+            return '-'.join([item for item in items if item])
