@@ -10,6 +10,19 @@ from documentstore_migracao.utils import files
 logger = logging.getLogger(__name__)
 
 
+def parse_date(_date):
+
+    def format(value):
+        if value and value.isdigit():
+            return value.zfill(2)
+        return value or ''
+
+    if _date is not None:
+        return tuple([format(_date.findtext(item) or '')
+                      for item in ['year', 'month', 'day']])
+    return '', '', ''
+
+
 def parse_value(value):
     value = value.lower()
     if value.isdigit():
@@ -50,6 +63,10 @@ class SPS_Package:
         self.prefix_asset_name = prefix_asset_name
 
     @property
+    def article_meta(self):
+        return self.xmltree.find('.//article-meta')
+
+    @property
     def xmltree(self):
         return self._xmltree
 
@@ -74,8 +91,37 @@ class SPS_Package:
             './/journal-id[@journal-id-type="publisher-id"]')
 
     @property
+    def journal_meta(self):
+        data = []
+        issns = [
+            self.xmltree.findtext('.//issn[@pub-type="epub"]'),
+            self.xmltree.findtext('.//issn[@pub-type="ppub"]'),
+            self.xmltree.findtext('.//issn'),
+        ]
+        for issn_type, issn in zip(['eissn', 'pissn', 'issn'], issns):
+            if issn:
+                data.append((issn_type, issn))
+        if self.acron:
+            data.append(('acron', self.acron))
+        return data
+
+    @property
+    def document_bundle_pub_year(self):
+        if self.article_meta is not None:
+            xpaths = (
+                'pub-date[@pub-type="collection"]',
+                'pub-date[@date-type="collection"]',
+                'pub-date[@pub-type="epub-pub"]',
+                'pub-date[@pub-type="epub"]',
+            )
+            for xpath in xpaths:
+                pubdate = self.article_meta.find(xpath)
+                if pubdate is not None and pubdate.findtext('year'):
+                    return pubdate.findtext('year')
+
+    @property
     def parse_article_meta(self):
-        elements = ['volume', 'issue', 'fpage', 'lpage', 'elocation',
+        elements = ['volume', 'issue', 'fpage', 'lpage', 'elocation-id',
                     'pub-date', 'article-id']
         items = []
         for elem_name in elements:
@@ -91,9 +137,9 @@ class SPS_Package:
                     if node.tag == 'issue':
                         content = parse_issue(content)
                     elif node.tag == 'pub-date':
-                        content = node.findtext('year')
+                        content = self.document_bundle_pub_year
                         elem_name = 'year'
-                    if content.isdigit() and int(content) == 0:
+                    if content and content.isdigit() and int(content) == 0:
                         content = ''
                     if content:
                         items.append((elem_name, content))
@@ -103,7 +149,7 @@ class SPS_Package:
     def package_name(self):
         data = dict(self.parse_article_meta)
         data_labels = data.keys()
-        labels = ['volume', 'issue', 'fpage', 'lpage', 'elocation']
+        labels = ['volume', 'issue', 'fpage', 'lpage', 'elocation-id']
         if 'volume' not in data_labels and 'issue' not in data_labels:
             if 'doi' in data_labels:
                 data.update({'type': 'ahead'})
@@ -116,7 +162,7 @@ class SPS_Package:
                 labels.append('year')
                 labels.append('other')
         elif 'fpage' not in data_labels and 'lpage' not in data_labels and \
-                'elocation' not in data_labels and 'doi' not in data_labels:
+                'elocation-id' not in data_labels and 'doi' not in data_labels:
             labels.append('other')
         items = [self.issn, self.acron]
         items += [data[k] for k in labels if k in data_labels]
@@ -158,3 +204,138 @@ class SPS_Package:
                 node.set(attr_name, "%s%s" % (new_fname, ext))
                 replacements.append((old_path, new_fname))
         return replacements
+
+    @property
+    def documents_bundle_id(self):
+        items = []
+        data = dict(self.journal_meta)
+        for label in ['eissn', 'pissn', 'issn']:
+            if data.get(label):
+                items = [data.get(label)]
+                break
+        items.append(data.get('acron'))
+
+        data = dict(self.parse_article_meta)
+        if not data.get('volume') and not data.get('issue'):
+            items.append('aop')
+        else:
+            labels = ('year', 'volume', 'issue')
+            items.extend(
+                [data[k] for k in labels if data.get(k)])
+        return '-'.join(items)
+
+    @property
+    def is_only_online_publication(self):
+        fpage = self.article_meta.findtext('fpage')
+        if fpage and fpage.isdigit():
+            fpage = int(fpage)
+        if fpage:
+            return False
+
+        lpage = self.article_meta.findtext('lpage')
+        if lpage and lpage.isdigit():
+            lpage = int(lpage)
+        if lpage:
+            return False
+
+        volume = self.article_meta.findtext('volume')
+        issue = self.article_meta.findtext('issue')
+        if volume or issue:
+            return bool(self.article_meta.findtext('elocation-id'))
+
+        return True
+
+    @property
+    def order_meta(self):
+        def format(value):
+            if value and value.isdigit():
+                return value.zfill(5)
+            return value or ''
+
+        data = dict(self.parse_article_meta)
+        return (
+                ('other', format(data.get('other'))),
+                ('fpage', format(data.get('fpage'))),
+                ('lpage', format(data.get('lpage'))),
+                ('documents_bundle_pubdate', self.documents_bundle_pubdate),
+                ('document_pubdate', self.document_pubdate),
+                ('elocation-id', data.get('elocation-id', '')),
+            )
+
+    @property
+    def order(self):
+        return tuple(item[1] for item in self.order_meta)
+
+    def match_pubdate(self, pubdate_xpaths):
+        """
+        Retorna o primeiro match da lista de pubdate_xpaths
+        """
+        for xpath in pubdate_xpaths:
+            pubdate = self.article_meta.find(xpath)
+            if pubdate is not None:
+                return pubdate
+
+    @property
+    def document_pubdate(self):
+        xpaths = ('pub-date[@pub-type="epub"]',
+                  'pub-date[@date-type="pub"]',
+                  'pub-date')
+        return parse_date(self.match_pubdate(xpaths))
+
+    @property
+    def documents_bundle_pubdate(self):
+        xpaths = ('pub-date[@pub-type="epub-ppub"]',
+                  'pub-date[@pub-type="collection"]',
+                  'pub-date[@date-type="collection"]',
+                  'pub-date')
+        return parse_date(self.match_pubdate(xpaths))
+
+
+def sort_documents(documents):
+    """
+    documents é uma lista de tuplas (localizacao no kernel, XML)
+    """
+    documents_sorter = DocumentsSorter()
+    documents_sorter.insert_documents(documents)
+    return documents_sorter.documents_bundles_with_sorted_documents
+
+
+class DocumentsSorter:
+
+    def __init__(self):
+        self._documents_bundles = {}
+        self._reverse = {}
+
+    @property
+    def reverse(self):
+        return self._reverse
+
+    @property
+    def documents_bundles(self):
+        return self._documents_bundles
+
+    def insert_document(self, doc_location, doc_xml):
+        pkg = SPS_Package(doc_xml, 'none')
+        if pkg.documents_bundle_id not in self.documents_bundles.keys():
+            self._reverse[pkg.documents_bundle_id] = \
+                pkg.is_only_online_publication
+            self._documents_bundles[pkg.documents_bundle_id] = {}
+        self._documents_bundles[pkg.documents_bundle_id][pkg.order] = \
+            doc_location
+
+    def insert_documents(self, documents):
+        """
+        documents é uma lista de tuplas (localizacao no kernel, XML)
+        """
+        for location, xml in documents:
+            self.insert_document(location, xml)
+
+    @property
+    def documents_bundles_with_sorted_documents(self):
+        ret = {}
+        for dbid, docs_bundle in self.documents_bundles.items():
+            ret[dbid] = [
+                docs_bundle[k]
+                for k in sorted(docs_bundle.keys(), reverse=self.reverse[dbid])
+            ]
+        return ret
