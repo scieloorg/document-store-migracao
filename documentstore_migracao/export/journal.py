@@ -24,7 +24,12 @@ def ext_journal(issn):
         "%s/journal" % config.get("AM_URL_API"),
         params={"collection": config.get("SCIELO_COLLECTION"), "issn": issn},
     ).json()
-    return Journal(journal[0])
+    if journal:
+        return Journal(journal[0])
+    else:
+        raise ValueError(
+            "Journal nao encontrado: %s: %s" % (config.get("SCIELO_COLLECTION"), issn)
+        )
 
 
 def get_all_journal():

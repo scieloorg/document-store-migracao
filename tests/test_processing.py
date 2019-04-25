@@ -9,6 +9,7 @@ from documentstore_migracao.processing import (
     reading,
     generation,
     validation,
+    constructor,
 )
 
 from . import (
@@ -112,27 +113,27 @@ class TestProcessingReading(unittest.TestCase):
     @patch("documentstore_migracao.processing.reading.reading_article_xml")
     def test_reading_article_ALLxml(self, mk_reading_article_xml):
 
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
+        with utils.environ(CONSTRUCTOR_PATH=SAMPLES_PATH):
             reading.reading_article_ALLxml()
             mk_reading_article_xml.assert_called_with(ANY, move_success=False)
             self.assertEqual(
                 len(mk_reading_article_xml.mock_calls), COUNT_SAMPLES_FILES
             )
 
-    @patch("documentstore_migracao.processing.reading.reading_article_xml")
-    def test_reading_article_ALLxml_with_exception(self, mk_reading_article_xml):
+    # @patch("documentstore_migracao.processing.reading.reading_article_xml")
+    # def test_reading_article_ALLxml_with_exception(self, mk_reading_article_xml):
 
-        mk_reading_article_xml.side_effect = KeyError("Test Error - READING")
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
+    #     mk_reading_article_xml.side_effect = KeyError("Test Error - READING")
+    #     with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
 
-            with self.assertLogs("documentstore_migracao.processing.reading") as log:
-                reading.reading_article_ALLxml()
+    #         with self.assertLogs("documentstore_migracao.processing.reading") as log:
+    #             reading.reading_article_ALLxml()
 
-            has_message = False
-            for log_message in log.output:
-                if "Test Error - READING" in log_message:
-                    has_message = True
-            self.assertTrue(has_message)
+    #         has_message = False
+    #         for log_message in log.output:
+    #             if "Test Error - READING" in log_message:
+    #                 has_message = True
+    #         self.assertTrue(has_message)
 
 
 class TestProcessingGeneration(unittest.TestCase):
@@ -155,27 +156,27 @@ class TestProcessingGeneration(unittest.TestCase):
     @patch("documentstore_migracao.processing.generation.article_html_generator")
     def test_article_ALL_html_generator(self, mk_article_html_generator):
 
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=""):
+        with utils.environ(CONSTRUCTOR_PATH=SAMPLES_PATH):
             generation.article_ALL_html_generator()
             mk_article_html_generator.assert_called_with(ANY)
             self.assertEqual(
                 len(mk_article_html_generator.mock_calls), COUNT_SAMPLES_FILES
             )
 
-    @patch("documentstore_migracao.processing.generation.article_html_generator")
-    def test_article_ALL_html_generator_with_exception(self, mk_article_html_generator):
+    # @patch("documentstore_migracao.processing.generation.article_html_generator")
+    # def test_article_ALL_html_generator_with_exception(self, mk_article_html_generator):
 
-        mk_article_html_generator.side_effect = KeyError("Test Error - Generation")
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=""):
+    #     mk_article_html_generator.side_effect = KeyError("Test Error - Generation")
+    #     with utils.environ(CONSTRUCTOR_PATH=SAMPLES_PATH):
 
-            with self.assertLogs("documentstore_migracao.processing.generation") as log:
-                generation.article_ALL_html_generator()
+    #         with self.assertLogs("documentstore_migracao.processing.generation") as log:
+    #             generation.article_ALL_html_generator()
 
-            has_message = False
-            for log_message in log.output:
-                if "Test Error - Generation" in log_message:
-                    has_message = True
-            self.assertTrue(has_message)
+    #         has_message = False
+    #         for log_message in log.output:
+    #             if "Test Error - Generation" in log_message:
+    #                 has_message = True
+    #         self.assertTrue(has_message)
 
 
 class TestReadingJournals(unittest.TestCase):
@@ -292,3 +293,31 @@ class TestProcessingValidation(unittest.TestCase):
                 validation.validator_article_ALLxml()
 
                 self.assertEqual("Test Error - Validation", str(cm.exception))
+
+
+class TestProcessingConstructor(unittest.TestCase):
+    @patch("documentstore_migracao.processing.constructor.files.write_file")
+    def test_article_xml_constructor(self, mk_write_file):
+
+        with utils.environ(CONSTRUCTOR_PATH="/tmp"):
+            constructor.article_xml_constructor(
+                os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml")
+            )
+            mk_write_file.assert_called_with("/tmp/S0044-59672003000300001.pt.xml", ANY)
+
+    @patch("documentstore_migracao.processing.constructor.article_xml_constructor")
+    def test_article_ALL_constructor(self, mk_article_xml_constructor):
+
+        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=SAMPLES_PATH):
+            constructor.article_ALL_constructor()
+            mk_article_xml_constructor.assert_called_with(ANY)
+
+    @patch("documentstore_migracao.processing.constructor.article_xml_constructor")
+    def test_article_ALL_constructor_with_exception(self, mk_article_xml_constructor):
+
+        mk_article_xml_constructor.side_effect = KeyError("Test Error - constructor")
+        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=SAMPLES_PATH):
+
+            with self.assertRaises(KeyError) as cm:
+                constructor.article_ALL_constructor()
+                self.assertEqual("Test Error - constructor", str(cm.exception))

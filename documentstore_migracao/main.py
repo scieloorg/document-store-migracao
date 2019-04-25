@@ -13,6 +13,7 @@ from documentstore_migracao.processing import (
     packing,
     generation,
     pipeline,
+    constructor,
 )
 from documentstore_migracao.utils import extract_isis
 
@@ -73,6 +74,12 @@ def process(args):
         action="store_true",
         help="Gera os html de todos os arquivos XML convertidos",
     )
+    parser.add_argument(
+        "--constructionFiles",
+        "-CT",
+        action="store_true",
+        help="Altera os xmls ja convertidos ou validados",
+    )
 
     parser.add_argument(
         "--issn-journal", "-j", help="Processa somente o journal informado"
@@ -81,7 +88,9 @@ def process(args):
         "--convetFile", "-c", help="Transformar somente o arquivos XML imformado"
     )
     parser.add_argument("--readFile", "-r", help="Ler somente o arquivos XML imformado")
-    parser.add_argument("--packFile", "-p", help="Empacotar somente o documento XML imformado")
+    parser.add_argument(
+        "--packFile", "-p", help="Empacotar somente o documento XML imformado"
+    )
     parser.add_argument(
         "--valideFile", "-v", help="Valida somente o arquivos XML imformado"
     )
@@ -114,6 +123,9 @@ def process(args):
 
     elif args.generationFiles:
         generation.article_ALL_html_generator()
+
+    elif args.constructionFiles:
+        constructor.article_ALL_constructor()
 
     elif args.convetFile:
         conversion.conversion_article_xml(args.convetFile)

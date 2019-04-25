@@ -2,7 +2,8 @@ import os
 import unittest
 from unittest.mock import patch
 from lxml import etree
-from documentstore_migracao.utils import files, xml, request, dicts
+from uuid import UUID
+from documentstore_migracao.utils import files, xml, request, dicts, string
 
 from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
 
@@ -17,9 +18,7 @@ class TestUtilsFiles(unittest.TestCase):
         self.assertEqual(extension, ".xml")
 
     def test_xml_files_list(self):
-        self.assertEqual(
-            len(files.xml_files_list(SAMPLES_PATH)),
-            COUNT_SAMPLES_FILES)
+        self.assertEqual(len(files.xml_files_list(SAMPLES_PATH)), COUNT_SAMPLES_FILES)
 
     def test_read_file(self):
         data = files.read_file(
@@ -132,18 +131,18 @@ class TestUtilsXML(unittest.TestCase):
                 self.assertFalse(expected)
 
     def test_file2objXML(self):
-        file_path = os.path.join(SAMPLES_PATH, 'any.xml')
+        file_path = os.path.join(SAMPLES_PATH, "any.xml")
         expected_text = "<root><a><b>bar</b></a></root>"
         obj = xml.file2objXML(file_path)
         self.assertIn(expected_text, str(etree.tostring(obj)))
 
     def test_file2objXML_raise_OSError_for_filenotfound(self):
-        file_path = os.path.join(SAMPLES_PATH, 'none.xml')
+        file_path = os.path.join(SAMPLES_PATH, "none.xml")
         with self.assertRaises(OSError):
             xml.file2objXML(file_path)
 
     def test_file2objXML_raise_XMLSyntaxError_for_filenotfound(self):
-        file_path = os.path.join(SAMPLES_PATH, 'file.txt')
+        file_path = os.path.join(SAMPLES_PATH, "file.txt")
         with self.assertRaises(etree.XMLSyntaxError):
             xml.file2objXML(file_path)
 
@@ -172,3 +171,29 @@ class TestUtilsDicts(unittest.TestCase):
     def test_grouper(self):
         result = dicts.grouper(3, "abcdefg", "x")
         self.assertEqual(list(result)[0], ("a", "b", "c"))
+
+
+class TestUtilsStrings(unittest.TestCase):
+    def test_extract_filename_ext_by_path(self):
+
+        filename, extension = string.extract_filename_ext_by_path(
+            "xml/conversion/S0044-59672014000400003/S0044-59672014000400003.pt.xml"
+        )
+        self.assertEqual(filename, "S0044-59672014000400003")
+        self.assertEqual(extension, ".xml")
+
+    def test_uuid2str(self):
+        uuid = "585b0b68-aa1d-41ab-8f19-aaa37c516337"
+        self.assertEqual(string.uuid2str(UUID(uuid)), "FX6F3cbyYmmwvtGmMB7WCgr")
+
+    def test_str2uuid(self):
+        self.assertEqual(
+            string.str2uuid("FX6F3cbyYmmwvtGmMB7WCgr"),
+            UUID("585b0b68-aa1d-41ab-8f19-aaa37c516337"),
+        )
+
+    @patch("documentstore_migracao.utils.string.uuid4")
+    def test_generate_scielo_pid(self, mk_uuid4):
+        mk_uuid4.return_value = UUID("585b0b68-aa1d-41ab-8f19-aaa37c516337")
+
+        self.assertEqual(string.generate_scielo_pid(), "FX6F3cbyYmmwvtGmMB7WCgr")
