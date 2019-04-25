@@ -288,7 +288,9 @@ def import_documents(sargs):
     subparsers = parser.add_subparsers(title="Commands", metavar="", dest="command")
 
     import_parser = subparsers.add_parser(
-        "import", help="Process XML files then import into Kernel database"
+        "import",
+        help="Process XML files then import into Kernel database",
+        parents=[mongodb_parser(sargs)],
     )
 
     # MINION OPTION
@@ -308,18 +310,6 @@ def import_documents(sargs):
         default=False,
         help="if connection wich to Min.io is secure, default False",
         action="store_true",
-    )
-
-    # DOCUMENT_STORE OPTION
-    import_parser.add_argument(
-        "--uri",
-        required=True,
-        help="""URI to connect at MongoDB where the import
-        will be done, e.g: "mongodb://user:password@mongodb-host/?authSource=admin" """,
-    )
-
-    import_parser.add_argument(
-        "--db", required=True, help="Database name to import registers"
     )
 
     args = parser.parse_args(sargs)

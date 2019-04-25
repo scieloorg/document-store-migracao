@@ -58,7 +58,7 @@ def inserting_document_store(session_db, storage) -> None:
     logger.info("Iniciando Envio dos do xmls")
     list_folders = files.list_files(config.get("DOWNLOAD_PATH"))
 
-    for folder in list_folders:
+    for folder in list_folders[:10]:
 
         try:
             import_document_by_database(
