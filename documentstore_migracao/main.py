@@ -16,7 +16,7 @@ from documentstore_migracao.processing import (
     constructor,
     inserting,
 )
-from documentstore_migracao.object_store import minio, adapters as ob_adapters
+from documentstore_migracao.object_store import minio
 from documentstore_migracao.utils import extract_isis
 
 logger = logging.getLogger(__name__)
@@ -213,8 +213,8 @@ def migrate_isis(sargs):
         extract_isis.create_output_dir(args.output)
         extract_isis.run(args.mst_file_path, args.output)
     elif args.command == "import":
-        mongo = adapters.MongoDB(uri=args.uri, dbname=args.db)
-        Session = adapters.Session.partial(mongo)
+        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
+        Session = ds_adapters.Session.partial(mongo)
 
         if args.type == "journal":
             pipeline.import_journals(args.import_file, session=Session())
