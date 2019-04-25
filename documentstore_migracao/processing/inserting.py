@@ -48,9 +48,10 @@ def import_document_by_database(folder: str, session_db, storage) -> None:
         )
 
     if obj_xml:
-        documentstore_data = {"data": url_xml, "assets": assets}
+        data_manifest = manifest.get_document_bundle_manifest(obj_xml, url_xml, assets)
+
         print(scielo_id)
-        print(documentstore_data)
+        print(data_manifest)
 
 
 def inserting_document_store(session_db, storage) -> None:
@@ -58,11 +59,11 @@ def inserting_document_store(session_db, storage) -> None:
     logger.info("Iniciando Envio dos do xmls")
     list_folders = files.list_files(config.get("DOWNLOAD_PATH"))
 
-    for folder in list_folders[:10]:
+    for folder in list_folders:
 
         try:
             import_document_by_database(
-               os.path.join(config.get("DOWNLOAD_PATH"), folder), session_db, storage
+                os.path.join(config.get("DOWNLOAD_PATH"), folder), session_db, storage
             )
 
         except Exception as ex:
