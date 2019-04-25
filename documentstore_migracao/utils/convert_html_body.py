@@ -4,7 +4,7 @@ import html
 from lxml import etree
 from copy import deepcopy
 from documentstore_migracao.utils import xml as utils_xml
-from documentstore_migracao import config
+
 
 logger = logging.getLogger(__name__)
 

@@ -16,7 +16,7 @@ def build_xml(article_meta_children_xml, doi):
                 doi
             )
     return """
-        <article>
+        <article xmlns:xlink="http://www.w3.org/1999/xlink">
         <front>
         <journal-meta>
             <journal-id journal-id-type="publisher-id">acron</journal-id>
@@ -43,7 +43,7 @@ def build_xml(article_meta_children_xml, doi):
 def sps_package(article_meta_xml, doi='10.1590/S0074-02761962000200006'):
     xml = build_xml(article_meta_xml, doi)
     xmltree = etree.fromstring(xml)
-    return SPS_Package(xmltree)
+    return SPS_Package(xmltree, 'a01')
 
 
 class Test_sps_package(unittest.TestCase):
@@ -74,6 +74,90 @@ class Test_sps_package(unittest.TestCase):
 
     def test_parse_issue_spe_num(self):
         self.assertEqual(parse_issue('Especial 1'), 'spe01')
+
+
+class Test_SPS_Package(unittest.TestCase):
+
+    def setUp(self):
+        article_xml = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+                <inline-graphic xlink:href="a01tab01.gif"/>
+                <graphic xlink:href="a01f01.gif"/>
+                <ext-link xlink:href="a01tab02.gif"/>
+                <ext-link xlink:href="mailto:a01f02.gif"/>
+                <inline-supplementary-material xlink:href="a01tab03.gif"/>
+                <supplementary-material xlink:href="a01tab04.gif"/>
+                <media xlink:href="a01tab04.gif"/>
+            </root>
+            """
+        self.sps_package = SPS_Package(
+            etree.fromstring(article_xml), 'a01')
+
+    def test_elements_which_has_xlink_href(self):
+        items = list(self.sps_package.elements_which_has_xlink_href)
+        self.assertEqual(len(items), 7)
+        self.assertEqual(
+            [node.tag for node in items],
+            sorted(
+                ['inline-graphic', 'graphic', 'ext-link', 'ext-link',
+                 'inline-supplementary-material', 'supplementary-material',
+                 'media']))
+
+    def test_replace_assets(self):
+        expected = [
+            ('a01tab02.gif', 'a01-gtab02'),
+            ('a01f01.gif', 'a01-gf01'),
+            ('a01tab01.gif', 'a01-gtab01'),
+            ('a01tab03.gif', 'a01-gtab03'),
+            ('a01tab04.gif', 'a01-gtab04'),
+            ('a01tab04.gif', 'a01-gtab04'),
+        ]
+        items = self.sps_package.replace_assets_names()
+        self.assertEqual(len(items), 6)
+        for i, item in enumerate(items):
+            with self.subTest(i):
+                self.assertEqual(expected[i][0], item[0])
+                self.assertEqual(expected[i][1], item[1])
+
+
+class Test_SPS_Package_No_Metadata(unittest.TestCase):
+
+    def setUp(self):
+        article_xml = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+                <inline-graphic xlink:href="a01tab01.gif"/>
+                <graphic xlink:href="a01f01.gif"/>
+                <ext-link xlink:href="a01tab02.gif"/>
+                <ext-link xlink:href="mailto:a01f02.gif"/>
+                <inline-supplementary-material xlink:href="a01tab03.gif"/>
+                <supplementary-material xlink:href="a01tab04.gif"/>
+                <media xlink:href="a01tab04.gif"/>
+            </root>
+            """
+        self.sps_package = SPS_Package(
+            etree.fromstring(article_xml), 'a01')
+
+    def test_parse_article(self):
+        self.assertEqual(
+            self.sps_package.parse_article_meta,
+            []
+        )
+
+    def test_package_name(self):
+        self.assertEqual(
+            self.sps_package.package_name,
+            'a01'
+        )
+
+    def test_asset_package_name_f01(self):
+        self.assertEqual(
+            self.sps_package.asset_name('a01f01.jpg'),
+            'a01-gf01.jpg'
+        )
+
+    def test_asset_package_name_any_img(self):
+        self.assertEqual(
+            self.sps_package.asset_name('img.jpg'),
+            'a01-gimg.jpg'
+        )
 
 
 class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
@@ -109,13 +193,13 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
 
     def test_asset_package_name_f01(self):
         self.assertEqual(
-            self.sps_package.asset_package_name('a01.htm', 'a01f01.jpg'),
+            self.sps_package.asset_name('a01f01.jpg'),
             '1234-5678-acron-volume-05-fpage-lpage-gf01.jpg'
         )
 
     def test_asset_package_name_any_img(self):
         self.assertEqual(
-            self.sps_package.asset_package_name('a01.htm', 'img.jpg'),
+            self.sps_package.asset_name('img.jpg'),
             '1234-5678-acron-volume-05-fpage-lpage-gimg.jpg'
         )
 
@@ -139,7 +223,7 @@ class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
                 ('doi', 'S0074-02761962000200006'),
                 ('publisher-id', 'S0074-02761962000200006'),
                 ('other', '00006'),
-           ]
+            ]
         )
 
     def test_package_name_vol_fpage(self):

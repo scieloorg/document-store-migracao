@@ -1,0 +1,4173 @@
+<?xml version="1.0" ?>
+<!DOCTYPE article
+  PUBLIC '-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN'
+  'JATS-journalpublishing1.dtd'>
+<article article-type="research-article" dtd-version="1.1" specific-use="sps-1.8" xml:lang="pt" xmlns:xlink="http://www.w3.org/1999/xlink">
+	
+ 
+	<front>
+		
+ 
+		<journal-meta>
+			
+ 
+			<journal-id journal-id-type="publisher-id">abb</journal-id>
+			
+ 
+			<journal-title-group>
+				
+ 
+				<journal-title>Acta Botanica Brasilica</journal-title>
+				
+ 
+				<abbrev-journal-title abbrev-type="publisher">Acta Bot. Bras.</abbrev-journal-title>
+				
+ 
+			</journal-title-group>
+			
+ 
+			<issn pub-type="ppub">0102-3306</issn>
+			
+ 
+			<issn pub-type="epub">1677-941X</issn>
+			
+ 
+			<publisher>
+				
+ 
+				<publisher-name>Sociedade Botânica do Brasil</publisher-name>
+				
+ 
+				<publisher-loc>Belo Horizonte, BA, Brazil</publisher-loc>
+				
+ 
+			</publisher>
+			
+ 
+		</journal-meta>
+		
+ 
+		<article-meta>
+			
+ 
+			<article-id pub-id-type="publisher-id">S0102-33062011000100002</article-id>
+			
+ 
+			<article-id pub-id-type="doi">10.1590/S0102-33062011000100002</article-id>
+			
+ 
+			<article-categories>
+				
+ 
+				<subj-group subj-group-type="heading">
+					
+ 
+					<subject>Artigos</subject>
+					
+ 
+				</subj-group>
+				
+ 
+			</article-categories>
+			
+ 
+			<title-group>
+				
+ 
+				<article-title>Variações na morfoanatomia foliar de Aechmea lindenii (E. Morren) Baker var. lindenii (Bromeliaceae) sob distintas condições ambientais</article-title>
+				
+ 
+				<trans-title-group xml:lang="en">
+					
+ 
+					<trans-title>Leaf morphoanatomy variation in Aechmea lindenii (E. Morren) Baker var. lindenii (Bromeliaceae) under distinct environmental conditions</trans-title>
+					
+ 
+				</trans-title-group>
+				
+ 
+			</title-group>
+			
+ 
+			<contrib-group>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Voltolini</surname>
+						
+ 
+						<given-names>Caroline Heinig</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff01"/>
+					
+ 
+				</contrib>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Santos</surname>
+						
+ 
+						<given-names>Marisa</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff01"/>
+					
+ 
+				</contrib>
+				
+ 
+			</contrib-group>
+			
+ 
+			<aff id="aff01">
+				
+ 
+				<addr-line>
+					
+ 
+					<named-content content-type="city">Florianópolis</named-content>
+					
+ 
+					<named-content content-type="state">Santa Catarina</named-content>
+					
+ 
+				</addr-line>
+				
+ 
+				<institution content-type="orgname">Universidade Federal de Santa Catarina</institution>
+				
+ 
+				<institution content-type="orgdiv1">Departamento de Botânica </institution>
+				
+ 
+				<country country="BR">Brazil</country>
+				
+ 
+			</aff>
+			
+ 
+			<pub-date pub-type="epub-ppub">
+				
+ 
+				<month>03</month>
+				
+ 
+				<year>2011</year>
+				
+ 
+			</pub-date>
+			
+ 
+			<volume>25</volume>
+			
+ 
+			<issue>1</issue>
+			
+ 
+			<fpage>2</fpage>
+			
+ 
+			<lpage>10</lpage>
+			
+ 
+			<history>
+				
+ 
+				<date date-type="received">
+					
+ 
+					<day>14</day>
+					
+ 
+					<month>05</month>
+					
+ 
+					<year>2009</year>
+					
+ 
+				</date>
+				
+ 
+				<date date-type="accepted">
+					
+ 
+					<day>22</day>
+					
+ 
+					<month>09</month>
+					
+ 
+					<year>2010</year>
+					
+ 
+				</date>
+				
+ 
+			</history>
+			
+ 
+			<permissions>
+				
+ 
+				<license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/4.0/" xml:lang="en">
+					
+ 
+					<license-p>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</license-p>
+					
+ 
+				</license>
+				
+ 
+			</permissions>
+			
+ 
+			<abstract>
+				
+ 
+				<p>Aechmea lindenii (E. Morren) Baker var. lindenii (Bromeliaceae-Bromelioideae) ocorre em restingas e Floresta Pluvial de Encosta Atlântica em Santa Catarina e Nordeste do Rio Grande do Sul, BR. Pode ser encontrada total ou parcialmente exposta à irradiação solar e em distintas formas de vida - terrícola, rupícola e epifítica. O objetivo deste trabalho foi comparar morfoanatomicamente às características de folhas de A. lindenii var. lindenii em distintas condições ambientais. Foram coletadas, na Ilha de Santa Catarina (Florianópolis, SC), folhas de plantas terrícolas em restinga herbácea (alta irradiação solar), rupícolas de costões rochosos (alta irradiação solar), terrícolas e epifíticas de sub-bosques (baixa irradiação solar) de restinga arbórea e rupícolas de sub-bosque (baixa irradiação solar) de Floresta Pluvial de Encosta Atlântica. Foram mensurados comprimento, largura, área da lâmina e bainha foliar, densidade estomática, comprimento e largura das células-guarda, espessura total e das estruturas constituintes na lâmina foliar. As características anatômicas qualitativas são semelhantes nas distintas condições analisadas. A baixa irradiação solar determina maior expansão da área foliar, decorrente do alongamento da lâmina. Lâmina e bainha foliares têm maior largura sob alta irradiação. A densidade estomática foi maior em folhas de plantas sob alta irradiação solar. A espessura total da lâmina foliar foi menor em plantas terrícolas sob alta irradiação, porém não mostrou diferenças estatísticas significativas entre as outras condições.</p>
+				
+ 
+			</abstract>
+			
+ 
+			<trans-abstract xml:lang="en">
+				
+ 
+				<p>Aechmea lindenii (E. Morren) Baker var. lindenii (Bromeliaceae-Bromelioideae) occurs in restingas and hillside Atlantic rain forest in Santa Catarina and northeastern Rio Grande do Sul, Brazil. It is found totally or partially exposed to solar radiation and in different life forms - terricolous, rupicolous and epiphytes. The aim of this work was to compare morphoanatomical leaf characteristics of A. lindenii var. lindenii in distinct environmental conditions. On Santa Catarina Island (Florianópolis, SC), the following were collected: leaves of terricolous plants in the herbaceous restinga (high solar radiation), rupicolous from rocky coast (high solar radiation), terricolous and understory epiphytes (low solar radiation) in the arboreal restinga and understory rupicolous (low solar radiation) from hillside Atlantic rain forest. We measured length, breadth and area of leaf blade and sheath, stomatal density, length and breadth of guard-cells; width of leaf blade and structural components. Qualitative anatomical characteristics are similar in the distinct conditions analyzed. Low solar radiation determined greater expansion of the leaf area, due to stretching of the blade. Leaf blade and sheath have greater breadth under high solar radiation. Stomatal density was greater in leaves of plants in high solar radiation. Total blade leaf width was smaller in leaves of terricolous plants under high solar radiation, nevertheless, statistically significant differences were not found among other conditions.</p>
+				
+ 
+			</trans-abstract>
+			
+ 
+			<kwd-group kwd-group-type="author-generated" xml:lang="en">
+				
+ 
+				<kwd>Responses to solar radiation, restinga</kwd>
+				
+ 
+				<kwd>Atlantic rain forest</kwd>
+				
+ 
+				<kwd>life forms</kwd>
+				
+ 
+			</kwd-group>
+			
+ 
+			<kwd-group kwd-group-type="author-generated" xml:lang="pt">
+				
+ 
+				<kwd>Respostas à irradiação solar, restinga</kwd>
+				
+ 
+				<kwd>Floresta Pluvial Atlântica</kwd>
+				
+ 
+				<kwd>formas de vida</kwd>
+				
+ 
+			</kwd-group>
+			
+ 
+			<counts>
+				
+ 
+				<fig-count count="0"/>
+				
+ 
+				<table-count count="0"/>
+				
+ 
+				<equation-count count="0"/>
+				
+ 
+				<ref-count count="41"/>
+				
+ 
+				<page-count count="9"/>
+				
+ 
+			</counts>
+			
+ 
+		</article-meta>
+		
+ 
+	</front>
+	
+ 
+	<body>
+		<p>
+			<bold>ARTIGOS</bold>
+			 ARTICLES
+		</p>
+		 
+		<p>
+			<bold>
+				Variações na morfoanatomia foliar de 
+				<italic>Aechmea lindenii</italic>
+				 (E. Morren) Baker var. 
+				<italic>lindenii</italic>
+				 (Bromeliaceae) sob distintas condições ambientais
+				<xref>
+					<sup>1</sup>
+				</xref>
+			</bold>
+		</p>
+		 
+		<p>
+			<bold>
+				Leaf morphoanatomy variation in 
+				<italic>Aechmea lindenii</italic>
+				 (E. Morren) Baker var. 
+				<italic>lindenii</italic>
+				 (Bromeliaceae) under distinct environmental conditions
+			</bold>
+		</p>
+		 
+		<p>
+			<bold>
+				Caroline Heinig Voltolini
+				<xref>
+					<sup>2</sup>
+				</xref>
+				; Marisa Santos
+			</bold>
+		</p>
+		 
+		<p>Universidade Federal de Santa Catarina, Departamento de Botânica, Florianópolis, SC, Brasil</p>
+		 
+		<p>
+			<bold>RESUMO</bold>
+		</p>
+		 
+		<p>
+			<italic>Aechmea lindenii</italic>
+			 (E. Morren) Baker var. 
+			<italic>lindenii</italic>
+			 (Bromeliaceae-Bromelioideae) ocorre em restingas e Floresta Pluvial de Encosta Atlântica em Santa Catarina e Nordeste do Rio Grande do Sul, BR. Pode ser encontrada total ou parcialmente exposta à irradiação solar e em distintas formas de vida - terrícola, rupícola e epifítica. O objetivo deste trabalho foi comparar morfoanatomicamente às características de folhas de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 em distintas condições ambientais. Foram coletadas, na Ilha de Santa Catarina (Florianópolis, SC), folhas de plantas terrícolas em restinga herbácea (alta irradiação solar), rupícolas de costões rochosos (alta irradiação solar), terrícolas e epifíticas de sub-bosques (baixa irradiação solar) de restinga arbórea e rupícolas de sub-bosque (baixa irradiação solar) de Floresta Pluvial de Encosta Atlântica. Foram mensurados comprimento, largura, área da lâmina e bainha foliar, densidade estomática, comprimento e largura das células-guarda, espessura total e das estruturas constituintes na lâmina foliar. As características anatômicas qualitativas são semelhantes nas distintas condições analisadas. A baixa irradiação solar determina maior expansão da área foliar, decorrente do alongamento da lâmina. Lâmina e bainha foliares têm maior largura sob alta irradiação. A densidade estomática foi maior em folhas de plantas sob alta irradiação solar. A espessura total da lâmina foliar foi menor em plantas terrícolas sob alta irradiação, porém não mostrou diferenças estatísticas significativas entre as outras condições.
+		</p>
+		 
+		<p>
+			<bold>Palavras-chave:</bold>
+			 Respostas à irradiação solar, restinga, Floresta Pluvial Atlântica, formas de vida
+		</p>
+		 
+		<p>
+			<bold>ABSTRACT</bold>
+		</p>
+		 
+		<p>
+			<italic>Aechmea lindenii</italic>
+			 (E. Morren) Baker var. 
+			<italic>lindenii</italic>
+			 (Bromeliaceae-Bromelioideae) occurs in restingas and hillside Atlantic rain forest in Santa Catarina and northeastern Rio Grande do Sul, Brazil. It is found totally or partially exposed to solar radiation and in different life forms - terricolous, rupicolous and epiphytes. The aim of this work was to compare morphoanatomical leaf characteristics of 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 in distinct environmental conditions. On Santa Catarina Island (Florianópolis, SC), the following were collected: leaves of terricolous plants in the herbaceous restinga (high solar radiation), rupicolous from rocky coast (high solar radiation), terricolous and understory epiphytes (low solar radiation) in the arboreal restinga and understory rupicolous (low solar radiation) from hillside Atlantic rain forest. We measured length, breadth and area of leaf blade and sheath, stomatal density, length and breadth of guard-cells; width of leaf blade and structural components. Qualitative anatomical characteristics are similar in the distinct conditions analyzed. Low solar radiation determined greater expansion of the leaf area, due to stretching of the blade. Leaf blade and sheath have greater breadth under high solar radiation. Stomatal density was greater in leaves of plants in high solar radiation. Total blade leaf width was smaller in leaves of terricolous plants under high solar radiation, nevertheless, statistically significant differences were not found among other conditions.
+		</p>
+		 
+		<p>
+			<bold>Key words:</bold>
+			 Responses to solar radiation, restinga, Atlantic rain forest, life forms
+		</p>
+		 
+		<p>
+			<bold>Introdução</bold>
+		</p>
+		 
+		<p>
+			A família Bromeliaceae está amplamente distribuída nas Américas, especialmente nas regiões tropicais e subtropicais (Judd 
+			<italic>et al</italic>
+			. 1999, Benzing 2000). Tradicionalmente Bromeliaceae possui três subfamílias - Pitcairnioideae, Tillandsioideae e Bromelioideae (Reitz 1983), contudo estudos filogenéticos recentes indicam Pitcairnioideae como parafilética, sugerindo a inclusão de novas subfamílias (Givnish 
+			<italic>et al.</italic>
+			 2009). Em Bromelioideae, conforme referem Smith &amp; Downs (1979) e Reitz (1983), as plantas são geralmente epífitas, apresentando sistema radicular reduzido, o qual serve para fixação no substrato, porém a absorção de água e nutrientes é realizada por tricomas peltados irregulares, os quais recobrem a lâmina foliar; a margem foliar é inteira ou serrilhada; as folhas formam tanques basais onde há armazenamento de água. O gênero 
+			<italic>Aechmea</italic>
+			 Ruiz &amp; Pavon pertence à Bromelioideae, sendo constituído por cerca de 172 espécies (Smith &amp; Downs 1979, Reitz 1983). No Estado de Santa Catarina ocorrem 17 espécies de 
+			<italic>Aechmea</italic>
+			, entre elas 
+			<italic>A. lindenii</italic>
+			 (E. Morren) Baker, que possui duas variedades: 
+			<italic>makoyana</italic>
+			 e 
+			<italic>lindenii</italic>
+			 (Reitz 1983). O autor refere que 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			, é endêmica do litoral de Santa Catarina e do Nordeste do Rio Grande do Sul (Torres), ocorrendo desde restingas até florestas de encostas. O autor ainda menciona que esta variedade pode ocorrer como epifítica, rupícola e terrícola (Reitz 1983). Lenzi 
+			<italic>et al</italic>
+			. (2006) constataram variações morfológicas e reprodutivas entre 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 presente em ambientes de restinga herbácea (alta irradiação solar), sub-bosque de restinga arbórea (baixa irradiação solar).
+		</p>
+		 
+		<p>
+			Diversos fatores limitantes para o estabelecimento e desenvolvimento de espécies vegetais são observados na restinga, em ambientes de dunas costeiras ocorrem fatores de estresse como borrifos marinhos, soterramento por areia, inundações, seca, alta irradiação solar, altas temperaturas, exposição ao vento, salinidade e deficiência nutricional (Hesp 1991). Respostas adaptativas, expressas em estratégias morfoanatômicas e fisiológicas, permitem a sobrevivência das plantas sob distintas condições ambientais (Lambers 
+			<italic>et al.</italic>
+			 1998). Podem ocorrer aclimatações na estrutura de folhas maduras afetadas pelo nível de irradiação solar (quantidade e qualidade), ao qual estão expostas durante o desenvolvimento (Dickison 2000).
+		</p>
+		 
+		<p>
+			Atuais pesquisas envolvendo anatomia de outras espécies de 
+			<italic>Aechmea,</italic>
+			 em sua maioria abordam aspectos taxonômicos e alguns filogenéticos e ecológicos (Scarano 
+			<italic>et al.</italic>
+			 2002, Aoyama &amp; Sajo 2003, Proença &amp; Sajo 2004, Sousa 
+			<italic>et al</italic>
+			. 2005, Horres 
+			<italic>et al.</italic>
+			 2007).
+		</p>
+		 
+		<p>
+			Este estudo abordará a anatomia de folhas de 
+			<italic>Aechmea lindenii</italic>
+			 (E. Morren) Baker var. 
+			<italic>lindenii</italic>
+			, sob diferentes exposições à irradiação solar (alta, em restinga herbácea e baixa em restinga arbórea) e com distintas formas de vida - terrícola, rupícola e epifítica. A investigação pretende contribuir para o melhor entendimento da biologia e adaptações desta espécie relacionadas às diferentes condições de sobrevivência.
+		</p>
+		 
+		<p>
+			<bold>Material e métodos</bold>
+		</p>
+		 
+		<p>
+			Para o estudo foram utilizadas folhas totalmente expandidas de 
+			<italic>Aechmea lindenni</italic>
+			 (E. Morren) Baker var. 
+			<italic>lindenni</italic>
+			 de no mínimo 5 plantas adultas por condição analisada. Exemplares do táxon estudado nos diferentes pontos de coleta, após identificação, foram depositados no Herbário FLOR (UFSC, Florianópolis, SC) sob números: 36.272, 36.275, 36.276, 36.277 e 36.871.
+		</p>
+		 
+		<p>
+			As coletas do material foram realizadas na Ilha de Santa Catarina (Florianópolis, SC, Brasil), que está situada entre as latitudes 27°22&amp;#x27;45&amp;#x27;&amp;#x27; e 27°50&amp;#x27;10&amp;#x27;&amp;#x27; e longitude 48°21&amp;#x27;37&amp;#x27;&amp;#x27; e 48°34&amp;#x27;49&amp;#x27;&amp;#x27;(
+			<xref>Fig. 1-2</xref>
+			), possui um clima do tipo Cfa, de acordo com Köeppen, subtropical úmido, com temperatura média anual de 20°C (Atlas de Santa Catarina 1986). A precipitação total anual é de 1400 mm, sem déficit hídrico (há excedente anual de 400-600 mm) e a umidade relativa anual é de 80-85% (Atlas de Santa Catarina 1986).
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/abb/v25n1/02f01a03.jpg"/>
+		</p>
+		<p>
+			<inline-graphic xlink:href="/img/revistas/abb/v25n1/02f04a06.jpg"/>
+		</p>
+		 
+		<p>
+			Para cada condição analisada (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t01.jpg">Tab. 1</ext-link>
+			), foi mensurada a irradiância com quantômetro LI-COR Model LI-250 
+			<italic>light meter</italic>
+			 utilizando-se a metodologia conforme Scarano 
+			<italic>et al.</italic>
+			 (2002). A análise do teor de matéria orgânica foi realizado, em triplicata, no Laboratório Físico Químico e Biológico da Companhia Integrada de Desenvolvimento Agrícola de Santa Catarina- CIDASC. Solos com teor de matéria orgânica até 1,5% são classificados como nível baixo; de 1,6 a 3,0%, nível médio; e acima de 3,0%, nível alto (Guimarães 
+			<italic>et al.</italic>
+			 1980).
+		</p>
+		 
+		<p>
+			Para avaliar a área foliar média, de cada folha, foram delineados os contornos das lâminas foliares, em papel 75g/m
+			<sup>2</sup>
+			, com densidade constante (tamanho ofício padrão). Os moldes foram recortados e medidos em balança digital. A massa destes moldes foi relacionada à massa de área conhecida em cm
+			<sup>2</sup>
+			 do mesmo papel, para a determinação da área foliar em cm
+			<sup>2</sup>
+			. Foram medidas as dimensões da lâmina e bainha foliar: comprimento (C = eixo longitudinal, desde a base até o ápice) e largura (L = eixo transversal, de bordo a bordo, na região média).
+		</p>
+		 
+		<p>Os terços médios da lâmina e da bainha foliar, foram seccionados paradérmica, transversal e longitudinalmente, na porção central entre bordos. As amostras foram analisadas em microscópio Leica MPS 30 DMLS e as imagens foram capturadas com câmara digital Sony P92.</p>
+		 
+		<p>
+			Foram feitas secções à mão-livre, nas amostras, com auxílio de lâmina de barbear, para confecção de lâminas temporárias, com água, e semipermanentes, com gelatina-glicerinada (Kaiser 1880, 
+			<italic>apud</italic>
+			 Kraus &amp; Arduin 1997), estas foram utilizadas para a determinação da densidade estomática e dimensões das células-guarda. A contagem do número de estômatos por área, em regiões sulcadas da lâmina foliar, foi obtida projetando as imagens, com câmara clara acoplada ao microscópio óptico CarlZeiss Jena, sobre área delimitada conhecida. Imagens das células-guarda projetadas foram medidas para determinar as dimensões. Pequenas amostras foram fixadas em glutaraldeído 2,5%, em tampão fosfato de sódio 0,1M, em pH 7,2, por três horas. Após o material foi lavado, por três vezes em tampão fosfato de sódio e mantido, por três dias, em etilenodiamina 10% (Carlquist 1982). Após este período, o material foi lavado em água destilada e desidratado em série etílica gradual e conservado em etanol 70 oGL. Estas amostras fixadas e desidratadas foram infiltradas em historresina (hidroxietilmetacrilato, 
+			<italic>Jung&amp;#x27;s Historesin</italic>
+			 - marca Leica). Blocos de historresina, contendo o material, foram seccionados com 5 μm de espessura, em micrótomo de rotação Leica - RM 2125 RT. As secções foram distendidas sobre lâminas de vidro contendo água, em chapa aquecedora (40 oC). Após a secagem das lâminas, o material foi corado com azul de toluidina 0,25% aquoso (Ruzin 1999). Estas foram utilizadas para a determinação da espessura da lâmina foliar e estruturas constituintes através de imagens capturadas em microscópio óptico e as medidas realizadas com auxílio do programa computacional ANATI-QUANTI (Aguiar 
+			<italic>et al.</italic>
+			 2007).
+		</p>
+		 
+		<p>
+			Para todos os estudos quantitativos foram determinados o número mínimo amostral pela equação n=(t
+			<sup>2</sup>
+			.s
+			<sup>2</sup>
+			).d
+			<sup>-2</sup>
+			, onde &quot;t&quot; é dado pela tabela de Student (considerando n-1, para significância de 0,05), &quot;s&quot; é o desvio padrão e &quot;s&quot; é igual a E/100.média, onde E=10 para 10% de probabilidade, valor considerado satisfatório (Sokal &amp; Rohlf 1969). Foram avaliadas a normalidade dos dados com o teste Shapiro-wilk e a homogeneidade das variâncias com o teste Levene através dos programas computacionais BioEstat 5.0 (Ayres 
+			<italic>et al.</italic>
+			 2007) e Statistica 7.0 (Statistica 2004), respectivamente. Após foram aplicadas transformações, quando necessário, e os dados obtidos para os cinco tratamentos foram comparados por análise de variância ANOVA (one-way), seguido por teste Tukey (ao nível de significância de 5%), quando paramétricos ou por análise Kruskal-Wallis seguido de teste DUM, quando não-paramétricos, através dos programas computacionais Statistica 7.0. e BioEstat 5.0, respectivamente.
+		</p>
+		 
+		<p>
+			<bold>Resultados e discussão</bold>
+		</p>
+		 
+		<p>
+			<italic>Aechmea lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 possui aspecto rosetado decorrente da filotaxia espiralada e tem bainhas foliares imbricadas (
+			<xref>Fig. 1-6</xref>
+			), o que favorece o acúmulo de água. As folhas são perenes, têm forma lanceolada, sendo constituídas por lâmina, com espinhos marginais, e bainha. Os espinhos marginais são rígidos e recurvados sendo raros ou ausentes na bainha. Morfologicamente, a delimitação entre lâmina e bainha é caracterizada por tênue saliência. A face adaxial da bainha é levemente arroxeada. A filotaxia espiralada é característica da família Bromeliaceae (Benzing 1980). Algumas adaptações foliares em bromélias garantem suprimento de água e nutrientes em ambientes nos quais as raízes são prioritariamente fixadoras (epifíticas e rupícolas), em algumas espécies há presença de folhas estreitas e densamente cobertas por tricomas, os quais absorvem água e nutrientes quando a superfície está úmida enquanto que em outras espécies, bainhas amplas e imbricadas, formando um tanque onde acumulam água e detritos além dos tricomas absorventes (Benzing 
+			<italic>et al.</italic>
+			 1976; Benzing 2000).
+		</p>
+		 
+		<p>
+			As lâminas foliares de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 mostram-se mais alongadas sob baixa irradiação solar, em relação àquelas sob alta irradiação, determinando aumento na área, embora com menor largura (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t02.jpg">Tab. 2</ext-link>
+			). Maior expansão da superfície de folhas de sombra, em relação às de sol, é amplamente referido na literatura (Parkhurst &amp; Loucks 1972, Lambers 
+			<italic>et al.</italic>
+			1998, Cao 2000, Rôças 
+			<italic>et al.</italic>
+			 2001), o que favorece a captação de fótons (Lee 
+			<italic>et al.</italic>
+			 1996). A bainha foliar apresenta maior largura e maior área sob alta irradiação (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t02.jpg">Tab. 2</ext-link>
+			). Plantas sob alta irradiação solar possuem folhas mais imbricadas (
+			<xref>Fig.1-2</xref>
+			), em decorrência da maior largura da bainha, fator este que favorece a melhor formação do tanque de reserva de água. Lenzi 
+			<italic>et al</italic>
+			. (2006) relatam que folhas de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 em ambientes de restinga herbácea (totalmente expostas à irradiação solar) são mais curtas, largas e coriáceas em relação as de restinga arbórea (sombreadas), estas mais longas, estreitas e membranáceas.
+		</p>
+		 
+		<p>
+			As folhas de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 independente do grau de exposição à irradiação solar e da forma de vida apresentam característica anatômicas qualitativas semelhantes. Na lâmina foliar ocorrem tricomas peltados em ambas as faces (
+			<xref>Fig.7-8</xref>
+			) e estômatos restritos à face abaxial em regiões sulcadas (
+			<xref>Fig. 8-9</xref>
+			). A epiderme é uniestratificada e apresenta corpos silicosos (
+			<xref>Fig. 10</xref>
+			), paredes anticlinais sinuosas e membrana cuticular espessa. Em posição subepidermica, ocorre esclerênquima, hidrênquima, clorênquima, feixes vasculares e cordões de fibras extra-vasculares (
+			<xref>Fig. 11-15</xref>
+			). A disposição dos tecidos na bainha foliar de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 é semelhante à lâmina, com exceção da presença de aerênquima entre os feixes vasculares (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02f16a18.jpg">Fig. 16-18</ext-link>
+			), menor alongamento das células do hidrênquima e ocorrência rara de clorênquima. Diversos autores observaram em Bromeliaceae células epidérmicas com paredes sinuosas em vista frontal, epiderme uniestratificada, presença de corpos silicosos e membrana cuticular delgada (Krauss 1949, Tomlinson 1969, Aoyama &amp; Sajo 2003, Proença &amp; Sajo 2004, Sousa 
+			<italic>et al</italic>
+			. 2005, Proença &amp; Sajo 2007). Corpos silicosos têm sido relacionados à proteção da planta contra herbivoria por serem indigestos e a economia hídrica por otimizar a refração de luz reduzindo desta forma a transpiração (Krauss 1949, Yoshida 
+			<italic>et al.</italic>
+			 1962). A presença de clorênquima, hidrênquima e cordões de fibras extra-vasculares é referida para a lâmina foliar em outras espécies de 
+			<italic>Aechmea</italic>
+			 estudadas (Aoyama &amp; Sajo 2003, Proença &amp; Sajo 2004, Sousa 
+			<italic>et al.</italic>
+			 2005).
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/abb/v25n1/02f07a8.jpg"/>
+		</p>
+		<p>
+			<inline-graphic xlink:href="/img/revistas/abb/v25n1/02f09a10.jpg"/>
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/abb/v25n1/02f11a12.jpg"/>
+		</p>
+		<p>
+			<inline-graphic xlink:href="/img/revistas/abb/v25n1/02f13a14.jpg"/>
+		</p>
+		<p>
+			<inline-graphic xlink:href="/img/revistas/abb/v25n1/02f15.jpg"/>
+		</p>
+		 
+		<p>
+			As espessuras das estruturas e tecidos constituintes da lâmina foliar de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 (membrana cuticular, célula epidérmica, esclerênquima, hidrênquima e clorênquima) mostram variações peculiares, que somadas resultam em diferenças ou semelhanças na espessura total da lâmina. Lâminas foliares menos espessas foram observadas em plantas terrícolas sob alta irradiação solar (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). Entre as demais condições analisadas neste estudo, inclusive para plantas rupícolas sob alta irradiação solar comparadas àquelas sob baixa irradiação, não foram verificadas diferenças estatisticamente significativas (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). A espessura do hidrênquima, tecido de reserva hídrica, atinge maior dimensão nas folhas sob baixa irradiação solar (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). Resultados que contrariam o que usualmente é referido na literatura. Folhas de sol são mais espessas que folhas de sombra, destacando-se o maior espessamento cuticular e do parênquima paliçádico, bem como dos tecidos de reserva hídrica (Lamber 
+			<italic>et al</italic>
+			. 1998, Dickison 2000, Taiz &amp; Zeiger 2004, Mantuano 
+			<italic>et al.</italic>
+			 2006, Terashima 
+			<italic>et al</italic>
+			. 2006). Contudo em folhas de 
+			<italic>A. bromeliifolia</italic>
+			 (Rudge) Baker (Bromeliaceae), quando em ambientes secos, o hidrênquima é mais espesso em plantas sombreadas do que naquelas totalmente expostas à irradiação solar (Scarano 
+			<italic>et al.</italic>
+			 2002).
+		</p>
+		 
+		<p>
+			Com relação ao clorênquima, comparando a mesma forma de vida, plantas rupícolas apresentam maior espessura quando sob alta irradiação, correspondendo ao usualmente referido na literatura, entretanto nas terrícolas ocorre o contrário (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). Lee 
+			<italic>et al.</italic>
+			 (1989) ressaltam que folhas mais expostas à irradiação tendem a ampliar os tecidos clorofilados. Scarano 
+			<italic>et al</italic>
+			. (2002) comparando plantas de 
+			<italic>A. bromeliifolia</italic>
+			 desenvolvidas em ambiente seco e sujeito ao alagamento observaram que a espessura do clorênquima nas folhas reflete interações que não estão diretamente relacionadas com distintos níveis de exposição solar. Em ambiente seco, as folhas de plantas sombreadas apresentavam maior espessura do clorênquima em relação àquelas sob alta irradiação solar, enquanto que em ambientes sujeitos ao alagamento foi observado o oposto, folhas sob alta irradiação mostraram maior espessura deste tecido em relação às sombreadas (Scarano 
+			<italic>et al</italic>
+			. 2002)
+		</p>
+		 
+		<p>
+			A maior espessura da membrana cuticular e das células epidérmicas ocorre sob alta irradiação, em ambas as faces da folha, nas terrícolas (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). Em rupícolas, na face adaxial, apenas as células epidérmicas mostram-se mais espessas e, na face abaxial, apenas a membrana cuticular (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). Comparando as espessuras destas estruturas das epífitas em relação às demais condições (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			), constata-se maior similaridade às plantas sob baixa irradiação, embora, na face adaxial, a espessura da membrana cuticular não é distinta das rupícolas sob alta irradiação e a espessura das células epidérmicas distingue-se também das rupícolas sob baixa irradiação. Tais fatos apontam para alguma interação entre a forma de vida, epifítica ou rupícola, e a intensidade de irradiação. Diversos autores, entre eles Napp-Zinn (1984) e Fahn &amp; Cutler (1992), mencionam que folhas de sol mostram maior espessura de membrana cuticular. Mantuano 
+			<italic>et al.</italic>
+			 (2006) verificou células epidérmicas adaxiais mais espessas em folhas de plantas de 
+			<italic>Erythroxylum ovalifolium</italic>
+			 Peyr (dicotiledônea-Erythroxilaceae) mais expostas à irradiação solar quando comparadas às daquelas sombreadas. Tanto a espessura da membrana cuticular da face abaxial, devido à posição mais ereta da folha, quanto das células epidérmicas adaxiais, podem ter uma função de proteção em condições de alta irradiação solar. Em ambientes de alta irradiação solar estratégias estruturais como diminuição dos ângulos foliares e o auto-sombreamento auxiliam na fotoproteção minimizando os danos potenciais por fotoinibição (Pearcy 
+			<italic>et al.</italic>
+			 2005).
+		</p>
+		 
+		<p>
+			Com relação à espessura do esclerênquima em folhas de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			, há diferenças entre os tratamentos, em ambas faces, entretanto, é mais marcante a maior espessura deste tecido subepidérmico na face abaxial das rupícolas sob alta irradiação (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). Os tecidos subepidérmicos esclerenquimáticos, além do importante papel na sustentação das folhas (Krauss 1949), também podem contribuir para o bloqueio do excesso de irradiação, amenizando o excesso de luz e calor. Plantas rupícolas sob alta irradiação solar recebem ventos fortes diretos provenientes do mar, enquanto que as terrícolas sob alta irradiação são protegidas pelas dunas frontais, que servem como barreiras aos ventos. Nas plantas sob baixa irradiação, a força do vento é amenizada pela proteção da vegetação no entorno.
+		</p>
+		 
+		<p>
+			A densidade estomática é maior nas folhas mais expostas à irradiação (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). A densidade de tricomas reduz com a irradiação (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			), auxiliando na formação do microclima na região dos estômatos. As células-guarda expandem-se mais longitudinalmente nas folhas sob baixa irradiação, em relação àquelas sob alta irradiação, se considerada a mesma forma de vida (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/abb/v25n1/02t03.jpg">Tab. 3</ext-link>
+			). O comprimento das células-guarda em lâminas foliares de plantas epifíticas, sob baixa irradiação, só diferiu das rupícolas sob alta irradiação. As plantas epifíticas em muitas das características analisadas mostram um padrão intermediário entre características de plantas sob alta e baixa irradiação solar. De acordo com Abrans 
+			<italic>et al.</italic>
+			 (1992), a menor expansão das células-guarda pode minimizar a perda de água em situações de maior irradiação solar no ambiente. Em 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii,</italic>
+			 o comprimento da célula-guarda deve estar relacionado com as características intrínsecas das folhas de monocotiledôneas, uma vez que os estômatos orientam-se longitudinalmente e há tendência a maior desenvolvimento sentido base-ápiceDe modo geral a influência das distintas formas de vida não se mostrou tão evidente nas características morfoanatômicas de 
+			<italic>A. lindenii</italic>
+			 var. 
+			<italic>lindenii</italic>
+			 quanto o nível de irradiação solar.
+		</p>
+		 
+		<p>
+			<bold>Agradecimentos</bold>
+		</p>
+		 
+		<p>À Coordenação de Auxílio à Pesquisa de Ensino Superior (CAPES) pela bolsa de mestrado concedida à primeira autora. Ao Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq) pela bolsa de produtividade em pesquisa à segunda autora (proc. 481623/2007-8) e auxílio financeiro (proc. 303351/2008-0).</p>
+		 
+		<p>
+			<bold>Referências Bibliográficas</bold>
+		</p>
+		 
+		<p>
+			Abrans, M.C.; Kloeppel, B.D. &amp;amp; Kubiske, M.E. 1992. Ecophysiological and morphological responses to shade and drought in two contrasting ecotypes of 
+			<italic>Prunus setorina</italic>
+			. 
+			<bold>Tree Physiology 10</bold>
+			: 343-355. 
+		</p>
+		 
+		<p>
+			Aguiar, T.V.; Sant&amp;#x27;anna-Santos, B.F.; Azevedo, A.A. &amp;amp; Ferreira, R.S. 2007. ANATI QUANTI: Software de análises quantitativas para estudos em anatomia vegetal. 
+			<bold>Planta Daninha 25</bold>
+			: 649-659. 
+		</p>
+		 
+		<p>
+			Aoyama, E.M &amp;amp; Sajo, M.G. 2003. Estrutura foliar de 
+			<italic>Aechmea</italic>
+			 Ruiz &amp; Pav. subgênero 
+			<italic>Lamprococcus</italic>
+			 (Beer) Baker e espécies relacionadas (Bromeliaceae). 
+			<bold>Revista Brasileira de Botânica 26</bold>
+			: 461-473. 
+		</p>
+		 
+		<p>
+			<bold>Atlas de Santa Catarina</bold>
+			. 1986. Gabinete de Planejamento e Coordenação Geral. Subchefia de Estatística, Geografia e Informática. Rio de Janeiro, Aerofoto Cruzeiro. 
+		</p>
+		 
+		<p>
+			Ayres, M.; Ayres, Júnior M.; Ayres D.L. &amp;amp; Santos, A.S. 2007. 
+			<bold>BioEstat 5.0: Aplicações estatísticas nas áreas das ciências biológicas e médicas.</bold>
+			 Belém, Sociedade Civil Mamiraúa/CNPq. 
+		</p>
+		 
+		<p>
+			Benzing, D.H. 1980. 
+			<bold>The Biology of the Bromeliads</bold>
+			. Califórnia, Mad River Press. 
+		</p>
+		 
+		<p>
+			Benzing, D.H. 2000. 
+			<bold>Bromeliaceae: Profile of an Adaptative Radiation.</bold>
+			 USA, Cambridge University Press. 
+		</p>
+		 
+		<p>
+			Benzing, D.H.; Henderson, K.; Kessel, B. &amp;amp; Sulak, J. 1976. The absortive capacities of bromeliad trichomes. 
+			<bold>American Journal of Botany 63</bold>
+			: 1009-1014. 
+		</p>
+		 
+		<p>
+			Cao, K.F. 2000. Leaf anatomy and chlorophyll content of 12 woody species in contrasting light conditions in a Bornean heath forest. 
+			<bold>Canadian Journal of Botany 78</bold>
+			: 1245-1253. 
+		</p>
+		 
+		<p>
+			Carlquist, S. 1982. The use of ethylenediamine in softening hard plant structures for paraffin sectioning. 
+			<bold>Stain Technology 57</bold>
+			: 311-317. 
+		</p>
+		 
+		<p>
+			Dickison, W.C. 2000. 
+			<bold>Integrative Plant Anatomy.</bold>
+			 Califórnia, Academic Press. 
+		</p>
+		 
+		<p>
+			Fahn, A. &amp;amp; Cutler, D.F. 1992. 
+			<bold>Xerophytes.</bold>
+			 Berlin, Gebrüder Borntraeger. 
+		</p>
+		 
+		<p>
+			Givnish, T.J.; Millan K.C.; Berry, P.E. &amp;amp; Sytsma, K.J. 2007. Phylogeny, adaptive radiation, and historical biogeography of Bromeliaceae inferred from 
+			<italic>ndh</italic>
+			F sequence data. 
+			<bold>Aliso 23</bold>
+			: 3-26. 
+		</p>
+		 
+		<p>
+			Guimarães, P.T.G.; Ferreira, J.G.; Carvalho, J.G &amp;amp; Lopes, A.S. 1980. Adubação de pastagens. 
+			<bold>Informe Agropecuário 70</bold>
+			: 34-52. 
+		</p>
+		 
+		<p>
+			Hesp, A.P. 1991. Ecological processes and plant adaptions on coastal dunes. 
+			<bold>Journal of Arid Enviromments 21</bold>
+			: 165-191. 
+		</p>
+		 
+		<p>
+			Horres, R.; Schulte, K.; Weising, K. &amp;amp; Zizka, G. 2007. Systematics of Bromelioideae (Bromeliaceae) evidence from molecular and anatomical studies. 
+			<bold>Aliso 23</bold>
+			: 27-43. 
+		</p>
+		 
+		<p>
+			Judd, W.S.; Campbell, C.S.; Kellogg, E.A. &amp;amp; Stevens, P.F. 1999. 
+			<bold>Plant Systematics: a phylogenetic approach.</bold>
+			 USA, Sinauer Associates. 
+		</p>
+		 
+		<p>
+			Kraus, J.E &amp;amp; Arduin, M. 1997. 
+			<bold>Manual Básico de Métodos em Morfologia Vegetal.</bold>
+			 Seropédica, Editora Universidade Rural. 
+		</p>
+		 
+		<p>
+			Krauss, B.H. 1949. Anatomy of the vegetative organs of the pineapple, 
+			<italic>Ananas comosus</italic>
+			 (L) Merr. (continued) II. The leaf. 
+			<bold>Botanical Gazette 110</bold>
+			: 303-404. 
+		</p>
+		 
+		<p>
+			Lambers, H.; Stuart, F. &amp;amp; Pons, T.L. 1998. 
+			<bold>Plant Physiological Ecology</bold>
+			. New York, Springers-Verlag. 
+		</p>
+		 
+		<p>
+			Lee, D.W.; Baskaran, K. Mansor, M.; Mohamad, H. &amp;amp; Yap, S. K. 1996. Irradiance and spectral quality effect Asian tropical rain forest tree seedling development. 
+			<bold>Ecology 77</bold>
+			: 568-580. 
+		</p>
+		 
+		<p>
+			Lee, H.S.J.; Lüttge, U.; Medina, E.; Smith, J.A.C.; Cram, W.J.; Diaz, M.; Grifûths, H.; Popp, M.; Schäfer, C.; Stimmel, K-H. &amp;amp;, Thonke, B. 1989. Ecophysiology of xerophytic and halophytic vegetation of a coastal alluvial plain in northern Venezuela III - 
+			<italic>Bromelia humilis</italic>
+			 Jacq. a terrestrial CAM bromeliad. 
+			<bold>New Phytologist 111</bold>
+			: 253-271. 
+		</p>
+		 
+		<p>
+			Lenzi, M.; Matos J.M. &amp;amp; Orth, A.I. 2006. Variação morfológica e reprodutiva de 
+			<italic>Aechmea lindenii</italic>
+			 (E. Morren) Baker var. 
+			<italic>lindenii</italic>
+			 (Bromeliaceae). 
+			<bold>Acta Botanica Brasilica 20</bold>
+			: 487-500. 
+		</p>
+		 
+		<p>
+			Mantuano, D.G.; Barros, C.F. &amp;amp; Scarano, F.R. 2006. Leaf anatomy variation within and between three &amp;quot;restinga&amp;quot; populations of 
+			<italic>Erythroxylum ovalifolium</italic>
+			 Peyr. (Erythroxylaceae) in Southeast Brazil. 
+			<bold>Revista Brasileira de Botânica 29</bold>
+			: 209-215. 
+		</p>
+		 
+		<p>
+			Napp-Zinn, K. 1984. 
+			<bold>Handbuch der Pflanzenanatomie. VIII Anatomie des Blattes,</bold>
+			 2. Blattanatomie der Angiospermen, B. Experimentelle und ökologishe Anatomie des Angiospermenblattes. Berlin, Gbdr. Borntraeger. 
+		</p>
+		 
+		<p>
+			Parkhurst, D.F. &amp;amp; Loucks, O.L. 1972. Optimal leaf size in relation to environment. 
+			<bold>Journal of Ecology 60</bold>
+			: 505-537. 
+		</p>
+		 
+		<p>
+			Pearcy, R.W.; Muraoka, H. &amp;amp; Valladares, F. 2005. Crown architecture in sun and shade environments: assessing function and trade-offs with a three-dimensional simulation mode. 
+			<bold>New Phytologist 166</bold>
+			: 791-800. 
+		</p>
+		 
+		<p>
+			Proença, S.L. &amp;amp; Sajo, M.G. 2004. Estrutura foliar de espécies de 
+			<italic>Aechmea</italic>
+			 Ruiz &amp; Pav. (Bromeliaceae) do Estado de São Paulo, Brasil. 
+			<bold>Acta Botanica Brasilica 18</bold>
+			: 319-331. 
+		</p>
+		 
+		<p>
+			Proença, S.L. &amp;amp; Sajo, M.G. 2007. Anatomia foliar de bromélias ocorrentes em áreas de cerrado do Estado de São Paulo, SP. 
+			<bold>Acta Botanica Brasilica 21</bold>
+			: 657-673. 
+		</p>
+		 
+		<p>
+			Reitz, R. 1983. Bromeliáceas e a Malária-Bromélia Endêmica. In: 
+			<bold>Flora Ilustrada Catarinense</bold>
+			. Parte I. Fascículo Bromélia. 
+		</p>
+		 
+		<p>
+			Rôças, G.; Scarano, F.R. &amp;amp; Barros, C.F. 2001. Leaf anatomical variation in 
+			<italic>Alchornea triplinervia</italic>
+			 (Spreng) Müll. Arg. (Euphorbiaceae) under distinct light and soil water regimes. 
+			<bold>Botanical Journal of the Linnean Society 136</bold>
+			: 231-238. 
+		</p>
+		 
+		<p>
+			Ruzin, S.E. 1999. 
+			<bold>Plant Microtechnique and Microscopy</bold>
+			. New York, Oxford University Press. 
+		</p>
+		 
+		<p>
+			Scarano, F.R.; Duarte, H.M.; Rôças, G.; Barreto, S.M.B.; Amado, E.F.; Reinert, F.; Wendt, T.; Mantovani, A.; Lima H.R.P. &amp;amp; Barros, C.F. 2002. Acclimation or stress symptom? An integrated study of intraspecific variation in the clonal plant 
+			<italic>Aechmea bromeliifolia</italic>
+			, a widespread CAM tank-bromeliad. 
+			<bold>Botanical Journal of the Linnean Society 140</bold>
+			: 391-401. 
+		</p>
+		 
+		<p>
+			Smith, L.B. &amp;amp; Downs, R.J. 1979. Bromelioideae (Bromeliaceae). 
+			<bold>Flora Neotropica Monograph 14</bold>
+			: 1493-2142. 
+		</p>
+		 
+		<p>
+			Sokal, R.R. &amp;amp; Rohlf, F.J. 1969. 
+			<bold>Biometry</bold>
+			. San Francisco, Freeman and Company. 
+		</p>
+		 
+		<p>
+			Sousa, G.M.; Estelita, M.E.M. &amp;amp; Wanderley, M.G.L. 2005. Anatomia foliar de espécies brasileiras de 
+			<italic>Aechmea</italic>
+			 subg. 
+			<italic>Chevaliera</italic>
+			 (Gaudich. 
+			<italic>ex</italic>
+			 Beer) Baker, Bromelioideae-Bromelioideae. 
+			<bold>Revista Brasileira Botânica 28</bold>
+			: 603-613. 
+		</p>
+		 
+		<p>
+			<bold>Statistica</bold>
+			. 2004. StatSoft, Inc. (data analysis software system), version 7. 
+		</p>
+		 
+		<p>
+			Taiz, L. &amp;amp; Zeiger, E. 2004. 
+			<bold>Fisiologia Vegetal</bold>
+			. 3a ed. Porto Alegre, Artmed Editora. 
+		</p>
+		 
+		<p>
+			Terashima, I; Miyazawa, S-I &amp;amp; Handa, Y.T. 2006. Why are sun leaves thicker than shade leaves? Consideration based on analyses of CO
+			<sub>2</sub>
+			 diffusion in the leaf. 
+			<bold>Journal of Plant Research 114</bold>
+			: 93-105. 
+		</p>
+		 
+		<p>
+			Tomlinson, P.B. 1969. 
+			<bold>Anatomy of the monocotyledons: III Commmelinales-Zingiberales</bold>
+			. Oxford, Oxford University Press. 
+		</p>
+		 
+		<p>
+			Yoshida, S.; Ohnishi, Y. &amp;amp; Kitagishi, K. 1962. Histochemistry of silicon in rice plant. III. The presence of cuticle-silica double layer in the epidermal tissue. 
+			<bold>Soil Science And Plant Nutricion 8</bold>
+			: 1-5. 
+		</p>
+		 
+		<p>Recebido em 14/05/2009. </p>
+		<p> Aceito em 22/09/2010</p>
+		 
+		<p>
+			<xref>1</xref>
+			 Parte da dissertação de Mestrado da primeira Autora 
+		</p>
+		<p>
+			<xref>2</xref>
+			 Autora para correspondência: 
+			<ext-link ext-link-type="email" xlink:href="mailto:carolinevoltolini@gmail.com">carolinevoltolini@gmail.com</ext-link>
+		</p>
+	</body>
+	
+ 
+	<back>
+		
+ 
+		<ref-list>
+			
+ 
+			<ref id="B1">
+				
+ 
+				<mixed-citation>
+					Abrans, M.C.; Kloeppel, B.D. &amp; Kubiske, M.E. 1992. Ecophysiological and morphological responses to shade and drought in two contrasting ecotypes of 
+					<italic>Prunus setorina</italic>
+					. 
+					<bold>Tree Physiology 10</bold>
+					: 343-355.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Ecophysiological and morphological responses to shade and drought in two contrasting ecotypes of Prunus setorina</article-title>
+					
+ 
+					<source>Tree Physiology</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1992</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>343</fpage>
+					
+ 
+					<lpage>355</lpage>
+					
+ 
+					<volume>10</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Abrans</surname>
+							
+ 
+							<given-names>M.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Kloeppel</surname>
+							
+ 
+							<given-names>B.D.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Kubiske</surname>
+							
+ 
+							<given-names>M.E.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B2">
+				
+ 
+				<mixed-citation>
+					Aguiar, T.V.; Sant'anna-Santos, B.F.; Azevedo, A.A. &amp; Ferreira, R.S. 2007. ANATI QUANTI: Software de análises quantitativas para estudos em anatomia vegetal. 
+					<bold>Planta Daninha 25</bold>
+					: 649-659.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>ANATI QUANTI: Software de análises quantitativas para estudos em anatomia vegetal</article-title>
+					
+ 
+					<source>Planta Daninha</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2007</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>649</fpage>
+					
+ 
+					<lpage>659</lpage>
+					
+ 
+					<volume>25</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Aguiar</surname>
+							
+ 
+							<given-names>T.V.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sant'anna-Santos</surname>
+							
+ 
+							<given-names>B.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Azevedo</surname>
+							
+ 
+							<given-names>A.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Ferreira</surname>
+							
+ 
+							<given-names>R.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B3">
+				
+ 
+				<mixed-citation>
+					Aoyama, E.M &amp; Sajo, M.G. 2003. Estrutura foliar de 
+					<italic>Aechmea</italic>
+					 Ruiz &amp; Pav. subgênero 
+					<italic>Lamprococcus</italic>
+					 (Beer) Baker e espécies relacionadas (Bromeliaceae). 
+					<bold>Revista Brasileira de Botânica 26</bold>
+					: 461-473.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Estrutura foliar de Aechmea Ruiz &amp; Pav. subgênero Lamprococcus (Beer) Baker e espécies relacionadas (Bromeliaceae)</article-title>
+					
+ 
+					<source>Revista Brasileira de Botânica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2003</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>461</fpage>
+					
+ 
+					<lpage>473</lpage>
+					
+ 
+					<volume>26</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Aoyama</surname>
+							
+ 
+							<given-names>E.M</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sajo</surname>
+							
+ 
+							<given-names>M.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B4">
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Gabinete de Planejamento e Coordenação Geral: Subchefia de Estatística, Geografia e Informática</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1986</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B5">
+				
+ 
+				<mixed-citation>
+					Ayres, M.; Ayres, Júnior M.; Ayres D.L. &amp; Santos, A.S. 2007. 
+					<bold>BioEstat 5.0: Aplicações estatísticas nas áreas das ciências biológicas e médicas.</bold>
+					 Belém, Sociedade Civil Mamiraúa/CNPq.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>BioEstat 5.0: Aplicações estatísticas nas áreas das ciências biológicas e médicas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2007</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Ayres</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Ayres</surname>
+							
+ 
+							<given-names>Júnior M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Ayres</surname>
+							
+ 
+							<given-names>D.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Santos</surname>
+							
+ 
+							<given-names>A.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B6">
+				
+ 
+				<mixed-citation>
+					Benzing, D.H. 1980. 
+					<bold>The Biology of the Bromeliads</bold>
+					. Califórnia, Mad River Press.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>The Biology of the Bromeliads</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Benzing</surname>
+							
+ 
+							<given-names>D.H.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B7">
+				
+ 
+				<mixed-citation>
+					Benzing, D.H. 2000. 
+					<bold>Bromeliaceae: Profile of an Adaptative Radiation.</bold>
+					 USA, Cambridge University Press.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Bromeliaceae: Profile of an Adaptative Radiation</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2000</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Benzing</surname>
+							
+ 
+							<given-names>D.H.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B8">
+				
+ 
+				<mixed-citation>
+					Benzing, D.H.; Henderson, K.; Kessel, B. &amp; Sulak, J. 1976. The absortive capacities of bromeliad trichomes. 
+					<bold>American Journal of Botany 63</bold>
+					: 1009-1014.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>The absortive capacities of bromeliad trichomes</article-title>
+					
+ 
+					<source>American Journal of Botany</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1976</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1009</fpage>
+					
+ 
+					<lpage>1014</lpage>
+					
+ 
+					<volume>63</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Benzing</surname>
+							
+ 
+							<given-names>D.H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Henderson</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Kessel</surname>
+							
+ 
+							<given-names>B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sulak</surname>
+							
+ 
+							<given-names>J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B9">
+				
+ 
+				<mixed-citation>
+					Cao, K.F. 2000. Leaf anatomy and chlorophyll content of 12 woody species in contrasting light conditions in a Bornean heath forest. 
+					<bold>Canadian Journal of Botany 78</bold>
+					: 1245-1253.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Leaf anatomy and chlorophyll content of 12 woody species in contrasting light conditions in a Bornean heath forest</article-title>
+					
+ 
+					<source>Canadian Journal of Botany</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2000</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1245</fpage>
+					
+ 
+					<lpage>1253</lpage>
+					
+ 
+					<volume>78</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Cao</surname>
+							
+ 
+							<given-names>K.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B10">
+				
+ 
+				<mixed-citation>
+					Carlquist, S. 1982. The use of ethylenediamine in softening hard plant structures for paraffin sectioning. 
+					<bold>Stain Technology 57</bold>
+					: 311-317.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>The use of ethylenediamine in softening hard plant structures for paraffin sectioning</article-title>
+					
+ 
+					<source>Stain Technology</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1982</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>311</fpage>
+					
+ 
+					<lpage>317</lpage>
+					
+ 
+					<volume>57</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Carlquist</surname>
+							
+ 
+							<given-names>S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B11">
+				
+ 
+				<mixed-citation>
+					Dickison, W.C. 2000. 
+					<bold>Integrative Plant Anatomy.</bold>
+					 Califórnia, Academic Press.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Integrative Plant Anatomy</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2000</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Dickison</surname>
+							
+ 
+							<given-names>W.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B12">
+				
+ 
+				<mixed-citation>
+					Fahn, A. &amp; Cutler, D.F. 1992. 
+					<bold>Xerophytes.</bold>
+					 Berlin, Gebrüder Borntraeger.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Xerophytes</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1992</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Fahn</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Cutler</surname>
+							
+ 
+							<given-names>D.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B13">
+				
+ 
+				<mixed-citation>
+					Givnish, T.J.; Millan K.C.; Berry, P.E. &amp; Sytsma, K.J. 2007. Phylogeny, adaptive radiation, and historical biogeography of Bromeliaceae inferred from 
+					<italic>ndh</italic>
+					F sequence data. 
+					<bold>Aliso 23</bold>
+					: 3-26.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Phylogeny, adaptive radiation, and historical biogeography of Bromeliaceae inferred from ndhF sequence data</article-title>
+					
+ 
+					<source>Aliso</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2007</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>3</fpage>
+					
+ 
+					<lpage>26</lpage>
+					
+ 
+					<volume>23</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Givnish</surname>
+							
+ 
+							<given-names>T.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Millan</surname>
+							
+ 
+							<given-names>K.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Berry</surname>
+							
+ 
+							<given-names>P.E.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sytsma</surname>
+							
+ 
+							<given-names>K.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B14">
+				
+ 
+				<mixed-citation>
+					Guimarães, P.T.G.; Ferreira, J.G.; Carvalho, J.G &amp; Lopes, A.S. 1980. Adubação de pastagens. 
+					<bold>Informe Agropecuário 70</bold>
+					: 34-52.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Adubação de pastagens</article-title>
+					
+ 
+					<source>Informe Agropecuário</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>34</fpage>
+					
+ 
+					<lpage>52</lpage>
+					
+ 
+					<volume>70</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Guimarães</surname>
+							
+ 
+							<given-names>P.T.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Ferreira</surname>
+							
+ 
+							<given-names>J.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Carvalho</surname>
+							
+ 
+							<given-names>J.G</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lopes</surname>
+							
+ 
+							<given-names>A.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B15">
+				
+ 
+				<mixed-citation>
+					Hesp, A.P. 1991. Ecological processes and plant adaptions on coastal dunes. 
+					<bold>Journal of Arid Enviromments 21</bold>
+					: 165-191.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Ecological processes and plant adaptions on coastal dunes</article-title>
+					
+ 
+					<source>Journal of Arid Enviromments</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1991</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>165</fpage>
+					
+ 
+					<lpage>191</lpage>
+					
+ 
+					<volume>21</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Hesp</surname>
+							
+ 
+							<given-names>A.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B16">
+				
+ 
+				<mixed-citation>
+					Horres, R.; Schulte, K.; Weising, K. &amp; Zizka, G. 2007. Systematics of Bromelioideae (Bromeliaceae) evidence from molecular and anatomical studies. 
+					<bold>Aliso 23</bold>
+					: 27-43.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Systematics of Bromelioideae (Bromeliaceae) evidence from molecular and anatomical studies</article-title>
+					
+ 
+					<source>Aliso</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2007</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>27</fpage>
+					
+ 
+					<lpage>43</lpage>
+					
+ 
+					<volume>23</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Horres</surname>
+							
+ 
+							<given-names>R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Schulte</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Weising</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Zizka</surname>
+							
+ 
+							<given-names>G.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B17">
+				
+ 
+				<mixed-citation>
+					Judd, W.S.; Campbell, C.S.; Kellogg, E.A. &amp; Stevens, P.F. 1999. 
+					<bold>Plant Systematics: a phylogenetic approach.</bold>
+					 USA, Sinauer Associates.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Plant Systematics: a phylogenetic approach</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1999</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Judd</surname>
+							
+ 
+							<given-names>W.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Campbell</surname>
+							
+ 
+							<given-names>C.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Kellogg</surname>
+							
+ 
+							<given-names>E.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Stevens</surname>
+							
+ 
+							<given-names>P.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B18">
+				
+ 
+				<mixed-citation>
+					Kraus, J.E &amp; Arduin, M. 1997. 
+					<bold>Manual Básico de Métodos em Morfologia Vegetal.</bold>
+					 Seropédica, Editora Universidade Rural.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Manual Básico de Métodos em Morfologia Vegetal</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1997</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Kraus</surname>
+							
+ 
+							<given-names>J.E</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Arduin</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B19">
+				
+ 
+				<mixed-citation>
+					Krauss, B.H. 1949. Anatomy of the vegetative organs of the pineapple, 
+					<italic>Ananas comosus</italic>
+					 (L) Merr. (continued) II. The leaf. 
+					<bold>Botanical Gazette 110</bold>
+					: 303-404.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Anatomy of the vegetative organs of the pineapple, Ananas comosus (L) Merr. (continued) II: The leaf</article-title>
+					
+ 
+					<source>Botanical Gazette</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1949</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>303</fpage>
+					
+ 
+					<lpage>404</lpage>
+					
+ 
+					<volume>110</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Krauss</surname>
+							
+ 
+							<given-names>B.H.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B20">
+				
+ 
+				<mixed-citation>
+					Lambers, H.; Stuart, F. &amp; Pons, T.L. 1998. 
+					<bold>Plant Physiological Ecology</bold>
+					. New York, Springers-Verlag.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Plant Physiological Ecology</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1998</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Lambers</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Stuart</surname>
+							
+ 
+							<given-names>F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pons</surname>
+							
+ 
+							<given-names>T.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B21">
+				
+ 
+				<mixed-citation>
+					Lee, D.W.; Baskaran, K. Mansor, M.; Mohamad, H. &amp; Yap, S. K. 1996. Irradiance and spectral quality effect Asian tropical rain forest tree seedling development. 
+					<bold>Ecology 77</bold>
+					: 568-580.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Irradiance and spectral quality effect Asian tropical rain forest tree seedling development</article-title>
+					
+ 
+					<source>Ecology</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1996</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>568</fpage>
+					
+ 
+					<lpage>580</lpage>
+					
+ 
+					<volume>77</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Lee</surname>
+							
+ 
+							<given-names>D.W.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Baskaran</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Mansor</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Mohamad</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Yap</surname>
+							
+ 
+							<given-names>S. K.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B22">
+				
+ 
+				<mixed-citation>
+					Lee, H.S.J.; Lüttge, U.; Medina, E.; Smith, J.A.C.; Cram, W.J.; Diaz, M.; Grifûths, H.; Popp, M.; Schäfer, C.; Stimmel, K-H. &amp;, Thonke, B. 1989. Ecophysiology of xerophytic and halophytic vegetation of a coastal alluvial plain in northern Venezuela III - 
+					<italic>Bromelia humilis</italic>
+					 Jacq. a terrestrial CAM bromeliad. 
+					<bold>New Phytologist 111</bold>
+					: 253-271.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Ecophysiology of xerophytic and halophytic vegetation of a coastal alluvial plain in northern Venezuela III: Bromelia humilis Jacq. a terrestrial CAM bromeliad</article-title>
+					
+ 
+					<source>New Phytologist</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1989</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>253</fpage>
+					
+ 
+					<lpage>271</lpage>
+					
+ 
+					<volume>111</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Lee</surname>
+							
+ 
+							<given-names>H.S.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lüttge</surname>
+							
+ 
+							<given-names>U.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Medina</surname>
+							
+ 
+							<given-names>E.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Smith</surname>
+							
+ 
+							<given-names>J.A.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Cram</surname>
+							
+ 
+							<given-names>W.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Diaz</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Grifûths</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Popp</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Schäfer</surname>
+							
+ 
+							<given-names>C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Stimmel</surname>
+							
+ 
+							<given-names>K-H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Thonke</surname>
+							
+ 
+							<given-names>B.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B23">
+				
+ 
+				<mixed-citation>
+					Lenzi, M.; Matos J.M. &amp; Orth, A.I. 2006. Variação morfológica e reprodutiva de 
+					<italic>Aechmea lindenii</italic>
+					 (E. Morren) Baker var. 
+					<italic>lindenii</italic>
+					 (Bromeliaceae). 
+					<bold>Acta Botanica Brasilica 20</bold>
+					: 487-500.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Variação morfológica e reprodutiva de Aechmea lindenii (E. Morren) Baker var. lindenii (Bromeliaceae)</article-title>
+					
+ 
+					<source>Acta Botanica Brasilica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2006</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>487</fpage>
+					
+ 
+					<lpage>500</lpage>
+					
+ 
+					<volume>20</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Lenzi</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Matos</surname>
+							
+ 
+							<given-names>J.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Orth</surname>
+							
+ 
+							<given-names>A.I.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B24">
+				
+ 
+				<mixed-citation>
+					Mantuano, D.G.; Barros, C.F. &amp; Scarano, F.R. 2006. Leaf anatomy variation within and between three &quot;restinga&quot; populations of 
+					<italic>Erythroxylum ovalifolium</italic>
+					 Peyr. (Erythroxylaceae) in Southeast Brazil. 
+					<bold>Revista Brasileira de Botânica 29</bold>
+					: 209-215.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Leaf anatomy variation within and between three &quot;restinga&quot; populations of Erythroxylum ovalifolium Peyr. (Erythroxylaceae) in Southeast Brazil</article-title>
+					
+ 
+					<source>Revista Brasileira de Botânica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2006</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>209</fpage>
+					
+ 
+					<lpage>215</lpage>
+					
+ 
+					<volume>29</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Mantuano</surname>
+							
+ 
+							<given-names>D.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Barros</surname>
+							
+ 
+							<given-names>C.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Scarano</surname>
+							
+ 
+							<given-names>F.R.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B25">
+				
+ 
+				<mixed-citation>
+					Napp-Zinn, K. 1984. 
+					<bold>Handbuch der Pflanzenanatomie. VIII Anatomie des Blattes,</bold>
+					 2. Blattanatomie der Angiospermen, B. Experimentelle und ökologishe Anatomie des Angiospermenblattes. Berlin, Gbdr. Borntraeger.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Handbuch der Pflanzenanatomie: VIII Anatomie des Blattes, 2. Blattanatomie der Angiospermen, B. Experimentelle und ökologishe Anatomie des Angiospermenblattes</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1984</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Napp-Zinn</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B26">
+				
+ 
+				<mixed-citation>
+					Parkhurst, D.F. &amp; Loucks, O.L. 1972. Optimal leaf size in relation to environment. 
+					<bold>Journal of Ecology 60</bold>
+					: 505-537.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Optimal leaf size in relation to environment</article-title>
+					
+ 
+					<source>Journal of Ecology</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1972</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>505</fpage>
+					
+ 
+					<lpage>537</lpage>
+					
+ 
+					<volume>60</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Parkhurst</surname>
+							
+ 
+							<given-names>D.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Loucks</surname>
+							
+ 
+							<given-names>O.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B27">
+				
+ 
+				<mixed-citation>
+					Pearcy, R.W.; Muraoka, H. &amp; Valladares, F. 2005. Crown architecture in sun and shade environments: assessing function and trade-offs with a three-dimensional simulation mode. 
+					<bold>New Phytologist 166</bold>
+					: 791-800.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Crown architecture in sun and shade environments: assessing function and trade-offs with a three-dimensional simulation mode</article-title>
+					
+ 
+					<source>New Phytologist</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2005</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>791</fpage>
+					
+ 
+					<lpage>800</lpage>
+					
+ 
+					<volume>166</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Pearcy</surname>
+							
+ 
+							<given-names>R.W.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Muraoka</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Valladares</surname>
+							
+ 
+							<given-names>F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B28">
+				
+ 
+				<mixed-citation>
+					Proença, S.L. &amp; Sajo, M.G. 2004. Estrutura foliar de espécies de 
+					<italic>Aechmea</italic>
+					 Ruiz &amp; Pav. (Bromeliaceae) do Estado de São Paulo, Brasil. 
+					<bold>Acta Botanica Brasilica 18</bold>
+					: 319-331.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Estrutura foliar de espécies de Aechmea Ruiz &amp; Pav. (Bromeliaceae) do Estado de São Paulo, Brasil</article-title>
+					
+ 
+					<source>Acta Botanica Brasilica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2004</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>319</fpage>
+					
+ 
+					<lpage>331</lpage>
+					
+ 
+					<volume>18</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Proença</surname>
+							
+ 
+							<given-names>S.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sajo</surname>
+							
+ 
+							<given-names>M.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B29">
+				
+ 
+				<mixed-citation>
+					Proença, S.L. &amp; Sajo, M.G. 2007. Anatomia foliar de bromélias ocorrentes em áreas de cerrado do Estado de São Paulo, SP. 
+					<bold>Acta Botanica Brasilica 21</bold>
+					: 657-673.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Anatomia foliar de bromélias ocorrentes em áreas de cerrado do Estado de São Paulo, SP</article-title>
+					
+ 
+					<source>Acta Botanica Brasilica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2007</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>657</fpage>
+					
+ 
+					<lpage>673</lpage>
+					
+ 
+					<volume>21</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Proença</surname>
+							
+ 
+							<given-names>S.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sajo</surname>
+							
+ 
+							<given-names>M.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B30">
+				
+ 
+				<mixed-citation>
+					Reitz, R. 1983. Bromeliáceas e a Malária-Bromélia Endêmica. In: 
+					<bold>Flora Ilustrada Catarinense</bold>
+					. Parte I. Fascículo Bromélia.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Flora Ilustrada Catarinense: Parte I. Fascículo Bromélia</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1983</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Reitz</surname>
+							
+ 
+							<given-names>R.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B31">
+				
+ 
+				<mixed-citation>
+					Rôças, G.; Scarano, F.R. &amp; Barros, C.F. 2001. Leaf anatomical variation in 
+					<italic>Alchornea triplinervia</italic>
+					 (Spreng) Müll. Arg. (Euphorbiaceae) under distinct light and soil water regimes. 
+					<bold>Botanical Journal of the Linnean Society 136</bold>
+					: 231-238.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Leaf anatomical variation in Alchornea triplinervia (Spreng) Müll. Arg. (Euphorbiaceae) under distinct light and soil water regimes</article-title>
+					
+ 
+					<source>Botanical Journal of the Linnean Society</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2001</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>231</fpage>
+					
+ 
+					<lpage>238</lpage>
+					
+ 
+					<volume>136</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Rôças</surname>
+							
+ 
+							<given-names>G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Scarano</surname>
+							
+ 
+							<given-names>F.R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Barros</surname>
+							
+ 
+							<given-names>C.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B32">
+				
+ 
+				<mixed-citation>
+					Ruzin, S.E. 1999. 
+					<bold>Plant Microtechnique and Microscopy</bold>
+					. New York, Oxford University Press.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Plant Microtechnique and Microscopy</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1999</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Ruzin</surname>
+							
+ 
+							<given-names>S.E.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B33">
+				
+ 
+				<mixed-citation>
+					Scarano, F.R.; Duarte, H.M.; Rôças, G.; Barreto, S.M.B.; Amado, E.F.; Reinert, F.; Wendt, T.; Mantovani, A.; Lima H.R.P. &amp; Barros, C.F. 2002. Acclimation or stress symptom? An integrated study of intraspecific variation in the clonal plant 
+					<italic>Aechmea bromeliifolia</italic>
+					, a widespread CAM tank-bromeliad. 
+					<bold>Botanical Journal of the Linnean Society 140</bold>
+					: 391-401.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Acclimation or stress symptom?: An integrated study of intraspecific variation in the clonal plant Aechmea bromeliifolia, a widespread CAM tank-bromeliad</article-title>
+					
+ 
+					<source>Botanical Journal of the Linnean Society</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2002</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>391</fpage>
+					
+ 
+					<lpage>401</lpage>
+					
+ 
+					<volume>140</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Scarano</surname>
+							
+ 
+							<given-names>F.R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Duarte</surname>
+							
+ 
+							<given-names>H.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Rôças</surname>
+							
+ 
+							<given-names>G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Barreto</surname>
+							
+ 
+							<given-names>S.M.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Amado</surname>
+							
+ 
+							<given-names>E.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Reinert</surname>
+							
+ 
+							<given-names>F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Wendt</surname>
+							
+ 
+							<given-names>T.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Mantovani</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lima</surname>
+							
+ 
+							<given-names>H.R.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Barros</surname>
+							
+ 
+							<given-names>C.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B34">
+				
+ 
+				<mixed-citation>
+					Smith, L.B. &amp; Downs, R.J. 1979. Bromelioideae (Bromeliaceae). 
+					<bold>Flora Neotropica Monograph 14</bold>
+					: 1493-2142.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Bromelioideae (Bromeliaceae)</article-title>
+					
+ 
+					<source>Flora Neotropica Monograph</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1979</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1493</fpage>
+					
+ 
+					<lpage>2142</lpage>
+					
+ 
+					<volume>14</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Smith</surname>
+							
+ 
+							<given-names>L.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Downs</surname>
+							
+ 
+							<given-names>R.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B35">
+				
+ 
+				<mixed-citation>
+					Sokal, R.R. &amp; Rohlf, F.J. 1969. 
+					<bold>Biometry</bold>
+					. San Francisco, Freeman and Company.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Biometry</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1969</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Sokal</surname>
+							
+ 
+							<given-names>R.R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Rohlf</surname>
+							
+ 
+							<given-names>F.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B36">
+				
+ 
+				<mixed-citation>
+					Sousa, G.M.; Estelita, M.E.M. &amp; Wanderley, M.G.L. 2005. Anatomia foliar de espécies brasileiras de 
+					<italic>Aechmea</italic>
+					 subg. 
+					<italic>Chevaliera</italic>
+					 (Gaudich. 
+					<italic>ex</italic>
+					 Beer) Baker, Bromelioideae-Bromelioideae. 
+					<bold>Revista Brasileira Botânica 28</bold>
+					: 603-613.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Anatomia foliar de espécies brasileiras de Aechmea subg. Chevaliera (Gaudich. ex Beer) Baker, Bromelioideae-Bromelioideae</article-title>
+					
+ 
+					<source>Revista Brasileira Botânica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2005</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>603</fpage>
+					
+ 
+					<lpage>613</lpage>
+					
+ 
+					<volume>28</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Sousa</surname>
+							
+ 
+							<given-names>G.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Estelita</surname>
+							
+ 
+							<given-names>M.E.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Wanderley</surname>
+							
+ 
+							<given-names>M.G.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B37">
+				
+ 
+				<mixed-citation>
+					<bold>Statistica</bold>
+					. 2004. StatSoft, Inc. (data analysis software system), version 7.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Statistica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2004</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B38">
+				
+ 
+				<mixed-citation>
+					Taiz, L. &amp; Zeiger, E. 2004. 
+					<bold>Fisiologia Vegetal</bold>
+					. 3ª ed. Porto Alegre, Artmed Editora.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Fisiologia Vegetal</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2004</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Taiz</surname>
+							
+ 
+							<given-names>L.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Zeiger</surname>
+							
+ 
+							<given-names>E.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B39">
+				
+ 
+				<mixed-citation>
+					Terashima, I; Miyazawa, S-I &amp; Handa, Y.T. 2006. Why are sun leaves thicker than shade leaves? Consideration based on analyses of CO
+					<sub>2</sub>
+					 diffusion in the leaf. 
+					<bold>Journal of Plant Research 114</bold>
+					: 93-105.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Why are sun leaves thicker than shade leaves?: Consideration based on analyses of CO2 diffusion in the leaf</article-title>
+					
+ 
+					<source>Journal of Plant Research</source>
+					
+ 
+					<date>
+						
+ 
+						<year>2006</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>93</fpage>
+					
+ 
+					<lpage>105</lpage>
+					
+ 
+					<volume>114</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Terashima</surname>
+							
+ 
+							<given-names>I</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Miyazawa</surname>
+							
+ 
+							<given-names>S-I</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Handa</surname>
+							
+ 
+							<given-names>Y.T.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B40">
+				
+ 
+				<mixed-citation>
+					Tomlinson, P.B. 1969. 
+					<bold>Anatomy of the monocotyledons: III Commmelinales-Zingiberales</bold>
+					. Oxford, Oxford University Press.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Anatomy of the monocotyledons: III Commmelinales-Zingiberales</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1969</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Tomlinson</surname>
+							
+ 
+							<given-names>P.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B41">
+				
+ 
+				<mixed-citation>
+					Yoshida, S.; Ohnishi, Y. &amp; Kitagishi, K. 1962. Histochemistry of silicon in rice plant. III. The presence of cuticle-silica double layer in the epidermal tissue. 
+					<bold>Soil Science And Plant Nutricion 8</bold>
+					: 1-5.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Histochemistry of silicon in rice plant: III. The presence of cuticle-silica double layer in the epidermal tissue</article-title>
+					
+ 
+					<source>Soil Science And Plant Nutricion</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1962</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1</fpage>
+					
+ 
+					<lpage>5</lpage>
+					
+ 
+					<volume>8</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Yoshida</surname>
+							
+ 
+							<given-names>S.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Ohnishi</surname>
+							
+ 
+							<given-names>Y.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Kitagishi</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+		</ref-list>
+		
+ 
+	</back>
+	
+
+</article>

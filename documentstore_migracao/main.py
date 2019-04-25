@@ -2,7 +2,6 @@
 import pkg_resources
 import argparse
 import sys
-import os
 import logging
 
 from documentstore import adapters
@@ -11,6 +10,7 @@ from documentstore_migracao.processing import (
     reading,
     conversion,
     validation,
+    packing,
     generation,
     pipeline,
 )
@@ -62,6 +62,12 @@ def process(args):
         help="Move os arquivos válidos de 'conversion' para 'valid_xml'",
     )
     parser.add_argument(
+        "--packFiles",
+        "-P",
+        action="store_true",
+        help="Processa todos os arquivos XML baixados",
+    )
+    parser.add_argument(
         "--generationFiles",
         "-G",
         action="store_true",
@@ -75,6 +81,7 @@ def process(args):
         "--convetFile", "-c", help="Transformar somente o arquivos XML imformado"
     )
     parser.add_argument("--readFile", "-r", help="Ler somente o arquivos XML imformado")
+    parser.add_argument("--packFile", "-p", help="Empacotar somente o documento XML imformado")
     parser.add_argument(
         "--valideFile", "-v", help="Valida somente o arquivos XML imformado"
     )
@@ -102,6 +109,8 @@ def process(args):
         validation.validator_article_ALLxml(
             args.move_to_processed_source, args.move_to_valid_xml
         )
+    elif args.packFiles:
+        packing.packing_article_ALLxml()
 
     elif args.generationFiles:
         generation.article_ALL_html_generator()
@@ -114,6 +123,9 @@ def process(args):
 
     elif args.readFile:
         reading.reading_article_xml(args.readFile, False)
+
+    elif args.packFile:
+        packing.packing_article_xml(args.packFile)
 
     elif args.issn_journal:
         extrated.extrated_selected_journal(args.issn_journal)

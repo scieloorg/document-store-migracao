@@ -4,7 +4,7 @@ import shutil
 
 from packtools import XMLValidator, exceptions
 
-from documentstore_migracao.utils import files, dicts, string
+from documentstore_migracao.utils import files, dicts
 from documentstore_migracao import config
 
 logger = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ def validator_article_ALLxml(move_to_processed_source=False, move_to_valid_xml=F
     result = {}
     for file_xml in list_files_xmls:
 
-        filename, _ = string.extract_filename_ext_by_path(file_xml)
+        filename, _ = files.extract_filename_ext_by_path(file_xml)
         converted_file = os.path.join(config.get("CONVERSION_PATH"), file_xml)
 
         try:

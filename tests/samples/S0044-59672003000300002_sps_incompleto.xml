@@ -1,0 +1,4669 @@
+<?xml version="1.0" ?>
+<!DOCTYPE article
+  PUBLIC '-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN'
+  'JATS-journalpublishing1.dtd'>
+<article article-type="research-article" dtd-version="1.1" specific-use="sps-1.8" xml:lang="pt" xmlns:xlink="http://www.w3.org/1999/xlink">
+	
+ 
+	<front>
+		
+ 
+		<journal-meta>
+			
+ 
+			<journal-id journal-id-type="publisher-id">aa</journal-id>
+			
+ 
+			<journal-title-group>
+				
+ 
+				<journal-title>Acta Amazonica</journal-title>
+				
+ 
+				<abbrev-journal-title abbrev-type="publisher">Acta Amaz.</abbrev-journal-title>
+				
+ 
+			</journal-title-group>
+			
+ 
+			<issn pub-type="ppub">0044-5967</issn>
+			
+ 
+			<issn pub-type="epub">1809-4392</issn>
+			
+ 
+			<publisher>
+				
+ 
+				<publisher-name>Instituto Nacional de Pesquisas da Amazônia</publisher-name>
+				
+ 
+				<publisher-loc>Manaus, AM, Brazil</publisher-loc>
+				
+ 
+			</publisher>
+			
+ 
+		</journal-meta>
+		
+ 
+		<article-meta>
+			
+ 
+			<article-id pub-id-type="publisher-id">S0044-59672003000300002</article-id>
+			
+ 
+			<article-id pub-id-type="doi">10.1590/S0044-59672003000300002</article-id>
+			
+ 
+			<title-group>
+				
+ 
+				<article-title>Plantas invasoras em sistemas agroflorestais com cupuaçuzeiro no município de Presidente Figueiredo (Amazonas, Brasil)</article-title>
+				
+ 
+				<trans-title-group xml:lang="en">
+					
+ 
+					<trans-title>Weedy plants in agroforestry systems with cupuassu in the municipality of Presidente Figueiredo (Amazonas, Brazil)</trans-title>
+					
+ 
+				</trans-title-group>
+				
+ 
+			</title-group>
+			
+ 
+			<contrib-group>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Sousa</surname>
+						
+ 
+						<given-names>Gladys Ferreira de</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff01"/>
+					
+ 
+				</contrib>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Oliveira</surname>
+						
+ 
+						<given-names>Luiz Antonio de</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff02"/>
+					
+ 
+				</contrib>
+				
+ 
+				<contrib contrib-type="author">
+					
+ 
+					<name>
+						
+ 
+						<surname>Silva</surname>
+						
+ 
+						<given-names>José Ferreira da</given-names>
+						
+ 
+					</name>
+					
+ 
+					<role>ND</role>
+					
+ 
+					<xref ref-type="aff" rid="aff03"/>
+					
+ 
+				</contrib>
+				
+ 
+			</contrib-group>
+			
+ 
+			<aff id="aff01">
+				
+ 
+				<addr-line>
+					
+ 
+					<named-content content-type="city">Belém</named-content>
+					
+ 
+					<named-content content-type="state"/>
+					
+ 
+				</addr-line>
+				
+ 
+				<institution content-type="orgname">Embrapa</institution>
+				
+ 
+				<country country="BR">Brazil</country>
+				
+ 
+				<email>gladysfs@cpatu.embrapa.br</email>
+				
+ 
+			</aff>
+			
+ 
+			<aff id="aff03">
+				
+ 
+				<addr-line>
+					
+ 
+					<named-content content-type="city">Manaus</named-content>
+					
+ 
+					<named-content content-type="state"/>
+					
+ 
+				</addr-line>
+				
+ 
+				<institution content-type="orgname">Universidade Federal do Amazonas</institution>
+				
+ 
+				<country country="BR">Brazil</country>
+				
+ 
+				<email>jfsilva@ufam.edu.br</email>
+				
+ 
+			</aff>
+			
+ 
+			<aff id="aff02">
+				
+ 
+				<addr-line>
+					
+ 
+					<named-content content-type="city">Manaus</named-content>
+					
+ 
+					<named-content content-type="state"/>
+					
+ 
+				</addr-line>
+				
+ 
+				<institution content-type="orgname">Instituto Nacional de Pesquisas da Amazônia</institution>
+				
+ 
+				<country country="BR">Brazil</country>
+				
+ 
+				<email>luizoli@inpa.gov.br</email>
+				
+ 
+			</aff>
+			
+ 
+			<pub-date pub-type="epub-ppub">
+				
+ 
+				<year>2003</year>
+				
+ 
+			</pub-date>
+			
+ 
+			<volume>33</volume>
+			
+ 
+			<issue>3</issue>
+			
+ 
+			<fpage>353</fpage>
+			
+ 
+			<lpage>370</lpage>
+			
+ 
+			<history>
+				
+ 
+				<date date-type="received">
+					
+ 
+					<day>06</day>
+					
+ 
+					<month>07</month>
+					
+ 
+					<year>2002</year>
+					
+ 
+				</date>
+				
+ 
+				<date date-type="accepted">
+					
+ 
+					<day>10</day>
+					
+ 
+					<month>03</month>
+					
+ 
+					<year>2003</year>
+					
+ 
+				</date>
+				
+ 
+			</history>
+			
+ 
+			<permissions>
+				
+ 
+				<license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/4.0/" xml:lang="en">
+					
+ 
+					<license-p>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</license-p>
+					
+ 
+				</license>
+				
+ 
+			</permissions>
+			
+ 
+			<abstract>
+				
+ 
+				<p>A infestação crescente de plantas invasoras nos sistemas agrícolas causa prejuízos às lavouras, com decréscimos acentuados da produtividade, quer pela competição direta pelos fatores de produção, quer pelos compostos alelopáticos liberados. Este trabalho consistiu de um levantamento e análise fitossociológica de alguns aspectos de espécies de invasoras que ocorrem em sistemas agroflorestais com cupuaçuzeiro, em três arranjos de culturas (mandioca+fruteiras; anuais+fruteiras; maracujá+fruteiras), sob três sistemas de adubação (NPK+MO, adubação com Fósforo e Fósforo+leguminosa). As coletas das plantas invasoras feitas em seis amostras de 0,25 m² por parcela foram posteriormente levadas ao laboratório para identificação. As 55 espécies identificadas estavam distribuídas em 23 famílias botânicas, sendo 43 espécies de dicotiledôneas (78,2%), 11 de monocotiledôneas (20,0%) e uma de pteridófita (1,8%). As famílias Poaceae (monocotiledônea) e Asteraceae (dicotiledônea) foram as mais freqüentes e com maior número de indivíduos. As espécies mais freqüentes e com maior número de plantas por m² foram Paspalum conjugatum P.J. Bergius (área A) e Homolepis aturensis (Kunth) Chase (área B), ambas da família Poaceae; Ageratum conyzoides L. da família Asteraceae, apresentou a maior densidade. Os coeficientes de similaridade variaram entre as áreas amostradas, sendo os maiores índices observados nos tratamentos que receberam adubação com matéria orgânica, particularmente nos sistemas mandioca+fruteiras. As práticas agrícolas e os sistemas de manejo do solo e das lavouras exerceram influência na composição florística e no tamanho das comunidades de plantas invasoras em cada local. O número de monocotiledôneas foi menor no tratamento com adubação NPK+MO.</p>
+				
+ 
+			</abstract>
+			
+ 
+			<trans-abstract xml:lang="en">
+				
+ 
+				<p>The increase of weed infestation on agricultural systems cause damages to the crops, decreasing plant productivity by the direct competition or by alelopathy. This work have undertaken a survey and phytosociological analysis of some aspects of weed species that occur in agroforestry systems with cupuassu. The treatments consisted of three crops arrangements (cassava+fruit trees; annuals crops+fruit trees; passion fruit+fruit trees), and three fertilizer management (NPK+OM, with Phosphorus and Phosphorus+leguminous). Three harvests of weed plants were accomplished, being six samples of 0,25 m² per plot. The identification of the species of the weed plants were carried out in the laboratory. The 55 weed species identified were distributed in 23 botanical families, being 43 of dicotyledonous species, 11 of monocotyledonous, and one of pteridophyta. The families Poaceae (monocotyledonous) and Asteraceae (dicotyledonous) were the most frequent and with large number of individuals. The most frequent species and with large number of plants per m² were Paspalum conjugatum P.J. Bergius (area A) and Homolepis aturensis (Kunth) Chase (area B) of the Poaceae family; Ageratum conyzoides L. of the Asteraceae family, presented the largest density. The similarity coefficients varied among the areas studied, being the largest indexes observed in the treatments that received fertilizers with organic matter (NPK+OM), particularly in the system cassava+fruit trees. The agricultural practices and the soil and crops management systems, had a great influence to the flora composition and in the weed plants communities size in each local area. The number of monocotyledonous was smaller in the treatment with NPK+OM than in the other treatments.</p>
+				
+ 
+			</trans-abstract>
+			
+ 
+			<kwd-group kwd-group-type="author-generated" xml:lang="en">
+				
+ 
+				<kwd>Theobroma grandiflorum</kwd>
+				
+ 
+				<kwd>weeds</kwd>
+				
+ 
+				<kwd>monocotyledonous</kwd>
+				
+ 
+				<kwd>dicotyledonous</kwd>
+				
+ 
+			</kwd-group>
+			
+ 
+			<kwd-group kwd-group-type="author-generated" xml:lang="pt">
+				
+ 
+				<kwd>Theobroma grandiflorum</kwd>
+				
+ 
+				<kwd>plantas daninhas</kwd>
+				
+ 
+				<kwd>monocotiledôneas</kwd>
+				
+ 
+				<kwd>dicotiledôneas</kwd>
+				
+ 
+			</kwd-group>
+			
+ 
+			<counts>
+				
+ 
+				<fig-count count="0"/>
+				
+ 
+				<table-count count="0"/>
+				
+ 
+				<equation-count count="0"/>
+				
+ 
+				<ref-count count="51"/>
+				
+ 
+				<page-count count="18"/>
+				
+ 
+			</counts>
+			
+ 
+		</article-meta>
+		
+ 
+	</front>
+	
+ 
+	<body>
+		<p>
+			<bold>
+				<sup>
+					<xref>1</xref>
+				</sup>
+			</bold>
+		</p>
+		 
+		<p>
+			<bold>Weedy plants in agroforestry systems with cupuassu in the municipality of Presidente Figueiredo (Amazonas, Brazil)</bold>
+		</p>
+		 
+		<p>
+			<bold>
+				Gladys Ferreira de Sousa
+				<sup>I</sup>
+				; Luiz Antonio de Oliveira
+				<sup>II</sup>
+				; José Ferreira da Silva
+				<sup>III</sup>
+			</bold>
+		</p>
+		 
+		<p>
+			<sup>I</sup>
+			Pesquisadora da Embrapa. Caixa Postal 48 CEP 66 095-100, Belém-PA (
+			<ext-link ext-link-type="email" xlink:href="mailto:gladysfs@cpatu.embrapa.br">gladysfs@cpatu.embrapa.br</ext-link>
+			) 
+		</p>
+		<p>
+			<sup>II</sup>
+			Pesquisador do INPA. Caixa Postal 478 , CEP 69 011- 970, Manaus (AM). (
+			<ext-link ext-link-type="email" xlink:href="mailto:luizoli@inpa.gov.br">luizoli@inpa.gov.br</ext-link>
+			), bolsista do CNPQ 
+		</p>
+		<p>
+			<sup>III</sup>
+			Professor da Universidade Federal do Amazonas. Av. Gal. Rodrigo Otávio, 3000, CEP 69077-000, Manaus (AM) (
+			<ext-link ext-link-type="email" xlink:href="mailto:jfsilva@ufam.edu.br">jfsilva@ufam.edu.br</ext-link>
+			)
+		</p>
+		 
+		<p>
+			<bold>RESUMO </bold>
+		</p>
+		 
+		<p>
+			 A infestação crescente de plantas invasoras nos sistemas agrícolas causa prejuízos às lavouras, com decréscimos acentuados da produtividade, quer pela competição direta pelos fatores de produção, quer pelos compostos alelopáticos liberados. Este trabalho consistiu de um levantamento e análise fitossociológica de alguns aspectos de espécies de invasoras que ocorrem em sistemas agroflorestais com cupuaçuzeiro, em três arranjos de culturas (mandioca+fruteiras; anuais+fruteiras; maracujá+fruteiras), sob três sistemas de adubação (NPK+MO, adubação com Fósforo e Fósforo+leguminosa). As coletas das plantas invasoras feitas em seis amostras de 0,25 m
+			<sup>2</sup>
+			 por parcela foram posteriormente levadas ao laboratório para identificação. As 55 espécies identificadas estavam distribuídas em 23 famílias botânicas, sendo 43 espécies de dicotiledôneas (78,2%), 11 de monocotiledôneas (20,0%) e uma de pteridófita (1,8%). As famílias Poaceae (monocotiledônea) e Asteraceae (dicotiledônea) foram as mais freqüentes e com maior número de indivíduos. As espécies mais freqüentes e com maior número de plantas por m
+			<sup>2</sup>
+			 foram 
+			<italic>Paspalum conjugatum</italic>
+			 P.J. Bergius (área A) e 
+			<italic>Homolepis aturensis </italic>
+			(Kunth) Chase (área B), ambas da família Poaceae; 
+			<italic>Ageratum conyzoides</italic>
+			 L. da família Asteraceae, apresentou a maior densidade. Os coeficientes de similaridade variaram entre as áreas amostradas, sendo os maiores índices observados nos tratamentos que receberam adubação com matéria orgânica, particularmente nos sistemas mandioca+fruteiras. As práticas agrícolas e os sistemas de manejo do solo e das lavouras exerceram influência na composição florística e no tamanho das comunidades de plantas invasoras em cada local. O número de monocotiledôneas foi menor no tratamento com adubação NPK+MO. 
+		</p>
+		 
+		<p>
+			<bold>Palavras-chave: </bold>
+			<italic>Theobroma grandiflorum</italic>
+			, plantas daninhas, monocotiledôneas, dicotiledôneas 
+		</p>
+		 
+		<p>
+			<bold>ABSTRACT </bold>
+		</p>
+		 
+		<p>
+			The increase of weed infestation on agricultural systems cause damages to the crops, decreasing plant productivity by the direct competition or by alelopathy. This work have undertaken a survey and phytosociological analysis of some aspects of weed species that occur in agroforestry systems with cupuassu. The treatments consisted of three crops arrangements (cassava+fruit trees; annuals crops+fruit trees; passion fruit+fruit trees), and three fertilizer management (NPK+OM, with Phosphorus and Phosphorus+leguminous). Three harvests of weed plants were accomplished, being six samples of 0,25 m
+			<sup>2</sup>
+			 per plot. The identification of the species of the weed plants were carried out in the laboratory. The 55 weed species identified were distributed in 23 botanical families, being 43 of dicotyledonous species, 11 of monocotyledonous, and one of pteridophyta. The families Poaceae (monocotyledonous) and Asteraceae (dicotyledonous) were the most frequent and with large number of individuals. The most frequent species and with large number of plants per m
+			<sup>2</sup>
+			 were 
+			<italic>Paspalum conjugatum</italic>
+			 P.J. Bergius (area A) and 
+			<italic>Homolepis aturensis</italic>
+			 (Kunth) Chase (area B) of the Poaceae family; 
+			<italic>Ageratum conyzoides</italic>
+			 L. of the Asteraceae family, presented the largest density. The similarity coefficients varied among the areas studied, being the largest indexes observed in the treatments that received fertilizers with organic matter (NPK+OM), particularly in the system cassava+fruit trees. The agricultural practices and the soil and crops management systems, had a great influence to the flora composition and in the weed plants communities size in each local area. The number of monocotyledonous was smaller in the treatment with NPK+OM than in the other treatments. 
+		</p>
+		 
+		<p>
+			<bold>Key-words: </bold>
+			 
+			<italic>Theobroma grandiflorum</italic>
+			, weeds, monocotyledonous, dicotyledonous 
+		</p>
+		 
+		<p>
+			<bold>INTRODUÇÃO</bold>
+			 
+		</p>
+		 
+		<p>
+			A infestação crescente de plantas invasoras nos sistemas agrícolas causa prejuízos às lavouras, com decréscimos acentuados da produtividade, quer pela competição direta pelos fatores de produção, quer pelos compostos alelopáticos liberados (Akobundu, 1987; Almeida, 1988; Martins &amp;amp; Pitelli, 1994; Saavedra, 1994; Souza Filho 
+			<italic>et al</italic>
+			., 1997; Vangessel 
+			<italic>et al.</italic>
+			, 1995). As comunidades de plantas invasoras geralmente resultam das alterações ecológicas pela ação antrópica. Porém, os danos causados são reduzidos quando manejadas adequadamente (Primavesi, 1992a, b). 
+		</p>
+		 
+		<p>
+			As necessidades de mão de obra para controle das plantas invasoras aumentam com a continuidade dos cultivos, tendo sido estimado em cerca de 30 a 40% dos custos totais de produção em plantios de mandioca (Alcântara &amp;amp; Carvalho, 1983) e na maioria dos cultivos nos trópicos (Yamoah 
+			<italic>et al.</italic>
+			, 1986). 
+		</p>
+		 
+		<p>
+			No Brasil, as plantas invasoras são responsáveis pela redução na produção de milho em cerca de 25 a 30 % e de 50 a 70 % em arroz de sequeiro (Lorenzi, 1980; Domingues 
+			<italic>et al.,</italic>
+			 1982). 
+		</p>
+		 
+		<p>Uma importante razão para o sucesso das invasoras é a sua capacidade de adaptação às condições dos agrossistemas, levando à ocupação e exploração eficiente do ambiente (Dias Filho, 1990). Ao manterem uma alta diversidade de espécies, inclusive dentro da mesma população, elas competem com maior sucesso com outras espécies. A heterogeneidade nas populações permite explorar recursos e adaptar-se à qualquer mudança de práticas culturais ou ambientais, enquanto as plantas cultivadas evoluem para a homogeneidade, visto ser a demanda a produtividade individual (Dekker, 1997). </p>
+		 
+		<p>
+			As práticas culturais e a intensificação dos cultivos provocam desequilíbrio nas populações de invasoras (Derksen 
+			<italic>et al</italic>
+			., 1993). Desse modo, alterações na diversidade de comunidades de plantas invasoras podem estar relacionadas com o histórico de manejo do solo e das culturas (Vinha 
+			<italic>et al.</italic>
+			, 1982; Derksen 
+			<italic>et al</italic>
+			., 1993). Stevensen 
+			<italic>et al</italic>
+			. (1997) observaram efeito significativo da interação rotação x tratos culturais na diversidade de invasoras. Para McCloskey 
+			<italic>et al.</italic>
+			 (1996) os tratos culturais são as práticas mais importantes que afetam a densidade das plantas invasoras. 
+		</p>
+		 
+		<p>
+			Nos sistemas agroflorestais, onde geralmente a área é mais intensamente ocupada por espécies cultivadas, os arranjos de culturas podem exercer um controle mais eficiente das plantas invasoras. Como observado por Sousa (1995), algumas combinações de culturas nos sistemas agroflorestais influenciaram na densidade, freqüência e fitomassa aérea das plantas invasoras, podendo também, minimizar a competição e otimizar a produção das áreas cultivadas (Schulz 
+			<italic>et al.</italic>
+			, 1994). 
+		</p>
+		 
+		<p>O trabalho objetivou identificar a composição florística das comunidades de plantas invasoras em sistemas agroflorestais com cupuaçuzeiro, procurando-se determinar o grau de infestação e distribuição das populações nas diferentes épocas do ano, de acordo com os diferentes arranjos dos componentes do sistema. Procurou-se determinar se diferentes níveis de fertilidade de solo influenciaram na diminuição ou aumento de espécies de monocotiledôneas e dicotiledôneas na área estudada. </p>
+		 
+		<p>
+			<bold>MATERIAL E MÉTODOS</bold>
+		</p>
+		 
+		<p>Área de estudo</p>
+		 
+		<p>
+			O trabalho foi conduzido no período de dezembro de 1996 a dezembro de 1998, em propriedades de pequenos produtores no município de Presidente Figueiredo, Estado do Amazonas, localizado a 107 km da cidade de Manaus. Geograficamente, este município se situa entre as coordenadas cartesianas de latitude sul 2
+			<sup>0</sup>
+			 14' 26&quot; e aproximadamente entre os graus 60
+			<sup>0 </sup>
+			a 61
+			<sup>0</sup>
+			 de longitude W. Gr, numa altitude de 92,9 metros acima do nível do mar. 
+		</p>
+		 
+		<p>
+			O clima da região é quente e úmido, classificado como Ami, segundo Köppen. Caracteriza-se pela temperatura média do mês mais frio nunca inferior a 18oC e a precipitação do mês mais seco, acima de 60 mm. A precipitação pluviométrica média anual é sempre superior a 2000 mm e distribuída em duas estações bem distintas: uma com alta precipitação pluviométrica, que vai de novembro a maio e a outra, de menor precipitação pluviométrica, vai de junho a outubro. O período de maior estiagem ocorre freqüentemente de julho a setembro (SUDAM, 1984; EMBRAPA, 1998a, b). O regime climático observado na época em que o trabalho foi desenvolvido apresentou, respectivamente, um total pluviométrico de 2.585 mm, 2.243 mm e 2.546 mm para os três anos. A temperatura média anual foi de 26,7oC, com a máxima em torno de 31,2
+			<sup>0</sup>
+			C e a mínima em torno de 23,5oC. A umidade relativa do ar é bastante elevada em toda a região, variando entre 71 % a 91 %, com média de cerca de 86 % (SUDAM, 1984; EMBRAPA, 1998a, b). 
+		</p>
+		 
+		<p>A economia do município é calcada nas atividades do setor secundário, com destaque para a mineração, e do setor primário, com o extrativismo (madeira, pedras, minério e pescado) e a agricultura. Esta é baseada no cultivo do arroz, mandioca (basicamente para produção de farinha), cupuaçu, macaxeira, cana-de-açúcar, guaraná e outras frutas como banana, mamão, laranja, etc. A pecuária, constituída pela exploração de bovinos, é também destaque no município (ICOTI, 1992; CPRM, 1998). </p>
+		 
+		<p>As duas propriedades em estudo localizam-se entre os km 13 e 51 na rodovia estadual AM-240, nas comunidades Marcos Freire (km 13) e São Francisco de Assis (km 22), situadas em assentamentos do INCRA. </p>
+		 
+		<p>
+			As principais unidades de solo que predominam na região são o Latossolo Amarelo, textura muito argilosa, distrófico, o Podzólico Vermelho Amarelo, textura média, distrófico e o Podzólico Vermelho Amarelo, textura pesada, distrófico (IPEAAOC, 1971; 1972). O relevo é suavemente ondulado em algumas áreas, existindo outras com relevo ondulado a muito ondulado. Os solos fazem parte do ecossistema de terra firme de formação recente, originados de sedimentos argilosos do Terciário, representados pela série Barreiras (BRASIL, 1978). O solo das áreas selecionadas para estudo é o Latossolo Amarelo, de textura muito pesada, encontrando-se em relevo plano. Amostras de solo das áreas foram coletadas, secadas ao ar, moídas e passadas em peneira de 2 mm para uniformização. A composição química e granulométrica encontra-se na 
+			<xref>Tabela 1</xref>
+			, sendo as determinações efetuadas pelos métodos de análises em uso no laboratório de solos da EMBRAPA Amazônia Ocidental (EMBRAPA, 1997). 
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/inexistente1.gif"/>
+		</p>
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/inexistente2.gif"/>
+		</p>
+		 
+		<p>Por ocasião da implantação dos sistemas, as áreas encontravam-se com vegetação secundária (capoeira) de aproximadamente dois anos, tendo sido realizado um levantamento florístico antes da implantação dos sistemas. </p>
+		 
+		<p>
+			<bold>Sistemas agroflorestais estudados</bold>
+			 
+		</p>
+		 
+		<p>Estudou-se a composição florística e a distribuição das plantas invasoras em três sistemas agroflorestais, os quais haviam sido implantados em 1994 e conduzidos em um projeto participativo entre a EMBRAPA/INPA/UA/IDAM e os pequenos produtores de agricultura itinerante. </p>
+		 
+		<p>
+			Os três sistemas agroflorestais estudados foram constituídos por: 1. Mandioca + fruteiras; 2. Cultivos anuais+fruteiras e 3. Maracujá+fruteiras. Os componentes fruteiras foram cupuaçuzeiro (
+			<italic>Theobroma grandiflorum</italic>
+			 (Willd. ex Spreng.) Schum.), bananeira (
+			<italic>Musa</italic>
+			 spp), pupunheira (
+			<italic>Bactris gasipaes </italic>
+			Kunth
+			<italic>)</italic>
+			 e ingazeiro (
+			<italic>Inga edulis </italic>
+			Mart.). 
+		</p>
+		 
+		<p>
+			<bold>Métodos de estudo</bold>
+			 
+		</p>
+		 
+		<p>
+			Os sistemas foram testados com três tratamentos de manejo de solos: (1) com adubação NPK+Matéria Orgânica (MO), (2) adubação com fósforo e (3) fósforo+leguminosa de cobertura (
+			<italic>Mucuna pruriens </italic>
+			(L.) DC.. 
+		</p>
+		 
+		<p>
+			Os níveis de adubação orgânica foram constituídos por: 3 litros/cova de esterco de galinha aplicado nas covas do maracujazeiro (
+			<italic>Passiflora actinia</italic>
+			 Hook.) e 12 litros nas linhas de plantio das plantas anuais: feijão-caupi - 
+			<italic>Vigna unguiculata</italic>
+			 (L.) Walp. e mandioca (
+			<italic>Manihot esculenta</italic>
+			 L.), aplicadas em uma única vez. A adubação química correspondeu a 70 g de uréia, 145 g de superfosfato triplo e 96 g de cloreto de potássio em cada cova das plantas de maracujá ou 144 g, 264 g e 216 g de uréia, superfosfato triplo e KCl, respectivamente, nas linhas de plantio das plantas anuais, sendo a aplicação feita anualmente. Uma dose de calcário dolomítico equivalente a 1,5 t ha
+			<sup>-1</sup>
+			 foi utilizada a lanço em todas as parcelas e a incorporação efetuada com enxada. A quantidade de esterco de galinha foi equivalente a 7 t ha
+			<sup>-1</sup>
+			 e a adubação química, a 40 kg de N ha
+			<sup>-1</sup>
+			, 35 kg de P ha
+			<sup>-1</sup>
+			 e 67 kg de K ha
+			<sup>-1</sup>
+			. O P foi aplicado de uma só vez no plantio das lavouras. O N e o K foram aplicados metade por ocasião do plantio e a outra metade conforme a cultura entre 45 e 60 dias após o plantio. Para as espécies já implantadas, os adubos foram aplicados em cobertura próximo à planta, sendo o fósforo usado de uma única vez e o nitrogênio e potássio em duas aplicações anuais. A mucuna foi semeada no final do ciclo da primeira lavoura anual. 
+		</p>
+		 
+		<p>Os sistemas foram implantados em módulos de 54 m x 72 m, em duas propriedades rurais (A e B). Cada parcela correspondeu a 18 m x 24 m. O delineamento experimental utilizado foi o de blocos ao acaso, em faixas, com seis repetições. A análise de variância dos resultados seguiu modelo proposto por Pimentel Gomes (1982). </p>
+		 
+		<p>
+			As plantas invasoras foram coletadas em três períodos, sendo o primeiro em fevereiro de 1997, na época chuvosa, antes do plantio das espécies anuais e semi-perene e antes da aplicação dos tratamentos de adubação. Os outros períodos foram novembro/97 (época seca) e janeiro-fevereiro/98 (época chuvosa). As plantas foram coletadas em cada parcela e identificadas. As amostragens corresponderam a seis amostras de 0,25 m
+			<sup>2</sup>
+			 cada, por parcela, distribuídas aleatoriamente, usando-se um quadrado de madeira de 50 cm x 50 cm. As seis áreas amostradas eqüivaliam a 1% da área útil de cada parcela. 
+		</p>
+		 
+		<p>Após a identificação preliminar feita pelos botânicos no campo, e a estimativa do grau de infestação, as plantas invasoras foram cortadas rente ao solo, separadas por classe em monocotiledôneas e dicotiledôneas, levadas para o laboratório para completar o trabalho de separação por espécie e identificação. Após a separação das plantas por espécie, foi feita a contagem de todos os indivíduos em cada sub-área amostrada, inclusive plântulas, quando era possível se distinguir. </p>
+		 
+		<p>Para facilitar a identificação botânica, foram preparadas, ainda no campo, exsicatas de todas as espécies encontradas. Procedeu-se uma breve descrição das principais características das plantas, tais como porte da espécie, altura, tipo de folha e de flores, quando encontradas. Foram preparadas fichas para catalogação, onde foram anotados nome comum e científico, data e local da coleta. </p>
+		 
+		<p>
+			O trabalho de identificação foi feito, em princípio, por comparação, utilizando-se as seguintes referências (Leitão Filho 
+			<italic>et al.</italic>
+			, 1972; Albuquerque, 1980; Kissmann &amp; Groth, 1993; Lorenzi, 1994; Le Bourgeois &amp; Merlier, 1995). Quando não foi possível, ou havia dúvidas, contou-se com a colaboração de um especialista ou em alguns casos foram citados apenas em nível de gênero e/ou família. As duplicatas das exsicatas de todas as espécies foram depositadas no herbário da EMBRAPA Amazônia Ocidental/Manaus. 
+		</p>
+		 
+		<p>A avaliação de comunidades de plantas invasoras e do seu comportamento nos diferentes hábitats foi feita usando-se variáveis como freqüência, coeficiente de similaridade, matéria seca e abundância (Carvalho &amp;amp; Pitelli, 1992). </p>
+		 
+		<p>Para o estudo quantitativo, foi efetuada a contagem do número de plantas de cada espécie, a partir do que realizaram-se os cálculos de freqüência de ocorrência, usando-se a fórmula a seguir, sendo os resultados dados em percentagem (Carvalho &amp;amp; Pitelli, 1992; Sousa, 1995). </p>
+		 
+		<p>F = Po x100/PT </p>
+		 
+		<p>F = Freqüência (%) </p>
+		 
+		<p>Po = número de parcelas ocupadas, isto é, em que ocorre uma dada espécie </p>
+		 
+		<p>PT = número total de parcelas amostradas. </p>
+		 
+		<p>A densidade foi definida como o número de indivíduos por metro quadrado, sendo determinada para cada espécie pela fórmula descrita por Carvalho &amp;amp; Pitelli (1992) e Sousa (1995): </p>
+		 
+		<p>
+			DA= n/m
+			<sup>2</sup>
+			 onde: 
+		</p>
+		 
+		<p>DA = densidade absoluta </p>
+		 
+		<p>n = número total de indivíduos de uma dada espécie </p>
+		 
+		<p>
+			m
+			<sup>2</sup>
+			 = metros quadrados. 
+		</p>
+		 
+		<p>O coeficiente de similaridade foi calculado baseando-se na seguinte fórmula: CS=2C x 100/A+B, proposta por Sorensen (1948), apud Carvalho &amp;amp; Pitelli (1992) e Sousa (1995), onde: </p>
+		 
+		<p>CS = Coeficiente de Similaridade (%) </p>
+		 
+		<p>A= número de espécies do hábitat A; </p>
+		 
+		<p>B= número de espécies do hábitat B; </p>
+		 
+		<p>C= número de espécies comuns aos dois hábitats. </p>
+		 
+		<p>
+			Os dados do número de plantas invasoras foram transformados em 
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a02fr01.gif"/>
+			, para efeito da análise de variância. A significância para a análise de variância foi feita pelo teste &quot;F&quot; a 5% de probabilidade. As comparações entre as médias foram feitas pelo teste de &quot;Tukey&quot;, também a 5% de probabilidade. Os cálculos do desvio padrão (s) e erro padrão da média (s
+			<sub>m</sub>
+			) foram conforme Pimentel Gomes (1982). 
+		</p>
+		 
+		<p>
+			<bold>RESULTADOS E DISCUSSÃO </bold>
+		</p>
+		 
+		<p>Caracterização das Plantas Invasoras nos Sistemas de uso da terra</p>
+		 
+		<p>
+			Foram identificadas 55 espécies de plantas invasoras, distribuídas em 23 famílias botânicas (
+			<xref>Tabela 2</xref>
+			). Destas espécies, 43 são dicotiledôneas (78,2 %), 11 monocotiledôneas (20,0%) e uma pteridófita (1,8%). Na 
+			<xref>Tabela 2</xref>
+			 foram relacionadas todas as espécies encontradas nas duas áreas e identificadas pelos seus nomes científico e vulgar, quando conhecidos, segundo Silva 
+			<italic>et al.</italic>
+			 (1977); Silva 
+			<italic>et al.</italic>
+			 (1988), Mori 
+			<italic>et al.</italic>
+			 (1980), Lorenzi (1994). 
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a02tab02.gif"/>
+		</p>
+		 
+		<p>
+			Observa-se também na 
+			<xref>Tabela 2</xref>
+			, que as espécies com maiores médias de densidades, ou seja, com maior número de plantas por m
+			<sup>2</sup>
+			 foram 
+			<italic>Paspalum conjugatum</italic>
+			 P.J. Bergius e 
+			<italic>Ageratum conyzoides</italic>
+			 L. na área A, com 66,81 e 44,67 plantas m
+			<sup>-2</sup>
+			, respectivamente. Na área B, as espécies com maiores densidades foram 
+			<italic>Homolepis aturensis </italic>
+			(Kunth) Chase e 
+			<italic>Ageratum conyzoides</italic>
+			 L., com 41,95 e 35,36 plantas m
+			<sup>-2</sup>
+			, respectivamente. 
+		</p>
+		 
+		<p>
+			As dez espécies mais importantes em número de indivíduos por m
+			<sup>2</sup>
+			 corresponderam a 86,34% na área A e 89,95% na área B. Destas, verifica-se que as famílias Poaceae (área A), Poaceae e Cyperaceae (área B) representam 42,91% e 60,88% nas áreas A e B, respectivamente. Pleasant 
+			<italic>et al.</italic>
+			 (1990), estudando medidas de controle de invasoras em sistemas de cultivo contínuo de lavouras anuais, mostraram que 60% das invasoras na primeira cultura eram constituídas por Poaceae, contra 15% de dicotiledôneas e 25% de Cyperaceae. Já no sexto cultivo, as Poaceae compunham 80% da população de invasoras. 
+		</p>
+		 
+		<p>
+			Conforme a densidade da comunidade em nível de grupo, nota-se que as monocotiledôneas foram superiores em relação ao número de indivíduos por metro quadrado, particularmente na área B. O número total de indivíduos de Poaceae e Cyperaceae por m
+			<sup>2</sup>
+			 na área B foi de 93,2 plantas m
+			<sup>-2</sup>
+			, enquanto o número de dicotiledôneas foi de 55,1 plantas m
+			<sup>-2</sup>
+			 (
+			<xref>Tabela 2</xref>
+			). Na área A, as monocotiledôneas estavam constituídas somente por Poaceae, com 113,0 indivíduos por m
+			<sup>2</sup>
+			, sendo um número bastante expressivo quando comparado a 138,6 plantas m
+			<sup>-2</sup>
+			 das 43 espécies dicotiledôneas. Mori 
+			<italic>et al.</italic>
+			 (1980) observaram que a ocorrência de dicotiledôneas foi maior que as monocotiledôneas (46 vs. 26 espécies). No entanto, as monocotiledôneas apresentaram maior biomassa, indicando que foram quase duas vezes mais prejudiciais aos cultivos que as dicotiledôneas. 
+		</p>
+		 
+		<p>
+			As famílias Poaceae e Asteraceae apresentaram maior número de espécies, ambas com 10, destacando-se 
+			<italic>Paspalum conjugatum</italic>
+			 P.J. Bergius, na área A, e 
+			<italic>Homolepis aturensis </italic>
+			(Kunth) Chase, na área B, como as mais freqüentes da família Poaceae. 
+			<italic>Panicum laxum</italic>
+			 Sw., a terceira espécie mais freqüente da família Poaceae, teve freqüência de somente 9,29% e 7,22% nas áreas A e B, respectivamente. Na família Asteraceae, destacaram-se 
+			<italic>Ageratum conyzoides</italic>
+			 nas áreas A e B, e 
+			<italic>Emilia coccinea</italic>
+			, na área A como as mais freqüentes. Outras famílias com menor número de espécies foram Euphorbiaceae (6), Rubiaceae (5), Verbenaceae (3) e Cecropiaceae (3). As demais apresentaram apenas uma espécie. 
+		</p>
+		 
+		<p>
+			Comparando-se com os dados do levantamento florístico realizado na área em 1994, antes da implantação dos sistemas, verifica-se que os cultivos modificaram a diversidade das espécies da vegetação invasora. Neste levantamento identificou-se cerca de 18 espécies, representadas por 16 famílias. As espécies com maior número de indivíduos encontradas na área, com vegetação de capoeira de aproximadamente dois anos, pertenciam às famílias Cecropiaceae (15), Melastomataceae (6) e Rubiaceae (5), que provavelmente compunham 80% do total de indivíduos de arbóreas. Também, foram encontradas espécies das famílias: Gleicheniaceae (2), Burseraceae (2), Sapindaceae (2), Fabaceae (2), Solanaceae (1), entre outras. Diferentemente, em áreas de floresta primária, Klinge 
+			<italic>et al.</italic>
+			 (1975) mostraram que a maior riqueza de espécies pertence às famílias 
+			<italic>Leguminosae</italic>
+			 (ocorrendo em todos os estratos), 
+			<italic>Sapotaceae, Lauraceae, Chrysobalanaceae e Rubiaceae</italic>
+			. 
+		</p>
+		 
+		<p>
+			Observa-se na 
+			<xref>Tabela 2</xref>
+			, que algumas dessas famílias não foram encontradas nesta avaliação e mesmo as que ocorreram não foram as mais freqüentes, geralmente apresentando-se com poucas espécies e poucos indivíduos, exceção feita apenas à família Rubiaceae, a terceira mais freqüente das dicotiledôneas, apresentando-se com cinco espécies. Estes resultados mostram a alteração na diversidade da composição florística das áreas com o uso. Souza, Silva &amp; Figueiredo (1998), comparando áreas de cultivo com áreas de pousio, também observaram redução na diversidade de espécies nas áreas de cultivo. Famílias como Malpighiaceae, Cecropiaceae, Euphorbiaceae, Cyperaceae, Poaceae, entre outras, foram também encontradas em áreas experimentais na EMBRAPA Amazônia Ocidental e em áreas cultivadas com cupuaçuzeiro (Silva, 1999). 
+		</p>
+		 
+		<p>O grupo das monocotiledôneas foi formado por somente duas famílias, Poaceae e Cyperaceae, representando 20% do total das espécies registradas. No entanto, o número de indivíduos por família foi muito maior, correspondendo a 49,3% da família Poaceae, contra 31% da família Asteraceae, a maior representante das dicotiledôneas. </p>
+		 
+		<p>
+			A maior freqüência de espécies das Poaceae pode ser justificada pelo manejo do solo (Kissmann &amp;amp; Groth, 1993) e, possivelmente, pela diminuição da fertilidade deste com os cultivos sucessivos, principalmente nos tratamentos sem adubação completa. Neste caso, a ocorrência de monocotiledôneas em maior quantidade indica também a maior eficiência destas espécies na exploração dos fatores de produção (Silva 
+			<italic>et al.</italic>
+			, 1988 ). 
+		</p>
+		 
+		<p>
+			Trabalhos conduzidos em áreas da região amazônica têm mostrado a família Poaceae e principalmente a espécie 
+			<italic>Paspalum conjugatum</italic>
+			 como mais freqüentes (Souza Filho, 1995; Souza 
+			<italic>et al.</italic>
+			, 1998). Alcântara &amp; Carvalho (1983), nos estudos de invasoras em plantios de mandioca, identificaram, também, as famílias Poaceae e Asteraceae como as mais freqüentes. De igual modo, áreas ocupadas com plantios de cacau, bananeira e com leguminosas de cobertura de solo foram encontradas proliferando por invasoras mais freqüentes, tais como espécies de Poaceae, como 
+			<italic>Paspalum conjugatum</italic>
+			, além de outras importantes citadas neste estudo (Lisboa &amp; Vinha, 1982; Silva 
+			<italic>et al.</italic>
+			, 1988; Valenzuela, 1990). Esta espécie se adapta às condições de baixa luminosidade, além de vegetar em solos de fertilidade média, razão portanto, de ser encontrada com maior freqüência em áreas bastante sombreadas (Lisboa &amp; Vinha, 1982). Assim, também, pode-se justificar a maior freqüência desta espécie e de outras Poaceae nos sistemas agroflorestais, onde há maior ocupação das áreas com plantas perenes arbóreas e, consequentemente, menor incidência de luz. 
+		</p>
+		 
+		<p>
+			A distribuição das dicotiledôneas foi generalizada nas áreas e nos tratamentos estudados. Observou-se, no entanto, maior ocorrência na área A que na B e geralmente, enquanto aumentava o número de dicotiledôneas decrescia o número de monocotiledôneas (
+			<ext-link ext-link-type="uri" xlink:href="/img/revistas/aa/v33n3/a02fig01.gif">Figura 1</ext-link>
+			, 
+			<xref>Tabela 3</xref>
+			). 
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a02tab03.gif"/>
+		</p>
+		 
+		<p>
+			O número de monocotiledôneas foi menor no tratamento com adubação completa (NPK+MO) e maior nos demais tratamentos, ou seja, com P e P+Leguminosa, em ambas as áreas (
+			<xref>Tabela 3</xref>
+			). Com as dicotiledôneas, no entanto, o processo foi inverso; nas áreas com adubação NPK+MO, no solo com fertilidade mais elevada (
+			<xref>Tabela 1</xref>
+			), o número de dicotiledôneas foi 113% (área A) e 17% (área B) maior que as monocotiledôneas, decrescendo nos tratamentos P e P+Leguminosa e, com menos adubação. O maior número de plantas deste grupo pode estar relacionado à maior diversidade de dicotiledôneas, em razão da maioria das famílias botânicas encontrar-se neste grupo (Nee, 1995). Por outro lado, neste grupo também são encontradas as famílias de plantas invasoras consideradas mais agressivas (Sousa, 1995). 
+		</p>
+		 
+		<p>
+			De modo geral, o número total de plantas e de espécies invasoras aumentou com o tempo como pode ser observado na 
+			<xref>Figura 2</xref>
+			 e 
+			<xref>Tabela 4</xref>
+			. O número total de plantas invasoras decresceu na segunda coleta, sendo mais acentuado nos sistemas mandioca+fruteiras e maracujá+fruteiras (
+			<xref>Figura 2</xref>
+			). O número de espécies monocotiledôneas também mostrou um ligeiro decréscimo na segunda coleta de invasoras na área B (
+			<xref>Tabela 4</xref>
+			). Estes decréscimos corresponderam à época mais seca, e conseqüentemente, período de maior deficiência hídrica. 
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a02fig02.jpg"/>
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a02tab04.gif"/>
+		</p>
+		<p/>
+		 
+		<p>
+			Os dados da 
+			<xref>Tabela 4</xref>
+			 mostram um acréscimo de 42% e 26% ocorrido no número total de espécies invasoras da primeira para a terceira coleta (fev/97 para fev/98) nas áreas B e A, respectivamente, sendo 22% e 50% o aumento de espécies dicotiledôneas e 40% e 25% o de monocotiledôneas. Os dados totais de espécies que ocorreram nas áreas A e B (
+			<xref>Tabela 4</xref>
+			) evidenciam o número expressivo de espécies dicotiledôneas em relação às monocotiledôneas, 29 versus 9 na área A e 35 versus 11 na área B, assim como mostram a maior diversidade da área B (46 versus 38 espécies), o que pode estar relacionado ao banco de sementes do solo diferente para cada área. 
+		</p>
+		 
+		<p>
+			No sistema anuais+fruteiras, as monocotiledôneas tiveram um aumento contínuo, o que pode ter sido em razão dos cultivos anuais mais freqüentes e que permitiram maior movimentação do solo (
+			<xref>Figura 2</xref>
+			). Estes dados concordam com resultados anteriores relatados, que concluíram pela menor perturbação do solo como responsáveis pela redução da reinfestação das plantas invasoras, incluindo espécies da família Poaceae (McCloskey 
+			<italic>et al.,</italic>
+			 1996). 
+		</p>
+		 
+		<p>
+			Nos agrossistemas tropicais, as comunidades de plantas invasoras dominantes são formadas por espécies nativas e cosmopolitas. Os resultados deste estudo mostram que as práticas agrícolas e os sistemas de manejo do solo e das culturas exercem influência acentuada na composição florística e no tamanho das comunidades de plantas invasoras em cada local. Estes resultados corroboram outros trabalhos com plantas invasoras (Kellman, 1980; Derksen 
+			<italic>et al</italic>
+			., 1993; Dekker, 1997). 
+		</p>
+		 
+		<p>Variação da comunidade de plantas invasoras nos sistemas agroflorestais estudados. </p>
+		 
+		<p>
+			Verifica-se pelos coeficientes de similaridade dos locais e tratamentos estudados que algumas áreas mostram maiores semelhanças em termos de espécies que outras (
+			<xref>Tabela 5</xref>
+			). No entanto, as similaridades entre as áreas com os sistemas são todas menores que 50%. 
+		</p>
+		 
+		<p/>
+		 
+		<p>
+			<inline-graphic xlink:href="/img/revistas/aa/v33n3/a02tab05.gif"/>
+		</p>
+		 
+		<p>Os maiores coeficientes de similaridade, entre as duas áreas, foram observados nos tratamentos que receberam adubação com matéria orgânica (NPK+MO), particularmente nos sistemas mandioca+fruteiras (44,0%), anuais+fruteiras (42,1%) e maracujá+fruteiras (46,3%). Este último apresenta o maior coeficiente de similaridade entre as áreas A e B, provavelmente em razão da menor movimentação do solo com o cultivo do maracujá, o qual tem ciclo mais longo que as culturas anuais e a mandioca. Os menores coeficientes foram observados no sistema anuais+fruteiras com NPK+MO (18,8%), P (15,6%) e P+Leguminosa (20,7%) na área A e maracujá+fruteiras com P, na B. De modo geral, os menores coeficientes de similaridade entre as áreas A e B em qualquer dos sistemas envolviam os tratamentos com P e P+Leguminosa. Estes variaram entre 20,0% a 38,9% (P e P+leguminosa, no sistema mandioca+fruteiras&amp;lt;anuais+fruteiras&amp;lt; maracujá+fruteiras); entre 21,2% a 21,9% (P+leguminosa e P, no sistema mandioca+fruteiras e anuais+fruteiras &amp;lt; anuais+fruteiras e maracujá+fruteiras &amp;lt;mandioca+fruteiras e maracujá+fruteiras). Dessa forma, comparando-se os dados das duas áreas, verifica-se que as maiores similaridades ocorreram nos três sistemas maracujá+fruteiras com NPK+MO, mandioca+fruteiras com NPK+MO e anuais+fruteiras com NPK+MO, cada um com o seu tratamento correspondente na outra área, cujos coeficientes foram de 46,3%, 44,0% e 42,1%, respectivamente. </p>
+		 
+		<p>
+			O índice de similaridade medido pelo número de espécies comuns nas diferentes áreas mostram a intensificação do uso das áreas, indicando o tipo de manejo do solo pelo tipo de comunidades de invasoras ocorrentes. Odum 
+			<italic>et al.</italic>
+			 (1994), comparando a vegetação entre áreas de cultivo e áreas mais antigas, mostraram a grande diferença existente entre as áreas; obtiveram coeficientes de similaridade entre 1-18%. Os mesmos autores mostraram que as seis espécies mais dominantes nas áreas antigas não foram encontradas nas de cultivo, enquanto que invasoras de cultivo foram encontradas apenas esparsamente nas áreas antigas. Notaram também, que as maiores semelhanças foram entre as áreas de plantio direto e as antigas adubadas (18%), concluindo que as invasoras prejudiciais à agricultura são realmente aquelas que se adaptam aos fertilizantes, desenvolvem resistência ao herbicida e geralmente não ocorrem nos ecossistemas naturais. Carvalho &amp; Pitelli (1992) mostraram que os coeficientes de similaridade não estão relacionados aos solos ou distância entre as áreas, mas podem estar mais ligados às formas de manejo dadas às diferentes áreas. 
+		</p>
+		 
+		<p>Sousa (1995) mostrou que as comunidades de plantas invasoras em áreas de pastagem foram diferentes das ocorrentes nos sistemas agroflorestais. Nesses, a similaridade entre as comunidades de plantas invasoras que ocorreram no estrato inferior dos diferentes sistemas agroflorestais foram semelhantes em 50 a mais de 60%. Isso indica, também, que o manejo dado ao solo é fator importante no aparecimento das comunidades de invasoras. </p>
+		 
+		<p>
+			Os resultados do presente trabalho mostraram os maiores coeficientes de similaridade nas áreas onde os sistemas de manejo do solo foram mais semelhantes, principalmente nos locais em que o tratamento NPK+MO foi utilizado (
+			<xref>Tabela 5</xref>
+			). Assim, o manejo contínuo do solo alterou as comunidades de plantas invasoras nas áreas do estudo, quando comparadas com as áreas originais utilizadas anteriormente. 
+		</p>
+		 
+		<p>
+			<bold>CONCLUSÕES</bold>
+			 
+		</p>
+		 
+		<p>A diversificação nas áreas de cultivo, aliada às práticas de manejo do solo, influencia na vegetação invasora dos cultivos, alterando as comunidades de plantas invasoras. </p>
+		 
+		<p>Nas duas áreas estudadas, as espécies da família Poaceae são mais eficientes na exploração do solo de baixa fertilidade, necessitando de manejo mais intensivo para seu controle. </p>
+		 
+		<p>As práticas agrícolas e os sistemas de manejo do solo e das culturas afetam a composição florística e o tamanho das comunidades de plantas invasoras em cada local. </p>
+		 
+		<p>O número de plantas monocotiledôneas foi menor no tratamento com adubação completa (NPK+MO), enquanto o número de dicotiledôneas foi 74% maior neste tratamento. </p>
+		 
+		<p>
+			As espécies com maiores médias de densidades por m
+			<sup>2</sup>
+			 foram 
+			<italic>Paspalum conjugatum</italic>
+			 e 
+			<italic>Ageratum conyzoides</italic>
+			 na área A. Na área B, as espécies com maiores densidades foram 
+			<italic>Homolepis aturensis </italic>
+			e 
+			<italic>Ageratum conyzoides</italic>
+			. 
+		</p>
+		 
+		<p>Os maiores coeficientes de similaridade obtidos nas duas áreas mostram que o manejo contínuo do solo altera fortemente as comunidades de plantas invasoras nas áreas, sendo atualmente bem diferentes das áreas originais, e mais representativo na presença de MO. </p>
+		 
+		<p>
+			<bold>BIBLIOGRAFIA CITADA </bold>
+			 
+		</p>
+		 
+		<p>
+			Akobundu, I.O. 1987. Weed science in integrated pest management. 
+			<italic>In</italic>
+			: Klingman, G.C.; Noordhoff, F.M. (Eds). 
+			<italic>Weed science in the tropics. Principles and practices.</italic>
+			 New York: John Willey. p.1-22. 
+		</p>
+		 
+		<p>
+			Albuquerque, J.M. 1980. Identificação de plantas invasoras de cultura na região de Manaus. 
+			<italic>Acta Amazonica, </italic>
+			10(1): 47-95. 
+		</p>
+		 
+		<p>
+			Alcântara, E.N.; Carvalho, D.A. 1983. Plantas daninhas em mandiocais (
+			<italic>Manihot esculenta</italic>
+			 Crantz) na região mineradora de Diamantina (Alto Jequitinhonha), Minas Gerais. 
+			<italic>Planta Daninha,</italic>
+			 6(2): 138-143. 
+		</p>
+		 
+		<p>
+			Almeida, F.S. 1988. 
+			<italic>A alelopatia e as plantas</italic>
+			. IAPAR Circular, 53. Londrina, 60 p. 
+		</p>
+		 
+		<p>
+			Brasil. 1978. 
+			<italic>Projeto RADAMBRASIL</italic>
+			. 
+			<italic>Folha SA. 20 Manaus: geologia, geomorfologia, pedologia, vegetação e uso potencial da terra</italic>
+			. Departamento Nacional de Produção Mineral, Rio de Janeiro, (Levantamento de Recursos Naturais, 18), 628 p. 
+		</p>
+		 
+		<p>
+			Carsky, R.J; Tarawall, S.A.; Becker, M.; Chikoye, D.; Tian, G.; Sanginga, N. 1998. 
+			<italic>Mucuna- herbaceous cover legume with potential for multiple uses. </italic>
+			Ibadan: International Institute of Tropical Agriculture. Monograph 25. 52.p 
+		</p>
+		<p>
+			Carvalho, S.L.; Pitelli, R.A. 1992. Comportamento e análise fitossociológica das principais espécies de plantas daninhas de pastagens da região de Selvia (MS). 
+			<italic>Planta Daninha,</italic>
+			 10(1-2): 25-32. 
+		</p>
+		 
+		<p>
+			CPRM. 1998. - Serviço Geológico do Brasil. Superintendência Regional de Manaus. 
+			<italic>Potencial turístico do município de Presidente Figueiredo</italic>
+			. 
+			<italic>Programa de Integração Mineral em municípios da Amazônia - Primaz de Presidente Figueiredo</italic>
+			. Companhia de Pesquisa de Recursos Minerais, Manaus, Amazonas. 63 p. 
+		</p>
+		 
+		<p>
+			Dekker, J. 1997. Weed diversity and weed management. Symposium: Importance of weed biology to weed management. Weed Science Society of America, Norfolk, Virginia, 
+			<italic>Weed Science,</italic>
+			 45: 357-363. 
+		</p>
+		 
+		<p>
+			Derksen, D.A.; Lafond, G.P.; Thomas, A.G.; Loeppky, H.A.; Swanton, C.J. 1993. Impact of agronomic practices on weed communities: Tillage systems. 
+			<italic>Weed Science,</italic>
+			 41(3): 409-17 
+		</p>
+		<p>
+			Dias Filho, M.B. 1990. 
+			<italic>Plantas invasoras em pastagens cultivadas da Amazônia: estratégias de manejo e controle</italic>
+			. EMBRAPA-CPATU. Documentos, 52. 103 p. 
+		</p>
+		 
+		<p>
+			Domingues, E.P.; Velline, R.A.; Pitelli, R.A.; Pacheco, P.A.C. 1982. Efeito do matocompetição sobre a produtividade da cultura do arroz de sequeiro 
+			<italic>(Oriza sativa L.)</italic>
+			; em diferentes condições de espaçamento e de fertilização nitrogenada em cobertura. 
+			<italic>In: Resumos do 6 Congresso Brasileira de Herbicida e Plantas Daninhas</italic>
+			. ALAM/SBHED, Campinas, 33 p. 
+		</p>
+		 
+		<p>
+			EMBRAPA. 1997. 
+			<italic>Manual de métodos de análise de solo.</italic>
+			 Centro Nacional de Pesquisa de Solos. - 2. ed. rev. atual. - Rio de Janeiro, 1997. 212. (EMBRAP A-CNPS. Documentos; 1). 
+		</p>
+		 
+		<p>
+			EMBRAPA, 1998a. 
+			<italic>Boletim Agrometeo-rológico</italic>
+			. EMBRAPA/CPAA, Manaus. 23 p
+			<italic>. </italic>
+			 
+		</p>
+		 
+		<p>
+			EMBRAPA, 1998b. 
+			<italic>Boletim Agrometeo-rológico</italic>
+			. EMBRAPA/CPAA, Manaus. 19 p 
+			<italic>. </italic>
+			 
+		</p>
+		 
+		<p>
+			ICOTI. 1992
+			<italic>.</italic>
+			 Instituto de Cooperação Técnica Intermunicipal. 
+			<italic>Informações básicas do município de Presidente Figueiredo</italic>
+			. ICOTI, Manaus, 58 p. 
+		</p>
+		 
+		<p>
+			IPEAAOC. 1971. Instituto de Pesquisa Agropecuária da Amazônia Ocidental. Convênio para levantamento da área do distrito Agropecuário da SUFRAMA, IPEAN e IPEAAOc
+			<italic>. Solos do Distrito Agropecuário da SUFRAMA</italic>
+			. IPEAAOc, Manaus, 99 p. 
+		</p>
+		 
+		<p>
+			IPEAAOC. 1972. Instituto de Pesquisa Agropecuária da Amazônia Ocidental. Levantamento detalhado dos solos do IPEAAOc. 
+			<italic>Boletim Técnico,</italic>
+			 3. IPEAAOc, Manaus, 63 p. 
+		</p>
+		 
+		<p>
+			Kellman, M. 1980. Geographic patterning. 
+			<italic>In: </italic>
+			Tropical weed communities and early secondary succession. 
+			<italic>Biotropica, </italic>
+			12: 34-39. (supl. 
+		</p>
+		 
+		<p>
+			Kissmann, K.G.; Groth, D. 1993.
+			<italic> Plantas infestantes e nocivas</italic>
+			. BASF, São Paulo, Tomo 4, 798 p. 
+		</p>
+		 
+		<p>
+			Klinge, H.; Rodrigues, W.A.; Brunig, E.F.; Fittkau, E.J. 1975. Biomass and structure in a Central Amazonian rain forest.
+			<italic> In</italic>
+			: Golley, F.F.; Medina, E. (Eds). 
+			<italic>Tropical Ecological Systems 11. Trends in Terrestrial and Aquatic Ecology.</italic>
+			 New York, Springer-Verlag Berlin. p.115-122. 
+		</p>
+		 
+		<p>
+			Le Bourgeois, T. Merlier, H. 1995. 
+			<italic>Adventrop. Les adventices d&amp;#x27;Afrique soudane-sahélienne</italic>
+			. Montpellier, France, Cirad - CA (ed.), 640 p. 
+		</p>
+		 
+		<p>
+			Leitão Filho, H.F.; Aranha, C.; Bacchi, O. 1972. 
+			<italic>Plantas invasoras de culturas</italic>
+			. Vol. 1. 
+		</p>
+		 
+		<p>
+			Lisboa, G. Vinha, S.G. 1982. Plantas indesejáveis em cacauais de idades diferentes na área do Centro de Pesquisas do Cacau (CEPEC), 
+			<italic>Revista Theobroma</italic>
+			, 12(3): 135-140. 
+		</p>
+		 
+		<p>
+			Lorenzi, H. 1980. Plantas daninhas na cultura do milho. 
+			<italic>Divulgação Agronômica Shell,</italic>
+			 São Paulo, 47: 1-9. 
+		</p>
+		 
+		<p>
+			Lorenzi, H. 1994. 
+			<italic>Manual de identificação e controle de plantas daninhas, plantio direto e convencional</italic>
+			 4.ed. Nova Odessa: Plantarum. 299 p. 
+		</p>
+		 
+		<p>
+			Martins, D.; Pitelli, R.A. 1994. Influência das plantas daninhas na cultura do amendoim das águas: Efeitos de espaçamentos, variedades e períodos de convivência. 
+			<italic>Planta Daninha,</italic>
+			 12(2): 87-92. 
+		</p>
+		 
+		<p>
+			McCloskey, M.; Firbank, L.G.; Watkinson, A.R.; Webb, D.J. 1996. The dynamics of experimental arable weed communities under different management practices. 
+			<italic>J. Veg. Sci., </italic>
+			7: 799-808. 
+		</p>
+		 
+		<p>
+			Mori, S.A.; Silva, A.A.M.; Lisboa, G.; Pereira, R.C.; Santos, T.S. 1980. Subsídios para estudos de plantas invasoras no sul da Bahia. I. Produtividade e Fenologia. 
+			<italic>Boletim Técnico 73</italic>
+			. Ilhéus, Comissão Executiva do Plano da Lavoura Cacaueira, 1980. 18 p. 
+		</p>
+		 
+		<p>
+			Nee, M. 1995. 
+			<italic>Flora Preliminar do Projeto Dinâmica Biológica de Fragmentos Florestais (PDBFF). </italic>
+			New York Botanical Garden; INPA/Smithsonian, Manaus, 264 p. 
+		</p>
+		 
+		<p>
+			Odum, E.P.; Park, T.Y.; Hutcheson, K. 1994. Comparison of the weedy vegetation in old-fields and crop fields on the same site reveals that fallowing crop fields does not result in seedbank buildup of agricultural weeds. 
+			<italic>Agriculture, Ecosystems and Environment,</italic>
+			 49: 247-252. 
+		</p>
+		 
+		<p>
+			Pimentel Gomes F. 1982. 
+			<italic>Curso de estatística experimental</italic>
+			. 10.ed. Piracicaba:ESAL Q. 430 p. 
+		</p>
+		 
+		<p>
+			Pleasant, J.Mt.; McCollum, R.E.; Coble, H.D. 1990. Weed population Dynamics and Weed Control in the Peruvian Amazon. 
+			<italic>Agronomy Journal,</italic>
+			 82:102-112. 
+		</p>
+		 
+		<p>
+			Primavesi, A. 1992a. 
+			<italic>Agricultura sustentável</italic>
+			. São Paulo, Nobel, 141 p. 
+		</p>
+		 
+		<p>
+			Primavesi, A. 1992b. 
+			<italic>Manejo ecológico de pastagens</italic>
+			. São Paulo, Nobel, 95 p. 
+		</p>
+		 
+		<p>
+			Saavedra, M.S. 1994. Dinamica y manejo de poblaciones de malas hierbas. 
+			<italic>Planta Daninha</italic>
+			, 2(1): 29-38. 
+		</p>
+		 
+		<p>
+			Schulz, B.; Becker, B.; Götsch, E. 1994. Indigenous knowledge in a &amp;#x27; modern&amp;#x27; sustainable agroforestry system - a case study from eastern Brazil. 
+			<italic>Agroforestry Systems,</italic>
+			 25: 59-69. 
+		</p>
+		 
+		<p>
+			Silva, M.F.; Lisbôa, P.L.B.; Lisbôa, R.C.L.1977. 
+			<italic>Nome vulgares de plantas amazônicas</italic>
+			. Belém, INPA, 222 p. 
+		</p>
+		 
+		<p>
+			Silva, L.A.M.; Vinha, S.G.; Pereira, R.C. 1988. Gramíneas invasoras de cacauais. 
+			<italic>Boletim Técnico </italic>
+			159. Ilheus, Comissão Executiva do Plano da Lavoura Cacaueira, 1970. 108 p. 
+		</p>
+		 
+		<p>
+			Silva, J.F. 1999. 
+			<italic>Influência de herbicidas no crescimento e anatomia da epiderme foliar de plantas de cupuaçu (Theobroma grandiflorum</italic>
+			 (Willdenow ex Spreng) Schumann)
+			<italic> e leguminosas em consorciação.</italic>
+			 Tese de Doutorado, Instituto Nacional de Pesquisa da Amazônia/Fundação Universidade do Amazonas. Manaus, Amazonas. 171p. 
+		</p>
+		 
+		<p>
+			Sorensen, T. 1948. A method of establishing groups of equal amplitude in plant society based on similarity of species content. 
+			<italic>In: </italic>
+			Odum, E.P. (Ed). 
+			<italic>Ecologia.</italic>
+			 3a ed., México, Interamericana. 1972. 640 p. 
+		</p>
+		 
+		<p>
+			Sousa, S.G.A. 1995. 
+			<italic>Dinâmica de plantas invasoras em sistemas agroflorestais implantados em pastagens degradadas da Amazônia Central. (Região de Manaus-AM).</italic>
+			 Dissertação de Mestrado, Escola Superior de Agricultura &quot;Luiz de Queiroz&quot; (ESALQ), Universidade de São Paulo. Piracicaba, São Paulo. 97p. 
+		</p>
+		 
+		<p>
+			Souza Filho, A.P.S. 1995
+			<italic>. Potencialidades alelopáticas envolvendo gramíneas e leguminosas forrageiras e plantas invasoras de pastagens.</italic>
+			 Dissertação de Mestrado, Faculdade de Ciências Agrárias e Veterinárias, Universidade Estadual Paulista, Campus de Jaboticabal. Jaboticabal. São Paulo. 137p. 
+		</p>
+		 
+		<p>
+			Souza Filho, A.P.S.; Rodrigues, L.R.A.; Rodrigues, T.J.D. 1997. Efeito do potencial alelopático de três leguminosas forrageiras sobre três invasoras de pastagens. 
+			<italic>Pesquisa Agropecuária Brasileira,</italic>
+			 32(2): 165-170. 
+		</p>
+		 
+		<p>
+			Souza, G.F.; Silva, J.F.; Figueiredo, A.F.. 1998. Levantamento de plantas daninhas em áreas com e sem cultivos, em Manaus-AM. 
+			<italic>Revista da Universidade do Amazonas</italic>
+			. Série: Ciências Agrárias, 7(1-2): 33-43. 
+		</p>
+		 
+		<p>
+			Stevensen, E.C.; Légère, A.; Simard, R.R.; Anger, D.A.; Pageau, D.; Lafond, J. 1997. Weed species diversity in spring barley varies with crop rotation and tillage, but not with nutrient source
+			<italic>. Weed Science</italic>
+			, 45: 798-806. 
+		</p>
+		 
+		<p>
+			SUDAM. 1984. 
+			<italic>Atlas Climatológico da Amazônia Brasileira.</italic>
+			 Projeto de Hidrologia e Climatologia da Amazônia. Superintendência de Desenvolvimento da Amazônia, (Public. n
+			<sup>0</sup>
+			 39), Belém, 125 p. 
+		</p>
+		 
+		<p>
+			Valenzuela, J.A.D. 1990. 
+			<italic>Leguminosas de cobertura em cacau (Theobroma cacao L.) y pejibaye (Bactris gasipaes H. B. K.).</italic>
+			 Tese de Mestrado em Fitoprotection, Centro Agronomico Tropical de Investigación y Enseñanza (CATIE). Turrialba, Costa Rica. 85p. 
+		</p>
+		 
+		<p>
+			Vangessel, M.J.; Schweizer, E.E.; Garrett, K.A.; Westra, P. 1995. Influence of weed density and distribution on corn (
+			<italic>Zea mays</italic>
+			) yield. 
+			<italic>Weed Science</italic>
+			, 43: 215-218. 
+		</p>
+		 
+		<p>
+			Yamoah, C.F.; Agboola, A.A.; Mulongoy, K. 1986. Decomposition, nitrogen release and weed control by prunings of selected alley cropping shrubs. 
+			<italic>Agroforestry Systems, </italic>
+			4: 239-246. 
+		</p>
+		 
+		<p>
+			Vinha, S.G.; Pereira, R.C.; Muller, M.W. 1982. Efeito do controle de plantas invasoras sobre uma vegetação na área do CEPEC. 
+			<italic>Revista Theobroma</italic>
+			, 12(3): 123-134. 
+		</p>
+		 
+		<p>Recebido: 06/07/2002 </p>
+		<p> Aceito: 10/03/2003 </p>
+		<p/>
+		 
+		<p>
+			<xref>1</xref>
+			 Parte da Tese de Doutorado submetida, pela autora, ao Instituto Nacional de Pesquisas da Amazônia - INPA.
+		</p>
+	</body>
+	
+ 
+	<back>
+		
+ 
+		<ref-list>
+			
+ 
+			<ref id="B1">
+				
+ 
+				<mixed-citation>
+					Akobundu, I.O. 1987. Weed science in integrated pest management. 
+					<italic>In</italic>
+					: Klingman, G.C.; Noordhoff, F.M. (Eds). 
+					<italic>Weed science in the tropics. Principles and practices.</italic>
+					 New York: John Willey. p.1-22.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Weed science in the tropics: Principles and practices</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1987</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1</fpage>
+					
+ 
+					<lpage>22</lpage>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Akobundu</surname>
+							
+ 
+							<given-names>I.O.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Klingman</surname>
+							
+ 
+							<given-names>G.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Noordhoff</surname>
+							
+ 
+							<given-names>F.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B2">
+				
+ 
+				<mixed-citation>
+					Albuquerque, J.M. 1980. Identificação de plantas invasoras de cultura na região de Manaus. 
+					<italic>Acta Amazonica, </italic>
+					10(1): 47-95.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Identificação de plantas invasoras de cultura na região de Manaus</article-title>
+					
+ 
+					<source>Acta Amazonica,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>47</fpage>
+					
+ 
+					<lpage>95</lpage>
+					
+ 
+					<issue>1</issue>
+					
+ 
+					<volume>10</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Albuquerque</surname>
+							
+ 
+							<given-names>J.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B3">
+				
+ 
+				<mixed-citation>
+					Alcântara, E.N.; Carvalho, D.A. 1983. Plantas daninhas em mandiocais (
+					<italic>Manihot esculenta</italic>
+					 Crantz) na região mineradora de Diamantina (Alto Jequitinhonha), Minas Gerais. 
+					<italic>Planta Daninha,</italic>
+					 6(2): 138-143.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Plantas daninhas em mandiocais (Manihot esculenta Crantz) na região mineradora de Diamantina (Alto Jequitinhonha), Minas Gerais</article-title>
+					
+ 
+					<source>Planta Daninha,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1983</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>138</fpage>
+					
+ 
+					<lpage>143</lpage>
+					
+ 
+					<issue>2</issue>
+					
+ 
+					<volume>6</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Alcântara</surname>
+							
+ 
+							<given-names>E.N.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Carvalho</surname>
+							
+ 
+							<given-names>D.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B4">
+				
+ 
+				<mixed-citation>
+					Almeida, F.S. 1988. 
+					<italic>A alelopatia e as plantas</italic>
+					. IAPAR Circular, 53. Londrina, 60 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>A alelopatia e as plantas</article-title>
+					
+ 
+					<source>IAPAR Circular</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1988</year>
+						
+ 
+					</date>
+					
+ 
+					<volume>53</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Almeida</surname>
+							
+ 
+							<given-names>F.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B5">
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Projeto RADAMBRASIL. Folha SA. 20 Manaus: geologia, geomorfologia, pedologia, vegetação e uso potencial da terra</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1978</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B6">
+				
+ 
+				<mixed-citation>
+					Carsky, R.J; Tarawall, S.A.; Becker, M.; Chikoye, D.; Tian, G.; Sanginga, N. 1998. 
+					<italic>Mucuna- herbaceous cover legume with potential for multiple uses. </italic>
+					Ibadan: International Institute of Tropical Agriculture. Monograph 25. 52.p 
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Mucuna- herbaceous cover legume with potential for multiple uses</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1998</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Carsky</surname>
+							
+ 
+							<given-names>R.J</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Tarawall</surname>
+							
+ 
+							<given-names>S.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Becker</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Chikoye</surname>
+							
+ 
+							<given-names>D.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Tian</surname>
+							
+ 
+							<given-names>G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Sanginga</surname>
+							
+ 
+							<given-names>N.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B7">
+				
+ 
+				<mixed-citation>
+					Carvalho, S.L.; Pitelli, R.A. 1992. Comportamento e análise fitossociológica das principais espécies de plantas daninhas de pastagens da região de Selvia (MS). 
+					<italic>Planta Daninha,</italic>
+					 10(1-2): 25-32.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Comportamento e análise fitossociológica das principais espécies de plantas daninhas de pastagens da região de Selvia (MS)</article-title>
+					
+ 
+					<source>Planta Daninha,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1992</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>25</fpage>
+					
+ 
+					<lpage>32</lpage>
+					
+ 
+					<issue>1-2</issue>
+					
+ 
+					<volume>10</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Carvalho</surname>
+							
+ 
+							<given-names>S.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pitelli</surname>
+							
+ 
+							<given-names>R.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B8">
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Potencial turístico do município de Presidente Figueiredo: Programa de Integração Mineral em municípios da Amazônia - Primaz de Presidente Figueiredo</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1998</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B9">
+				
+ 
+				<mixed-citation>
+					Dekker, J. 1997. Weed diversity and weed management. Symposium: Importance of weed biology to weed management. Weed Science Society of America, Norfolk, Virginia, 
+					<italic>Weed Science,</italic>
+					 45: 357-363.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Weed diversity and weed management</article-title>
+					
+ 
+					<source>Weed Science</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1997</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>357</fpage>
+					
+ 
+					<lpage>363</lpage>
+					
+ 
+					<volume>45</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Dekker</surname>
+							
+ 
+							<given-names>J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B10">
+				
+ 
+				<mixed-citation>
+					Derksen, D.A.; Lafond, G.P.; Thomas, A.G.; Loeppky, H.A.; Swanton, C.J. 1993. Impact of agronomic practices on weed communities: Tillage systems. 
+					<italic>Weed Science,</italic>
+					 41(3): 409-17 
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Impact of agronomic practices on weed communities: Tillage systems</article-title>
+					
+ 
+					<source>Weed Science</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1993</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>409</fpage>
+					
+ 
+					<lpage>17</lpage>
+					
+ 
+					<issue>3</issue>
+					
+ 
+					<volume>41</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Derksen</surname>
+							
+ 
+							<given-names>D.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lafond</surname>
+							
+ 
+							<given-names>G.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Thomas</surname>
+							
+ 
+							<given-names>A.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Loeppky</surname>
+							
+ 
+							<given-names>H.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Swanton</surname>
+							
+ 
+							<given-names>C.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B11">
+				
+ 
+				<mixed-citation>
+					Dias Filho, M.B. 1990. 
+					<italic>Plantas invasoras em pastagens cultivadas da Amazônia: estratégias de manejo e controle</italic>
+					. EMBRAPA-CPATU. Documentos, 52. 103 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Plantas invasoras em pastagens cultivadas da Amazônia: estratégias de manejo e controle</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1990</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Dias Filho</surname>
+							
+ 
+							<given-names>M.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B12">
+				
+ 
+				<mixed-citation>
+					Domingues, E.P.; Velline, R.A.; Pitelli, R.A.; Pacheco, P.A.C. 1982. Efeito do matocompetição sobre a produtividade da cultura do arroz de sequeiro 
+					<italic>(Oriza sativa L.)</italic>
+					; em diferentes condições de espaçamento e de fertilização nitrogenada em cobertura. 
+					<italic>In: Resumos do 6 Congresso Brasileira de Herbicida e Plantas Daninhas</italic>
+					. ALAM/SBHED, Campinas, 33 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Resumos do 6 Congresso Brasileira de Herbicida e Plantas Daninhas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1982</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Domingues</surname>
+							
+ 
+							<given-names>E.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Velline</surname>
+							
+ 
+							<given-names>R.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pitelli</surname>
+							
+ 
+							<given-names>R.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pacheco</surname>
+							
+ 
+							<given-names>P.A.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B13">
+				
+ 
+				<mixed-citation>
+					EMBRAPA. 1997. 
+					<italic>Manual de métodos de análise de solo.</italic>
+					 Centro Nacional de Pesquisa de Solos. - 2. ed. rev. atual. - Rio de Janeiro, 1997. 212. (EMBRAP A-CNPS. Documentos; 1).
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Manual de métodos de análise de solo</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1997</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B14">
+				
+ 
+				<mixed-citation>
+					EMBRAPA, 1998a. 
+					<italic>Boletim Agrometeo-rológico</italic>
+					. EMBRAPA/CPAA, Manaus. 23 p
+					<italic>.</italic>
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Boletim Agrometeo-rológico</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1998</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B15">
+				
+ 
+				<mixed-citation>
+					EMBRAPA, 1998b. 
+					<italic>Boletim Agrometeo-rológico</italic>
+					. EMBRAPA/CPAA, Manaus. 19 p 
+					<italic>.</italic>
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Boletim Agrometeo-rológico</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1998</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B16">
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Informações básicas do município de Presidente Figueiredo</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1992</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B17">
+				
+ 
+				<mixed-citation>
+					IPEAAOC. 1971. Instituto de Pesquisa Agropecuária da Amazônia Ocidental. Convênio para levantamento da área do distrito Agropecuário da SUFRAMA, IPEAN e IPEAAOc
+					<italic>. Solos do Distrito Agropecuário da SUFRAMA</italic>
+					. IPEAAOc, Manaus, 99 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Solos do Distrito Agropecuário da SUFRAMA</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1971</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B18">
+				
+ 
+				<mixed-citation>
+					IPEAAOC. 1972. Instituto de Pesquisa Agropecuária da Amazônia Ocidental. Levantamento detalhado dos solos do IPEAAOc. 
+					<italic>Boletim Técnico,</italic>
+					 3. IPEAAOc, Manaus, 63 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Boletim Técnico</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1972</year>
+						
+ 
+					</date>
+					
+ 
+					<volume>3</volume>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B19">
+				
+ 
+				<mixed-citation>
+					Kellman, M. 1980. Geographic patterning. 
+					<italic>In: </italic>
+					Tropical weed communities and early secondary succession. 
+					<italic>Biotropica, </italic>
+					12: 34-39. (supl.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Geographic patterning</article-title>
+					
+ 
+					<source>Biotropica</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>34</fpage>
+					
+ 
+					<lpage>39</lpage>
+					
+ 
+					<volume>12</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Kellman</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B20">
+				
+ 
+				<mixed-citation>
+					Kissmann, K.G.; Groth, D. 1993.
+					<italic> Plantas infestantes e nocivas</italic>
+					. BASF, São Paulo, Tomo 4, 798 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Plantas infestantes e nocivas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1993</year>
+						
+ 
+					</date>
+					
+ 
+					<volume>4</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Kissmann</surname>
+							
+ 
+							<given-names>K.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Groth</surname>
+							
+ 
+							<given-names>D.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B21">
+				
+ 
+				<mixed-citation>
+					Klinge, H.; Rodrigues, W.A.; Brunig, E.F.; Fittkau, E.J. 1975. Biomass and structure in a Central Amazonian rain forest.
+					<italic> In</italic>
+					: Golley, F.F.; Medina, E. (Eds). 
+					<italic>Tropical Ecological Systems 11. Trends in Terrestrial and Aquatic Ecology.</italic>
+					 New York, Springer-Verlag Berlin. p.115-122.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Tropical Ecological Systems 11: Trends in Terrestrial and Aquatic Ecology</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1975</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>115</fpage>
+					
+ 
+					<lpage>122</lpage>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Klinge</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Rodrigues</surname>
+							
+ 
+							<given-names>W.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Brunig</surname>
+							
+ 
+							<given-names>E.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Fittkau</surname>
+							
+ 
+							<given-names>E.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Golley</surname>
+							
+ 
+							<given-names>F.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Medina</surname>
+							
+ 
+							<given-names>E.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B22">
+				
+ 
+				<mixed-citation>
+					Le Bourgeois, T. Merlier, H. 1995. 
+					<italic>Adventrop. Les adventices d'Afrique soudane-sahélienne</italic>
+					. Montpellier, France, Cirad - CA (ed.), 640 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Adventrop: Les adventices d'Afrique soudane-sahélienne</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Le Bourgeois</surname>
+							
+ 
+							<given-names>T.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Merlier</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B23">
+				
+ 
+				<mixed-citation>
+					Leitão Filho, H.F.; Aranha, C.; Bacchi, O. 1972. 
+					<italic>Plantas invasoras de culturas</italic>
+					. Vol. 1.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Plantas invasoras de culturas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1972</year>
+						
+ 
+					</date>
+					
+ 
+					<volume>1</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Leitão Filho</surname>
+							
+ 
+							<given-names>H.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Aranha</surname>
+							
+ 
+							<given-names>C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Bacchi</surname>
+							
+ 
+							<given-names>O.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B24">
+				
+ 
+				<mixed-citation>
+					Lisboa, G. Vinha, S.G. 1982. Plantas indesejáveis em cacauais de idades diferentes na área do Centro de Pesquisas do Cacau (CEPEC), 
+					<italic>Revista Theobroma</italic>
+					, 12(3): 135-140.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Plantas indesejáveis em cacauais de idades diferentes na área do Centro de Pesquisas do Cacau (CEPEC)</article-title>
+					
+ 
+					<source>Revista Theobroma,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1982</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>135</fpage>
+					
+ 
+					<lpage>140</lpage>
+					
+ 
+					<issue>3</issue>
+					
+ 
+					<volume>12</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Lisboa</surname>
+							
+ 
+							<given-names>G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Vinha</surname>
+							
+ 
+							<given-names>S.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B25">
+				
+ 
+				<mixed-citation>
+					Lorenzi, H. 1980. Plantas daninhas na cultura do milho. 
+					<italic>Divulgação Agronômica Shell,</italic>
+					 São Paulo, 47: 1-9.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Plantas daninhas na cultura do milho</article-title>
+					
+ 
+					<source>Divulgação Agronômica Shell, São Paulo,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>1</fpage>
+					
+ 
+					<lpage>9</lpage>
+					
+ 
+					<volume>47</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Lorenzi</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B26">
+				
+ 
+				<mixed-citation>
+					Lorenzi, H. 1994. 
+					<italic>Manual de identificação e controle de plantas daninhas, plantio direto e convencional</italic>
+					 4.ed. Nova Odessa: Plantarum. 299 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Manual de identificação e controle de plantas daninhas, plantio direto e convencional</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1994</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Lorenzi</surname>
+							
+ 
+							<given-names>H.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B27">
+				
+ 
+				<mixed-citation>
+					Martins, D.; Pitelli, R.A. 1994. Influência das plantas daninhas na cultura do amendoim das águas: Efeitos de espaçamentos, variedades e períodos de convivência. 
+					<italic>Planta Daninha,</italic>
+					 12(2): 87-92.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Influência das plantas daninhas na cultura do amendoim das águas: Efeitos de espaçamentos, variedades e períodos de convivência</article-title>
+					
+ 
+					<source>Planta Daninha,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1994</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>87</fpage>
+					
+ 
+					<lpage>92</lpage>
+					
+ 
+					<issue>2</issue>
+					
+ 
+					<volume>12</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Martins</surname>
+							
+ 
+							<given-names>D.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pitelli</surname>
+							
+ 
+							<given-names>R.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B28">
+				
+ 
+				<mixed-citation>
+					McCloskey, M.; Firbank, L.G.; Watkinson, A.R.; Webb, D.J. 1996. The dynamics of experimental arable weed communities under different management practices. 
+					<italic>J. Veg. Sci., </italic>
+					7: 799-808.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>The dynamics of experimental arable weed communities under different management practices</article-title>
+					
+ 
+					<source>J. Veg. Sci.,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1996</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>799</fpage>
+					
+ 
+					<lpage>808</lpage>
+					
+ 
+					<volume>7</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>McCloskey</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Firbank</surname>
+							
+ 
+							<given-names>L.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Watkinson</surname>
+							
+ 
+							<given-names>A.R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Webb</surname>
+							
+ 
+							<given-names>D.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B29">
+				
+ 
+				<mixed-citation>
+					Mori, S.A.; Silva, A.A.M.; Lisboa, G.; Pereira, R.C.; Santos, T.S. 1980. Subsídios para estudos de plantas invasoras no sul da Bahia. I. Produtividade e Fenologia. 
+					<italic>Boletim Técnico 73</italic>
+					. Ilhéus, Comissão Executiva do Plano da Lavoura Cacaueira, 1980. 18 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Subsídios para estudos de plantas invasoras no sul da Bahia. I.: Produtividade e Fenologia</article-title>
+					
+ 
+					<source>Boletim Técnico</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1980</year>
+						
+ 
+					</date>
+					
+ 
+					<volume>73</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Mori</surname>
+							
+ 
+							<given-names>S.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Silva</surname>
+							
+ 
+							<given-names>A.A.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lisboa</surname>
+							
+ 
+							<given-names>G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pereira</surname>
+							
+ 
+							<given-names>R.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Santos</surname>
+							
+ 
+							<given-names>T.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B30">
+				
+ 
+				<mixed-citation>
+					Nee, M. 1995. 
+					<italic>Flora Preliminar do Projeto Dinâmica Biológica de Fragmentos Florestais (PDBFF). </italic>
+					New York Botanical Garden; INPA/Smithsonian, Manaus, 264 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Flora Preliminar do Projeto Dinâmica Biológica de Fragmentos Florestais (PDBFF)</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Nee</surname>
+							
+ 
+							<given-names>M.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B31">
+				
+ 
+				<mixed-citation>
+					Odum, E.P.; Park, T.Y.; Hutcheson, K. 1994. Comparison of the weedy vegetation in old-fields and crop fields on the same site reveals that fallowing crop fields does not result in seedbank buildup of agricultural weeds. 
+					<italic>Agriculture, Ecosystems and Environment,</italic>
+					 49: 247-252.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Comparison of the weedy vegetation in old-fields and crop fields on the same site reveals that fallowing crop fields does not result in seedbank buildup of agricultural weeds</article-title>
+					
+ 
+					<source>Agriculture, Ecosystems and Environment,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1994</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>247</fpage>
+					
+ 
+					<lpage>252</lpage>
+					
+ 
+					<volume>49</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Odum</surname>
+							
+ 
+							<given-names>E.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Park</surname>
+							
+ 
+							<given-names>T.Y.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Hutcheson</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B32">
+				
+ 
+				<mixed-citation>
+					Pimentel Gomes F. 1982. 
+					<italic>Curso de estatística experimental</italic>
+					. 10.ed. Piracicaba:ESAL Q. 430 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Curso de estatística experimental</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1982</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Pimentel Gomes</surname>
+							
+ 
+							<given-names>F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B33">
+				
+ 
+				<mixed-citation>
+					Pleasant, J.Mt.; McCollum, R.E.; Coble, H.D. 1990. Weed population Dynamics and Weed Control in the Peruvian Amazon. 
+					<italic>Agronomy Journal,</italic>
+					 82:102-112.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Weed population Dynamics and Weed Control in the Peruvian Amazon</article-title>
+					
+ 
+					<source>Agronomy Journal,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1990</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>102</fpage>
+					
+ 
+					<lpage>112</lpage>
+					
+ 
+					<volume>82</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Pleasant</surname>
+							
+ 
+							<given-names>J.Mt.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>McCollum</surname>
+							
+ 
+							<given-names>R.E.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Coble</surname>
+							
+ 
+							<given-names>H.D.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B34">
+				
+ 
+				<mixed-citation>
+					Primavesi, A. 1992a. 
+					<italic>Agricultura sustentável</italic>
+					. São Paulo, Nobel, 141 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Agricultura sustentável</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1992</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Primavesi</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B35">
+				
+ 
+				<mixed-citation>
+					Primavesi, A. 1992b. 
+					<italic>Manejo ecológico de pastagens</italic>
+					. São Paulo, Nobel, 95 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Manejo ecológico de pastagens</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1992</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Primavesi</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B36">
+				
+ 
+				<mixed-citation>
+					Saavedra, M.S. 1994. Dinamica y manejo de poblaciones de malas hierbas. 
+					<italic>Planta Daninha</italic>
+					, 2(1): 29-38.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Dinamica y manejo de poblaciones de malas hierbas</article-title>
+					
+ 
+					<source>Planta Daninha,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1994</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>29</fpage>
+					
+ 
+					<lpage>38</lpage>
+					
+ 
+					<issue>1</issue>
+					
+ 
+					<volume>2</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Saavedra</surname>
+							
+ 
+							<given-names>M.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B37">
+				
+ 
+				<mixed-citation>
+					Schulz, B.; Becker, B.; Götsch, E. 1994. Indigenous knowledge in a ' modern' sustainable agroforestry system - a case study from eastern Brazil. 
+					<italic>Agroforestry Systems,</italic>
+					 25: 59-69.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Indigenous knowledge in a ' modern' sustainable agroforestry system - a case study from eastern Brazil</article-title>
+					
+ 
+					<source>Agroforestry Systems,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1994</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>59</fpage>
+					
+ 
+					<lpage>69</lpage>
+					
+ 
+					<volume>25</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Schulz</surname>
+							
+ 
+							<given-names>B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Becker</surname>
+							
+ 
+							<given-names>B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Götsch</surname>
+							
+ 
+							<given-names>E.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B38">
+				
+ 
+				<mixed-citation>
+					Silva, M.F.; Lisbôa, P.L.B.; Lisbôa, R.C.L.1977. 
+					<italic>Nome vulgares de plantas amazônicas</italic>
+					. Belém, INPA, 222 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Nome vulgares de plantas amazônicas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1977</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Silva</surname>
+							
+ 
+							<given-names>M.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lisbôa</surname>
+							
+ 
+							<given-names>P.L.B.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lisbôa</surname>
+							
+ 
+							<given-names>R.C.L.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B39">
+				
+ 
+				<mixed-citation>
+					Silva, L.A.M.; Vinha, S.G.; Pereira, R.C. 1988. Gramíneas invasoras de cacauais. 
+					<italic>Boletim Técnico </italic>
+					159. Ilheus, Comissão Executiva do Plano da Lavoura Cacaueira, 1970. 108 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Gramíneas invasoras de cacauais</article-title>
+					
+ 
+					<source>Boletim Técnico</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1988</year>
+						
+ 
+					</date>
+					
+ 
+					<volume>159</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Silva</surname>
+							
+ 
+							<given-names>L.A.M.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Vinha</surname>
+							
+ 
+							<given-names>S.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pereira</surname>
+							
+ 
+							<given-names>R.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B40">
+				
+ 
+				<mixed-citation>
+					Silva, J.F. 1999. 
+					<italic>Influência de herbicidas no crescimento e anatomia da epiderme foliar de plantas de cupuaçu (Theobroma grandiflorum</italic>
+					 (Willdenow ex Spreng) Schumann)
+					<italic> e leguminosas em consorciação.</italic>
+					 Tese de Doutorado, Instituto Nacional de Pesquisa da Amazônia/Fundação Universidade do Amazonas. Manaus, Amazonas. 171p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="thesis">
+					
+ 
+					<source>de herbicidas no crescimento e anatomia da epiderme foliar de plantas de cupuaçu (Theobroma grandiflorum (Willdenow ex Spreng) Schumann) e leguminosas em consorciação</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1999</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Silva</surname>
+							
+ 
+							<given-names>J.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B41">
+				
+ 
+				<mixed-citation>
+					Sorensen, T. 1948. A method of establishing groups of equal amplitude in plant society based on similarity of species content. 
+					<italic>In: </italic>
+					Odum, E.P. (Ed). 
+					<italic>Ecologia.</italic>
+					 3Ş ed., México, Interamericana. 1972. 640 p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Ecologia</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1948</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Sorensen</surname>
+							
+ 
+							<given-names>T.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Odum</surname>
+							
+ 
+							<given-names>E.P.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B42">
+				
+ 
+				<mixed-citation>
+					Sousa, S.G.A. 1995. 
+					<italic>Dinâmica de plantas invasoras em sistemas agroflorestais implantados em pastagens degradadas da Amazônia Central. (Região de Manaus-AM).</italic>
+					 Dissertação de Mestrado, Escola Superior de Agricultura &quot;Luiz de Queiroz&quot; (ESALQ), Universidade de São Paulo. Piracicaba, São Paulo. 97p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="thesis">
+					
+ 
+					<source>Dinâmica de plantas invasoras em sistemas agroflorestais implantados em pastagens degradadas da Amazônia Central. (Região de Manaus-AM)</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Sousa</surname>
+							
+ 
+							<given-names>S.G.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B43">
+				
+ 
+				<mixed-citation>
+					Souza Filho, A.P.S. 1995
+					<italic>. Potencialidades alelopáticas envolvendo gramíneas e leguminosas forrageiras e plantas invasoras de pastagens.</italic>
+					 Dissertação de Mestrado, Faculdade de Ciências Agrárias e Veterinárias, Universidade Estadual Paulista, Campus de Jaboticabal. Jaboticabal. São Paulo. 137p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="thesis">
+					
+ 
+					<source>Potencialidades alelopáticas envolvendo gramíneas e leguminosas forrageiras e plantas invasoras de pastagens</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Souza Filho</surname>
+							
+ 
+							<given-names>A.P.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B44">
+				
+ 
+				<mixed-citation>
+					Souza Filho, A.P.S.; Rodrigues, L.R.A.; Rodrigues, T.J.D. 1997. Efeito do potencial alelopático de três leguminosas forrageiras sobre três invasoras de pastagens. 
+					<italic>Pesquisa Agropecuária Brasileira,</italic>
+					 32(2): 165-170.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Efeito do potencial alelopático de três leguminosas forrageiras sobre três invasoras de pastagens</article-title>
+					
+ 
+					<source>Pesquisa Agropecuária Brasileira,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1997</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>165</fpage>
+					
+ 
+					<lpage>170</lpage>
+					
+ 
+					<issue>2</issue>
+					
+ 
+					<volume>32</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Souza Filho</surname>
+							
+ 
+							<given-names>A.P.S.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Rodrigues</surname>
+							
+ 
+							<given-names>L.R.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Rodrigues</surname>
+							
+ 
+							<given-names>T.J.D.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B45">
+				
+ 
+				<mixed-citation>
+					Souza, G.F.; Silva, J.F.; Figueiredo, A.F.. 1998. Levantamento de plantas daninhas em áreas com e sem cultivos, em Manaus-AM. 
+					<italic>Revista da Universidade do Amazonas</italic>
+					. Série: Ciências Agrárias, 7(1-2): 33-43.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Levantamento de plantas daninhas em áreas com e sem cultivos, em Manaus-AM</article-title>
+					
+ 
+					<source>Revista da Universidade do Amazonas</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1998</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>33</fpage>
+					
+ 
+					<lpage>43</lpage>
+					
+ 
+					<issue>1-2</issue>
+					
+ 
+					<volume>7</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Souza</surname>
+							
+ 
+							<given-names>G.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Silva</surname>
+							
+ 
+							<given-names>J.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Figueiredo</surname>
+							
+ 
+							<given-names>A.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B46">
+				
+ 
+				<mixed-citation>
+					Stevensen, E.C.; Légère, A.; Simard, R.R.; Anger, D.A.; Pageau, D.; Lafond, J. 1997. Weed species diversity in spring barley varies with crop rotation and tillage, but not with nutrient source
+					<italic>. Weed Science</italic>
+					, 45: 798-806.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Weed species diversity in spring barley varies with crop rotation and tillage, but not with nutrient source</article-title>
+					
+ 
+					<source>Weed Science,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1997</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>798</fpage>
+					
+ 
+					<lpage>806</lpage>
+					
+ 
+					<volume>45</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Stevensen</surname>
+							
+ 
+							<given-names>E.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Légère</surname>
+							
+ 
+							<given-names>A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Simard</surname>
+							
+ 
+							<given-names>R.R.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Anger</surname>
+							
+ 
+							<given-names>D.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pageau</surname>
+							
+ 
+							<given-names>D.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Lafond</surname>
+							
+ 
+							<given-names>J.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B47">
+				
+ 
+				<element-citation publication-type="book">
+					
+ 
+					<source>Atlas Climatológico da Amazônia Brasileira: Projeto de Hidrologia e Climatologia da Amazônia</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1984</year>
+						
+ 
+					</date>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B48">
+				
+ 
+				<mixed-citation>
+					Valenzuela, J.A.D. 1990. 
+					<italic>Leguminosas de cobertura em cacau (Theobroma cacao L.) y pejibaye (Bactris gasipaes H. B. K.).</italic>
+					 Tese de Mestrado em Fitoprotection, Centro Agronomico Tropical de Investigación y Enseñanza (CATIE). Turrialba, Costa Rica. 85p.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="thesis">
+					
+ 
+					<source>Leguminosas de cobertura em cacau (Theobroma cacao L.) y pejibaye (Bactris gasipaes H. B. K.)</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1990</year>
+						
+ 
+					</date>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Valenzuela</surname>
+							
+ 
+							<given-names>J.A.D.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B49">
+				
+ 
+				<mixed-citation>
+					Vangessel, M.J.; Schweizer, E.E.; Garrett, K.A.; Westra, P. 1995. Influence of weed density and distribution on corn (
+					<italic>Zea mays</italic>
+					) yield. 
+					<italic>Weed Science</italic>
+					, 43: 215-218.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Influence of weed density and distribution on corn (Zea mays) yield</article-title>
+					
+ 
+					<source>Weed Science,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1995</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>215</fpage>
+					
+ 
+					<lpage>218</lpage>
+					
+ 
+					<volume>43</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Vangessel</surname>
+							
+ 
+							<given-names>M.J.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Schweizer</surname>
+							
+ 
+							<given-names>E.E.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Garrett</surname>
+							
+ 
+							<given-names>K.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Westra</surname>
+							
+ 
+							<given-names>P.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B50">
+				
+ 
+				<mixed-citation>
+					Yamoah, C.F.; Agboola, A.A.; Mulongoy, K. 1986. Decomposition, nitrogen release and weed control by prunings of selected alley cropping shrubs. 
+					<italic>Agroforestry Systems, </italic>
+					4: 239-246.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Decomposition, nitrogen release and weed control by prunings of selected alley cropping shrubs</article-title>
+					
+ 
+					<source>Agroforestry Systems,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1986</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>239</fpage>
+					
+ 
+					<lpage>246</lpage>
+					
+ 
+					<volume>4</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Yamoah</surname>
+							
+ 
+							<given-names>C.F.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Agboola</surname>
+							
+ 
+							<given-names>A.A.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Mulongoy</surname>
+							
+ 
+							<given-names>K.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+			<ref id="B51">
+				
+ 
+				<mixed-citation>
+					Vinha, S.G.; Pereira, R.C.; Muller, M.W. 1982. Efeito do controle de plantas invasoras sobre uma vegetação na área do CEPEC. 
+					<italic>Revista Theobroma</italic>
+					, 12(3): 123-134.
+				</mixed-citation>
+				
+ 
+				<element-citation publication-type="journal">
+					
+ 
+					<article-title>Efeito do controle de plantas invasoras sobre uma vegetação na área do CEPEC</article-title>
+					
+ 
+					<source>Revista Theobroma,</source>
+					
+ 
+					<date>
+						
+ 
+						<year>1982</year>
+						
+ 
+					</date>
+					
+ 
+					<fpage>123</fpage>
+					
+ 
+					<lpage>134</lpage>
+					
+ 
+					<issue>3</issue>
+					
+ 
+					<volume>12</volume>
+					
+ 
+					<person-group person-group-type="author">
+						
+ 
+						<name>
+							
+ 
+							<surname>Vinha</surname>
+							
+ 
+							<given-names>S.G.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Pereira</surname>
+							
+ 
+							<given-names>R.C.</given-names>
+							
+ 
+						</name>
+						
+ 
+						<name>
+							
+ 
+							<surname>Muller</surname>
+							
+ 
+							<given-names>M.W.</given-names>
+							
+ 
+						</name>
+						
+ 
+					</person-group>
+					
+ 
+				</element-citation>
+				
+ 
+			</ref>
+			
+ 
+		</ref-list>
+		
+ 
+	</back>
+	
+
+</article>

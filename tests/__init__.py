@@ -1,6 +1,9 @@
 import os
 
+
 SAMPLES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "samples")
+TEMP_TEST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temp")
+
 
 SAMPLES_JOURNAL = {
     "v64": [{"_": "spm@insp3.insp.mx"}],
@@ -495,4 +498,4 @@ SAMPLE_ISSUES_KERNEL = [
         "id": "0001-3714-1998-v29-n3",
     }
 ]
-COUNT_SAMPLES_FILES = 9
+COUNT_SAMPLES_FILES = 13

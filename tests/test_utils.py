@@ -2,14 +2,24 @@ import os
 import unittest
 from unittest.mock import patch
 from lxml import etree
-from documentstore_migracao.utils import files, xml, request, dicts, string
+from documentstore_migracao.utils import files, xml, request, dicts
 
 from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
 
 
 class TestUtilsFiles(unittest.TestCase):
+    def test_extract_filename_ext_by_path(self):
+
+        filename, extension = files.extract_filename_ext_by_path(
+            "xml/conversion/S0044-59672014000400003/S0044-59672014000400003.pt.xml"
+        )
+        self.assertEqual(filename, "S0044-59672014000400003")
+        self.assertEqual(extension, ".xml")
+
     def test_xml_files_list(self):
-        self.assertEqual(len(files.xml_files_list(SAMPLES_PATH)), COUNT_SAMPLES_FILES)
+        self.assertEqual(
+            len(files.xml_files_list(SAMPLES_PATH)),
+            COUNT_SAMPLES_FILES)
 
     def test_read_file(self):
         data = files.read_file(
@@ -31,12 +41,12 @@ class TestUtilsFiles(unittest.TestCase):
 
         self.assertEqual(expected_text, text)
 
-    def test_write_file(self):
+    def test_write_binary_file(self):
         expected_text = b"<a><b>bar</b></a>"
         filename = "foo_test_binary.txt"
 
         try:
-            files.write_file_bynary(filename, expected_text)
+            files.write_file_binary(filename, expected_text)
 
             with open(filename, "rb") as f:
                 text = f.read()
@@ -121,6 +131,22 @@ class TestUtilsXML(unittest.TestCase):
                 expected = html.findall(".//%s" % tag)
                 self.assertFalse(expected)
 
+    def test_file2objXML(self):
+        file_path = os.path.join(SAMPLES_PATH, 'any.xml')
+        expected_text = "<root><a><b>bar</b></a></root>"
+        obj = xml.file2objXML(file_path)
+        self.assertIn(expected_text, str(etree.tostring(obj)))
+
+    def test_file2objXML_raise_OSError_for_filenotfound(self):
+        file_path = os.path.join(SAMPLES_PATH, 'none.xml')
+        with self.assertRaises(OSError):
+            xml.file2objXML(file_path)
+
+    def test_file2objXML_raise_XMLSyntaxError_for_filenotfound(self):
+        file_path = os.path.join(SAMPLES_PATH, 'file.txt')
+        with self.assertRaises(etree.XMLSyntaxError):
+            xml.file2objXML(file_path)
+
 
 class TestUtilsRequest(unittest.TestCase):
     @patch("documentstore_migracao.utils.request.requests")
@@ -146,13 +172,3 @@ class TestUtilsDicts(unittest.TestCase):
     def test_grouper(self):
         result = dicts.grouper(3, "abcdefg", "x")
         self.assertEqual(list(result)[0], ("a", "b", "c"))
-
-
-class TestUtilsStrings(unittest.TestCase):
-    def test_extract_filename_ext_by_path(self):
-
-        filename, extension = string.extract_filename_ext_by_path(
-            "xml/conversion/S0044-59672014000400003/S0044-59672014000400003.pt.xml"
-        )
-        self.assertEqual(filename, "S0044-59672014000400003")
-        self.assertEqual(extension, ".xml")
