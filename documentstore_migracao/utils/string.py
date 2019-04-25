@@ -2,6 +2,7 @@
 import re
 import unicodedata
 import string
+import os
 from datetime import datetime
 from math import log2, ceil
 from uuid import UUID, uuid4
