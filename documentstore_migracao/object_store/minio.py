@@ -5,6 +5,8 @@ import json
 
 from minio import Minio
 from minio.error import ResponseError, NoSuchBucket
+
+from documentstore_migracao.utils import files, xml
 from documentstore_migracao import config
 
 logger = logging.getLogger(__name__)
@@ -14,9 +16,7 @@ class MinioStorage:
     def __init__(
         self, minio_host, minio_access_key, minio_secret_key, minio_secure=True
     ):
-        import pdb
 
-        pdb.set_trace()
         self.bucket_name = "documentstore"
         self.POLICY_READ_ONLY = {
             "Version": "2012-10-17",
@@ -82,15 +82,32 @@ class MinioStorage:
             self.bucket_name, json.dumps(self.POLICY_READ_ONLY)
         )
 
+    def _generator_media_path(self, file_path, prefix):
+        """
+        2 niveis de Pastas onde :
+            * o primeiro representando o periódico por meio do ISSN+Acrônimo
+            * o segundo o scielo-id do documento no seu idioma original.
+            Var: Prefix
+        O nome do arquivo sera alterado para soma SHA-1, para evitar duplicatas e conflitos em nomes.
+        """
+        n_filename = files.calcule_sha1(file_path)
+        _, file_extension = os.path.splitext(os.path.basename(file_path))
+
+        return f"{prefix}/{n_filename}{file_extension}"
+
     def get_urls(self, media_path: str) -> str:
 
         url = self._client.presigned_get_object(self.bucket_name, media_path)
         return url.split("?")[0]
 
-    def register(self, file_path) -> str:
-        media_path = os.path.basename(file_path)
+    def register(self, file_path, prefix="") -> str:
+        media_path = self._generator_media_path(file_path, prefix)
+        metadata = {"origin_name": os.path.basename(file_path)}
+
         try:
-            self._client.fput_object(self.bucket_name, media_path, file_path)
+            self._client.fput_object(
+                self.bucket_name, media_path, file_path=file_path, metadata=metadata
+            )
 
         except NoSuchBucket as err:
             logger.info(err)

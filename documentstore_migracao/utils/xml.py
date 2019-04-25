@@ -153,3 +153,18 @@ def get_scielo_id(obj_xml):
     if scielo:
         return scielo[0].text
 
+def get_journal_id(obj_xml):
+    """The journal id of the main document.
+    """
+    journal = obj_xml.xpath('//journal-id[@journal-id-type="publisher-id"]')
+    if journal:
+        return journal[0].text
+
+
+def get_issn_journal(obj_xml):
+    """The issn of journal of the main document.
+    """
+    issn_journal = obj_xml.xpath('//issn[@pub-type="ppub"]|//issn[@pub-type="epub"]')
+    if issn_journal:
+        return issn_journal[0].text
+

@@ -3,6 +3,7 @@
 import os
 import shutil
 import logging
+import hashlib
 
 from documentstore_migracao import config
 
@@ -88,3 +89,12 @@ def write_file_binary(path, source):
     logger.debug("Gravando arquivo binario: %s", path)
     with open(path, "wb") as f:
         f.write(source)
+
+
+def calcule_sha1(path):
+    logger.debug("Lendo arquivo: %s", path)
+    hash_sha1 = ""
+    with open(path, "rb") as f:
+        contents = f.read()
+        hash_sha1 = hashlib.sha1(contents).hexdigest()
+    return hash_sha1
