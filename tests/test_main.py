@@ -59,6 +59,12 @@ class TestMainProcess(unittest.TestCase):
         process(["--readFile", "/tmp/example.xml"])
         mk_reading_article_xml.assert_called_once_with("/tmp/example.xml", False)
 
+    @patch("documentstore_migracao.processing.constructor.article_ALL_constructor")
+    def test_arg_constructionFiles(self, mk_article_ALL_constructor):
+
+        process(["--constructionFiles"])
+        mk_article_ALL_constructor.assert_called_once_with()
+
     def test_not_arg(self):
 
         with self.assertRaises(SystemExit) as cm:
