@@ -1,9 +1,7 @@
 """ module to methods to string format """
 import re
 import unicodedata
-import string
-import os
-from datetime import datetime
+
 from math import log2, ceil
 from uuid import UUID, uuid4
 
@@ -12,22 +10,14 @@ DIGIT_CHARS = "bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ3456789"
 chars_map = {dig: idx for idx, dig in enumerate(DIGIT_CHARS)}
 
 
-def normalize(string):
+def normalize(_string):
 
-    return unicodedata.normalize("NFKD", " ".join(string.split()))
-
-
-def remove_spaces(string):
-
-    return re.sub(" +", " ", string).strip()
+    return unicodedata.normalize("NFKD", " ".join(_string.split()))
 
 
-def extract_filename_ext_by_path(inputFilepath):
+def remove_spaces(_string):
 
-    filename_w_ext = os.path.basename(inputFilepath)
-    c_filename, file_extension = os.path.splitext(filename_w_ext)
-    filename, _ = os.path.splitext(c_filename)
-    return filename, file_extension
+    return re.sub(" +", " ", _string).strip()
 
 
 def uuid2str(value):
