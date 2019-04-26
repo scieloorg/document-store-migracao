@@ -24,7 +24,7 @@ def str2objXML(_string):
 
 def file2objXML(file_path):
     file_content = files.read_file(file_path)
-    file_content = ' '.join(file_content.split())
+    file_content = " ".join(file_content.split())
     return etree.fromstring(file_content)
 
 
@@ -37,8 +37,8 @@ def objXML2file(file_path, obj_xml, pretty=False):
             xml_declaration=True,
             encoding="utf-8",
             method="xml",
-            pretty_print=pretty
-        ).decode("utf-8")
+            pretty_print=pretty,
+        ).decode("utf-8"),
     )
 
 
@@ -149,22 +149,17 @@ def loadToXML(file):
 def get_scielo_id(obj_xml):
     """The scielo id of the main document.
     """
-    scielo = obj_xml.xpath('//article-id[@pub-id-type="scielo-id"]')
-    if scielo:
-        return scielo[0].text
+    return obj_xml.findtext('//article-id[@pub-id-type="scielo-id"]')
 
 def get_journal_id(obj_xml):
     """The journal id of the main document.
     """
-    journal = obj_xml.xpath('//journal-id[@journal-id-type="publisher-id"]')
-    if journal:
-        return journal[0].text
+    return obj_xml.findtext('//journal-id[@journal-id-type="publisher-id"]')
 
 
 def get_issn_journal(obj_xml):
     """The issn of journal of the main document.
     """
-    issn_journal = obj_xml.xpath('//issn[@pub-type="ppub"]|//issn[@pub-type="epub"]')
-    if issn_journal:
-        return issn_journal[0].text
-
+    return obj_xml.findtext('//issn[@pub-type="ppub"]') or obj_xml.findtext(
+        '//issn[@pub-type="epub"]'
+    )

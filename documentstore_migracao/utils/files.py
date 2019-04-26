@@ -64,9 +64,10 @@ def xml_files_list(path):
 
 
 def list_files(path):
-    if path and os.path.isdir(path):
-        return [f for f in os.listdir(path)]
-    return []
+    try:
+        return os.listdir(path)
+    except FileNotFoundError:
+        return []
 
 
 def read_file(path):

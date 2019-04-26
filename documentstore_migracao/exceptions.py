@@ -7,3 +7,8 @@ class FetchEnvVariableError(Exception):
     """Erro do qual não pode ser recuperado durante a aquisição
     de informações do ambiente de execução. Informações as quais
     são necessárias para o funcionamento correto do software"""
+
+
+class MultipleXMLError(Exception):
+    """Erro De que foi encontrado mais de 1 xmls no pacote SPS. Informações as quais
+    são necessárias para o funcionamento correto do software"""
