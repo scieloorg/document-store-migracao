@@ -205,6 +205,7 @@ class TestConversionJournalJson(unittest.TestCase):
             "v940": [{"_": "20190128"}],
             "v50": [{"_": "C"}],
             "v400": [{"_": "10000-000A"}],
+            "v435": [{"t": "ONLIN", "_": "0001-3714"}],
         }
 
     def test_should_return_a_bundle(self):

@@ -1,10 +1,14 @@
+from copy import deepcopy
 import unittest
 from documentstore_migracao.utils.xylose_converter import (
     journal_to_kernel,
     issue_to_kernel,
     parse_date,
+    get_journal_issns_from_issue,
+    find_documents_bundles,
 )
 from xylose.scielodocument import Journal, Issue
+from . import SAMPLE_ISSUES_JSON, SAMPLE_KERNEL_JOURNAL, SAMPLE_ISSUES_KERNEL
 
 
 def get_metadata_item(bundle, field):
@@ -268,3 +272,32 @@ class TestXyloseIssueConverter(unittest.TestCase):
             [["2019-01-29T00:00:00.000000Z", [1, 6]]],
             self.issue["metadata"]["publication_season"],
         )
+
+
+class TestFindDocumentBundles(unittest.TestCase):
+    def setUp(self):
+        self.issue_json = deepcopy(SAMPLE_ISSUES_JSON[0])
+        self.basic_issue = Issue({"issue": self.issue_json})
+
+    def test_should_return_all_journal_issns_from_issue(self):
+        issns = get_journal_issns_from_issue(self.basic_issue)
+        self.assertEqual(["0001-3714"], issns)
+
+    def test_should_should_include_electronic_issn(self):
+        self.issue_json["v435"] = [{"t": "ONLIN", "_": "10000-000A"}]
+        issue = Issue({"issue": self.issue_json})
+        issns = get_journal_issns_from_issue(issue)
+        issns.sort()
+        expected = ["0001-3714", "10000-000A"]
+        self.assertEqual(expected, issns)
+
+    def test_should_link_journal_and_issues(self):
+        issues = [Issue({"issue": self.issue_json})]
+        journal_issues = find_documents_bundles(SAMPLE_KERNEL_JOURNAL, issues)
+        self.assertEqual([SAMPLE_ISSUES_KERNEL[0]["id"]], journal_issues)
+
+    def test_should_not_find_bundles_for_journal(self):
+        self.issue_json["v35"] = [{"_": "0001-3714X"}]
+        issues = [Issue({"issue": self.issue_json})]
+        journal_issues = find_documents_bundles(SAMPLE_KERNEL_JOURNAL, issues)
+        self.assertListEqual([], journal_issues)
