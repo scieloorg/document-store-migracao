@@ -92,10 +92,13 @@ def write_file_binary(path, source):
         f.write(source)
 
 
-def calcule_sha1(path):
+def sha1(path):
     logger.debug("Lendo arquivo: %s", path)
-    hash_sha1 = ""
+    _sum = hashlib.sha1()
     with open(path, "rb") as f:
-        contents = f.read()
-        hash_sha1 = hashlib.sha1(contents).hexdigest()
-    return hash_sha1
+        while True:
+            chunk = file.read(1024)
+            if not chunk:
+                break
+            _sum.update(chunk)
+    return _sum.hexdigest()

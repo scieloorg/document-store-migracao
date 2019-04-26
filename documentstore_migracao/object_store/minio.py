@@ -69,13 +69,10 @@ class MinioStorage:
 
     def _create_bucket(self):
         # Make a bucket with the make_bucket API call.
-        try:
-            self._client.make_bucket(
-                self.bucket_name, location=config.get("SCIELO_COLLECTION")
-            )
-            self._set_public_bucket()
-        except ResponseError as err:
-            raise
+        self._client.make_bucket(
+            self.bucket_name, location=config.get("SCIELO_COLLECTION")
+        )
+        self._set_public_bucket()
 
     def _set_public_bucket(self):
         self._client.set_bucket_policy(
@@ -90,7 +87,7 @@ class MinioStorage:
             Var: Prefix
         O nome do arquivo sera alterado para soma SHA-1, para evitar duplicatas e conflitos em nomes.
         """
-        n_filename = files.calcule_sha1(file_path)
+        n_filename = files.sha1(file_path)
         _, file_extension = os.path.splitext(os.path.basename(file_path))
 
         return f"{prefix}/{n_filename}{file_extension}"
@@ -114,14 +111,8 @@ class MinioStorage:
             self._create_bucket()
             return self.register(file_path)
 
-        except ResponseError as err:
-            print(err)
-
         return self.get_urls(media_path)
 
     def remove(self, media_path: str) -> None:
         # Remove an object.
-        try:
-            self._client.remove_object(self.bucket_name, media_path)
-        except ResponseError as err:
-            print(err)
+        self._client.remove_object(self.bucket_name, media_path)

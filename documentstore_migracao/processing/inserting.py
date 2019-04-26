@@ -60,7 +60,7 @@ def inserting_document_store(session_db, storage) -> None:
     logger.info("Iniciando Envio dos do xmls")
     list_folders = files.list_files(config.get("DOWNLOAD_PATH"))
 
-    for folder in list_folders[:10]:
+    for folder in list_folders:
 
         try:
             import_document_by_database(
@@ -68,6 +68,7 @@ def inserting_document_store(session_db, storage) -> None:
             )
 
         except Exception as ex:
-            logger.error(folder)
-            logger.exception(ex)
+            logger.info(
+                "não foi possível submeter o conteúdo do diretório %s: %s", folder, ex
+            )
             raise
