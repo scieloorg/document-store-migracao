@@ -21,14 +21,12 @@ def import_document_by_database(folder: str, session_db, storage) -> None:
     medias_files = set(list_files) - set(xml_files)
 
     if len(xml_files) > 1:
-        raise exceptions.MultipleXMLError(
-            "Existe %s xmls no pacote SPS", len(xml_files)
-        )
+        raise exceptions.XMLError("Existe %s xmls no pacote SPS", len(xml_files))
     else:
         try:
             x_file = xml_files[0]
         except IndexError as ex:
-            raise IndexError("Não existe XML no pacote SPS")
+            raise XMLError("Não existe XML no pacote SPS")
 
     xml_path = os.path.join(folder, x_file)
     obj_xml = xml.loadToXML(xml_path)

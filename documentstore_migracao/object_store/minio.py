@@ -79,7 +79,7 @@ class MinioStorage:
             self.bucket_name, json.dumps(self.POLICY_READ_ONLY)
         )
 
-    def _generator_media_path(self, file_path, prefix):
+    def _generator_object_name(self, file_path, prefix):
         """
         2 niveis de Pastas onde :
             * o primeiro representando o periódico por meio do ISSN+Acrônimo
@@ -98,21 +98,24 @@ class MinioStorage:
         return url.split("?")[0]
 
     def register(self, file_path, prefix="") -> str:
-        media_path = self._generator_media_path(file_path, prefix)
+        object_name = self._generator_object_name(file_path, prefix)
         metadata = {"origin_name": os.path.basename(file_path)}
 
         try:
             self._client.fput_object(
-                self.bucket_name, media_path, file_path=file_path, metadata=metadata
+                self.bucket_name,
+                object_name=object_name,
+                file_path=file_path,
+                metadata=metadata,
             )
 
         except NoSuchBucket as err:
             logger.info(err)
             self._create_bucket()
-            return self.register(file_path)
+            return self.register(file_path, prefix)
 
-        return self.get_urls(media_path)
+        return self.get_urls(object_name)
 
-    def remove(self, media_path: str) -> None:
+    def remove(self, object_name: str) -> None:
         # Remove an object.
-        self._client.remove_object(self.bucket_name, media_path)
+        self._client.remove_object(self.bucket_name, object_name)

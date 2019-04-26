@@ -9,6 +9,7 @@ class FetchEnvVariableError(Exception):
     são necessárias para o funcionamento correto do software"""
 
 
-class MultipleXMLError(Exception):
-    """Erro De que foi encontrado mais de 1 xmls no pacote SPS. Informações as quais
-    são necessárias para o funcionamento correto do software"""
+class XMLError(Exception):
+    """ Represents errors that would block HTMLGenerator instance from
+    being created.
+    """

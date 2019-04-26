@@ -95,7 +95,7 @@ def write_file_binary(path, source):
 def sha1(path):
     logger.debug("Lendo arquivo: %s", path)
     _sum = hashlib.sha1()
-    with open(path, "rb") as f:
+    with open(path, "rb") as file:
         while True:
             chunk = file.read(1024)
             if not chunk:
