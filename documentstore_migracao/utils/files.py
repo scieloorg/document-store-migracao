@@ -3,6 +3,7 @@
 import os
 import shutil
 import logging
+import hashlib
 
 from documentstore_migracao import config
 
@@ -58,9 +59,15 @@ def create_path_by_file(path, file_xml_path):
 
 
 def xml_files_list(path):
-    if path and os.path.isdir(path):
-        return [f for f in os.listdir(path) if f.endswith(".xml")]
-    return []
+    files = list_files(path)
+    return list(filter(lambda f: f.endswith(".xml"), files))
+
+
+def list_files(path):
+    try:
+        return os.listdir(path)
+    except FileNotFoundError:
+        return []
 
 
 def read_file(path):
@@ -83,3 +90,15 @@ def write_file_binary(path, source):
     logger.debug("Gravando arquivo binario: %s", path)
     with open(path, "wb") as f:
         f.write(source)
+
+
+def sha1(path):
+    logger.debug("Lendo arquivo: %s", path)
+    _sum = hashlib.sha1()
+    with open(path, "rb") as file:
+        while True:
+            chunk = file.read(1024)
+            if not chunk:
+                break
+            _sum.update(chunk)
+    return _sum.hexdigest()

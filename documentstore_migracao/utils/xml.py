@@ -24,7 +24,7 @@ def str2objXML(_string):
 
 def file2objXML(file_path):
     file_content = files.read_file(file_path)
-    file_content = ' '.join(file_content.split())
+    file_content = " ".join(file_content.split())
     return etree.fromstring(file_content)
 
 
@@ -37,8 +37,8 @@ def objXML2file(file_path, obj_xml, pretty=False):
             xml_declaration=True,
             encoding="utf-8",
             method="xml",
-            pretty_print=pretty
-        ).decode("utf-8")
+            pretty_print=pretty,
+        ).decode("utf-8"),
     )
 
 
@@ -112,7 +112,7 @@ def get_languages(obj_xml):
 
 
 def get_document_publication_date_for_migration(obj_xml):
-    
+
     def format(item):
         if item:
             return item.zfill(2)
@@ -133,3 +133,33 @@ def get_document_publication_date_for_migration(obj_xml):
             items = [format(pubdate.findtext(elem_name))
                      for elem_name in ['year', 'month', 'day']]
             return '-'.join([item for item in items if item])
+
+
+def loadToXML(file):
+    """Parses `file` to produce an etree instance.
+
+    The XML can be retrieved given its filesystem path,
+    an URL or a file-object.
+    """
+    parser = etree.XMLParser(remove_blank_text=True, no_network=True)
+    xml = etree.parse(file, parser)
+    return xml
+
+
+def get_scielo_id(obj_xml):
+    """The scielo id of the main document.
+    """
+    return obj_xml.findtext('//article-id[@pub-id-type="scielo-id"]')
+
+def get_journal_id(obj_xml):
+    """The journal id of the main document.
+    """
+    return obj_xml.findtext('//journal-id[@journal-id-type="publisher-id"]')
+
+
+def get_issn_journal(obj_xml):
+    """The issn of journal of the main document.
+    """
+    return obj_xml.findtext('//issn[@pub-type="ppub"]') or obj_xml.findtext(
+        '//issn[@pub-type="epub"]'
+    )
