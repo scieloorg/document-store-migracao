@@ -151,6 +151,7 @@ def get_scielo_id(obj_xml):
     """
     return obj_xml.findtext('//article-id[@pub-id-type="scielo-id"]')
 
+
 def get_journal_id(obj_xml):
     """The journal id of the main document.
     """
