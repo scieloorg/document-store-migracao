@@ -80,9 +80,9 @@ def read_file(path):
     return text
 
 
-def write_file(path, source):
+def write_file(path, source, mode="w"):
     logger.debug("Gravando arquivo: %s", path)
-    with open(path, "w", encoding="utf-8") as f:
+    with open(path, mode, encoding="utf-8") as f:
         f.write(source)
 
 

@@ -20,6 +20,8 @@ SPS_PKG_PATH:
     pacotes de XML validados e nomeados de acordo com SPS
 INCOMPLETE_SPS_PKG_PATH:
     pacotes de XML validados e nomeados de acordo com SPS, mas com ativos digitais faltantes
+ERRORS_PATH:
+    arquivos de erros
 """
 
 _default = dict(
@@ -39,6 +41,7 @@ _default = dict(
     ISIS_BASE_PATH=os.environ.get("ISIS_BASE_PATH"),
     SPS_PKG_PATH=os.path.join(BASE_PATH, "xml/sps_packages"),
     INCOMPLETE_SPS_PKG_PATH=os.path.join(BASE_PATH, "xml/incomplete_sps_packages"),
+    ERRORS_PATH=os.path.join(BASE_PATH, "xml/errors"),
     DATABASE_URI=os.environ.get("DATABASE_URI", "localhost:27017"),
     DATABASE_NAME=os.environ.get("DATABASE_NAME", "document-store"),
 )
