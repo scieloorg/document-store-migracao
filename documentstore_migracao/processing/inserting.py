@@ -26,7 +26,7 @@ def import_document_by_database(folder: str, session_db, storage) -> None:
         try:
             x_file = xml_files[0]
         except IndexError as ex:
-            raise XMLError("Não existe XML no pacote SPS")
+            raise exceptions.XMLError("Não existe XML no pacote SPS: %s", ex)
 
     xml_path = os.path.join(folder, x_file)
     obj_xml = xml.loadToXML(xml_path)
