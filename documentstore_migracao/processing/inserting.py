@@ -3,11 +3,30 @@
 import os
 import logging
 
-from documentstore_migracao.utils import files, xml
+from documentstore_migracao.utils import files, xml, manifest
 from documentstore_migracao import config, exceptions
+
+from documentstore.domain import utcnow
+from documentstore.exceptions import AlreadyExists
 
 
 logger = logging.getLogger(__name__)
+
+
+class ManifestDomainAdapter:
+    """Complementa o manifesto produzido na fase de transformação
+    para o formato exigido pelos adapters do Kernel para
+    realizar a inserção no MongoDB"""
+
+    def __init__(self, manifest):
+        self._manifest = manifest
+
+    def id(self) -> str:
+        return self.manifest["id"]
+
+    @property
+    def manifest(self) -> dict:
+        return self._manifest
 
 
 def import_document_by_database(folder: str, session_db, storage) -> None:
@@ -48,22 +67,30 @@ def import_document_by_database(folder: str, session_db, storage) -> None:
         )
 
     if obj_xml:
-        data_manifest = manifest.get_document_bundle_manifest(obj_xml, url_xml, assets)
+        manifest_data = ManifestDomainAdapter(
+            manifest=manifest.get_document_bundle_manifest(obj_xml, url_xml, assets)
+        )
 
-        print(scielo_id)
-        print(data_manifest)
+        try:
+            session_db.documents.add(data=manifest_data)
+            session_db.changes.add(
+                {"timestamp": utcnow(), "entity": "Document", "id": manifest_data.id()}
+            )
+            logger.info("Document-store save: %s", manifest_data.id())
+        except AlreadyExists as exc:
+            logger.exception(exc)
 
 
 def inserting_document_store(session_db, storage) -> None:
 
     logger.info("Iniciando Envio dos do xmls")
-    list_folders = files.list_files(config.get("DOWNLOAD_PATH"))
+    list_folders = files.list_files(config.get("SPS_PKG_PATH"))
 
     for folder in list_folders:
 
         try:
             import_document_by_database(
-                os.path.join(config.get("DOWNLOAD_PATH"), folder), session_db, storage
+                os.path.join(config.get("SPS_PKG_PATH"), folder), session_db, storage
             )
 
         except Exception as ex:
