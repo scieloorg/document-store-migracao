@@ -112,7 +112,6 @@ def get_languages(obj_xml):
 
 
 def get_document_publication_date_for_migration(obj_xml):
-
     def format(item):
         if item:
             return item.zfill(2)
@@ -120,19 +119,21 @@ def get_document_publication_date_for_migration(obj_xml):
     pubdate_xpaths = (
         'pub-date[@pub-type="epub"]',
         'pub-date[@date-type="pub"]',
-        'pub-date',
+        "pub-date",
     )
 
-    article_meta = obj_xml.find('.//article-meta')
+    article_meta = obj_xml.find(".//article-meta")
     if article_meta is None:
-        raise ValueError('XML não possui article-meta')
+        raise ValueError("XML não possui article-meta")
 
     for xpath in pubdate_xpaths:
         pubdate = article_meta.find(xpath)
         if pubdate is not None:
-            items = [format(pubdate.findtext(elem_name))
-                     for elem_name in ['year', 'month', 'day']]
-            return '-'.join([item for item in items if item])
+            items = [
+                format(pubdate.findtext(elem_name))
+                for elem_name in ["year", "month", "day"]
+            ]
+            return "-".join([item for item in items if item])
 
 
 def loadToXML(file):
@@ -149,7 +150,7 @@ def loadToXML(file):
 def get_scielo_id(obj_xml):
     """The scielo id of the main document.
     """
-    return obj_xml.findtext('//article-id[@pub-id-type="scielo-id"]')
+    return obj_xml.findtext(".//article-id[@specific-use='scielo']")
 
 
 def get_journal_id(obj_xml):

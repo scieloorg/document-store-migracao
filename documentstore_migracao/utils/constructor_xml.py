@@ -36,10 +36,11 @@ class ConstructorXMLPipeline(object):
             iterators = [xml.iterfind(path) for path in self.PATHS]
             for article in itertools.chain(*iterators):
 
-                node = article.findall(".//article-id[@pub-id-type='scielo-id']")
+                node = article.findall(".//article-id[@specific-use='scielo']")
                 if not node:
                     articleId = etree.Element("article-id")
-                    articleId.set("pub-id-type", "scielo-id")
+                    articleId.set("pub-id-type", "publisher-id")
+                    articleId.set("specific-use", "scielo")
                     articleId.text = string.generate_scielo_pid()
                     self._append_node(article, articleId)
 
