@@ -2,12 +2,14 @@
 
 import os
 import logging
+from typing import List
 
 from documentstore_migracao.utils import files, xml, manifest
 from documentstore_migracao import config, exceptions
 
-from documentstore.domain import utcnow
+from documentstore.domain import utcnow, DocumentsBundle
 from documentstore.exceptions import AlreadyExists
+from documentstore.interfaces import Session
 
 
 logger = logging.getLogger(__name__)
@@ -98,3 +100,29 @@ def inserting_document_store(session_db, storage) -> None:
                 "não foi possível submeter o conteúdo do diretório %s: %s", folder, ex
             )
             raise
+
+
+def link_documents_bundles_with_documents(
+    documents_bundle: DocumentsBundle, documents: List[str], session: Session
+):
+    """Função responsável por atualizar o relacionamento entre
+    documents bundles e documents no nível de banco de dados"""
+
+    for document in documents:
+        try:
+            documents_bundle.add_document(document)
+        except AlreadyExists:
+            logger.info(
+                "Document %s already exists in documents bundle %s"
+                % (document, documents_bundle)
+            )
+
+    session.documents_bundles.update(documents_bundle)
+
+    session.changes.add(
+        {
+            "timestamp": utcnow(),
+            "entity": "DocumentsBundle",
+            "id": documents_bundle.id(),
+        }
+    )
