@@ -111,3 +111,5 @@ xml/*
 json/*
 
 
+tests/samples/S0044-59672003000300002_sps_*
+tests/samples/any
