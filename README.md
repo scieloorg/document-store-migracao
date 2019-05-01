@@ -14,7 +14,6 @@ Esta ferramenta possui a capacidade de migrar dados de bases ISIS (title e issue
 Antes de executar a ferramenta de migração observe se as seguintes dependências estão presentes:
 
 - Java `>= 1.8`
-- [Jython](http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.5.3/jython-installer-2.5.3.jar) `== 2.5.x`
 - Python `== 3.6.x`
 
 #### Configuração
@@ -22,9 +21,8 @@ Antes de executar a ferramenta de migração observe se as seguintes dependênci
 Para o devido funcionamento desta ferramenta é necessário que algumas configurações sejam feitas, siga as seguintes instruções:
 
 1. Instale o Java.
-2. Instale o Jython.
-3. Instale o Python.
-4. Instale os utilitários de migração
+2. Instale o Python.
+3. Instale os utilitários de migração
 
 ```shell
 python setup.py install

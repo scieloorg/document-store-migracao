@@ -27,7 +27,12 @@ def run(path: str, output_file: str):
     parâmetro output_file.
     """
 
-    command = "jython %s -t 3 -p 'v' -o %s %s" % (ISIS2JSON_PATH, output_file, path)
+    command = "java -cp %s org.python.util.jython %s -t 3 -p 'v' -o %s %s" % (
+        config.get("CLASSPATH"),
+        ISIS2JSON_PATH,
+        output_file,
+        path,
+    )
 
     try:
         logger.debug("Extracting database file: %s" % path)

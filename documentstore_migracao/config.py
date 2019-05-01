@@ -60,12 +60,12 @@ DOC_TYPE_XML = """<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Pu
 
 os.environ["XML_CATALOG_FILES"] = XML_CATALOG
 
-os.environ["CLASSPATH"] = "".join(
-    [
-        os.path.join(BASE_PATH, "documentstore_migracao/utils/isis2json/lib/Bruma.jar"),
-        ":",
-        os.path.join(
-            BASE_PATH, "documentstore_migracao/utils/isis2json/lib/jyson-1.0.1.jar"
-        ),
-    ]
-)
+JAVA_LIB_DIR = os.path.join(BASE_PATH, "documentstore_migracao/utils/isis2json/lib/")
+
+JAVA_LIBS_PATH = [
+    os.path.join(JAVA_LIB_DIR, file)
+    for file in os.listdir(JAVA_LIB_DIR)
+    if file.endswith(".jar")
+]
+
+os.environ["CLASSPATH"] = ":".join(JAVA_LIBS_PATH)
