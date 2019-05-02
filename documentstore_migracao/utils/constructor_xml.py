@@ -4,7 +4,7 @@ import itertools
 
 from lxml import etree
 from copy import deepcopy
-from documentstore_migracao.utils import string
+from documentstore_migracao.utils import scielo_ids_generator
 
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class ConstructorXMLPipeline(object):
                     articleId = etree.Element("article-id")
                     articleId.set("pub-id-type", "publisher-id")
                     articleId.set("specific-use", "scielo")
-                    articleId.text = string.generate_scielo_pid()
+                    articleId.text = scielo_ids_generator.generate_scielo_pid()
                     self._append_node(article, articleId)
 
             return data

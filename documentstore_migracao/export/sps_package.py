@@ -2,9 +2,11 @@ import os
 import itertools
 import logging
 
+from copy import deepcopy
 from lxml import etree
 
 from documentstore_migracao.utils import files
+from documentstore_migracao.utils import scielo_ids_generator
 
 
 logger = logging.getLogger(__name__)
@@ -49,18 +51,18 @@ def parse_issue(issue):
 def is_asset_href(href):
     return ('img/revistas' in href or href.count('.') == 1) and \
            (
-               ':' not in href and \
-               '@' not in href and \
-               not href.startswith('www') and \
+               ':' not in href and
+               '@' not in href and
+               not href.startswith('www') and
                not href.startswith('http')
            )
 
 
 class SPS_Package:
 
-    def __init__(self, xmltree, prefix_asset_name):
+    def __init__(self, xmltree, _original_asset_name_prefix=None):
         self.xmltree = xmltree
-        self.prefix_asset_name = prefix_asset_name
+        self._original_asset_name_prefix = _original_asset_name_prefix
 
     @property
     def article_meta(self):
@@ -147,6 +149,9 @@ class SPS_Package:
 
     @property
     def package_name(self):
+        if self._original_asset_name_prefix is None:
+            raise ValueError(
+                'SPS_Package._original_asset_name_prefix has an invalid value.')
         data = dict(self.parse_article_meta)
         data_labels = data.keys()
         labels = ['volume', 'issue', 'fpage', 'lpage', 'elocation-id']
@@ -167,10 +172,13 @@ class SPS_Package:
         items = [self.issn, self.acron]
         items += [data[k] for k in labels if k in data_labels]
         return '-'.join([item for item in items if item]) or \
-               self.prefix_asset_name
+               self._original_asset_name_prefix
 
     def asset_name(self, img_filename):
-        filename, ext = os.path.splitext(self.prefix_asset_name)
+        if self._original_asset_name_prefix is None:
+            raise ValueError(
+                'SPS_Package._original_asset_name_prefix has an invalid value.')
+        filename, ext = os.path.splitext(self._original_asset_name_prefix)
         suffix = img_filename
         if img_filename.startswith(filename):
             suffix = img_filename[len(filename):]
@@ -206,6 +214,35 @@ class SPS_Package:
         return replacements
 
     @property
+    def volume(self):
+        return dict(self.parse_article_meta).get('volume')
+
+    @property
+    def number(self):
+        issue = dict(self.parse_article_meta).get('issue')
+        if issue:
+            if 's' in issue and 'spe' not in issue:
+                if '-s' in issue:
+                    return issue[:issue.find('-s')]
+                if issue.startswith('s'):
+                    return None
+        return issue
+
+    @property
+    def supplement(self):
+        issue = dict(self.parse_article_meta).get('issue')
+        if issue:
+            if 's' in issue and 'spe' not in issue:
+                if '-s' in issue:
+                    return issue[issue.find('-s')+2:]
+                if issue.startswith('s'):
+                    return issue[1:]
+
+    @property
+    def year(self):
+        return self.documents_bundle_pubdate[0]
+
+    @property
     def documents_bundle_id(self):
         items = []
         data = dict(self.journal_meta)
@@ -213,6 +250,7 @@ class SPS_Package:
             if data.get(label):
                 items = [data.get(label)]
                 break
+
         items.append(data.get('acron'))
 
         data = dict(self.parse_article_meta)
@@ -266,7 +304,7 @@ class SPS_Package:
     def order(self):
         return tuple(item[1] for item in self.order_meta)
 
-    def match_pubdate(self, pubdate_xpaths):
+    def _match_pubdate(self, pubdate_xpaths):
         """
         Retorna o primeiro match da lista de pubdate_xpaths
         """
@@ -280,7 +318,7 @@ class SPS_Package:
         xpaths = ('pub-date[@pub-type="epub"]',
                   'pub-date[@date-type="pub"]',
                   'pub-date')
-        return parse_date(self.match_pubdate(xpaths))
+        return parse_date(self._match_pubdate(xpaths))
 
     @property
     def documents_bundle_pubdate(self):
@@ -288,7 +326,7 @@ class SPS_Package:
                   'pub-date[@pub-type="collection"]',
                   'pub-date[@date-type="collection"]',
                   'pub-date')
-        return parse_date(self.match_pubdate(xpaths))
+        return parse_date(self._match_pubdate(xpaths))
 
 
 def sort_documents(documents):
@@ -314,28 +352,41 @@ class DocumentsSorter:
     def documents_bundles(self):
         return self._documents_bundles
 
-    def insert_document(self, doc_location, doc_xml):
-        pkg = SPS_Package(doc_xml, 'none')
-        if pkg.documents_bundle_id not in self.documents_bundles.keys():
-            self._reverse[pkg.documents_bundle_id] = \
+    def insert_document(self, document_id, document_xml):
+        pkg = SPS_Package(document_xml, 'none')
+        pkg_docs_bundle_id = pkg.documents_bundle_id
+        if pkg_docs_bundle_id not in self.documents_bundles.keys():
+            self._reverse[pkg_docs_bundle_id] = \
                 pkg.is_only_online_publication
-            self._documents_bundles[pkg.documents_bundle_id] = {}
-        self._documents_bundles[pkg.documents_bundle_id][pkg.order] = \
-            doc_location
+            self._documents_bundles[pkg_docs_bundle_id] = {}
+            self._documents_bundles[pkg_docs_bundle_id]['items'] = {}
+            self._documents_bundles[pkg_docs_bundle_id]['data'] = {
+                'eissn': dict(pkg.journal_meta).get('eissn'),
+                'pissn': dict(pkg.journal_meta).get('pissn'),
+                'issn': dict(pkg.journal_meta).get('issn'),
+                'acron': dict(pkg.journal_meta).get('acron'),
+                'year': pkg.year,
+                'volume': pkg.volume,
+                'number': pkg.number,
+                'supplement': pkg.supplement,
+            }
+        self._documents_bundles[pkg_docs_bundle_id]['items'][pkg.order] = \
+            document_id
 
     def insert_documents(self, documents):
         """
-        documents é uma lista de tuplas (localizacao no kernel, XML)
+        documents é uma lista de tuplas (document_id, document_xml)
         """
-        for location, xml in documents:
-            self.insert_document(location, xml)
+        for document_id, document_xml in documents:
+            self.insert_document(document_id, document_xml)
 
     @property
     def documents_bundles_with_sorted_documents(self):
-        ret = {}
-        for dbid, docs_bundle in self.documents_bundles.items():
-            ret[dbid] = [
-                docs_bundle[k]
-                for k in sorted(docs_bundle.keys(), reverse=self.reverse[dbid])
+        _documents_bundles = deepcopy(self.documents_bundles)
+        for dbid, docs_bundle in _documents_bundles.items():
+            _documents_bundles[dbid]['items'] = [
+                docs_bundle['items'][k]
+                for k in sorted(
+                    docs_bundle['items'].keys(), reverse=self.reverse[dbid])
             ]
-        return ret
+        return _documents_bundles

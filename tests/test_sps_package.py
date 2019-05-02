@@ -82,8 +82,8 @@ class Test_MatchPubDate1(unittest.TestCase):
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree, None)
 
-    def test_match_pubdate(self):
-        result = self.sps_package.match_pubdate(
+    def test__match_pubdate(self):
+        result = self.sps_package._match_pubdate(
                     ('pub-date[@date-type="pub"]',
                      'pub-date[@date-type="collection"]'))
         self.assertEqual(
@@ -112,8 +112,8 @@ class Test_MatchPubDate2(unittest.TestCase):
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree, None)
 
-    def test_match_pubdate(self):
-        result = self.sps_package.match_pubdate(
+    def test__match_pubdate(self):
+        result = self.sps_package._match_pubdate(
                     ('pub-date[@pub-type="epub"]',
                      'pub-date[@pub-type="collection"]'))
         self.assertEqual(
@@ -142,8 +142,8 @@ class Test_MatchPubDate3(unittest.TestCase):
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree, None)
 
-    def test_match_pubdate(self):
-        result = self.sps_package.match_pubdate(
+    def test__match_pubdate(self):
+        result = self.sps_package._match_pubdate(
                     ('pub-date[@pub-type="collection"]',
                      'pub-date[@pub-type="epub-ppub"]'))
         self.assertEqual(
@@ -174,8 +174,8 @@ class Test_MatchPubDate4(unittest.TestCase):
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree, None)
 
-    def test_match_pubdate(self):
-        result = self.sps_package.match_pubdate(
+    def test__match_pubdate(self):
+        result = self.sps_package._match_pubdate(
                     ('pub-date[@date-type="pub"]',
                      'pub-date[@date-type="collection"]'))
         self.assertEqual(
@@ -337,6 +337,12 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
                 ('other', '00006'),
             ]
         )
+
+    def test_supplement(self):
+        self.assertEqual(self.sps_package.supplement, None)
+
+    def test_number(self):
+        self.assertEqual(self.sps_package.number, '05')
 
     def test_package_name_vol_num_fpage(self):
         self.assertEqual(
@@ -525,6 +531,12 @@ class Test_SPS_Package_VolNumSpeFpageLpage(unittest.TestCase):
             ]
         )
 
+    def test_supplement(self):
+        self.assertEqual(self.sps_package.supplement, None)
+
+    def test_number(self):
+        self.assertEqual(self.sps_package.number, '05-spe')
+
     def test_package_name_vol_num_spe_fpage(self):
         self.assertEqual(
             self.sps_package.package_name,
@@ -693,6 +705,12 @@ class Test_SPS_Package_VolSuplFpageLpage(unittest.TestCase):
             ]
         )
 
+    def test_supplement(self):
+        self.assertEqual(self.sps_package.supplement, '0')
+
+    def test_number(self):
+        self.assertIsNone(self.sps_package.number)
+
     def test_package_name_vol_suppl_fpage(self):
         self.assertEqual(
             self.sps_package.package_name,
@@ -749,6 +767,12 @@ class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
             ]
         )
 
+    def test_supplement(self):
+        self.assertEqual(self.sps_package.supplement, 'a')
+
+    def test_number(self):
+        self.assertIsNone(self.sps_package.number)
+
     def test_package_name_vol_suppl_a_fpage(self):
         self.assertEqual(
             self.sps_package.package_name,
@@ -804,6 +828,12 @@ class Test_SPS_Package_VolNumSuplFpageLpage(unittest.TestCase):
                 ('other', '00006'),
             ]
         )
+
+    def test_supplement(self):
+        self.assertEqual(self.sps_package.supplement, '0')
+
+    def test_number(self):
+        self.assertEqual(self.sps_package.number, '02')
 
     def test_package_name_vol_num_suppl_fpage(self):
         self.assertEqual(
@@ -1128,6 +1158,12 @@ class Test_SPS_Package_Article_HTML(unittest.TestCase):
             ]
         )
 
+    def test_supplement(self):
+        self.assertEqual(self.sps_package.supplement, None)
+
+    def test_number(self):
+        self.assertEqual(self.sps_package.number, None)
+
     def test_package_name(self):
         self.assertEqual(
             self.sps_package.package_name,
@@ -1197,10 +1233,23 @@ class Test_DocumentsSort_Pages(unittest.TestCase):
             '/documents/kaksjao',
         )
         data = [(k, v) for k, v in zip(location_at_kernel, xmls)]
+        result = sort_documents(data)
         self.assertEqual(
-            sort_documents(data),
-            expected
+            result['1234-5678-acron-2010-volume-05']['items'],
+            expected['1234-5678-acron-2010-volume-05']
         )
+        expected_data = {
+            'eissn': '1234-5678',
+            'pissn': '0123-4567',
+            'issn': '1234-5678',
+            'acron': 'acron',
+            'year': '2010',
+            'volume': 'volume',
+            'number': '05',
+            'supplement': None,
+        }
+        self.assertEqual(
+            result['1234-5678-acron-2010-volume-05']['data'], expected_data)
 
 
 class Test_DocumentsSort_PagesAndOther(unittest.TestCase):
@@ -1236,10 +1285,23 @@ class Test_DocumentsSort_PagesAndOther(unittest.TestCase):
                 ],
         }
         data = [(k, v) for k, v in zip(location_at_kernel, xmls)]
+        result = sort_documents(data)
         self.assertEqual(
-            sort_documents(data),
-            expected
+            result['1234-5678-acron-2010-volume-05']['items'],
+            expected['1234-5678-acron-2010-volume-05']
         )
+        expected_data = {
+            'eissn': '1234-5678',
+            'pissn': '0123-4567',
+            'issn': '1234-5678',
+            'acron': 'acron',
+            'year': '2010',
+            'volume': 'volume',
+            'number': '05',
+            'supplement': None,
+        }
+        self.assertEqual(
+            result['1234-5678-acron-2010-volume-05']['data'], expected_data)
 
 
 class Test_DocumentsSort_ContinuousPublication(unittest.TestCase):
@@ -1296,19 +1358,19 @@ class Test_DocumentsSort_ContinuousPublication(unittest.TestCase):
         }
         data = [(k, v) for k, v in zip(location_at_kernel, xmls)]
         result = sort_documents(data)
-        for i, item in enumerate(result['1234-5678-acron-2010-30']):
+        for i, item in enumerate(result['1234-5678-acron-2010-30']['items']):
             with self.subTest(i):
                 self.assertEqual(
                     item,
                     expected['1234-5678-acron-2010-30'][i]
                 )
-        for i, item in enumerate(result['1234-5678-acron-2011-30']):
+        for i, item in enumerate(result['1234-5678-acron-2011-30']['items']):
             with self.subTest(i):
                 self.assertEqual(
                     item,
                     expected['1234-5678-acron-2011-30'][i]
                 )
-        for i, item in enumerate(result['1234-5678-acron-2012-30']):
+        for i, item in enumerate(result['1234-5678-acron-2012-30']['items']):
             with self.subTest(i):
                 self.assertEqual(
                     item,
@@ -1354,10 +1416,23 @@ class Test_DocumentsSort_Pages_Other_and_ArticlePubDate(unittest.TestCase):
                 ],
         }
         data = [(k, v) for k, v in zip(location_at_kernel, xmls)]
+        result = sort_documents(data)
         self.assertEqual(
-            sort_documents(data),
-            expected
+            result['1234-5678-acron-2010-volume-05']['items'],
+            expected['1234-5678-acron-2010-volume-05']
         )
+        expected_data = {
+            'eissn': '1234-5678',
+            'pissn': '0123-4567',
+            'issn': '1234-5678',
+            'acron': 'acron',
+            'year': '2010',
+            'volume': 'volume',
+            'number': '05',
+            'supplement': None,
+        }
+        self.assertEqual(
+            result['1234-5678-acron-2010-volume-05']['data'], expected_data)
 
 
 class Test_DocumentsSort_AOP(unittest.TestCase):
@@ -1409,7 +1484,7 @@ class Test_DocumentsSort_AOP(unittest.TestCase):
 
         data = [(k, v) for k, v in zip(location_at_kernel, xmls)]
         result = sort_documents(data)
-        for i, item in enumerate(result['1234-5678-acron-aop']):
+        for i, item in enumerate(result['1234-5678-acron-aop']['items']):
             with self.subTest(i):
                 self.assertEqual(
                     item,
@@ -1455,39 +1530,39 @@ class Test_DocumentsSort_MoreThanOneBundle(unittest.TestCase):
         expected = {
             '1234-5678-acron-2012-32':
                 [
-                    '/documents/xyz_2012_05_10_5',
+                    '/documents/xyz_2012_05_10_5'
                 ],
             '1234-5678-acron-2011-32':
                 [
                     '/documents/kas_2011_05_10_7',
-                    '/documents/abc_2011_05_10_4',
+                    '/documents/abc_2011_05_10_4'
                 ],
             '1234-5678-acron-2010-32':
                 [
-                    '/documents/www_2010_04_10_6',
+                    '/documents/www_2010_04_10_6'
                 ],
             '1234-5678-acron-2012-30':
                 [
-                    '/documents/xyz_2012_05_08_9',
+                    '/documents/xyz_2012_05_08_9'
                 ],
             '1234-5678-acron-2011-30':
                 [
                     '/documents/kak_2011_05_10_11',
-                    '/documents/abc_2011_05_09_8',
+                    '/documents/abc_2011_05_09_8'
                 ],
             '1234-5678-acron-2010-30':
                 [
-                    '/documents/www_2010_05_15_10',
+                    '/documents/www_2010_05_15_10'
                 ],
         }
 
         data = [(k, v) for k, v in zip(location_at_kernel, xmls)]
         result = sort_documents(data)
-        for expected_key in expected.keys():
-            for i, item in enumerate(result[expected_key]):
-                with self.subTest((expected_key, i)):
+        for docs_bundle_id in expected.keys():
+            for i, location in enumerate(result[docs_bundle_id]['items']):
+                with self.subTest((docs_bundle_id, i)):
                     self.assertEqual(
-                        item,
-                        expected[expected_key][i]
+                        location,
+                        expected[docs_bundle_id][i]
                     )
 
