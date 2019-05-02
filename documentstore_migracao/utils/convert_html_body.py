@@ -377,72 +377,47 @@ class HTML2SPSPipeline(object):
             return data
 
     class APipe(plumber.Pipe):
-        def _parser_node_mailto(self, node, _attrib, href):
-
-            email = etree.Element("email")
-            email.text = href.replace("mailto:", "")
-
-            node.tag = "p"
-            node.append(email)
-            _attrib = {}
-            return _attrib
-
-        def _parser_node_link(self, node, _attrib, href):
+        def _parser_node_external_link(self, node, extlinktype="uri"):
             node.tag = "ext-link"
 
-            # Remove Traget in link
-            _attrib.pop("target", None)
-            _attrib.update(
-                {"ext-link-type": "uri", "{http://www.w3.org/1999/xlink}href": href}
-            )
-            return _attrib
+            href = node.attrib.get('href')
+            node.attrib.clear()
+            _attrib = {
+                "ext-link-type": extlinktype,
+                "{http://www.w3.org/1999/xlink}href": href
+            }
+            node.attrib.update(_attrib)
 
-        def _parser_node_anchor(self, node, _attrib, href):
+        def _parser_node_anchor(self, node):
             node.tag = "xref"
-
-            # remover name e title
-            _attrib.pop("title", None)
-            _attrib.pop("name", None)
-
+            href = node.attrib.get('href')
+            node.attrib.clear()
             root = node.getroottree()
             list_tags = ["div", "sec", "table"]
             for tag in list_tags:
-                ref_node = root.findall("//%s[@id='%s']" % (tag, href.replace("#", "")))
+                xref_name = href.replace("#", "")
+                ref_node = root.findall("//%s[@id='%s']" % (tag, xref_name))
                 if ref_node:
-                    _attrib.update(
-                        {"rid": href.replace("#", ""), "ref-type": ref_node[0].tag}
+                    node.attrib.update(
+                        {"rid": xref_name, "ref-type": ref_node[0].tag}
                     )
-            return _attrib
 
         def parser_node(self, node):
-            _attrib = deepcopy(node.attrib)
             try:
-                href = _attrib.pop("href")
+                href = node.attrib['href']
             except KeyError:
                 logger.debug("\tTag 'a' sem href removendo node do xml")
                 node.getparent().remove(node)
-                return
-
-            if "mailto" in href or "@" in href:
-                _attrib = self._parser_node_mailto(node, _attrib, href)
-
-            elif (
-                href.startswith("htt")
-                or href.startswith("ftp")
-                or href.startswith("/")
-                or href.startswith("../")
-                or href.startswith("www")
-                or href.startswith("file")
-            ):
-                _attrib = self._parser_node_link(node, _attrib, href)
-
-            elif "#" in href:
-                _attrib = self._parser_node_anchor(node, _attrib, href)
-
-            etree.strip_tags(node, "break")
-
-            node.attrib.clear()
-            node.attrib.update(_attrib)
+            else:
+                if href.startswith("#"):
+                    self._parser_node_anchor(node)
+                elif "mailto" in href or "@" in href:
+                    self._parser_node_external_link(node, "email")
+                elif (
+                    '/' in href or
+                    href.startswith('www')
+                ):
+                    self._parser_node_external_link(node)
 
         def transform(self, data):
             raw, xml = data
