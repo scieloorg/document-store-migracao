@@ -56,6 +56,7 @@ class HTML2SPSPipeline(object):
             self.RemoveCommentPipe(),
             self.BodyAllowedTagPipe(),
             self.HTMLEscapingPipe(),
+            self.RemovePWhichIsParentOfPPipe(),
         )
 
     class SetupPipe(plumber.Pipe):
@@ -656,6 +657,44 @@ class HTML2SPSPipeline(object):
                 if not children.tag in self.TAGS:
                     xml.remove(children)
 
+            return data
+
+    class RemovePWhichIsParentOfPPipe(plumber.Pipe):
+
+        def _tag_texts(self, xml):
+            for node in xml.xpath(".//p[p]"):
+                if node.text and node.text.strip():
+                    new_p = etree.Element('p')
+                    new_p.text = node.text
+                    node.text = ''
+                    node.insert(0, new_p)
+
+                for child in node.iter():
+                    if child.tail and child.tail.strip():
+                        new_p = etree.Element('p')
+                        new_p.text = child.tail
+                        child.tail = ''
+                        child.addnext(new_p)
+
+        def _identify_extra_p_tags(self, xml):
+            for node in xml.xpath(".//p[p]"):
+                node.tag = "REMOVE_P"
+
+        def _tag_text_in_body(self, xml):
+            for body in xml.xpath(".//body"):
+                for node in body.findall('*'):
+                    if node.tail and node.tail.strip():
+                        new_p = etree.Element('p')
+                        new_p.text = node.tail
+                        node.tail = ''
+                        node.addnext(new_p)
+
+        def transform(self, data):
+            raw, xml = data
+            self._tag_texts(xml)
+            self._identify_extra_p_tags(xml)
+            self._tag_text_in_body(xml)
+            etree.strip_tags(xml, "REMOVE_P")
             return data
 
     def deploy(self, raw):
