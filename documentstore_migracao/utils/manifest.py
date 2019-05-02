@@ -11,7 +11,7 @@ def get_document_bundle_manifest(
     documento xml"""
 
     try:
-        _id = document.find(".//article-id[@pub-id-type='scielo-id']").text
+        _id = document.find(".//article-id[@specific-use='scielo']").text
     except AttributeError:
         raise ValueError("Document requires an scielo-id") from None
 
