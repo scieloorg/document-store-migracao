@@ -3,7 +3,6 @@ import shutil
 import logging
 
 from requests.compat import urljoin
-from requests.exceptions import HTTPError
 from lxml import etree
 from documentstore_migracao.utils import (
     files,
@@ -69,7 +68,7 @@ def download_asset(old_path, new_fname, dest_path):
     try:
         request_file = request.get(
             location, timeout=int(config.get("TIMEOUT") or 10))
-    except HTTPError as e:
+    except request.HTTPGetError as e:
         try:
             msg = str(e)
         except TypeError:
