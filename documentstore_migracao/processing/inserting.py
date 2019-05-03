@@ -4,12 +4,7 @@ import os
 import logging
 from typing import List
 
-from documentstore_migracao.utils import (
-    files,
-    xml,
-    manifest,
-    scielo_ids_generator
-)
+from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
 
 from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter
@@ -58,11 +53,10 @@ def register_document(folder: str, session_db, storage) -> None:
 
     xml_path = os.path.join(folder, x_file)
     obj_xml = xml.loadToXML(xml_path)
-    scielo_id = xml.get_scielo_id(obj_xml)
-    acrom = xml.get_journal_id(obj_xml)
-    issn = xml.get_issn_journal(obj_xml)
 
-    prefix = f"{issn}_{acrom}/{scielo_id}"
+    xml_sps = SPS_Package(obj_xml)
+
+    prefix = xml_sps.media_prefix
     url_xml = storage.register(xml_path, prefix)
 
     assets = []
@@ -82,8 +76,7 @@ def register_document(folder: str, session_db, storage) -> None:
         try:
             session_db.documents.add(data=manifest_data)
             session_db.changes.add(
-                {"timestamp": utcnow(),
-                 "entity": "Document", "id": manifest_data.id()}
+                {"timestamp": utcnow(), "entity": "Document", "id": manifest_data.id()}
             )
             logger.info("Document-store save: %s", manifest_data.id())
         except AlreadyExists as exc:
@@ -93,53 +86,47 @@ def register_document(folder: str, session_db, storage) -> None:
 
 
 def get_documents_bundle(session_db, data):
-    issns = list(set(
-        [data.get(issn_type)
-         for issn_type in ('eissn', 'pissn', 'issn')]))
+    issns = list(set([data.get(issn_type) for issn_type in ("eissn", "pissn", "issn")]))
 
     bad_docs_bundle_id = []
     for issn in issns:
         if issn:
             docs_bundle_id = scielo_ids_generator.documents_bundle_id(
                 issn,
-                data.get('year'),
-                data.get('volume'),
-                data.get('number'),
-                data.get('supplement')
+                data.get("year"),
+                data.get("volume"),
+                data.get("number"),
+                data.get("supplement"),
             )
             try:
-                documents_bundle = session_db.documents_bundles.fetch(
-                    docs_bundle_id)
+                documents_bundle = session_db.documents_bundles.fetch(docs_bundle_id)
             except DoesNotExist:
                 bad_docs_bundle_id.append(docs_bundle_id)
             else:
                 return documents_bundle
     raise ValueError(
-        'Nenhum documents_bundle encontrado %s' %
-        ', '.join(bad_docs_bundle_id))
+        "Nenhum documents_bundle encontrado %s" % ", ".join(bad_docs_bundle_id)
+    )
 
 
 def inserting_document_store(session_db, storage) -> None:
     documents_sorter = DocumentsSorter()
     register_documents(session_db, storage, documents_sorter)
     register_documents_in_documents_bundle(
-        session_db,
-        documents_sorter.documents_bundles_with_sorted_documents)
+        session_db, documents_sorter.documents_bundles_with_sorted_documents
+    )
 
 
 def register_documents(session_db, storage, documents_sorter) -> None:
     logger.info("Iniciando Envio dos do xmls")
     list_folders = files.list_files(config.get("SPS_PKG_PATH"))
 
-    err_filename = os.path.join(
-        config.get("ERRORS_PATH"), 'insert_documents.err')
+    err_filename = os.path.join(config.get("ERRORS_PATH"), "insert_documents.err")
 
     for folder in list_folders:
         try:
             document_path = os.path.join(config.get("SPS_PKG_PATH"), folder)
-            registration_result = register_document(
-                document_path, session_db, storage
-            )
+            registration_result = register_document(document_path, session_db, storage)
             if registration_result:
                 document_xml, document_id = registration_result
                 documents_sorter.insert_document(document_id, document_xml)
@@ -147,7 +134,7 @@ def register_documents(session_db, storage, documents_sorter) -> None:
         except Exception as ex:
             msg = "Falha ao registrar documento %s: %s" % (document_path, ex)
             logger.error(msg)
-            files.write_file(err_filename, msg, 'a')
+            files.write_file(err_filename, msg, "a")
 
 
 def link_documents_bundles_with_documents(
@@ -177,21 +164,22 @@ def link_documents_bundles_with_documents(
 
 
 def register_documents_in_documents_bundle(
-        session_db, documents_sorted_in_bundles) -> None:
+    session_db, documents_sorted_in_bundles
+) -> None:
 
     err_filename = os.path.join(
-        config.get("ERRORS_PATH"), 'insert_documents_in_bundle.err')
+        config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
+    )
 
     not_registered = []
 
     for key, documents_bundle in documents_sorted_in_bundles.items():
-        data = documents_bundle['data']
-        items = documents_bundle['items']
+        data = documents_bundle["data"]
+        items = documents_bundle["items"]
         try:
             documents_bundle = get_documents_bundle(session_db, data)
         except ValueError as error:
-            files.write_file(err_filename, key+'\n', 'a')
+            files.write_file(err_filename, key + "\n", "a")
             not_registered.append(key)
         else:
-            link_documents_bundles_with_documents(
-                documents_bundle, items, session_db)
+            link_documents_bundles_with_documents(documents_bundle, items, session_db)

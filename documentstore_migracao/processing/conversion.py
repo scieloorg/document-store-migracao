@@ -3,30 +3,30 @@ import logging
 
 from lxml import etree
 from typing import List
-from documentstore_migracao.utils import files, xml, string
-from documentstore_migracao import config
 from xylose.scielodocument import Journal, Issue
-from documentstore_migracao.utils import xylose_converter
+from documentstore_migracao.utils import files, xml, string, xylose_converter
+from documentstore_migracao.export.sps_package import SPS_Package
+from documentstore_migracao import config
 
 logger = logging.getLogger(__name__)
 
 
 def conversion_article_xml(file_xml_path):
-    article = files.read_file(file_xml_path)
 
-    logger.info("file: %s", file_xml_path)
-    obj_xml = etree.fromstring(article)
+    obj_xmltree = xml.loadToXML(file_xml_path)
+    obj_xml = obj_xmltree.getroot()
+
     obj_xml.set("specific-use", "sps-1.8")
     obj_xml.set("dtd-version", "1.1")
 
-    for index, body in enumerate(obj_xml.xpath("//body"), start=1):
-        logger.info("Processando body numero: %s" % index)
+    xml_sps = SPS_Package(obj_xmltree)
+    # CONVERTE O BODY DO AM PARA SPS
+    xml_sps.transform_body()
 
-        obj_html_body = xml.parser_body_xml(body)
-        # sobrecreve o html escapado anterior pelo novo xml tratado
-        body.getparent().replace(body, obj_html_body)
+    # CONSTROI O SCIELO-id NO XML CONVERTIDO
+    xml_sps.create_scielo_id()
 
-    languages = "-".join(xml.get_languages(obj_xml))
+    languages = "-".join(xml_sps.languages)
     _, fname = os.path.split(file_xml_path)
     fname, fext = fname.rsplit(".", 1)
 
@@ -34,21 +34,7 @@ def conversion_article_xml(file_xml_path):
         config.get("CONVERSION_PATH"), "%s.%s.%s" % (fname, languages, fext)
     )
 
-    files.write_file(
-        new_file_xml_path,
-        xml.prettyPrint_format(
-            string.remove_spaces(
-                etree.tostring(
-                    obj_xml,
-                    doctype=config.DOC_TYPE_XML,
-                    pretty_print=True,
-                    xml_declaration=True,
-                    encoding="utf-8",
-                    method="xml",
-                ).decode("utf-8")
-            )
-        ),
-    )
+    xml.objXML2file(new_file_xml_path, xml_sps.xmltree, pretty=True)
 
 
 def conversion_article_ALLxml():
