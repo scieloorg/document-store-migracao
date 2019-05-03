@@ -403,6 +403,7 @@ class SPS_Package:
                 articleId.set("pub-id-type", "publisher-id")
                 articleId.set("specific-use", "scielo")
                 articleId.text = scielo_ids_generator.generate_scielo_pid()
+                _append_node(article, articleId)
 
         return self.xmltree
 

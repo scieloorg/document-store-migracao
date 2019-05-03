@@ -7,7 +7,7 @@ from typing import List
 from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
 
 from documentstore_migracao import config, exceptions
-from documentstore_migracao.export.sps_package import DocumentsSorter
+from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
 
 from documentstore.domain import utcnow, DocumentsBundle
 from documentstore.exceptions import AlreadyExists, DoesNotExist

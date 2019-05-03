@@ -12,6 +12,7 @@ from documentstore_migracao.processing import (
     inserting,
 )
 from documentstore_migracao.object_store import minio
+from documentstore import adapters as ds_adapters
 
 
 logger = logging.getLogger(__name__)
