@@ -353,6 +353,68 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 0)
                 self.assertEqual(text, etree.tostring(node))
 
+    def test_pipe_a__parser_node_external_link_for_uri(self):
+        expected = {
+            '{http://www.w3.org/1999/xlink}href': 'http://bla.org',
+            'ext-link-type': 'uri'
+        }
+        xml = etree.fromstring(
+            '<root><a href="http://bla.org">texto</a></root>')
+        node = xml.find('.//a')
+
+        self.pipeline.APipe()._parser_node_external_link(node)
+
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
+        self.assertEqual(
+            node.attrib.get(
+                '{http://www.w3.org/1999/xlink}href'), 'http://bla.org')
+        self.assertEqual(
+            node.attrib.get('ext-link-type'), 'uri')
+        self.assertEqual(node.tag, 'ext-link')
+        self.assertEqual(node.text, 'texto')
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
+
+    def test_pipe_a___parser_node_external_link_for_email(self):
+        """
+        <ext-link ext-link-type="email" xlink:href="mailto:nuesslin@lrz.tum.de">
+nuesslin@lrz.tum.de</ext-link>
+        """
+        expected_keys = [
+            '{http://www.w3.org/1999/xlink}href',
+            'ext-link-type'
+        ]
+        href = ['mailto:a@scielo.org', 'mailto:x@scielo.org']
+        content = ['Enviar e-mail para A', '<img src="mail.gif" />']
+        expected = """<root>
+        <p><ext-link ext-link-type="email" xlink:href="mailto:a@scielo.org">Enviar e-mail para A</ext-link></p>
+        <p><ext-link ext-link-type="email" xlink:href="mailto:x@scielo.org"><img src="mail.gif" /></ext-link></p>
+        </root>"""
+        text = """<root>
+        <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
+        <p><a href="mailto:x@scielo.org"><img src="mail.gif" /></a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+
+        for i, node in enumerate(xml.findall('.//a')):
+            with self.subTest(i):
+                self.pipeline.APipe()._parser_node_external_link(node, "email")
+
+                self.assertEqual(set(expected_keys), set(node.attrib.keys()))
+                self.assertIn(
+                    node.attrib.get(
+                        '{http://www.w3.org/1999/xlink}href'),
+                    href[i]
+                    )
+                self.assertEqual(
+                    node.attrib.get('ext-link-type'), 'email')
+                self.assertEqual(node.tag, 'ext-link')
+                if node.text:
+                    self.assertEqual(node.text, 'Enviar e-mail para A')
+                else:
+                    self.assertIn(
+                        '<img src="mail.gif"/>',
+                        etree.tostring(node, encoding="unicode"))
+
     def test_pipe_a_mailto(self):
         text = """<root>
         <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
@@ -363,7 +425,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.APipe())
 
         nodes = transformed.findall(".//p/p")
-        self.assertEqual(len(nodes), 4)
+        self.assertEqual(len(nodes), 0)
         texts = [
             b"<p>Enviar e-mail para A<email>a@scielo.org</email></p>",
             b'<p><img src="mail.gif"/><email>x@scielo.org</email></p>',
@@ -389,9 +451,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         text = [
             "<root>",
             '<p><a href="https://new.scielo.br"/></p>',
-            '<p><a href="https://www.google.com"><img src="mail.gif"/></a></p>',
-            '<p><a href="https://www.bbc.com">BBC</a></p>',
-            '<p><a href="http://www.bbc.com">Enviar <b>e-mail para</b> mim</a></p>',
+            '<p><a href="//www.google.com"><img src="mail.gif"/></a></p>',
+            '<p><a href="ftp://www.bbc.com">BBC</a></p>',
+            '<p><a href="../www.bbc.com">Enviar <b>e-mail para</b> mim</a></p>',
             "</root>",
         ]
         text = "".join(text)
@@ -401,9 +463,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertEqual(len(nodes), 4)
         data = [
             ("https://new.scielo.br", b""),
-            ("https://www.google.com", b'<img src="mail.gif"/>'),
-            ("https://www.bbc.com", b"BBC"),
-            ("http://www.bbc.com", b"Enviar <b>e-mail para</b> mim"),
+            ("//www.google.com", b'<img src="mail.gif"/>'),
+            ("ftp://www.bbc.com", b"BBC"),
+            ("../www.bbc.com", b"Enviar <b>e-mail para</b> mim"),
         ]
         for node, item in zip(nodes, data):
             link, content = item
@@ -421,10 +483,11 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertIsNone(transformed.find(".//a"))
 
     def test_pipe_a_href_error(self):
-        text = "<root><a href='error'>Teste</a></root>"
+        text = '<root><a href="error">Teste</a></root>'
         raw, transformed = self._transform(text, self.pipeline.APipe())
         self.assertEqual(
-            etree.tostring(transformed).strip(), b"<root><a>Teste</a></root>"
+            etree.tostring(transformed).strip(),
+            b'<root><a href="error">Teste</a></root>'
         )
 
     def test_pipe_td(self):
