@@ -19,17 +19,17 @@ def ext_identifiers():
 
 
 def ext_journal(issn):
-
-    journal = request.get(
-        "%s/journal" % config.get("AM_URL_API"),
-        params={"collection": config.get("SCIELO_COLLECTION"), "issn": issn},
-    ).json()
-    if journal:
-        return Journal(journal[0])
-    else:
-        raise ValueError(
+    try:
+        journal = request.get(
+            "%s/journal" % config.get("AM_URL_API"),
+            params={"collection": config.get("SCIELO_COLLECTION"), "issn": issn},
+        )
+    except request.HTTPGetError:
+        logger.error(
             "Journal nao encontrado: %s: %s" % (config.get("SCIELO_COLLECTION"), issn)
         )
+    else:
+        return Journal(journal.json()[0])
 
 
 def get_all_journal():

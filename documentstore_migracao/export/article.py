@@ -12,8 +12,9 @@ def ext_identifiers(issn_journal):
     articles_id = request.get(
         "%s/article/identifiers/" % config.get("AM_URL_API"),
         params={"collection": config.get("SCIELO_COLLECTION"), "issn": issn_journal},
-    ).json()
-    return articles_id
+    )
+    if articles_id:
+        return articles_id.json()
 
 
 def get_articles(issn_journal):
@@ -25,20 +26,27 @@ def get_articles(issn_journal):
 def ext_article(code, **ext_params):
     params = ext_params
     params.update({"collection": config.get("SCIELO_COLLECTION"), "code": code})
-
-    article = request.get("%s/article" % config.get("AM_URL_API"), params=params)
-    return article
+    try:
+        article = request.get("%s/article" % config.get("AM_URL_API"), params=params)
+    except request.HTTPGetError:
+        logger.error(
+            "Erro coletando dados do artigo PID %s" % code
+        )
+    else:
+        return article
 
 
 def ext_article_json(code, **ext_params):
-    article = ext_article(code, **ext_params).json()
-    return article
+    article = ext_article(code, **ext_params)
+    if article:
+        return article.json()
 
 
 def ext_article_txt(code, **ext_params):
     logger.info("\t Arquivo XML '%s' extraido", code)
-    article = ext_article(code, body="true", format="xmlrsps", **ext_params).text
-    return article
+    article = ext_article(code, body="true", format="xmlrsps", **ext_params)
+    if article:
+        return article.text
 
 
 def get_all_articles_notXML(issn):

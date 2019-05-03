@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch, ANY, Mock
 
 from lxml import etree
-from requests import HTTPError
+from documentstore_migracao.utils.request import HTTPGetError
 
 from documentstore_migracao.processing import (
     packing,
@@ -163,8 +163,8 @@ class TestProcessingPackingDownloadAsset(unittest.TestCase):
             self.assertTrue(fp.read(), b'conteudo')
 
     @patch("documentstore_migracao.utils.request.get")
-    def test_download_asset_raise_HTTPError_exception(self, mk_request_get):
-        mk_request_get.side_effect = HTTPError
+    def test_download_asset_raise_HTTPGetError_exception(self, mk_request_get):
+        mk_request_get.side_effect = HTTPGetError
         old_path = '/img/en/scielobre.gif'
         new_fname = 'novo'
         dest_path = TEMP_TEST_PATH
@@ -197,7 +197,7 @@ class TestProcessingPacking_PackingAssets(unittest.TestCase):
         pkg_name = 'pacote_sps'
 
         mk_request_get.side_effect = [
-            HTTPError('Error'),
+            HTTPGetError('Error'),
             m,
         ]
         result_path = packing.packing_assets(
@@ -224,7 +224,7 @@ class TestProcessingPacking_PackingAssets(unittest.TestCase):
         renamed_path = pkg_path + '_INCOMPLETE'
         pkg_name = 'pacote_sps'
         mk_request_get.side_effect = [
-            HTTPError('Error'),
+            HTTPGetError('Error'),
             m,
         ]
         result_path = packing.packing_assets(

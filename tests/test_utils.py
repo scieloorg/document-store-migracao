@@ -1,6 +1,7 @@
 import os
 import unittest
-from unittest.mock import patch
+from requests.exceptions import HTTPError
+from unittest.mock import patch, MagicMock
 from lxml import etree
 from uuid import UUID
 from documentstore_migracao.utils import files, xml, request, dicts, string
@@ -154,6 +155,18 @@ class TestUtilsRequest(unittest.TestCase):
         expected = {"params": {"collection": "spa"}}
         request.get("http://api.test.com", **expected)
         mk_requests.get.assert_called_once_with("http://api.test.com", **expected)
+
+    @patch("documentstore_migracao.utils.request.requests")
+    def test_get_raises_exception_if_requests_exception(self, mk_requests):
+        mk_response = MagicMock()
+        mk_response.raise_for_status.side_effect = HTTPError
+        mk_requests.get.return_value = mk_response
+        self.assertRaises(
+            request.HTTPGetError,
+            request.get,
+            "http://api.test.com",
+            **{}
+        )
 
 
 class TestUtilsDicts(unittest.TestCase):
