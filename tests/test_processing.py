@@ -1,15 +1,14 @@
 import os
 import unittest
-from unittest.mock import patch, ANY, call
+from unittest.mock import patch, ANY, call, Mock
 
 from xylose.scielodocument import Journal, Article
 from documentstore_migracao.processing import (
     extrated,
     conversion,
-    reading,
-    generation,
     validation,
-    constructor,
+    reading,
+    inserting,
 )
 
 from . import (
@@ -95,88 +94,6 @@ class TestProcessingConversion(unittest.TestCase):
             # with self.assertRaises(KeyError) as cm:
             #     conversion.conversion_article_ALLxml()
             #     self.assertEqual("Test Error - CONVERSION", str(cm.exception))
-
-
-class TestProcessingReading(unittest.TestCase):
-    def test_reading_article_xml(self):
-
-        reading.reading_article_xml(
-            os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
-        )
-
-    def test_reading_article_xml_has_media(self):
-
-        reading.reading_article_xml(
-            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml")
-        )
-
-    @patch("documentstore_migracao.processing.reading.reading_article_xml")
-    def test_reading_article_ALLxml(self, mk_reading_article_xml):
-
-        with utils.environ(CONSTRUCTOR_PATH=SAMPLES_PATH):
-            reading.reading_article_ALLxml()
-            mk_reading_article_xml.assert_called_with(ANY, move_success=False)
-            self.assertEqual(
-                len(mk_reading_article_xml.mock_calls), COUNT_SAMPLES_FILES
-            )
-
-    # @patch("documentstore_migracao.processing.reading.reading_article_xml")
-    # def test_reading_article_ALLxml_with_exception(self, mk_reading_article_xml):
-
-    #     mk_reading_article_xml.side_effect = KeyError("Test Error - READING")
-    #     with utils.environ(CONVERSION_PATH=SAMPLES_PATH):
-
-    #         with self.assertLogs("documentstore_migracao.processing.reading") as log:
-    #             reading.reading_article_ALLxml()
-
-    #         has_message = False
-    #         for log_message in log.output:
-    #             if "Test Error - READING" in log_message:
-    #                 has_message = True
-    #         self.assertTrue(has_message)
-
-
-class TestProcessingGeneration(unittest.TestCase):
-    def test_article_html_generator(self):
-
-        with utils.environ(GENERATOR_PATH="/tmp"):
-            filename = "/tmp/S0044-59672003000300001.pt.pt.html"
-            try:
-                generation.article_html_generator(
-                    os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml")
-                )
-                with open(filename, "r") as f:
-                    text = f.read()
-
-            finally:
-                os.remove(filename)
-
-            self.assertIn("S0044-59672003000300001", text)
-
-    @patch("documentstore_migracao.processing.generation.article_html_generator")
-    def test_article_ALL_html_generator(self, mk_article_html_generator):
-
-        with utils.environ(CONSTRUCTOR_PATH=SAMPLES_PATH):
-            generation.article_ALL_html_generator()
-            mk_article_html_generator.assert_called_with(ANY)
-            self.assertEqual(
-                len(mk_article_html_generator.mock_calls), COUNT_SAMPLES_FILES
-            )
-
-    # @patch("documentstore_migracao.processing.generation.article_html_generator")
-    # def test_article_ALL_html_generator_with_exception(self, mk_article_html_generator):
-
-    #     mk_article_html_generator.side_effect = KeyError("Test Error - Generation")
-    #     with utils.environ(CONSTRUCTOR_PATH=SAMPLES_PATH):
-
-    #         with self.assertLogs("documentstore_migracao.processing.generation") as log:
-    #             generation.article_ALL_html_generator()
-
-    #         has_message = False
-    #         for log_message in log.output:
-    #             if "Test Error - Generation" in log_message:
-    #                 has_message = True
-    #         self.assertTrue(has_message)
 
 
 class TestReadingJournals(unittest.TestCase):
@@ -296,29 +213,28 @@ class TestProcessingValidation(unittest.TestCase):
                 self.assertEqual("Test Error - Validation", str(cm.exception))
 
 
-class TestProcessingConstructor(unittest.TestCase):
-    @patch("documentstore_migracao.processing.constructor.files.write_file")
-    def test_article_xml_constructor(self, mk_write_file):
+class TestProcessingInserting(unittest.TestCase):
+    @patch("documentstore_migracao.processing.inserting.register_document")
+    def test_inserting_document_store(self, mk_import_document_by_database):
 
-        with utils.environ(CONSTRUCTOR_PATH="/tmp"):
-            constructor.article_xml_constructor(
-                os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml")
-            )
-            mk_write_file.assert_called_with("/tmp/S0044-59672003000300001.pt.xml", ANY)
+        session_db = Mock()
+        storage = Mock()
 
-    @patch("documentstore_migracao.processing.constructor.article_xml_constructor")
-    def test_article_ALL_constructor(self, mk_article_xml_constructor):
+        with utils.environ(SPS_PKG_PATH=SAMPLES_PATH):
+            inserting.inserting_document_store(session_db, storage)
 
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=SAMPLES_PATH):
-            constructor.article_ALL_constructor()
-            mk_article_xml_constructor.assert_called_with(ANY)
+        mk_import_document_by_database.assert_called_with(ANY, session_db, storage)
 
-    @patch("documentstore_migracao.processing.constructor.article_xml_constructor")
-    def test_article_ALL_constructor_with_exception(self, mk_article_xml_constructor):
+    def test_import_document_by_database(self):
 
-        mk_article_xml_constructor.side_effect = KeyError("Test Error - constructor")
-        with utils.environ(CONVERSION_PATH=SAMPLES_PATH, VALID_XML_PATH=SAMPLES_PATH):
+        session_db = Mock()
+        storage = Mock()
+        storage.register().return_value = "http://localhost:9000/img/exemple.jpg"
 
-            with self.assertRaises(KeyError) as cm:
-                constructor.article_ALL_constructor()
-                self.assertEqual("Test Error - constructor", str(cm.exception))
+        inserting.register_document(
+            os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_completo"),
+            session_db,
+            storage,
+        )
+
+        session_db.documents.add.assert_called_with(data=ANY)

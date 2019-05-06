@@ -108,28 +108,28 @@ class TestUtilsXML(unittest.TestCase):
 
         self.assertIn(b"<body></body>", obj)
 
-    def test_find_medias(self):
+    # def test_find_medias(self):
 
-        with open(
-            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), "r"
-        ) as f:
-            text = f.read()
-        obj = etree.fromstring(text)
-        medias = xml.find_medias(obj)
+    #     with open(
+    #         os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), "r"
+    #     ) as f:
+    #         text = f.read()
+    #     obj = etree.fromstring(text)
+    #     medias = xml.find_medias(obj)
 
-        self.assertEqual(len(medias), 3)
+    #     self.assertEqual(len(medias), 3)
 
-    def test_pipe_body_xml(self):
-        with open(os.path.join(SAMPLES_PATH, "S0036-36341997000100003.xml"), "r") as f:
-            text = f.read()
+    # def test_pipe_body_xml(self):
+    #     with open(os.path.join(SAMPLES_PATH, "S0036-36341997000100003.xml"), "r") as f:
+    #         text = f.read()
 
-        obj = etree.fromstring(text)
-        html = xml.parser_body_xml(obj)
-        tags = ("div", "img", "li", "ol", "ul", "i", "b", "a")
-        for tag in tags:
-            with self.subTest(tag=tag):
-                expected = html.findall(".//%s" % tag)
-                self.assertFalse(expected)
+    #     obj = etree.fromstring(text)
+    #     html = xml.parser_body_xml(obj)
+    #     tags = ("div", "img", "li", "ol", "ul", "i", "b", "a")
+    #     for tag in tags:
+    #         with self.subTest(tag=tag):
+    #             expected = html.findall(".//%s" % tag)
+    #             self.assertFalse(expected)
 
     def test_file2objXML(self):
         file_path = os.path.join(SAMPLES_PATH, "any.xml")
@@ -186,177 +186,177 @@ class TestUtilsDicts(unittest.TestCase):
         self.assertEqual(list(result)[0], ("a", "b", "c"))
 
 
-class TestGetPublicationDate(unittest.TestCase):
+# class TestGetPublicationDate(unittest.TestCase):
 
-    def test_pubdate_pubtype_epub(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2011</year>
-                </pub-date>
-                <pub-date pub-type="epub">
-                    <year>2010</year>
-                    <month>1</month>
-                    <day>9</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2010-01-09')
+#     def test_pubdate_pubtype_epub(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date pub-type="collection">
+#                     <year>2011</year>
+#                 </pub-date>
+#                 <pub-date pub-type="epub">
+#                     <year>2010</year>
+#                     <month>1</month>
+#                     <day>9</day>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2010-01-09')
 
-    def test_pubdate_datetype_pub(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                </pub-date>
-                <pub-date date-type="pub">
-                    <year>2012</year>
-                    <month>9</month>
-                    <day>3</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2012-09-03')
+#     def test_pubdate_datetype_pub(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date date-type="collection">
+#                     <year>2013</year>
+#                 </pub-date>
+#                 <pub-date date-type="pub">
+#                     <year>2012</year>
+#                     <month>9</month>
+#                     <day>3</day>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2012-09-03')
 
-    def test_pubdate_pubtype_collection_year_month(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02')
+#     def test_pubdate_pubtype_collection_year_month(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date pub-type="collection">
+#                     <year>2013</year>
+#                     <month>2</month>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013-02')
 
-    def test_pubdate_pubtype_collection_year(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2013</year>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013')
+#     def test_pubdate_pubtype_collection_year(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date pub-type="collection">
+#                     <year>2013</year>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013')
 
-    def test_pubdate_pubtype_collection_year_month_day(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                    <day>4</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02-04')
+#     def test_pubdate_pubtype_collection_year_month_day(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date pub-type="collection">
+#                     <year>2013</year>
+#                     <month>2</month>
+#                     <day>4</day>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013-02-04')
 
-    def test_pubdate_datetype_collection_year_month(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02')
+#     def test_pubdate_datetype_collection_year_month(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date date-type="collection">
+#                     <year>2013</year>
+#                     <month>2</month>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013-02')
 
-    def test_pubdate_datetype_collection_year(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013')
+#     def test_pubdate_datetype_collection_year(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date date-type="collection">
+#                     <year>2013</year>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013')
 
-    def test_pubdate_datetype_collection_year_month_day(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                    <day>4</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02-04')
+#     def test_pubdate_datetype_collection_year_month_day(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date date-type="collection">
+#                     <year>2013</year>
+#                     <month>2</month>
+#                     <day>4</day>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013-02-04')
 
-    def test_pubdate_pubtype_epubppub_year_month(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="epub-pub">
-                    <year>2013</year>
-                    <month>2</month>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02')
+#     def test_pubdate_pubtype_epubppub_year_month(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date pub-type="epub-pub">
+#                     <year>2013</year>
+#                     <month>2</month>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013-02')
 
-    def test_pubdate_pubtype_epubppub_year(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="epub-pub">
-                    <year>2013</year>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013')
+#     def test_pubdate_pubtype_epubppub_year(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date pub-type="epub-pub">
+#                     <year>2013</year>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013')
 
-    def test_pubdate_pubtype_epubppub_year_month_day(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="epub-pub">
-                    <year>2013</year>
-                    <month>2</month>
-                    <day>4</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02-04')
+#     def test_pubdate_pubtype_epubppub_year_month_day(self):
+#         _xml = """<root>
+#             <article-meta>
+#                 <pub-date pub-type="epub-pub">
+#                     <year>2013</year>
+#                     <month>2</month>
+#                     <day>4</day>
+#                 </pub-date>
+#             </article-meta>
+#         </root>
+#         """
+#         article_xml = etree.fromstring(_xml)
+#         self.assertEqual(
+#             xml.get_document_publication_date_for_migration(article_xml),
+#             '2013-02-04')

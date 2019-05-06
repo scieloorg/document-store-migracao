@@ -20,6 +20,8 @@ SPS_PKG_PATH:
     pacotes de XML validados e nomeados de acordo com SPS
 INCOMPLETE_SPS_PKG_PATH:
     pacotes de XML validados e nomeados de acordo com SPS, mas com ativos digitais faltantes
+ERRORS_PATH:	
+    arquivos de erros    
 """
 
 _default = dict(
@@ -36,6 +38,7 @@ _default = dict(
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
     GENERATOR_PATH=os.path.join(BASE_PATH, "xml/html"),
     CONSTRUCTOR_PATH=os.path.join(BASE_PATH, "xml/constructor"),
+    ERRORS_PATH=os.path.join(BASE_PATH, "xml/errors"),
 )
 
 
