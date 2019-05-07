@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from documentstore_migracao.main import main, main_migrate_isis
+from documentstore_migracao.main import main, main_migrate_isis, tools
 
 
 class TestMain(unittest.TestCase):
@@ -17,4 +17,11 @@ class TestMain(unittest.TestCase):
 
         mk_process.return_value = 0
         self.assertRaises(SystemExit, main_migrate_isis)
+        mk_process.assert_called_once_with(["test"])
+
+    @patch("documentstore_migracao.main.tools_parser")
+    def test_main_tools_parser(self, mk_process):
+
+        mk_process.return_value = 0
+        self.assertRaises(SystemExit, tools)
         mk_process.assert_called_once_with(["test"])

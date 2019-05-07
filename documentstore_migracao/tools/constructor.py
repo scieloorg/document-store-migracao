@@ -1,8 +1,8 @@
 import os
 import logging
 from lxml import etree
-from packtools import XML
-from documentstore_migracao.utils import files, constructor_xml, string
+
+from documentstore_migracao.utils import files, string, xml
 from documentstore_migracao.export.sps_package import SPS_Package
 from documentstore_migracao import config
 

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, ANY
 
 from documentstore_migracao.main.migrate_articlemeta import migrate_articlemeta_parser
 
@@ -40,6 +40,38 @@ class TestMigrateProcess(unittest.TestCase):
 
         migrate_articlemeta_parser(["validation", "--valideFile", "/tmp/example.xml"])
         mk_validator_article_xml.assert_called_once_with("/tmp/example.xml")
+
+    @patch("documentstore_migracao.processing.packing.packing_article_ALLxml")
+    def test_command_pack_sps(self, mk_packing_article_ALLxml):
+
+        migrate_articlemeta_parser(["pack_sps"])
+        mk_packing_article_ALLxml.assert_called_once_with()
+
+    @patch("documentstore_migracao.processing.packing.packing_article_xml")
+    def test_command_pack_sps_arg_pathFile(self, mk_packing_article_xml):
+
+        migrate_articlemeta_parser(["pack_sps", "--packFile", "/tmp/example.xml"])
+        mk_packing_article_xml.assert_called_once_with("/tmp/example.xml")
+
+    @patch("documentstore_migracao.processing.inserting.inserting_document_store")
+    def test_command_import(self, mk_inserting_document_store):
+
+        migrate_articlemeta_parser(
+            [
+                "import",
+                "--uri",
+                "mongodb://user:password@mongodb-host/?authSource=admin",
+                "--db",
+                "document-store",
+                "--minio_host",
+                "localhost:9000",
+                "--minio_access_key",
+                "minio",
+                "--minio_secret_key",
+                "minio123",
+            ]
+        )
+        mk_inserting_document_store.assert_called_once_with(session_db=ANY, storage=ANY)
 
     def test_not_arg(self):
 

@@ -225,16 +225,16 @@ class TestProcessingInserting(unittest.TestCase):
 
         mk_import_document_by_database.assert_called_with(ANY, session_db, storage)
 
-    def test_import_document_by_database(self):
+    # def test_import_document_by_database(self):
 
-        session_db = Mock()
-        storage = Mock()
-        storage.register().return_value = "http://localhost:9000/img/exemple.jpg"
+    #     session_db = Mock()
+    #     storage = Mock()
+    #     storage.register().return_value = "http://localhost:9000/img/exemple.jpg"
 
-        inserting.register_document(
-            os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_completo"),
-            session_db,
-            storage,
-        )
+    #     inserting.register_document(
+    #         os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_completo"),
+    #         session_db,
+    #         storage,
+    #     )
 
-        session_db.documents.add.assert_called_with(data=ANY)
+    #     session_db.documents.add.assert_called_with(data=ANY)
