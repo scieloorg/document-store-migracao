@@ -7,7 +7,7 @@ from .migrate_articlemeta import migrate_articlemeta_parser
 from .tools import tools_parser
 
 
-def main():
+def main_migrate_articlemeta():
     """ method main to script setup.py """
     sys.exit(migrate_articlemeta_parser(sys.argv[1:]))
 

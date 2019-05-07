@@ -26,9 +26,7 @@ class TestExportJournal(unittest.TestCase):
     @patch("documentstore_migracao.export.journal.request.get")
     @patch("documentstore_migracao.export.journal.logger.error")
     def test_ext_journal_catch_request_get_exception(
-        self,
-        mk_logger_error,
-        mk_request_get,
+        self, mk_logger_error, mk_request_get
     ):
         mk_request_get.side_effect = request.HTTPGetError
         result = journal.ext_journal("1234-5678")
@@ -85,9 +83,7 @@ class TestExportArticle(unittest.TestCase):
     @patch("documentstore_migracao.export.article.logger.error")
     @patch("documentstore_migracao.export.article.request.get")
     def test_ext_article_log_error_if_request_raises_exception(
-        self,
-        mk_request_get,
-        mk_logger_error
+        self, mk_request_get, mk_logger_error
     ):
         article_pid = "S0036-36341997000100001"
         mk_request_get.side_effect = request.HTTPGetError

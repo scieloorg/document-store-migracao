@@ -109,7 +109,7 @@ def get_documents_bundle(session_db, data):
     )
 
 
-def inserting_document_store(session_db, storage) -> None:
+def import_documents_to_kernel(session_db, storage) -> None:
     documents_sorter = DocumentsSorter()
     register_documents(session_db, storage, documents_sorter)
     register_documents_in_documents_bundle(

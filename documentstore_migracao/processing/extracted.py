@@ -8,7 +8,7 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def extrated_journal_data(obj_journal):
+def extract_journal_data(obj_journal):
     count = 0
     logger.info("\t coletando dados do periodico '%s'", obj_journal.title)
 
@@ -27,18 +27,18 @@ def extrated_journal_data(obj_journal):
     logger.info("\t Total de %s artigos", count)
 
 
-def extrated_selected_journal(issn):
+def extract_select_journal(issn):
 
     logger.info("Iniciando extração do journal %s" % issn)
 
     obj_journal = journal.ext_journal(issn)
-    extrated_journal_data(obj_journal)
+    extract_journal_data(obj_journal)
 
 
-def extrated_all_data():
+def extract_all_data():
 
     logger.info("Iniciando extração")
     list_journais = journal.get_journals()
     for obj_journal in list_journais:
 
-        extrated_journal_data(obj_journal)
+        extract_journal_data(obj_journal)

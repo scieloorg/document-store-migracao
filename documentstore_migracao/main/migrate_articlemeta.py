@@ -5,7 +5,7 @@ import argparse
 from .base import base_parser, minio_parser, mongodb_parser
 
 from documentstore_migracao.processing import (
-    extrated,
+    extracted,
     conversion,
     validation,
     packing,
@@ -22,65 +22,69 @@ def migrate_articlemeta_parser(sargs):
     """ method to migrate articlemeta """
 
     parser = argparse.ArgumentParser(
-        description="Document Store (Kernel) - Migração", parents=[base_parser(sargs)]
+        epilog="""Para mais informações de subcomando utilizar o
+            argumento `-h`, exemplo: ds_migracao extract -h""",
+        description="Document Store (Kernel) - Migração",
+        parents=[base_parser(sargs)],
     )
     subparsers = parser.add_subparsers(title="Commands", metavar="", dest="command")
 
     # EXTRACAO
-    extrate_parser = subparsers.add_parser(
-        "extrate",
-        help="Baixar todos os XML do article-meta (AM) de todos os periodicos, "
-        "exceto se o argumento '--issn-journal' ou '-j' estiver informado com o ISSN do periodicos expecifico.",
+    extraction_parser = subparsers.add_parser(
+        "extract", help="Extrai todos os artigos originários do formato HTML"
     )
-    extrate_parser.add_argument(
-        "--issn-journal", "-j", help="Informe o ISSN do periodico que querira extrair"
+    extraction_parser.add_argument(
+        "--issn",
+        dest="issn_journal",
+        metavar="",
+        help="Extrai os artigos apenas do periódico informado",
     )
 
     # CONVERCAO
     import_parser = subparsers.add_parser(
-        "conversion",
-        help="Converte o 'body' de todos os arquivos XML de 'SOURCE_PATH' para o formato SPS, "
-        "exceto se o argumento '--convetFile' ou '-c' estiver informado com o caminho de um arquivo XML para a converção.",
+        "convert", help="Converte o conteúdo da tag `body` dos XMLs extraídos"
     )
     import_parser.add_argument(
-        "--convetFile", "-c", help="Transformar somente o arquivos XML imformado"
+        "--file",
+        dest="convertFile",
+        metavar="",
+        help="Converte apenas o arquivo XML imformado",
     )
 
     # VALIDACAO
     validation_parser = subparsers.add_parser(
-        "validation",
-        help="Valida todos os arquivos XML da pasta 'CONVERSION_PATH', "
-        "utilize os parametros: \n"
-        "'--move_to_processed_source' ou '-MS' para mover os arquivos válidos de 'SOURCE_PATH' para 'PROCESSED_SOURCE_PATH' \n"
-        "'--move_to_valid_xml' ou '-MC' para mover os arquivos válidos de 'CONVERSION_PATH' para 'VALID_XML_PATH' .\n"
-        "Para validar somente um arquivo, utilize o argumento '--valideFile' ou '-f' informando o caminho de um arquivo XML para a validação.",
+        "validate", help="Valida os XMLs por meio das regras da `SPS` vigente"
     )
     validation_parser.add_argument(
         "--move_to_processed_source",
-        "-MS",
         action="store_true",
         default=False,
         help="Move os arquivos válidos de 'SOURCE_PATH' para 'PROCESSED_SOURCE_PATH'",
     )
     validation_parser.add_argument(
         "--move_to_valid_xml",
-        "-MC",
         action="store_true",
         default=False,
         help="Move os arquivos válidos de 'CONVERSION_PATH' para 'VALID_XML_PATH'",
     )
     validation_parser.add_argument(
-        "--valideFile", "-f", help="Valida somente o arquivos XML imformado"
+        "--file",
+        "-f",
+        dest="validateFile",
+        metavar="",
+        help="Valida apenas o arquivo XML imformado",
     )
 
     # GERACAO PACOTE SPS
     pack_sps_parser = subparsers.add_parser(
-        "pack_sps",
-        help="Processa XMLs validados contidos na pasta 'VALID_XML_PATH' e gerar os pacotes no formato SPS, "
-        "exceto se argumento '--packFile' ou '-p' estiver informando o caminho de um arquivo XML para geração do pacote",
+        "pack", help="Gera pacotes `SPS` a partir de XMLs válidos"
     )
     pack_sps_parser.add_argument(
-        "--packFile", "-p", help="Empacotar somente o documento XML imformado"
+        "--file",
+        "-f",
+        dest="packFile",
+        metavar="",
+        help="Gera o pacote `SPS` apenas para o documento XML imformado",
     )
 
     # IMPORTACAO
@@ -98,31 +102,31 @@ def migrate_articlemeta_parser(sargs):
     logger = logging.getLogger()
     logger.setLevel(level)
 
-    if args.command == "extrate":
+    if args.command == "extract":
         if args.issn_journal:
-            extrated.extrated_selected_journal(args.issn_journal)
+            extracted.extract_select_journal(args.issn_journal)
         else:
-            extrated.extrated_all_data()
+            extracted.extract_all_data()
 
-    elif args.command == "conversion":
-        if args.convetFile:
-            conversion.conversion_article_xml(args.convetFile)
+    elif args.command == "convert":
+        if args.convertFile:
+            conversion.convert_article_xml(args.convertFile)
         else:
-            conversion.conversion_article_ALLxml()
+            conversion.convert_article_ALLxml()
 
-    elif args.command == "validation":
-        if args.valideFile:
-            validation.validator_article_xml(args.valideFile)
+    elif args.command == "validate":
+        if args.validateFile:
+            validation.validate_article_xml(args.validateFile)
         else:
-            validation.validator_article_ALLxml(
+            validation.validate_article_ALLxml(
                 args.move_to_processed_source, args.move_to_valid_xml
             )
 
-    elif args.command == "pack_sps":
+    elif args.command == "pack":
         if args.packFile:
-            packing.packing_article_xml(args.packFile)
+            packing.pack_article_xml(args.packFile)
         else:
-            packing.packing_article_ALLxml()
+            packing.pack_article_ALLxml()
 
     elif args.command == "import":
         mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
@@ -135,7 +139,7 @@ def migrate_articlemeta_parser(sargs):
             minio_secure=args.minio_is_secure,
         )
 
-        inserting.inserting_document_store(session_db=DB_Session(), storage=storage)
+        inserting.import_documents_to_kernel(session_db=DB_Session(), storage=storage)
 
     else:
         raise SystemExit(

@@ -29,9 +29,7 @@ def ext_article(code, **ext_params):
     try:
         article = request.get("%s/article" % config.get("AM_URL_API"), params=params)
     except request.HTTPGetError:
-        logger.error(
-            "Erro coletando dados do artigo PID %s" % code
-        )
+        logger.error("Erro coletando dados do artigo PID %s" % code)
     else:
         return article
 

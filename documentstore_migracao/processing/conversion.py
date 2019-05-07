@@ -11,7 +11,7 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def conversion_article_xml(file_xml_path):
+def convert_article_xml(file_xml_path):
 
     obj_xmltree = xml.loadToXML(file_xml_path)
     obj_xml = obj_xmltree.getroot()
@@ -37,14 +37,14 @@ def conversion_article_xml(file_xml_path):
     xml.objXML2file(new_file_xml_path, xml_sps.xmltree, pretty=True)
 
 
-def conversion_article_ALLxml():
+def convert_article_ALLxml():
 
     logger.info("Iniciando Conversão do xmls")
     list_files_xmls = files.xml_files_list(config.get("SOURCE_PATH"))
     for file_xml in list_files_xmls:
 
         try:
-            conversion_article_xml(os.path.join(config.get("SOURCE_PATH"), file_xml))
+            convert_article_xml(os.path.join(config.get("SOURCE_PATH"), file_xml))
 
         except Exception as ex:
             logger.error(file_xml)

@@ -11,13 +11,13 @@ from . import utils, SAMPLES_PATH, TEMP_TEST_PATH, COUNT_SAMPLES_FILES
 
 
 class TestProcessingPacking(unittest.TestCase):
-    def test_packing_article_xml_missing_media(self):
+    def test_pack_article_xml_missing_media(self):
         with utils.environ(
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
         ):
-            packing.packing_article_xml(
+            packing.pack_article_xml(
                 os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_incompleto.xml")
             )
             files = set(
@@ -44,13 +44,13 @@ class TestProcessingPacking(unittest.TestCase):
             )
             self.assertEqual(9, len(files))
 
-    def test_packing_article_xml_has_media(self):
+    def test_pack_article_xml_has_media(self):
         with utils.environ(
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
         ):
-            packing.packing_article_xml(
+            packing.pack_article_xml(
                 os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_completo.xml")
             )
             files = set(
@@ -75,31 +75,29 @@ class TestProcessingPacking(unittest.TestCase):
             )
             self.assertEqual(10, len(files))
 
-    def test_packing_article_xml_has_no_media(self):
+    def test_pack_article_xml_has_no_media(self):
         with utils.environ(
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
         ):
-            packing.packing_article_xml(os.path.join(SAMPLES_PATH, "any.xml"))
+            packing.pack_article_xml(os.path.join(SAMPLES_PATH, "any.xml"))
             files = set(os.listdir(os.path.join(SAMPLES_PATH, "any")))
             self.assertEqual({"any.xml"}, files)
             self.assertEqual(1, len(files))
 
-    @patch("documentstore_migracao.processing.packing.packing_article_xml")
-    def test_packing_article_ALLxml(self, mk_packing_article_xml):
+    @patch("documentstore_migracao.processing.packing.pack_article_xml")
+    def test_pack_article_ALLxml(self, mk_pack_article_xml):
 
         with utils.environ(VALID_XML_PATH=SAMPLES_PATH):
-            packing.packing_article_ALLxml()
-            mk_packing_article_xml.assert_called_with(ANY)
-            self.assertEqual(
-                len(mk_packing_article_xml.mock_calls), COUNT_SAMPLES_FILES
-            )
+            packing.pack_article_ALLxml()
+            mk_pack_article_xml.assert_called_with(ANY)
+            self.assertEqual(len(mk_pack_article_xml.mock_calls), COUNT_SAMPLES_FILES)
 
-    @patch("documentstore_migracao.processing.packing.packing_article_xml")
-    def test_packing_article_ALLxml_with_errors(self, mk_packing_article_xml):
+    @patch("documentstore_migracao.processing.packing.pack_article_xml")
+    def test_pack_article_ALLxml_with_errors(self, mk_pack_article_xml):
 
-        mk_packing_article_xml.side_effect = [
+        mk_pack_article_xml.side_effect = [
             PermissionError("Permission error message"),
             OSError("OSError message"),
             etree.Error(ANY),
@@ -118,7 +116,7 @@ class TestProcessingPacking(unittest.TestCase):
 
         with utils.environ(VALID_XML_PATH=SAMPLES_PATH):
             with self.assertLogs("documentstore_migracao.processing.packing") as log:
-                packing.packing_article_ALLxml()
+                packing.pack_article_ALLxml()
 
             msg = []
             for log_message in log.output:
@@ -159,15 +157,15 @@ class TestProcessingPackingDownloadAsset(unittest.TestCase):
     @patch("documentstore_migracao.utils.request.get")
     def test_download_asset_raise_HTTPGetError_exception(self, mk_request_get):
         mk_request_get.side_effect = HTTPGetError
-        old_path = '/img/en/scielobre.gif'
-        new_fname = 'novo'
+        old_path = "/img/en/scielobre.gif"
+        new_fname = "novo"
         dest_path = TEMP_TEST_PATH
 
         error = packing.download_asset(old_path, new_fname, dest_path)
         self.assertIsNotNone(error)
 
 
-class TestProcessingPacking_PackingAssets(unittest.TestCase):
+class TestProcessingpack_PackingAssets(unittest.TestCase):
     def setUp(self):
         if os.path.isdir(TEMP_TEST_PATH):
             shutil.rmtree(TEMP_TEST_PATH)
@@ -179,7 +177,7 @@ class TestProcessingPacking_PackingAssets(unittest.TestCase):
         shutil.rmtree(TEMP_TEST_PATH)
 
     @patch("documentstore_migracao.utils.request.get")
-    def test__packing_incomplete_package(self, mk_request_get):
+    def test__pack_incomplete_package(self, mk_request_get):
         asset_replacements = [
             ("/img/revistas/a01.gif", "f01"),
             ("/img/revistas/a02.gif", "f02"),
@@ -190,10 +188,7 @@ class TestProcessingPacking_PackingAssets(unittest.TestCase):
         bad_pkg_path = self.bad_pkg_path
         pkg_name = "pacote_sps"
 
-        mk_request_get.side_effect = [
-            HTTPGetError('Error'),
-            m,
-        ]
+        mk_request_get.side_effect = [HTTPGetError("Error"), m]
         result_path = packing.packing_assets(
             asset_replacements, pkg_path, bad_pkg_path, pkg_name
         )
@@ -204,7 +199,7 @@ class TestProcessingPacking_PackingAssets(unittest.TestCase):
             self.assertEqual(fp.read(), "/img/revistas/a01.gif f01 Error")
 
     @patch("documentstore_migracao.utils.request.get")
-    def test__packing_incomplete_package_same_dir(self, mk_request_get):
+    def test__pack_incomplete_package_same_dir(self, mk_request_get):
         asset_replacements = [
             ("/img/revistas/a01.gif", "f01"),
             ("/img/revistas/a02.gif", "f02"),
@@ -213,12 +208,9 @@ class TestProcessingPacking_PackingAssets(unittest.TestCase):
         m.content = b"conteudo"
         pkg_path = self.good_pkg_path
         bad_pkg_path = self.good_pkg_path
-        renamed_path = pkg_path + '_INCOMPLETE'
-        pkg_name = 'pacote_sps'
-        mk_request_get.side_effect = [
-            HTTPGetError('Error'),
-            m,
-        ]
+        renamed_path = pkg_path + "_INCOMPLETE"
+        pkg_name = "pacote_sps"
+        mk_request_get.side_effect = [HTTPGetError("Error"), m]
         result_path = packing.packing_assets(
             asset_replacements, pkg_path, bad_pkg_path, pkg_name
         )
@@ -229,7 +221,7 @@ class TestProcessingPacking_PackingAssets(unittest.TestCase):
             self.assertEqual(fp.read(), "/img/revistas/a01.gif f01 Error")
 
     @patch("documentstore_migracao.utils.request.get")
-    def test__packing_complete_package(self, mk_request_get):
+    def test__pack_complete_package(self, mk_request_get):
         asset_replacements = [
             ("/img/revistas/a01.gif", "f01"),
             ("/img/revistas/a02.gif", "f02"),

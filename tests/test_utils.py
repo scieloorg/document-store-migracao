@@ -144,10 +144,7 @@ class TestUtilsRequest(unittest.TestCase):
         mk_response.raise_for_status.side_effect = HTTPError
         mk_requests.get.return_value = mk_response
         self.assertRaises(
-            request.HTTPGetError,
-            request.get,
-            "http://api.test.com",
-            **{}
+            request.HTTPGetError, request.get, "http://api.test.com", **{}
         )
 
 
