@@ -629,3 +629,230 @@ nuesslin@lrz.tum.de</ext-link>
 
                 found = tree.findall(".//%s" % expected_tag)
                 self.assertIsNotNone(found)
+
+
+class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
+
+    def setUp(self):
+        self.text = """<root>
+            <body>
+                <p>
+                    <p>paragrafo 1</p>
+                    <p>paragrafo 2</p>
+                </p>
+            </body>
+            </root>"""
+        self.xml = etree.fromstring(self.text)
+        self.pipe = HTML2SPSPipeline().RemovePWhichIsParentOfPPipe()
+
+    def _compare_tags_and_texts(self, transformed, expected):
+        def normalize(xmltree):
+            s = ''.join(etree.tostring(xmltree, encoding='unicode').split())
+            s = s.replace('><', '>BREAK<')
+            return s.split('BREAK')
+
+        self.assertEqual(
+            [node.tag for node in transformed.findall('.//body//*')],
+            [node.tag for node in expected.findall('.//body//*')]
+        )
+        self.assertEqual(
+            [node.text.strip() if node.text else ''
+             for node in transformed.findall('.//body//*')],
+            [node.text.strip() if node.text else ''
+             for node in expected.findall('.//body//*')]
+        )
+        self.assertEqual(normalize(transformed), normalize(expected))
+
+    def test_identify_extra_p_tags(self):
+        expected = etree.fromstring("""<root>
+            <body>
+                <REMOVE_P>
+                    <p>paragrafo 1</p>
+                    <p>paragrafo 2</p>
+                </REMOVE_P>
+            </body>
+            </root>""")
+        self.pipe._identify_extra_p_tags(self.xml)
+        self.assertEqual(len(self.xml.findall('.//body//p')), 2)
+        self.assertEqual(len(self.xml.findall('.//body//*')), 3)
+        self._compare_tags_and_texts(self.xml, expected)
+
+    def test_transform(self):
+        expected = etree.fromstring("""<root>
+            <body>
+            <p>paragrafo 1</p>
+            <p>paragrafo 2</p>
+            </body>
+            </root>""")
+
+        data = self.text, self.xml
+        raw, transformed = self.pipe.transform(data)
+        self.assertEqual(len(transformed.findall('.//body//p')), 2)
+        self.assertEqual(len(transformed.findall('.//body//*')), 2)
+        self._compare_tags_and_texts(transformed, expected)
+
+
+class Test_RemovePWhichIsParentOfPPipe_Case2(unittest.TestCase):
+
+    def setUp(self):
+        self.text = """<root>
+            <body>
+                <p>
+                    texto 0
+                    <p>paragrafo 1</p>
+                    texto 2
+                    <p>paragrafo 3</p>
+                    texto 4
+                </p>
+            </body>
+            </root>"""
+        self.xml = etree.fromstring(self.text)
+        self.pipe = HTML2SPSPipeline().RemovePWhichIsParentOfPPipe()
+
+    def _compare_tags_and_texts(self, transformed, expected):
+        def normalize(xmltree):
+            s = ''.join(etree.tostring(xmltree, encoding='unicode').split())
+            s = s.replace('><', '>BREAK<')
+            return s.split('BREAK')
+
+        self.assertEqual(
+            [node.tag for node in transformed.findall('.//body//*')],
+            [node.tag for node in expected.findall('.//body//*')]
+        )
+        self.assertEqual(
+            [node.text.strip() if node.text else ''
+             for node in transformed.findall('.//body//*')],
+            [node.text.strip() if node.text else ''
+             for node in expected.findall('.//body//*')]
+        )
+        self.assertEqual(normalize(transformed), normalize(expected))
+
+    def test__tag_texts(self):
+        expected = etree.fromstring("""<root>
+            <body>
+                <p>
+                    <p>texto 0</p>
+                    <p>paragrafo 1</p>
+                    <p>texto 2</p>
+                    <p>paragrafo 3</p>
+                    <p>texto 4</p>
+                </p>
+            </body>
+            </root>""")
+        xml = self.xml
+        self.pipe._tag_texts(xml)
+        result = xml.findall('.//body//p')
+        self.assertEqual(len(xml.findall('.//body')), 1)
+        self.assertEqual(len(result), 6)
+        self._compare_tags_and_texts(self.xml, expected)
+
+    def test__identify_extra_p_tags(self):
+        expected = etree.fromstring("""<root>
+            <body>
+                <REMOVE_P>
+                    texto 0
+                    <p>paragrafo 1</p>
+                    texto 2
+                    <p>paragrafo 3</p>
+                    texto 4
+                </REMOVE_P>
+            </body>
+            </root>""")
+        xml = self.xml
+        self.pipe._identify_extra_p_tags(xml)
+        self.assertEqual(len(xml.findall('.//body')), 1)
+        self._compare_tags_and_texts(xml, expected)
+
+    def test_transform(self):
+        expected = etree.fromstring("""<root>
+            <body>
+            <p>texto 0</p>
+            <p>paragrafo 1</p>
+            <p>texto 2</p>
+            <p>paragrafo 3</p>
+            <p>texto 4</p>
+            </body>
+            </root>""")
+        raw, transformed = self.pipe.transform((self.text, self.xml))
+        self.assertEqual(len(transformed.findall('.//body')), 1)
+        self._compare_tags_and_texts(self.xml, expected)
+
+
+class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
+
+    def setUp(self):
+        self.text = """<root>
+            <body>
+                <p>
+                    <p>texto 0</p>
+                    <p>paragrafo 1</p>
+                    <p>
+                        <p>
+                            paragrafo 2
+                            <p>texto 3</p>
+                        </p>
+                        <p>paragrafo 4</p>
+                    </p>
+
+                    <p>paragrafo 5</p>
+                    <p>texto 6</p>
+                </p>
+            </body>
+            </root>"""
+        self.xml = etree.fromstring(self.text)
+        self.pipe = HTML2SPSPipeline().RemovePWhichIsParentOfPPipe()
+
+    def _compare_tags_and_texts(self, transformed, expected):
+        def normalize(xmltree):
+            s = ''.join(etree.tostring(xmltree, encoding='unicode').split())
+            s = s.replace('><', '>BREAK<')
+            return s.split('BREAK')
+
+        self.assertEqual(
+            [node.tag for node in transformed.findall('.//body//*')],
+            [node.tag for node in expected.findall('.//body//*')]
+        )
+        self.assertEqual(
+            [node.text.strip() if node.text else ''
+             for node in transformed.findall('.//body//*')],
+            [node.text.strip() if node.text else ''
+             for node in expected.findall('.//body//*')]
+        )
+        self.assertEqual(normalize(transformed), normalize(expected))
+
+    def test__identify_extra_p_tags(self):
+        expected = etree.fromstring("""<root>
+            <body>
+                <REMOVE_P>
+                    <p>texto 0</p>
+                    <p>paragrafo 1</p>
+                    <REMOVE_P>
+                        <REMOVE_P>
+                            paragrafo 2
+                            <p>texto 3</p>
+                        </REMOVE_P>
+                        <p>paragrafo 4</p>
+                    </REMOVE_P>
+                    <p>paragrafo 5</p>
+                    <p>texto 6</p>
+                </REMOVE_P>
+                </body>
+            </root>""")
+        self.pipe._identify_extra_p_tags(self.xml)
+        self._compare_tags_and_texts(self.xml, expected)
+
+    def test_transform(self):
+        expected = etree.fromstring("""<root>
+            <body>
+                <p>texto 0</p>
+                <p>paragrafo 1</p>
+                <p>paragrafo 2</p>
+                <p>texto 3</p>
+                <p>paragrafo 4</p>
+                <p>paragrafo 5</p>
+                <p>texto 6</p>
+            </body>
+            </root>""")
+        raw, transformed = self.pipe.transform((self.xml, expected))
+        self.assertEqual(len(transformed.findall('.//body')), 1)
+        self._compare_tags_and_texts(transformed, expected)
