@@ -10,7 +10,7 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def validator_article_xml(file_xml_path, print_error=True):
+def validate_article_xml(file_xml_path, print_error=True):
 
     result = {}
     logger.info(file_xml_path)
@@ -43,7 +43,7 @@ def validator_article_xml(file_xml_path, print_error=True):
     return result
 
 
-def validator_article_ALLxml(move_to_processed_source=False, move_to_valid_xml=False):
+def validate_article_ALLxml(move_to_processed_source=False, move_to_valid_xml=False):
     logger.info("Iniciando Validação dos xmls")
     list_files_xmls = files.xml_files_list(config.get("CONVERSION_PATH"))
 
@@ -58,7 +58,7 @@ def validator_article_ALLxml(move_to_processed_source=False, move_to_valid_xml=F
         converted_file = os.path.join(config.get("CONVERSION_PATH"), file_xml)
 
         try:
-            errors = validator_article_xml(converted_file, False)
+            errors = validate_article_xml(converted_file, False)
 
             for k_error, v_error in errors.items():
                 dicts.merge(result, k_error, v_error)

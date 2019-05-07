@@ -1,7 +1,7 @@
 from lxml import etree
 from .xylose_converter import parse_date
 
-from documentstore_migracao.utils import xml
+from documentstore_migracao.export.sps_package import SPS_Package
 
 
 def get_document_bundle_manifest(
@@ -10,12 +10,13 @@ def get_document_bundle_manifest(
     """Cria um manifesto no formato do Kernel a partir de um
     documento xml"""
 
-    try:
-        _id = document.find(".//article-id[@specific-use='scielo']").text
-    except AttributeError:
-        raise ValueError("Document requires an scielo-id") from None
+    obj_sps = SPS_Package(document)
 
-    date = xml.get_document_publication_date_for_migration(document)
+    _id = obj_sps.scielo_id
+    date = obj_sps.document_pubdate
+
+    if not _id:
+        raise ValueError("Document requires an scielo-id") from None
 
     if not date:
         raise ValueError("A creation date is required") from None

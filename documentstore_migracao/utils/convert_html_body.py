@@ -97,8 +97,7 @@ class HTML2SPSPipeline(object):
         EXCEPTIONS = ["a", "br", "img", "hr"]
 
         def _is_empty_element(self, node):
-            return node.findall("*") == [] and \
-                   not (node.text or '').strip()
+            return node.findall("*") == [] and not (node.text or "").strip()
 
         def _remove_empty_element(self, node):
             parent = node.getparent()
@@ -107,11 +106,11 @@ class HTML2SPSPipeline(object):
                     previous = node.getprevious()
                     if previous is not None:
                         if not previous.tail:
-                            previous.tail = ''
+                            previous.tail = ""
                         previous.tail += node.tail
                     else:
                         if not parent.text:
-                            parent.text = ''
+                            parent.text = ""
                         parent.text += node.tail
                 parent.remove(node)
                 removed = node.tag
@@ -137,8 +136,7 @@ class HTML2SPSPipeline(object):
                 remove = len(removed_tags) > 0
             if len(total_removed_tags) > 0:
                 logger.info(
-                    "Total de %s tags vazias removidas",
-                    len(total_removed_tags)
+                    "Total de %s tags vazias removidas", len(total_removed_tags)
                 )
                 logger.info(
                     "Tags removidas:%s ",
@@ -381,17 +379,17 @@ class HTML2SPSPipeline(object):
         def _parser_node_external_link(self, node, extlinktype="uri"):
             node.tag = "ext-link"
 
-            href = node.attrib.get('href')
+            href = node.attrib.get("href")
             node.attrib.clear()
             _attrib = {
                 "ext-link-type": extlinktype,
-                "{http://www.w3.org/1999/xlink}href": href
+                "{http://www.w3.org/1999/xlink}href": href,
             }
             node.attrib.update(_attrib)
 
         def _parser_node_anchor(self, node):
             node.tag = "xref"
-            href = node.attrib.get('href')
+            href = node.attrib.get("href")
             node.attrib.clear()
             root = node.getroottree()
             list_tags = ["div", "sec", "table"]
@@ -399,13 +397,11 @@ class HTML2SPSPipeline(object):
                 xref_name = href.replace("#", "")
                 ref_node = root.findall("//%s[@id='%s']" % (tag, xref_name))
                 if ref_node:
-                    node.attrib.update(
-                        {"rid": xref_name, "ref-type": ref_node[0].tag}
-                    )
+                    node.attrib.update({"rid": xref_name, "ref-type": ref_node[0].tag})
 
         def parser_node(self, node):
             try:
-                href = node.attrib['href']
+                href = node.attrib["href"]
             except KeyError:
                 logger.debug("\tTag 'a' sem href removendo node do xml")
                 node.getparent().remove(node)
@@ -414,10 +410,7 @@ class HTML2SPSPipeline(object):
                     self._parser_node_anchor(node)
                 elif "mailto" in href or "@" in href:
                     self._parser_node_external_link(node, "email")
-                elif (
-                    '/' in href or
-                    href.startswith('www')
-                ):
+                elif "/" in href or href.startswith("www"):
                     self._parser_node_external_link(node)
 
         def transform(self, data):
@@ -660,20 +653,19 @@ class HTML2SPSPipeline(object):
             return data
 
     class RemovePWhichIsParentOfPPipe(plumber.Pipe):
-
         def _tag_texts(self, xml):
             for node in xml.xpath(".//p[p]"):
                 if node.text and node.text.strip():
-                    new_p = etree.Element('p')
+                    new_p = etree.Element("p")
                     new_p.text = node.text
-                    node.text = ''
+                    node.text = ""
                     node.insert(0, new_p)
 
                 for child in node.iter():
                     if child.tail and child.tail.strip():
-                        new_p = etree.Element('p')
+                        new_p = etree.Element("p")
                         new_p.text = child.tail
-                        child.tail = ''
+                        child.tail = ""
                         child.addnext(new_p)
 
         def _identify_extra_p_tags(self, xml):
@@ -682,11 +674,11 @@ class HTML2SPSPipeline(object):
 
         def _tag_text_in_body(self, xml):
             for body in xml.xpath(".//body"):
-                for node in body.findall('*'):
+                for node in body.findall("*"):
                     if node.tail and node.tail.strip():
-                        new_p = etree.Element('p')
+                        new_p = etree.Element("p")
                         new_p.text = node.tail
-                        node.tail = ''
+                        node.tail = ""
                         node.addnext(new_p)
 
         def transform(self, data):

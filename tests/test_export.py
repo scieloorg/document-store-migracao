@@ -10,8 +10,8 @@ from documentstore_migracao import exceptions, config
 from . import SAMPLES_JOURNAL, SAMPLES_ARTICLE, SAMPLES_PATH, utils
 
 
-@patch("documentstore_migracao.export.journal.request.get")
 class TestExportJournal(unittest.TestCase):
+    @patch("documentstore_migracao.export.journal.request.get")
     def test_ext_journal(self, mk_request_get):
 
         mk_request_get.return_value.json.return_value = [SAMPLES_JOURNAL]
@@ -23,11 +23,10 @@ class TestExportJournal(unittest.TestCase):
 
         self.assertEqual(result.title, SAMPLES_JOURNAL["v100"][0]["_"])
 
+    @patch("documentstore_migracao.export.journal.request.get")
     @patch("documentstore_migracao.export.journal.logger.error")
     def test_ext_journal_catch_request_get_exception(
-        self,
-        mk_logger_error,
-        mk_request_get,
+        self, mk_logger_error, mk_request_get
     ):
         mk_request_get.side_effect = request.HTTPGetError
         result = journal.ext_journal("1234-5678")
@@ -36,11 +35,13 @@ class TestExportJournal(unittest.TestCase):
         )
         self.assertIsNone(result)
 
+    @patch("documentstore_migracao.export.journal.request.get")
     def test_ext_identifiers(self, mk_request_get):
 
         journal.ext_identifiers()
         mk_request_get.assert_called_once_with(ANY, params={"collection": ANY})
 
+    @patch("documentstore_migracao.export.journal.request.get")
     @patch("documentstore_migracao.export.journal.ext_identifiers")
     @patch("documentstore_migracao.export.journal.ext_journal")
     def test_get_all_journal(self, mk_ext_journal, mk_ext_identifiers, mk_r):
@@ -54,6 +55,7 @@ class TestExportJournal(unittest.TestCase):
         result = journal.get_all_journal()
         self.assertEqual(result[0], obj_journal)
 
+    @patch("documentstore_migracao.export.journal.request.get")
     @patch("documentstore_migracao.export.article.RestfulClient.journals")
     def test_get_journals(self, mk_journals, mk_r):
 
@@ -81,9 +83,7 @@ class TestExportArticle(unittest.TestCase):
     @patch("documentstore_migracao.export.article.logger.error")
     @patch("documentstore_migracao.export.article.request.get")
     def test_ext_article_log_error_if_request_raises_exception(
-        self,
-        mk_request_get,
-        mk_logger_error
+        self, mk_request_get, mk_logger_error
     ):
         article_pid = "S0036-36341997000100001"
         mk_request_get.side_effect = request.HTTPGetError

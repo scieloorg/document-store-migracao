@@ -4,7 +4,7 @@ from requests.exceptions import HTTPError
 from unittest.mock import patch, MagicMock
 from lxml import etree
 
-from documentstore_migracao.utils import files, xml, request, dicts
+from documentstore_migracao.utils import files, xml, request, dicts, string
 
 from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
 
@@ -87,6 +87,11 @@ class TestUtilsFiles(unittest.TestCase):
         finally:
             os.rmdir("/tmp/S0044-59672014000400003")
 
+    def test_sha1(self):
+        str_hash = files.sha1(os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml"))
+
+        self.assertEqual("efaa1e0fc26b5b5266be343526434a67c8aca530", str_hash)
+
 
 class TestUtilsXML(unittest.TestCase):
     def test_str2objXML(self):
@@ -107,29 +112,6 @@ class TestUtilsXML(unittest.TestCase):
         obj = xml.str2objXML("<a><b>bar</b></a>")
 
         self.assertIn(b"<body></body>", obj)
-
-    def test_find_medias(self):
-
-        with open(
-            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), "r"
-        ) as f:
-            text = f.read()
-        obj = etree.fromstring(text)
-        medias = xml.find_medias(obj)
-
-        self.assertEqual(len(medias), 3)
-
-    def test_pipe_body_xml(self):
-        with open(os.path.join(SAMPLES_PATH, "S0036-36341997000100003.xml"), "r") as f:
-            text = f.read()
-
-        obj = etree.fromstring(text)
-        html = xml.parser_body_xml(obj)
-        tags = ("div", "img", "li", "ol", "ul", "i", "b", "a")
-        for tag in tags:
-            with self.subTest(tag=tag):
-                expected = html.findall(".//%s" % tag)
-                self.assertFalse(expected)
 
     def test_file2objXML(self):
         file_path = os.path.join(SAMPLES_PATH, "any.xml")
@@ -162,10 +144,7 @@ class TestUtilsRequest(unittest.TestCase):
         mk_response.raise_for_status.side_effect = HTTPError
         mk_requests.get.return_value = mk_response
         self.assertRaises(
-            request.HTTPGetError,
-            request.get,
-            "http://api.test.com",
-            **{}
+            request.HTTPGetError, request.get, "http://api.test.com", **{}
         )
 
 
@@ -186,177 +165,8 @@ class TestUtilsDicts(unittest.TestCase):
         self.assertEqual(list(result)[0], ("a", "b", "c"))
 
 
-class TestGetPublicationDate(unittest.TestCase):
-
-    def test_pubdate_pubtype_epub(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2011</year>
-                </pub-date>
-                <pub-date pub-type="epub">
-                    <year>2010</year>
-                    <month>1</month>
-                    <day>9</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
+class TestUtilsStrings(unittest.TestCase):
+    def test_remove_spaces(self):
         self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2010-01-09')
-
-    def test_pubdate_datetype_pub(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                </pub-date>
-                <pub-date date-type="pub">
-                    <year>2012</year>
-                    <month>9</month>
-                    <day>3</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2012-09-03')
-
-    def test_pubdate_pubtype_collection_year_month(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02')
-
-    def test_pubdate_pubtype_collection_year(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2013</year>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013')
-
-    def test_pubdate_pubtype_collection_year_month_day(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                    <day>4</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02-04')
-
-    def test_pubdate_datetype_collection_year_month(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02')
-
-    def test_pubdate_datetype_collection_year(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013')
-
-    def test_pubdate_datetype_collection_year_month_day(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date date-type="collection">
-                    <year>2013</year>
-                    <month>2</month>
-                    <day>4</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02-04')
-
-    def test_pubdate_pubtype_epubppub_year_month(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="epub-pub">
-                    <year>2013</year>
-                    <month>2</month>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02')
-
-    def test_pubdate_pubtype_epubppub_year(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="epub-pub">
-                    <year>2013</year>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013')
-
-    def test_pubdate_pubtype_epubppub_year_month_day(self):
-        _xml = """<root>
-            <article-meta>
-                <pub-date pub-type="epub-pub">
-                    <year>2013</year>
-                    <month>2</month>
-                    <day>4</day>
-                </pub-date>
-            </article-meta>
-        </root>
-        """
-        article_xml = etree.fromstring(_xml)
-        self.assertEqual(
-            xml.get_document_publication_date_for_migration(article_xml),
-            '2013-02-04')
+            string.remove_spaces("MUITO    ESPACO   PALAVRA"), "MUITO ESPACO PALAVRA"
+        )

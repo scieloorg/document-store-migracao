@@ -30,69 +30,64 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_empty_do_not_remove_img(self):
         text = '<root><p> <img align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <img align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
-            expected.replace('>', '>[BREAK]').split('[BREAK]'),
-            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+            expected.replace(">", ">[BREAK]").split("[BREAK]"),
+            resultado.replace(">", ">[BREAK]").split("[BREAK]"),
         )
 
     def test_pipe_remove_empty_do_not_remove_a(self):
         text = '<root><p> <a align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <a align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
-            expected.replace('>', '>[BREAK]').split('[BREAK]'),
-            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+            expected.replace(">", ">[BREAK]").split("[BREAK]"),
+            resultado.replace(">", ">[BREAK]").split("[BREAK]"),
         )
 
     def test_pipe_remove_empty_do_not_remove_hr(self):
         text = '<root><p> <hr align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <hr align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
-            expected.replace('>', '>[BREAK]').split('[BREAK]'),
-            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+            expected.replace(">", ">[BREAK]").split("[BREAK]"),
+            resultado.replace(">", ">[BREAK]").split("[BREAK]"),
         )
 
     def test_pipe_remove_empty_do_not_remove_br(self):
         text = '<root><p> <br align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <br align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
-            expected.replace('>', '>[BREAK]').split('[BREAK]'),
-            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+            expected.replace(">", ">[BREAK]").split("[BREAK]"),
+            resultado.replace(">", ">[BREAK]").split("[BREAK]"),
         )
 
     def test_pipe_remove_empty_p(self):
-        text = '<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p> <p/> </root>'
-        expected = '<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p>  </root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.RemoveEmptyPipe())
+        text = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p> <p/> </root>"
+        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p>  </root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
-            expected.replace('>', '>[BREAK]').split('[BREAK]'),
-            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+            expected.replace(">", ">[BREAK]").split("[BREAK]"),
+            resultado.replace(">", ">[BREAK]").split("[BREAK]"),
         )
 
     def test_pipe_remove_empty_bold(self):
-        text = '<root><p>Colonização micorrízica e concentração de nutrientes <bold> </bold> em três cultivares de bananeiras em um latossolo amarelo</p> </root>'
-        expected = '<root><p>Colonização micorrízica e concentração de nutrientes  em três cultivares de bananeiras em um latossolo amarelo</p> </root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.RemoveEmptyPipe())
+        text = "<root><p>Colonização micorrízica e concentração de nutrientes <bold> </bold> em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
+        expected = "<root><p>Colonização micorrízica e concentração de nutrientes  em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
 
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
-            expected.replace('>', '>[BREAK]').split('[BREAK]'),
-            resultado.replace('>', '>[BREAK]').split('[BREAK]'),
+            expected.replace(">", ">[BREAK]").split("[BREAK]"),
+            resultado.replace(">", ">[BREAK]").split("[BREAK]"),
         )
+
     def test_pipe_remove_attribute_style(self):
         text = '<root><p style="x">texto <b style="x"></b></p> <td style="bla"><caption style="x"/></td></root>'
         raw, transformed = self._transform(
@@ -355,23 +350,21 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_a__parser_node_external_link_for_uri(self):
         expected = {
-            '{http://www.w3.org/1999/xlink}href': 'http://bla.org',
-            'ext-link-type': 'uri'
+            "{http://www.w3.org/1999/xlink}href": "http://bla.org",
+            "ext-link-type": "uri",
         }
-        xml = etree.fromstring(
-            '<root><a href="http://bla.org">texto</a></root>')
-        node = xml.find('.//a')
+        xml = etree.fromstring('<root><a href="http://bla.org">texto</a></root>')
+        node = xml.find(".//a")
 
         self.pipeline.APipe()._parser_node_external_link(node)
 
         self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
         self.assertEqual(
-            node.attrib.get(
-                '{http://www.w3.org/1999/xlink}href'), 'http://bla.org')
-        self.assertEqual(
-            node.attrib.get('ext-link-type'), 'uri')
-        self.assertEqual(node.tag, 'ext-link')
-        self.assertEqual(node.text, 'texto')
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "http://bla.org"
+        )
+        self.assertEqual(node.attrib.get("ext-link-type"), "uri")
+        self.assertEqual(node.tag, "ext-link")
+        self.assertEqual(node.text, "texto")
         self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
 
     def test_pipe_a___parser_node_external_link_for_email(self):
@@ -379,12 +372,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         <ext-link ext-link-type="email" xlink:href="mailto:nuesslin@lrz.tum.de">
 nuesslin@lrz.tum.de</ext-link>
         """
-        expected_keys = [
-            '{http://www.w3.org/1999/xlink}href',
-            'ext-link-type'
-        ]
-        href = ['mailto:a@scielo.org', 'mailto:x@scielo.org']
-        content = ['Enviar e-mail para A', '<img src="mail.gif" />']
+        expected_keys = ["{http://www.w3.org/1999/xlink}href", "ext-link-type"]
+        href = ["mailto:a@scielo.org", "mailto:x@scielo.org"]
+        content = ["Enviar e-mail para A", '<img src="mail.gif" />']
         expected = """<root>
         <p><ext-link ext-link-type="email" xlink:href="mailto:a@scielo.org">Enviar e-mail para A</ext-link></p>
         <p><ext-link ext-link-type="email" xlink:href="mailto:x@scielo.org"><img src="mail.gif" /></ext-link></p>
@@ -395,25 +385,23 @@ nuesslin@lrz.tum.de</ext-link>
         </root>"""
         xml = etree.fromstring(text)
 
-        for i, node in enumerate(xml.findall('.//a')):
+        for i, node in enumerate(xml.findall(".//a")):
             with self.subTest(i):
                 self.pipeline.APipe()._parser_node_external_link(node, "email")
 
                 self.assertEqual(set(expected_keys), set(node.attrib.keys()))
                 self.assertIn(
-                    node.attrib.get(
-                        '{http://www.w3.org/1999/xlink}href'),
-                    href[i]
-                    )
-                self.assertEqual(
-                    node.attrib.get('ext-link-type'), 'email')
-                self.assertEqual(node.tag, 'ext-link')
+                    node.attrib.get("{http://www.w3.org/1999/xlink}href"), href[i]
+                )
+                self.assertEqual(node.attrib.get("ext-link-type"), "email")
+                self.assertEqual(node.tag, "ext-link")
                 if node.text:
-                    self.assertEqual(node.text, 'Enviar e-mail para A')
+                    self.assertEqual(node.text, "Enviar e-mail para A")
                 else:
                     self.assertIn(
                         '<img src="mail.gif"/>',
-                        etree.tostring(node, encoding="unicode"))
+                        etree.tostring(node, encoding="unicode"),
+                    )
 
     def test_pipe_a_mailto(self):
         text = """<root>
@@ -487,7 +475,7 @@ nuesslin@lrz.tum.de</ext-link>
         raw, transformed = self._transform(text, self.pipeline.APipe())
         self.assertEqual(
             etree.tostring(transformed).strip(),
-            b'<root><a href="error">Teste</a></root>'
+            b'<root><a href="error">Teste</a></root>',
         )
 
     def test_pipe_td(self):
@@ -632,7 +620,6 @@ nuesslin@lrz.tum.de</ext-link>
 
 
 class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
-
     def setUp(self):
         self.text = """<root>
             <body>
@@ -647,53 +634,60 @@ class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
 
     def _compare_tags_and_texts(self, transformed, expected):
         def normalize(xmltree):
-            s = ''.join(etree.tostring(xmltree, encoding='unicode').split())
-            s = s.replace('><', '>BREAK<')
-            return s.split('BREAK')
+            s = "".join(etree.tostring(xmltree, encoding="unicode").split())
+            s = s.replace("><", ">BREAK<")
+            return s.split("BREAK")
 
         self.assertEqual(
-            [node.tag for node in transformed.findall('.//body//*')],
-            [node.tag for node in expected.findall('.//body//*')]
+            [node.tag for node in transformed.findall(".//body//*")],
+            [node.tag for node in expected.findall(".//body//*")],
         )
         self.assertEqual(
-            [node.text.strip() if node.text else ''
-             for node in transformed.findall('.//body//*')],
-            [node.text.strip() if node.text else ''
-             for node in expected.findall('.//body//*')]
+            [
+                node.text.strip() if node.text else ""
+                for node in transformed.findall(".//body//*")
+            ],
+            [
+                node.text.strip() if node.text else ""
+                for node in expected.findall(".//body//*")
+            ],
         )
         self.assertEqual(normalize(transformed), normalize(expected))
 
     def test_identify_extra_p_tags(self):
-        expected = etree.fromstring("""<root>
+        expected = etree.fromstring(
+            """<root>
             <body>
                 <REMOVE_P>
                     <p>paragrafo 1</p>
                     <p>paragrafo 2</p>
                 </REMOVE_P>
             </body>
-            </root>""")
+            </root>"""
+        )
         self.pipe._identify_extra_p_tags(self.xml)
-        self.assertEqual(len(self.xml.findall('.//body//p')), 2)
-        self.assertEqual(len(self.xml.findall('.//body//*')), 3)
+        self.assertEqual(len(self.xml.findall(".//body//p")), 2)
+        self.assertEqual(len(self.xml.findall(".//body//*")), 3)
         self._compare_tags_and_texts(self.xml, expected)
 
     def test_transform(self):
-        expected = etree.fromstring("""<root>
+        expected = etree.fromstring(
+            """<root>
             <body>
             <p>paragrafo 1</p>
             <p>paragrafo 2</p>
             </body>
-            </root>""")
+            </root>"""
+        )
 
         data = self.text, self.xml
         raw, transformed = self.pipe.transform(data)
-        self.assertEqual(len(transformed.findall('.//body//p')), 2)
-        self.assertEqual(len(transformed.findall('.//body//*')), 2)
+        self.assertEqual(len(transformed.findall(".//body//p")), 2)
+        self.assertEqual(len(transformed.findall(".//body//*")), 2)
         self._compare_tags_and_texts(transformed, expected)
 
 
 class Test_RemovePWhichIsParentOfPPipe_Case2(unittest.TestCase):
-
     def setUp(self):
         self.text = """<root>
             <body>
@@ -711,24 +705,29 @@ class Test_RemovePWhichIsParentOfPPipe_Case2(unittest.TestCase):
 
     def _compare_tags_and_texts(self, transformed, expected):
         def normalize(xmltree):
-            s = ''.join(etree.tostring(xmltree, encoding='unicode').split())
-            s = s.replace('><', '>BREAK<')
-            return s.split('BREAK')
+            s = "".join(etree.tostring(xmltree, encoding="unicode").split())
+            s = s.replace("><", ">BREAK<")
+            return s.split("BREAK")
 
         self.assertEqual(
-            [node.tag for node in transformed.findall('.//body//*')],
-            [node.tag for node in expected.findall('.//body//*')]
+            [node.tag for node in transformed.findall(".//body//*")],
+            [node.tag for node in expected.findall(".//body//*")],
         )
         self.assertEqual(
-            [node.text.strip() if node.text else ''
-             for node in transformed.findall('.//body//*')],
-            [node.text.strip() if node.text else ''
-             for node in expected.findall('.//body//*')]
+            [
+                node.text.strip() if node.text else ""
+                for node in transformed.findall(".//body//*")
+            ],
+            [
+                node.text.strip() if node.text else ""
+                for node in expected.findall(".//body//*")
+            ],
         )
         self.assertEqual(normalize(transformed), normalize(expected))
 
     def test__tag_texts(self):
-        expected = etree.fromstring("""<root>
+        expected = etree.fromstring(
+            """<root>
             <body>
                 <p>
                     <p>texto 0</p>
@@ -738,16 +737,18 @@ class Test_RemovePWhichIsParentOfPPipe_Case2(unittest.TestCase):
                     <p>texto 4</p>
                 </p>
             </body>
-            </root>""")
+            </root>"""
+        )
         xml = self.xml
         self.pipe._tag_texts(xml)
-        result = xml.findall('.//body//p')
-        self.assertEqual(len(xml.findall('.//body')), 1)
+        result = xml.findall(".//body//p")
+        self.assertEqual(len(xml.findall(".//body")), 1)
         self.assertEqual(len(result), 6)
         self._compare_tags_and_texts(self.xml, expected)
 
     def test__identify_extra_p_tags(self):
-        expected = etree.fromstring("""<root>
+        expected = etree.fromstring(
+            """<root>
             <body>
                 <REMOVE_P>
                     texto 0
@@ -757,14 +758,16 @@ class Test_RemovePWhichIsParentOfPPipe_Case2(unittest.TestCase):
                     texto 4
                 </REMOVE_P>
             </body>
-            </root>""")
+            </root>"""
+        )
         xml = self.xml
         self.pipe._identify_extra_p_tags(xml)
-        self.assertEqual(len(xml.findall('.//body')), 1)
+        self.assertEqual(len(xml.findall(".//body")), 1)
         self._compare_tags_and_texts(xml, expected)
 
     def test_transform(self):
-        expected = etree.fromstring("""<root>
+        expected = etree.fromstring(
+            """<root>
             <body>
             <p>texto 0</p>
             <p>paragrafo 1</p>
@@ -772,14 +775,14 @@ class Test_RemovePWhichIsParentOfPPipe_Case2(unittest.TestCase):
             <p>paragrafo 3</p>
             <p>texto 4</p>
             </body>
-            </root>""")
+            </root>"""
+        )
         raw, transformed = self.pipe.transform((self.text, self.xml))
-        self.assertEqual(len(transformed.findall('.//body')), 1)
+        self.assertEqual(len(transformed.findall(".//body")), 1)
         self._compare_tags_and_texts(self.xml, expected)
 
 
 class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
-
     def setUp(self):
         self.text = """<root>
             <body>
@@ -804,24 +807,29 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
 
     def _compare_tags_and_texts(self, transformed, expected):
         def normalize(xmltree):
-            s = ''.join(etree.tostring(xmltree, encoding='unicode').split())
-            s = s.replace('><', '>BREAK<')
-            return s.split('BREAK')
+            s = "".join(etree.tostring(xmltree, encoding="unicode").split())
+            s = s.replace("><", ">BREAK<")
+            return s.split("BREAK")
 
         self.assertEqual(
-            [node.tag for node in transformed.findall('.//body//*')],
-            [node.tag for node in expected.findall('.//body//*')]
+            [node.tag for node in transformed.findall(".//body//*")],
+            [node.tag for node in expected.findall(".//body//*")],
         )
         self.assertEqual(
-            [node.text.strip() if node.text else ''
-             for node in transformed.findall('.//body//*')],
-            [node.text.strip() if node.text else ''
-             for node in expected.findall('.//body//*')]
+            [
+                node.text.strip() if node.text else ""
+                for node in transformed.findall(".//body//*")
+            ],
+            [
+                node.text.strip() if node.text else ""
+                for node in expected.findall(".//body//*")
+            ],
         )
         self.assertEqual(normalize(transformed), normalize(expected))
 
     def test__identify_extra_p_tags(self):
-        expected = etree.fromstring("""<root>
+        expected = etree.fromstring(
+            """<root>
             <body>
                 <REMOVE_P>
                     <p>texto 0</p>
@@ -837,12 +845,14 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
                     <p>texto 6</p>
                 </REMOVE_P>
                 </body>
-            </root>""")
+            </root>"""
+        )
         self.pipe._identify_extra_p_tags(self.xml)
         self._compare_tags_and_texts(self.xml, expected)
 
     def test_transform(self):
-        expected = etree.fromstring("""<root>
+        expected = etree.fromstring(
+            """<root>
             <body>
                 <p>texto 0</p>
                 <p>paragrafo 1</p>
@@ -852,7 +862,8 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
                 <p>paragrafo 5</p>
                 <p>texto 6</p>
             </body>
-            </root>""")
+            </root>"""
+        )
         raw, transformed = self.pipe.transform((self.xml, expected))
-        self.assertEqual(len(transformed.findall('.//body')), 1)
+        self.assertEqual(len(transformed.findall(".//body")), 1)
         self._compare_tags_and_texts(transformed, expected)

@@ -22,31 +22,33 @@ from collections import namedtuple
 import re
 
 
-MAIN_SUBFIELD_KEY = '_'
-SUBFIELD_MARKER_RE = re.compile(r'\^([a-z0-9])', re.IGNORECASE)
-DEFAULT_ENCODING = u'utf-8'
+MAIN_SUBFIELD_KEY = "_"
+SUBFIELD_MARKER_RE = re.compile(r"\^([a-z0-9])", re.IGNORECASE)
+DEFAULT_ENCODING = u"utf-8"
+
 
 def expand(content, subkeys=None):
-    ''' Parse a field into an association list of keys and subfields
+    """ Parse a field into an association list of keys and subfields
 
         >>> expand('zero^1one^2two^3three')
         [('_', 'zero'), ('1', 'one'), ('2', 'two'), ('3', 'three')]
 
-    '''
+    """
     if subkeys is None:
         regex = SUBFIELD_MARKER_RE
-    elif subkeys == '':
+    elif subkeys == "":
         return [(MAIN_SUBFIELD_KEY, content)]
     else:
-        regex = re.compile(r'\^(['+subkeys+'])', re.IGNORECASE)
-    content = content.replace('^^', '^^ ')
+        regex = re.compile(r"\^([" + subkeys + "])", re.IGNORECASE)
+    content = content.replace("^^", "^^ ")
     parts = []
     start = 0
     key = MAIN_SUBFIELD_KEY
     while True:
         found = regex.search(content, start)
-        if found is None: break
-        parts.append((key, content[start:found.start()].rstrip()))
+        if found is None:
+            break
+        parts.append((key, content[start : found.start()].rstrip()))
         key = found.group(1).lower()
         start = found.end()
     parts.append((key, content[start:].rstrip()))
@@ -54,18 +56,18 @@ def expand(content, subkeys=None):
 
 
 class CompositeString(object):
-    ''' Represent an Isis field, with subfields, using
+    """ Represent an Isis field, with subfields, using
     Python native datastructures
 
     >>> author = CompositeString('John Tenniel^xillustrator',
     ... subkeys='x')
     >>> unicode(author)
     u'John Tenniel^xillustrator'
-    '''
-    
+    """
+
     def __init__(self, isis_raw, subkeys=None, encoding=DEFAULT_ENCODING):
         if not isinstance(isis_raw, basestring):
-            raise TypeError('%r value must be unicode or str instance' % isis_raw)
+            raise TypeError("%r value must be unicode or str instance" % isis_raw)
 
         self.__isis_raw = isis_raw.decode(encoding)
         self.__expanded = expand(self.__isis_raw, subkeys)
@@ -91,7 +93,7 @@ class CompositeString(object):
 
 
 class CompositeField(object):
-    ''' Represent an Isis field, with subfields, using
+    """ Represent an Isis field, with subfields, using
         Python native datastructures
 
         >>> author = CompositeField( [('name','Braz, Marcelo'),('role','writer')] )
@@ -102,7 +104,7 @@ class CompositeField(object):
         >>> author
         CompositeField((('name', 'Braz, Marcelo'), ('role', 'writer')))
 
-    '''
+    """
 
     def __init__(self, value, subkeys=None):
         if subkeys is None:
@@ -110,13 +112,13 @@ class CompositeField(object):
         try:
             value_as_dict = dict(value)
         except TypeError:
-            raise TypeError('%r value must be a key-value structure' % self)
-        
+            raise TypeError("%r value must be a key-value structure" % self)
+
         for key in value_as_dict:
             if key not in subkeys:
-                raise TypeError('Unexpected keyword %r' % key)
-    
-        self.value = tuple([(key, value_as_dict.get(key,None)) for key in subkeys])
+                raise TypeError("Unexpected keyword %r" % key)
+
+        self.value = tuple([(key, value_as_dict.get(key, None)) for key in subkeys])
 
     def __getitem__(self, key):
         return dict(self.value)[key]
@@ -136,7 +138,9 @@ class CompositeField(object):
 
 def test():
     import doctest
+
     doctest.testmod()
 
-if __name__=='__main__':
+
+if __name__ == "__main__":
     test()

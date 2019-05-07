@@ -1,4 +1,3 @@
-
 from math import log2, ceil
 from uuid import UUID, uuid4
 
@@ -31,21 +30,20 @@ def generate_scielo_pid():
     return uuid2str(uuid4())
 
 
-def documents_bundle_id(
-        issn_id, year, volume=None, number=None, supplement=None):
-    labels = ['issn_id', 'year', 'volume', 'number', 'supplement']
+def documents_bundle_id(issn_id, year, volume=None, number=None, supplement=None):
+    labels = ["issn_id", "year", "volume", "number", "supplement"]
     values = [issn_id, year, volume, number, supplement]
 
     data = dict([(label, value) for label, value in zip(labels, values)])
 
-    labels = ['issn_id', 'year']
+    labels = ["issn_id", "year"]
     _id = []
     for label in labels:
         value = data.get(label)
         if value:
             _id.append(value)
 
-    labels = [('volume', 'v'), ('number', 'n'), ('supplement', 's')]
+    labels = [("volume", "v"), ("number", "n"), ("supplement", "s")]
     for label, prefix in labels:
         value = data.get(label)
         if value:
@@ -53,4 +51,4 @@ def documents_bundle_id(
                 value = str(int(value))
             _id.append(prefix + value)
 
-    return '-'.join(_id)
+    return "-".join(_id)

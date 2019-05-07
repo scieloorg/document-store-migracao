@@ -9,7 +9,7 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def article_html_generator(file_xml_path):
+def article_html_generator(file_xml_path: str, dest_path: str) -> None:
 
     logger.info("file: %s", file_xml_path)
 
@@ -27,7 +27,7 @@ def article_html_generator(file_xml_path):
         fname, fext = fname.rsplit(".", 1)
         out_fname = ".".join([fname, lang, "html"])
 
-        new_file_html_path = os.path.join(config.get("GENERATOR_PATH"), out_fname)
+        new_file_html_path = os.path.join(dest_path, out_fname)
 
         files.write_file(
             new_file_html_path,
@@ -41,18 +41,12 @@ def article_html_generator(file_xml_path):
         )
 
 
-def article_ALL_html_generator():
+def article_ALL_html_generator(source_path: str, dest_path: str) -> None:
 
     logger.info("Iniciando Geração dos HTMLs")
-    list_files_xmls = files.xml_files_list(config.get("CONSTRUCTOR_PATH"))
+    list_files_xmls = files.xml_files_list(source_path)
     for file_xml in list_files_xmls:
-
         try:
-            article_html_generator(
-                os.path.join(config.get("CONSTRUCTOR_PATH"), file_xml)
-            )
-
+            article_html_generator(os.path.join(source_path, file_xml), dest_path)
         except Exception as ex:
-            logger.error(file_xml)
-            logger.exception(ex)
-            # raise
+            logger.info("não foi possível gerar o html do Arquivo %s: %s", file_xml, ex)

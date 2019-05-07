@@ -4,7 +4,8 @@ import unittest
 from unittest import mock
 from documentstore_migracao.utils import extract_isis
 from documentstore_migracao.processing import pipeline, conversion
-from documentstore_migracao import exceptions, main, config
+from documentstore_migracao import exceptions, config
+from documentstore_migracao.main.migrate_isis import migrate_isis_parser
 from .apptesting import Session
 from . import (
     SAMPLES_PATH,
@@ -128,63 +129,71 @@ class IsisCommandLineTests(unittest.TestCase):
     def setUp(self):
         self.session = Session
 
-    @mock.patch("documentstore_migracao.main.extract_isis")
-    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")
+    @mock.patch("documentstore_migracao.main.migrate_isis.extract_isis")
+    @mock.patch(
+        "documentstore_migracao.main.migrate_isis.argparse.ArgumentParser.error"
+    )
     def test_extract_subparser_requires_mst_file_path_and_output_file(
         self, error_mock, extract_isis_mock
     ):
-        main.migrate_isis("extract".split())
+        migrate_isis_parser("extract".split())
         error_mock.assert_called_with(
             "the following arguments are required: file, --output"
         )
 
-    @mock.patch("documentstore_migracao.main.extract_isis")
+    @mock.patch("documentstore_migracao.main.migrate_isis.extract_isis")
     def test_extract_subparser_should_call_extract_isis_command(
         self, extract_isis_mock
     ):
-        main.migrate_isis("extract /path/to/file.mst --output /jsons/file.json".split())
+        migrate_isis_parser(
+            "extract /path/to/file.mst --output /jsons/file.json".split()
+        )
         extract_isis_mock.create_output_dir.assert_called_once_with("/jsons/file.json")
         extract_isis_mock.run.assert_called_once_with(
             "/path/to/file.mst", "/jsons/file.json"
         )
 
-    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")
+    @mock.patch(
+        "documentstore_migracao.main.migrate_isis.argparse.ArgumentParser.error"
+    )
     def test_import_journals_requires_json_path_and_type_of_entity(self, error_mock):
-        main.migrate_isis("import".split())
+        migrate_isis_parser("import".split())
         error_mock.assert_called_with(
             "the following arguments are required: --uri, --db, file, --type"
         )
 
-    @mock.patch("documentstore_migracao.main.pipeline.import_journals")
+    @mock.patch("documentstore_migracao.main.migrate_isis.pipeline.import_journals")
     def test_import_journals_should_call_pipeline(self, import_journals_mock):
-        main.migrate_isis(
+        migrate_isis_parser(
             """import /jsons/file.json --type journal
             --uri mongodb://uri --db db-name""".split()
         )
         import_journals_mock.assert_called_once()
 
-    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.print_help")
+    @mock.patch(
+        "documentstore_migracao.main.migrate_isis.argparse.ArgumentParser.print_help"
+    )
     def test_should_print_help_if_arguments_does_not_match(self, print_help_mock):
-        main.migrate_isis([])
+        migrate_isis_parser([])
         print_help_mock.assert_called()
 
-    @mock.patch("documentstore_migracao.main.pipeline.import_issues")
+    @mock.patch("documentstore_migracao.main.migrate_isis.pipeline.import_issues")
     def test_import_should_call_issues_pipeline_when_import_type_is_issue(
         self, import_issues_mock
     ):
-        main.migrate_isis(
+        migrate_isis_parser(
             """import /jsons/file.json --type issue
             --uri mongodb://uri --db db-name""".split()
         )
         import_issues_mock.assert_called_once()
 
     @mock.patch(
-        "documentstore_migracao.main.pipeline.import_documents_bundles_link_with_journal"
+        "documentstore_migracao.main.migrate_isis.pipeline.import_documents_bundles_link_with_journal"
     )
     def test_import_should_import_linked_journals_bundles(
         self, import_documents_bundles_link_with_journal_mock
     ):
-        main.migrate_isis(
+        migrate_isis_parser(
             """import /jsons/file.json --type documents-bundles-link
             --uri mongodb://uri --db db-name""".split()
         )
@@ -194,11 +203,13 @@ class IsisCommandLineTests(unittest.TestCase):
     @mock.patch(
         "documentstore_migracao.processing.pipeline.link_documents_bundles_with_journals"
     )
-    @mock.patch("documentstore_migracao.main.argparse.ArgumentParser.error")
+    @mock.patch(
+        "documentstore_migracao.main.migrate_isis.argparse.ArgumentParser.error"
+    )
     def test_merge_subparser_requires_json_paths_and_output_file(
         self, error_mock, link_documents_bundles_with_journals_mock
     ):
-        main.migrate_isis("link".split())
+        migrate_isis_parser("link".split())
         error_mock.assert_called_with(
             "the following arguments are required: journals, issues, --output"
         )
@@ -209,8 +220,8 @@ class IsisCommandLineTests(unittest.TestCase):
     def test_link_command_should_link_journals_and_bundles(
         self, link_documents_bundles_with_journals_mock
     ):
-        main.migrate_isis(
-            """link journals.json 
+        migrate_isis_parser(
+            """link journals.json
             issues.json --output linked.json""".split()
         )
 
@@ -330,6 +341,7 @@ class TestLinkDocumentsBundlesWithJournals(unittest.TestCase):
         open_mock = open_mock()
         open_mock.write.assert_called_once()
         self.assertIn("0001-3714", str(open_mock.write.call_args))
+
 
 class TestImportDocumentsBundlesLink(unittest.TestCase):
     def setUp(self):
