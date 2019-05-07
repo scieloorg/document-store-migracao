@@ -8,49 +8,49 @@ class TestMigrateProcess(unittest.TestCase):
     @patch("documentstore_migracao.processing.extracted.extract_all_data")
     def test_command_extrate(self, mk_extract_all_data):
 
-        migrate_articlemeta_parser(["extraction"])
+        migrate_articlemeta_parser(["extract"])
         mk_extract_all_data.assert_called_once_with()
 
     @patch("documentstore_migracao.processing.extracted.extract_select_journal")
     def test_command_extrate_arg_issn_journal(self, mk_extract_select_journal):
 
-        migrate_articlemeta_parser(["extraction", "--issn-journal", "1234-5678"])
+        migrate_articlemeta_parser(["extract", "--issn", "1234-5678"])
         mk_extract_select_journal.assert_called_once_with("1234-5678")
 
     @patch("documentstore_migracao.processing.conversion.convert_article_ALLxml")
     def test_command_conversion(self, mk_convert_article_ALLxml):
 
-        migrate_articlemeta_parser(["conversion"])
+        migrate_articlemeta_parser(["convert"])
         mk_convert_article_ALLxml.assert_called_once_with()
 
     @patch("documentstore_migracao.processing.conversion.convert_article_xml")
     def test_command_conversion_arg_pathFile(self, mk_convert_article_xml):
 
-        migrate_articlemeta_parser(["conversion", "--convertFile", "/tmp/example.xml"])
+        migrate_articlemeta_parser(["convert", "--file", "/tmp/example.xml"])
         mk_convert_article_xml.assert_called_once_with("/tmp/example.xml")
 
     @patch("documentstore_migracao.processing.validation.validate_article_ALLxml")
     def test_command_validation(self, mk_validate_article_ALLxml):
 
-        migrate_articlemeta_parser(["validation"])
+        migrate_articlemeta_parser(["validate"])
         mk_validate_article_ALLxml.assert_called_once_with(False, False)
 
     @patch("documentstore_migracao.processing.validation.validate_article_xml")
     def test_command_validation_arg_validateFile(self, mk_validate_article_xml):
 
-        migrate_articlemeta_parser(["validation", "--validateFile", "/tmp/example.xml"])
+        migrate_articlemeta_parser(["validate", "--file", "/tmp/example.xml"])
         mk_validate_article_xml.assert_called_once_with("/tmp/example.xml")
 
     @patch("documentstore_migracao.processing.packing.pack_article_ALLxml")
     def test_command_pack_sps(self, mk_pack_article_ALLxml):
 
-        migrate_articlemeta_parser(["pack_sps"])
+        migrate_articlemeta_parser(["pack"])
         mk_pack_article_ALLxml.assert_called_once_with()
 
     @patch("documentstore_migracao.processing.packing.pack_article_xml")
     def test_command_pack_sps_arg_pathFile(self, mk_pack_article_xml):
 
-        migrate_articlemeta_parser(["pack_sps", "--packFile", "/tmp/example.xml"])
+        migrate_articlemeta_parser(["pack", "--file", "/tmp/example.xml"])
         mk_pack_article_xml.assert_called_once_with("/tmp/example.xml")
 
     @patch("documentstore_migracao.processing.inserting.import_documents_to_kernel")
