@@ -11,7 +11,7 @@ class TestMigrateProcess(unittest.TestCase):
     def test_command_extrate(self, mk_extract_all_data):
 
         migrate_articlemeta_parser(
-            ["extract", "--file", os.path.join(SAMPLES_PATH, "documents_pids.txt")]
+            ["extract", os.path.join(SAMPLES_PATH, "documents_pids.txt")]
         )
         mk_extract_all_data.assert_called_once_with(
             ["S0021-25712009000400001\n", "S0021-25712009000400002"]

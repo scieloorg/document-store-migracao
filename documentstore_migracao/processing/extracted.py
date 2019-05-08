@@ -10,14 +10,14 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def extract_all_data(list_documents_pids: List):
+def extract_all_data(list_documents_pids: List[str]):
 
     logger.info("Iniciando extração dos Documentos")
+    count = 0
     for documents_pid in tqdm(list_documents_pids):
         documents_pid = documents_pid.strip()
-        count = 0
-        logger.debug("\t coletando dados do Documento '%s'", documents_pid)
 
+        logger.debug("\t coletando dados do Documento '%s'", documents_pid)
         xml_article = article.ext_article_txt(documents_pid)
         if xml_article:
             count += 1
