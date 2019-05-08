@@ -1,7 +1,7 @@
 import os
 import logging
 import shutil
-
+from tqdm import tqdm
 from packtools import XMLValidator, exceptions
 
 from documentstore_migracao.utils import files, dicts
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def validate_article_xml(file_xml_path, print_error=True):
 
     result = {}
-    logger.info(file_xml_path)
+    logger.debug(file_xml_path)
     try:
         xmlvalidator = XMLValidator.parse(file_xml_path)
         is_valid, errors = xmlvalidator.validate()
@@ -53,7 +53,7 @@ def validate_article_ALLxml(move_to_processed_source=False, move_to_valid_xml=Fa
     func = shutil.move if move_to_valid_xml else shutil.copyfile
 
     result = {}
-    for file_xml in list_files_xmls:
+    for file_xml in tqdm(list_files_xmls):
 
         filename, _ = files.extract_filename_ext_by_path(file_xml)
         converted_file = os.path.join(config.get("CONVERSION_PATH"), file_xml)

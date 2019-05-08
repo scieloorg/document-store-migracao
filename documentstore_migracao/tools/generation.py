@@ -1,6 +1,7 @@
 import os
 import logging
 
+from tqdm import tqdm
 from lxml import etree
 from packtools import HTMLGenerator, XML, catalogs
 from documentstore_migracao.utils import files, xml
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def article_html_generator(file_xml_path: str, dest_path: str) -> None:
 
-    logger.info("file: %s", file_xml_path)
+    logger.debug("file: %s", file_xml_path)
 
     parsed_xml = XML(file_xml_path, no_network=False)
     html_generator = HTMLGenerator.parse(
@@ -45,7 +46,7 @@ def article_ALL_html_generator(source_path: str, dest_path: str) -> None:
 
     logger.info("Iniciando Geração dos HTMLs")
     list_files_xmls = files.xml_files_list(source_path)
-    for file_xml in list_files_xmls:
+    for file_xml in tqdm(list_files_xmls):
         try:
             article_html_generator(os.path.join(source_path, file_xml), dest_path)
         except Exception as ex:
