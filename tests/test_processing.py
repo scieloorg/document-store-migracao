@@ -1,5 +1,6 @@
 import os
 import unittest
+from lxml import etree
 from unittest.mock import patch, ANY, call, Mock
 
 from xylose.scielodocument import Journal, Article
@@ -208,3 +209,21 @@ class TestProcessingValidation(unittest.TestCase):
                 validation.validate_article_ALLxml()
 
                 self.assertEqual("Test Error - Validation", str(cm.exception))
+
+    @patch("documentstore_migracao.processing.validation.XMLValidator")
+    def test_validation_should_fail_if_lxml_raise_an_exception(self, mk_xmlvalidator):
+        mk_xmlvalidator.parse.side_effect = etree.XMLSyntaxError(
+            "some error", 1, 1, 1, "fake_path/file.xml"
+        )
+        result = validation.validate_article_xml("fake_path/file.xml")
+        self.assertEqual(
+            {
+                "some error (file.xml, line 1)": {
+                    "count": 1,
+                    "lineno": [1],
+                    "message": ["some error (file.xml, line 1)"],
+                    "filename": {"fake_path/file.xml"},
+                }
+            },
+            result,
+        )
