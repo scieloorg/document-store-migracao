@@ -14,6 +14,7 @@ def extract_all_data(list_documents_pids: List):
 
     logger.info("Iniciando extração dos Documentos")
     for documents_pid in tqdm(list_documents_pids):
+        documents_pid = documents_pid.strip()
         count = 0
         logger.debug("\t coletando dados do Documento '%s'", documents_pid)
 
