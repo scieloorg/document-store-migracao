@@ -209,7 +209,7 @@ def issue_to_kernel(issue):
             _creation_date, sorted(set(_publication_season))
         )
 
-    _id = scielo_ids_generator.documents_bundle_id(
+    _id = scielo_ids_generator.issue_id(
         issn_id, _year, issue.volume, issue.number, _supplement
     )
     _bundle["_id"] = _id

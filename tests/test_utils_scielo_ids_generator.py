@@ -26,10 +26,10 @@ class TestUtilsSciELOIDsGenerator_for_document(unittest.TestCase):
         )
 
 
-class TestUtilsSciELOIDsGenerator_for_documents_bundle(unittest.TestCase):
+class TestUtilsSciELOIDsGenerator_for_issue_bundle(unittest.TestCase):
     def test_issn_year_volume_number_suppl(self):
         self.assertEqual(
-            scielo_ids_generator.documents_bundle_id(
+            scielo_ids_generator.issue_id(
                 "ISSN", "YEAR", "VOLUME", "03", "SUPPL"
             ),
             "ISSN-YEAR-vVOLUME-n3-sSUPPL",
@@ -37,13 +37,13 @@ class TestUtilsSciELOIDsGenerator_for_documents_bundle(unittest.TestCase):
 
     def test_issn_year_volume_number(self):
         self.assertEqual(
-            scielo_ids_generator.documents_bundle_id("ISSN", "YEAR", "VOLUME", "03"),
+            scielo_ids_generator.issue_id("ISSN", "YEAR", "VOLUME", "03"),
             "ISSN-YEAR-vVOLUME-n3",
         )
 
     def test_issn_year_volume_suppl(self):
         self.assertEqual(
-            scielo_ids_generator.documents_bundle_id(
+            scielo_ids_generator.issue_id(
                 "ISSN", "YEAR", "VOLUME", supplement="SUPPL"
             ),
             "ISSN-YEAR-vVOLUME-sSUPPL",
@@ -51,12 +51,12 @@ class TestUtilsSciELOIDsGenerator_for_documents_bundle(unittest.TestCase):
 
     def test_issn_year_volume(self):
         self.assertEqual(
-            scielo_ids_generator.documents_bundle_id("ISSN", "YEAR", "VOLUME"),
+            scielo_ids_generator.issue_id("ISSN", "YEAR", "VOLUME"),
             "ISSN-YEAR-vVOLUME",
         )
 
     def test_issn_year_number(self):
         self.assertEqual(
-            scielo_ids_generator.documents_bundle_id("ISSN", "YEAR", number="03"),
+            scielo_ids_generator.issue_id("ISSN", "YEAR", number="03"),
             "ISSN-YEAR-n3",
         )
