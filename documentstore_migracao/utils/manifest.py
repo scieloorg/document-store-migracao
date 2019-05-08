@@ -11,7 +11,6 @@ def get_document_bundle_manifest(
     documento xml"""
 
     obj_sps = SPS_Package(document)
-
     _id = obj_sps.scielo_id
     date = obj_sps.document_pubdate
 
@@ -21,7 +20,9 @@ def get_document_bundle_manifest(
     if not date:
         raise ValueError("A creation date is required") from None
 
-    _creation_date = parse_date(date)
+    _creation_date = parse_date(
+        "-".join([date_part for date_part in date if date_part])
+    )
 
     _version = {"data": document_url, "assets": {}, "timestamp": _creation_date}
     _document = {"id": _id, "versions": [_version]}
