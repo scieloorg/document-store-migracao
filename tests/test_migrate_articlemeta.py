@@ -1,21 +1,21 @@
 import unittest
+import os
 from unittest.mock import patch, ANY
 
 from documentstore_migracao.main.migrate_articlemeta import migrate_articlemeta_parser
+from . import SAMPLES_PATH
 
 
 class TestMigrateProcess(unittest.TestCase):
     @patch("documentstore_migracao.processing.extracted.extract_all_data")
     def test_command_extrate(self, mk_extract_all_data):
 
-        migrate_articlemeta_parser(["extract"])
-        mk_extract_all_data.assert_called_once_with()
-
-    @patch("documentstore_migracao.processing.extracted.extract_select_journal")
-    def test_command_extrate_arg_issn_journal(self, mk_extract_select_journal):
-
-        migrate_articlemeta_parser(["extract", "--issn", "1234-5678"])
-        mk_extract_select_journal.assert_called_once_with("1234-5678")
+        migrate_articlemeta_parser(
+            ["extract", "--file", os.path.join(SAMPLES_PATH, "documents_pids.txt")]
+        )
+        mk_extract_all_data.assert_called_once_with(
+            ["S0021-25712009000400001\n", "S0021-25712009000400002"]
+        )
 
     @patch("documentstore_migracao.processing.conversion.convert_article_ALLxml")
     def test_command_conversion(self, mk_convert_article_ALLxml):

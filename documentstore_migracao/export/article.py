@@ -41,7 +41,7 @@ def ext_article_json(code, **ext_params):
 
 
 def ext_article_txt(code, **ext_params):
-    logger.info("\t Arquivo XML '%s' extraido", code)
+    logger.debug("\t Arquivo XML '%s' extraido", code)
     article = ext_article(code, body="true", format="xmlrsps", **ext_params)
     if article:
         return article.text
@@ -52,7 +52,7 @@ def get_all_articles_notXML(issn):
     articles_id = get_articles(issn)
     for article in articles_id:
         if article.data["version"] != "xml":
-            logger.info("\t Arquivo XML '%s' extraido", article.data["code"])
+            logger.debug("\t Arquivo XML '%s' extraido", article.data["code"])
             articles.append(
                 (article.data["code"], ext_article_txt(article.data["code"]))
             )

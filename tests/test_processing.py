@@ -23,47 +23,14 @@ from . import (
 
 
 class TestProcessingExtracted(unittest.TestCase):
-    def setUp(self):
-        self.obj_journal = Journal(SAMPLES_JOURNAL)
+    @patch("documentstore_migracao.processing.extracted.article.ext_article_txt")
+    def test_extract_all_data(self, mk_extract_article_txt):
 
-    @patch("documentstore_migracao.processing.extracted.article.get_articles")
-    def test_extract_journal_data(self, mk_get_articles):
-
-        mk_get_articles.return_value = [Article(SAMPLES_ARTICLE)]
+        mk_extract_article_txt.return_value = SAMPLES_XML_ARTICLE
         with utils.environ(SOURCE_PATH="/tmp"):
-            extracted.extract_journal_data(self.obj_journal)
+            extracted.extract_all_data(["S0036-36341997000100001"])
 
-            self.assertTrue(os.path.isfile("/tmp/S0036-36341997000100001.xml"))
-            os.remove("/tmp/S0036-36341997000100001.xml")
-
-    @patch("documentstore_migracao.processing.extracted.files.write_file")
-    @patch("documentstore_migracao.processing.extracted.article.get_not_xml_article")
-    @patch("documentstore_migracao.processing.extracted.article.get_articles")
-    def test_extract_journal_data_notCall(
-        self, mk_get_articles, mk_get_not_xml_article, mk_write_file
-    ):
-
-        mk_get_articles.return_value = [Article(SAMPLES_ARTICLE)]
-        mk_get_not_xml_article.return_value = None
-
-        with utils.environ(SOURCE_PATH="/tmp"):
-            extracted.extract_journal_data(self.obj_journal)
-            mk_write_file.assert_not_called()
-
-    @patch("documentstore_migracao.processing.extracted.extract_journal_data")
-    def test_extract_selected_journal(self, mk_extract_journal_data):
-
-        with utils.environ(SCIELO_COLLECTION="spa"):
-            extracted.extract_select_journal(SAMPLES_JOURNAL["issns"])
-            mk_extract_journal_data.assert_called_once_with(ANY)
-
-    @patch("documentstore_migracao.processing.extracted.journal.get_journals")
-    @patch("documentstore_migracao.processing.extracted.extract_journal_data")
-    def test_extract_all_data(self, mk_extract_journal_data, mk_get_journals):
-
-        mk_get_journals.return_value = [self.obj_journal]
-        extracted.extract_all_data()
-        mk_extract_journal_data.assert_called_once_with(self.obj_journal)
+        self.assertTrue(os.path.exists("/tmp/S0036-36341997000100001.xml"))
 
 
 class TestProcessingConversion(unittest.TestCase):

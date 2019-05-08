@@ -1,6 +1,8 @@
 import logging
 import os
-from documentstore_migracao.export import journal, article
+from typing import List
+from tqdm import tqdm
+from documentstore_migracao.export import article
 from documentstore_migracao.utils import files
 from documentstore_migracao import config
 
@@ -8,37 +10,21 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def extract_journal_data(obj_journal):
-    count = 0
-    logger.info("\t coletando dados do periodico '%s'", obj_journal.title)
+def extract_all_data(list_documents_pids: List):
 
-    articles = article.get_articles(obj_journal.scielo_issn)
-    for _article in articles:
-        xml_article = article.get_not_xml_article(_article)
+    logger.info("Iniciando extração dos Documentos")
+    for documents_pid in tqdm(list_documents_pids):
+        count = 0
+        logger.debug("\t coletando dados do Documento '%s'", documents_pid)
+
+        xml_article = article.ext_article_txt(documents_pid)
         if xml_article:
             count += 1
 
             file_path = os.path.join(
-                config.get("SOURCE_PATH"), "%s.xml" % _article.data["code"]
+                config.get("SOURCE_PATH"), "%s.xml" % documents_pid
             )
-            logger.info("\t Salvando arquivo '%s'", file_path)
+            logger.debug("\t Salvando arquivo '%s'", file_path)
             files.write_file(file_path, xml_article)
 
     logger.info("\t Total de %s artigos", count)
-
-
-def extract_select_journal(issn):
-
-    logger.info("Iniciando extração do journal %s" % issn)
-
-    obj_journal = journal.ext_journal(issn)
-    extract_journal_data(obj_journal)
-
-
-def extract_all_data():
-
-    logger.info("Iniciando extração")
-    list_journais = journal.get_journals()
-    for obj_journal in list_journais:
-
-        extract_journal_data(obj_journal)

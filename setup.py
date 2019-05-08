@@ -20,6 +20,7 @@ requires = [
     "packtools",
     "paginate",
     "minio",
+    "tqdm",
 ]
 
 tests_require = [

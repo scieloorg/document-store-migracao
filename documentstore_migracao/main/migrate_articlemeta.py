@@ -34,10 +34,12 @@ def migrate_articlemeta_parser(sargs):
         "extract", help="Extrai todos os artigos originários do formato HTML"
     )
     extraction_parser.add_argument(
-        "--issn",
-        dest="issn_journal",
+        "--file",
+        dest="list_documents_pids",
         metavar="",
-        help="Extrai os artigos apenas do periódico informado",
+        required=True,
+        type=argparse.FileType("r"),
+        help="Extrai os artigos dos PIDs informados",
     )
 
     # CONVERCAO
@@ -103,10 +105,7 @@ def migrate_articlemeta_parser(sargs):
     logger.setLevel(level)
 
     if args.command == "extract":
-        if args.issn_journal:
-            extracted.extract_select_journal(args.issn_journal)
-        else:
-            extracted.extract_all_data()
+        extracted.extract_all_data(args.list_documents_pids.readlines())
 
     elif args.command == "convert":
         if args.convertFile:
