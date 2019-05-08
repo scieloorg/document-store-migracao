@@ -34,12 +34,9 @@ def migrate_articlemeta_parser(sargs):
         "extract", help="Extrai todos os artigos originários do formato HTML"
     )
     extraction_parser.add_argument(
-        "--file",
-        dest="list_documents_pids",
-        metavar="",
-        required=True,
+        "file",
         type=argparse.FileType("r"),
-        help="Extrai os artigos dos PIDs informados",
+        help="Arquivo com a lista de PIDs dos artigos a serem extraidos",
     )
 
     # CONVERCAO
@@ -105,7 +102,7 @@ def migrate_articlemeta_parser(sargs):
     logger.setLevel(level)
 
     if args.command == "extract":
-        extracted.extract_all_data(args.list_documents_pids.readlines())
+        extracted.extract_all_data(args.file.readlines())
 
     elif args.command == "convert":
         if args.convertFile:
