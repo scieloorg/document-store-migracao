@@ -2,6 +2,7 @@ import os
 import shutil
 import logging
 
+from tqdm import tqdm
 from requests.compat import urljoin
 from lxml import etree
 from documentstore_migracao.utils import files, request, xml
@@ -43,7 +44,7 @@ def pack_article_ALLxml():
 
     logger.info("Empacotando os documentos XML")
     list_files_xmls = files.xml_files_list(config.get("VALID_XML_PATH"))
-    for file_xml in list_files_xmls:
+    for file_xml in tqdm(list_files_xmls):
 
         try:
             pack_article_xml(os.path.join(config.get("VALID_XML_PATH"), file_xml))

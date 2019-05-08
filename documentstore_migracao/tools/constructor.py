@@ -1,6 +1,7 @@
 import os
 import logging
 from lxml import etree
+from tqdm import tqdm
 
 from documentstore_migracao.utils import files, string, xml
 from documentstore_migracao.export.sps_package import SPS_Package
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def article_xml_constructor(file_xml_path: str, dest_path: str) -> None:
 
-    logger.info("file: %s", file_xml_path)
+    logger.debug("file: %s", file_xml_path)
 
     parsed_xml = xml.loadToXML(file_xml_path)
     xml_sps = SPS_Package(parsed_xml)
@@ -27,7 +28,7 @@ def article_ALL_constructor(source_path: str, dest_path: str) -> None:
 
     logger.info("Iniciando Construção dos XMLs")
     list_files_xmls = files.xml_files_list(source_path)
-    for file_xml in list_files_xmls:
+    for file_xml in tqdm(list_files_xmls):
 
         try:
             article_xml_constructor(os.path.join(source_path, file_xml), dest_path)

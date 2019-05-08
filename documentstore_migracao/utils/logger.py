@@ -5,6 +5,9 @@ from documentstore_migracao import config
 
 
 def configure_logger():
+
+    SUB_DICT_CONFIG = {"level": "DEBUG", "handlers": ["file"], "propagate": False}
+
     l_config.dictConfig(
         {
             "version": 1,
@@ -22,7 +25,7 @@ def configure_logger():
                     "stream": "ext://sys.stdout",
                 },
                 "file": {
-                    "level": "ERROR",
+                    "level": "INFO",
                     "class": "logging.handlers.RotatingFileHandler",
                     "formatter": "default",
                     "filename": os.path.join(config.get("LOGGER_PATH"), "migracao.log"),
@@ -30,7 +33,12 @@ def configure_logger():
                     "backupCount": 3,
                 },
             },
-            "loggers": {"": {"level": "DEBUG", "handlers": ["console", "file"]}},
-            "disable_existing_loggers": False,
+            "loggers": {
+                "packtools.domain": SUB_DICT_CONFIG,
+                "documentstore_migracao.export.sps_package": SUB_DICT_CONFIG,
+                "documentstore_migracao.utils.convert_html_body": SUB_DICT_CONFIG,
+                "documentstore_migracao.processing.packing": SUB_DICT_CONFIG,
+            },
+            "root": {"level": "DEBUG", "handlers": ["console", "file"]},
         }
     )
