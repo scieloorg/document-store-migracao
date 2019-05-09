@@ -6,6 +6,7 @@ from packtools import XMLValidator, exceptions
 
 from documentstore_migracao.utils import files, dicts
 from documentstore_migracao import config
+from lxml import etree
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ def validate_article_xml(file_xml_path, print_error=True):
     try:
         xmlvalidator = XMLValidator.parse(file_xml_path)
         is_valid, errors = xmlvalidator.validate()
-    except exceptions.XMLSPSVersionError as e:
+    except (exceptions.XMLSPSVersionError, etree.LxmlError) as e:
         result[str(e)] = {
             "count": 1,
             "lineno": [1],
