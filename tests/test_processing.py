@@ -28,9 +28,12 @@ class TestProcessingExtracted(unittest.TestCase):
 
         mk_extract_article_txt.return_value = SAMPLES_XML_ARTICLE
         with utils.environ(SOURCE_PATH="/tmp"):
-            extracted.extract_all_data(["S0036-36341997000100001"])
+            try:
+                extracted.extract_all_data(["S0036-36341997000100001"])
 
-        self.assertTrue(os.path.exists("/tmp/S0036-36341997000100001.xml"))
+                self.assertTrue(os.path.exists("/tmp/S0036-36341997000100001.xml"))
+            finally:
+                os.remove("/tmp/S0036-36341997000100001.xml")
 
 
 class TestProcessingConversion(unittest.TestCase):
