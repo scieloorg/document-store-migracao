@@ -70,7 +70,7 @@ def register_document(folder: str, session_db, storage) -> None:
 
     if obj_xml:
         manifest_data = ManifestDomainAdapter(
-            manifest=manifest.get_document_bundle_manifest(obj_xml, url_xml, assets)
+            manifest=manifest.get_document_manifest(obj_xml, url_xml, assets)
         )
 
         try:
@@ -86,27 +86,73 @@ def register_document(folder: str, session_db, storage) -> None:
 
 
 def get_documents_bundle(session_db, data):
-    issns = list(set([data.get(issn_type) for issn_type in ("eissn", "pissn", "issn")]))
-
-    bad_docs_bundle_id = []
+    issns = list(set([
+        data[issn_type]
+        for issn_type in ("eissn", "pissn", "issn")
+        if data.get(issn_type)
+    ]))
+    is_issue = data.get("volume") or data.get("number")
+    bad_bundle_id = []
     for issn in issns:
-        if issn:
-            docs_bundle_id = scielo_ids_generator.documents_bundle_id(
+        if is_issue:
+            bundle_id = scielo_ids_generator.issue_id(
                 issn,
                 data.get("year"),
                 data.get("volume"),
                 data.get("number"),
                 data.get("supplement"),
             )
+        else:
+            bundle_id = scielo_ids_generator.aops_bundle_id(issn)
+        logger.debug("Fetch documents bundle {}".format(bundle_id))
+        try:
+            documents_bundle = session_db.documents_bundles.fetch(bundle_id)
+        except DoesNotExist:
+            bad_bundle_id.append(bundle_id)
+        else:
+            return documents_bundle
+    if is_issue:
+        raise ValueError(
+            "Nenhum documents_bundle encontrado %s" % ", ".join(bad_bundle_id)
+        )
+    else:
+        bad_issn = []
+        for issn in issns:
             try:
-                documents_bundle = session_db.documents_bundles.fetch(docs_bundle_id)
+                documents_bundle = create_aop_bundle(session_db, issn)
             except DoesNotExist:
-                bad_docs_bundle_id.append(docs_bundle_id)
+                bad_issn.append(issn)
             else:
                 return documents_bundle
-    raise ValueError(
-        "Nenhum documents_bundle encontrado %s" % ", ".join(bad_docs_bundle_id)
+        raise ValueError(
+            "Nenhum periódico encontrado para criação do AOP %s" % ", ".join(bad_issn)
+        )
+
+
+def create_aop_bundle(session_db, issn):
+    _journal = session_db.journals.fetch(issn)
+    bundle_id = scielo_ids_generator.aops_bundle_id(issn)
+    manifest_data = ManifestDomainAdapter(
+        manifest=manifest.get_document_bundle_manifest(bundle_id, utcnow())
     )
+    session_db.documents_bundles.add(data=manifest_data)
+    session_db.changes.add(
+        {
+            "timestamp": utcnow(),
+            "entity": "DocumentsBundle",
+            "id": bundle_id,
+        }
+    )
+    _journal.ahead_of_print_bundle = bundle_id
+    session_db.journals.update(_journal)
+    session_db.changes.add(
+        {
+            "timestamp": utcnow(),
+            "entity": "journal",
+            "id": issn,
+        }
+    )
+    return session_db.documents_bundles.fetch(bundle_id)
 
 
 def import_documents_to_kernel(session_db, storage) -> None:

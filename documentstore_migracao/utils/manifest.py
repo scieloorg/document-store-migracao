@@ -4,7 +4,7 @@ from .xylose_converter import parse_date
 from documentstore_migracao.export.sps_package import SPS_Package
 
 
-def get_document_bundle_manifest(
+def get_document_manifest(
     document: etree.ElementTree, document_url: str, assets: list
 ) -> dict:
     """Cria um manifesto no formato do Kernel a partir de um
@@ -33,3 +33,14 @@ def get_document_bundle_manifest(
         ]
 
     return _document
+
+
+def get_document_bundle_manifest(bundle_id: str, date: str) -> dict:
+    return {
+        "_id" : bundle_id,
+        "created" : date,
+        "updated" : date,
+        "items" : [],
+        "metadata" : {},
+        "id" : bundle_id,
+    }
