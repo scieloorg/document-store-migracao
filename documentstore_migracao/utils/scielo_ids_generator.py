@@ -30,7 +30,7 @@ def generate_scielo_pid():
     return uuid2str(uuid4())
 
 
-def documents_bundle_id(issn_id, year, volume=None, number=None, supplement=None):
+def issue_id(issn_id, year, volume=None, number=None, supplement=None):
     labels = ["issn_id", "year", "volume", "number", "supplement"]
     values = [issn_id, year, volume, number, supplement]
 
@@ -52,3 +52,7 @@ def documents_bundle_id(issn_id, year, volume=None, number=None, supplement=None
             _id.append(prefix + value)
 
     return "-".join(_id)
+
+
+def aops_bundle_id(issn_id):
+    return issn_id + "-aop"
