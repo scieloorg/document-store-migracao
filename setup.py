@@ -21,6 +21,7 @@ requires = [
     "paginate",
     "minio",
     "tqdm",
+    "scielo-documentstore",
 ]
 
 tests_require = [
