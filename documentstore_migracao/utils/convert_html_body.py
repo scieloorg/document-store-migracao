@@ -9,6 +9,24 @@ from documentstore_migracao.utils import xml as utils_xml
 logger = logging.getLogger(__name__)
 
 
+def _remove_element_or_comment(node):
+    parent = node.getparent()
+    if parent is not None:
+        if node.tail:
+            previous = node.getprevious()
+            if previous is not None:
+                if not previous.tail:
+                    previous.tail = ""
+                previous.tail += node.tail
+            else:
+                if not parent.text:
+                    parent.text = ""
+                parent.text += node.tail
+        parent.remove(node)
+        removed = node.tag
+        return removed
+
+
 def _process(xml, tag, func):
     logger.debug("\tbuscando tag '%s'", tag)
     nodes = xml.findall(".//%s" % tag)
@@ -99,29 +117,12 @@ class HTML2SPSPipeline(object):
         def _is_empty_element(self, node):
             return node.findall("*") == [] and not (node.text or "").strip()
 
-        def _remove_empty_element(self, node):
-            parent = node.getparent()
-            if parent is not None:
-                if node.tail:
-                    previous = node.getprevious()
-                    if previous is not None:
-                        if not previous.tail:
-                            previous.tail = ""
-                        previous.tail += node.tail
-                    else:
-                        if not parent.text:
-                            parent.text = ""
-                        parent.text += node.tail
-                parent.remove(node)
-                removed = node.tag
-                return removed
-
         def _remove_empty_tags(self, xml):
             removed_tags = []
             for node in xml.xpath("//*"):
                 if node.tag not in self.EXCEPTIONS:
                     if self._is_empty_element(node):
-                        removed = self._remove_empty_element(node)
+                        removed = _remove_element_or_comment(node)
                         if removed:
                             removed_tags.append(removed)
             return removed_tags
@@ -404,7 +405,7 @@ class HTML2SPSPipeline(object):
                 href = node.attrib["href"]
             except KeyError:
                 logger.debug("\tTag 'a' sem href removendo node do xml")
-                node.getparent().remove(node)
+                _remove_element_or_comment(node)
             else:
                 if href.startswith("#"):
                     self._parser_node_anchor(node)
@@ -593,8 +594,7 @@ class HTML2SPSPipeline(object):
 
             comments = xml.xpath("//comment()")
             for comment in comments:
-                parent = comment.getparent()
-                parent.remove(comment)
+                _remove_element_or_comment(comment)
             logger.info("Total de %s 'comentarios' processadas", len(comments))
             return data
 
@@ -647,8 +647,8 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             for children in xml.getchildren():
-                if not children.tag in self.TAGS:
-                    xml.remove(children)
+                if children.tag not in self.TAGS:
+                    _remove_element_or_comment(children)
 
             return data
 
