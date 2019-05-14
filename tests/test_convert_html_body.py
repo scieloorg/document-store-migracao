@@ -2,7 +2,11 @@ import os
 import unittest
 from lxml import etree
 
-from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline, _process
+from documentstore_migracao.utils.convert_html_body import (
+    HTML2SPSPipeline,
+    _process,
+    _remove_element_or_comment,
+)
 from . import SAMPLES_PATH
 
 
@@ -867,3 +871,54 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
         raw, transformed = self.pipe.transform((self.xml, expected))
         self.assertEqual(len(transformed.findall(".//body")), 1)
         self._compare_tags_and_texts(transformed, expected)
+
+
+class Test__remove_element_or_comment(unittest.TestCase):
+
+    def test_etree_remove_removes_element_and_text_after_element(self):
+        text = "<root><a name='bla'/>texto sera removido tambem</root>"
+        xml = etree.fromstring(text)
+        node = xml.find('.//a')
+        xml.remove(node)
+        self.assertEqual(etree.tostring(xml), b"<root/>")
+
+    def test_etree_remove_removes_comment_and_text_after_comment(self):
+        text = "<root><!-- comentario -->texto sera removido tambem</root>"
+        xml = etree.fromstring(text)
+        comment = xml.xpath("//comment()")
+        xml.remove(comment[0])
+        self.assertEqual(etree.tostring(xml), b"<root/>")
+
+    def test__remove_element_or_comment_keep_text_after_element(self):
+        text = "<root><a name='bla'/>texto a manter</root>"
+        expected = b"<root>texto a manter</root>"
+        xml = etree.fromstring(text)
+        node = xml.find('.//a')
+        removed = _remove_element_or_comment(node)
+        self.assertEqual(removed, 'a')
+        self.assertEqual(etree.tostring(xml), expected)
+
+    def test__remove_element_or_comment_removes_keep_text_after_comment(self):
+        text = "<root><!-- comentario -->texto a manter</root>"
+        expected = b"<root>texto a manter</root>"
+        xml = etree.fromstring(text)
+        comment = xml.xpath("//comment()")
+        _remove_element_or_comment(comment[0])
+        self.assertEqual(etree.tostring(xml), expected)
+
+    def test__remove_element_or_comment_keeps_spaces_after_element(self):
+        text = "<root> <a name='bla'/> texto a manter</root>"
+        expected = b"<root>  texto a manter</root>"
+        xml = etree.fromstring(text)
+        node = xml.find('.//a')
+        removed = _remove_element_or_comment(node)
+        self.assertEqual(removed, 'a')
+        self.assertEqual(etree.tostring(xml), expected)
+
+    def test__remove_element_or_comment_keeps_spaces_after_comment(self):
+        text = "<root> <!-- comentario --> texto a manter</root>"
+        expected = b"<root>  texto a manter</root>"
+        xml = etree.fromstring(text)
+        comment = xml.xpath("//comment()")
+        _remove_element_or_comment(comment[0])
+        self.assertEqual(etree.tostring(xml), expected)
