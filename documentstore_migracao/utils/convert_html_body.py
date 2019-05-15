@@ -387,6 +387,42 @@ class HTML2SPSPipeline(object):
             }
             node.attrib.update(_attrib)
 
+        def _create_email(self, node):
+            a_node_copy = deepcopy(node)
+            href = a_node_copy.attrib.get("href")
+            if 'mailto:' in href:
+                href = href.split('mailto:')[1]
+
+            node.attrib.clear()
+            node.tag = 'email'
+
+            img = node.find('img')
+            if img is not None:
+                graphic = etree.Element('graphic')
+                graphic.attrib['{http://www.w3.org/1999/xlink}href'] = \
+                    img.attrib['src']
+                node.remove(img)
+                parent = node.getprevious() or node.getparent()
+                graphic.append(node)
+                parent.append(graphic)
+
+            if node.text and node.text.strip():
+                if href == node.text:
+                    pass
+                elif href in node.text:
+                    node.tag = 'REMOVE_TAG'
+                    texts = node.text.split(href)
+                    node.text = texts[0]
+                    email = etree.Element('email')
+                    email.text = href
+                    email.tail = texts[1]
+                    node.append(email)
+                    etree.strip_tags(node.getparent(), 'REMOVE_TAG')
+                else:
+                    node.attrib['{http://www.w3.org/1999/xlink}href'] = href
+            if not node.text:
+                node.text = href
+
         def _parser_node_anchor(self, node):
             node.tag = "xref"
             href = node.attrib.get("href")
@@ -409,7 +445,7 @@ class HTML2SPSPipeline(object):
                 if href.startswith("#"):
                     self._parser_node_anchor(node)
                 elif "mailto" in href or "@" in href:
-                    self._parser_node_external_link(node, "email")
+                    self._create_email(node)
                 elif "/" in href or href.startswith("www"):
                     self._parser_node_external_link(node)
 
