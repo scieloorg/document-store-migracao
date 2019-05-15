@@ -371,62 +371,72 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.assertEqual(node.text, "texto")
         self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
 
-    def test_pipe_a___parser_node_external_link_for_email(self):
-        """
-        <ext-link ext-link-type="email" xlink:href="mailto:nuesslin@lrz.tum.de">
-nuesslin@lrz.tum.de</ext-link>
-        """
-        expected_keys = ["{http://www.w3.org/1999/xlink}href", "ext-link-type"]
-        href = ["mailto:a@scielo.org", "mailto:x@scielo.org"]
-        content = ["Enviar e-mail para A", '<img src="mail.gif" />']
+    def test_pipe_a__creates_email_element_with_href_attribute(self):
         expected = """<root>
-        <p><ext-link ext-link-type="email" xlink:href="mailto:a@scielo.org">Enviar e-mail para A</ext-link></p>
-        <p><ext-link ext-link-type="email" xlink:href="mailto:x@scielo.org"><img src="mail.gif" /></ext-link></p>
+        <p><email xlink:href="mailto:a@scielo.org">Enviar e-mail para A</email></p>
         </root>"""
         text = """<root>
         <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+
+        node = xml.find(".//a")
+        self.pipeline.APipe()._create_email(node)
+
+        self.assertIn(
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"),
+            'mailto:a@scielo.org'
+        )
+        self.assertEqual(node.tag, "email")
+        self.assertEqual(node.text, "Enviar e-mail para A")
+
+    def test_pipe_a__creates_email_(self):
+        expected = """<root>
+        <p>Enviar e-mail para <email>a@scielo.org</email>.</p>
+        </root>"""
+        text = """<root>
+        <p><a href="mailto:a@scielo.org">Enviar e-mail para a@scielo.org.</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+
+        node = xml.find(".//a")
+        self.pipeline.APipe()._create_email(node)
+        p = xml.find('.//p')
+        self.assertEqual(p.text, 'Enviar e-mail para ')
+        email = p.find('email')
+        self.assertEqual(email.text, 'a@scielo.org')
+        self.assertEqual(email.tail, '.')
+
+    def test_pipe_a__creates_graphic_email(self):
+        expected = b"""<root><p><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="email.gif"><email>mailto:x@scielo.org</email></graphic></p></root>"""
+        text = """<root>
         <p><a href="mailto:x@scielo.org"><img src="mail.gif" /></a></p>
         </root>"""
         xml = etree.fromstring(text)
 
-        for i, node in enumerate(xml.findall(".//a")):
-            with self.subTest(i):
-                self.pipeline.APipe()._parser_node_external_link(node, "email")
+        node = xml.find(".//a")
+        self.pipeline.APipe()._create_email(node)
 
-                self.assertEqual(set(expected_keys), set(node.attrib.keys()))
-                self.assertIn(
-                    node.attrib.get("{http://www.w3.org/1999/xlink}href"), href[i]
-                )
-                self.assertEqual(node.attrib.get("ext-link-type"), "email")
-                self.assertEqual(node.tag, "ext-link")
-                if node.text:
-                    self.assertEqual(node.text, "Enviar e-mail para A")
-                else:
-                    self.assertIn(
-                        '<img src="mail.gif"/>',
-                        etree.tostring(node, encoding="unicode"),
-                    )
+        self.assertEqual(
+            xml.find(".//graphic").attrib.get(
+                "{http://www.w3.org/1999/xlink}href"),
+            'mail.gif'
+            )
+        print(etree.tostring(xml))
+        self.assertEqual(
+            xml.findtext(".//graphic/email"),
+            'x@scielo.org'
+            )
 
-    def test_pipe_a_mailto(self):
+    def test_pipe_a__creates_email(self):
         text = """<root>
-        <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
-        <p><a href="mailto:x@scielo.org"><img src="mail.gif" /></a></p>
-        <p><a href="mailto:a04qdr04@scielo.org">Enviar e-mail para a04qdr04</a></p>
-        <p><a href="mailto:a04qdr08@scielo.org">Enviar e-mail para mim</a></p>
+        <p><a href="mailto:a@scielo.org">a@scielo.org</a></p>
         </root>"""
         raw, transformed = self._transform(text, self.pipeline.APipe())
 
-        nodes = transformed.findall(".//p/p")
-        self.assertEqual(len(nodes), 0)
-        texts = [
-            b"<p>Enviar e-mail para A<email>a@scielo.org</email></p>",
-            b'<p><img src="mail.gif"/><email>x@scielo.org</email></p>',
-            b"<p>Enviar e-mail para a04qdr04<email>a04qdr04@scielo.org</email></p>",
-            b"<p>Enviar e-mail para mim<email>a04qdr08@scielo.org</email></p>",
-        ]
-        for node, text in zip(nodes, texts):
-            with self.subTest(node=node):
-                self.assertEqual(text, etree.tostring(node).strip())
+        node = transformed.find(".//email")
+        self.assertEqual(node.text, 'a@scielo.org')
+        self.assertEqual(node.tag, 'email')
 
     def test_pipe_a_anchor(self):
         node = self.etreeXML.find(".//font[@size='1']")
