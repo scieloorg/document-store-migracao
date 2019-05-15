@@ -380,7 +380,7 @@ class SPS_Package:
             _, obj_html_body = convert.deploy(txt_body)
 
             # sobrecreve o html escapado anterior pelo novo xml tratado
-            body.getparent().replace(body, obj_html_body)
+            body.getparent().replace(body, obj_html_body.find("body"))
 
         return self.xmltree
 
