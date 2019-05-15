@@ -101,18 +101,6 @@ class TestUtilsXML(unittest.TestCase):
 
         self.assertIn(expected_text, str(etree.tostring(obj)))
 
-    @patch("documentstore_migracao.utils.xml.etree.fromstring")
-    def test_str2objXML_except(self, mk_fromstring):
-        def _side_effect(arg):
-            if arg == "<body></body>":
-                return b"<body></body>"
-            raise etree.XMLSyntaxError("Test Error - READING XML", 1, 1, 1)
-
-        mk_fromstring.side_effect = _side_effect
-        obj = xml.str2objXML("<a><b>bar</b></a>")
-
-        self.assertIn(b"<body></body>", obj)
-
     def test_file2objXML(self):
         file_path = os.path.join(SAMPLES_PATH, "any.xml")
         expected_text = "<root><a><b>bar</b></a></root>"

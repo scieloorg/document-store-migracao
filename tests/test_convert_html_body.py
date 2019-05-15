@@ -129,7 +129,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.DivPipe())
 
         self.assertEqual(
-            etree.tostring(transformed), b'<root><sec id="intro">bla</sec><sec/></root>'
+            etree.tostring(transformed), b'<root><p id="intro">bla</p><p/></root>'
         )
 
     def test_pipe_img(self):
@@ -384,8 +384,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.pipeline.APipe()._create_email(node)
 
         self.assertIn(
-            node.attrib.get("{http://www.w3.org/1999/xlink}href"),
-            'mailto:a@scielo.org'
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "mailto:a@scielo.org"
         )
         self.assertEqual(node.tag, "email")
         self.assertEqual(node.text, "Enviar e-mail para A")
@@ -401,11 +400,11 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
         node = xml.find(".//a")
         self.pipeline.APipe()._create_email(node)
-        p = xml.find('.//p')
-        self.assertEqual(p.text, 'Enviar e-mail para ')
-        email = p.find('email')
-        self.assertEqual(email.text, 'a@scielo.org')
-        self.assertEqual(email.tail, '.')
+        p = xml.find(".//p")
+        self.assertEqual(p.text, "Enviar e-mail para ")
+        email = p.find("email")
+        self.assertEqual(email.text, "a@scielo.org")
+        self.assertEqual(email.tail, ".")
 
     def test_pipe_a__creates_graphic_email(self):
         expected = b"""<root><p><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="email.gif"><email>mailto:x@scielo.org</email></graphic></p></root>"""
@@ -418,15 +417,11 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self.pipeline.APipe()._create_email(node)
 
         self.assertEqual(
-            xml.find(".//graphic").attrib.get(
-                "{http://www.w3.org/1999/xlink}href"),
-            'mail.gif'
-            )
+            xml.find(".//graphic").attrib.get("{http://www.w3.org/1999/xlink}href"),
+            "mail.gif",
+        )
         print(etree.tostring(xml))
-        self.assertEqual(
-            xml.findtext(".//graphic/email"),
-            'x@scielo.org'
-            )
+        self.assertEqual(xml.findtext(".//graphic/email"), "x@scielo.org")
 
     def test_pipe_a__creates_email(self):
         text = """<root>
@@ -435,8 +430,19 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.APipe())
 
         node = transformed.find(".//email")
-        self.assertEqual(node.text, 'a@scielo.org')
-        self.assertEqual(node.tag, 'email')
+        self.assertEqual(node.text, "a@scielo.org")
+        self.assertEqual(node.tag, "email")
+
+    def test_pipe_a__create_email_mailto_empty(self):
+        text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+
+        node = transformed.find(".//email")
+        self.assertEqual(node.text, "sfpyip@hku.hk")
+        self.assertEqual(
+            node.tail,
+            "). Correspondence should be addressed to Dr Yip at this address.",
+        )
 
     def test_pipe_a_anchor(self):
         node = self.etreeXML.find(".//font[@size='1']")
@@ -447,6 +453,33 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         new_xml = etree.fromstring(text)
 
         self.assertEqual(new_xml.find("xref").attrib["rid"], "home")
+
+    def test_pipe_a_anchor__remove_top(self):
+        text = """<root><a href="#top"><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></a></root>"""
+
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+
+        node = transformed.find(".//xref")
+        self.assertFalse(node)
+
+        node = transformed.find(".//graphic")
+        self.assertIsNotNone(node)
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></root>',
+        )
+
+    @unittest.skip("TODO")
+    def test_pipe_a_anchor__remove_xref(self):
+        text = """<root><a href="#topb">b</a> Demographic and Health Surveys. Available from: </root>"""
+
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"<root>b Demographic and Health Surveys. Available from: </root>",
+        )
 
     def test_pipe_a_hiperlink(self):
 
@@ -591,26 +624,11 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b"""<root><p><bold><p>nova imagem</p><inline-graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></bold></p></root>""",
         )
 
-    def test_pipe_graphicChildren_block(self):
-        text = """<root><p><block><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></block></p></root>"""
-        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
-        self.assertEqual(
-            etree.tostring(transformed),
-            b"""<root><p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></p></root>""",
-        )
-
     def test_pipe_remove_comments(self):
         text = """<root><!-- COMMENT 1 --><x>TEXT 1</x><y>TEXT 2 <!-- COMMENT 2 --></y></root>"""
         raw, transformed = self._transform(text, self.pipeline.RemoveCommentPipe())
         self.assertEqual(
             etree.tostring(transformed), b"""<root><x>TEXT 1</x><y>TEXT 2 </y></root>"""
-        )
-
-    def test_pipe_BodyAllowedTagPipe(self):
-        text = """<body><p>TEXT 1</p><hr/><p>TEXT 2</p></body>"""
-        raw, transformed = self._transform(text, self.pipeline.BodyAllowedTagPipe())
-        self.assertEqual(
-            etree.tostring(transformed), b"""<body><p>TEXT 1</p><p>TEXT 2</p></body>"""
         )
 
     def test__process(self):
@@ -884,11 +902,10 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
 
 
 class Test__remove_element_or_comment(unittest.TestCase):
-
     def test_etree_remove_removes_element_and_text_after_element(self):
         text = "<root><a name='bla'/>texto sera removido tambem</root>"
         xml = etree.fromstring(text)
-        node = xml.find('.//a')
+        node = xml.find(".//a")
         xml.remove(node)
         self.assertEqual(etree.tostring(xml), b"<root/>")
 
@@ -903,9 +920,9 @@ class Test__remove_element_or_comment(unittest.TestCase):
         text = "<root><a name='bla'/>texto a manter</root>"
         expected = b"<root>texto a manter</root>"
         xml = etree.fromstring(text)
-        node = xml.find('.//a')
+        node = xml.find(".//a")
         removed = _remove_element_or_comment(node)
-        self.assertEqual(removed, 'a')
+        self.assertEqual(removed, "a")
         self.assertEqual(etree.tostring(xml), expected)
 
     def test__remove_element_or_comment_removes_keep_text_after_comment(self):
@@ -920,9 +937,9 @@ class Test__remove_element_or_comment(unittest.TestCase):
         text = "<root> <a name='bla'/> texto a manter</root>"
         expected = b"<root>  texto a manter</root>"
         xml = etree.fromstring(text)
-        node = xml.find('.//a')
+        node = xml.find(".//a")
         removed = _remove_element_or_comment(node)
-        self.assertEqual(removed, 'a')
+        self.assertEqual(removed, "a")
         self.assertEqual(etree.tostring(xml), expected)
 
     def test__remove_element_or_comment_keeps_spaces_after_comment(self):
@@ -932,3 +949,15 @@ class Test__remove_element_or_comment(unittest.TestCase):
         comment = xml.xpath("//comment()")
         _remove_element_or_comment(comment[0])
         self.assertEqual(etree.tostring(xml), expected)
+
+    def test__remove_element_or_comment_xref(self):
+        text = """<root><xref href="#top"><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></xref></root>"""
+
+        xml = etree.fromstring(text)
+        node = xml.find(".//xref")
+
+        _remove_element_or_comment(node)
+        self.assertEqual(
+            etree.tostring(xml),
+            b'<root><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></root>',
+        )

@@ -22,8 +22,20 @@ def _remove_element_or_comment(node):
                 if not parent.text:
                     parent.text = ""
                 parent.text += node.tail
-        parent.remove(node)
+
         removed = node.tag
+        try:
+            node.tag = "REMOVE_NODE"
+
+        except AttributeError:
+            parent.remove(node)
+
+        else:
+            if node.getchildren():
+                etree.strip_tags(parent, "REMOVE_NODE")
+            else:
+                parent.remove(node)
+
         return removed
 
 
@@ -70,6 +82,7 @@ class HTML2SPSPipeline(object):
             self.APipe(),
             self.StrongPipe(),
             self.TdCleanPipe(),
+            self.TableCleanPipe(),
             self.BlockquotePipe(),
             self.HrPipe(),
             self.GraphicChildrenPipe(),
@@ -386,42 +399,47 @@ class HTML2SPSPipeline(object):
         def _create_email(self, node):
             a_node_copy = deepcopy(node)
             href = a_node_copy.attrib.get("href")
-            if 'mailto:' in href:
-                href = href.split('mailto:')[1]
+            if "mailto:" in href:
+                href = href.split("mailto:")[1]
 
             node.attrib.clear()
-            node.tag = 'email'
+            node.tag = "email"
 
-            img = node.find('img')
+            img = node.find("img")
             if img is not None:
-                graphic = etree.Element('graphic')
-                graphic.attrib['{http://www.w3.org/1999/xlink}href'] = \
-                    img.attrib['src']
-                node.remove(img)
+                graphic = etree.Element("graphic")
+                graphic.attrib["{http://www.w3.org/1999/xlink}href"] = img.attrib["src"]
+                _remove_element_or_comment(img)
                 parent = node.getprevious() or node.getparent()
                 graphic.append(node)
                 parent.append(graphic)
+
+            if not href:
+                return
 
             if node.text and node.text.strip():
                 if href == node.text:
                     pass
                 elif href in node.text:
-                    node.tag = 'REMOVE_TAG'
+                    node.tag = "REMOVE_TAG"
                     texts = node.text.split(href)
                     node.text = texts[0]
-                    email = etree.Element('email')
+                    email = etree.Element("email")
                     email.text = href
                     email.tail = texts[1]
                     node.append(email)
-                    etree.strip_tags(node.getparent(), 'REMOVE_TAG')
+                    etree.strip_tags(node.getparent(), "REMOVE_TAG")
                 else:
-                    node.attrib['{http://www.w3.org/1999/xlink}href'] = href
+                    node.attrib["{http://www.w3.org/1999/xlink}href"] = href
             if not node.text:
                 node.text = href
 
         def _parser_node_anchor(self, node):
             node.tag = "xref"
             href = node.attrib.get("href")
+            if href.startswith("#top") or href.startswith("#back"):
+                result = _remove_element_or_comment(node)
+
             node.attrib.clear()
             root = node.getroottree()
             list_tags = ["div", "p", "table"]
@@ -442,7 +460,7 @@ class HTML2SPSPipeline(object):
                     self._parser_node_anchor(node)
                 elif "mailto" in href or "@" in href:
                     self._create_email(node)
-                elif "/" in href or href.startswith("www") or "http" in href::
+                elif "/" in href or href.startswith("www") or "http" in href:
                     self._parser_node_external_link(node)
 
         def transform(self, data):
@@ -497,6 +515,28 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "td", self.parser_node)
+            return data
+
+    class TableCleanPipe(TdCleanPipe):
+        EXPECTED_ATTRIBUTES = [
+            "border",
+            "cellpadding",
+            "cellspacing",
+            "content-type",
+            "frame",
+            "id",
+            "rules",
+            "specific-use",
+            "style",
+            "summary",
+            "width",
+            "xml:base",
+        ]
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "table", self.parser_node)
             return data
 
     class EmPipe(plumber.Pipe):
@@ -694,9 +734,10 @@ class DataSanitizationPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.GraphicInExtLink(),
-            self.GraphicInXref(),
+            # self.GraphicInXref(),
             self.HRTagPape(),
             self.TableinBody(),
+            self.TableinP(),
         )
 
     def deploy(self, raw):
@@ -710,12 +751,14 @@ class DataSanitizationPipeline(object):
             return data, new_obj
 
     class GraphicInExtLink(plumber.Pipe):
+        NEW_TAG = "p"
+
         def parser_node(self, node):
 
             graphic = node.find("graphic")
             _graphic = deepcopy(graphic)
             _graphic.tag = "inline-graphic"
-            p = etree.Element("p")
+            p = etree.Element(self.NEW_TAG)
             p.append(_graphic)
             node.append(p)
             node.remove(graphic)
@@ -726,22 +769,14 @@ class DataSanitizationPipeline(object):
             _process(xml, "ext-link[graphic]", self.parser_node)
             return data
 
-    class GraphicInXref(plumber.Pipe):
-        def parser_node(self, node):
+    # class GraphicInXref(GraphicInExtLink):
+    #     NEW_TAG = "monospace"
 
-            graphic = node.find("graphic")
-            _graphic = deepcopy(graphic)
-            _graphic.tag = "inline-graphic"
-            bold = etree.Element("bold")
-            bold.append(_graphic)
-            node.append(bold)
-            node.remove(graphic)
+    #     def transform(self, data):
+    #         raw, xml = data
 
-        def transform(self, data):
-            raw, xml = data
-
-            _process(xml, "xref[graphic]", self.parser_node)
-            return data
+    #         _process(xml, "xref[graphic]", self.parser_node)
+    #         return data
 
     class HRTagPape(plumber.Pipe):
         def parser_node(self, node):
@@ -771,4 +806,11 @@ class DataSanitizationPipeline(object):
             raw, xml = data
 
             _process(xml, "body[table]", self.parser_node)
+            return data
+
+    class TableinP(TableinBody):
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "p[table]", self.parser_node)
             return data
