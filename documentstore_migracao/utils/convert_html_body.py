@@ -1,9 +1,13 @@
 import logging
 import plumber
 import html
+import re
+import os
 from lxml import etree
 from copy import deepcopy
+from documentstore_migracao.utils import files
 from documentstore_migracao.utils import xml as utils_xml
+from documentstore_migracao import config
 
 
 logger = logging.getLogger(__name__)
@@ -13,15 +17,16 @@ def _remove_element_or_comment(node):
     parent = node.getparent()
     if parent is not None:
         if node.tail:
+            text = (node.text or "").strip() + node.tail
             previous = node.getprevious()
             if previous is not None:
                 if not previous.tail:
                     previous.tail = ""
-                previous.tail += node.tail
+                previous.tail += text
             else:
                 if not parent.text:
                     parent.text = ""
-                parent.text += node.tail
+                parent.text += text
 
         removed = node.tag
         try:
@@ -58,10 +63,21 @@ def wrap_node(node, elem_wrap="p"):
     return p
 
 
+def gera_id(_string):
+
+    number_item = re.search(r"([a-zA-Z]+)(\d+)", _string)
+    if number_item:
+        name_item, number_item = number_item.groups()
+        rid = name_item[0] + str(int(number_item))
+        return rid
+
+
 class HTML2SPSPipeline(object):
-    def __init__(self):
+    def __init__(self, pid):
+        self.pid = pid
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
+            self.SaveRawBodyPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveExcedingStyleTagsPipe(),
             self.RemoveEmptyPipe(),
@@ -71,6 +87,8 @@ class HTML2SPSPipeline(object):
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
+            self.ANamePipe(),
+            self.TablePipe(),
             self.ImgPipe(),
             self.LiPipe(),
             self.OlPipe(),
@@ -87,12 +105,28 @@ class HTML2SPSPipeline(object):
             self.HrPipe(),
             self.GraphicChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
+            self.RemoveRefIdPipe(),
             self.SanitizationPipe(),
         )
 
     class SetupPipe(plumber.Pipe):
-        def transform(self, data):
+        def transform(self, raw):
+            pid, data = raw
             xml = utils_xml.str2objXML(data)
+            return pid, data, xml
+
+    class SaveRawBodyPipe(plumber.Pipe):
+        def transform(self, data):
+            pid, raw, xml = data
+
+            root = xml.getroottree()
+            root.write(
+                os.path.join("/tmp/", "%s.xml" % pid),
+                encoding="utf-8",
+                doctype=config.DOC_TYPE_XML,
+                xml_declaration=True,
+                pretty_print=True,
+            )
             return data, xml
 
     class DeprecatedHTMLTagsPipe(plumber.Pipe):
@@ -291,6 +325,57 @@ class HTML2SPSPipeline(object):
             _process(xml, "div", self.parser_node)
             return data
 
+    class ANamePipe(plumber.Pipe):
+        def parser_node(self, node):
+            attrib = node.attrib
+
+            _id_name = attrib.get("name", attrib.get("id")).lower()
+
+            if _id_name.startswith("top") or _id_name.startswith("back"):
+                return
+
+            if _id_name.startswith("t"):
+                node.tag = "table-wrap"
+            elif _id_name[0] in "fcq":
+                node.tag = "fig"
+            elif _id_name.startswith("n"):
+                node.tag = "fn"
+
+            node.attrib.clear()
+            ref_id = gera_id(_id_name)
+            if ref_id:
+                node.set("ref-id", ref_id)
+            node.set("id", _id_name)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "a[@name]", self.parser_node)
+            return data
+
+    class TablePipe(plumber.Pipe):
+        def parser_node_table(self, node):
+
+            _id = node.attrib.get("id")
+            if _id:
+                p = etree.Element("table-wrap")
+                _node = deepcopy(node)
+                p.append(_node)
+
+                id_name = gera_id(new_element[0] + id_name[-1])
+                if id_name:
+                    p.set("id", id_name)
+
+                parent = node.getparent()
+                parent.append(p)
+                parent.remove(node)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "table[@id]", self.parser_node_table)
+            return data
+
     class ImgPipe(plumber.Pipe):
         def parser_node(self, node):
             node.tag = "graphic"
@@ -299,6 +384,25 @@ class HTML2SPSPipeline(object):
 
             node.attrib.clear()
             node.set("{http://www.w3.org/1999/xlink}href", src)
+
+            filename, __ = files.extract_filename_ext_by_path(src)
+            if "t" in filename:
+                new_element = "table-wrap"
+                id_name = filename.split("t")
+            else:
+                id_name = filename.split("f")
+                new_element = "fig"
+
+            n_id = gera_id(new_element[0] + id_name[-1])
+            if n_id:
+                root = node.getroottree()
+                ref_node = root.find("//%s[@ref-id='%s']" % (new_element, n_id))
+                if ref_node is not None:
+                    _node = deepcopy(node)
+                    ref_node.append(_node)
+
+                    parent = node.getparent()
+                    parent.remove(node)
 
         def transform(self, data):
             raw, xml = data
@@ -438,16 +542,46 @@ class HTML2SPSPipeline(object):
             node.tag = "xref"
             href = node.attrib.get("href")
             if href.startswith("#top") or href.startswith("#back"):
-                result = _remove_element_or_comment(node)
+
+                list_c_node = list(node.getchildren())
+                c_text = "".join([t.strip() for t in node.itertext()])
+
+                if (
+                    len(list_c_node) == 1
+                    and c_text == ""
+                    and list_c_node[0].tag == "graphic"
+                ):
+                    node.remove(list_c_node[0])
+                _remove_element_or_comment(node)
 
             node.attrib.clear()
             root = node.getroottree()
-            list_tags = ["div", "p", "table"]
-            for tag in list_tags:
-                xref_name = href.replace("#", "")
-                ref_node = root.findall("//%s[@id='%s']" % (tag, xref_name))
-                if ref_node:
-                    node.attrib.update({"rid": xref_name, "ref-type": ref_node[0].tag})
+
+            xref_name = href.replace("#", "")
+            if xref_name == "ref":
+
+                rid = node.text
+                if not rid.isdigit():
+                    rid = (
+                        rid.replace("(", "")
+                        .replace(")", "")
+                        .replace("-", ",")
+                        .split(",")
+                    )
+                    rid = rid[0]
+                node.set("rid", "B%s" % rid)
+                node.set("ref-type", "bibr")
+
+            else:
+                rid = gera_id(xref_name)
+                if rid:
+                    ref_node = root.find("//*[@ref_id='%s']" % rid)
+                    node.set("rid", xref_name)
+                    if ref_node is not None:
+                        ref_type = ref_node.tag
+                        if ref_type == "table-wrap":
+                            ref_type = "table"
+                        node.set("ref-type", ref_type)
 
         def parser_node(self, node):
             try:
@@ -716,6 +850,16 @@ class HTML2SPSPipeline(object):
             etree.strip_tags(xml, "REMOVE_P")
             return data
 
+    class RemoveRefIdPipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.attrib.pop("ref-id", None)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "*[@ref-id]", self.parser_node)
+            return data
+
     class SanitizationPipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
@@ -725,6 +869,7 @@ class HTML2SPSPipeline(object):
             return raw, obj
 
     def deploy(self, raw):
+        raw = (self.pid, raw)
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
 
@@ -734,7 +879,6 @@ class DataSanitizationPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.GraphicInExtLink(),
-            # self.GraphicInXref(),
             self.HRTagPape(),
             self.TableinBody(),
             self.TableinP(),
@@ -768,15 +912,6 @@ class DataSanitizationPipeline(object):
 
             _process(xml, "ext-link[graphic]", self.parser_node)
             return data
-
-    # class GraphicInXref(GraphicInExtLink):
-    #     NEW_TAG = "monospace"
-
-    #     def transform(self, data):
-    #         raw, xml = data
-
-    #         _process(xml, "xref[graphic]", self.parser_node)
-    #         return data
 
     class HRTagPape(plumber.Pipe):
         def parser_node(self, node):
