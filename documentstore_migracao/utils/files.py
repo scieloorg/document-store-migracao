@@ -4,6 +4,7 @@ import os
 import shutil
 import logging
 import hashlib
+from typing import List, Tuple, Set
 
 from documentstore_migracao import config
 
@@ -102,3 +103,58 @@ def sha1(path):
                 break
             _sum.update(chunk)
     return _sum.hexdigest()
+
+
+def register_latest_stage(stages_file_path: str, stage_id: str) -> None:
+    """Adiciona um `stage_id` na última linha de um
+    arquivo de controle"""
+
+    with open(stages_file_path, "a") as file:
+        file.write(f"{stage_id}\n")
+
+
+def fetch_stage_file_path(content: List[str], func_name: str) -> str:
+    """Retorna o path para um arquivo temporário contendo
+    uma lista de `stage_id`"""
+
+    name = hashlib.md5("".join(content).encode()).hexdigest()
+    return os.path.join(config.get("CACHE_PATH"), func_name, name)
+
+
+def create_stage_file(stage_file_path):
+    """Cria um arquivo para conter a lista de estágios
+    já realizados"""
+
+    directory = os.path.dirname(stage_file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    register_latest_stage(stage_file_path, "")
+
+
+def fetch_stages_to_do(path: str, all_stages: List[str]) -> Tuple[Set[str], Set[str], str]:
+    """Retorna a lista de estágios a serem processados
+    e a quantidade de estágios já realizados"""
+
+    with open(path, "r") as file:
+        stages_already_done = file.readlines()
+        stages_to_do = set(all_stages) - set(stages_already_done)
+        return stages_to_do, stages_already_done, path
+
+
+def fetch_stages_info(content: List[str], func_name: str) -> Tuple[Set[str], Set[str], str]:
+    """Fachada que executa os passos necessários para
+    criar o arquivo de cache que **contém** os estágios já realizados
+    por uma função.
+
+    Retorna uma tupla contendo informações sobre o arquivo de estágios:
+    stages_to_do        :: Lista contendo os `estágios` a serem realizados
+    stages_already_done  :: Quantidade de estágios finalizados
+    path                :: Path para os arquivo contendo os estágios já
+                           realizados
+    """
+
+    stages_file_path = fetch_stage_file_path(content=content, func_name=func_name)
+    create_stage_file(stage_file_path=stages_file_path)
+
+    return fetch_stages_to_do(path=stages_file_path, all_stages=content)
