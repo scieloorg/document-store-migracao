@@ -17,12 +17,14 @@ def convert_article_xml(file_xml_path):
     obj_xmltree = xml.loadToXML(file_xml_path)
     obj_xml = obj_xmltree.getroot()
 
-    obj_xml.set("specific-use", "sps-1.8")
+    obj_xml.set("specific-use", "sps-1.9")
     obj_xml.set("dtd-version", "1.1")
 
     xml_sps = SPS_Package(obj_xmltree)
     # CONVERTE O BODY DO AM PARA SPS
     xml_sps.transform_body()
+    # CONVERTE PUB-DATE PARA SPS 1.9
+    xml_sps.transform_pubdate()
 
     # CONSTROI O SCIELO-id NO XML CONVERTIDO
     xml_sps.create_scielo_id()

@@ -54,7 +54,7 @@ INITIAL_PATH = [get(k) for k, v in _default.items() if k.endswith("_PATH")]
 INITIAL_PATH = [item for item in INITIAL_PATH if item is not None]
 
 
-DOC_TYPE_XML = """<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "JATS-journalpublishing1.dtd">"""
+DOC_TYPE_XML = """<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">"""
 
 os.environ["XML_CATALOG_FILES"] = XML_CATALOG
 
