@@ -28,9 +28,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_create_instance(self):
         expected_text = "<p>La nueva epoca de la revista<italic>Salud Publica de Mexico </italic></p>"
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        pid, raw, xml = pipeline.SetupPipe().transform(
-            ("S1234-56782018000100011", expected_text)
-        )
+        raw, xml = pipeline.SetupPipe().transform(expected_text)
         self.assertIn(expected_text, str(etree.tostring(xml)))
 
     def test_pipe_remove_empty_do_not_remove_img(self):
@@ -582,7 +580,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         text = '<root><td width="" height="" style="style"><p>Teste</p></td></root>'
         raw, transformed = self._transform(text, self.pipeline.TdCleanPipe())
         self.assertEqual(
-            etree.tostring(transformed), b'<root><td style="style">Teste</td></root>'
+            etree.tostring(transformed),
+            b'<root><td style="style"><p>Teste</p></td></root>',
         )
 
     def test_pipe_blockquote(self):

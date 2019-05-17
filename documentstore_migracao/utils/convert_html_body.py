@@ -65,19 +65,27 @@ def wrap_node(node, elem_wrap="p"):
 
 def gera_id(_string):
 
-    number_item = re.search(r"([a-zA-Z]+)(\d+)", _string)
+    number_item = re.search(r"([a-zA-Z]{1,3})(\d)([a-zA-Z])", _string)
     if number_item:
-        name_item, number_item = number_item.groups()
-        rid = name_item[0] + str(int(number_item))
+        name_item, number_item, sufix_item = number_item.groups("")
+        rid = name_item + str(int(number_item)) + sufix_item
         return rid
 
 
+class CustomPipe(plumber.Pipe):
+    def __init__(self, super_obj=None, *args, **kwargs):
+
+        self.super_obj = super_obj
+        super(CustomPipe, self).__init__(*args, **kwargs)
+
+
 class HTML2SPSPipeline(object):
-    def __init__(self, pid):
+    def __init__(self, pid, index_body=1):
         self.pid = pid
+        self.index_body = index_body
         self._ppl = plumber.Pipeline(
-            self.SetupPipe(),
-            self.SaveRawBodyPipe(),
+            self.SetupPipe(super_obj=self),
+            self.SaveRawBodyPipe(super_obj=self),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveExcedingStyleTagsPipe(),
             self.RemoveEmptyPipe(),
@@ -87,7 +95,7 @@ class HTML2SPSPipeline(object):
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
-            self.ANamePipe(),
+            self.ANamePipe(super_obj=self),
             self.TablePipe(),
             self.ImgPipe(),
             self.LiPipe(),
@@ -109,19 +117,17 @@ class HTML2SPSPipeline(object):
             self.SanitizationPipe(),
         )
 
-    class SetupPipe(plumber.Pipe):
-        def transform(self, raw):
-            pid, data = raw
-            xml = utils_xml.str2objXML(data)
-            return pid, data, xml
-
-    class SaveRawBodyPipe(plumber.Pipe):
+    class SetupPipe(CustomPipe):
         def transform(self, data):
-            pid, raw, xml = data
+            xml = utils_xml.str2objXML(data)
+            return data, xml
 
+    class SaveRawBodyPipe(CustomPipe):
+        def transform(self, data):
+            raw, xml = data
             root = xml.getroottree()
             root.write(
-                os.path.join("/tmp/", "%s.xml" % pid),
+                os.path.join("/tmp/", "%s.xml" % self.super_obj.pid),
                 encoding="utf-8",
                 doctype=config.DOC_TYPE_XML,
                 xml_declaration=True,
@@ -129,7 +135,7 @@ class HTML2SPSPipeline(object):
             )
             return data, xml
 
-    class DeprecatedHTMLTagsPipe(plumber.Pipe):
+    class DeprecatedHTMLTagsPipe(CustomPipe):
         TAGS = ["font", "small", "big", "dir", "span", "s", "lixo", "center"]
 
         def transform(self, data):
@@ -325,12 +331,11 @@ class HTML2SPSPipeline(object):
             _process(xml, "div", self.parser_node)
             return data
 
-    class ANamePipe(plumber.Pipe):
+    class ANamePipe(CustomPipe):
         def parser_node(self, node):
             attrib = node.attrib
 
-            _id_name = attrib.get("name", attrib.get("id")).lower()
-
+            _id_name = attrib.get("name", attrib.get("id", "")).lower()
             if _id_name.startswith("top") or _id_name.startswith("back"):
                 return
 
@@ -342,10 +347,13 @@ class HTML2SPSPipeline(object):
                 node.tag = "fn"
 
             node.attrib.clear()
-            ref_id = gera_id(_id_name)
+            ref_id = "%s-%s" % (
+                gera_id(_id_name) or _id_name,
+                self.super_obj.index_body,
+            )
             if ref_id:
                 node.set("ref-id", ref_id)
-            node.set("id", _id_name)
+            node.set("id", ref_id)
 
         def transform(self, data):
             raw, xml = data
@@ -927,7 +935,6 @@ class HTML2SPSPipeline(object):
             return raw, obj
 
     def deploy(self, raw):
-        raw = (self.pid, raw)
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
 

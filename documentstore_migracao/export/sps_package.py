@@ -380,7 +380,7 @@ class SPS_Package:
             logger.info("Processando body numero: %s" % index)
 
             txt_body = body.findtext("./p") or ""
-            convert = HTML2SPSPipeline(pid=self.publisher_id)
+            convert = HTML2SPSPipeline(pid=self.publisher_id, index_body=index)
             _, obj_html_body = convert.deploy(txt_body)
 
             # sobrecreve o html escapado anterior pelo novo xml tratado
