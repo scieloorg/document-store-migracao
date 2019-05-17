@@ -97,7 +97,7 @@ class HTML2SPSPipeline(object):
             self.EmPipe(),
             self.UPipe(),
             self.BPipe(),
-            self.APipe(),
+            # self.APipe(),
             self.StrongPipe(),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
@@ -617,7 +617,61 @@ class HTML2SPSPipeline(object):
             return data
 
     class TdCleanPipe(plumber.Pipe):
-        UNEXPECTED_INNER_TAGS = ["p", "span", "small", "dir"]
+        EXPECTED_INNER_TAGS = [
+            "email",
+            "ext-link",
+            "uri",
+            "hr",
+            "inline-supplementary-material",
+            "related-article",
+            "related-object",
+            "disp-formula",
+            "disp-formula-group",
+            "break",
+            "citation-alternatives",
+            "element-citation",
+            "mixed-citation",
+            "nlm-citation",
+            "bold",
+            "fixed-case",
+            "italic",
+            "monospace",
+            "overline",
+            "roman",
+            "sans-serif",
+            "sc",
+            "strike",
+            "underline",
+            "ruby",
+            "chem-struct",
+            "inline-formula",
+            "def-list",
+            "list",
+            "tex-math",
+            "mml:math",
+            "p",
+            "abbrev",
+            "index-term",
+            "index-term-range-end",
+            "milestone-end",
+            "milestone-start",
+            "named-content",
+            "styled-content",
+            "alternatives",
+            "array",
+            "code",
+            "graphic",
+            "media",
+            "preformat",
+            "inline-graphic",
+            "inline-media",
+            "private-char",
+            "fn",
+            "target",
+            "xref",
+            "sub",
+            "sup",
+        ]
         EXPECTED_ATTRIBUTES = [
             "abbr",
             "align",
@@ -636,8 +690,10 @@ class HTML2SPSPipeline(object):
         ]
 
         def parser_node(self, node):
-            for tag in self.UNEXPECTED_INNER_TAGS:
-                etree.strip_tags(node, tag)
+            for c_node in node.getchildren():
+                if c_node.tag not in self.EXPECTED_INNER_TAGS:
+                    _remove_element_or_comment(c_node)
+
             _attrib = {}
             for key in node.attrib.keys():
                 if key in self.EXPECTED_ATTRIBUTES:
@@ -652,6 +708,8 @@ class HTML2SPSPipeline(object):
             return data
 
     class TableCleanPipe(TdCleanPipe):
+        EXPECTED_INNER_TAGS = ["col", "colgroup", "thead", "tfoot", "tbody", "tr"]
+
         EXPECTED_ATTRIBUTES = [
             "border",
             "cellpadding",
