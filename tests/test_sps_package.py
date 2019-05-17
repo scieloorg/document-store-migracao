@@ -73,13 +73,13 @@ def sps_package(article_meta_xml, doi="10.1590/S0074-02761962000200006"):
 
 class Test_MatchPubDate1(unittest.TestCase):
     def setUp(self):
-        xml = """<article><article-meta>
+        self.xml = """<article><article-meta>
             <pub-date date-type="pub">
                 <year>2010</year><month>5</month><day>13</day></pub-date>
             <pub-date date-type="collection">
                 <year>2012</year><month>2</month><day>3</day></pub-date>
         </article-meta></article>"""
-        xmltree = etree.fromstring(xml)
+        xmltree = etree.fromstring(self.xml)
         self.sps_package = SPS_Package(xmltree, None)
 
     def test__match_pubdate(self):
@@ -95,6 +95,61 @@ class Test_MatchPubDate1(unittest.TestCase):
         self.assertEqual(
             self.sps_package.documents_bundle_pubdate, ("2012", "02", "03")
         )
+
+    def test_transform_pubdate(self):
+        self.sps_package.transform_pubdate()
+        xpaths_results = (
+            ('pub-date[@date-type="pub"]', ("2010", "5", "13"),),
+            ('pub-date[@date-type="collection"]', ("2012", "2", "3"),),
+        )
+        for xpath, result in xpaths_results:
+            with self.subTest(xpath=xpath, result=result):
+                pubdate = self.sps_package.article_meta.find(xpath)
+                self.assertIsNotNone(pubdate)
+                self.assertEqual(pubdate.get("publication-format"), "electronic")
+                self.assertEqual(pubdate.findtext("year"), result[0])
+                self.assertEqual(pubdate.findtext("month"), result[1])
+                self.assertEqual(pubdate.findtext("day"), result[2])
+
+
+class Test_MatchPubDate1_Season(unittest.TestCase):
+    def setUp(self):
+        xml = """<article><article-meta>
+            <pub-date date-type="pub">
+                <year>2010</year><month>5</month><day>13</day></pub-date>
+            <pub-date date-type="collection">
+                <year>2012</year><season>Jan-Feb</season></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test__match_pubdate(self):
+        result = self.sps_package._match_pubdate(
+            ('pub-date[@date-type="pub"]', 'pub-date[@date-type="collection"]')
+        )
+        self.assertEqual(result.findtext("year"), "2010")
+
+    def test_document_pubdate(self):
+        self.assertEqual(self.sps_package.document_pubdate, ("2010", "05", "13"))
+
+    def test_documents_bundle_pubdate(self):
+        self.assertEqual(
+            self.sps_package.documents_bundle_pubdate, ("2012", "", "")
+        )
+
+    def test_transform_pubdate(self):
+        self.sps_package.transform_pubdate()
+        pubdate = self.sps_package.article_meta.find('pub-date[@date-type="pub"]')
+        self.assertIsNotNone(pubdate)
+        self.assertEqual(pubdate.get("publication-format"), "electronic")
+        self.assertEqual(pubdate.findtext("year"), "2010")
+        self.assertEqual(pubdate.findtext("month"), "5")
+        self.assertEqual(pubdate.findtext("day"), "13")
+        pubdate = self.sps_package.article_meta.find('pub-date[@date-type="collection"]')
+        self.assertIsNotNone(pubdate)
+        self.assertEqual(pubdate.get("publication-format"), "electronic")
+        self.assertEqual(pubdate.findtext("year"), "2012")
+        self.assertEqual(pubdate.findtext("season"), "Jan-Feb")
 
 
 class Test_MatchPubDate2(unittest.TestCase):
@@ -120,6 +175,22 @@ class Test_MatchPubDate2(unittest.TestCase):
     def test_documents_bundle_pubdate(self):
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
 
+    def test_transform_pubdate(self):
+        self.sps_package.transform_pubdate()
+        xpaths_results = (
+            ('pub-date[@date-type="pub"]', ("2010", "4", "1"),),
+            ('pub-date[@date-type="collection"]', ("2012", None, None),),
+        )
+        for xpath, result in xpaths_results:
+            with self.subTest(xpath=xpath, result=result):
+                pubdate = self.sps_package.article_meta.find(xpath)
+                self.assertIsNotNone(pubdate)
+                self.assertIsNone(pubdate.attrib.get("pub-type"))
+                self.assertEqual(pubdate.get("publication-format"), "electronic")
+                self.assertEqual(pubdate.findtext("year"), result[0])
+                self.assertEqual(pubdate.findtext("month"), result[1])
+                self.assertEqual(pubdate.findtext("day"), result[2])
+
 
 class Test_MatchPubDate3(unittest.TestCase):
     def setUp(self):
@@ -143,6 +214,22 @@ class Test_MatchPubDate3(unittest.TestCase):
 
     def test_documents_bundle_pubdate(self):
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2011", "", ""))
+
+    def test_transform_pubdate(self):
+        self.sps_package.transform_pubdate()
+        xpaths_results = (
+            ('pub-date[@date-type="pub"]', ("2010", "9", "10"),),
+            ('pub-date[@date-type="collection"]', ("2011", None, None),),
+        )
+        for xpath, result in xpaths_results:
+            with self.subTest(xpath=xpath, result=result):
+                pubdate = self.sps_package.article_meta.find(xpath)
+                self.assertIsNotNone(pubdate)
+                self.assertIsNone(pubdate.attrib.get("pub-type"))
+                self.assertEqual(pubdate.get("publication-format"), "electronic")
+                self.assertEqual(pubdate.findtext("year"), result[0])
+                self.assertEqual(pubdate.findtext("month"), result[1])
+                self.assertEqual(pubdate.findtext("day"), result[2])
 
 
 class Test_MatchPubDate4(unittest.TestCase):
@@ -169,6 +256,21 @@ class Test_MatchPubDate4(unittest.TestCase):
 
     def test_documents_bundle_pubdate(self):
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "02", ""))
+
+    def test_transform_pubdate(self):
+        self.sps_package.transform_pubdate()
+        xpaths_results = (
+            ('pub-date[@date-type="pub"]', ("2010", "9", "1"),),
+            ('pub-date[@date-type="collection"]', ("2012", "2", None),),
+        )
+        for xpath, result in xpaths_results:
+            with self.subTest(xpath=xpath, result=result):
+                pubdate = self.sps_package.article_meta.find(xpath)
+                self.assertIsNotNone(pubdate)
+                self.assertEqual(pubdate.get("publication-format"), "electronic")
+                self.assertEqual(pubdate.findtext("year"), result[0])
+                self.assertEqual(pubdate.findtext("month"), result[1])
+                self.assertEqual(pubdate.findtext("day"), result[2])
 
 
 class Test_sps_package(unittest.TestCase):

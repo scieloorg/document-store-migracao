@@ -1,7 +1,7 @@
 import os
 import unittest
 from lxml import etree
-from unittest.mock import patch, ANY, call, Mock
+from unittest.mock import patch, ANY, call, Mock, MagicMock
 
 from xylose.scielodocument import Journal, Article
 from documentstore_migracao.processing import (
@@ -38,6 +38,58 @@ class TestProcessingExtracted(unittest.TestCase):
 
 
 class TestProcessingConversion(unittest.TestCase):
+    @patch("documentstore_migracao.processing.conversion.SPS_Package")
+    @patch("documentstore_migracao.processing.conversion.xml")
+    def test_convert_article_xml_sets_sps_and_dtd_versions(
+        self, mk_utils_xml, MockSPS_Package
+    ):
+        mk_obj_xml = MagicMock()
+        mk_obj_xmltree = MagicMock()
+        mk_obj_xmltree.getroot.return_value = mk_obj_xml
+        mk_utils_xml.loadToXML.return_value = mk_obj_xmltree
+        conversion.convert_article_xml(
+            os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
+        )
+        mk_obj_xml.set.assert_has_calls(
+            [call("specific-use", "sps-1.9"), call("dtd-version", "1.1")]
+        )
+
+    @patch("documentstore_migracao.processing.conversion.SPS_Package")
+    @patch("documentstore_migracao.processing.conversion.xml")
+    def test_convert_article_xml_creates_sps_package_instance(
+        self, mk_utils_xml, MockSPS_Package
+    ):
+        mk_obj_xmltree = MagicMock()
+        mk_utils_xml.loadToXML.return_value = mk_obj_xmltree
+        conversion.convert_article_xml(
+            os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
+        )
+        MockSPS_Package.assert_called_once_with(mk_obj_xmltree)
+
+    @patch("documentstore_migracao.processing.conversion.SPS_Package")
+    @patch("documentstore_migracao.processing.conversion.xml")
+    def test_convert_article_xml_calls_sps_package_transform_body(
+        self, mk_utils_xml, MockSPS_Package
+    ):
+        mk_xml_sps = MagicMock()
+        MockSPS_Package.return_value = mk_xml_sps
+        conversion.convert_article_xml(
+            os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
+        )
+        mk_xml_sps.transform_body.assert_called_once()
+
+    @patch("documentstore_migracao.processing.conversion.SPS_Package")
+    @patch("documentstore_migracao.processing.conversion.xml")
+    def test_convert_article_xml_calls_sps_package_transform_pubdate(
+        self, mk_utils_xml, MockSPS_Package
+    ):
+        mk_xml_sps = MagicMock()
+        MockSPS_Package.return_value = mk_xml_sps
+        conversion.convert_article_xml(
+            os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
+        )
+        mk_xml_sps.transform_pubdate.assert_called_once()
+
     def test_convert_article_xml(self):
 
         conversion.convert_article_xml(
