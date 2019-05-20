@@ -105,7 +105,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_hr(self):
         text = '<root><hr style="x" /></root>'
         raw, transformed = self._transform(text, self.pipeline.HrPipe())
-        self.assertEqual(etree.tostring(transformed), b'<root><p content-type="hr"/></root>')
+        self.assertEqual(
+            etree.tostring(transformed), b'<root><p content-type="hr"/></root>'
+        )
 
     def test_pipe_br(self):
         text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'
@@ -156,7 +158,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         expected = [
             b"<list-item><p>Texto dentro de <b>li</b> 1</p></list-item>",
             b"<list-item><p>Texto dentro de <b>li</b> 2</p></list-item>",
-            b"<list-item><p>Texto dentro de 3</p></list-item>",
+            b"<list-item><p><b>Texto dentro de 3</b></p></list-item>",
             b"<list-item><p>Texto dentro de 4</p></list-item>",
         ]
         raw, transformed = self._transform(text, self.pipeline.LiPipe())
@@ -459,8 +461,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             <graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/>
         </a><a name="tx01" id="tx01"/></root>"""
 
-        raw, transformed = self._transform(
-            text, self.pipeline.ANamePipe(self.pipeline))
+        raw, transformed = self._transform(text, self.pipeline.ANamePipe(self.pipeline))
 
         node = transformed.find(".//xref")
         self.assertIsNone(node)
@@ -470,6 +471,21 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
         node = transformed.find(".//graphic")
         self.assertIsNotNone(node)
+        self.assertIsNotNone(node)
+
+    def test_pipe_aname__removes_navigation_to_note_go_and_back_case2(self):
+        text = """<root><a name="not01" id="not01"></a>TEXTO NOTA</root>"""
+
+        raw, transformed = self._transform(text, self.pipeline.ANamePipe(self.pipeline))
+
+        node_fn = transformed.find(".//fn[p]")
+        self.assertIsNotNone(node_fn)
+        self.assertIsNone(node_fn.tail)
+
+        node_p = transformed.find(".//fn/p")
+        self.assertIsNotNone(node_p)
+
+        self.assertEqual(node_p.text, "TEXTO NOTA")
 
     def test_pipe_a_anchor__remove_xref_with_graphic(self):
         text = """<root><a href="#top">

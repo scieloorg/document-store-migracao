@@ -53,14 +53,28 @@ def _process(xml, tag, func):
 
 
 def wrap_node(node, elem_wrap="p"):
-    tag = node.tag
 
-    p = etree.Element(elem_wrap)
     _node = deepcopy(node)
+    p = etree.Element(elem_wrap)
     p.append(_node)
-    etree.strip_tags(p, tag)
+    node.getparent().replace(node, p)
 
     return p
+
+
+def wrap_content_node(node, elem_wrap="p"):
+
+    _node = deepcopy(node)
+    p = etree.Element(elem_wrap)
+    if _node.text:
+        p.text = _node.text
+    if _node.tail:
+        p.tail = _node.tail
+
+    _node.text = None
+    _node.tail = None
+    _node.append(p)
+    node.getparent().replace(node, _node)
 
 
 def gera_id(_string):
@@ -332,7 +346,6 @@ class HTML2SPSPipeline(object):
             return data
 
     class ANamePipe(CustomPipe):
-
         def find_a_href(self, root, _id_name):
             return root.find('.//a[@href="#{}"]'.format(_id_name))
 
@@ -346,10 +359,12 @@ class HTML2SPSPipeline(object):
             root = node.getroottree()
             if _id_name.startswith("tx"):
                 _remove_element_or_comment(node)
-                _remove_element_or_comment(self.find_a_href(root, _id_name))
+                _a_ref_node = self.find_a_href(root, _id_name)
+                if _a_ref_node is not None:
+                    _remove_element_or_comment(_a_ref_node)
             elif _id_name.startswith("t"):
                 a_href = self.find_a_href(root, _id_name)
-                if a_href and a_href.text and 'tab' in a_href.text.lower():
+                if a_href is not None and a_href.text and "tab" in a_href.text.lower():
                     node.tag = "table-wrap"
                 else:
                     node.tag = "fn"
@@ -357,6 +372,13 @@ class HTML2SPSPipeline(object):
                 node.tag = "fig"
             elif _id_name.startswith("n"):
                 node.tag = "fn"
+
+            if node.tag == "fn":
+                p = etree.Element("p")
+                p.text = (node.text or "") + (node.tail or "")
+                node.tail = None
+                node.text = None
+                node.append(p)
 
             node.attrib.clear()
             ref_id = "%s-%s" % (
@@ -443,7 +465,7 @@ class HTML2SPSPipeline(object):
                 if c_node.tag not in self.ALLOWED_CHILDREN
             ]
             for c_node in c_not_allowed:
-                node.replace(c_node, wrap_node(c_node, "p"))
+                wrap_node(c_node, "p")
 
             if node.text:
                 p = etree.Element("p")
@@ -574,14 +596,13 @@ class HTML2SPSPipeline(object):
                     node.remove(list_c_node[0])
                 _remove_element_or_comment(node)
 
-
             node.attrib.clear()
             root = node.getroottree()
 
             xref_name = href.replace("#", "")
             if xref_name == "ref":
 
-                rid = node.text
+                rid = node.text or ""
                 if not rid.isdigit():
                     rid = (
                         rid.replace("(", "")
@@ -590,6 +611,7 @@ class HTML2SPSPipeline(object):
                         .split(",")
                     )
                     rid = rid[0]
+
                 node.set("rid", "B%s" % rid)
                 node.set("ref-type", "bibr")
 
@@ -959,9 +981,9 @@ class DataSanitizationPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.GraphicInExtLink(),
-            self.HRTagPape(),
             self.TableinBody(),
             self.TableinP(),
+            self.AddPinFN(),
         )
 
     def deploy(self, raw):
@@ -975,17 +997,11 @@ class DataSanitizationPipeline(object):
             return data, new_obj
 
     class GraphicInExtLink(plumber.Pipe):
-        NEW_TAG = "p"
-
         def parser_node(self, node):
 
             graphic = node.find("graphic")
-            _graphic = deepcopy(graphic)
-            _graphic.tag = "inline-graphic"
-            p = etree.Element(self.NEW_TAG)
-            p.append(_graphic)
-            node.append(p)
-            node.remove(graphic)
+            graphic.tag = "inline-graphic"
+            wrap_node(graphic, "p")
 
         def transform(self, data):
             raw, xml = data
@@ -993,29 +1009,11 @@ class DataSanitizationPipeline(object):
             _process(xml, "ext-link[graphic]", self.parser_node)
             return data
 
-    class HRTagPape(plumber.Pipe):
-        def parser_node(self, node):
-
-            element = etree.fromstring(
-                "<table-wrap><table><tr><td><hr/></td></tr></table></table-wrap>"
-            )
-            node.getparent().replace(node, element)
-
-        def transform(self, data):
-            raw, xml = data
-
-            _process(xml, "hr", self.parser_node)
-            return data
-
     class TableinBody(plumber.Pipe):
         def parser_node(self, node):
 
             table = node.find("table")
-            _table = deepcopy(table)
-            w_wrap = etree.Element("table-wrap")
-            w_wrap.append(_table)
-            node.append(w_wrap)
-            node.remove(table)
+            wrap_node(table, "table-wrap")
 
         def transform(self, data):
             raw, xml = data
@@ -1028,4 +1026,15 @@ class DataSanitizationPipeline(object):
             raw, xml = data
 
             _process(xml, "p[table]", self.parser_node)
+            return data
+
+    class AddPinFN(plumber.Pipe):
+        def parser_node(self, node):
+            if node.text:
+                wrap_content_node(node, "p")
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "fn", self.parser_node)
             return data
