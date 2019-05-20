@@ -105,7 +105,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_hr(self):
         text = '<root><hr style="x" /></root>'
         raw, transformed = self._transform(text, self.pipeline.HrPipe())
-        self.assertEqual(etree.tostring(transformed), b"<root><hr/></root>")
+        self.assertEqual(etree.tostring(transformed), b'<root><p content-type="hr"/></root>')
 
     def test_pipe_br(self):
         text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'

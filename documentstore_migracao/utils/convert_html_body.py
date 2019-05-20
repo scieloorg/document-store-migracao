@@ -787,6 +787,8 @@ class HTML2SPSPipeline(object):
     class HrPipe(plumber.Pipe):
         def parser_node(self, node):
             node.attrib.clear()
+            node.tag = "p"
+            node.set("content-type", "hr")
 
         def transform(self, data):
             raw, xml = data
