@@ -454,6 +454,23 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     #     self.assertEqual(new_xml.find("xref").attrib["rid"], "home")
 
+    def test_pipe_aname__removes_navigation_to_note_go_and_back(self):
+        text = """<root><a href="#tx01">
+            <graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/>
+        </a><a name="tx01" id="tx01"/></root>"""
+
+        raw, transformed = self._transform(
+            text, self.pipeline.ANamePipe(self.pipeline))
+
+        node = transformed.find(".//xref")
+        self.assertIsNone(node)
+
+        node = transformed.find(".//a")
+        self.assertIsNone(node)
+
+        node = transformed.find(".//graphic")
+        self.assertIsNotNone(node)
+
     def test_pipe_a_anchor__remove_xref_with_graphic(self):
         text = """<root><a href="#top">
             <graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/>

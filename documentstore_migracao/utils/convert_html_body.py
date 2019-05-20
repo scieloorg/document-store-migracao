@@ -105,7 +105,7 @@ class HTML2SPSPipeline(object):
             self.EmPipe(),
             self.UPipe(),
             self.BPipe(),
-            # self.APipe(),
+            self.APipe(),
             self.StrongPipe(),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
@@ -332,6 +332,10 @@ class HTML2SPSPipeline(object):
             return data
 
     class ANamePipe(CustomPipe):
+
+        def find_a_href(self, root, _id_name):
+            return root.find('.//a[@href="#{}"]'.format(_id_name))
+
         def parser_node(self, node):
             attrib = node.attrib
 
@@ -339,8 +343,16 @@ class HTML2SPSPipeline(object):
             if _id_name.startswith("top") or _id_name.startswith("back"):
                 return
 
-            if _id_name.startswith("t"):
-                node.tag = "table-wrap"
+            root = node.getroottree()
+            if _id_name.startswith("tx"):
+                _remove_element_or_comment(node)
+                _remove_element_or_comment(self.find_a_href(root, _id_name))
+            elif _id_name.startswith("t"):
+                a_href = self.find_a_href(root, _id_name)
+                if a_href and a_href.text and 'tab' in a_href.text.lower():
+                    node.tag = "table-wrap"
+                else:
+                    node.tag = "fn"
             elif _id_name[0] in "fcq":
                 node.tag = "fig"
             elif _id_name.startswith("n"):
@@ -561,6 +573,7 @@ class HTML2SPSPipeline(object):
                 ):
                     node.remove(list_c_node[0])
                 _remove_element_or_comment(node)
+
 
             node.attrib.clear()
             root = node.getroottree()
