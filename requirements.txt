@@ -63,3 +63,4 @@ WebTest==2.0.33
 xylose==1.35.1
 zope.deprecation==4.4.0
 zope.interface==4.6.0
+fs==2.4.5
