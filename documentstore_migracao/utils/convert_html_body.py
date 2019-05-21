@@ -125,6 +125,7 @@ class HTML2SPSPipeline(object):
             self.TableCleanPipe(),
             self.BlockquotePipe(),
             self.HrPipe(),
+            self.TagsHPipe(),
             self.GraphicChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveRefIdPipe(),
@@ -816,6 +817,21 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "hr", self.parser_node)
+            return data
+
+    class TagsHPipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.attrib.clear()
+            org_tag = node.tag
+            node.tag = "p"
+            node.set("content-type", org_tag)
+
+        def transform(self, data):
+            raw, xml = data
+
+            tags = ["h1", "h2", "h3", "h4", "h5", "h6"]
+            for tag in tags:
+                _process(xml, tag, self.parser_node)
             return data
 
     class GraphicChildrenPipe(plumber.Pipe):

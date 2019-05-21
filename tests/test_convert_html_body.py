@@ -109,6 +109,22 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             etree.tostring(transformed), b'<root><p content-type="hr"/></root>'
         )
 
+    def test_pipe__tagsh__h1(self):
+        text = "<root><h1>Titulo 1</h1></root>"
+        raw, transformed = self._transform(text, self.pipeline.TagsHPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p content-type="h1">Titulo 1</p></root>',
+        )
+
+    def test_pipe__tagsh__h3(self):
+        text = "<root><h3>Titulo 3</h3></root>"
+        raw, transformed = self._transform(text, self.pipeline.TagsHPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p content-type="h3">Titulo 3</p></root>',
+        )
+
     def test_pipe_br(self):
         text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
