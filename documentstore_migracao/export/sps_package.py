@@ -411,6 +411,26 @@ class SPS_Package:
 
         return self.xmltree
 
+    def transform_pubdate(self):
+        xpaths_to_change =(
+            ("pub-date[@pub-type='epub']", ("date-type", "pub",)),
+            ("pub-date[@pub-type='collection']", ("date-type", "collection",)),
+            ("pub-date[@pub-type='epub-ppub']", ("date-type", "collection",)),
+        )
+        for xpath, pubdate_element_attr in xpaths_to_change:
+            pubdate = self.article_meta.find(xpath)
+            if pubdate is not None:
+                pubdate.set(*pubdate_element_attr)
+                pubdate.attrib.pop("pub-type")
+        xpaths_to_update =(
+            ("pub-date[@date-type='pub']"),
+            ("pub-date[@date-type='collection']"),
+        )
+        for xpath in xpaths_to_update:
+            pubdate = self.article_meta.find(xpath)
+            if pubdate is not None:
+                pubdate.set("publication-format", "electronic")
+
 
 def sort_documents(documents):
     """

@@ -20,7 +20,7 @@ minio==4.0.16
 more-itertools==6.0.0
 nose==1.3.7
 numpy==1.16.3
-packtools==2.4
+packtools==2.5
 paginate==0.5.6
 PasteDeploy==2.0.1
 pathlib2==2.3.3
@@ -46,7 +46,7 @@ regex==2019.4.14
 repoze.lru==0.7
 requests==2.21.0
 scielo-clea==0.3.0
--e git://github.com/scieloorg/document-store.git@9422e6c8b8c25d5980c0c441b77293a42aaf77ec#egg=scielo_documentstore
+-e git://github.com/scieloorg/document-store.git@96585ce99fb09503605416dceb5207a4ac70c43e#egg=scielo_documentstore
 simplejson==3.16.0
 six==1.12.0
 soupsieve==1.9

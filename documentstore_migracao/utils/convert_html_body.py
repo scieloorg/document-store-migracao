@@ -579,6 +579,9 @@ class HTML2SPSPipeline(object):
                 graphic.append(node)
                 parent.append(graphic)
 
+            if not href:
+                return
+
             if node.text and node.text.strip():
                 if href == node.text:
                     pass

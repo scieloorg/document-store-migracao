@@ -446,6 +446,14 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
         node = transformed.find(".//email")
+        self.assertEqual(node.text, "a@scielo.org")
+        self.assertEqual(node.tag, "email")
+
+    def test_pipe_a__create_email_mailto_empty(self):
+        text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+
+        node = transformed.find(".//email")
         self.assertEqual(node.text, "sfpyip@hku.hk")
         self.assertEqual(
             node.tail,
