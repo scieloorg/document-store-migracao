@@ -462,15 +462,30 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             "). Correspondence should be addressed to Dr Yip at this address.",
         )
 
-    # def test_pipe_a_anchor(self):
-    #     node = self.etreeXML.find(".//font[@size='1']")
-    #     data = self.etreeXML, node
-    #     self.pipeline.APipe().transform(data)
+    def test_pipe_a_anchor(self):
+        node = self.etreeXML.find(".//font[@size='1']")
+        data = self.etreeXML, node
+        self.pipeline.APipe().transform(data)
 
-    #     text = etree.tostring(node).strip()
-    #     new_xml = etree.fromstring(text)
+        text = etree.tostring(node).strip()
+        new_xml = etree.fromstring(text)
 
-    #     self.assertEqual(new_xml.find("xref").attrib["rid"], "home")
+        self.assertIsNotNone(new_xml.find("xref"))
+
+    def test_pipe_aname__removes_navigation_to_note_go_and_back(self):
+        text = """<root><a href="#tx01">
+            <graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/>
+        </a><a name="tx01" id="tx01"/></root>"""
+
+        raw, transformed = self._transform(text, self.pipeline.ANamePipe(self.pipeline))
+
+        node = transformed.find(".//xref")
+        self.assertIsNone(node)
+
+        node = transformed.find(".//a")
+        self.assertIsNone(node)
+
+        self.assertIsNotNone(new_xml.find("xref"))
 
     def test_pipe_aname__removes_navigation_to_note_go_and_back(self):
         text = """<root><a href="#tx01">

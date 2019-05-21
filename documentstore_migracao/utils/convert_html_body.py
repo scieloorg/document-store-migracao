@@ -386,8 +386,7 @@ class HTML2SPSPipeline(object):
                 gera_id(_id_name) or _id_name,
                 self.super_obj.index_body,
             )
-            if ref_id:
-                node.set("ref-id", ref_id)
+            node.set("ref-id", ref_id)
             node.set("id", ref_id)
 
         def transform(self, data):

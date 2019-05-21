@@ -3,6 +3,9 @@ import logging
 from articlemeta.client import RestfulClient
 from documentstore_migracao import config
 from documentstore_migracao.utils import request
+from documentstore.domain import retry_gracefully
+from requests.exceptions import HTTPError, ConnectTimeout, ConnectionError
+from urllib3.exceptions import MaxRetryError
 
 logger = logging.getLogger(__name__)
 client = RestfulClient()
@@ -23,6 +26,7 @@ def get_articles(issn_journal):
     )
 
 
+@retry_gracefully(exc_list=[HTTPError, ConnectTimeout, MaxRetryError, ConnectionError])
 def ext_article(code, **ext_params):
     params = ext_params
     params.update({"collection": config.get("SCIELO_COLLECTION"), "code": code})

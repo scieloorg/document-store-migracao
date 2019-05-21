@@ -25,7 +25,7 @@ class TestDataSanitizationPipeline(unittest.TestCase):
             b"""<root><ext-link href="#top"><p><inline-graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></p></ext-link></root>""",
         )
 
-    def test__table_in_blody(self):
+    def test__table_in_body(self):
         text = """<root><body><table><tr><td>TEXTO</td></tr></table></body></root>"""
 
         raw, transformed = self._transform(text, self.pipeline.TableinBody())
