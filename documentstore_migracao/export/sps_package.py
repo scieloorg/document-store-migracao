@@ -94,6 +94,10 @@ class SPS_Package:
         return self.xmltree.findtext('.//journal-id[@journal-id-type="publisher-id"]')
 
     @property
+    def publisher_id(self):
+        return self.xmltree.findtext('.//article-id[@pub-id-type="publisher-id"]')
+
+    @property
     def journal_meta(self):
         data = []
         issns = [
@@ -376,11 +380,11 @@ class SPS_Package:
             logger.info("Processando body numero: %s" % index)
 
             txt_body = body.findtext("./p") or ""
-            convert = HTML2SPSPipeline()
+            convert = HTML2SPSPipeline(pid=self.publisher_id, index_body=index)
             _, obj_html_body = convert.deploy(txt_body)
 
             # sobrecreve o html escapado anterior pelo novo xml tratado
-            body.getparent().replace(body, obj_html_body)
+            body.getparent().replace(body, obj_html_body.find("body"))
 
         return self.xmltree
 
