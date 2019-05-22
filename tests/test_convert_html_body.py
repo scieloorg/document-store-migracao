@@ -767,6 +767,31 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 found = tree.findall(".//%s" % expected_tag)
                 self.assertIsNotNone(found)
 
+    def test_pipe_remove_ref_id(self):
+        text = """<root><a ref-id="B1" id="B1">Texto</a></root>"""
+        raw, transformed = self._transform(text, self.pipeline.RemoveRefIdPipe())
+        self.assertEqual(
+            etree.tostring(transformed), b"""<root><a id="B1">Texto</a></root>"""
+        )
+
+    def test_pipe_table(self):
+        text = """<root><table id="B1"><tr><td>Texto</td></tr></table></root>"""
+        raw, transformed = self._transform(
+            text, self.pipeline.TablePipe(super_obj=self.pipeline)
+        )
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><table-wrap id="b1-1"><table><tr><td>Texto</td></tr></table></table-wrap></root>""",
+        )
+
+    def test_pipe_remove_id_duplicated(self):
+        text = """<root><a id="B1">Texto</a><p>Texto</p><a id="B1">Texto</a></root>"""
+        raw, transformed = self._transform(text, self.pipeline.RemoveDuplicatedIdPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><a id="B1">Texto</a><p>Texto</p></root>""",
+        )
+
 
 class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
     def setUp(self):

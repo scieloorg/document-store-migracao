@@ -79,7 +79,7 @@ def wrap_content_node(node, elem_wrap="p"):
 
 def gera_id(_string, index_body):
 
-    number_item = re.search(r"([a-zA-Z]{1,3})(\d)([a-zA-Z])", _string)
+    number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z]?)", _string)
     if number_item:
         name_item, number_item, sufix_item = number_item.groups("")
         rid = name_item + str(int(number_item)) + sufix_item
@@ -416,11 +416,10 @@ class HTML2SPSPipeline(object):
             if _id:
                 p = etree.Element("table-wrap")
                 _node = deepcopy(node)
+                _node.attrib.clear()
                 p.append(_node)
 
-                id_name = gera_id(
-                    new_element[0] + id_name[-1], self.super_obj.index_body
-                )
+                id_name = gera_id(_id, self.super_obj.index_body)
                 p.set("id", id_name)
 
                 parent = node.getparent()
@@ -635,8 +634,9 @@ class HTML2SPSPipeline(object):
                 node.set("ref-type", "bibr")
 
             else:
+
                 rid = gera_id(xref_name, self.super_obj.index_body)
-                ref_node = root.find("//*[@ref_id='%s']" % rid)
+                ref_node = root.find("//*[@ref-id='%s']" % rid)
 
                 node.set("rid", rid)
                 if ref_node is not None:
