@@ -109,6 +109,22 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             etree.tostring(transformed), b'<root><p content-type="hr"/></root>'
         )
 
+    def test_pipe__tagsh__h1(self):
+        text = "<root><h1>Titulo 1</h1></root>"
+        raw, transformed = self._transform(text, self.pipeline.TagsHPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p content-type="h1">Titulo 1</p></root>',
+        )
+
+    def test_pipe__tagsh__h3(self):
+        text = "<root><h3>Titulo 3</h3></root>"
+        raw, transformed = self._transform(text, self.pipeline.TagsHPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><p content-type="h3">Titulo 3</p></root>',
+        )
+
     def test_pipe_br(self):
         text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
@@ -453,6 +469,21 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
         text = etree.tostring(node).strip()
         new_xml = etree.fromstring(text)
+
+        self.assertIsNotNone(new_xml.find("xref"))
+
+    def test_pipe_aname__removes_navigation_to_note_go_and_back(self):
+        text = """<root><a href="#tx01">
+            <graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/>
+        </a><a name="tx01" id="tx01"/></root>"""
+
+        raw, transformed = self._transform(text, self.pipeline.ANamePipe(self.pipeline))
+
+        node = transformed.find(".//xref")
+        self.assertIsNone(node)
+
+        node = transformed.find(".//a")
+        self.assertIsNone(node)
 
         self.assertIsNotNone(new_xml.find("xref"))
 
