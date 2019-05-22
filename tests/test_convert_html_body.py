@@ -789,7 +789,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.RemoveDuplicatedIdPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b"""<root><a id="B1">Texto</a><p>Texto</p></root>""",
+            b"""<root><a id="B1">Texto</a><p>Texto</p><a id="B1-duplicate-0">Texto</a></root>""",
         )
 
 

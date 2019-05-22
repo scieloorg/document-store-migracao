@@ -79,10 +79,10 @@ def wrap_content_node(node, elem_wrap="p"):
 
 def gera_id(_string, index_body):
 
-    number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z]?)", _string)
+    number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z0-9]+)?", _string)
     if number_item:
         name_item, number_item, sufix_item = number_item.groups("")
-        rid = name_item + str(int(number_item)) + sufix_item
+        rid = name_item + number_item + sufix_item
     else:
         rid = _string
 
@@ -170,11 +170,13 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             nodes = xml.findall(".//*[@id]")
+            root = xml.getroottree()
             for node in nodes:
                 attr = node.attrib
-                d_ids = xml.findall(".//*[@id='%s']" % attr["id"])
+                d_ids = root.findall(".//*[@id='%s']" % attr["id"])
                 if len(d_ids) > 1:
-                    _remove_element_or_comment(d_ids[1])
+                    for index, d_n in enumerate(d_ids[1:]):
+                        d_n.set("id", "%s-duplicate-%s" % (attr["id"], index))
 
             return data
 
