@@ -1085,3 +1085,50 @@ class Test__remove_element_or_comment(unittest.TestCase):
             etree.tostring(xml),
             b'<root><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></root>',
         )
+
+
+class TestTempIdToAsset(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+
+    def _add_temp_id(self, text):
+        xml = etree.fromstring(text)
+        return self.pipeline.AddTempIdToAssetElementPipe(
+            ).transform((text, xml))
+
+    def _remove_temp_id(self, data):
+        return self.pipeline.RemoveTempIdToAssetElementPipe(
+            ).transform(data)
+
+    def test_add_and_remove_temp_id_to_img(self):
+        text = """<root>
+            <img align="x" src="/x/a04qdr04.gif"/>
+            <img align="x" src="a04qdr04.gif"/>
+            <img align="x" src="a04c08.gif"/>
+            <img align="x" src="a04t04.gif"/>
+            <img align="x" src="a04f08.gif"/>
+            <img align="x" src="a04f03a.gif"/>
+        </root>"""
+        expected = [
+            None, 'qdr4', 'c8', 't4', 'f8', 'f3a'
+        ]
+        text, xml = self._add_temp_id(text)
+        for i, img in enumerate(xml.findall('.//img')):
+            with self.subTest(img.attrib.get('src')):
+                self.assertEqual(
+                    img.attrib.get('temp_id'),
+                    expected[i]
+                    )
+
+        text, xml = self._remove_temp_id((text, xml))
+        for i, img in enumerate(xml.findall('.//img')):
+            with self.subTest(img.attrib.get('src')):
+                self.assertEqual(
+                    img.attrib.get('temp_id'),
+                    None
+                    )
+                self.assertEqual(
+                    img.attrib.get('temp_reftype'),
+                    None
+                    )
+
