@@ -77,13 +77,17 @@ def wrap_content_node(node, elem_wrap="p"):
     node.getparent().replace(node, _node)
 
 
-def gera_id(_string):
+def gera_id(_string, index_body):
 
     number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z0-9]+)?", _string)
     if number_item:
         name_item, number_item, sufix_item = number_item.groups("")
-        rid = name_item + str(int(number_item)) + sufix_item
-        return rid
+        rid = name_item + number_item + sufix_item
+    else:
+        rid = _string
+
+    ref_id = "%s-%s" % (rid, index_body)
+    return ref_id.lower()
 
 
 class CustomPipe(plumber.Pipe):
@@ -101,6 +105,7 @@ class HTML2SPSPipeline(object):
             self.SetupPipe(super_obj=self),
             self.SaveRawBodyPipe(super_obj=self),
             self.DeprecatedHTMLTagsPipe(),
+            self.RemoveDuplicatedIdPipe(),
             self.RemoveExcedingStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
@@ -111,8 +116,8 @@ class HTML2SPSPipeline(object):
             self.DivPipe(),
             self.AddTempIdToAssetElementPipe(),
             self.ANamePipe(super_obj=self),
-            self.TablePipe(),
-            self.ImgPipe(),
+            self.TablePipe(super_obj=self),
+            self.ImgPipe(super_obj=self),
             self.LiPipe(),
             self.OlPipe(),
             self.UlPipe(),
@@ -120,7 +125,7 @@ class HTML2SPSPipeline(object):
             self.EmPipe(),
             self.UPipe(),
             self.BPipe(),
-            self.APipe(),
+            self.APipe(super_obj=self),
             self.StrongPipe(),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
@@ -161,6 +166,21 @@ class HTML2SPSPipeline(object):
                 nodes = xml.findall(".//" + tag)
                 if len(nodes) > 0:
                     etree.strip_tags(xml, tag)
+            return data
+
+    class RemoveDuplicatedIdPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+
+            nodes = xml.findall(".//*[@id]")
+            root = xml.getroottree()
+            for node in nodes:
+                attr = node.attrib
+                d_ids = root.findall(".//*[@id='%s']" % attr["id"])
+                if len(d_ids) > 1:
+                    for index, d_n in enumerate(d_ids[1:]):
+                        d_n.set("id", "%s-duplicate-%s" % (attr["id"], index))
+
             return data
 
     class RemoveExcedingStyleTagsPipe(plumber.Pipe):
@@ -429,10 +449,7 @@ class HTML2SPSPipeline(object):
                 node.append(p)
 
             node.attrib.clear()
-            ref_id = "%s-%s" % (
-                gera_id(_id_name) or _id_name,
-                self.super_obj.index_body,
-            )
+            ref_id = gera_id(_id_name, self.super_obj.index_body)
             node.set("ref-id", ref_id)
             node.set("id", ref_id)
 
@@ -442,18 +459,18 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[@name]", self.parser_node)
             return data
 
-    class TablePipe(plumber.Pipe):
+    class TablePipe(CustomPipe):
         def parser_node_table(self, node):
 
             _id = node.attrib.get("id")
             if _id:
                 p = etree.Element("table-wrap")
                 _node = deepcopy(node)
+                _node.attrib.clear()
                 p.append(_node)
 
-                id_name = gera_id(new_element[0] + id_name[-1])
-                if id_name:
-                    p.set("id", id_name)
+                id_name = gera_id(_id, self.super_obj.index_body)
+                p.set("id", id_name)
 
                 parent = node.getparent()
                 parent.append(p)
@@ -465,7 +482,7 @@ class HTML2SPSPipeline(object):
             _process(xml, "table[@id]", self.parser_node_table)
             return data
 
-    class ImgPipe(plumber.Pipe):
+    class ImgPipe(CustomPipe):
         def parser_node(self, node):
             node.tag = "graphic"
             _attrib = deepcopy(node.attrib)
@@ -482,16 +499,15 @@ class HTML2SPSPipeline(object):
                 id_name = filename.split("f")
                 new_element = "fig"
 
-            n_id = gera_id(new_element[0] + id_name[-1])
-            if n_id:
-                root = node.getroottree()
-                ref_node = root.find("//%s[@ref-id='%s']" % (new_element, n_id))
-                if ref_node is not None:
-                    _node = deepcopy(node)
-                    ref_node.append(_node)
+            n_id = gera_id(new_element[0] + id_name[-1], self.super_obj.index_body)
+            root = node.getroottree()
+            ref_node = root.find("//%s[@ref-id='%s']" % (new_element, n_id))
+            if ref_node is not None:
+                _node = deepcopy(node)
+                ref_node.append(_node)
 
-                    parent = node.getparent()
-                    parent.remove(node)
+                parent = node.getparent()
+                parent.remove(node)
 
         def transform(self, data):
             raw, xml = data
@@ -577,7 +593,7 @@ class HTML2SPSPipeline(object):
             _process(xml, "b", self.parser_node)
             return data
 
-    class APipe(plumber.Pipe):
+    class APipe(CustomPipe):
         def _parser_node_external_link(self, node, extlinktype="uri"):
             node.tag = "ext-link"
 
@@ -597,6 +613,11 @@ class HTML2SPSPipeline(object):
 
             node.attrib.clear()
             node.tag = "email"
+
+            if not href:
+                # devido ao caso do href estar mal formado devemos so trocar a tag
+                # e retorna para continuar o Pipe
+                return
 
             img = node.find("img")
             if img is not None:
@@ -663,22 +684,24 @@ class HTML2SPSPipeline(object):
                 node.set("ref-type", "bibr")
 
             else:
-                rid = gera_id(xref_name)
-                if rid:
-                    ref_node = root.find("//*[@ref_id='%s']" % rid)
-                    node.set("rid", xref_name)
-                    if ref_node is not None:
-                        ref_type = ref_node.tag
-                        if ref_type == "table-wrap":
-                            ref_type = "table"
-                        node.set("ref-type", ref_type)
+
+                rid = gera_id(xref_name, self.super_obj.index_body)
+                ref_node = root.find("//*[@ref-id='%s']" % rid)
+
+                node.set("rid", rid)
+                if ref_node is not None:
+                    ref_type = ref_node.tag
+                    if ref_type == "table-wrap":
+                        ref_type = "table"
+                    node.set("ref-type", ref_type)
 
         def parser_node(self, node):
             try:
                 href = node.attrib["href"].strip()
             except KeyError:
-                logger.debug("\tTag 'a' sem href removendo node do xml")
-                _remove_element_or_comment(node)
+                if "id" not in node.attrib.keys():
+                    logger.debug("\tTag 'a' sem href removendo node do xml")
+                    _remove_element_or_comment(node)
             else:
                 if href.startswith("#"):
                     self._parser_node_anchor(node)
