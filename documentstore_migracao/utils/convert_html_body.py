@@ -114,7 +114,7 @@ class HTML2SPSPipeline(object):
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
-            self.AddTempIdToAssetElementPipe(),
+            self.AddTempIdToAssetElementPipe(super_obj=self),
             self.ANamePipe(super_obj=self),
             self.TablePipe(super_obj=self),
             self.ImgPipe(super_obj=self),
@@ -368,7 +368,7 @@ class HTML2SPSPipeline(object):
             _process(xml, "div", self.parser_node)
             return data
 
-    class AddTempIdToAssetElementPipe(plumber.Pipe):
+    class AddTempIdToAssetElementPipe(CustomPipe):
         """Ajuda a identificar table-wrap/@id, fig/@id"""
         ID_AND_REF = (
             ('t', 'table-wrap'),
@@ -385,8 +385,8 @@ class HTML2SPSPipeline(object):
                 for prefix, elem_name in self.ID_AND_REF:
                     if prefix in filename:
                         parts = filename.split(prefix)
-                        print(prefix + parts[-1])
-                        temp_id = gera_id(prefix + parts[-1])
+                        temp_id = gera_id(
+                            prefix + parts[-1], self.super_obj.index_body)
                         node.set('temp_id', temp_id)
                         ref_type = elem_name
                         if ref_type == 'table-wrap':
@@ -421,7 +421,9 @@ class HTML2SPSPipeline(object):
             attrib = node.attrib
 
             _id_name = attrib.get("name", attrib.get("id", "")).lower()
-            if _id_name.startswith("top") or _id_name.startswith("back"):
+            if _id_name.startswith("top") or _id_name.startswith("back") or\
+                    _id_name.startswith("home"):
+                _remove_element_or_comment(node)
                 return
 
             root = node.getroottree()
@@ -430,6 +432,8 @@ class HTML2SPSPipeline(object):
                 _a_ref_node = self.find_a_href(root, _id_name)
                 if _a_ref_node is not None:
                     _remove_element_or_comment(_a_ref_node)
+                return
+
             elif _id_name.startswith("t"):
                 a_href = self.find_a_href(root, _id_name)
                 if a_href is not None and a_href.text and "tab" in a_href.text.lower():

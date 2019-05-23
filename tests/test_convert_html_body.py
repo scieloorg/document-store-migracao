@@ -1151,7 +1151,7 @@ class TestTempIdToAsset(unittest.TestCase):
     def _add_temp_id(self, text):
         xml = etree.fromstring(text)
         return self.pipeline.AddTempIdToAssetElementPipe(
-            ).transform((text, xml))
+            self.pipeline).transform((text, xml))
 
     def _remove_temp_id(self, data):
         return self.pipeline.RemoveTempIdToAssetElementPipe(
@@ -1167,7 +1167,7 @@ class TestTempIdToAsset(unittest.TestCase):
             <img align="x" src="a04f03a.gif"/>
         </root>"""
         expected = [
-            None, 'qdr4', 'c8', 't4', 'f8', 'f3a'
+            None, 'qdr04-1', 'c08-1', 't04-1', 'f08-1', 'f03a-1',
         ]
         text, xml = self._add_temp_id(text)
         for i, img in enumerate(xml.findall('.//img')):
@@ -1188,4 +1188,3 @@ class TestTempIdToAsset(unittest.TestCase):
                     img.attrib.get('temp_reftype'),
                     None
                     )
-
