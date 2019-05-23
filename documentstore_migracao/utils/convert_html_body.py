@@ -79,7 +79,7 @@ def wrap_content_node(node, elem_wrap="p"):
 
 def gera_id(_string):
 
-    number_item = re.search(r"([a-zA-Z]{1,3})(\d)([a-zA-Z])", _string)
+    number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z0-9]+)?", _string)
     if number_item:
         name_item, number_item, sufix_item = number_item.groups("")
         rid = name_item + str(int(number_item)) + sufix_item
@@ -109,6 +109,7 @@ class HTML2SPSPipeline(object):
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
+            self.AddTempIdToAssetElementPipe(),
             self.ANamePipe(super_obj=self),
             self.TablePipe(),
             self.ImgPipe(),
@@ -129,6 +130,7 @@ class HTML2SPSPipeline(object):
             self.GraphicChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveRefIdPipe(),
+            self.RemoveTempIdToAssetElementPipe(),
             self.SanitizationPipe(),
         )
 
@@ -344,6 +346,51 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "div", self.parser_node)
+            return data
+
+    class AddTempIdToAssetElementPipe(plumber.Pipe):
+        """Ajuda a identificar table-wrap/@id, fig/@id"""
+        ID_AND_REF = (
+            ('t', 'table-wrap'),
+            ('f', 'fig'),
+            ('q', 'fig'),
+            ('c', 'fig'),
+        )
+
+        def parser_node(self, node):
+            src_or_href = node.attrib.get('href') or node.attrib.get('src')
+            if src_or_href.startswith('/img') or '/' not in src_or_href:
+
+                filename, __ = files.extract_filename_ext_by_path(src_or_href)
+                for prefix, elem_name in self.ID_AND_REF:
+                    if prefix in filename:
+                        parts = filename.split(prefix)
+                        print(prefix + parts[-1])
+                        temp_id = gera_id(prefix + parts[-1])
+                        node.set('temp_id', temp_id)
+                        ref_type = elem_name
+                        if ref_type == 'table-wrap':
+                            ref_type = 'table'
+                        node.set('temp_reftype', ref_type)
+                        break
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            _process(xml, "img", self.parser_node)
+            return data
+
+    class RemoveTempIdToAssetElementPipe(plumber.Pipe):
+        """Ajuda a identificar table-wrap/@id, fig/@id"""
+        def parser_node(self, node):
+            if node.attrib.get('temp_id'):
+                node.attrib.pop("temp_id", None)
+                node.attrib.pop("temp_reftype", None)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            _process(xml, "img", self.parser_node)
             return data
 
     class ANamePipe(CustomPipe):
