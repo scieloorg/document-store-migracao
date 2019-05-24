@@ -779,6 +779,30 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             etree.tostring(transformed), b"""<root><x>TEXT 1</x><y>TEXT 2 </y></root>"""
         )
 
+    def test_pipe_disp_quote(self):
+        text = """<root><disp-quote>TEXT</disp-quote></root>"""
+        raw, transformed = self._transform(text, self.pipeline.DispQuotePipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><disp-quote><p>TEXT</p></disp-quote></root>""",
+        )
+
+    def test_pipe_disp_quote_case2(self):
+        text = """<root><disp-quote><p>TEXT 1</p>TEXT 2</disp-quote></root>"""
+        raw, transformed = self._transform(text, self.pipeline.DispQuotePipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><disp-quote><p>TEXT 1</p><p>TEXT 2</p></disp-quote></root>""",
+        )
+
+    def test_pipe_disp_quote_case3(self):
+        text = """<root><disp-quote><italic>TEXT 1</italic></disp-quote></root>"""
+        raw, transformed = self._transform(text, self.pipeline.DispQuotePipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><disp-quote><p><italic>TEXT 1</italic></p></disp-quote></root>""",
+        )
+
     def test__process(self):
         def f(node):
             node.tag = node.tag.upper()

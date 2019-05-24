@@ -132,6 +132,7 @@ class HTML2SPSPipeline(object):
             self.BlockquotePipe(),
             self.HrPipe(),
             self.TagsHPipe(),
+            self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveRefIdPipe(),
@@ -905,6 +906,65 @@ class HTML2SPSPipeline(object):
             tags = ["h1", "h2", "h3", "h4", "h5", "h6"]
             for tag in tags:
                 _process(xml, tag, self.parser_node)
+            return data
+
+    class DispQuotePipe(plumber.Pipe):
+        TAGS = [
+            "label",
+            "title",
+            "address",
+            "alternatives",
+            "array",
+            "boxed-text",
+            "chem-struct-wrap",
+            "code",
+            "fig",
+            "fig-group",
+            "graphic",
+            "media",
+            "preformat",
+            "supplementary-material",
+            "table-wrap",
+            "table-wrap-group",
+            "disp-formula",
+            "disp-formula-group",
+            "def-list",
+            "list",
+            "tex-math",
+            "mml:math",
+            "p",
+            "related-article",
+            "related-object",
+            "disp-quote",
+            "speech",
+            "statement",
+            "verse-group",
+            "attrib",
+            "permissions",
+        ]
+
+        def parser_node(self, node):
+            node.attrib.clear()
+            if node.text and node.text.strip():
+                new_p = etree.Element("p")
+                new_p.text = node.text
+                node.text = None
+                node.insert(0, new_p)
+
+            for c_node in node.getchildren():
+                if c_node.tail and c_node.tail.strip():
+                    new_p = etree.Element("p")
+                    new_p.text = c_node.tail
+                    c_node.tail = None
+                    c_node.addnext(new_p)
+
+                if c_node.tag not in self.TAGS:
+                    wrap_node(c_node, "p")
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "disp-quote", self.parser_node)
             return data
 
     class GraphicChildrenPipe(plumber.Pipe):
