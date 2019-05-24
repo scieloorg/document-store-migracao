@@ -114,10 +114,6 @@ class HTML2SPSPipeline(object):
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
-            self.AddTempIdToAssetElementPipe(super_obj=self),
-            self.ANamePipe(super_obj=self),
-            self.TablePipe(super_obj=self),
-            self.ImgPipe(super_obj=self),
             self.LiPipe(),
             self.OlPipe(),
             self.UlPipe(),
@@ -125,8 +121,11 @@ class HTML2SPSPipeline(object):
             self.EmPipe(),
             self.UPipe(),
             self.BPipe(),
-            self.APipe(super_obj=self),
             self.StrongPipe(),
+            self.CreateElementsFromANamePipe(super_obj=self),
+            self.AssetsPipe(super_obj=self),
+            self.APipe(super_obj=self),
+            self.ImgPipe(super_obj=self),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
             self.BlockquotePipe(),
@@ -369,124 +368,6 @@ class HTML2SPSPipeline(object):
             _process(xml, "div", self.parser_node)
             return data
 
-    class AddTempIdToAssetElementPipe(CustomPipe):
-        """Ajuda a identificar table-wrap/@id, fig/@id"""
-        ID_AND_REF = (
-            ('t', 'table-wrap'),
-            ('f', 'fig'),
-            ('q', 'fig'),
-            ('c', 'fig'),
-        )
-
-        def parser_node(self, node):
-            src_or_href = node.attrib.get('href') or node.attrib.get('src')
-            if src_or_href.startswith('/img') or '/' not in src_or_href:
-
-                filename, __ = files.extract_filename_ext_by_path(src_or_href)
-                for prefix, elem_name in self.ID_AND_REF:
-                    if prefix in filename:
-                        parts = filename.split(prefix)
-                        temp_id = gera_id(
-                            prefix + parts[-1], self.super_obj.index_body)
-                        node.set('temp_id', temp_id)
-                        ref_type = elem_name
-                        if ref_type == 'table-wrap':
-                            ref_type = 'table'
-                        node.set('temp_reftype', ref_type)
-                        break
-
-        def transform(self, data):
-            raw, xml = data
-            _process(xml, "a[@href]", self.parser_node)
-            _process(xml, "img", self.parser_node)
-            return data
-
-    class RemoveTempIdToAssetElementPipe(plumber.Pipe):
-        """Ajuda a identificar table-wrap/@id, fig/@id"""
-        def parser_node(self, node):
-            if node.attrib.get('temp_id'):
-                node.attrib.pop("temp_id", None)
-                node.attrib.pop("temp_reftype", None)
-
-        def transform(self, data):
-            raw, xml = data
-            _process(xml, "a[@href]", self.parser_node)
-            _process(xml, "img", self.parser_node)
-            return data
-
-    class ANamePipe(CustomPipe):
-        def find_a_href(self, root, _id_name):
-            return root.find('.//a[@href="#{}"]'.format(_id_name))
-
-        def parser_node(self, node):
-            attrib = node.attrib
-
-            _id_name = attrib.get("name", attrib.get("id", "")).lower()
-            if _id_name.startswith("top") or _id_name.startswith("back") or\
-                    _id_name.startswith("home"):
-                _remove_element_or_comment(node)
-                return
-
-            root = node.getroottree()
-            if _id_name.startswith("tx"):
-                _remove_element_or_comment(node)
-                _a_ref_node = self.find_a_href(root, _id_name)
-                if _a_ref_node is not None:
-                    _remove_element_or_comment(_a_ref_node)
-                return
-
-            elif _id_name.startswith("t"):
-                a_href = self.find_a_href(root, _id_name)
-                if a_href is not None and a_href.text and "tab" in a_href.text.lower():
-                    node.tag = "table-wrap"
-                else:
-                    node.tag = "fn"
-            elif _id_name[0] in "fcq":
-                node.tag = "fig"
-            elif _id_name.startswith("n"):
-                node.tag = "fn"
-
-            if node.tag == "fn":
-                p = etree.Element("p")
-                p.text = (node.text or "") + (node.tail or "")
-                node.tail = None
-                node.text = None
-                node.append(p)
-
-            node.attrib.clear()
-            ref_id = gera_id(_id_name, self.super_obj.index_body)
-            node.set("ref-id", ref_id)
-            node.set("id", ref_id)
-
-        def transform(self, data):
-            raw, xml = data
-
-            _process(xml, "a[@name]", self.parser_node)
-            return data
-
-    class TablePipe(CustomPipe):
-        def parser_node_table(self, node):
-
-            _id = node.attrib.get("id")
-            if _id:
-                p = etree.Element("table-wrap")
-                _node = deepcopy(node)
-                _node.attrib.clear()
-                p.append(_node)
-
-                id_name = gera_id(_id, self.super_obj.index_body)
-                p.set("id", id_name)
-
-                parent = node.getparent()
-                parent.append(p)
-                parent.remove(node)
-
-        def transform(self, data):
-            raw, xml = data
-
-            _process(xml, "table[@id]", self.parser_node_table)
-            return data
-
     class ImgPipe(CustomPipe):
         def parser_node(self, node):
             node.tag = "graphic"
@@ -495,24 +376,6 @@ class HTML2SPSPipeline(object):
 
             node.attrib.clear()
             node.set("{http://www.w3.org/1999/xlink}href", src)
-
-            filename, __ = files.extract_filename_ext_by_path(src)
-            if "t" in filename:
-                new_element = "table-wrap"
-                id_name = filename.split("t")
-            else:
-                id_name = filename.split("f")
-                new_element = "fig"
-
-            n_id = gera_id(new_element[0] + id_name[-1], self.super_obj.index_body)
-            root = node.getroottree()
-            ref_node = root.find("//%s[@ref-id='%s']" % (new_element, n_id))
-            if ref_node is not None:
-                _node = deepcopy(node)
-                ref_node.append(_node)
-
-                parent = node.getparent()
-                parent.remove(node)
 
         def transform(self, data):
             raw, xml = data
@@ -596,6 +459,62 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "b", self.parser_node)
+            return data
+
+    class CreateElementsFromANamePipe(CustomPipe):
+        def find_a_href(self, root, _id_name):
+            return root.find('.//a[@href="#{}"]'.format(_id_name))
+
+        def parser_node(self, node):
+            attrib = node.attrib
+
+            _id_name = attrib.get("name", attrib.get("id", "")).lower()
+            if _id_name.startswith("top") or _id_name.startswith("back") or\
+                    _id_name.startswith("home"):
+                _remove_element_or_comment(node)
+                return
+
+            root = node.getroottree()
+
+            a_href = self.find_a_href(root, _id_name)
+            a_href_texts = ''
+            if a_href is not None:
+                a_href_texts = ' '.join(a_href.itertext())
+
+            if _id_name.startswith("tx"):
+                _remove_element_or_comment(node)
+                if _a_ref_node is not None:
+                    _remove_element_or_comment(_a_ref_node)
+                return
+
+            if _id_name.startswith("t"):
+                if a_href_texts and "tab" in a_href_texts.lower():
+                    node.tag = "table-wrap"
+                else:
+                    node.tag = "fn"
+            elif _id_name[0] in "fcq":
+                node.tag = "fig"
+            elif _id_name.startswith("n"):
+                node.tag = "fn"
+
+            if node.tag == "fn":
+                p = etree.Element("p")
+                p.text = (node.text or "") + (node.tail or "")
+                node.tail = None
+                node.text = None
+                node.append(p)
+
+            node.attrib.clear()
+            ref_id = gera_id(_id_name, self.super_obj.index_body)
+            node.set("ref-id", ref_id)
+            node.set("id", ref_id)
+            if a_href_texts:
+                node.set("temp_label", a_href_texts)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "a[@name]", self.parser_node)
             return data
 
     class APipe(CustomPipe):
@@ -1120,6 +1039,27 @@ class HTML2SPSPipeline(object):
             _, obj = convert.deploy(xml)
             return raw, obj
 
+    class AssetsPipe(CustomPipe):
+        def transform(self, data):
+            raw, xml = data
+
+            convert = AssetsPipeline(self.pid, self.index_body)
+            _, obj = convert.deploy(xml)
+            return raw, obj
+
+    class RemoveTempIdToAssetElementPipe(plumber.Pipe):
+        """Ajuda a identificar table-wrap/@id, fig/@id"""
+        def parser_node(self, node):
+            if node.attrib.get('temp_id'):
+                node.attrib.pop("temp_id", None)
+                node.attrib.pop("temp_reftype", None)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            _process(xml, "img", self.parser_node)
+            return data
+
     def deploy(self, raw):
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
@@ -1186,4 +1126,215 @@ class DataSanitizationPipeline(object):
             raw, xml = data
 
             _process(xml, "fn", self.parser_node)
+            return data
+
+
+class AssetsPipeline(object):
+    def __init__(self, pid, index_body=1):
+        self.pid = pid
+        self.index_body = index_body
+        self._ppl = plumber.Pipeline(
+            self.SetupPipe(),
+            self.AddTempIdToTablePipe(super_obj=self),
+            self.AddTempIdToAssetFileElementsPipe(super_obj=self),
+            self.CreateAssetElementFromAhrefPipe(super_obj=self),
+            self.CreateAssetElementFromImgOrTablePipe(super_obj=self),
+        )
+
+    def deploy(self, raw):
+        transformed_data = self._ppl.run(raw, rewrap=True)
+        return next(transformed_data)
+
+    class SetupPipe(plumber.Pipe):
+        def transform(self, data):
+
+            new_obj = deepcopy(data)
+            return data, new_obj
+
+    class AddTempIdToAssetFileElementsPipe(CustomPipe):
+        """Ajuda a identificar table-wrap/@id, fig/@id"""
+        ID_AND_REF = (
+            ('t', 'table-wrap'),
+            ('f', 'fig'),
+            ('q', 'fig'),
+            ('c', 'fig'),
+        )
+
+        def parser_node(self, node):
+            src_or_href = node.attrib.get('href') or node.attrib.get('src')
+            if src_or_href.startswith('/img') or '/' not in src_or_href:
+
+                filename, __ = files.extract_filename_ext_by_path(src_or_href)
+                for prefix, elem_name in self.ID_AND_REF:
+                    if prefix in filename:
+                        parts = filename.split(prefix)
+                        temp_id = gera_id(
+                            prefix + parts[-1], self.super_obj.index_body)
+                        node.set('temp_id', temp_id)
+                        ref_type = elem_name
+                        if ref_type == 'table-wrap':
+                            ref_type = 'table'
+                        node.set('temp_reftype', ref_type)
+                        break
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            _process(xml, "img", self.parser_node)
+            return data
+
+    class AddTempIdToTablePipe(CustomPipe):
+        def parser_node_table(self, node):
+
+            _id = node.attrib.get("id")
+            if _id:
+                temp_id = gera_id(_id, self.super_obj.index_body)
+                node.set("id", temp_id)
+                node.set("temp_id", temp_id)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "table[@id]", self.parser_node_table)
+            return data
+
+    class CreateAssetElementFromAhrefPipe(CustomPipe):
+
+        def _create_graphic(self, node_a):
+            new_graphic = deepcopy(node_a)
+            new_graphic.tag = "graphic"
+            new_graphic.attrib.clear()
+            new_graphic.set(
+                "{http://www.w3.org/1999/xlink}href",
+                node_a.attrib.get('href'))
+            return new_graphic
+
+        def _create_asset_element(self, temp_id, temp_reftype):
+            tag = temp_reftype
+            if tag == "table":
+                tag = "table-wrap"
+            new_elem = etree.Element(tag)
+            new_elem.set("id", temp_id)
+            return new_elem
+
+        def parser_node(self, node):
+            temp_id = node.attrib.pop("temp_id")
+            temp_reftype = node.attrib.pop("temp_reftype")
+
+            new_graphic = self._create_graphic(node)
+            new_elem = self._create_asset_element(temp_id, temp_reftype)
+            new_elem.append(new_graphic)
+
+            label = etree.Element('label')
+            label.text = ' '.join(node.itertext())
+            new_elem.insert(0, label)
+
+            new_p = etree.Element("p")
+            new_p.append(new_elem)
+
+            parent = node.getparent()
+            parent.addnext(new_p)
+
+            node.tag = "xref"
+            node.set("rid", temp_id)
+            node.set("ref-type", temp_reftype)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@temp_id]", self.parser_node)
+            return data
+
+    class CreateAssetElementFromImgOrTablePipe(CustomPipe):
+
+        def _find_label_and_caption_in_node(self, node, previous_or_next):
+            text = ' '.join(previous_or_next.itertext())
+            text = ' '.join([item for item in text.split() if item])
+            node_text = ' '.join(node.itertext())
+            node_text = ' '.join([item for item in node_text.split() if item])
+            if node_text == "":
+
+            if node_text in text:
+                _node = previous_or_next
+                print('\n'*10)
+                print(node_text)
+                print(text)
+                parts = text.split()
+                if len(parts) > 0:
+                    if parts[1].isalnum():
+                        text = parts[:2], parts[2:]
+                    else:
+                        text = parts[:1], parts[1:]
+                    if len(text) == 2:
+                        label = etree.Element('label')
+                        caption = etree.Element('caption')
+                        title = etree.Element('title')
+                        label.text = ' '.join(text[0])
+                        title.text = ' '.join(text[1])
+                        caption.append(title)
+                        return _node, label, caption
+
+        def _find_label_and_caption_around_node(self, node):
+            parent = node.getparent()
+            _node = None
+            label = None
+            caption = None
+            node_label_caption = None
+
+            previous = parent.getprevious()
+            _next = parent.getnext()
+
+            if previous:
+                node_label_caption = self._find_label_and_caption_in_node(
+                    node, previous)
+
+            if node_label_caption is None and _next is not None:
+                node_label_caption = self._find_label_and_caption_in_node(
+                    node, _next)
+
+            if node_label_caption is not None:
+                _node, label, caption = node_label_caption
+                _node.getparent().remove(_node)
+                return label, caption
+
+        def _get_asset_node(self, img, temp_id, temp_reftype):
+            root = img.getroottree()
+
+            asset = root.find('.//*[@temp_id="{}"]'.format(temp_id))
+            if asset is None:
+                new_asset = self._create_asset_element(temp_id, temp_reftype)
+                new_p = etree.Element('p')
+                new_p.append(new_asset)
+                img.getparent().addprevious(new_p)
+                asset = new_asset
+            return asset
+
+        def _create_asset_element(self, temp_id, temp_reftype):
+            tag = temp_reftype
+            if tag == "table":
+                tag = "table-wrap"
+            new_elem = etree.Element(tag)
+            new_elem.set("id", temp_id)
+            return new_elem
+
+        def parser_node(self, img):
+            temp_id = img.attrib.pop("temp_id")
+            temp_reftype = img.attrib.pop("temp_reftype")
+
+            img_parent = img.getparent()
+
+            label_and_caption = self._find_label_and_caption_around_node(img)
+
+            asset = self._get_asset_node(img, temp_id, temp_reftype)
+
+            if label_and_caption:
+                asset.insert(0, label_and_caption[0])
+                asset.insert(0, label_and_caption[1])
+
+            asset.append(deepcopy(img))
+            img_parent.remove(img)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "img[@temp_id]", self.parser_node)
+            _process(xml, "table[@temp_id]", self.parser_node)
             return data
