@@ -4,6 +4,9 @@ import argparse
 
 from .base import base_parser, minio_parser, mongodb_parser
 
+from documentstore_migracao import config
+from documentstore_migracao.utils.build_ps_package import BuildPSPackage
+
 from documentstore_migracao.processing import (
     extracted,
     conversion,
@@ -86,6 +89,46 @@ def migrate_articlemeta_parser(sargs):
         help="Gera o pacote `SPS` apenas para o documento XML imformado",
     )
 
+    # GERACAO PACOTE SPS FROM SITE STRUTURE
+    pack_sps_parser_from_site = subparsers.add_parser(
+        "pack_from_site", help="Gera pacotes `SPS` a partir da estrutura do Site SciELO"
+    )
+    pack_sps_parser_from_site.add_argument(
+        "-a", "--acrons", dest="acrons", nargs="+", help="journal acronyms."
+    )
+
+    pack_sps_parser_from_site.add_argument(
+        "-Xfolder",
+        "--Xfolder",
+        dest="xml_folder",
+        required=True,
+        help="XML folder path.",
+    )
+
+    pack_sps_parser_from_site.add_argument(
+        "-Ifolder",
+        "--Ifolder",
+        dest="img_folder",
+        required=True,
+        help="IMG folder path.",
+    )
+
+    pack_sps_parser_from_site.add_argument(
+        "-Pfolder",
+        "--pfolder",
+        dest="pdf_folder",
+        required=True,
+        help="PDF folder path.",
+    )
+
+    pack_sps_parser_from_site.add_argument(
+        "-Ofolder",
+        "--ofolder",
+        dest="output_folder",
+        default=config.get('SITE_SPS_PKG_PATH'),
+        help="Output path.",
+    )
+
     # IMPORTACAO
     import_parser = subparsers.add_parser(
         "import",
@@ -123,6 +166,17 @@ def migrate_articlemeta_parser(sargs):
             packing.pack_article_xml(args.packFile)
         else:
             packing.pack_article_ALLxml()
+
+    elif args.command == "pack_from_site":
+        build_ps = BuildPSPackage(
+            args.acrons,
+            args.xml_folder,
+            args.img_folder,
+            args.pdf_folder,
+            args.output_folder,
+        )
+
+        build_ps.run()
 
     elif args.command == "import":
         mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)

@@ -18,10 +18,12 @@ XML_ERRORS_PATH:
     arquivos .err cujo conteúdo é XML + mensagens de erro
 SPS_PKG_PATH:
     pacotes de XML validados e nomeados de acordo com SPS
+SITE_SPS_PKG_PATH:
+    Caminhio para os pacotes SPS XML gerados a partir da estrutura do Site antigo do SciELO
 INCOMPLETE_SPS_PKG_PATH:
     pacotes de XML validados e nomeados de acordo com SPS, mas com ativos digitais faltantes
-ERRORS_PATH:	
-    arquivos de erros    
+ERRORS_PATH:
+    arquivos de erros
 """
 
 _default = dict(
@@ -34,6 +36,7 @@ _default = dict(
     VALID_XML_PATH=os.path.join(BASE_PATH, "xml/xml_valid"),
     XML_ERRORS_PATH=os.path.join(BASE_PATH, "xml/xml_errors"),
     SPS_PKG_PATH=os.path.join(BASE_PATH, "xml/sps_packages"),
+    SITE_SPS_PKG_PATH=os.path.join(BASE_PATH, "xml/site_sps_packages"),
     INCOMPLETE_SPS_PKG_PATH=os.path.join(BASE_PATH, "xml/incomplete_sps_packages"),
     LOGGER_PATH=os.path.join(BASE_PATH, ""),
     GENERATOR_PATH=os.path.join(BASE_PATH, "xml/html"),
