@@ -22,6 +22,7 @@ requires = [
     "paginate",
     "minio",
     "tqdm",
+    "fs",
 ]
 
 tests_require = [
@@ -35,8 +36,8 @@ tests_require = [
 setuptools.setup(
     name="documentstore-migracao",
     version="0.1",
-    author="Cesar Augustp",
-    author_email="cesar.bruschetta@scielo.org",
+    author="SciELO",
+    author_email="scielo-dev@googlegroups.com",
     description="",
     long_description=README + "\n\n" + CHANGES,
     long_description_content_type="text/markdown",
@@ -61,6 +62,10 @@ setuptools.setup(
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         "Operating System :: OS Independent",
     ],
+    dependency_links=[
+        "git://github.com/scieloorg/document-store.git@96585ce99fb09503605416dceb5207a4ac70c43e#egg=scielo_documentstore",
+    ],
+
     entry_points="""\
         [console_scripts]
             ds_migracao=documentstore_migracao.main:main_migrate_articlemeta

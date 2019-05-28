@@ -1309,7 +1309,8 @@ class AssetsPipeline(object):
 
             if node_label_caption is not None:
                 _node, label, caption = node_label_caption
-                _node.getparent().remove(_node)
+                if _node.getparent() is not None:
+                    _node.getparent().remove(_node)
                 return label, caption
 
         def _get_asset_node(self, img_or_table, xref_id, xref_reftype):
