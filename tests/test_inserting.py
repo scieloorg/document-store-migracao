@@ -2,7 +2,12 @@ import unittest
 from unittest.mock import patch, Mock, MagicMock, ANY, call
 from copy import deepcopy
 from .apptesting import Session
-from . import SAMPLE_ISSUES_KERNEL, SAMPLE_AOPS_KERNEL, SAMPLE_KERNEL_JOURNAL
+from . import (
+    SAMPLE_ISSUES_KERNEL,
+    SAMPLE_AOPS_KERNEL,
+    SAMPLE_KERNEL_JOURNAL,
+    SAMPLES_PATH,
+)
 
 import os
 import shutil
@@ -336,3 +341,35 @@ class TestProcessingInserting(unittest.TestCase):
         mk_get_documents_bundle.assert_any_call(
             session_db, self.aop_data
         )
+
+
+class TestDocumentManifest(unittest.TestCase):
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def setUp(self, mock_minio_storage):
+        self.package_path = os.path.join(SAMPLES_PATH, "S0036-36342008000100001")
+        self.renditions_names = ["a01v50n1.html", "a01v50n1.pdf"]
+        self.renditions_urls_mock = [
+            "prefix/some-md5-hash-1.html",
+            "prefix/some-md5-hash-2.pdf",
+        ]
+
+        mock_minio_storage.register.side_effect = self.renditions_urls_mock
+        self.renditions = inserting.get_document_renditions(
+            self.package_path, self.renditions_names, "prefix", mock_minio_storage
+        )
+
+    def test_rendition_should_contains_file_name(self):
+        self.assertEqual("a01v50n1.html", self.renditions[0]["filename"])
+        self.assertEqual("a01v50n1.pdf", self.renditions[1]["filename"])
+
+    def test_rendition_should_contains_url_link(self):
+        self.assertEqual(self.renditions_urls_mock[0], self.renditions[0]["url"])
+        self.assertEqual(self.renditions_urls_mock[1], self.renditions[1]["url"])
+
+    def test_rendition_should_contains_size_bytes(self):
+        self.assertEqual(5, self.renditions[0]["size_bytes"])
+        self.assertEqual(111671, self.renditions[1]["size_bytes"])
+
+    def test_rendition_should_contains_mimetype(self):
+        self.assertEqual("text/html", self.renditions[0]["mimetype"])
+        self.assertEqual("application/pdf", self.renditions[1]["mimetype"])

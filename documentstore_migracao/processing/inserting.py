@@ -3,7 +3,7 @@
 import os
 import logging
 from typing import List
-
+from mimetypes import MimeTypes
 from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
 
 from documentstore_migracao import config, exceptions
@@ -33,6 +33,33 @@ class ManifestDomainAdapter:
         return self._manifest
 
 
+def get_document_renditions(
+    folder: str, renditions: List[str], file_prefix: str, storage: object
+) -> List[dict]:
+    """Obtem informações sobre todos os `rendition` informados
+    e retorna um dicionário com informações relevantes sobre
+    os arquivos"""
+
+    mimetypes = MimeTypes()
+
+    _renditions = []
+
+    for rendition in renditions:
+        _mimetype = mimetypes.guess_type(rendition)[0]
+        _rendition_path = os.path.join(folder, rendition)
+
+        _renditions.append(
+            {
+                "filename": rendition,
+                "url": storage.register(_rendition_path, file_prefix),
+                "size_bytes": os.path.getsize(_rendition_path),
+                "mimetype": _mimetype,
+            }
+        )
+
+    return _renditions
+
+
 def register_document(folder: str, session_db, storage) -> None:
 
     logger.info("Processando a Pasta %s", folder)
@@ -41,7 +68,10 @@ def register_document(folder: str, session_db, storage) -> None:
     obj_xml = None
     prefix = ""
     xml_files = files.xml_files_list(folder)
-    medias_files = set(list_files) - set(xml_files)
+    _renditions = list(
+        filter(lambda file: ".pdf" in file or ".html" in file, list_files)
+    )
+    medias_files = set(list_files) - set(xml_files) - set(_renditions)
 
     if len(xml_files) > 1:
         raise exceptions.XMLError("Existe %s xmls no pacote SPS", len(xml_files))
@@ -69,8 +99,11 @@ def register_document(folder: str, session_db, storage) -> None:
         )
 
     if obj_xml:
+        renditions = get_document_renditions(folder, _renditions, prefix, storage)
         manifest_data = ManifestDomainAdapter(
-            manifest=manifest.get_document_manifest(obj_xml, url_xml, assets)
+            manifest=manifest.get_document_manifest(
+                obj_xml, url_xml, assets, renditions
+            )
         )
 
         try:
