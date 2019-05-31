@@ -35,6 +35,7 @@ def objXML2file(file_path, obj_xml, pretty=False):
             doctype=config.DOC_TYPE_XML,
             xml_declaration=True,
             method="xml",
+            encoding="utf-8",
             pretty_print=pretty,
         ),
     )
