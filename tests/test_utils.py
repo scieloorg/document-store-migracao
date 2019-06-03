@@ -1,5 +1,6 @@
 import os
 import unittest
+import tempfile
 from requests.exceptions import HTTPError
 from unittest.mock import patch, MagicMock
 from lxml import etree
@@ -116,6 +117,23 @@ class TestUtilsXML(unittest.TestCase):
         file_path = os.path.join(SAMPLES_PATH, "file.txt")
         with self.assertRaises(etree.XMLSyntaxError):
             xml.file2objXML(file_path)
+
+    def test_objXML2file(self):
+
+        xml_obj = etree.fromstring(
+            """<root>
+                <p>TEXTO é ç á à è</p>
+            </root>"""
+        )
+        test_dir = tempfile.mkdtemp()
+        file_name = os.path.join(test_dir, "test.xml")
+
+        xml.objXML2file(file_name, xml_obj)
+        with open(file_name) as f:
+            text = f.read()
+
+            self.assertIn("<?xml version='1.0' encoding='utf-8'?>", text)
+            self.assertIn("é ç á à è", text)
 
 
 class TestUtilsRequest(unittest.TestCase):
