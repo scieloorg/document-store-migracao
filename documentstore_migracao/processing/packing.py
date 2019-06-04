@@ -56,7 +56,10 @@ def pack_article_ALLxml():
 
 def download_asset(old_path, new_fname, dest_path):
     """Returns msg, if error"""
-    location = urljoin(config.get("STATIC_URL_FILE"), old_path)
+    if old_path.startswith("http"):
+        location = old_path
+    else:
+        location = urljoin(config.get("STATIC_URL_FILE"), old_path)
     try:
         request_file = request.get(location, timeout=int(config.get("TIMEOUT") or 10))
     except request.HTTPGetError as e:
