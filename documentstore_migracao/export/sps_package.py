@@ -5,6 +5,7 @@ import logging
 from copy import deepcopy
 from lxml import etree
 
+from documentstore_migracao.export import article
 from documentstore_migracao.utils import files, string
 from documentstore_migracao.utils import scielo_ids_generator
 from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
@@ -95,7 +96,12 @@ class SPS_Package:
 
     @property
     def publisher_id(self):
-        return self.xmltree.findtext('.//article-id[@pub-id-type="publisher-id"]')
+        try:
+            return self.xmltree.xpath(
+                './/article-id[not(@specific-use="scielo") and @pub-id-type="publisher-id"]/text()'
+            )[0]
+        except IndexError:
+            return None
 
     @property
     def journal_meta(self):
@@ -232,6 +238,15 @@ class SPS_Package:
                 new_fname = self.asset_name(f_name)
                 node.set(attr_name, "%s%s" % (new_fname, ext))
                 replacements.append((old_path, new_fname))
+
+        # RENDITION PDF
+        obj_article = article.get_article(self.publisher_id)
+        pdfs = obj_article.fulltexts()["pdf"]
+        for l_pdf, u_pdf in pdfs.items():
+            f_name, ext = files.extract_filename_ext_by_path(u_pdf)
+            new_fname = self.asset_name(f_name)
+            replacements.append((u_pdf, new_fname))
+
         return replacements
 
     @property
@@ -412,17 +427,17 @@ class SPS_Package:
         return self.xmltree
 
     def transform_pubdate(self):
-        xpaths_to_change =(
-            ("pub-date[@pub-type='epub']", ("date-type", "pub",)),
-            ("pub-date[@pub-type='collection']", ("date-type", "collection",)),
-            ("pub-date[@pub-type='epub-ppub']", ("date-type", "collection",)),
+        xpaths_to_change = (
+            ("pub-date[@pub-type='epub']", ("date-type", "pub")),
+            ("pub-date[@pub-type='collection']", ("date-type", "collection")),
+            ("pub-date[@pub-type='epub-ppub']", ("date-type", "collection")),
         )
         for xpath, pubdate_element_attr in xpaths_to_change:
             pubdate = self.article_meta.find(xpath)
             if pubdate is not None:
                 pubdate.set(*pubdate_element_attr)
                 pubdate.attrib.pop("pub-type")
-        xpaths_to_update =(
+        xpaths_to_update = (
             ("pub-date[@date-type='pub']"),
             ("pub-date[@date-type='collection']"),
         )
