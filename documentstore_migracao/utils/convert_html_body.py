@@ -119,6 +119,8 @@ def identify_tag_and_reftype_by_label_or_id(a_href_text, _id_name):
     if a_href_text:
         if not a_href_text[0].isalnum():
             return "symbol", "fn"
+        if a_href_text.startswith("ap") or a_href_text.startswith("an"):
+            return "app", "app"
         if a_href_text.startswith("equ") or a_href_text.startswith("ecu"):
             return "disp-formula", "disp-formula"
         if a_href_text.startswith("form"):
@@ -136,10 +138,130 @@ def identify_tag_and_reftype_by_label_or_id(a_href_text, _id_name):
     if not _id_name:
         return
 
+    _id_name = _id_name.lower()
+
+    for item in ["not", "_ftnref"]:
+        if _id_name.startswith(item) and _id_name[len(item) :].isdigit():
+            return
+
+    for item in ["back"]:
+        if _id_name.startswith(item) and _id_name[len(item) :].isdigit():
+            return "fn", "fn"
+
+    for item in ["titulo", "title", "home", "tx", "top", "back"]:
+        if _id_name.startswith(item):
+            return
+
+    for item in ["nt", "fn"]:
+        if _id_name.startswith(item):
+            return "fn", "fn"
+
+    if _id_name.startswith("ref"):
+        return "ref", "bibr"
+    if _id_name.startswith("ap") or _id_name.startswith("an"):
+        return "app", "app"
+
+    if _id_name[0] in "gfcq":
+        return "fig", "fig"
+    if _id_name.startswith("tab"):
+        return "table-wrap", "table"
+    if _id_name[0] in "t":
+        return
+
     if not _id_name[0].isalnum():
         if _id_name[0] == "*":
             return
         return "symbol", "fn"
+
+    return "fn", "fn"
+
+
+def identify_tag_and_reftype_and_id_from_filepath(src_or_href):
+    ID_AND_REF = (
+        ("figure", "fig"),
+        ("analis", "fig"),
+        ("for", "disp-formula"),
+        ("eq", "disp-formula"),
+        ("tab", "table-wrap"),
+        ("ape", "app"),
+        ("app", "app"),
+        ("an", "app"),
+        ("t", "table-wrap"),
+        ("qdr", "fig"),
+        ("cu", "fig"),
+        ("q", "fig"),
+        ("c", "fig"),
+        ("f", "fig"),
+        ("g", "fig"),
+        ("e", "disp-formula"),
+    )
+
+    filename, __ = files.extract_filename_ext_by_path(src_or_href)
+    for prefix, elem_name in ID_AND_REF:
+        if prefix in filename:
+            parts = filename.split(prefix)
+            if len(parts) < 2:
+                continue
+            if parts[0] and parts[0][-1].isalpha():
+                continue
+            if len(prefix) == 1 and parts[1] and not parts[1].isdigit():
+                continue
+            _id = filename[filename.find(prefix):]
+
+            ref_type = elem_name
+            if ref_type == "table-wrap":
+                ref_type = "table"
+            return elem_name, ref_type, _id
+
+
+def get_id(text):
+    t = []
+    for c in text:
+        if c.isalpha():
+            t.append(c)
+        else:
+            break
+    if len(t) > 0:
+        prefix = ''.join(t)
+        return text[text.find(prefix)+len(prefix):]
+
+
+def identify_tag_and_reftype_id_from_a_href_text(a_href_text):
+    a_href_text = (a_href_text or "").lower()
+    if a_href_text:
+        parts = a_href_text.split(" ")
+        _id = ""
+        if len(parts) > 1:
+            items = [item for item in parts[1:] if not item.isalpha()]
+            if len(items) > 0:
+                _id = items[0]
+            else:
+                items = sorted([(len(item), item) for item in parts[1:] if item.isalnum()])
+                if items:
+                    _id = items[0]
+        if not a_href_text[0].isalnum():
+            return "symbol", "fn", _id
+        if a_href_text.startswith("ap") or a_href_text.startswith("an"):
+            return "app", "app", _id
+        if a_href_text.startswith("equ") or a_href_text.startswith("ecu"):
+            return "disp-formula", "disp-formula", _id
+        if a_href_text.startswith("form"):
+            return "disp-formula", "disp-formula", _id
+        if a_href_text.startswith("tab"):
+            return "table-wrap", "table", _id
+        if (
+            a_href_text.startswith("quadro")
+            or a_href_text.startswith("cuadro")
+            or a_href_text.startswith("fig")
+            or a_href_text.startswith("gr")
+        ):
+            return "fig", "fig", _id
+
+
+def identify_tag_and_reftype_id_from_a_name(_id_name):
+
+    if not _id_name:
+        return
 
     _id_name = _id_name.lower()
 
@@ -151,7 +273,7 @@ def identify_tag_and_reftype_by_label_or_id(a_href_text, _id_name):
         if _id_name.startswith(item) and _id_name[len(item) :].isdigit():
             return "fn", "fn"
 
-    for item in ["titulo", "home", "tx", "top", "back"]:
+    for item in ["titulo", "title", "home", "tx", "top", "back"]:
         if _id_name.startswith(item):
             return
 
@@ -161,41 +283,22 @@ def identify_tag_and_reftype_by_label_or_id(a_href_text, _id_name):
 
     if _id_name.startswith("ref"):
         return "ref", "bibr"
-
-    if _id_name and not _id_name[0].isalpha() and not _id_name[0].isdigit():
-        return "symbol", "fn"
+    if _id_name.startswith("ap") or _id_name.startswith("an"):
+        return "app", "app"
 
     if _id_name[0] in "gfcq":
         return "fig", "fig"
-    if _id_name[0] in "t":
+    if _id_name.startswith("tab"):
         return "table-wrap", "table"
+    if _id_name[0] in "t":
+        return
+
+    if not _id_name[0].isalnum():
+        if _id_name[0] == "*":
+            return
+        return "symbol", "fn"
 
     return "fn", "fn"
-
-
-def identify_tag_and_reftype_and_id_from_img_or_a_path(src_or_href):
-    ID_AND_REF = (
-        ("figure", "fig"),
-        ("for", "disp-formula"),
-        ("eq", "disp-formula"),
-        ("img", "fig"),
-        ("t", "table-wrap"),
-        ("f", "fig"),
-        ("q", "fig"),
-        ("c", "fig"),
-        ("g", "fig"),
-        ("e", "disp-formula"),
-        ("i", "fig"),
-    )
-
-    filename, __ = files.extract_filename_ext_by_path(src_or_href)
-    for prefix, elem_name in ID_AND_REF:
-        if prefix in filename:
-            _id = filename[filename.find(prefix) :]
-            ref_type = elem_name
-            if ref_type == "table-wrap":
-                ref_type = "table"
-            return elem_name, ref_type, _id
 
 
 class CustomPipe(plumber.Pipe):
@@ -233,7 +336,7 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
-            self.CompleteAnchorPipe(super_obj=self),
+            self.FixElementAPipe(super_obj=self),
             self.InternalLinkAsAsteriskPipe(super_obj=self),
             self.AnchorAndInternalLinkPipe(super_obj=self),
             self.AssetsPipe(super_obj=self),
@@ -1105,11 +1208,23 @@ class HTML2SPSPipeline(object):
             _, obj = convert.deploy(xml)
             return raw, obj
 
-    class CompleteAnchorPipe(CustomPipe):
+    class FixElementAPipe(CustomPipe):
         def parser_node(self, node):
-            _name = node.attrib.get("id", node.attrib.get("name"))
-            node.set("name", _name)
-            node.set("id", _name)
+            _id = node.attrib.get("id")
+            _name = node.attrib.get("name")
+            if _id is None:
+                node.set("_id", _name)
+            if _name is None:
+                node.set("name", _id)
+            href = node.attrib.get("href")
+            if href:
+                if href[0] == "#":
+                    a = etree.Element("a")
+                    a.set("name", node.attrib.get("name"))
+                    a.set("id", node.attrib.get("id"))
+                    node.addprevious(a)
+                    node.attrib.pop("id")
+                    node.attrib.pop("name")
 
         def transform(self, data):
             raw, xml = data
@@ -1352,25 +1467,27 @@ class AssetsPipeline(object):
         def parser_node(self, node):
             path = node.attrib.get("href")
             if "/img/revistas" in path or "/fbpe" in path:
-                result = identify_tag_and_reftype_and_id_from_img_or_a_path(path)
-                if result is None:
+                tag_and_reftype_id1 = identify_tag_and_reftype_and_id_from_filepath(path)
+                if tag_and_reftype_id1 is None:
                     return
 
-                elem_name, ref_type, _id = result
-
+                elem_name, ref_type, _id = tag_and_reftype_id1
                 a_href_text = get_node_text(node)
-                if a_href_text:
-                    alt = identify_tag_and_reftype_by_label_or_id(a_href_text, _id)
-                    if alt:
-                        elem_name, ref_type = alt
+                alternative_tag_and_reftype_id = identify_tag_and_reftype_id_from_a_href_text(
+                    a_href_text)
+                if alternative_tag_and_reftype_id:
+                    alt_tag, alt_reftype, alt_id = alternative_tag_and_reftype_id
+                    if elem_name != alt_tag:
+                        elem_name = alt_tag
+                        ref_type = alt_reftype
+                        _id = alt_id
 
                 new_id = gera_id(_id, self.super_obj.index_body)
                 node.set("asset_new_id", new_id)
                 node.set("asset_elem_name", elem_name)
                 node.set("asset_reftype", ref_type)
-                asset_label = get_node_text(node)
-                if asset_label:
-                    node.set("asset_label", asset_label)
+                if a_href_text:
+                    node.set("asset_label", a_href_text)
 
         def transform(self, data):
             raw, xml = data
@@ -1404,7 +1521,7 @@ class AssetsPipeline(object):
         def handle_images(self, xml):
             for path, nodes in self.get_images(xml).items():
                 if len(nodes) == 1:
-                    result = identify_tag_and_reftype_and_id_from_img_or_a_path(path)
+                    result = identify_tag_and_reftype_and_id_from_filepath(path)
                     if result is not None:
                         elem_name, ref_type, _id = result
                         node = nodes[0]
