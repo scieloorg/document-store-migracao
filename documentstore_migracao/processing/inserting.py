@@ -1,6 +1,7 @@
 """ module to processing to inserting methods """
 
 import os
+import re
 import logging
 from typing import List
 from mimetypes import MimeTypes
@@ -40,6 +41,16 @@ def get_document_renditions(
     e retorna um dicionário com informações relevantes sobre
     os arquivos"""
 
+    def get_language(filename: str) -> str:
+        """Busca pelo idioma do rendition a partir do seu nome"""
+
+        try:
+            LANG_REGEX = re.compile(r".*-([a-zA-z-_]+)\.\w+")
+            return LANG_REGEX.findall(filename)[-1]
+        except:
+            return None
+
+
     mimetypes = MimeTypes()
 
     _renditions = []
@@ -47,15 +58,19 @@ def get_document_renditions(
     for rendition in renditions:
         _mimetype = mimetypes.guess_type(rendition)[0]
         _rendition_path = os.path.join(folder, rendition)
+        _lang = get_language(rendition)
 
-        _renditions.append(
-            {
-                "filename": rendition,
-                "url": storage.register(_rendition_path, file_prefix),
-                "size_bytes": os.path.getsize(_rendition_path),
-                "mimetype": _mimetype,
-            }
-        )
+        _rendition = {
+            "filename": rendition,
+            "url": storage.register(_rendition_path, file_prefix),
+            "size_bytes": os.path.getsize(_rendition_path),
+            "mimetype": _mimetype,
+        }
+
+        if _lang is not None:
+            _rendition["lang"] = _lang
+
+        _renditions.append(_rendition)
 
     return _renditions
 

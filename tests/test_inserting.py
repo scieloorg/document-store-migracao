@@ -346,11 +346,11 @@ class TestProcessingInserting(unittest.TestCase):
 class TestDocumentManifest(unittest.TestCase):
     @patch("documentstore_migracao.object_store.minio.MinioStorage")
     def setUp(self, mock_minio_storage):
-        self.package_path = os.path.join(SAMPLES_PATH, "S0036-36342008000100001")
-        self.renditions_names = ["a01v50n1.html", "a01v50n1.pdf"]
+        self.package_path = os.path.join(SAMPLES_PATH, "0034-8910-rsp-47-02-0231")
+        self.renditions_names = ["0034-8910-rsp-47-02-0231.pdf", "0034-8910-rsp-47-02-0231-en.pdf"]
         self.renditions_urls_mock = [
-            "prefix/some-md5-hash-1.html",
-            "prefix/some-md5-hash-2.pdf",
+            "prefix/0034-8910-rsp-47-02-0231.pdf.pdf",
+            "prefix/0034-8910-rsp-47-02-0231.pdf-en.pdf",
         ]
 
         mock_minio_storage.register.side_effect = self.renditions_urls_mock
@@ -359,17 +359,23 @@ class TestDocumentManifest(unittest.TestCase):
         )
 
     def test_rendition_should_contains_file_name(self):
-        self.assertEqual("a01v50n1.html", self.renditions[0]["filename"])
-        self.assertEqual("a01v50n1.pdf", self.renditions[1]["filename"])
+        self.assertEqual("0034-8910-rsp-47-02-0231.pdf", self.renditions[0]["filename"])
+        self.assertEqual("0034-8910-rsp-47-02-0231-en.pdf", self.renditions[1]["filename"])
 
     def test_rendition_should_contains_url_link(self):
         self.assertEqual(self.renditions_urls_mock[0], self.renditions[0]["url"])
         self.assertEqual(self.renditions_urls_mock[1], self.renditions[1]["url"])
 
     def test_rendition_should_contains_size_bytes(self):
-        self.assertEqual(5, self.renditions[0]["size_bytes"])
-        self.assertEqual(111671, self.renditions[1]["size_bytes"])
+        self.assertEqual(110104, self.renditions[0]["size_bytes"])
+        self.assertEqual(106379, self.renditions[1]["size_bytes"])
 
     def test_rendition_should_contains_mimetype(self):
-        self.assertEqual("text/html", self.renditions[0]["mimetype"])
+        self.assertEqual("application/pdf", self.renditions[0]["mimetype"])
         self.assertEqual("application/pdf", self.renditions[1]["mimetype"])
+    
+    def test_renditon_should_contains_language(self):
+        self.assertEqual("en", self.renditions[1]["lang"])
+    
+    def test_rendtion_should_not_contains_language(self):
+        self.assertIsNone(self.renditions[0].get("lang"))

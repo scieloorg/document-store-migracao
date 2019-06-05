@@ -51,7 +51,7 @@ def get_document_manifest(
                     }
                 ],
                 "mimetype": rendition.get("mimetype"),
-                "lang": obj_sps.languages[0],
+                "lang": rendition.get("lang", obj_sps.languages[0]),
             }
         )
 
