@@ -69,9 +69,8 @@ def wrap_node(node, elem_wrap="p"):
     return p
 
 
-def wrap_content_node(node, elem_wrap="p"):
+def wrap_content_node(_node, elem_wrap="p"):
 
-    _node = deepcopy(node)
     p = etree.Element(elem_wrap)
     if _node.text:
         p.text = _node.text
@@ -80,8 +79,7 @@ def wrap_content_node(node, elem_wrap="p"):
 
     _node.text = None
     _node.tail = None
-    _node.append(p)
-    node.getparent().replace(node, _node)
+    _node.insert(0, p)
 
 
 def gera_id(_string, index_body):
@@ -228,6 +226,8 @@ class HTML2SPSPipeline(object):
             self.LiPipe(),
             self.OlPipe(),
             self.UlPipe(),
+            self.DefListPipe(),
+            self.DefItemPipe(),
             self.IPipe(),
             self.EmPipe(),
             self.UPipe(),
@@ -239,7 +239,6 @@ class HTML2SPSPipeline(object):
             self.AssetsPipe(super_obj=self),
             self.APipe(super_obj=self),
             self.ImgPipe(super_obj=self),
-            # self.RemoveTablePipe(),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
             self.BlockquotePipe(),
@@ -544,6 +543,28 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "ul", self.parser_node)
+            return data
+
+    class DefListPipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.tag = "def-list"
+            node.attrib.clear()
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "dl", self.parser_node)
+            return data
+
+    class DefItemPipe(plumber.Pipe):
+        def parser_node(self, node):
+            node.tag = "def-item"
+            node.attrib.clear()
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "dd", self.parser_node)
             return data
 
     class IPipe(plumber.Pipe):
@@ -1229,6 +1250,7 @@ class DataSanitizationPipeline(object):
             self.TableinBody(),
             self.TableinP(),
             self.AddPinFN(),
+            self.WrapNodeInDefItem(),
         )
 
     def deploy(self, raw):
@@ -1282,6 +1304,23 @@ class DataSanitizationPipeline(object):
             raw, xml = data
 
             _process(xml, "fn", self.parser_node)
+            return data
+
+    class WrapNodeInDefItem(plumber.Pipe):
+        def parser_node(self, node):
+            text = node.text or ""
+            tail = node.tail or ""
+            if text.strip() or tail.strip():
+                wrap_content_node(node, "term")
+
+            for c_node in node.getchildren():
+                if c_node.tag not in ["term", "def"]:
+                    wrap_node(c_node, "def")
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "def-item", self.parser_node)
             return data
 
 

@@ -233,6 +233,36 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 1)
                 self.assertEqual(node.attrib["list-type"], "bullet")
 
+    def test_pipe_dl(self):
+        text = """
+            <root>
+            <dl><dd>Black hot drink</dd></dl>
+            <dl><dd>Milk</dd></dl>
+            </root>
+        """
+        raw, transformed = self._transform(text, self.pipeline.DefListPipe())
+
+        nodes = transformed.findall(".//def-list")
+        self.assertEqual(len(nodes), 2)
+        for node in nodes:
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 0)
+
+    def test_pipe_dd(self):
+        text = """
+            <root>
+            <dl><dd>Black hot drink</dd></dl>
+            <dl><dd>Milk</dd></dl>
+            </root>
+        """
+        raw, transformed = self._transform(text, self.pipeline.DefItemPipe())
+
+        nodes = transformed.findall(".//def-item")
+        self.assertEqual(len(nodes), 2)
+        for node in nodes:
+            with self.subTest(node=node):
+                self.assertEqual(len(node.attrib), 0)
+
     def test_pipe_i(self):
         text = """
             <root>

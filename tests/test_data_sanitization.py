@@ -58,3 +58,24 @@ class TestDataSanitizationPipeline(unittest.TestCase):
         self.assertEqual(
             etree.tostring(transformed), b"""<root><fn><p>TEXTO</p></fn></root>"""
         )
+
+    def test__add_def_in_defItem(self):
+        text = """<root><def-list><def-item>TEXTO<p>poly(A)polymerase I</p></def-item></def-list></root>"""
+
+        raw, transformed = self._transform(text, self.pipeline.WrapNodeInDefItem())
+        self.assertEqual(len(transformed.findall(".//term")), 1)
+        self.assertEqual(len(transformed.findall(".//def")), 1)
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><def-list><def-item><term>TEXTO</term><def><p>poly(A)polymerase I</p></def></def-item></def-list></root>""",
+        )
+
+    def test__add_def_in_defItem_case2(self):
+        text = """<root><def-list><def-item><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="email.gif"/></def-item></def-list></root>"""
+
+        raw, transformed = self._transform(text, self.pipeline.WrapNodeInDefItem())
+        self.assertEqual(len(transformed.findall(".//def")), 1)
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><def-list><def-item><def><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="email.gif"/></def></def-item></def-list></root>""",
+        )
