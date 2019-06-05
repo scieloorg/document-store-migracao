@@ -7,6 +7,7 @@ from documentstore_migracao.utils.convert_html_body import (
     AssetsPipeline,
     _process,
     _remove_element_or_comment,
+    identify_tag_and_reftype_by_label_or_id,
 )
 from . import SAMPLES_PATH
 
@@ -506,6 +507,13 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             "). Correspondence should be addressed to Dr Yip at this address.",
         )
 
+    def test_fix_element_a(self):
+        text = """<root><a name="_ftnref19" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
+        expected = b"""<root><a name="_ftnref19" id="_ftnref19"/><a href="#_ftn2"><sup>1</sup></a></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipeline.FixElementAPipe(self.pipeline).transform((text, xml))
+        self.assertEqual(etree.tostring(xml), expected)
+
     def test_pipe_asterisk_in_a_name(self):
         text = '<root><a name="*" id="*"/></root>'
         expected = b"<root/>"
@@ -535,6 +543,19 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             super_obj=self.pipeline
         ).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
+
+    def test_pipe_aname__removes__ftn(self):
+        text = """<root><a name="_ftnref19" title="" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
+        raw, transformed = text, etree.fromstring(text)
+        raw, transformed = self.pipeline.AnchorAndInternalLinkPipe(
+            self.pipeline
+        ).transform((raw, transformed))
+        node = transformed.find(".//xref")
+        self.assertIsNone(node)
+        node = transformed.find(".//a")
+        self.assertIsNone(node)
+        # self.assertIsNotNone(transformed.find(".//sup"))
+        self.assertEqual(etree.tostring(transformed), b"<root/>")
 
     def test_pipe_aname__removes_navigation_to_note_go_and_back(self):
         text = """<root><a href="#tx01">
@@ -1129,6 +1150,15 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
         raw, transformed = self.pipe.transform((self.xml, expected))
         self.assertEqual(len(transformed.findall(".//body")), 1)
         self._compare_tags_and_texts(transformed, expected)
+
+
+class Test__identify_tag_and_reftype_by_label_or_id(unittest.TestCase):
+    def test_identify_tag_and_reftype_by_label_or_id(self):
+        result = identify_tag_and_reftype_by_label_or_id(
+            "",
+            "APPENDIX- Click to enlarge"
+        )
+        self.assertEqual(result, ("app", "app"))
 
 
 class Test__remove_element_or_comment(unittest.TestCase):
