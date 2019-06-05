@@ -1,0 +1,1428 @@
+<?xml version='1.0' encoding='ASCII'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" article-type="research-article" dtd-version="1.0" xml:lang="en">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Rev Saude Publica</journal-id>
+      <journal-title-group>
+        <journal-title>Revista de Sa&#250;de P&#250;blica</journal-title>
+        <abbrev-journal-title abbrev-type="publisher">Rev. Sa&#250;de P&#250;bl.</abbrev-journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">0034-8910</issn>
+      <issn pub-type="epub">1518-8787</issn>
+      <publisher>
+        <publisher-name>Faculdade de Sa&#250;de P&#250;blica da Universidade de S&#227;o Paulo</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="publisher-id" specific-use="scielo">JbFB78yTCdRV3cgJSfbxZCR</article-id>
+      <article-id pub-id-type="publisher-id">S0034-8910.2013047003868</article-id>
+      <article-id pub-id-type="doi">10.1590/S0034-8910.2013047003868</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Pr&#225;tica de Sa&#250;de P&#250;blica</subject>
+          <subject>Artigos Originais</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title xml:lang="en">Professional and community satisfaction with the Brazilian family health strategy</article-title>
+        <trans-title-group xml:lang="pt">
+          <trans-title>Satisfa&#231;&#227;o dos profissionais e da comunidade com a estrat&#233;gia da sa&#250;de da fam&#237;lia</trans-title>
+        </trans-title-group>
+        <trans-title-group xml:lang="es">
+          <trans-title>Satisfacci&#243;n de los profesionales y de la comunidad con la estrategia de la salud de familia</trans-title>
+        </trans-title-group>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Perez</surname>
+            <given-names>Lilian G</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff1">I</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Sheridan</surname>
+            <given-names>Juliet D</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff1">I</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Nicholls</surname>
+            <given-names>Andrea Y</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff1">I</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Mues</surname>
+            <given-names>Katherine E</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff2">II</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Saleme</surname>
+            <given-names>Priscila S</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff3">III</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Resende</surname>
+            <given-names>Joana C</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff3">III</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Ferreira</surname>
+            <given-names>Jos&#233; A G</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff3">III</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Leon</surname>
+            <given-names>Juan S</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff1">I</xref>
+        </contrib>
+        <aff id="aff1"><label>I</label><institution content-type="orgname">Emory University</institution><institution content-type="orgdiv1">Rollins School of Public Health</institution><institution content-type="orgdiv2">Hubert Department of Global Health</institution><addr-line><named-content content-type="city">Atlanta</named-content><named-content content-type="state">GA</named-content><country>USA</country></addr-line>Hubert Department of Global Health. Rollins School of Public Health. Emory University. Atlanta, GA, USA</aff>
+        <aff id="aff2"><label>II</label><institution content-type="orgname">Emory University</institution><institution content-type="orgdiv1">Rollins School of Public Health</institution><institution content-type="orgdiv2">Department of Epidemiology</institution><addr-line><named-content content-type="city">Atlanta</named-content><named-content content-type="state">GA</named-content><country>USA</country></addr-line>Department of Epidemiology. Rollins School of Public Health. Emory University. Atlanta, GA, USA</aff>
+        <aff id="aff3"><label>III</label><institution content-type="orgname">Faculdade da Sa&#250;de e Ecologia Humana</institution><addr-line><named-content content-type="city">Vespasiano</named-content><named-content content-type="state">MG</named-content><country>Brasil</country></addr-line>Faculdade da Sa&#250;de e Ecologia Humana. Vespasiano, MG, Brasil</aff>
+      </contrib-group>
+      <author-notes>
+        <fn>
+          <p>The authors declare that there are no conflicts of interests.</p>
+        </fn>
+        <corresp><bold>Correspondence:</bold>, Juan S. Leon, 1518 Clifton Rd NE, Rollins School of Public Health, Emory University, Atlanta, GA, USA, E-mail:   <email xmlns:xlink="http://www.w3.org/1999/xlink">juan.leon@emory.edu</email></corresp>
+      </author-notes>
+      <pub-date pub-type="epub-ppub">
+        <month>06</month>
+        <year>2013</year>
+      </pub-date>
+      <volume>47</volume>
+      <issue>2</issue>
+      <fpage>403</fpage>
+      <lpage>413</lpage>
+      <history>
+        <date date-type="received">
+          <day>22</day>
+          <month>10</month>
+          <year>2011</year>
+        </date>
+        <date date-type="accepted">
+          <day>9</day>
+          <month>9</month>
+          <year>2012</year>
+        </date>
+      </history>
+      <permissions>
+        <license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/3.0/">
+          <license-p>This is an Open Access article distributed under the terms of the Creative Commons Attribution Non-Commercial License, which permits unrestricted non-commercial use, distribution, and reproduction in any medium, provided the original work is properly cited.</license-p>
+        </license>
+      </permissions>
+      <abstract xml:lang="en">
+        <sec>
+          <title>OBJECTIVE:</title>
+          <p> To analyze the strengths and limitations of the Family Health Strategy from the perspective of health care professionals and the community.  </p>
+        </sec>
+        <sec sec-type="methods">
+          <title>METHODS:</title>
+          <p> Between June-August 2009, in the city of Vespasiano, Minas Gerais State, Southeastern Brazil, a questionnaire was used to evaluate the Family Health Strategy (ESF) with 77 healthcare professionals and 293 caregivers of children under five. Health care professional training, community access to health care, communication with patients and delivery of health education and pediatric care were the main points of interest in the evaluation. Logistic regression analysis was used to obtain odds ratios and 95% confidence intervals as well as to assess the statistical significance of the variables studied.  </p>
+        </sec>
+        <sec sec-type="results">
+          <title>RESULTS:</title>
+          <p> The majority of health care professionals reported their program training was insufficient in quantity, content and method of delivery. Caregivers and professionals identified similar weaknesses (services not accessible to the community, lack of healthcare professionals, poor training for professionals) and strengths (community health worker-patient communications, provision of educational information, and pediatric care). Recommendations for improvement included: more doctors and specialists, more and better training, and scheduling improvements. Caregiver satisfaction with the ESF was found to be related to perceived benefits such as community health agent household visits (OR 5.8, 95%CI 2.8;12.1), good professional-patient relationships (OR 4.8, 95%CI 2.5;9.3), and family-focused health (OR 4.1, 95%CI 1.6;10.2); and perceived problems such as lack of personnel (OR 0.3, 95%CI 0.2;0.6), difficulty with access (OR 0.2, 95%CI 0.1;0.4), and poor quality of care (OR 0.3, 95%CI 0.1;0.6). Overall, 62% of caregivers reported being generally satisfied with the ESF services.  </p>
+        </sec>
+        <sec sec-type="conclusions">
+          <title>CONCLUSIONS:</title>
+          <p> Identifying the limitations and strengths of the Family Health Strategy from the healthcare professional and caregiver perspective may serve to advance primary community healthcare in Brazil.</p>
+        </sec>
+      </abstract>
+      <trans-abstract xml:lang="pt">
+        <sec>
+          <title>OBJETIVO:</title>
+          <p> Analisar as limita&#231;&#245;es e os pontos positivos da Estrat&#233;gia de Sa&#250;de da Fam&#237;lia na perspectiva dos profissionais da sa&#250;de e da comunidade.  </p>
+        </sec>
+        <sec sec-type="methods">
+          <title>M&#201;TODOS:</title>
+          <p> Estudo realizado entre os meses de junho e agosto de 2009, na cidade de Vespasiano, MG, localizada na regi&#227;o Sudeste do Brasil. Para avaliar a Estrat&#233;gia de Sa&#250;de da Fam&#237;lia (ESF), foi aplicado question&#225;rio em 77 profissionais da sa&#250;de e 293 cuidadores de crian&#231;as menores de cinco anos. Vari&#225;veis como o treinamento das equipes de sa&#250;de, acesso da comunidade aos servi&#231;os prestados pelas equipes de ESF, comunica&#231;&#227;o com os pacientes, a aten&#231;&#227;o prestada &#224; crian&#231;a e as informa&#231;&#245;es de sa&#250;de passadas aos cuidadores foram alguns dos pontos de interesse da investiga&#231;&#227;o. An&#225;lises de regress&#227;o log&#237;stica foram utilizadas para se avaliar a signific&#226;ncia estat&#237;stica das vari&#225;veis estudadas, bem como os valores de odds ratio e intervalo de confian&#231;a.  </p>
+        </sec>
+        <sec sec-type="results">
+          <title>RESULTADOS:</title>
+          <p> A maioria dos profissionais relatou que seus treinamentos foram insuficientes em quantidade, conte&#250;do e metodologia utilizada. Os cuidadores e profissionais identificaram semelhantes limita&#231;&#245;es da Estrat&#233;gia de Sa&#250;de da Fam&#237;lia (os servi&#231;os inacess&#237;veis &#224; comunidade, falta de treinamento e n&#250;mero insuficiente de profissionais) e tamb&#233;m pontos fortes semelhantes (a comunica&#231;&#227;o entre agentes comunit&#225;rios e comunidade, fornecimento de informa&#231;&#245;es educacionais e foco na aten&#231;&#227;o &#224; crian&#231;a). Como recomenda&#231;&#245;es para a melhoria do programa foram apontados: a necessidade de mais m&#233;dicos e especialistas, treinamentos em maior quantidade e qualidade e melhoria na marca&#231;&#227;o de consultas. A satisfa&#231;&#227;o dos cuidadores foi relacionada aos benef&#237;cios ofertados, como as visitas dos profissionais &#224;s casas (OR 5,8; IC95% 2,8;12,1), boa rela&#231;&#227;o entre comunidade e profissionais (OR 4,8; IC95% 2,5;9,3) e foco na sa&#250;de da fam&#237;lia (OR 4,1; IC95% 1,6;10,2). Problemas como n&#250;mero insuficiente de profissionais (OR 0,3; IC95% 0,2;0,6), dificuldade de acesso aos servi&#231;os prestados pela ESF (OR 0,2; IC95% 0,1;0,4) e qualidade ruim dos servi&#231;os ofertados (OR 0,3; IC95% 0,1;0,6) foram relacionados &#224; insatisfa&#231;&#227;o da comunidade com a ESF. De uma maneira geral, a maioria dos cuidadores (62%) mostraram estar satisfeitos com os servi&#231;os prestados pela ESF.</p>
+        </sec>
+        <sec sec-type="conclusions">
+          <title> CONCLUS&#213;ES:</title>
+          <p> Identificar as limita&#231;&#245;es e os pontos positivos da ESF pode gerar uma valiosa informa&#231;&#227;o, que auxiliar&#225; na melhoria dessa estrat&#233;gia para a aten&#231;&#227;o prim&#225;ria no Brasil.</p>
+        </sec>
+      </trans-abstract>
+      <trans-abstract xml:lang="es">
+        <sec>
+          <title>OBJETIVO:</title>
+          <p> Analizar las limitaciones y los puntos positivos de la Estrategia de Salud de la Familia en la perspectiva de los profesionales de la salud y de la comunidad.  </p>
+        </sec>
+        <sec sec-type="methods">
+          <title>M&#201;TODOS:</title>
+          <p> Estudio realizado entre los meses de Junio y Agosto de 2009, en la ciudad de Vespasiano, MG, localizada en el la regi&#243;n sureste de Brasil. Para evaluar la Estrategia de la Salud de la Familia (ESF), se aplic&#243; cuestionario en 77 profesionales de la salud y 293 cuidadores de ni&#241;os menores de cinco a&#241;os. Las Variables, entrenamiento de los grupos de salud, acceso de la comunidad a los servicios suministrados por los grupos de ESF, comunicaci&#243;n con los pacientes, la atenci&#243;n suministrada al ni&#241;o y las informaciones de salud entregadas a los cuidadores, fueron algunos de los puntos de inter&#233;s de la investigaci&#243;n. Los an&#225;lisis de regresi&#243;n log&#237;stica se utilizaron para evaluar la significancia estad&#237;stica de las variables estudiadas, as&#237; como los valores de odds ratio (OR) e intervalo de confianza (IC).  </p>
+        </sec>
+        <sec sec-type="results|discussion|conclusions">
+          <title>RESULTADOS:</title>
+          <p> La mayor&#237;a de los profesionales mencion&#243; que sus entrenamientos fueron insuficientes en cantidad, contenido y metodolog&#237;a utilizada. Los cuidadores y profesionales identificaron limitaciones semejantes de la ESF (los servicios inaccesibles a la comunidad, falta de entrenamiento e insuficiente n&#250;mero de profesionales) y tambi&#233;n semejantes puntos fuertes (la comunicaci&#243;n entre agentes comunitarios y comunidad, suministro de informaciones educativas y &#233;nfasis en la atenci&#243;n del ni&#241;o). Como recomendaciones para mejorar el programa fueron se&#241;alados: la necesidad de m&#225;s m&#233;dicos y especialistas, entrenamientos en mayor cantidad y calidad y mejor&#237;a al concertar cita con m&#233;dicos. La satisfacci&#243;n de los cuidadores fue relacionada con los beneficios ofertados, como las visitas de los profesionales a las casas (OR 5,8; IC95% 2,8;12,1), buena relaci&#243;n entre comunidad y profesionales (OR 4,8; IC95% 2,5;9,3) y, &#233;nfasis en la salud de la familia (OR 4,1; IC 95% 1,6; 10,2). Problemas como insuficiente n&#250;mero de profesionales (OR 0,3; IC95% 0,2;0,6), dificultad en el acceso a los servicios suministrados por la ESF (OR 0,2; IC95% 0,1;0,4) y mala calidad de los servicios ofertados (OR 0,3; IC95% 0,1;0,6) se relacionaron con la insatisfacci&#243;n de la comunidad con la ESF. De una forma general, la mayor&#237;a de los cuidadores (62%) mostraron estar satisfechos con los servicios suministrados por la ESF.  </p>
+        </sec>
+        <sec sec-type="conclusions">
+          <title>CONCLUSIONES:</title>
+          <p> Identificar las limitaciones y los puntos positivos de la ESF puede generar una informaci&#243;n valiosa que ayudar&#225; en la mejor&#237;a de &#233;sta estrategia de atenci&#243;n primaria en Brasil.</p>
+        </sec>
+      </trans-abstract>
+      <kwd-group xml:lang="en">
+        <kwd>Job Satisfaction</kwd>
+        <kwd>Patient Satisfaction</kwd>
+        <kwd>Family Health Program</kwd>
+        <kwd>Patient Care Team</kwd>
+        <kwd>Health Manpower</kwd>
+      </kwd-group>
+      <kwd-group xml:lang="pt">
+        <kwd>Satisfa&#231;&#227;o no Emprego</kwd>
+        <kwd>Satisfa&#231;&#227;o do Paciente</kwd>
+        <kwd>Programa Sa&#250;de da Fam&#237;lia</kwd>
+        <kwd>Equipe de Assist&#234;ncia ao Paciente</kwd>
+        <kwd>Recursos Humanos em Sa&#250;de</kwd>
+      </kwd-group>
+      <kwd-group xml:lang="es">
+        <kwd>Satisfacci&#243;n en el Trabajo</kwd>
+        <kwd>Satisfacci&#243;n del Paciente</kwd>
+        <kwd>Programa de Salud Familiar</kwd>
+        <kwd>Grupo de Atenci&#243;n al Paciente</kwd>
+        <kwd>Recursos Humanos en Salud</kwd>
+      </kwd-group>
+      <counts>
+        <fig-count count="2"/>
+        <table-count count="4"/>
+        <ref-count count="28"/>
+        <page-count count="X"/>
+      </counts>
+    </article-meta>
+  </front>
+  <body>
+    <sec sec-type="intro">
+      <title>INTRODUCTION</title>
+      <p>Dramatic changes made to Brazil&#8217;s Unified Health System (SUS) in the 1990s led to the creation of a public, federal, decentralized, participatory and comprehensive health system.<sup><xref ref-type="bibr" rid="B10">10</xref></sup> One federal program receiving particular recognition for its contributions to reducing child mortality in Brazil is the Family Health Strategy (ESF).<sup><xref ref-type="bibr" rid="B14">14</xref></sup> The ESF was designed to deliver primary health care services through multidisciplinary health teams comprised of a physician, a nurse, a nurse assistant, and several community health workers (CHW).<sup><xref ref-type="bibr" rid="B13">13</xref></sup> The teams provide health promotion, disease prevention, treatment and rehabilitation at ESF health units at the municipal level and extend these services to the household level via regular household visits.</p>
+      <p>Epidemiological studies have reported the impact ESF has had on reducing infant mortality in Brazil.<sup><xref ref-type="bibr" rid="B01">1</xref>,   <xref ref-type="bibr" rid="B10">10</xref>,   <xref ref-type="bibr" rid="B12">12</xref>,   <xref ref-type="bibr" rid="B18">18</xref>,   <xref ref-type="bibr" rid="B19">19</xref></sup>Under-five mortality due to diarrhea decreased from 12% in 1990 to 5% in 2002, following expansion of the ESF.<sup><xref ref-type="bibr" rid="B10">10</xref></sup> A health system&#8217;s performance is often evaluated using epidemiological data instead of the perceptions or satisfaction levels of the patients or health workers involved in the system.<sup><xref ref-type="bibr" rid="B02">2</xref>,   <xref ref-type="bibr" rid="B24">24</xref></sup>Limited research has examined the perceptions of the ESF&#8217;s services for child health, particularly from the perspective of the professionals delivering these services and the caregivers of children receiving care. Studying the perspectives of individual users especially those of caregivers of children under five years, is important for improving health systems,<sup><xref ref-type="bibr" rid="B05">5</xref>,   <xref ref-type="bibr" rid="B08">8</xref></sup> as they are frequent users of health system services for their vulnerable children. Valuable insight into a health systems&#8217; overall performance can be obtained from the users and providers.<sup><xref ref-type="bibr" rid="B04">4</xref>,   <xref ref-type="bibr" rid="B05">5</xref>,   <xref ref-type="bibr" rid="B20">20</xref>,   <xref ref-type="bibr" rid="B22">22</xref></sup>An important challenge to achieving the Millennium Development Goals in developing countries, as noted by Willis-Shattuck et al,<sup><xref ref-type="bibr" rid="B27">27</xref></sup> is the absence of a properly trained and motivated workforce. Evaluating the potential factors influencing health worker retention is critical for improving health systems.<sup><xref ref-type="bibr" rid="B13">13</xref>,   <xref ref-type="bibr" rid="B17">17</xref></sup> In a study from the state of Cear&#225;, Northeastern Brazil, health worker integrity was cited as a key element to the observed improvements in community health.<sup><xref ref-type="bibr" rid="B25">25</xref></sup> Patient or community satisfaction with ESF services can be used to identify areas for programmatic improvement.<sup><xref ref-type="bibr" rid="B02">2</xref>,   <xref ref-type="bibr" rid="B04">4</xref>,   <xref ref-type="bibr" rid="B11">11</xref>,   <xref ref-type="bibr" rid="B12">12</xref></sup> In our previous work, patient satisfaction with the health agent and ESF unit were associated with perceived access to the unit and frequency of agent home visits.<sup><xref ref-type="bibr" rid="B16">16</xref></sup> Positive relationships between the community and ESF professionals are important in the primary care setting because of its long-term orientation centered on prevention.<sup><xref ref-type="bibr" rid="B02">2</xref>,   <xref ref-type="bibr" rid="B15">15</xref>,   <xref ref-type="bibr" rid="B17">17</xref></sup></p>
+      <p>This study aimed to analyze the strengths and limitations of ESF services, through the perceptions of health care professionals and the community.</p>
+      <p>These analyses may provide key findings through which Brazilian policy makers and researchers in the field of health care quality can utilize user and professional perceptions as indicators of population health and program strengths and limitations.</p>
+    </sec>
+    <sec sec-type="methods">
+      <title>METHODS</title>
+      <p>The ESF was officially implemented in the state of Minas Gerais, Southeastern Brazil in 2004-2005. The municipality of Vespasiano was the first city in Minas Gerais to adopt the ESF as the main strategy for primary health care in 1999 (pers. comm. Dr. H&#233;rica Soraya Albano, Vespasiano&#8217;s Municipal Secretary of Health). Because Vespasiano had the longest history with the ESF in Minas Gerais, we chose it as the site of our study investigating the caregiver and health care professionals&#8217; satisfaction with the ESF in a city with commitment and experience with the ESF. The coverage of the ESF in Vespasiano was 34% in 2009. We collected perceptions from each health care professional team member (doctors, nurses, nurse assistants, and CHWs) from June to August of 2009, on their program training, challenges encountered in the work environment, and the professionals&#8217; overall evaluation of the ESF services. We also collected perceptions from caregivers of children under-five during the same time period on their experience with overall ESF services. In a sub-analysis, we explored the use of and satisfaction with ESF diarrhea care and prevention services among caregivers because such activities may have an important role in preventing mortality due to diarrhea among children under-five.<sup><xref ref-type="bibr" rid="B18">18</xref>,   <xref ref-type="bibr" rid="B19">19</xref></sup></p>
+      <p>The sample population was comprised of primary caregivers of children served by the ESF program and professionals working at the ESF units in the city of Vespasiano, Minas Gerais State, Southeastern Brazil. Vespasiano was selected as the study site because it had the longest history with the ESF in Minas Gerais State. Another reason for selecting Vespasiano was that it was the appropriate size, unlike a larger city, to randomly sample the entire municipality and all the ESF professionals with our resources, community, municipality and research support. We chose diarrhea as a model disease to study the ESF&#8217;s efforts in child health because it is a common yet potentially fatal disease of children under-five<sup><xref ref-type="bibr" rid="B18">18</xref>,   <xref ref-type="bibr" rid="B19">19</xref></sup> and serves as a concrete service with which to specifically evaluate the program.</p>
+      <p>Primary caregivers of children &lt; 5 years old were recruited by random selection between June and August of 2009. They were chosen because they are frequent users of health system services for their vulnerable children. Respondents were identified from all ten of the ESF units in Vespasiano. Lists of all households were obtained from the units themselves, and 310 households were selected using proportionally allocated stratified random sampling, stratified by ESF unit.<sup><xref ref-type="bibr" rid="B15">15</xref></sup> The sample size was calculated to obtain a precision of 0.055 around an estimate of user satisfaction with the ESF. Of 310 selected households, 253 of the eligible households agreed to participate (82% response rate).</p>
+      <p>The participants in the health professional study included a convenience sample of health care professionals (18 years old and over) working for the ESF during the study period. We chose the ESF Professionals because the caregivers interact with these representatives of the ESF system. Of the 85 eligible professionals identified and contacted, eight doctors, eight nurses, nine nurse assistants and 52 community health workers (CHW) agreed to participate (91% response rate).</p>
+      <p>The interviews were conducted in Portuguese using a semi-structured questionnaire, either at the ESF health units or the health care professionals&#8217; home, by trained local medical students unaffiliated with the ESF. The Vespasiano ESF was not involved in the study conception, design, or analysis except to provide lists of caregivers from which random sampling frames were constructed and encouraging CHW to accompany study staff to the caregiver&#8217;s home. CHW did not participate and were not present during data collection. Study questions not developed independently by the survey authors were referenced from the Integrated Health Facility Assessment Survey.<sup><xref ref-type="bibr" rid="B16">16</xref></sup> These questions were related to health care service quality, health care provider communication practices, and problems encountered on the job, as well as diarrhea services and health care-seeking behaviors in the community. Each interview took approximately 30 minutes to complete. Caregivers were asked these four satisfaction questions: &#8220;In general, how does the ESF in Vespasiano benefit you and your family?&#8221;; &#8220;Have you had any problems with the ESF in Vespasiano that you would like to share with us?&#8221;; &#8220;How satisfied are you with services provided at the ESF unit?&#8221;; and &#8220;Do you have any other information on the ESF you would like to share with us?&#8221;.</p>
+      <p>All surveys were double-data entered by two different data operators and cleaned using EpiInfo version 3.5.1 and Microsoft Access 2007. Open-ended responses were stratified by Professional category and translated from Portuguese to English by the authors. For open-ended responses, we used a post-hoc coding approach, where we attached codes to the participant answers to the open-ended questions and counted the types of responses we received. All quantitative statistical analysis procedures were completed using EpiInfo version 3.5.1 and SPSS/PASW Statistical Software (V. 17.0 and 18.0). Binary logistic regression models were created with an enter method of entry. A p &lt; 0.05 was considered significant.</p>
+      <p>We compared specific problems and challenges cited by health care professionals and caregivers to identify common challenges encountered by all participants in the ESF system. Professionals were asked specifically about these issues, while caregivers&#8217; views were extracted from open-ended responses, which led to smaller percentages of caregivers&#8217; responses because all caregivers did not address all topics. We asked all participants about their ESF training experiences to evaluate the ESF practices for health care professional capacity strengthening. We also asked those who received training if they found the training useful for their work at the ESF and whether they had any suggestions to improve the training system. From the open ended suggestions provided by each health care professional for improving the training system, we used a post-hoc coding approach, where we attached codes to the participant answers to the open-ended questions and counted the types of responses we received. We then grouped common responses related to training   <italic>quantity</italic>,   <italic>topics</italic>,   <italic>methods</italic>, and   <italic>quality</italic>.</p>
+      <p>To evaluate whether specific benefits and problems were associated with overall caregiver satisfaction with the ESF, the coded open-ended responses of specific benefits and problems (exposures) were compared with a specific closed-ended response on overall caregiver satisfaction with the ESF.<sup><xref ref-type="bibr" rid="B15">15</xref></sup> We ran two logistic regression models to assess which benefits and problems were significant predictors of caregiver satisfaction.</p>
+      <p>The two studies followed the principles set down in the Declaration of Helsinki and were approved by the Institutional Review Boards of Emory University (IRB00020524, 2009, Atlanta, GA, USA) and the   <italic>Faculdade da Sa&#250;de e Ecologia Humana</italic>&#8211; FASEH, Vespasiano, MG, Southeastern Brazil (IRB Process n<sup>o</sup> 330/2009). Written informed consent was requested of each subject before each interview.</p>
+    </sec>
+    <sec sec-type="results">
+      <title>RESULTS</title>
+      <p>About 53% of respondents were 30 years old or younger (19 to 63 years); females comprised 95% of respondents. A majority of nurses (87%) and CHWs (94%), compared to doctors (63%) and nurse assistants (67%), reported having less than five years of experience working in the health care setting before entering the ESF. A significantly (p = 0.02) greater percentage of the CHW (75%) reported working at the ESF for more than a year compared to other professionals combined: doctors (50%), nurse assistants (33%), and nurses (63%). The majority of the caregivers were female (94%) and the mean age was 34 years old (SE 0.73 years).</p>
+      <p>We chose similar questions from both surveys to compare responses on caregiver and health professional satisfaction levels and perceptions of the ESF (   <xref ref-type="table" rid="t01">Table 1</xref>). More professionals than caregivers said they believed the ESF was accessible to the communities they served (68%   <italic>versus</italic>46%); 75% of doctors, 88% of nurses, 56% of nurse assistants, and 65% of CHW thought that the ESF was accessible to the communities they served. 34% of caregivers &#8220;sometimes&#8221; thought the ESF was accessible (data not shown). While very few caregivers surveyed reported that they had ever received any advice (18%) or participated in educational activities (2%) on diarrhea treatment, nearly all professionals reported that they normally give caregivers of children advice (97%) and CHWs hold educational activities (67%) on diarrhea treatment. Specifically, 100% of doctors, 100% of nurses, 100% (9/9) of nurse assistants, and 96% of CHW gave advice about diarrhea treatment. Few caregivers reported receiving written information on diarrhea prevention, and few CHW reported having given written information in the last year. No particular ESF unit stood out as having higher information distribution rates than others (data not shown). The Child Health Booklet had high usage rates among both professionals and caregivers: most caregivers (81%) regularly use the booklet (for monitoring child growth or keeping track of child vaccination records), and most professionals (72%) have been trained on the booklet (   <xref ref-type="table" rid="t01">Table 1</xref>); 67% of doctors, 67% of nurses, 43% of nurse assistants, and 77% of CHW were trained on the Child Health Booklet. There were discrepancies between caregivers and professionals in the particular activities around diarrhea, especially advice about diarrhea treatment and the distribution of written information about diarrhea. However, the two groups had similar levels of high to very high overall satisfaction with the ESF&#8217;s diarrhea services (professionals 87%, caregivers 85%); 88% of doctors, 100% of nurses, 100% of nurse assistants, and 83% of CHW were satisfied with the ESF diarrhea services.</p>
+      <p>
+        <table-wrap id="t01">
+          <label>Table 1.</label>
+          <caption>
+            <title>Caregivers and professionals&#8217; reported experiences with the Family Health Strategy (ESF) services and activities. Vespasiano, Southeastern Brazil, 2009.</title>
+          </caption>
+          <table frame="hsides" rules="groups">
+            <colgroup width="12%">
+              <col width="1%"/>
+              <col width="50%"/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td colspan="2" rowspan="2"> Variable</td>
+                <td colspan="2" align="center"> Caregivers</td>
+                <td colspan="2" align="center"> Professionals</td>
+              </tr>
+              <tr>
+                <td align="center">n</td>
+                <td align="center">%</td>
+                <td align="center">n</td>
+                <td align="center">%</td>
+              </tr>
+              <tr>
+                <td colspan="6" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td colspan="2">Accessible to the community</td>
+                <td align="center">n = 242</td>
+                <td align="center"/>
+                <td align="center">n = 77</td>
+                <td align="center"/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Yes</td>
+                <td align="center">110</td>
+                <td align="center">45.5</td>
+                <td align="center">52</td>
+                <td align="center">67.5</td>
+              </tr>
+              <tr>
+                <td colspan="2">Receive/give advice about diarrhea treatment</td>
+                <td align="center">n = 252</td>
+                <td align="center"/>
+                <td align="center">n = 77</td>
+                <td align="center"/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Any advice</td>
+                <td align="center">44</td>
+                <td align="center">17.5</td>
+                <td align="center">75</td>
+                <td align="center">97.4</td>
+              </tr>
+              <tr>
+                <td colspan="2">Educational activities about diarrhea<sup>a</sup></td>
+                <td align="center">n = 252</td>
+                <td align="center"/>
+                <td align="center">n = 51</td>
+                <td align="center"/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Caregivers ever participated; CHW presented in past year</td>
+                <td align="center">5</td>
+                <td align="center">2.0</td>
+                <td align="center">34</td>
+                <td align="center">66.7</td>
+              </tr>
+              <tr>
+                <td colspan="2">Written information about diarrhea<sup>a</sup></td>
+                <td align="center">n = 252</td>
+                <td align="center"/>
+                <td align="center">n = 52</td>
+                <td align="center"/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Caregivers have received; CHW presented in past year</td>
+                <td align="center">44</td>
+                <td align="center">17.5</td>
+                <td align="center">2</td>
+                <td align="center">3.9</td>
+              </tr>
+              <tr>
+                <td colspan="2">Child Health Booklet</td>
+                <td align="center">n = 236</td>
+                <td align="center"/>
+                <td align="center">n = 66</td>
+                <td align="center"/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Caregivers use booklet,<sup>b</sup> Professionals received training on booklet</td>
+                <td align="center">191</td>
+                <td align="center">80.9</td>
+                <td align="center">47</td>
+                <td align="center">71.2</td>
+              </tr>
+              <tr>
+                <td colspan="2">Satisfaction with ESF diarrhea services<sup>c</sup></td>
+                <td align="center">n = 103</td>
+                <td align="center"/>
+                <td align="center">n = 77</td>
+                <td align="center"/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Yes</td>
+                <td align="center">88</td>
+                <td align="center">85.4</td>
+                <td align="center">67</td>
+                <td align="center">87.0</td>
+              </tr>
+            </tbody>
+          </table>
+          <table-wrap-foot>
+            <fn id="TFN01t01">
+              <p>CHW: Community Health Worker <sup>a</sup> Questions on having ever given educational activities and written info on diarrhea were only asked to community health agents. <sup>b</sup> &#8220;Use&#8221; includes monitoring child growth and vaccination records. <sup>c</sup> The n is relatively small for caregivers because not all have ever sought diarrhea treatment with ESF. Variable for caregivers combines questions on caregiver satisfaction levels with services for controlling diarrhea at ESF unit, and caregiver satisfaction levels with advice given by community health agent.</p>
+            </fn>
+          </table-wrap-foot>
+        </table-wrap>
+      </p>
+      <p>The most common problem cited by caregivers was &#8220;lack of health care professionals,&#8221; a sentiment shared by a similar number of nurses and a smaller percentage of CHW and nurse assistants but, interestingly, not doctors (   <xref ref-type="table" rid="t02">Table 2</xref>). More than <sup><xref ref-type="bibr" rid="B03">3</xref></sup>/<sub>4</sub> of the health care professionals in all categories reported that the &#8220;ESF was difficult to access&#8221;, in terms of length of travel time for professionals, while <sup><xref ref-type="bibr" rid="B01">1</xref></sup>/<sub>4</sub> of caregivers reported this issue. The same discrepancy between professional and caregiver opinions on lack of resources also suggests different expectations among professionals and caregivers on what resources should be available. Around half the professionals reported that &#8220;poor quality&#8221; was a problem, which includes &#8220;lack of training;&#8221; less than a quarter of caregivers felt that &#8220;poor quality of care&#8221; was a problem. The caregivers cited challenges, related to &#8220;poor infrastructure&#8221; and &#8220;limited resource availability,&#8221; as major issues that may be limiting their delivery and utilization of care.</p>
+      <p>
+        <table-wrap id="t02">
+          <label>Table 2.</label>
+          <caption>
+            <title>Professional and caregivers&#8217; perceptions of challenges and problems with the Family Health Strategy services. Vespasiano, Southeastern Brazil, 2009.</title>
+          </caption>
+          <table frame="hsides" rules="groups">
+            <colgroup width="7%">
+              <col width="15%"/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td rowspan="2"> Challenge (Yes)<sup>a</sup></td>
+                <td colspan="2" align="center"> Doctor</td>
+                <td colspan="2" align="center"> Nurse</td>
+                <td colspan="2" align="center"> Nurse assistant</td>
+                <td colspan="2" align="center"> Community health worker</td>
+                <td colspan="2" align="center"> All professionals</td>
+                <td colspan="2" align="center"> Caregivers</td>
+              </tr>
+              <tr>
+                <td align="center"> n</td>
+                <td align="center"> %</td>
+                <td align="center"> n</td>
+                <td align="center"> %</td>
+                <td align="center"> n</td>
+                <td align="center"> %</td>
+                <td align="center"> n</td>
+                <td align="center"> %</td>
+                <td align="center"> n</td>
+                <td align="center"> %</td>
+                <td align="center"> n</td>
+                <td align="center"> %</td>
+              </tr>
+              <tr>
+                <td colspan="13" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td>Not enough health care professionals</td>
+                <td align="center"> 0</td>
+                <td align="center"> 0</td>
+                <td align="center"> 3</td>
+                <td align="center"> 38.0</td>
+                <td align="center"> 2</td>
+                <td align="center"> 2.0</td>
+                <td align="center"> 9</td>
+                <td align="center"> 17.0</td>
+                <td align="center"> 14</td>
+                <td align="center"> 18.0</td>
+                <td align="center"> 89</td>
+                <td align="center"> 35.0</td>
+              </tr>
+              <tr>
+                <td>Difficult to access</td>
+                <td align="center"> 6</td>
+                <td align="center"> 75.0</td>
+                <td align="center"> 6</td>
+                <td align="center"> 75.0</td>
+                <td align="center"> 7</td>
+                <td align="center"> 78.0</td>
+                <td align="center"> 38</td>
+                <td align="center"> 73.0</td>
+                <td align="center"> 57</td>
+                <td align="center"> 74.0</td>
+                <td align="center"> 53</td>
+                <td align="center"> 21.0</td>
+              </tr>
+              <tr>
+                <td>Lack of resources<sup>b</sup></td>
+                <td align="center"> 6</td>
+                <td align="center"> 75.0</td>
+                <td align="center"> 8</td>
+                <td align="center"> 100.0</td>
+                <td align="center"> 6</td>
+                <td align="center"> 67.0</td>
+                <td align="center"> 37</td>
+                <td align="center"> 71.0</td>
+                <td align="center"> 57</td>
+                <td align="center"> 74.0</td>
+                <td align="center"> 41</td>
+                <td align="center"> 16.0</td>
+              </tr>
+              <tr>
+                <td>Poor quality<sup>c</sup></td>
+                <td align="center"> 5</td>
+                <td align="center"> 63.0</td>
+                <td align="center"> 3</td>
+                <td align="center"> 38.0</td>
+                <td align="center"> 4</td>
+                <td align="center"> 44.0</td>
+                <td align="center"> 27</td>
+                <td align="center"> 52.0</td>
+                <td align="center"> 39</td>
+                <td align="center"> 51.0</td>
+                <td align="center"> 40</td>
+                <td align="center"> 16.0</td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td align="center"> 8</td>
+                <td/>
+                <td align="center"> 8</td>
+                <td/>
+                <td align="center"> 9</td>
+                <td/>
+                <td align="center"> 52</td>
+                <td/>
+                <td align="center"> 77</td>
+                <td/>
+                <td align="center"> 253</td>
+                <td/>
+              </tr>
+            </tbody>
+          </table>
+          <table-wrap-foot>
+            <fn id="TFN01t02">
+              <p><sup>a</sup>Combination of &#8220;no&#8221; and &#8220;don&#8217;t know&#8221; complete remaining responses; caregiver responses coded from open-ended responses <sup>b  </sup>Includes medication, equipment, and staff <sup>c  </sup>Includes lack of training for professionals and poor care for caregivers</p>
+            </fn>
+          </table-wrap-foot>
+        </table-wrap>
+      </p>
+      <p>Almost all professionals (92%) had received some form of ESF training (both formal and informal) in their first 12 months working at the ESF, mainly through lectures (96%) and/or individual orientation by co-workers (93%, data not shown). A high proportion of professionals (97%) perceived that their training was useful for their work in the program.</p>
+      <p>Almost all participants suggested increasing the number of training sessions provided (   <italic>quantity</italic>) and expanding on the content of the training (   <italic>topics</italic>) to include topics specific to issues encountered in their communities or health units (   <xref ref-type="table" rid="t03">Table 3</xref>). Professionals recommended moving the training sessions to the units or arranging transportation to the training sites and providing take-home materials after the sessions to improve the way training sessions are provided. They made suggestions to improve the   <italic>quality</italic>of the sessions, such as reducing the number of people per session for better organization and standardizing the language for all professionals to follow.</p>
+      <p>
+        <table-wrap id="t03">
+          <label>Table 3.</label>
+          <caption>
+            <title>Suggestions to improve current Family Health Strategy health care professional training, by professional category and training theme. Vespasiano, Southeastern Brazil, 2009.</title>
+          </caption>
+          <table frame="hsides" rules="groups">
+            <colgroup width="19%">
+              <col width="5%"/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>Theme<sup>a</sup></td>
+                <td align="center"> Doctor</td>
+                <td align="center"> Nurse</td>
+                <td align="center"> Nurse assistant</td>
+                <td align="center"> Community health worker</td>
+              </tr>
+              <tr>
+                <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td>Quantity</td>
+                <td align="center"> Need more (e.g., trimester meetings)</td>
+                <td align="center"> N/A</td>
+                <td align="center"> Need more (e.g., weekly meetings)</td>
+                <td align="center"> Need more</td>
+              </tr>
+              <tr>
+                <td>Topics</td>
+                <td align="center"> Address unit-specific issues</td>
+                <td align="center"> Address community and unit-specific issues</td>
+                <td align="center"> Provide training in: pharmacy skills; environmental issues; relevant research topics</td>
+                <td align="center"> -Address community-specific issues -Provide training in: disease pathology; first aid; elderly health; maternal and child health; diarrhea; sexually transmitted diseases; patient communication; vaccines; treatments</td>
+              </tr>
+              <tr>
+                <td>Methods</td>
+                <td align="center"> -Provide lectures from specialized professionals (e.g., from the medical school) -Request evaluations of training sessions from each trainee</td>
+                <td align="center"> Provide individual training when needed (especially for CHW)</td>
+                <td align="center"> -Provide handouts/ materials -Arrange transportation to training sites -Have light snacks available</td>
+                <td align="center"> -Provide special training for new CHW -Provide handouts-Need more videos, lectures, and practical training (workshops) -Offer training at units -Divide training by unit -Provide training on how to use health promotion materials</td>
+              </tr>
+              <tr>
+                <td>Quality</td>
+                <td align="center"> Good</td>
+                <td align="center"> -Make training more dynamic -Need greater consistency of information -Use language all can understand</td>
+                <td align="center"> -Slow down pace of lectures -Need better organization (less people/session)</td>
+                <td align="center"> -Slow down pace of lectures -Need more investment in CHW capacity-strengthening -Information should be up to date</td>
+              </tr>
+            </tbody>
+          </table>
+          <table-wrap-foot>
+            <fn id="TFN01t03">
+              <p><sup>a</sup>Responses extracted from open-ended questions and assigned to themes identified by the investigator.</p>
+            </fn>
+            <fn id="TFN02t03">
+              <p>N/A: no comment; CHW; community health worker</p>
+            </fn>
+          </table-wrap-foot>
+        </table-wrap>
+      </p>
+      <p>Caregivers reported on several strengths of the program and provided recommendations for improvements (<xref ref-type="fig" rid="f01">Figure A</xref>). The most commonly cited benefits were availability of staff, ease in scheduling appointments, and the home visits by CHWs. Provision of pediatric care and information on health issues were also mentioned by around 10% of caregivers. We also asked about common problems with the ESF and the four main problems raised by caregivers were lack of personnel (35%), difficulty with access (21%), poor quality of care (16%), and lack of resources (16%) (data not shown, n = 253). Caregivers reported specific places where improvements in the ESF care could be improved (<xref ref-type="fig" rid="f01">Figure B</xref>). The most common responses were that the ESF needed more doctors and specialists. Other common recommendations were to make the scheduling process easier, improve attention from ESF staff, and to give out more educational information. Many of the recommendations paralleled benefits cited by the caregivers. These areas, specifically the scheduling process, home visits and doctor-patient relationships, and information given to the caregivers, were identified as strengths of the ESF program and areas where improvements could capitalize on areas of program strength.</p>
+      <p>
+        <fig id="f01">
+          <label>Figure.</label>
+          <caption>
+            <title>Caregivers; cited benefi ts of the Family Health Strategy and recommendations for improving the ESF in Vespasiano, Southeastern Brazil, 2009</title>
+          </caption>
+          <graphic xlink:href="0034-8910-rsp-47-02-0403-gf01.tif"/>
+        </fig>
+      </p>
+      <p>In general, 62% of caregivers reported being &#8220;satisfied&#8221; or &#8220;very satisfied&#8221; with the services of the ESF and 10% of caregivers reported being &#8220;dissatisfied&#8221; with the ESF. The first logistic regression model showed the association between the open-ended benefits and overall satisfaction with the ESF, while adjusting for other benefits, education and income (   <xref ref-type="table" rid="t04">Table 4</xref>). Caregivers who cited household visits as a benefit of the ESF were almost five times more likely to be satisfied with the ESF than caregivers who did not mention household visits. Caregivers who discussed the positive relationships and family-focused care they received from health professionals were four times more likely to be satisfied than caregivers who did not mention positive relationships or family-focused care. The second model, examined the association between open-ended problems and overall satisfaction, while adjusting for other problems, education and income. Caregivers who cited a lack of personnel were a third less likely to be satisfied than caregivers who did not cite lack of personnel. Caregivers who cited difficulty of access and poor quality of care were a fifth and a fourth less likely to be satisfied, respectively, than caregivers who did not cite difficulty of access or poor quality of care. Prevention services and lack of resources were not significantly related to overall satisfaction with the ESF.</p>
+      <p>
+        <table-wrap id="t04">
+          <label>Table 4.</label>
+          <caption>
+            <title>Predictors of caregiver satisfaction with the Family Health Strategy in Vespasiano, Southeastern Brazil, 2009.</title>
+          </caption>
+          <table frame="hsides" rules="groups">
+            <colgroup width="15%">
+              <col width="1%"/>
+              <col width="50%"/>
+              <col/>
+              <col/>
+              <col/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td colspan="2">Variable</td>
+                <td align="center">OR</td>
+                <td align="center">95%CI</td>
+                <td align="center">P</td>
+              </tr>
+              <tr>
+                <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td colspan="5" align="center"> Adjusted Model 1. Benefits (n = 253)</td>
+              </tr>
+              <tr>
+                <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td colspan="5"> Benefits<sup>a</sup></td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Household visits<sup>b</sup></td>
+                <td align="center"> 5.783</td>
+                <td align="center"> 2.770;12.075</td>
+                <td align="center">&lt; 0.0001</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Good professional-patient relationship<sup>b</sup></td>
+                <td align="center"> 4.806</td>
+                <td align="center"> 2.484;9.296</td>
+                <td align="center">&lt; 0.0001</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Family-focused health<sup>b</sup></td>
+                <td align="center"> 4.059</td>
+                <td align="center"> 1.619;10.179</td>
+                <td align="center"> 0.003</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Prevention services</td>
+                <td align="center"> 1.298</td>
+                <td align="center"> 0.595;2.831</td>
+                <td align="center"> 0.572</td>
+              </tr>
+              <tr>
+                <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td colspan="5" align="center"> Adjusted Model 2. Challenges (n = 253)</td>
+              </tr>
+              <tr>
+                <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td colspan="5"> Problems<sup>a</sup></td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Lack of personnel<sup>b</sup></td>
+                <td align="center"> 0.346</td>
+                <td align="center"> 0.191;0.626</td>
+                <td align="center">&lt; 0.0001</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Difficulty with access<sup>b</sup></td>
+                <td align="center"> 0.206</td>
+                <td align="center"> 0.103;0.412</td>
+                <td align="center">&lt; 0.0001</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Poor quality of care<sup>b</sup></td>
+                <td align="center"> 0.266</td>
+                <td align="center"> 0.124;0.573</td>
+                <td align="center"> 0.001</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Lack of resources</td>
+                <td align="center"> 0.828</td>
+                <td align="center"> 0.381;1.800</td>
+                <td align="center"> 0.634</td>
+              </tr>
+            </tbody>
+          </table>
+          <table-wrap-foot>
+            <fn id="TFN01t04">
+              <p><sup>a</sup>In Model 1, all benefits were adjusted for each other. In Model 2, all problems were adjusted for each other. In both models, education and income were adjusted for all variables and were not significant.</p>
+            </fn>
+            <fn id="TFN02t04">
+              <p><sup>b</sup>p &lt; 0.05</p>
+            </fn>
+          </table-wrap-foot>
+        </table-wrap>
+      </p>
+    </sec>
+    <sec sec-type="discussion">
+      <title>DISCUSSION</title>
+      <p>Areas of discrepancy between caregiver and professional perceptions were important factors in patient satisfaction. Professionals and caregivers often encountered similar challenges that may be hindering the program&#8217;s capacity to meet the healthcare needs of the caregiver. Recommendations from healthcare professionals and caregivers on improvements to training and program services were also important areas for improvement of the ESF. Despite the limitations encountered within the program structure, 62% of caregivers reported being &#8220;satisfied&#8221; or &#8220;very satisfied&#8221; with the services of the ESF and 10% of caregivers reported being &#8220;dissatisfied&#8221; with the ESF, indicating that the program was evaluated fairly positively. Our study supports studies that recognize the important role the program may have in promoting child health in Brazil.<sup><xref ref-type="bibr" rid="B01">1</xref>,   <xref ref-type="bibr" rid="B03">3</xref>,   <xref ref-type="bibr" rid="B10">10</xref>,   <xref ref-type="bibr" rid="B18">18</xref>,   <xref ref-type="bibr" rid="B19">19</xref></sup></p>
+      <p>Differences between caregiver and Professional perceptions of the ESF were greatest in three areas: the ESF was accessible to the caregiver; health care professionals were lacking; and the rates at which caregivers received advice or educational activities on child diarrhea treatment. This difference may be due to caregivers&#8217; experiences of waiting in long lines, difficulty getting appointments<sup><xref ref-type="bibr" rid="B07">7</xref>,   <xref ref-type="bibr" rid="B20">20</xref></sup> (data not shown), and over-reporting of giving health advice or educational activities by CHWs. Similarities in perceptions of the ESF were found in satisfaction with ESF diarrhea services and usage of the Child Health Booklet. Professionals also shared challenges: difficulty of access to the unit and to households, lack of resources, and poor quality of training. These work challenges have been cited by ESF Professionals in other municipalities.<sup><xref ref-type="bibr" rid="B06">6</xref>,   <xref ref-type="bibr" rid="B10">10</xref>,   <xref ref-type="bibr" rid="B13">13</xref>,   <xref ref-type="bibr" rid="B17">17</xref></sup> Perceptions of limited resources and poor infrastructure could be explained by the relatively recent implementation of the program in the municipality<sup><xref ref-type="bibr" rid="B13">13</xref>,   <xref ref-type="bibr" rid="B22">22</xref></sup>(e.g., transportation to distant ESF units may be lacking).</p>
+      <p>Both caregivers and professionals had recommendations for improving the ESF in structuring and providing health care services to their communities: improvement of health care services<sup><xref ref-type="bibr" rid="B04">4</xref>,   <xref ref-type="bibr" rid="B05">5</xref>,   <xref ref-type="bibr" rid="B23">23</xref></sup>and worker retention, job satisfaction, and motivation<sup><xref ref-type="bibr" rid="B09">9</xref>,   <xref ref-type="bibr" rid="B21">21</xref>,   <xref ref-type="bibr" rid="B28">28</xref></sup>responsible for a strong overall health care system.<sup><xref ref-type="bibr" rid="B09">9</xref>,   <xref ref-type="bibr" rid="B25">25</xref></sup>In a review of the literature, Willis-Shattuck et al<sup><xref ref-type="bibr" rid="B27">27</xref></sup> cited health care worker retention as a key factor in strengthening health care systems in developing countries. Job satisfaction and motivation play a key role in retaining health care professionals without regard to financial considerations.<sup><xref ref-type="bibr" rid="B17">17</xref>,   <xref ref-type="bibr" rid="B27">27</xref></sup> Many recommendations stemmed from areas of discrepancy between professional and caregiver perceptions and were significant factors in patient satisfaction (   <xref ref-type="table" rid="t04">Table 4</xref>). Professionals were more likely to think that ESF services were accessible to the caregiver; on the other hand, caregivers found it difficult to access services and that problem made caregivers significantly less likely to be satisfied (OR 0.2, 95%CI 0.1;0.4,   <xref ref-type="table" rid="t04">Table 4</xref>). Similar results were found in the perception that there weren&#8217;t enough health care professionals (OR 0.3, 95%CI 0.2;0.6), and the perception of poor quality of care (OR 0.3, 95%CI 0.1;0.6,   <xref ref-type="table" rid="t02">Tables 2</xref>and   <xref ref-type="table" rid="t04">4</xref>). These problems all significantly decreased the likelihood that caregivers were satisfied with the ESF. Areas of correspondence between the perceptions of professionals and caregivers were significantly related to increased patient satisfaction, as seen in household visits (OR 5.8, 95%CI 2.8; 12.1), attendance (OR 4.8, 95%CI 2.5;9.3), and family-focused health (OR 4.1, 95%CI 1.6;10.2). By increasing correspondence between caregiver and professional perceptions and expectations, patient satisfaction may be increased, which in turn will increase medical compliance and more effective utilization of care.<sup><xref ref-type="bibr" rid="B20">20</xref>,   <xref ref-type="bibr" rid="B26">26</xref></sup>Our study is among a small group of publications that have examined areas of correspondence and discrepancies between the identified perceptions of the users and ESF professionals. Despite the limitations involved with comparing the perceptions of the two groups simultaneously, our results point to the critical need for increased identification and evaluation of caregiver&#8217;s and ESF professional&#8217;s perceptions of public health programs like the ESF in order to use the findings to construct appropriate recommendations for program development.</p>
+      <p>Our study had strengths and limitations. By inviting all the professionals of Vespasiano (n = 85) to participate (response rate 91%), we increased our likelihood of obtaining a large sample population and collecting a wide and representative range of perceptions from all four ESF professional types. Random sampling of caregivers allowed us to make generalizations about ESF caregivers in the municipality.<sup><xref ref-type="bibr" rid="B15">15</xref></sup> Our methods involved novel approaches not applied in other studies, including the application of modeling procedures to examine caregiver satisfaction, comparison of the perceptions of the caregivers and professionals and random sampling to identify the sample of caregivers for the study. In addition, we attempted to reduce potential interviewer bias by providing standardized training to all interviewers on conducting the survey and probing for open ended data before the start of the study. However, one disease marker, diarrhea, instead of several disease markers, was evaluated. We could not assess the influence of duration of the professional&#8217;s work with the specific ESF unit on their satisfaction because we lacked these data and sample size for an adequate analysis. The data presented here are based on self-reports from the participants, which raises a concern for potential respondent bias. Because the context and phrasing of the questions between caregivers and professionals differed, we were not able to statistically compare these two populations, but instead can only make general comparisons. Our study objectives, however, were designed to evaluate perceptions of the services provided and to a lesser extent the actual delivery of these services.</p>
+      <p>While our study examined a local scenario, some of our findings may be generalized to the perceptions of other ESF professionals in Brazil. Key differences in ESF experiences between municipalities may involve different disease profiles, institutional capacities, and public administration within each area.<sup><xref ref-type="bibr" rid="B13">13</xref>,   <xref ref-type="bibr" rid="B22">22</xref></sup>These differences should be considered in multi-site evaluation studies. By interviewing the majority of the ESF professionals in Vespasiano, similar perceptions were reported across the participants regardless of the health unit where they worked (which had their own differences and needs to consider), suggesting that our results may also reflect the perceptions of other ESF professionals in Brazil. Many caregiver responses were similar across the units where they received care and because our findings have been supported at least partially by studies outside Vespasiano,<sup><xref ref-type="bibr" rid="B06">6</xref>,   <xref ref-type="bibr" rid="B10">10</xref>,   <xref ref-type="bibr" rid="B12">12</xref>,   <xref ref-type="bibr" rid="B13">13</xref>,   <xref ref-type="bibr" rid="B17">17</xref></sup>these responses may also reflect the perceptions of other users of the ESF in Brazil. Because the survey pool (primary caregivers of children &lt; 5 years in Vespasiano served by the ESF) was randomly sampled, the resulting data were generalizable to the entire population of ESF caregivers throughout the municipality. The analyses of this study can serve as a basis for future research across municipalities.</p>
+      <p>Our findings allow for the development of measures to improve on the challenges confronting ESF health teams while promoting key activities that may be contributing to patient satisfaction and reductions in the incidence and severity of some of the major diseases affecting the Brazilian pediatric population.</p>
+    </sec>
+  </body>
+  <back>
+    <ack>
+      <title>
+        <bold>ACKNOWLEDGEMENTS</bold>
+      </title>
+      <p>To Dr. Eric Mintz and Dr. Jay McAuliffe for their valuable input throughout the project; to Ms. Elizabeth Adams for statistical assistance; to Dr. H&#233;rica Soraya Albano of Vespasiano&#8217;s Municipal Secretary of Health; to Dr. Assuero Rodrigues da Silva, Director of the   <italic>Faculdade de Sa&#250;de e Ecologia Humana</italic>, Vespasiano, Brazil); to Dr. Aristides J. V. Carvalho and to Dr. Carlos E. F. Starling, for stimulating discussions; and to the Family Health Strategy professionals and caregivers who participated in this work.</p>
+      <p>A) Bars represent the number of caregivers who mentioned the row topic as a benefit of the ESF services. &#8220;Other&#8221; responses included availability of exam options, fast lab results, an easy system, availability of medications, being well treated by staff, focus on prevention, chronic disease care, vaccinations, antenatal care, and general improvement in the ESF. B) Bars represent the number of caregivers who mentioned each topic as a recommendation to improve the ESF program. &#8220;Other&#8221; responses include: better staff training, more medicines, better unit facilities, more home visits from agent, better process for urgent care, better quality, better professional-patient relationships, and better overall structure.</p>
+    </ack>
+    <ref-list>
+      <title>REFERENCES</title>
+      <ref id="B01">
+        <label>1</label>
+        <mixed-citation>1. Aquino R, Oliveira NF, Barreto ML. Impact of the Family Health Program on infant mortality in Brazilian municipalities. Am J Public Health. 2009;99(1):87-93. DOI:10.2105/AJPH.2007.127480</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Aquino</surname>
+              <given-names>R</given-names>
+            </name>
+            <name>
+              <surname>Oliveira</surname>
+              <given-names>NF</given-names>
+            </name>
+            <name>
+              <surname>Barreto</surname>
+              <given-names>ML</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Impact of the Family Health Program on infant mortality in Brazilian municipalities</article-title>
+          <source>Am J Public Health</source>
+          <year>2009</year>
+          <volume>99</volume>
+          <issue>1</issue>
+          <fpage>87</fpage>
+          <lpage>93</lpage>
+          <pub-id pub-id-type="doi">10.2105/AJPH.2007.127480</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B02">
+        <label>2</label>
+        <mixed-citation>2. Atkinson S, Haran D. Individual and district scale determinants of users' satisfaction with primary health care in developing countries. Soc Sci Med. 2005;60(3):501-13. DOI:10.1016/j.socscimed.2004.05.019</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Atkinson</surname>
+              <given-names>S</given-names>
+            </name>
+            <name>
+              <surname>Haran</surname>
+              <given-names>D</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Individual and district scale determinants of users' satisfaction with primary health care in developing countries</article-title>
+          <source>Soc Sci Med</source>
+          <year>2005</year>
+          <volume>60</volume>
+          <issue>3</issue>
+          <fpage>501</fpage>
+          <lpage>13</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.socscimed.2004.05.019</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B03">
+        <label>3</label>
+        <mixed-citation>3. Barreto ML, Aquino R. Recent positive developments in the Brazilian health system. Am J Public Health. 2009;99(1):8. DOI:10.2105/AJPH.2008.153791</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Barreto</surname>
+              <given-names>ML</given-names>
+            </name>
+            <name>
+              <surname>Aquino</surname>
+              <given-names>R</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Recent positive developments in the Brazilian health system</article-title>
+          <source>Am J Public Health</source>
+          <year>2009</year>
+          <volume>99</volume>
+          <issue>1</issue>
+          <fpage>8</fpage>
+          <pub-id pub-id-type="doi">10.2105/AJPH.2008.153791</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B04">
+        <label>4</label>
+        <mixed-citation>4. Bleich SN, Ozaltin E, Murray CK. How does satisfaction with the health-care system relate to patient experience? Bull World Health Organ. 2009;87(4):271-8. DOI:10.1590/S0042-96862009000400012</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Bleich</surname>
+              <given-names>SN</given-names>
+            </name>
+            <name>
+              <surname>Ozaltin</surname>
+              <given-names>E</given-names>
+            </name>
+            <name>
+              <surname>Murray</surname>
+              <given-names>CK</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">How does satisfaction with the health-care system relate to patient experience?</article-title>
+          <source>Bull World Health Organ</source>
+          <year>2009</year>
+          <volume>87</volume>
+          <issue>4</issue>
+          <fpage>271</fpage>
+          <lpage>8</lpage>
+          <pub-id pub-id-type="doi">10.1590/S0042-96862009000400012</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B05">
+        <label>5</label>
+        <mixed-citation>5. Carr-Hill RA. The measurement of patient satisfaction. J Public Health Med. 1992;14(3):236-49.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title xml:lang="en">Carr-Hill RA. The measurement of patient satisfaction</article-title>
+          <source>J Public Health Med</source>
+          <year>1992</year>
+          <volume>14</volume>
+          <issue>3</issue>
+          <fpage>236</fpage>
+          <lpage>49</lpage>
+        </element-citation>
+      </ref>
+      <ref id="B06">
+        <label>6</label>
+        <mixed-citation>6. Cotta RMM, Schott M, Azeredo CM, Franceschini SCC, Priore SE, Dias G. Organiza&#231;&#227;o do trabalho e perfil dos profissionais do Programa Sa&#250;de da Fam&#237;lia: um desafio na reestrutura&#231;&#227;o da aten&#231;&#227;o b&#225;sica em sa&#250;de. Epidemiol Serv Saude. 2006;15(3):7-18. DOI:10.5123/S1679-49742006000300002</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Cotta</surname>
+              <given-names>RMM</given-names>
+            </name>
+            <name>
+              <surname>Schott</surname>
+              <given-names>M</given-names>
+            </name>
+            <name>
+              <surname>Azeredo</surname>
+              <given-names>CM</given-names>
+            </name>
+            <name>
+              <surname>Franceschini</surname>
+              <given-names>SCC</given-names>
+            </name>
+            <name>
+              <surname>Priore</surname>
+              <given-names>SE</given-names>
+            </name>
+            <name>
+              <surname>Dias</surname>
+              <given-names>G</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="pt">Organiza&#231;&#227;o do trabalho e perfil dos profissionais do Programa Sa&#250;de da Fam&#237;lia: um desafio na reestrutura&#231;&#227;o da aten&#231;&#227;o b&#225;sica em sa&#250;de</article-title>
+          <source>Epidemiol Serv Saude</source>
+          <year>2006</year>
+          <volume>15</volume>
+          <issue>3</issue>
+          <fpage>7</fpage>
+          <lpage>18</lpage>
+          <pub-id pub-id-type="doi">10.5123/S1679-49742006000300002</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B07">
+        <label>7</label>
+        <mixed-citation>7. Gouveia GC, Souza WV, Luna CF, Souza-J&#250;nior PRB, Szwarcwald CL. Health care users' satisfaction in Brazil, 2003. Cad Saude Publica. 2005;21(Supl 1):S109-18. DOI:10.1590/S0102-311X2005000700012</mixed-citation>
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Gouveia</surname>
+              <given-names>GC</given-names>
+            </name>
+            <name>
+              <surname>Souza</surname>
+              <given-names>WV</given-names>
+            </name>
+            <name>
+              <surname>Luna</surname>
+              <given-names>CF</given-names>
+            </name>
+            <name>
+              <surname>Souza-J&#250;nior</surname>
+              <given-names>PRB</given-names>
+            </name>
+            <name>
+              <surname>Szwarcwald</surname>
+              <given-names>CL</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Health care users' satisfaction in Brazil, 2003.   <italic>Cad Saude Publica</italic> </article-title>
+          <source>2005;21(Supl 1)</source>
+          <fpage>S109</fpage>
+          <lpage>18</lpage>
+          <pub-id pub-id-type="doi">10.1590/S0102-311X2005000700012</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B08">
+        <label>8</label>
+        <mixed-citation>8. Hudak PL, Wright JG. The characteristics of patient satisfaction measures. Spine. 2000;25(24):3167-77.</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Hudak</surname>
+              <given-names>PL</given-names>
+            </name>
+            <name>
+              <surname>Wright</surname>
+              <given-names>JG</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">The characteristics of patient satisfaction measures</article-title>
+          <source>Spine</source>
+          <year>2000</year>
+          <volume>25</volume>
+          <issue>24</issue>
+          <fpage>3167</fpage>
+          <lpage>77</lpage>
+        </element-citation>
+      </ref>
+      <ref id="B09">
+        <label>9</label>
+        <mixed-citation>9. Kmietowicz Z. Allowing migrant health workers to work back home would help offset &#8220;brain drain&#8221;. BMJ. 2010;341:c5157. DOI:10.1136/bmj.c5157</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title xml:lang="en">Kmietowicz Z. Allowing migrant health workers to work back home would help offset &#8220;brain drain&#8221;</article-title>
+          <source>BMJ</source>
+          <year>2010</year>
+          <volume>341</volume>
+          <fpage>c5157</fpage>
+          <pub-id pub-id-type="doi">10.1136/bmj.c5157</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B10">
+        <label>10</label>
+        <mixed-citation>10. Macinko J, Guanais FC, Fatima M, Souza M. Evaluation of the impact of the Family Health Program on infant mortality in Brazil, 1990-2002. J Epidemiol Community Health. 2006;60(1):13-9. DOI:10.1136/jech.2005.038323</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Macinko</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Guanais</surname>
+              <given-names>FC</given-names>
+            </name>
+            <name>
+              <surname>Fatima</surname>
+              <given-names>M</given-names>
+            </name>
+            <name>
+              <surname>Souza</surname>
+              <given-names>M</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Evaluation of the impact of the Family Health Program on infant mortality in Brazil, 1990-2002</article-title>
+          <source>J Epidemiol Community Health</source>
+          <year>2006</year>
+          <volume>60</volume>
+          <issue>1</issue>
+          <fpage>13</fpage>
+          <lpage>9</lpage>
+          <pub-id pub-id-type="doi">10.1136/jech.2005.038323</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B11">
+        <label>11</label>
+        <mixed-citation>11. Macinko J, Souza MFM, Guanais FC, Sim&#245;es CCS. Going to scale with community-based primary care: an analysis of the family health program and infant mortality in Brazil, 1999-2004. Soc Sci Med. 2007;65(10):2070-80. DOI:10.1016/j.socscimed.2007.06.028</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Macinko</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Souza</surname>
+              <given-names>MFM</given-names>
+            </name>
+            <name>
+              <surname>Guanais</surname>
+              <given-names>FC</given-names>
+            </name>
+            <name>
+              <surname>Sim&#245;es</surname>
+              <given-names>CCS</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Going to scale with community-based primary care: an analysis of the family health program and infant mortality in Brazil, 1999-2004</article-title>
+          <source>Soc Sci Med</source>
+          <year>2007</year>
+          <volume>65</volume>
+          <issue>10</issue>
+          <fpage>2070</fpage>
+          <lpage>80</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.socscimed.2007.06.028</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B12">
+        <label>12</label>
+        <mixed-citation>12. Macinko J, Costa MFL. Access to, use of and satisfaction with health services among adults enrolled in Brazil&#8217;s Family Health Strategy: evidence from the 2008 National Household Survey. Trop Med Int Health. 2012;17(1):36-42. DOI:10.1111/j.1365-3156.2011.02866.x</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Macinko</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Costa</surname>
+              <given-names>MFL</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Access to, use of and satisfaction with health services among adults enrolled in Brazil&#8217;s Family Health Strategy: evidence from the 2008 National Household Survey</article-title>
+          <source>Trop Med Int Health</source>
+          <year>2012</year>
+          <volume>17</volume>
+          <issue>1</issue>
+          <fpage>36</fpage>
+          <lpage>42</lpage>
+          <pub-id pub-id-type="doi">10.1111/j.1365-3156.2011.02866.x</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B13">
+        <label>13</label>
+        <mixed-citation>13. Magalh&#227;es R, SennaMCM. Local implementation of the Family Health Program in Brazil. Cad Saude Publica. 2006;22(12):2549-59. DOI:10.1590/S0102-311X2006001200005</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Magalh&#227;es</surname>
+              <given-names>R</given-names>
+            </name>
+            <collab>SennaMCM</collab>
+          </person-group>
+          <article-title xml:lang="en">Local implementation of the Family Health Program in Brazil</article-title>
+          <source>Cad Saude Publica</source>
+          <year>2006</year>
+          <volume>22</volume>
+          <issue>12</issue>
+          <fpage>2549</fpage>
+          <lpage>59</lpage>
+          <pub-id pub-id-type="doi">10.1590/S0102-311X2006001200005</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B14">
+        <label>14</label>
+        <mixed-citation>14. Minist&#233;rio da Sa&#250;de, Secretaria de Vigil&#226;ncia em Sa&#250;de. Pol&#237;tica nacional de promo&#231;&#227;o da sa&#250;de. Bras&#237;lia (DF); 2006. (S&#233;rie B. Textos B&#225;sicos de Sa&#250;de). [citado 2013 mar 27]. Dispon&#237;vel em:   <ext-link ext-link-type="uri" xlink:href="http://portal.saude.gov.br/portal/arquivos/pdf/pactovolume7.pdf">http://portal.saude.gov.br/portal/arquivos/pdf/pactovolume7.pdf</ext-link> </mixed-citation>
+        <element-citation publication-type="book">
+          <article-title xml:lang="pt">Minist&#233;rio da Sa&#250;de, Secretaria de Vigil&#226;ncia em Sa&#250;de. Pol&#237;tica nacional de promo&#231;&#227;o da sa&#250;de. Bras&#237;lia (DF); 2006. (S&#233;rie B. Textos B&#225;sicos de Sa&#250;de). [citado 2013 mar 27]</article-title>
+          <source>Dispon&#237;vel em:</source>
+          <comment>
+            <ext-link ext-link-type="uri" xlink:href="http://portal.saude.gov.br/portal/arquivos/pdf/pactovolume7.pdf">http://portal.saude.gov.br/portal/arquivos/pdf/pactovolume7.pdf</ext-link>
+          </comment>
+        </element-citation>
+      </ref>
+      <ref id="B15">
+        <label>15</label>
+        <mixed-citation>15. Mues KE, Resende JC, Santos OC, Perez LG, Ferreira JA, Leon JS. User satisfaction with the Family Health Program in Vespasiano, Minas Gerais, Brazil. Pan Am Health J. 2012;31(6):454-60. DOI:10.1590/S1020-49892012000600002</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Mues</surname>
+              <given-names>KE</given-names>
+            </name>
+            <name>
+              <surname>Resende</surname>
+              <given-names>JC</given-names>
+            </name>
+            <name>
+              <surname>Santos</surname>
+              <given-names>OC</given-names>
+            </name>
+            <name>
+              <surname>Perez</surname>
+              <given-names>LG</given-names>
+            </name>
+            <name>
+              <surname>Ferreira</surname>
+              <given-names>JA</given-names>
+            </name>
+            <name>
+              <surname>Leon</surname>
+              <given-names>JS</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">User satisfaction with the Family Health Program in Vespasiano, Minas Gerais, Brazil</article-title>
+          <source>Pan Am Health J</source>
+          <year>2012</year>
+          <volume>31</volume>
+          <issue>6</issue>
+          <fpage>454</fpage>
+          <lpage>60</lpage>
+          <pub-id pub-id-type="doi">10.1590/S1020-49892012000600002</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B16">
+        <label>16</label>
+        <mixed-citation>16. Murray J, Manancourt S. Integrated health facility assessment manual: using local planning to improve the quality of child care at health facilities. Arlington: BASICS; 1998.</mixed-citation>
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Murray</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Manancourt</surname>
+              <given-names>S</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Integrated health facility assessment manual: using local planning to improve the quality of child care at health facilities</article-title>
+          <publisher-loc>Arlington</publisher-loc>
+          <publisher-name>BASICS</publisher-name>
+          <year>1998</year>
+        </element-citation>
+      </ref>
+      <ref id="B17">
+        <label>17</label>
+        <mixed-citation>17. Oliveira EM, Spiri WC. Family Health Program: the experience of a multiprofessional team. Rev Saude Publica. 2006;40(4):727-33. DOI:10.1590/S0034-89102006000500025</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Oliveira</surname>
+              <given-names>EM</given-names>
+            </name>
+            <name>
+              <surname>Spiri</surname>
+              <given-names>WC</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Family Health Program: the experience of a multiprofessional team</article-title>
+          <source>Rev Saude Publica</source>
+          <year>2006</year>
+          <volume>40</volume>
+          <issue>4</issue>
+          <fpage>727</fpage>
+          <lpage>33</lpage>
+          <pub-id pub-id-type="doi">10.1590/S0034-89102006000500025</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B18">
+        <label>18</label>
+        <mixed-citation>18. Rasella D, Aquino R, Barreto ML. Impact of the Family Health Program on the quality of vital information and reduction of child unattended deaths in Brazil: an ecological longitudinal study. BMC Public Health. 2010;10:380. DOI:10.1186/1471-2458-10-380</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Rasella</surname>
+              <given-names>D</given-names>
+            </name>
+            <name>
+              <surname>Aquino</surname>
+              <given-names>R</given-names>
+            </name>
+            <name>
+              <surname>Barreto</surname>
+              <given-names>ML</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Impact of the Family Health Program on the quality of vital information and reduction of child unattended deaths in Brazil: an ecological longitudinal study</article-title>
+          <source>BMC Public Health</source>
+          <year>2010</year>
+          <volume>10</volume>
+          <fpage>380</fpage>
+          <pub-id pub-id-type="doi">10.1186/1471-2458-10-380</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B19">
+        <label>19</label>
+        <mixed-citation>19. Rasella D, Aquino R, Barreto ML. Reducing childhood mortality from diarrhea and lower respiratory tract infections in Brazil. Pediatrics. 2010;126(3):e534-40. DOI: 10.1542/peds.2009-3197 10.1542/peds.2009-3197</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Rasella</surname>
+              <given-names>D</given-names>
+            </name>
+            <name>
+              <surname>Aquino</surname>
+              <given-names>R</given-names>
+            </name>
+            <name>
+              <surname>Barreto</surname>
+              <given-names>ML</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Reducing childhood mortality from diarrhea and lower respiratory tract infections in Brazil</article-title>
+          <source>Pediatrics</source>
+          <year>2010</year>
+          <volume>126</volume>
+          <issue>3</issue>
+          <fpage>e534</fpage>
+          <lpage>40</lpage>
+          <pub-id pub-id-type="doi">10.1542/peds.2009-3197</pub-id>
+          <comment>10.1542/peds.2009-3197</comment>
+        </element-citation>
+      </ref>
+      <ref id="B20">
+        <label>20</label>
+        <mixed-citation>20. Ribeiro JM, Siqueira SAV, Pinto LFS. Avalia&#231;&#227;o da aten&#231;&#227;o &#224; sa&#250;de da crian&#231;a (0-5 anos) no PSF de Teres&#243;polis (RJ) segundo a percep&#231;&#227;o dos usu&#225;rios. Cienc Saude Coletiva. 2010;15(2):517-27. DOI:10.1590/S1413-81232010000200028</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Ribeiro</surname>
+              <given-names>JM</given-names>
+            </name>
+            <name>
+              <surname>Siqueira</surname>
+              <given-names>SAV</given-names>
+            </name>
+            <name>
+              <surname>Pinto</surname>
+              <given-names>LFS</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="pt">Avalia&#231;&#227;o da aten&#231;&#227;o &#224; sa&#250;de da crian&#231;a (0-5 anos) no PSF de Teres&#243;polis (RJ) segundo a percep&#231;&#227;o dos usu&#225;rios</article-title>
+          <source>Cienc Saude Coletiva</source>
+          <year>2010</year>
+          <volume>15</volume>
+          <issue>2</issue>
+          <fpage>517</fpage>
+          <lpage>27</lpage>
+          <pub-id pub-id-type="doi">10.1590/S1413-81232010000200028</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B21">
+        <label>21</label>
+        <mixed-citation>21. Saravia NG, Miranda JF. Plumbing the brain drain. Bull World Health Organ. 2004;82(8):608-15. DOI:10.1590/S0042-96862004000800011</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Saravia</surname>
+              <given-names>NG</given-names>
+            </name>
+            <name>
+              <surname>Miranda</surname>
+              <given-names>JF</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Plumbing the brain drain</article-title>
+          <source>Bull World Health Organ</source>
+          <year>2004</year>
+          <volume>82</volume>
+          <issue>8</issue>
+          <fpage>608</fpage>
+          <lpage>15</lpage>
+          <pub-id pub-id-type="doi">10.1590/S0042-96862004000800011</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B22">
+        <label>22</label>
+        <mixed-citation>22. Sarti TD, Campos CEA, Zandonade E, Ruschi GEC, Maciel ELN. Avalia&#231;&#227;o das a&#231;&#245;es de planejamento em sa&#250;de empreendidas por equipes de sa&#250;de da fam&#237;lia. Cad Saude Publica. 2012;28(3):537-48. DOI:10.1590/S0102-311X2012000300014</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Sarti</surname>
+              <given-names>TD</given-names>
+            </name>
+            <name>
+              <surname>Campos</surname>
+              <given-names>CEA</given-names>
+            </name>
+            <name>
+              <surname>Zandonade</surname>
+              <given-names>E</given-names>
+            </name>
+            <name>
+              <surname>Ruschi</surname>
+              <given-names>GEC</given-names>
+            </name>
+            <name>
+              <surname>Maciel</surname>
+              <given-names>ELN</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="pt">Avalia&#231;&#227;o das a&#231;&#245;es de planejamento em sa&#250;de empreendidas por equipes de sa&#250;de da fam&#237;lia</article-title>
+          <source>Cad Saude Publica</source>
+          <year>2012</year>
+          <volume>28</volume>
+          <issue>3</issue>
+          <fpage>537</fpage>
+          <lpage>48</lpage>
+          <pub-id pub-id-type="doi">10.1590/S0102-311X2012000300014</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B23">
+        <label>23</label>
+        <mixed-citation>23. Schneider H, Palmer N. Getting to the truth? Researching user views of primary health care. Health Policy Plan. 2002;17(1):32-41. DOI:10.1093/heapol/17.1.32</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Schneider</surname>
+              <given-names>H</given-names>
+            </name>
+            <name>
+              <surname>Palmer</surname>
+              <given-names>N</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Getting to the truth? Researching user views of primary health care</article-title>
+          <source>Health Policy Plan</source>
+          <year>2002</year>
+          <volume>17</volume>
+          <issue>1</issue>
+          <fpage>32</fpage>
+          <lpage>41</lpage>
+          <pub-id pub-id-type="doi">10.1093/heapol/17.1.32</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B24">
+        <label>24</label>
+        <mixed-citation>24. Sitzia J, Wood N. Patient satisfaction: a review of issues and concepts. Soc Sci Med. 1997;45(12):1829-43. DOI:10.1016/S0277-9536(97)00128-7</mixed-citation>
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Sitzia</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Wood</surname>
+              <given-names>N</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Patient satisfaction: a review of issues and concepts.   <italic>Soc Sci Med</italic> </article-title>
+          <publisher-loc>1997;45(12)</publisher-loc>
+          <publisher-name>1829-43</publisher-name>
+          <pub-id pub-id-type="doi">10.1016/S0277-9536(97)00128-7</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B25">
+        <label>25</label>
+        <mixed-citation>25. Tendler J, Freedheim S. Trust in a rent-seeking world: health and government transformed in Northeast Brazil. World Dev. 1994;22(12):1771-91. DOI:10.1016/0305-750x(94)90173-2</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Tendler</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Freedheim</surname>
+              <given-names>S</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Trust in a rent-seeking world: health and government transformed in Northeast Brazil</article-title>
+          <source>World Dev</source>
+          <year>1994</year>
+          <volume>22</volume>
+          <issue>12</issue>
+          <fpage>1771</fpage>
+          <lpage>91</lpage>
+          <pub-id pub-id-type="doi">10.1016/0305-750x(94)90173-2</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B26">
+        <label>26</label>
+        <mixed-citation>26. Williams B. Patient satisfaction: a valid concept? Soc Sci Med. 1994;38(4):509-16.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title xml:lang="en">Williams B. Patient satisfaction: a valid concept?</article-title>
+          <source>Soc Sci Med</source>
+          <year>1994</year>
+          <volume>38</volume>
+          <issue>4</issue>
+          <fpage>509</fpage>
+          <lpage>16</lpage>
+        </element-citation>
+      </ref>
+      <ref id="B27">
+        <label>27</label>
+        <mixed-citation>27. Willis-Shattuck M, Bidwell P, Thomas S, Wyness L, Blaauw D, Ditlopo P. Motivation and retention of health workers in developing countries: a systematic review. BMC Health Serv Res. 2008;8:247. DOI:10.1186/1472-6963-8-247</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Willis-Shattuck</surname>
+              <given-names>M</given-names>
+            </name>
+            <name>
+              <surname>Bidwell</surname>
+              <given-names>P</given-names>
+            </name>
+            <name>
+              <surname>Thomas</surname>
+              <given-names>S</given-names>
+            </name>
+            <name>
+              <surname>Wyness</surname>
+              <given-names>L</given-names>
+            </name>
+            <name>
+              <surname>Blaauw</surname>
+              <given-names>D</given-names>
+            </name>
+            <name>
+              <surname>Ditlopo</surname>
+              <given-names>P</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Motivation and retention of health workers in developing countries: a systematic review</article-title>
+          <source>BMC Health Serv Res</source>
+          <year>2008</year>
+          <volume>8</volume>
+          <fpage>247</fpage>
+          <pub-id pub-id-type="doi">10.1186/1472-6963-8-247</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B28">
+        <label>28</label>
+        <mixed-citation>28. Witt J. Addressing the migration of health professionals: the role of working conditions and educational placements. BMC Public Health. 2009;9(Suppl 1):S7. DOI:10.1186/1471-2458-9-S1-S7</mixed-citation>
+        <element-citation publication-type="book">
+          <article-title xml:lang="en">Witt J. Addressing the migration of health professionals: the role of working conditions and educational placements.   <italic>BMC Public Health</italic> </article-title>
+          <source>2009;9(Suppl 1)</source>
+          <fpage>S7</fpage>
+          <pub-id pub-id-type="doi">10.1186/1471-2458-9-S1-S7</pub-id>
+        </element-citation>
+      </ref>
+    </ref-list>
+    <app-group>
+      <app>
+        <title>HIGHLIGHTS</title>
+        <p>The authors used an ordinary questionnaire to assess the perceptions of health care professionals, community health care workers and service users. There is a wide discrepancy between the two groups of interviewees&#8217; perceptions of the functioning of the Family Health Strategy.</p>
+        <p>The health care professionals highlighted the limitations: difficulties in access to the workplace, poor quality of the care provided, insufficient training and lack of adequate preparation.</p>
+        <p>The service users highlighted limitations such as the lack of health care professionals, insufficient infrastructure, limited availability of resources, difficulties in access and poor quality services. However, the majority of service users (62%) stated that they were satisfied or very satisfied.</p>
+        <p>Among the positive aspects, services users mentioned availability of services, the ease with which appointments could be made and home visits by community health care agents.</p>
+        <p>Profa. Rita de C&#225;ssia Barradas Barata</p>
+        <p>Scientific Editor</p>
+      </app>
+    </app-group>
+    <fn-group>
+      <fn id="fn01">
+        <p>Partially supported by grant 1K01AI087724 &#8211; 01 from the National Institute of Allergy and Infectious Diseases at the National Institute of Health; grant 2010-85212-20608 from the National Institute of Food and Agriculture at the U.S. Department of Agriculture; and the Emory University Global Health Institute [to Juan S Leon]; supported by the Emory University Scholarly Inquiry and Research at Emory program [to Juliet D Sheridan]; partially supported by a research grant from the Investigators Program of the   <italic>Faculdade de Sa&#250;de e Ecologia Humana</italic>, Vespasiano, Brazil [to Jos&#233; A G Ferreira]; partially supported by the Eugene J. Gangarosa Fund, the Anne E. and William A. Foege Global Health Fund, the O.C. Hubert Charitable Trust, the RSPH Student Initiative Fund, and the NIH Global Frameworks Grant (2007-2010) [to Katherine E Mues and Lilian G Perez].</p>
+      </fn>
+    </fn-group>
+  </back>
+</article>

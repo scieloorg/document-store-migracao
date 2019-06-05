@@ -17,6 +17,11 @@ from documentstore_migracao.utils import manifest
 from documentstore_migracao import config
 from documentstore.domain import DocumentsBundle
 from documentstore.exceptions import DoesNotExist
+from documentstore_migracao.processing.inserting import (
+    get_document_assets_path,
+    put_static_assets_into_storage
+)
+from documentstore_migracao.utils.xml import loadToXML
 
 
 class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
@@ -379,3 +384,115 @@ class TestDocumentManifest(unittest.TestCase):
     
     def test_rendtion_should_not_contains_language(self):
         self.assertIsNone(self.renditions[0].get("lang"))
+
+
+class TestDocumentRegister(unittest.TestCase):
+    def setUp(self):
+        self.package_path = os.path.join(SAMPLES_PATH, "0034-8910-rsp-47-02-0231")
+        self.xml_path = os.path.join(self.package_path, "0034-8910-rsp-47-02-0231.xml")
+        self.xml_etree = loadToXML(self.xml_path)
+        self.package_files = [
+            "0034-8910-rsp-47-02-0231-en.pdf",
+            "0034-8910-rsp-47-02-0231-gf01-en.jpg",
+            "0034-8910-rsp-47-02-0231-gf01-en.tif",
+            "0034-8910-rsp-47-02-0231-gf01.jpg",
+            "0034-8910-rsp-47-02-0231-gf01.tif",
+            "0034-8910-rsp-47-02-0231.pdf",
+            "0034-8910-rsp-47-02-0231.xml",
+        ]
+
+        self.second_package_path = os.path.join(
+            SAMPLES_PATH, "0034-8910-rsp-47-02-0403"
+        )
+
+        self.second_xml_path = os.path.join(
+            self.second_package_path, "0034-8910-rsp-47-02-0403.xml"
+        )
+
+        self.second_xml_etree = loadToXML(self.second_xml_path)
+
+        self.second_package_files = [
+            "0034-8910-rsp-47-02-0403-gf01.jpg",
+            "0034-8910-rsp-47-02-0403-gf01.tif",
+            "0034-8910-rsp-47-02-0403.pdf",
+            "0034-8910-rsp-47-02-0403.xml",
+        ]
+
+    def test_get_documents_assets_should_return_assets_and_additionals(self):
+        assets, additionals = get_document_assets_path(
+            self.xml_etree, self.package_files, self.package_path
+        )
+
+        self.assertEqual(
+            ["0034-8910-rsp-47-02-0231-gf01", "0034-8910-rsp-47-02-0231-gf01-en"],
+            list(assets.keys()),
+        )
+
+        for additional in additionals.values():
+            with self.subTest(additional=additional):
+                self.assertNotIn(".tif", additional)
+
+    def test_get_documents_must_prefers_tif_files_instead_jpeg(self):
+        assets, _ = get_document_assets_path(
+            self.xml_etree, self.package_files, self.package_path
+        )
+
+        self.assertIn(
+            "0034-8910-rsp-47-02-0231-gf01.tif", assets["0034-8910-rsp-47-02-0231-gf01"]
+        )
+
+    def test_get_documents_assets_must_contain_additional_files_with_no_prefered_files(
+        self
+    ):
+        _, additionals = get_document_assets_path(
+            self.xml_etree, self.package_files, self.package_path
+        )
+
+        self.assertIn(
+            "0034-8910-rsp-47-02-0231-gf01.jpg",
+            additionals["0034-8910-rsp-47-02-0231-gf01"],
+        )
+
+    def test_get_documents_assets_must_contain_additional_files_when_references_is_not_complete(
+        self
+    ):
+        _, additionals = get_document_assets_path(
+            self.second_xml_etree, self.second_package_files, self.second_package_path
+        )
+
+        self.assertIn(
+            "0034-8910-rsp-47-02-0403-gf01.jpg",
+            additionals["0034-8910-rsp-47-02-0403-gf01"],
+        )
+
+    def test_get_documents_assets_should_not_return_assets_path(self):
+        assets, additionals = get_document_assets_path(
+            self.xml_etree, [], self.package_path
+        )
+
+        self.assertEqual({}, additionals)
+        self.assertEqual([None, None], list(assets.values()))
+
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def test_put_assets_into_storage_should_ignore_missing_assets(self, mk_store):
+        mk_store.register.side_effect = ["http://storage.io/mock-url.pdf"]
+
+        assets = {"first-asset": "path-to.pdf", "second-asset": None}
+        results = put_static_assets_into_storage(assets, "some-prefix", mk_store)
+
+        for result in results:
+            with self.subTest(result=result):
+                self.assertNotEqual("second-asset", result["asset_id"])
+
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def test_put_assets_should_raise_exception_when_ignore_missing_is_turned_off(
+        self, mk_store
+    ):
+        mk_store.register.side_effect = ["http://storage.io/mock-url.pdf", TypeError]
+
+        assets = {"first-asset": "path-to.pdf", "second-asset": None}
+
+        with self.assertRaises(TypeError):
+            put_static_assets_into_storage(
+                assets, "some-prefix", mk_store, ignore_missing_assets=False
+            )

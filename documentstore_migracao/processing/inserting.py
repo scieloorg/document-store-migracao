@@ -3,14 +3,15 @@
 import os
 import re
 import logging
-from typing import List
+from typing import List, Tuple
 from mimetypes import MimeTypes
+import lxml
 from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
 
 from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
 
-from documentstore.domain import utcnow, DocumentsBundle
+from documentstore.domain import utcnow, DocumentsBundle, get_static_assets
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore.interfaces import Session
 
@@ -50,7 +51,6 @@ def get_document_renditions(
         except:
             return None
 
-
     mimetypes = MimeTypes()
 
     _renditions = []
@@ -75,6 +75,70 @@ def get_document_renditions(
     return _renditions
 
 
+def get_document_assets_path(
+    xml: lxml.etree,
+    folder_files: list,
+    folder: str,
+    prefered_types=[".tif"]
+) -> Tuple[dict, dict]:
+    """Retorna a lista de assets e seus respectivos paths no
+    filesystem. Também retorna um dicionário com `arquivos adicionais`
+    que por ventura existam no pacote SPS. Os arquivos adicionais podem
+    existir se o XML referênciar um arquivo estático que possua mais de
+    uma extensão dentro do pacote SPS.
+
+    Para os assets do tipo `graphic` existe uma ordem de preferência para os
+    tipos de arquivos onde arquivos `.tif` são preferênciais em comparação
+    com arquivos `.jp*g` ou `.png`. Exemplo:
+
+    1) Referência para arquivo `1518-8787-rsp-40-01-92-98-gseta`
+    2) Pacote com arquivos `1518-8787-rsp-40-01-92-98-gseta.jpeg` e
+       `1518-8787-rsp-40-01-92-98-gseta.tif`
+    3) Resultado de asset `{'1518-8787-rsp-40-01-92-98-gseta': '1518-8787-rsp-40-01-92-98-gseta.tif'}
+    4) Resultado para arquivo adicional: `[1518-8787-rsp-40-01-92-98-gseta.jpeg]`
+    """
+
+    # TODO: é preciso que o get_static_assets conheça todos os tipos de assets
+    static_assets = dict([(asset[0], None) for asset in get_static_assets(xml)])
+    static_additionals = {}
+
+    for folder_file in folder_files:
+        file_name, extension = os.path.splitext(folder_file)
+
+        for key in static_assets.keys():
+            path = os.path.join(folder, folder_file)
+
+            if key == folder_file:
+                static_assets[key] = path
+            elif key in folder_file and extension in prefered_types:
+                static_assets[key] = path
+            elif key in folder_file and static_assets[key] is None:
+                static_assets[key] = path
+            elif file_name == key:
+                static_additionals[key] = path
+            elif file_name == os.path.splitext(key)[0]:
+                static_additionals[file_name] = path
+
+    return (static_assets, static_additionals)
+
+
+def put_static_assets_into_storage(
+    assets: dict, prefix: str, storage, ignore_missing_assets: bool = True
+) -> List[dict]:
+    """Armazena os arquivos assets em um object storage"""
+    _assets = []
+
+    for asset_name, asset_path in assets.items():
+        if not asset_path and ignore_missing_assets:
+            continue
+
+        _assets.append(
+            {"asset_id": asset_name, "asset_url": storage.register(asset_path, prefix)}
+        )
+
+    return _assets
+
+
 def register_document(folder: str, session_db, storage) -> None:
 
     logger.info("Processando a Pasta %s", folder)
@@ -86,7 +150,6 @@ def register_document(folder: str, session_db, storage) -> None:
     _renditions = list(
         filter(lambda file: ".pdf" in file or ".html" in file, list_files)
     )
-    medias_files = set(list_files) - set(xml_files) - set(_renditions)
 
     if len(xml_files) > 1:
         raise exceptions.XMLError("Existe %s xmls no pacote SPS", len(xml_files))
@@ -101,23 +164,24 @@ def register_document(folder: str, session_db, storage) -> None:
 
     xml_sps = SPS_Package(obj_xml)
 
+    # TODO: é possível que alguns artigos não possuam o self.acron
     prefix = xml_sps.media_prefix
     url_xml = storage.register(xml_path, prefix)
 
-    assets = []
-    for m_file in medias_files:
-        assets.append(
-            {
-                "asset_id": m_file,
-                "asset_url": storage.register(os.path.join(folder, m_file), prefix),
-            }
-        )
+    static_assets, static_additionals = get_document_assets_path(
+        obj_xml, list_files, folder
+    )
+    registered_assets = put_static_assets_into_storage(static_assets, prefix, storage)
+
+    for additional_path in static_additionals.values():
+        storage.register(os.path.join(additional_path), prefix)
+        logger.error(additional_path)
 
     if obj_xml:
         renditions = get_document_renditions(folder, _renditions, prefix, storage)
         manifest_data = ManifestDomainAdapter(
             manifest=manifest.get_document_manifest(
-                obj_xml, url_xml, assets, renditions
+                obj_xml, url_xml, registered_assets, renditions
             )
         )
 
