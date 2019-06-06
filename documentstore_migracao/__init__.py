@@ -1,6 +1,8 @@
 import sys
 import os
+import faulthandler
 
+faulthandler.enable()
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from documentstore_migracao.utils import logger, files
