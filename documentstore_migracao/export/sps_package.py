@@ -241,11 +241,12 @@ class SPS_Package:
 
         # RENDITION PDF
         obj_article = article.get_article(self.publisher_id)
-        pdfs = obj_article.fulltexts()["pdf"]
-        for l_pdf, u_pdf in pdfs.items():
-            f_name, ext = files.extract_filename_ext_by_path(u_pdf)
-            new_fname = self.asset_name(f_name)
-            replacements.append((u_pdf, new_fname))
+        if obj_article:
+            pdfs = obj_article.fulltexts()["pdf"]
+            for l_pdf, u_pdf in pdfs.items():
+                f_name, ext = files.extract_filename_ext_by_path(u_pdf)
+                new_fname = self.asset_name(f_name)
+                replacements.append((u_pdf, new_fname))
 
         return replacements
 
@@ -399,7 +400,12 @@ class SPS_Package:
             _, obj_html_body = convert.deploy(txt_body)
 
             # sobrecreve o html escapado anterior pelo novo xml tratado
-            body.getparent().replace(body, obj_html_body.find("body"))
+            if obj_html_body.tag != "body":
+                obj_html_body = obj_html_body.find("body")
+            if obj_html_body is None:
+                raise TypeError("XML: %s esta sem Body" % (self.publisher_id))
+
+            body.getparent().replace(body, obj_html_body)
 
         return self.xmltree
 
