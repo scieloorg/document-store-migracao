@@ -49,6 +49,7 @@ class TestProcessingPacking(unittest.TestCase):
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
+            SCIELO_COLLECTION="scl",
         ):
             packing.pack_article_xml(
                 os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_completo.xml")
@@ -70,10 +71,11 @@ class TestProcessingPacking(unittest.TestCase):
                     "1809-4392-aa-33-03-353-370-ga02fig01.gif",
                     "1809-4392-aa-33-03-353-370-ga02tab01a.gif",
                     "1809-4392-aa-33-03-353-370-ga02tab01b.gif",
+                    "1809-4392-aa-33-03-353-370-gv33n3a02.pdf",
                 },
                 files,
             )
-            self.assertEqual(10, len(files))
+            self.assertEqual(11, len(files))
 
     def test_pack_article_xml_has_no_media(self):
         with utils.environ(
