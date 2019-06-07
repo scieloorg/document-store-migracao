@@ -1155,8 +1155,7 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
 class Test__identify_tag_and_reftype_by_label_or_id(unittest.TestCase):
     def test_identify_tag_and_reftype_by_label_or_id(self):
         result = identify_tag_and_reftype_by_label_or_id(
-            "",
-            "APPENDIX- Click to enlarge"
+            "", "APPENDIX- Click to enlarge"
         )
         self.assertEqual(result, ("app", "app"))
 
@@ -1568,3 +1567,53 @@ class TestAssetsPipeline(unittest.TestCase):
         self.assertIsNotNone(xml.find(".//table-wrap[@id]/img"))
         self.assertIsNotNone(xml.find(".//table-wrap[@id]/label"))
         self.assertIsNone(xml.find(".//table-wrap[@id]/caption"))
+
+
+class TestAnnex(unittest.TestCase):
+
+    def test_(self):
+        text = """<root>
+        <a href="#anx01">Anexo 1</a>
+        <p><a name="anx01" id="anx01"/></p>
+        <p><img src="/img/revistas/trends/v33n3/a05tab01.jpg"/></p>
+        </root>
+        """
+        xml = etree.fromstring(text)
+        pipeline1 = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        text, xml = pipeline1.AnchorAndInternalLinkPipe(
+            pipeline1).transform((text, xml))
+
+        pipeline1 = AssetsPipeline(pid="S1234-56782018000100011")
+        text, xml = pipeline1.AddAssetInfoToImgElementsPipe(
+            pipeline1).transform((text, xml))
+        print(etree.tostring(xml))
+        text, xml = pipeline1.CreateAssetElementsFromExternalLinkElementsPipe(
+            pipeline1).transform((text, xml))
+        text, xml = pipeline1.CreateAssetElementsFromImgOrTableElementsPipe(
+            pipeline1).transform((text, xml))
+
+
+class TestTableWrap(unittest.TestCase):
+
+    def test_(self):
+        text = """<root>
+        <a href="#tab01">Table 1</a>
+        <p><a name="tab01" id="tab01"/></p>
+        <p><img src="/img/revistas/trends/v33n3/a05t01.jpg"/></p>
+        </root>
+        """
+        print("\n"*10)
+        xml = etree.fromstring(text)
+        pipeline1 = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        text, xml = pipeline1.AnchorAndInternalLinkPipe(
+            pipeline1).transform((text, xml))
+        print(etree.tostring(xml))
+
+        pipeline1 = AssetsPipeline(pid="S1234-56782018000100011")
+        text, xml = pipeline1.AddAssetInfoToImgElementsPipe(
+            pipeline1).transform((text, xml))
+        print(etree.tostring(xml))
+        text, xml = pipeline1.CreateAssetElementsFromImgOrTableElementsPipe(
+            pipeline1).transform((text, xml))
+        print(etree.tostring(xml))
+

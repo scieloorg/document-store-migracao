@@ -17,7 +17,10 @@ def validate_article_xml(file_xml_path, print_error=True):
     logger.debug(file_xml_path)
     try:
         xmlvalidator = XMLValidator.parse(file_xml_path)
-        is_valid, errors = xmlvalidator.validate_all()
+        if config.get("VALIDATE_ALL") == "TRUE":
+            is_valid, errors = xmlvalidator.validate_all()
+        else:
+            is_valid, errors = xmlvalidator.validate()
     except (exceptions.XMLSPSVersionError, etree.LxmlError) as e:
         result[str(e)] = {
             "count": 1,
