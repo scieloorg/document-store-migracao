@@ -43,6 +43,7 @@ _default = dict(
     CONSTRUCTOR_PATH=os.path.join(BASE_PATH, "xml/constructor"),
     ERRORS_PATH=os.path.join(BASE_PATH, "xml/errors"),
     CACHE_PATH=os.path.join(BASE_PATH, ".cache"),
+    VALIDATE_ALL="TRUE",
 )
 
 
