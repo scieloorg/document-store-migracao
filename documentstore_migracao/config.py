@@ -2,6 +2,7 @@ import os
 from packtools.catalogs import XML_CATALOG
 
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
+CONVERSION_TAGS = os.path.join(BASE_PATH, "documentstore_migracao", "utils", "convert_html_body.txt")
 
 """
 SOURCE_PATH:
@@ -44,6 +45,7 @@ _default = dict(
     ERRORS_PATH=os.path.join(BASE_PATH, "xml/errors"),
     CACHE_PATH=os.path.join(BASE_PATH, ".cache"),
     VALIDATE_ALL="TRUE",
+
 )
 
 
