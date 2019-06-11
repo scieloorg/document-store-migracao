@@ -17,6 +17,11 @@ from documentstore_migracao.utils import manifest
 from documentstore_migracao import config
 from documentstore.domain import DocumentsBundle
 from documentstore.exceptions import DoesNotExist
+from documentstore_migracao.processing.inserting import (
+    get_document_assets_path,
+    put_static_assets_into_storage
+)
+from documentstore_migracao.utils.xml import loadToXML
 
 
 class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
@@ -346,11 +351,11 @@ class TestProcessingInserting(unittest.TestCase):
 class TestDocumentManifest(unittest.TestCase):
     @patch("documentstore_migracao.object_store.minio.MinioStorage")
     def setUp(self, mock_minio_storage):
-        self.package_path = os.path.join(SAMPLES_PATH, "S0036-36342008000100001")
-        self.renditions_names = ["a01v50n1.html", "a01v50n1.pdf"]
+        self.package_path = os.path.join(SAMPLES_PATH, "0034-8910-rsp-47-02-0231")
+        self.renditions_names = ["0034-8910-rsp-47-02-0231.pdf", "0034-8910-rsp-47-02-0231-en.pdf"]
         self.renditions_urls_mock = [
-            "prefix/some-md5-hash-1.html",
-            "prefix/some-md5-hash-2.pdf",
+            "prefix/0034-8910-rsp-47-02-0231.pdf.pdf",
+            "prefix/0034-8910-rsp-47-02-0231.pdf-en.pdf",
         ]
 
         mock_minio_storage.register.side_effect = self.renditions_urls_mock
@@ -359,17 +364,135 @@ class TestDocumentManifest(unittest.TestCase):
         )
 
     def test_rendition_should_contains_file_name(self):
-        self.assertEqual("a01v50n1.html", self.renditions[0]["filename"])
-        self.assertEqual("a01v50n1.pdf", self.renditions[1]["filename"])
+        self.assertEqual("0034-8910-rsp-47-02-0231.pdf", self.renditions[0]["filename"])
+        self.assertEqual("0034-8910-rsp-47-02-0231-en.pdf", self.renditions[1]["filename"])
 
     def test_rendition_should_contains_url_link(self):
         self.assertEqual(self.renditions_urls_mock[0], self.renditions[0]["url"])
         self.assertEqual(self.renditions_urls_mock[1], self.renditions[1]["url"])
 
     def test_rendition_should_contains_size_bytes(self):
-        self.assertEqual(5, self.renditions[0]["size_bytes"])
-        self.assertEqual(111671, self.renditions[1]["size_bytes"])
+        self.assertEqual(110104, self.renditions[0]["size_bytes"])
+        self.assertEqual(106379, self.renditions[1]["size_bytes"])
 
     def test_rendition_should_contains_mimetype(self):
-        self.assertEqual("text/html", self.renditions[0]["mimetype"])
+        self.assertEqual("application/pdf", self.renditions[0]["mimetype"])
         self.assertEqual("application/pdf", self.renditions[1]["mimetype"])
+    
+    def test_renditon_should_contains_language(self):
+        self.assertEqual("en", self.renditions[1]["lang"])
+    
+    def test_rendtion_should_not_contains_language(self):
+        self.assertIsNone(self.renditions[0].get("lang"))
+
+
+class TestDocumentRegister(unittest.TestCase):
+    def setUp(self):
+        self.package_path = os.path.join(SAMPLES_PATH, "0034-8910-rsp-47-02-0231")
+        self.xml_path = os.path.join(self.package_path, "0034-8910-rsp-47-02-0231.xml")
+        self.xml_etree = loadToXML(self.xml_path)
+        self.package_files = [
+            "0034-8910-rsp-47-02-0231-en.pdf",
+            "0034-8910-rsp-47-02-0231-gf01-en.jpg",
+            "0034-8910-rsp-47-02-0231-gf01-en.tif",
+            "0034-8910-rsp-47-02-0231-gf01.jpg",
+            "0034-8910-rsp-47-02-0231-gf01.tif",
+            "0034-8910-rsp-47-02-0231.pdf",
+            "0034-8910-rsp-47-02-0231.xml",
+        ]
+
+        self.second_package_path = os.path.join(
+            SAMPLES_PATH, "0034-8910-rsp-47-02-0403"
+        )
+
+        self.second_xml_path = os.path.join(
+            self.second_package_path, "0034-8910-rsp-47-02-0403.xml"
+        )
+
+        self.second_xml_etree = loadToXML(self.second_xml_path)
+
+        self.second_package_files = [
+            "0034-8910-rsp-47-02-0403-gf01.jpg",
+            "0034-8910-rsp-47-02-0403-gf01.tif",
+            "0034-8910-rsp-47-02-0403.pdf",
+            "0034-8910-rsp-47-02-0403.xml",
+        ]
+
+    def test_get_documents_assets_should_return_assets_and_additionals(self):
+        assets, additionals = get_document_assets_path(
+            self.xml_etree, self.package_files, self.package_path
+        )
+
+        self.assertEqual(
+            ["0034-8910-rsp-47-02-0231-gf01", "0034-8910-rsp-47-02-0231-gf01-en"],
+            list(assets.keys()),
+        )
+
+        for additional in additionals.values():
+            with self.subTest(additional=additional):
+                self.assertNotIn(".tif", additional)
+
+    def test_get_documents_must_prefers_tif_files_instead_jpeg(self):
+        assets, _ = get_document_assets_path(
+            self.xml_etree, self.package_files, self.package_path
+        )
+
+        self.assertIn(
+            "0034-8910-rsp-47-02-0231-gf01.tif", assets["0034-8910-rsp-47-02-0231-gf01"]
+        )
+
+    def test_get_documents_assets_must_contain_additional_files_with_no_prefered_files(
+        self
+    ):
+        _, additionals = get_document_assets_path(
+            self.xml_etree, self.package_files, self.package_path
+        )
+
+        self.assertIn(
+            "0034-8910-rsp-47-02-0231-gf01.jpg",
+            additionals["0034-8910-rsp-47-02-0231-gf01"],
+        )
+
+    def test_get_documents_assets_must_contain_additional_files_when_references_is_not_complete(
+        self
+    ):
+        _, additionals = get_document_assets_path(
+            self.second_xml_etree, self.second_package_files, self.second_package_path
+        )
+
+        self.assertIn(
+            "0034-8910-rsp-47-02-0403-gf01.jpg",
+            additionals["0034-8910-rsp-47-02-0403-gf01"],
+        )
+
+    def test_get_documents_assets_should_not_return_assets_path(self):
+        assets, additionals = get_document_assets_path(
+            self.xml_etree, [], self.package_path
+        )
+
+        self.assertEqual({}, additionals)
+        self.assertEqual([None, None], list(assets.values()))
+
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def test_put_assets_into_storage_should_ignore_missing_assets(self, mk_store):
+        mk_store.register.side_effect = ["http://storage.io/mock-url.pdf"]
+
+        assets = {"first-asset": "path-to.pdf", "second-asset": None}
+        results = put_static_assets_into_storage(assets, "some-prefix", mk_store)
+
+        for result in results:
+            with self.subTest(result=result):
+                self.assertNotEqual("second-asset", result["asset_id"])
+
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def test_put_assets_should_raise_exception_when_ignore_missing_is_turned_off(
+        self, mk_store
+    ):
+        mk_store.register.side_effect = ["http://storage.io/mock-url.pdf", TypeError]
+
+        assets = {"first-asset": "path-to.pdf", "second-asset": None}
+
+        with self.assertRaises(TypeError):
+            put_static_assets_into_storage(
+                assets, "some-prefix", mk_store, ignore_missing_assets=False
+            )

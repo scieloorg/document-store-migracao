@@ -1,0 +1,1678 @@
+<?xml version='1.0' encoding='ASCII'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" article-type="research-article" dtd-version="1.0" xml:lang="pt">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Rev Saude Publica</journal-id>
+      <journal-title-group>
+        <journal-title>Revista de Sa&#250;de P&#250;blica</journal-title>
+        <abbrev-journal-title abbrev-type="publisher">Rev. Sa&#250;de P&#250;bl.</abbrev-journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">0034-8910</issn>
+      <issn pub-type="epub">1518-8787</issn>
+      <publisher>
+        <publisher-name>Faculdade de Sa&#250;de P&#250;blica da Universidade de S&#227;o Paulo</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="publisher-id" specific-use="scielo">RTvCBGM7dpYYrf9NJcqwQqq</article-id>
+      <article-id pub-id-type="publisher-id">S0034-89102013000100008</article-id>
+      <article-id pub-id-type="doi">10.1590/S0034-89102013000100008</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Artigos Originais</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title xml:lang="pt">Diferen&#231;as entre as medidas do &#237;ndice-h geradas em distintas fontes bibliogr&#225;ficas e engenho de busca</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Barreto</surname>
+            <given-names>Mauricio Lima</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff1">I</xref>
+          <xref ref-type="aff" rid="aff2">II</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Arag&#227;o</surname>
+            <given-names>Erika</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff2">II</xref>
+          <xref ref-type="aff" rid="aff3">III</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Sousa</surname>
+            <given-names>Luis Eugenio Portela Fernandes de</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff1">I</xref>
+          <xref ref-type="aff" rid="aff2">II</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Santana</surname>
+            <given-names>T&#225;ris Maria</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff2">II</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Barata</surname>
+            <given-names>Rita Barradas</given-names>
+          </name>
+          <xref ref-type="aff" rid="aff4">IV</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="aff1"><label>I</label><institution content-type="orgdiv1">Instituto de Sa&#250;de Coletiva</institution><institution content-type="orgname">Universidade Federal da Bahia</institution><addr-line><named-content content-type="city">Salvador</named-content><named-content content-type="state">BA</named-content></addr-line><country>Brasil</country> Instituto de Sa&#250;de Coletiva. Universidade Federal da Bahia. Salvador, BA, Brasil  </aff>
+      <aff id="aff2"><label>II</label><institution content-type="orgname">Instituto Nacional de Ci&#234;ncia e Tecnologia, Ci&#234;ncia Inova&#231;&#227;o e Tecnologia em Sa&#250;de</institution><addr-line><named-content content-type="city">Salvador</named-content><named-content content-type="state">BA</named-content></addr-line><country>Brasil</country> Instituto Nacional de Ci&#234;ncia e Tecnologia. Ci&#234;ncia, Inova&#231;&#227;o e Tecnologia em Sa&#250;de. Salvador, BA, Brasil  </aff>
+      <aff id="aff3"><label>III</label><institution content-type="orgdiv1">Centro de Pesquisa Gon&#231;alo Muniz</institution><institution content-type="orgname">Funda&#231;&#227;o Oswaldo Cruz</institution><addr-line><named-content content-type="city">Salvador</named-content><named-content content-type="state">BA</named-content></addr-line><country>Brasil</country> Centro de Pesquisa Gon&#231;alo Muniz. Funda&#231;&#227;o Oswaldo Cruz. Salvador, BA, Brasil  </aff>
+      <aff id="aff4"><label>IV</label><institution content-type="orgdiv1">Departamento de Medicina Social</institution><institution content-type="orgname">Faculdade de Ci&#234;ncias M&#233;dicas da Santa Casa de S&#227;o Paulo</institution><addr-line><named-content content-type="city">S&#227;o Paulo</named-content><named-content content-type="state">SP</named-content></addr-line><country>Brasil</country> Departamento de Medicina Social. Faculdade de Ci&#234;ncias M&#233;dicas da Santa Casa de S&#227;o Paulo. S&#227;o Paulo, SP, Brasil  </aff>
+      <author-notes>
+        <fn fn-type="conflict">
+          <p>Os autores declaram n&#227;o haver conflito de interesses.</p>
+        </fn>
+        <corresp><bold>Correspond&#234;ncia | Correspondence:</bold> , Mauricio Lima Barreto, Instituto de Sa&#250;de Coletiva &#8211; UFBA, Rua Bas&#237;lio da Cunha, s/n&#176; Canela, 40110-040 Salvador, BA, Brasil, E-mail: <email xmlns:xlink="http://www.w3.org/1999/xlink">mauricio@ufba.br</email>
+				</corresp>
+      </author-notes>
+      <pub-date pub-type="epub-ppub">
+        <month>06</month>
+        <year>2013</year>
+      </pub-date>
+      <volume>47</volume>
+      <issue>2</issue>
+      <fpage>231</fpage>
+      <lpage>238</lpage>
+      <history>
+        <date date-type="received">
+          <day>1</day>
+          <month>9</month>
+          <year>2012</year>
+        </date>
+        <date date-type="accepted">
+          <day>21</day>
+          <month>2</month>
+          <year>2013</year>
+        </date>
+      </history>
+      <permissions>
+        <license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/3.0/">
+          <license-p>This is an Open Access article distributed under the terms of the Creative Commons Attribution Non-Commercial License, which permits unrestricted non-commercial use, distribution, and reproduction in any medium, provided the original work is properly cited.</license-p>
+        </license>
+      </permissions>
+      <abstract xml:lang="pt">
+        <sec sec-type="methods">
+          <title>M&#201;TODOS:</title>
+          <p> Comparou-se a produ&#231;&#227;o cient&#237;fica de pesquisadores brasileiros bolsistas 1-A do CNPq, das &#225;reas da sa&#250;de coletiva, imunologia e medicina. Os &#237;ndices-h de cada pesquisador foram estimados com base no <italic>Web of Science</italic>, Scopus e Google Acad&#234;mico. Foram estimadas as medianas dos &#237;ndices-h para os grupos de pesquisadores em cada &#225;rea, e para comparar as diferen&#231;as foram usados, de acordo com cada fonte, o teste n&#227;o param&#233;trico de Kruskal- Wallis e as compara&#231;&#245;es m&#250;ltiplas de Behrens-Fisher.  </p>
+        </sec>
+        <sec sec-type="results">
+          <title>RESULTADOS:</title>
+          <p> A &#225;rea da imunologia apresentou mediana dos &#237;ndices-h mais alta que os da Sa&#250;de Coletiva e da Medicina quando se utiliza a base <italic>Web of Science</italic> . Por&#233;m, essa diferen&#231;a desapareceu quando a compara&#231;&#227;o foi feita utilizando a base Scopus ou o Google Acad&#234;mico.  </p>
+        </sec>
+        <sec sec-type="conclusions">
+          <title>CONCLUS&#213;ES:</title>
+          <p> A emerg&#234;ncia do Google Acad&#234;mico traz a um novo patamar as discuss&#245;es sobre a medida do impacto bibliom&#233;trico das publica&#231;&#245;es cientificas. &#193;reas com fortes componentes profissionais, em que o conhecimento produzido &#233; e deve ser publicado tamb&#233;m na l&#237;ngua nativa, <italic>vis-a-vis</italic> sua difus&#227;o para a comunidade internacional, t&#234;m padr&#227;o de publica&#231;&#245;es e cita&#231;&#245;es cient&#237;ficas diferente de &#225;reas exclusivas ou predominantemente acad&#234;micas e mais bem captado pelo Google Acad&#234;mico.  </p>
+        </sec>
+        <sec>
+          <title>OBJETIVO:</title>
+          <p> Analisar a utiliza&#231;&#227;o do &#237;ndice-h como medida do impacto bibliogr&#225;fico da produ&#231;&#227;o cient&#237;fica de pesquisadores brasileiros.</p>
+        </sec>
+      </abstract>
+      <kwd-group xml:lang="pt">
+        <kwd>Sa&#250;de P&#250;blica</kwd>
+        <kwd>Indicadores de Produ&#231;&#227;o Cient&#237;fica</kwd>
+        <kwd>Indicadores Bibliom&#233;tricos</kwd>
+        <kwd>Bases de Dados Bibliogr&#225;ficas</kwd>
+        <kwd>Bibliometria</kwd>
+      </kwd-group>
+      <counts>
+        <fig-count count="2"/>
+        <table-count count="3"/>
+        <ref-count count="16"/>
+        <page-count count="7"/>
+      </counts>
+    </article-meta>
+  </front>
+  <body>
+    <sec sec-type="intro">
+      <title>INTRODU&#199;&#195;O</title>
+      <p>O desenvolvimento social e econ&#244;mico, o crescimento da produ&#231;&#227;o cient&#237;fica e de sua import&#226;ncia para esse desenvolvimento e a consequente consolida&#231;&#227;o da ci&#234;ncia como objeto de pol&#237;ticas p&#250;blicas na segunda metade do s&#233;culo XX trouxeram a necessidade de desenvolver indicadores capazes de mensurar e avaliar o desempenho das complexas atividades cient&#237;ficas, em geral, e dos seus componentes &#8211; pesquisadores e institui&#231;&#245;es &#8211;, em particular. Apesar de reconhecidas limita&#231;&#245;es, os indicadores bibliom&#233;tricos s&#227;o os mais amplamente utilizados para avaliar a atividade cient&#237;fica, sua influ&#234;ncia e seu impacto.<sup><xref ref-type="bibr" rid="B13">13</xref></sup> Medidas bibliom&#233;tricas capazes de mensurar e qualificar a produtividade cient&#237;fica s&#227;o desenvolvidas para informar o desempenho de pesquisadores, grupos e institui&#231;&#245;es de pesquisa e orientar as promo&#231;&#245;es de cientistas, o fomento &#224; pesquisa, a forma&#231;&#227;o de pessoal. A bibliometria &#233; um campo vasto para estudos emp&#237;ricos e uma das bases da Cienciometria.</p>
+      <p>As medidas bibliom&#233;tricas evoluem ao longo do tempo. Inicialmente, limitavam-se &#224; simples contagem e &#224; valora&#231;&#227;o do n&#250;mero de publica&#231;&#245;es. Rapidamente, o n&#250;mero de publica&#231;&#245;es era cada vez menos relevante na qualifica&#231;&#227;o da produtividade de um pesquisador se n&#227;o viesse associado a alguma medida da qualidade, expressa pelo reconhecimento pelos pares. Essa qualidade foi bibliometricamente traduzida pelo n&#250;mero de cita&#231;&#245;es obtidas pelas publica&#231;&#245;es cient&#237;ficas. No entanto, o uso do n&#250;mero bruto de cita&#231;&#245;es, como medida da influ&#234;ncia de uma publica&#231;&#227;o, apresentou limita&#231;&#245;es e nem sempre refletia sua qualidade.<sup><xref ref-type="bibr" rid="B13">13</xref></sup> Uma s&#233;rie de &#237;ndices &#233; sugerida para substitu&#237;-lo, tendo por base as cita&#231;&#245;es. O &#237;ndice-h &#233; o mais popular.</p>
+      <p>Esse &#237;ndice foi desenvolvido por um f&#237;sico interessado em produzir uma medida que, com base nas pr&#243;prias cita&#231;&#245;es, reduzisse as insufici&#234;ncias relacionadas com a simples contagem do seu n&#250;mero e superasse os problemas com os denominadores utilizados no c&#225;lculo do fator de impacto. Hirsh<sup><xref ref-type="bibr" rid="B08">8</xref> , <xref ref-type="bibr" rid="B09">9</xref>
+				</sup> (2005, 2007) sugeriu que o &#237;ndice-h era melhor do que os outros &#237;ndices at&#233; ent&#227;o usados &#8211; n&#250;mero total de artigos, n&#250;mero total de cita&#231;&#245;es, n&#250;mero m&#233;dio de cita&#231;&#245;es, n&#250;mero de publica&#231;&#245;es &#8220;significativas&#8221; &#8211;, pois combinava o n&#250;mero de cita&#231;&#245;es com o n&#250;mero de cita&#231;&#245;es dos artigos altamente citados.</p>
+      <p>O &#237;ndice-h ganha particular destaque devido &#224; possibilidade de utiliza&#231;&#227;o de uma &#250;nica medida estimada de forma particularmente simples para caracterizar o impacto da produ&#231;&#227;o cient&#237;fica de um investigador. Seu c&#225;lculo &#233; feito com base no ordenamento decrescente do n&#250;mero de cita&#231;&#245;es de cada trabalho do autor (ou grupo de pesquisa, revista, institui&#231;&#227;o), definindo-se como &#237;ndice-h o ponto em que o n&#250;mero de cita&#231;&#245;es corresponde ao n&#250;mero de ordem. Um pesquisador que tem 50 artigos publicados, dentre os quais 22 receberam 22 ou mais cita&#231;&#245;es, ter&#225; &#237;ndice-h = 22. Trata-se de um &#237;ndice bem robusto, pois combina a quantidade da produ&#231;&#227;o cient&#237;fica (n&#250;mero de publica&#231;&#245;es) e aspectos da sua qualidade ou relev&#226;ncia (cita&#231;&#245;es).<sup><xref ref-type="bibr" rid="B08">8</xref></sup> Tornou-se um dos indicadores mais utilizados para avalia&#231;&#227;o da produ&#231;&#227;o cient&#237;fica e objeto de s&#233;rios debates acerca de aspectos relacionados &#224;s medidas bibliom&#233;tricas na ci&#234;ncia.<sup><xref ref-type="bibr" rid="B04">4</xref></sup>
+			</p>
+      <p>H&#225; clareza sobre a variabilidade do &#237;ndice-h quando da compara&#231;&#227;o entre diferentes &#225;reas cient&#237;ficas. &#193;reas mais prol&#237;ficas em n&#250;mero de publica&#231;&#245;es registram maiores &#237;ndices-h. Existe variablilidade quando diferentes bases bibliogr&#225;ficas ou engenhos de busca s&#227;o utilizados para derivar os &#237;ndices.<sup><xref ref-type="bibr" rid="B12">12</xref> , <xref ref-type="bibr" rid="B14">14</xref>
+				</sup> Isso porque essas bases diferenciam-se quanto &#224; cobertura dos seus registros bibliogr&#225;ficos ou de suas cita&#231;&#245;es.<sup><xref ref-type="bibr" rid="B01">1</xref></sup> Para as &#225;reas das Ci&#234;ncias Sociais e Humanas, algumas bases de dados s&#227;o menos representativas, pois n&#227;o indexam livros, relat&#243;rios ou anais de confer&#234;ncia.<sup><xref ref-type="bibr" rid="B15">15</xref></sup> Portanto, a escolha da base de dados para o c&#225;lculo do &#237;ndice-h influencia diretamente nos valores encontrados.</p>
+      <p>Duas bases bibliogr&#225;ficas destacam-se por cobrirem amplo espectro das &#225;reas cient&#237;ficas e por contabilizarem cita&#231;&#245;es: a <italic>ISI Web of Science</italic>(WoS), com registros bibliogr&#225;ficos desde 1945; e a Scopus, criada mais recentemente como competidor da primeira, com registros a partir de 1960 e, de modo mais sistem&#225;tico, desde 1996. O Google Acad&#234;mico (GA) vem ganhando import&#226;ncia, ainda que n&#227;o seja uma base bibliogr&#225;fica como as anteriores. &#201; um engenho de busca que utiliza algoritmos para identificar publica&#231;&#245;es cient&#237;ficas e suas cita&#231;&#245;es dispon&#237;veis na <italic>web</italic> . Essa caracter&#237;stica faz com que o GA abranja maior diversidade de produ&#231;&#245;es bibliogr&#225;ficas, incluindo livros, palestras, aulas e outros. Ao longo deste artigo utilizaremos o termo bases bibliogr&#225;ficas para as tr&#234;s fontes referidas, incluindo o GA.</p>
+      <p>Este artigo tem o objetivo de analisar a utiliza&#231;&#227;o do &#237;ndice-h como medida do impacto bibliogr&#225;fico da produ&#231;&#227;o cient&#237;fica de pesquisadores brasileiros. A perspectiva &#233; chamar a aten&#231;&#227;o para a import&#226;ncia de utiliza&#231;&#227;o de bases adequadas &#224;s especifidades de cada campo do conhecimento, destacando as particularidades da Sa&#250;de Coletiva.</p>
+    </sec>
+    <sec sec-type="methods">
+      <title>M&#201;TODOS</title>
+      <p>Foram selecionadas tr&#234;s &#225;reas para an&#225;lise, Sa&#250;de Coletiva, Imunologia e Medicina, que fazem parte das chamadas ci&#234;ncias da vida, as quais incluem ci&#234;ncias b&#225;sicas como as biol&#243;gicas, e aplicadas, como as agr&#225;rias e as ci&#234;ncias da sa&#250;de. A Imunologia foi escolhida por ser uma das sub&#225;reas das ci&#234;ncias biol&#243;gicas na qual se observam os maiores fatores de impacto de pesquisadores e dos peri&#243;dicos utilizados para a divulga&#231;&#227;o de sua produ&#231;&#227;o. A Medicina foi selecionada em raz&#227;o de constituir um conjunto de &#225;reas das ci&#234;ncias da sa&#250;de que apresenta a maior produ&#231;&#227;o em n&#250;mero de artigos e fator de impacto elevado. A Sa&#250;de Coletiva apresenta grande diversidade interna, incluindo pesquisadores nas sub&#225;reas de epidemiologia, ci&#234;ncias sociais em sa&#250;de e pol&#237;ticas e gest&#227;o de sa&#250;de, al&#233;m de apresentar comunidade menor do que a da Medicina. A despeito disso, destaca-se em termos de produ&#231;&#227;o cient&#237;fica no Brasil.</p>
+      <p>Foram inclu&#237;dos na an&#225;lise apenas os bolsistas de produtividade 1-A do Conselho Nacional de Desenvolvimento Cient&#237;fico e Tecnol&#243;gico (CNPq). A Bolsa CNPq de Produtividade em Pesquisa &#233; destinada aos pesquisadores que se destacam entre seus pares, valorizando sua produ&#231;&#227;o cient&#237;fica segundo crit&#233;rios normativos. Os bolsistas de produtividade podem ser enquadrados em tr&#234;s categorias: 2, 1 (D, C, B e A) e s&#234;nior. <xref ref-type="fn" rid="fn01"><sup>a</sup></xref>
+			</p>
+      <p>O pesquisador dever&#225; ter, no m&#237;nimo, tr&#234;s anos completos ap&#243;s a conclus&#227;o do doutorado para a bolsa da categoria 2 ou oito anos para a categoria 1. Os crit&#233;rios usados para julgar os pedidos de bolsa s&#227;o: (a) produ&#231;&#227;o cient&#237;fica do candidato; (b) forma&#231;&#227;o de recursos humanos em n&#237;vel de P&#243;s-Gradua&#231;&#227;o; (c) contribui&#231;&#227;o cient&#237;fica e tecnol&#243;gica e para inova&#231;&#227;o; (d) coordena&#231;&#227;o ou participa&#231;&#227;o principal em projetos de pesquisa; e (e) participa&#231;&#227;o em atividades editoriais e de gest&#227;o cient&#237;fica bem como administra&#231;&#227;o de institui&#231;&#245;es e n&#250;cleos de excel&#234;ncia cient&#237;fica e tecnol&#243;gica.</p>
+      <p>O pesquisador dever&#225; completar 15 anos, consecutivos ou n&#227;o, com bolsa da categoria 1 para ter direito &#224; bolsa s&#234;nior. Na categoria 1, o pesquisador ser&#225; enquadrado em um dos quatro diferentes n&#237;veis (A, B, C ou D), com base no seu desempenho nos &#250;ltimos dez anos e comparativamente com o desempenho de seus pares. Para a categoria 2, ser&#225; avaliada a produtividade do pesquisador em um &#250;nico n&#237;vel, com &#234;nfase nos trabalhos publicados e orienta&#231;&#245;es, ambos referentes aos &#250;ltimos cinco anos.</p>
+      <p>A categoria 1 n&#237;vel A, topo da hierarquia, enquadra candidatos que apresentam excel&#234;ncia continuada na produ&#231;&#227;o cient&#237;fica, na forma&#231;&#227;o de recursos humanos e que lideram grupos de pesquisa consolidados. A escolha desse grupo restringiu a compara&#231;&#227;o a pesquisadores com elevada produtividade e lideran&#231;a cient&#237;fica em cada uma das tr&#234;s diferentes &#225;reas consideradas. A amostra agrupou pesquisadores no mesmo est&#225;gio de carreira, considerando que o tempo de exerc&#237;cio profissional influencia fortemente o &#237;ndice-h.</p>
+      <p>A lista dos pesquisadores foi obtida na plataforma Carlos Chagas do CNPq em abril de 2011. Foram inclu&#237;dos 98 pesquisadores: 20 da Sa&#250;de Coletiva, 59 da Medicina e 19 da Imunologia. O acesso &#224;s bases WoS e Scopus foi obtido pelo Portal de Peri&#243;dicos da Capes. O GA foi acessado utilizando a interface <italic>Publish-or-Perish,</italic>
+				<italic>software</italic> de acesso livre que organiza as buscas em GA e calcula o &#237;ndice-h. <xref ref-type="fn" rid="fn02"><sup>b</sup></xref>
+			</p>
+      <p>Foram feitas buscas em cada base de dados utilizando o campo &#8220;nome em cita&#231;&#245;es bibliogr&#225;ficas&#8221; dos curr&#237;culos da Plataforma Lattes (CNPq) dos autores selecionados. Foram conferidas as &#225;reas de pesquisa e as institui&#231;&#245;es de pertencimento de cada pesquisador. Os documentos encontrados nas bases bibliogr&#225;ficas foram comparados &#224;queles referidos no curr&#237;culo da Plataforma Lattes de cada autor. Essa checagem possibilitou a exclus&#227;o de publica&#231;&#245;es de autores hom&#244;nimos, o que poderia distorcer os resultados.</p>
+      <p>Foram estimados os &#237;ndices-h para cada pesquisador nas tr&#234;s bases, considerando o per&#237;odo de abrang&#234;ncia de cada uma. Obteve-se o total da produ&#231;&#227;o indexada de cada autor nas diferentes bases. Qualquer distor&#231;&#227;o relativa a diferen&#231;as de cobertura temporal est&#225; presente em todas as &#225;reas; portanto, n&#227;o afeta a compara&#231;&#227;o do comportamento do &#237;ndice-h em tr&#234;s diferentes &#225;reas/sub&#225;reas do conhecimento nas tr&#234;s bases. Esse processo foi feito de forma cega, i.e., sem conhecimento pr&#233;vio da &#225;rea do pesquisador, o que evitou tendenciosidade por parte dos autores deste estudo.</p>
+      <p>M&#233;dias e medianas foram obtidas para cada grupo de pesquisadores agregados por &#225;rea e por fonte de origem da estimativa dos &#237;ndices-h. Para testar a signific&#226;ncia estat&#237;stica das diferen&#231;as entre os grupos, ao comparar as tr&#234;s &#225;reas utilizando a mesma base ou as tr&#234;s bases para cada &#225;rea, foi utilizado o teste n&#227;o param&#233;trico de Kruskal-Wallis, aplicado para testes com mais de dois grupos, equivalente &#224; an&#225;lise de vari&#226;ncia para medidas param&#233;tricas. Nos casos em que o resultado do teste de Kruskal-Wallis foi significativo (p &lt; 0,05), realizou-se o teste de compara&#231;&#245;es m&#250;ltiplas de Behrens-Fisher, que testa os grupos dois a dois para precisar entre quais grupos ocorreu a diferen&#231;a.<sup><xref ref-type="bibr" rid="B05">5</xref></sup>
+			</p>
+    </sec>
+    <sec sec-type="results">
+      <title>RESULTADOS</title>
+      <p>Os dados relativos aos pesquisadores da Sa&#250;de Coletiva apresentaram maior amplitude de varia&#231;&#227;o, com valores mais extremos m&#237;nimos e m&#225;ximos ( <xref ref-type="table" rid="t01">Tabela 1</xref> ). Nos gr&#225;ficos a, b e c da Figura s&#227;o apresentadas, com mais detalhes, as distribui&#231;&#245;es dos valores dos &#237;ndices-h e suas respectivas medianas para os pesquisadores de cada &#225;rea, gerados pelas tr&#234;s diferentes fontes utilizadas no estudo (WoS, Scopus e GA).</p>
+      <p>
+        <table-wrap id="t01">
+          <label>Tabela 1.</label>
+          <caption>
+            <title>M&#233;dia e mediana dos &#237;ndices-h de pesquisadores 1-A do CNPq das &#225;reas da Sa&#250;de Coletiva, Medicina e Imunologia estimados em diferentes fontes (WoS, Scopus e GA).</title>
+          </caption>
+          <table frame="hsides" rules="groups">
+            <colgroup width="25%">
+              <col width="1%"/>
+              <col/>
+              <col/>
+              <col/>
+              <col/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td/>
+                <td/>
+                <td align="center">
+                  <italic>Web of Science</italic>
+                </td>
+                <td align="center"> Scopus</td>
+                <td align="center"> Google Acad&#234;mico</td>
+              </tr>
+              <tr>
+                <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td colspan="5"> Sa&#250;de Coletiva</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#233;dia</td>
+                <td align="center"> 19,4</td>
+                <td align="center"> 20,4</td>
+                <td align="center"> 31,0</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Desvio Padr&#227;o</td>
+                <td align="center"> 14,1</td>
+                <td align="center"> 10,1</td>
+                <td align="center"> 14,6</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Mediana</td>
+                <td align="center"> 17</td>
+                <td align="center"> 19</td>
+                <td align="center"> 28</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#237;nimo</td>
+                <td align="center"> 4</td>
+                <td align="center"> 2</td>
+                <td align="center"> 14</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#225;ximo</td>
+                <td align="center"> 62</td>
+                <td align="center"> 49</td>
+                <td align="center"> 68</td>
+              </tr>
+              <tr>
+                <td colspan="5"> Medicina</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#233;dia</td>
+                <td align="center"> 20,6</td>
+                <td align="center"> 20,5</td>
+                <td align="center"> 25,2</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Desvio Padr&#227;o</td>
+                <td align="center"> 7,4</td>
+                <td align="center"> 6,4</td>
+                <td align="center"> 10,2</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Mediana</td>
+                <td align="center"> 18</td>
+                <td align="center"> 20</td>
+                <td align="center"> 24,5</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#237;nimo</td>
+                <td align="center"> 6</td>
+                <td align="center"> 10</td>
+                <td align="center"> 6</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#225;ximo</td>
+                <td align="center"> 39</td>
+                <td align="center"> 39</td>
+                <td align="center"> 57</td>
+              </tr>
+              <tr>
+                <td colspan="5"> Imunologia</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#233;dia</td>
+                <td align="center"> 28,4</td>
+                <td align="center"> 24,0</td>
+                <td align="center"> 31,4</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Desvio Padr&#227;o</td>
+                <td align="center"> 9,1</td>
+                <td align="center"> 6,6</td>
+                <td align="center"> 12,8</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Mediana</td>
+                <td align="center"> 27</td>
+                <td align="center"> 24</td>
+                <td align="center"> 27</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#237;nimo</td>
+                <td align="center"> 17</td>
+                <td align="center"> 12</td>
+                <td align="center"> 18</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>M&#225;ximo</td>
+                <td align="center"> 50</td>
+                <td align="center"> 40</td>
+                <td align="center"> 59</td>
+              </tr>
+            </tbody>
+          </table>
+          <table-wrap-foot>
+            <fn id="TFN01t01">
+              <p><sup>a</sup> Teste de Kruskal-Wallis</p>
+            </fn>
+          </table-wrap-foot>
+        </table-wrap>
+      </p>
+      <p>
+        <fig id="f01">
+          <label>
+            <bold>
+              <underline>Figura.</underline>
+            </bold>
+          </label>
+          <caption>
+            <title>
+              <underline>&#205;ndices-h e medianas estimados nas bases <italic>Web of Science</italic> , Scopus e Google Acad&#234;mico (calculado pelo Publish-or- Perish) de pesquisadores 1-A do Conselho Nacional de Pesquisa e Desenvolvimento Tecnol&#243;gico do Brasil (CNPq) das &#225;reas Sa&#250;de Coletiva, Medicina e Imunologia.</underline>
+            </title>
+          </caption>
+          <graphic xlink:href="0034-8910-rsp-47-02-0231-gf01"/>
+        </fig>
+      </p>
+      <p>Pesquisadores da Sa&#250;de Coletiva e da Medicina apresentaram medianas dos &#237;ndices-h extra&#237;dos do GA significativamente maiores que as extra&#237;das das duas outras bases (<xref ref-type="table" rid="t02">Tabelas 2</xref> e <xref ref-type="table" rid="t03">3</xref>). As tr&#234;s &#225;reas n&#227;o diferiram com rela&#231;&#227;o aos &#237;ndices-h obtidos da Scopus e do GA, por&#233;m a Imunologia apresentou medianas significativamente maiores do que as duas outras &#225;reas na WoS. Essa diferen&#231;a desapareceu quando a compara&#231;&#227;o foi feita utilizando as bases Scopus ou GA.</p>
+      <p>
+        <table-wrap id="t02">
+          <label>Tabela 2.</label>
+          <caption>
+            <title>Mediana dos &#237;ndices-h de pesquisadores 1-A do CNPq das &#225;reas da Sa&#250;de Coletiva, Medicina e Imunologia estimados em diferentes fontes (<italic>Web of Science</italic> , Scopus e Google Acad&#234;mico) e (a) p-valores da compara&#231;&#227;o de a- diferentes fontes e (b) p-valores da compara&#231;&#227;o de diferentes &#225;reas para cada fonte.</title>
+          </caption>
+          <table frame="hsides" rules="groups">
+            <colgroup width="33%">
+              <col/>
+              <col/>
+              <col/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>a) Fonte</td>
+                <td align="center"> &#193;rea</td>
+                <td align="center"> p<sup>a</sup>
+								</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td/>
+                <td align="center"> Sa&#250;de Coletiva</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>
+                  <italic>Web of Science</italic>
+                </td>
+                <td align="center"> 17,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Scopus</td>
+                <td align="center"> 19,0</td>
+                <td align="center"> 0,008</td>
+              </tr>
+              <tr>
+                <td>Google Acad&#234;mico</td>
+                <td align="center"> 28,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td align="center"> Medicina</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>
+                  <italic>Web of Science</italic>
+                </td>
+                <td align="center"> 18,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Scopus</td>
+                <td align="center"> 20,0</td>
+                <td align="center"> 0,001</td>
+              </tr>
+              <tr>
+                <td>Google Acad&#234;mico</td>
+                <td align="center"> 24,5</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td align="center"> Imunologia</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>
+                  <italic>Web of Science</italic>
+                </td>
+                <td align="center"> 27,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Scopus</td>
+                <td align="center"> 24,0</td>
+                <td align="center"> 0,145</td>
+              </tr>
+              <tr>
+                <td>Google Acad&#234;mico</td>
+                <td align="center"> 27,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td>b) &#193;reas</td>
+                <td align="center"> Fontes</td>
+                <td align="center"> p<sup>a</sup>
+								</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td/>
+                <td align="center">
+                  <italic>Web of Science</italic>
+                </td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Sa&#250;de Coletiva</td>
+                <td align="center"> 17,0</td>
+                <td align="center"> 0,001</td>
+              </tr>
+              <tr>
+                <td>Medicina</td>
+                <td align="center"> 18,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Imunologia</td>
+                <td align="center"> 27,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td align="center"> Scopus</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Sa&#250;de Coletiva</td>
+                <td align="center"> 19,0</td>
+                <td align="center"> 0,157</td>
+              </tr>
+              <tr>
+                <td>Medicina</td>
+                <td align="center"> 20,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Imunologia</td>
+                <td align="center"> 24,0</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td align="center"> Google Acad&#234;mico</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Sa&#250;de Coletiva</td>
+                <td align="center"> 28,0</td>
+                <td align="center"> 0,120</td>
+              </tr>
+              <tr>
+                <td>Medicina</td>
+                <td align="center"> 24,5</td>
+                <td/>
+              </tr>
+              <tr>
+                <td>Imunologia</td>
+                <td align="center"> 27,0</td>
+                <td/>
+              </tr>
+            </tbody>
+          </table>
+        </table-wrap>
+      </p>
+      <p>
+        <table-wrap id="t03">
+          <label>Tabela 3.</label>
+          <caption>
+            <title>Resultados dos testes de compara&#231;&#227;o m&#250;ltipla: compara&#231;&#227;o entre as fontes em cada &#225;rea e compara&#231;&#227;o entre as &#225;reas em cada fonte.</title>
+          </caption>
+          <table frame="hsides" rules="groups">
+            <colgroup>
+              <col width="1%"/>
+              <col width="75%"/>
+              <col/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td colspan="2"> Compara&#231;&#227;o entre as fontes em cada &#225;rea</td>
+                <td align="center"> p<sup>a</sup>
+								</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+              </tr>
+              <tr>
+                <td colspan="3"> Sa&#250;de Coletiva</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Scopus <italic>vs</italic>
+									<italic>Web of Science</italic>
+								</td>
+                <td align="center"> 0,603</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Scopus <italic>vs</italic> Google Acad&#234;mico</td>
+                <td align="center"> 0,003</td>
+              </tr>
+              <tr>
+                <td colspan="2"><italic>Web of Science</italic><italic>vs</italic> Google Acad&#234;mico</td>
+                <td align="center"> 0,002</td>
+              </tr>
+              <tr>
+                <td colspan="2"> Medicina</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Scopus <italic>vs</italic>
+									<italic>Web of Science</italic>
+								</td>
+                <td align="center"> 0,996</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Scopus <italic>vs</italic> Google Acad&#234;mico</td>
+                <td align="center"> 0,013</td>
+              </tr>
+              <tr>
+                <td colspan="2"><italic>Web of Science</italic><italic>vs</italic> Google Acad&#234;mico</td>
+                <td align="center"> 0,010</td>
+              </tr>
+              <tr>
+                <td colspan="2"> Imunologia</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Scopus <italic>vs</italic>
+									<italic>Web of Science</italic>
+								</td>
+                <td align="center"> 0,267</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Scopus <italic>vs</italic> Google Acad&#234;mico</td>
+                <td align="center"> 0,158</td>
+              </tr>
+              <tr>
+                <td colspan="2"><italic>Web of Science</italic><italic>vs</italic> Google Acad&#234;mico</td>
+                <td align="center"> 0,878</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <italic>Web of Science</italic>
+                </td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Sa&#250;de Coletiva <italic>vs</italic> Imunologia</td>
+                <td align="center"> 0,004</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Sa&#250;de Coletiva <italic>vs</italic> Medicina</td>
+                <td align="center"> 0,404</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Imunologia <italic>vs</italic> Medicina</td>
+                <td align="center"> 0,001</td>
+              </tr>
+              <tr>
+                <td colspan="2"> Scopus</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Sa&#250;de Coletiva <italic>vs</italic> Imunologia</td>
+                <td align="center"> 0,240</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Sa&#250;de Coletiva <italic>vs</italic> Medicina</td>
+                <td align="center"> 0,907</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Imunologia <italic>vs</italic> Medicina</td>
+                <td align="center"> 0,178</td>
+              </tr>
+              <tr>
+                <td colspan="2"> Google Acad&#234;mico</td>
+                <td/>
+              </tr>
+              <tr>
+                <td/>
+                <td>Sa&#250;de Coletiva <italic>vs</italic> Imunologia</td>
+                <td align="center"> 0,999</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Sa&#250;de Coletiva <italic>vs</italic> Medicina</td>
+                <td align="center"> 0,284</td>
+              </tr>
+              <tr>
+                <td/>
+                <td>Imunologia <italic>vs</italic> Medicina</td>
+                <td align="center"> 0,234</td>
+              </tr>
+            </tbody>
+          </table>
+        </table-wrap>
+      </p>
+      <p>Entre os pesquisadores da Medicina e da Sa&#250;de Coletiva houve aumento significativo das medianas dos &#237;ndices-h quando o GA foi utilizado em compara&#231;&#227;o com as duas outras bases (23% e 47% maiores, respectivamente).</p>
+    </sec>
+    <sec sec-type="discussion">
+      <title>DISCUSS&#195;O</title>
+      <p>O uso do GA gera &#237;ndices-h mais altos para os pesquisadores da Sa&#250;de Coletiva, seguida pela Medicina, mas n&#227;o para os da Imunologia, quando comparados aos &#237;ndices-h gerados na WoS ou na Scopus. A Imunologia apresenta medianas significativamente maiores do que as duas outras &#225;reas na WoS, provavelmente por ser uma ci&#234;ncia b&#225;sica, cujos artigos s&#227;o tradicionalmente publicados na l&#237;ngua inglesa e muito citados entre os pares. Segundo o <italic>Journal Citation Reports</italic>(JCR, da <italic>ISI Web of Knowledge</italic> ), existiam 139 peri&#243;dicos indexados em Imunologia e 234 em Sa&#250;de P&#250;blica em 2011, considerando a cole&#231;&#227;o de ci&#234;ncia e a de ci&#234;ncias sociais. A despeito disso, os &#237;ndices de cita&#231;&#227;o s&#227;o mais elevados na Imunologia.</p>
+      <p>Resultados dessa natureza s&#227;o relevantes, pois decis&#245;es sobre qual base utilizar para o c&#225;lculo do &#237;ndice-h t&#234;m implica&#231;&#245;es para o <italic>ranking</italic> dos pesquisadores e das &#225;reas acad&#234;micas.</p>
+      <p>Pesquisadores da Imunologia apresentaram valores medianos similares dos &#237;ndices-h calculados nas tr&#234;s diferentes bases, enquanto os pesquisadores da Medicina e da Sa&#250;de Coletiva apresentam significativas diferen&#231;as nos &#237;ndices-h estimados pelo GA, quando comparados &#224; WoS e &#224; Scopus. Essa diferen&#231;a foi superior a 50% para a Sa&#250;de Coletiva. A &#225;rea de sa&#250;de, em geral, tem maior n&#250;mero de revistas publicadas no Brasil que n&#227;o estavam indexadas ou que tinham sido indexadas recentemente nas bases Scopus e WoS.</p>
+      <p>Utilizando diferente abordagem, Pereira &amp;Bronhara<sup><xref ref-type="bibr" rid="B16">16</xref></sup> (2011) estimaram os &#237;ndices-h para todos os docentes brasileiros ativos em programas de p&#243;s-gradua&#231;&#227;o em Sa&#250;de Coletiva em 2009. Utilizaram a WoS e encontraram m&#233;dia nacional do &#237;ndice-h de 3,1, com 29,8% dos docentes obtendo &#237;ndices-h iguais a zero.</p>
+      <p>A utiliza&#231;&#227;o do GA em lugar do WoS traria resultados diferentes. A maioria dos pesquisadores 1-A na Sa&#250;de Coletiva &#233; de epidemiologistas, com padr&#227;o de publica&#231;&#227;o mais pr&#243;ximo das ci&#234;ncias naturais ou exatas, como a Imunologia; portanto, est&#227;o bem representados na WoS. Na Sa&#250;de Coletiva, h&#225; docentes das sub&#225;reas ci&#234;ncias sociais em sa&#250;de e pol&#237;tica e gest&#227;o de servi&#231;os de sa&#250;de, cujos perfis de publica&#231;&#245;es e cita&#231;&#245;es se aproximam das ci&#234;ncias sociais em geral, que t&#234;m menor cobertura de indexa&#231;&#227;o e de registro de cita&#231;&#245;es na WoS do que no GA. Isso ocorre porque parte significativa das publica&#231;&#245;es das ci&#234;ncias sociais &#233; feita em forma de livros ou outros tipos de documentos, capturados pelo GA, n&#227;o indexados na Scopus ou na WoS.</p>
+      <p>A emerg&#234;ncia do GA e de interfaces que maximizam a sua utiliza&#231;&#227;o traz a um novo patamar as discuss&#245;es sobre a medida do impacto bibliom&#233;trico das publica&#231;&#245;es cientificas. &#193;reas com fortes componentes profissionais, em que o conhecimento produzido &#233; e deve ser publicado tamb&#233;m na l&#237;ngua nativa, <italic>vis-a-vis</italic>sua divulga&#231;&#227;o junto &#224; comunidade cient&#237;fica internacional, t&#234;m padr&#227;o de publica&#231;&#245;es e cita&#231;&#245;es cient&#237;ficas diferente de &#225;reas exclusiva ou predominantemente acad&#234;micas.</p>
+      <p>As diferen&#231;as dos &#237;ndices-h encontradas nas tr&#234;s fontes est&#227;o relacionadas a caracter&#237;sticas particulares dessas fontes. A WoS pertence a Thomson Reuters, terceira maior companhia editorial do mundo, que cobra pelo seu acesso. &#201; a mais tradicional das bases e a mais utilizada, inclusive nas institui&#231;&#245;es de pesquisa no Brasil. A Scopus, desenvolvida pela Elsevier, segunda maior companhia editorial do mundo, &#233; privada e de acesso pago. Apesar de ser mais jovem, &#233; forte competidora da WoS. Tem cobertura mais ampla de revistas cient&#237;ficas, inclusive de outras l&#237;nguas que n&#227;o a inglesa e publicadas fora do eixo Am&#233;rica do Norte-Europa Ocidental. De acordo com informa&#231;&#245;es dispon&#237;veis nos respectivos portais, a base Scopus apresentava 19.500 revistas em 2012, mais de 240 eram brasileiras. Na WoS, dos mais de 12 mil peri&#243;dicos indexados, cerca de 140 eram brasileiros. O GA, por sua vez, est&#225; inserido no mais popular engenho de busca de informa&#231;&#245;es em toda a<italic>World Wide Web</italic> .</p>
+      <p>Um dos primeiros autores a comparar essas tr&#234;s fontes destacou diferen&#231;as entre elas que precisavam ser mais bem esclarecidas.<sup><xref ref-type="bibr" rid="B01">1</xref></sup> Enquanto Bar-Ilan<sup><xref ref-type="bibr" rid="B01">1</xref></sup> encontrou varia&#231;&#245;es para cima e para baixo entre os &#237;ndices-h estimados pelo GA em compara&#231;&#227;o com as duas outras fontes,<sup><xref ref-type="bibr" rid="B01">1</xref></sup> no presente estudo o GA gerou sistematicamente resultados mais altos, com diferen&#231;as estatisticamente significantes para a Sa&#250;de Coletiva e a Medicina.</p>
+      <p>Essas diverg&#234;ncias podem dever-se ao fato de que, no seu in&#237;cio, os &#237;ndices eram estimados diretamente do GA sem a possibilidade de exclus&#227;o de cita&#231;&#245;es n&#227;o referentes a artigos ou de hom&#244;nimos. Por&#233;m, a cria&#231;&#227;o do<italic>Publish-or-Perish</italic> (PorP) e, mais recentemente, uma nova interface desenvolvida pela pr&#243;pria Google (o comando <italic>my citations</italic>no GA) trouxeram melhorias ao sistema, gerando redu&#231;&#227;o das inconsist&#234;ncias. As diferen&#231;as atuais de resultados entre os &#237;ndices-h do GA em compara&#231;&#227;o &#224;s outras duas bases podem melhor refletir diferen&#231;as reais nos n&#250;meros de publica&#231;&#245;es e cita&#231;&#245;es.</p>
+      <p>A pesquisadora que desenvolveu o <italic>software</italic> PorP chama a aten&#231;&#227;o para a superioridade do GA em estimar &#237;ndices-h de pesquisadores de &#225;reas cient&#237;ficas aplicadas e &#225;reas sociais e humanas em especial, cujos peri&#243;dicos cient&#237;ficos est&#227;o pouco cobertos pelas duas bases utilizadas.<sup><xref ref-type="bibr" rid="B07">7</xref></sup> Uma vantagem do GA &#233; n&#227;o depender de bases de dados comerciais fechadas. Ao indexar refer&#234;ncias e cita&#231;&#245;es dispon&#237;veis na <italic> web</italic> , o GA torna-se mais aberto e permite acessar larga base de informa&#231;&#245;es que n&#227;o est&#225; indexada na Scopus nem na WoS.</p>
+      <p>A abordagem dos engenhos de busca tamb&#233;m tem desvantagens. Aceita maior grau de &#8220;sujeira&#8221; nas informa&#231;&#245;es obtidas, i.e., a inclus&#227;o de publica&#231;&#245;es e cita&#231;&#245;es de artigos n&#227;o cient&#237;ficos, o que traz limita&#231;&#245;es, exige mais cuidados na sua manipula&#231;&#227;o e na constru&#231;&#227;o dos &#237;ndices, e faz com que o GA tenha adeptos e detratores.<sup><xref ref-type="bibr" rid="B06">6</xref> , <xref ref-type="bibr" rid="B10">10</xref>
+				</sup> O fato de a estimativa do &#237;ndice-h depender de um n&#250;mero de publica&#231;&#245;es que &#233; um pequeno percentual do total das publica&#231;&#245;es de um pesquisador ativo faz com que seja mais simples verificar as publica&#231;&#245;es e suas respectivas cita&#231;&#245;es que entraram no c&#225;lculo do &#237;ndice, excluindo as men&#231;&#245;es indevidas.</p>
+      <p>O conhecimento das vantagens e imperfei&#231;&#245;es de cada uma das fontes utilizadas permitir&#225; o uso mais produtivo dos tais &#237;ndices bibliom&#233;tricos, explorando melhor o potencial de cada um. Isso pode evitar sua utiliza&#231;&#227;o como forma de controle acad&#234;mico ou de cria&#231;&#227;o de (falsas) hierarquias entre pesquisadores e institui&#231;&#245;es de pesquisa.</p>
+      <p>A varia&#231;&#227;o do &#237;ndice-h decorrente da fonte bibliogr&#225;fica ou do engenho de busca em que &#233; aplicado n&#227;o &#233; uma defici&#234;ncia inerente a essa medida. Contudo, h&#225; insufici&#234;ncias do pr&#243;prio &#237;ndice que s&#227;o destacadas por alguns autores. Acumulam-se cr&#237;ticas sobre o uso desse indicador, sejam de car&#225;ter mais geral em rela&#231;&#227;o ao uso de &#237;ndices que tenham por base as cita&#231;&#245;es como medida do impacto cient&#237;fico, sejam as relacionadas especificamente a esse indicador. As cr&#237;ticas mais gerais afirmam que o uso de cita&#231;&#245;es pode ser afetado por fatores de diferentes ordens: sociais, pol&#237;ticos ou geogr&#225;ficos, e contestam a rela&#231;&#227;o entre &#8220;popularidade&#8221; para gerar n&#250;mero elevado de cita&#231;&#245;es e clara express&#227;o da efetiva qualidade cient&#237;fica.<sup><xref ref-type="bibr" rid="B13">13</xref></sup> Em perspectiva mais radical, alguns arguem que o uso de m&#233;tricas cient&#237;ficas, em especial as bibliometrias, &#233; parte de um projeto maior que visa impor um<italic>quantified control</italic> das atividades acad&#234;micas.<sup><xref ref-type="bibr" rid="B03">3</xref></sup>
+			</p>
+      <p>Cr&#237;ticas mais espec&#237;ficas ao &#237;ndice-h destacam o fato de ele ser dependente do tempo. Ele &#233; cumulativo e tem rela&#231;&#227;o com o n&#250;mero de cita&#231;&#245;es, mas tamb&#233;m com o n&#250;mero de publica&#231;&#245;es. Um autor com dez publica&#231;&#245;es com milhares de cita&#231;&#245;es nunca ter&#225; um &#237;ndice-h maior do que 10. Esse aspecto &#233; importante e o pr&#243;prio Hirsch<sup><xref ref-type="bibr" rid="B09">9</xref></sup> (2007) definiu em artigo original que o &#237;ndice serviria para avaliar pesquisadores em um mesmo est&#225;gio da carreira. O indice-h &#233; &#250;til para comparar os cientistas mais produtivos, que geralmente possuem maior tempo de atua&#231;&#227;o no seu campo, o que justificou a escolha pelos pesquisadores 1-A do CNPq.<sup><xref ref-type="bibr" rid="B02">2</xref></sup> Outra desvantagem do &#237;ndice-h refere-se ao fato de poder ser manipulado por meio de autocita&#231;&#227;o ou outros mecanismos.</p>
+      <p>Outro aspecto relevante a comentar &#233; a varia&#231;&#227;o do &#237;ndice-h entre &#225;reas cient&#237;ficas. Uma compara&#231;&#227;o entre os &#237;ndices-h dos membros das dez &#225;reas cient&#237;ficas da Academia de Brasileira de Ci&#234;ncias mostrou que as m&#233;dias mais altas dos &#237;ndices-h, calculados com base na WoS, estavam nas &#225;reas de Biomedicina, Sa&#250;de e Qu&#237;mica (23, 20 e 19, respectivamente), m&#233;dias baixas encontravam-se nas &#225;reas de Ci&#234;ncias da Terra, Engenharias e Matem&#225;tica (9, 8, e 7, respectivamente) e m&#233;dias praticamente nulas na &#225;rea de Ci&#234;ncias Humanas (1).<sup><xref ref-type="bibr" rid="B11">11</xref></sup>
+			</p>
+      <p>A utiliza&#231;&#227;o de bases adequadas &#224;s especificidades de cada campo do conhecimento &#233; fundamental. Isso possibilita tornar mais robusta a utiliza&#231;&#227;o do &#237;ndice-h para informar a performance de pesquisadores, grupos e institui&#231;&#245;es de pesquisa e de orientar as promo&#231;&#245;es de cientistas, o fomento da pesquisa e a forma&#231;&#227;o de pessoal.</p>
+    </sec>
+  </body>
+  <back>
+    <ref-list>
+      <title>
+        <bold>REFER&#202;NCIAS</bold>
+      </title>
+      <ref id="B01">
+        <label>1</label>
+        <mixed-citation>1. Bar-Ilan J. Which h-index? A comparison of WoS, Scopus and Google Scholar. Scienciometrics. 2008;74(2):257-71. DOI: http://dx.doi.org/10.1007/s11192-008-0216-y</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Bar-Ilan</surname>
+              <given-names>J</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Which h-index? A comparison of WoS, Scopus and Google Scholar</article-title>
+          <source>Scienciometrics</source>
+          <year>2008</year>
+          <volume>74</volume>
+          <issue>2</issue>
+          <fpage>257</fpage>
+          <lpage>71</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1007/s11192-008-0216-y">http://dx.doi.org/10.1007/s11192-008-0216-y</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B02">
+        <label>2</label>
+        <mixed-citation>2. Bornmann L,Hans-Dieter D. What Do We Know About the h Index? J Am Soc Inf Sci Technol. 2007;58(9):1381-5. DOI: http://dx.doi.org/10.1002/asi.20609</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Bornmann</surname>
+              <given-names>L</given-names>
+            </name>
+            <name>
+              <surname>Hans-Dieter</surname>
+              <given-names>D</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">What Do We Know About the h Index?</article-title>
+          <source>J Am Soc Inf Sci Technol</source>
+          <year>2007</year>
+          <volume>58</volume>
+          <issue>9</issue>
+          <fpage>1381</fpage>
+          <lpage>5</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1002/asi.20609">http://dx.doi.org/10.1002/asi.20609</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B03">
+        <label>3</label>
+        <mixed-citation>3. Burrows R. Living with the h-index? Metric assemblages in the contemporary academy. Sociol Rev. 2012;60(2):355-72. DOI: http://dx.doi.org/10.1111/j.1467-954X.2012.02077.x</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Burrows</surname>
+              <given-names>R</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Living with the h-index? Metric assemblages in the contemporary academy</article-title>
+          <source>Sociol Rev</source>
+          <year>2012</year>
+          <volume>60</volume>
+          <issue>2</issue>
+          <fpage>355</fpage>
+          <lpage>72</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1111/j.1467-954X.2012.02077.x">http://dx.doi.org/10.1111/j.1467-954X.2012.02077.x</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B04">
+        <label>4</label>
+        <mixed-citation>4. Cronin B, Meho L I. Using the h-index to rank influential information scientists. J Am Soc Inf Sci Technol. 2006;57(9):1275-8. DOI: http://dx.doi.org/10.1002/asi.20354</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Cronin</surname>
+              <given-names>B</given-names>
+            </name>
+            <name>
+              <surname>Meho L</surname>
+              <given-names>I</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Using the h-index to rank influential information scientists</article-title>
+          <source>J Am Soc Inf Sci Technol</source>
+          <year>2006</year>
+          <volume>57</volume>
+          <issue>9</issue>
+          <fpage>1275</fpage>
+          <lpage>8</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1002/asi.20354">http://dx.doi.org/10.1002/asi.20354</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B05">
+        <label>5</label>
+        <mixed-citation>5. Dalgaard P. Introductory Statistics with R. 2 ed. New York: Springer Science; 2008.</mixed-citation>
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Dalgaard</surname>
+              <given-names>P</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Introductory Statistics with R</article-title>
+          <edition>2 ed</edition>
+          <publisher-loc>New York</publisher-loc>
+          <publisher-name>Springer Science</publisher-name>
+          <year>2008</year>
+        </element-citation>
+      </ref>
+      <ref id="B06">
+        <label>6</label>
+        <mixed-citation>6. Harzing AWK, Van-der-Wal R. Google Scholar: the democratization of citation analysis? Ethics Sci Environ Polit. 2008; (1):61-73. DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.3354/esep00076">http://dx.doi.org/10.3354/esep00076</ext-link>
+				</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Harzing</surname>
+              <given-names>AWK</given-names>
+            </name>
+            <name>
+              <surname>Van-der-Wal</surname>
+              <given-names>R</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Google Scholar: the democratization of citation analysis?</article-title>
+          <source>Ethics Sci Environ Polit</source>
+          <year>2008</year>
+          <issue>1</issue>
+          <fpage>61</fpage>
+          <lpage>73</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.3354/esep00076">http://dx.doi.org/10.3354/esep00076</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B07">
+        <label>7</label>
+        <mixed-citation>7. Harzing AW,Van-der-Wal R. A Google Scholar H-Index for journals: an alternative metric to measure journal impact in economics &amp;business? J Am Soc Inf Sci Technol. 2009;60(1):41-6. DOI: http://dx.doi.org/10.1002/asi.20953</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Harzing</surname>
+              <given-names>AW</given-names>
+            </name>
+            <name>
+              <surname>Van-der-Wal</surname>
+              <given-names>R</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">A Google Scholar H-Index for journals: an alternative metric to measure journal impact in economics &amp;business?</article-title>
+          <source>J Am Soc Inf Sci Technol</source>
+          <year>2009</year>
+          <volume>60</volume>
+          <issue>1</issue>
+          <fpage>41</fpage>
+          <lpage>6</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1002/asi.20953">http://dx.doi.org/10.1002/asi.20953</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B08">
+        <label>8</label>
+        <mixed-citation>8. Hirsch JE. An index to quantify an individual&#8217;s scientific research output. Proc Natl Acad Sci USA. 2005;102(46):16569-72. DOI: http://dx.doi.org/10.1073/pnas.0507655102</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Hirsch</surname>
+              <given-names>JE</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">An index to quantify an individual&#8217;s scientific research output</article-title>
+          <source>Proc Natl Acad Sci USA</source>
+          <year>2005</year>
+          <volume>102</volume>
+          <issue>46</issue>
+          <fpage>16569</fpage>
+          <lpage>72</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1073/pnas.0507655102">http://dx.doi.org/10.1073/pnas.0507655102</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B09">
+        <label>9</label>
+        <mixed-citation>9. Hirch JE. Does the h index have predictive power? Proc Natl Acad Sci USA. 2007;104(49):19193-8. DOI: http://dx.doi.org/10.1073/pnas.0707962104</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>JE</surname>
+              <given-names>Hirch</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Does the h index have predictive power?</article-title>
+          <source>Proc Natl Acad Sci USA</source>
+          <year>2007</year>
+          <volume>104</volume>
+          <issue>49</issue>
+          <fpage>19193</fpage>
+          <lpage>8</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1073/pnas.0707962104">http://dx.doi.org/10.1073/pnas.0707962104</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B10">
+        <label>10</label>
+        <mixed-citation>10. Jacso P. Metadata mega mess in Google Scholar. Online Inf Rev. 2009;34(1):175-91. DOI: http://dx.doi.org/10.1108/14684521011024191</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>P</surname>
+              <given-names>Jacso</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Metadata mega mess in Google Scholar</article-title>
+          <source>Online Inf Rev</source>
+          <year>2009</year>
+          <volume>34</volume>
+          <issue>1</issue>
+          <fpage>175</fpage>
+          <lpage>91</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1108/14684521011024191">http://dx.doi.org/10.1108/14684521011024191</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B11">
+        <label>11</label>
+        <mixed-citation>11. Kellner AW, Ponciano LC. H-index in the Brazilian Academy of Sciences: comments and concerns. An Acad Bras Cienc. 2008;80(4):771-81. DOI: http://dx.doi.org/10.1590/S0001-37652008000400016</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Kellner</surname>
+              <given-names>AW</given-names>
+            </name>
+            <name>
+              <surname>Ponciano</surname>
+              <given-names>LC</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">H-index in the Brazilian Academy of Sciences: comments and concerns</article-title>
+          <source>An Acad Bras Cienc</source>
+          <year>2008</year>
+          <volume>80</volume>
+          <issue>4</issue>
+          <fpage>771</fpage>
+          <lpage>81</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1590/S0001-37652008000400016">http://dx.doi.org/10.1590/S0001-37652008000400016</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B12">
+        <label>12</label>
+        <mixed-citation>12. Lacasse JR, Hodge DR, Bean KF. Evaluating the productivity of social work scholars using the h-index. Res Soc Work Pract. 2011;21(5):599-607. DOI: http://dx.doi.org/10.1177/1049731511405069</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Lacasse</surname>
+              <given-names>JR</given-names>
+            </name>
+            <name>
+              <surname>Hodge</surname>
+              <given-names>DR</given-names>
+            </name>
+            <name>
+              <surname>Bean</surname>
+              <given-names>KF</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Evaluating the productivity of social work scholars using the h-index</article-title>
+          <source>Res Soc Work Pract</source>
+          <year>2011</year>
+          <volume>21</volume>
+          <issue>5</issue>
+          <fpage>599</fpage>
+          <lpage>607</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1177/1049731511405069">http://dx.doi.org/10.1177/1049731511405069</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B13">
+        <label>13</label>
+        <mixed-citation>13. Lindsey D. Using citation counts as a measure of quality in science measuring what&#8217;s measurable rather than what&#8217;s valid. Scientometrics. 1989;15(3-4):189-203. DOI: http://dx.doi.org/10.1007/BF02017198</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>D</surname>
+              <given-names>Lindsey</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Using citation counts as a measure of quality in science measuring what&#8217;s measurable rather than what&#8217;s valid</article-title>
+          <source>Scientometrics</source>
+          <year>1989</year>
+          <volume>15</volume>
+          <issue>3-4</issue>
+          <fpage>189</fpage>
+          <lpage>203</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1007/BF02017198">http://dx.doi.org/10.1007/BF02017198</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B14">
+        <label>14</label>
+        <mixed-citation>14. Norris M, Oppenheim C. Comparing alternatives to the Web of Science for coverage of the social sciences&#8217; literature. J Informetr. 2007;1(2):161-9. DOI: http://dx.doi.org/10.1016/j.joi.2006.12.001</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Norris</surname>
+              <given-names>M</given-names>
+            </name>
+            <name>
+              <surname>Oppenheim</surname>
+              <given-names>C</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Comparing alternatives to the Web of Science for coverage of the social sciences&#8217; literature</article-title>
+          <source>J Informetr</source>
+          <year>2007</year>
+          <volume>1</volume>
+          <issue>2</issue>
+          <fpage>161</fpage>
+          <lpage>9</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1016/j.joi.2006.12.001">http://dx.doi.org/10.1016/j.joi.2006.12.001</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B15">
+        <label>15</label>
+        <mixed-citation>15. Ouimet M, Bedard PO, Gelineau F. Are the h-index and some of its alternatives discriminatory of epistemological beliefs and methodological preferences of faculty members? The case of social scientists in Quebec. Scientometrics. 2011;88(1):91-106. DOI:http://dx.doi.org/10.1007/s11192-011-0364-3</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Ouimet</surname>
+              <given-names>M</given-names>
+            </name>
+            <name>
+              <surname>Bedard</surname>
+              <given-names>PO</given-names>
+            </name>
+            <name>
+              <surname>Gelineau</surname>
+              <given-names>F</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">Are the h-index and some of its alternatives discriminatory of epistemological beliefs and methodological preferences of faculty members? The case of social scientists in Quebec</article-title>
+          <source>Scientometrics</source>
+          <year>2011</year>
+          <volume>88</volume>
+          <issue>1</issue>
+          <fpage>91</fpage>
+          <lpage>106</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1007/s11192-011-0364-3">http://dx.doi.org/10.1007/s11192-011-0364-3</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+      <ref id="B16">
+        <label>16</label>
+        <mixed-citation>16. Pereira JCR,Bronhara B. H-index of Collective Health professors in Brazil. Rev Saude Publica. 2011;45(3):599-606. DOI:http://dx.doi.org/10.1590/S0034-89102011005000027</mixed-citation>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Pereira</surname>
+              <given-names>JCR</given-names>
+            </name>
+            <name>
+              <surname>Bronhara</surname>
+              <given-names>B</given-names>
+            </name>
+          </person-group>
+          <article-title xml:lang="en">H-index of Collective Health professors in Brazil</article-title>
+          <source>Rev Saude Publica</source>
+          <year>2011</year>
+          <volume>45</volume>
+          <issue>3</issue>
+          <fpage>599</fpage>
+          <lpage>606</lpage>
+          <comment>DOI: <ext-link ext-link-type="uri" xlink:href="http://dx.doi.org/10.1590/S0034-89102011005000027">http://dx.doi.org/10.1590/S0034-89102011005000027</ext-link>
+					</comment>
+        </element-citation>
+      </ref>
+    </ref-list>
+    <fn-group>
+      <fn>
+        <p>Artigo dispon&#237;vel em portugu&#234;s e ingl&#234;s em: <ext-link ext-link-type="uri" xlink:href="www.scielo.br/rsp">www.scielo.br/rsp</ext-link>
+				</p>
+      </fn>
+      <fn id="fn01">
+        <label>a</label>
+        <p>Minist&#233;rio de Ci&#234;ncia e Tecnologia. Conselho Nacional de Desenvolvimento Cient&#237;fico e Tecnol&#243;gico. Resolu&#231;&#227;o Normativa n&#176; 9, de 24 de abril de 2009. Bras&#237;lia (DF); 2009.</p>
+      </fn>
+      <fn id="fn02">
+        <label>b</label>
+        <p>Harzing AW. Publish or Perish. Version 3.0.3813. Londres; 2010 [citado 2013 jan]. Dispon&#237;vel em: <ext-link ext-link-type="uri" xlink:href="www.harzing.com/pop.htm">www.harzing.com/pop.htm</ext-link>
+				</p>
+      </fn>
+    </fn-group>
+  </back>
+  <sub-article id="S01" article-type="translation" xml:lang="en">
+    <front-stub>
+      <title-group>
+        <article-title xml:lang="en">Differences between h-index measures from different bibliographic sources and search engines</article-title>
+      </title-group>
+      <abstract xml:lang="en">
+        <sec>
+          <title>OBJECTIVE</title>
+          <p>To analyze the use of the h-index as a measure of the bibliometric impact of Brazilian researchers&#8217; scientific publications.</p>
+        </sec>
+        <sec>
+          <title>METHODS</title>
+          <p>The scientific production of Brazilian CNPq 1-A researchers in the areas of public health, immunology and medicine were compared. The mean h-index of the groups of researchers in each area were estimated and nonparametric Kruskal Wallis test and multiple comparisons Behrens-Fisher test were used to compare the differences.</p>
+        </sec>
+        <sec sec-type="results">
+          <title>RESULTS</title>
+          <p>The h-index means were higher in the area of Immunology than in Public Health and Medicine when the Web of Science base was used. However, this difference disappears when the comparison is made using Scopus or Google Scholar.</p>
+        </sec>
+        <sec sec-type="conclusions">
+          <title>CONCLUSIONS</title>
+          <p>The emergence of Google Scholar brings a new level to discussions on the measure of the bibliometric impact of scientific publications. Areas with strong professional components, in which knowledge is produced and must also be published in the native language, <italic>vis-a-vis</italic> its dissemination to the international community, necessarily have a standard of scientific publications and citations different from areas exclusively or predominantly academic and they are best captured by Google Scholar.</p>
+        </sec>
+      </abstract>
+      <kwd-group xml:lang="en">
+        <kwd>Public Health  </kwd>
+        <kwd>Scientific Publication Indicators</kwd>
+        <kwd>Bibliometric Indicators</kwd>
+        <kwd>Databases, Bibliographic</kwd>
+        <kwd>Bibliometrics</kwd>
+      </kwd-group>
+    </front-stub>
+    <body>
+      <sec sec-type="intro">
+        <title>INTRODUCTION</title>
+        <p>Growth in scientific production, its importance in economic and social development and the consequent consolidation of science as a public policy object in the second half of the 20<sup>th</sup>century brought with it them the need to develop indicators capable of measuring and evaluating the performance of complex scientific activities in general, and of its components &#8211; researchers and institutions &#8211; in particular. In spite of their recognized limitations, bibliometric indicators are the most widely used to evaluate scientific activity and its influence and impact.<sup><xref ref-type="bibr" rid="B13">13</xref></sup>Bibliometric measurements capable of measuring and qualifying scientific productivity are developed to report the performance of researchers, groups and research institutions and to guide the promotion of scientists, fostering research and personnel training. Bibliometrics is a vast field of empirical study and one of the bases of scientometrics.</p>
+        <p>Bibliometric measurements have evolved over time.Initially, they were limited to counting the number of publications. However, in a short time, the number of publications became increasingly less relevant in qualifying the productivity of a researcher if it were not related to some measure of quality, expressed by peer recognition. This quality was translated into bibliometrics through the number of citations obtained in scientific publications. However, using the gross number of citations as a measure of the in influence of a publication had its limitations and was not always a reflection of quality.<sup><xref ref-type="bibr" rid="B13">13</xref></sup>A series of indices have been suggested for substituting this method, based on citations. The h-index is the most popular.</p>
+        <p>This index was developed by a physicist interested in producing a measure which, based on citations, reduces the shortcomings related to simply counting them and overcomes the problems of the denominators used in calculating the impact factor. Hirsh<sup><xref ref-type="bibr" rid="B08">8</xref> , <xref ref-type="bibr" rid="B09">9</xref>
+					</sup>(2005, 2007) suggested that the h-index was better than other indices used up until now &#8211; total number of articles, total number of citations, mean number of citations, number of &#8216;significant&#8217; publications &#8211;, as it combines the number of citations with the number of citations of commonly cited articles.</p>
+        <p>The h-index became renowned due to the possibility of using one single measure, which is calculated in a particularly simple way, to characterize the impact of a researcher&#8217;s scientific output. It is calculated based on the descending order of the number of citations of each piece of work by the author (or research group, journal, institution), the h-index being defined as the point at which the number of citations correspond to the number of the order. A researcher who has published 50 articles, of which 22 received 22 or more citations, would have an h-index = 22. It is a robust index, as it combines quantity of scientific production (number of publications) and aspects of their quality or relevance (citations).<sup><xref ref-type="bibr" rid="B08">8</xref></sup>As it has become one of the most commonly used indicators to evaluate scientific production, it also has become the object of serious debate on aspects related to bibliometric measures in science.<sup><xref ref-type="bibr" rid="B04">4</xref></sup>
+				</p>
+        <p>There is transparency on h-index variability compared between different scientific areas. Areas with more prolific numbers of publications registered higher h-indices. There is variability when different bibliographic bases or search engines are used to derive the indices.<sup><xref ref-type="bibr" rid="B12">12</xref> , <xref ref-type="bibr" rid="B14">14</xref>
+					</sup>This is because these bases differ with regards to the coverage of their bibliographic or citation records.<sup><xref ref-type="bibr" rid="B01">1</xref></sup>For the areas of Social and Human sciences, some databases are less representative as fewer books, reports or conference proceedings are indexed.<sup><xref ref-type="bibr" rid="B15">15</xref></sup>Therefore, the choice of database used to calculate the h-index directly influences the values found.</p>
+        <p>Two bibliographic databases stand out for their wide ranging coverage of scientific areas and for counting citations: the ISI Web of Science (WoS), with bibliographic records dating back to 1945; and Scopus, created more recently to compete with the former, with records dating from 1960 and, in a more systematic way, from 1996. Recently, Google Scholar (GS) has gained importance, although it is not a bibliographic database like the two former. It is a search engine which uses algorithms to identify scientific publications and their citations available on the internet. This characteristic means that Google Scholar embraces a greater diversity of bibliographic productions, including books, seminars, lectures and others. In this article, the term bibliographic database will be used to refer to all three sources, including GS.</p>
+        <p>This article aims to analyze the use of h-index as a measure of bibliographic impact of the scientific output of Brazilian researchers. The perspective is to call attention to the use of databases appropriate to the specifics of each field of knowledge, highlighting the particularities of Public Health.</p>
+      </sec>
+      <sec sec-type="methods">
+        <title>METHODS</title>
+        <p>Three areas were selected for the analysis: Public Health, Immunology and Medicine, which form part of the so-called life sciences, which includes basic sciences, such as Biology, and applied sciences, such as agricultural and health sciences. Immunology was chosen as it is one of the subareas of biological science in which the greatest impact factors of researchers and the journals used for divulging their output are observed. Medicine was selected because it constitutes a range of the areas of health sciences which have the highest numbers of articles and a high impact factor. Public Health showed the greatest internal diversity, including researchers in the subareas of epidemiology, social sciences in health and politics and health care management, as well as having a smaller scientific community that Medicine. In spite of this, it stands out with regards to scientific output in Brazil.</p>
+        <p>Only those who received productivity grant 1-A from the <italic>Conselho Nacional de Desenvolvimento Cient&#237;fico e Tecnol&#243;gico</italic> (CNPq &#8211; National Council for Scientific and Technological Development) were included in the analysis. The CNPq Productivity in Research grant is aimed at researchers who stand out amongst their peers, valuing scientific output according to normative criteria. Those who receive a productivity grant can be divided into three categories: 2, 1 (D, C, B and A) and senior. <sup><xref ref-type="fn" rid="fn03">a</xref></sup>
+				</p>
+        <p>In order to apply for a category 2 grant, the researcher should have completed a doctorate at least three years beforehand, or eight years for a category 1 grant. The criteria used to judge grant applications are: (a) the candidate&#8217;s scientific production; (b) human resources training at a Post-Graduate level; (c) scientific and technological contribution and contribution to innovation; (d) coordination or participation as a lead researcher in research projects; and (e) participation in editorial and scientific management activities as well as administration of institutions and scientific and technological centers of excellence.</p>
+        <p>To qualify for a senior grant, the researcher should have completed 15 years, which may or may not be consecutive, with a category 1 grant. In category 1, the researcher falls into one of the four subcategories (A, B, C or D), based on their performance in the last ten years and compared with the performance of their peers. For category 2, their productivity is evaluated on one level only, with emphasis on published work and guidance, both referring to the preceding five years.</p>
+        <p>Category 1-A, the top of the hierarchy, contains researchers who show continued excellence in scientific production, in human resources training and who lead consolidated groups of researchers. The choice of this group restricted comparison to researchers with high levels of productivity and scientific leadership in each of the three areas in question. The sample grouped together researchers at the same stage of their career, as length of time spend in the profession strongly influences the h-index.</p>
+        <p>The list of researchers was obtained from the CNPq Carlos Chagas platform in April 2011. It included 98 researchers: 20 from Public Health, 59 from Medicine and 19 from Immunology. Access to the WoS and Scopus databases was obtained through the Capes Journal Portal. GS was accessed using the Publish-or-Perish interface, free access software which organizes searches and calculates h-index. <sup><xref ref-type="fn" rid="fn04">b</xref></sup>
+				</p>
+        <p>Searches were conducted in each database using the field &#8220;name in bibliographic citations&#8221; of the selected authors&#8217; C.Vs. on the Lattes platform (CNPq). The areas of research and institution of each researcher were checked. Documents found in the bibliographic databases were compared to those referred to in each authors&#8217; C.Vs. on the Lattes platform. This check enabled publications by authors with the same name to be excluded, as this could have distorted the results.</p>
+        <p>The h-indices for each researcher were estimated using the three databases, considering the period covered by each. The total indexed production of each author in the different bases was found. Any distortion with regards to the difference time covered is present in all three areas; therefore, it does not affect comparisons of h-index behavior in the three different areas/subareas in the three databases. This process was carried out blind, i.e., without prior knowledge of the researchers&#8217; area, which avoided any bias on the part of the authors of this study.</p>
+        <p>Means and medians were obtained for each group of researchers by area and by origin of the h-indices estimates. To test the statistical significance of differences between the groups, the Kruskal-Wallis test for two or more groups, equivalent to non-parametric variance analysis, was used to compare the three areas in question using the same database, or the three databases for each area. In those cases in which the result of the Kruskal-Wallis test was significant (p &lt; 0.05), the Behrens-Fisher multiple comparisons test was used, which tests the groups two by two, to ascertain in which groups the difference occurred.<sup><xref ref-type="bibr" rid="B05">5</xref></sup>
+				</p>
+      </sec>
+      <sec sec-type="results">
+        <title>RESULTS</title>
+        <p>The data referring to the Public Health researchers showed a greater range of variation, with more extreme minimum and maximum values ( <xref ref-type="table" rid="t05">Table 1</xref> ). In the graphics a, b and c of the Figure, the distribution of the h-index values and their respective medians for the researchers in each area are shown in more detail, generated for the three different sources used in the study (WoS, Scopus and GS).</p>
+        <p>
+          <table-wrap id="t05">
+            <label>Table 1.</label>
+            <caption>
+              <title>Mean and median of h-indices for CNPq 1-A researchers in the areas of Public Health, Medicine and Immunology estimated from different sources.</title>
+            </caption>
+            <table frame="hsides" rules="groups">
+              <colgroup width="25%">
+                <col width="1%"/>
+                <col/>
+                <col/>
+                <col/>
+                <col/>
+              </colgroup>
+              <tbody>
+                <tr>
+                  <td/>
+                  <td/>
+                  <td align="center">Web of Science</td>
+                  <td align="center">Scopus</td>
+                  <td align="center">Google Scholar</td>
+                </tr>
+                <tr>
+                  <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="5">Public Health</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Mean</td>
+                  <td align="center">19.4</td>
+                  <td align="center">20.4</td>
+                  <td align="center">31.0</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Standard Deviation</td>
+                  <td align="center">14.1</td>
+                  <td align="center">10.1</td>
+                  <td align="center">14.6</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Median</td>
+                  <td align="center">17</td>
+                  <td align="center">19</td>
+                  <td align="center">28</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Minimum</td>
+                  <td align="center">4</td>
+                  <td align="center">2</td>
+                  <td align="center">14</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Maximum</td>
+                  <td align="center">62</td>
+                  <td align="center">49</td>
+                  <td align="center">68</td>
+                </tr>
+                <tr>
+                  <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="5">Medicine</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Mean</td>
+                  <td align="center">20.6</td>
+                  <td align="center">20.5</td>
+                  <td align="center">25.2</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Standard Deviation</td>
+                  <td align="center">7.4</td>
+                  <td align="center">6.4</td>
+                  <td align="center">10.2</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Median</td>
+                  <td align="center">18</td>
+                  <td align="center">20</td>
+                  <td align="center">24.5</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Minimum</td>
+                  <td align="center">6</td>
+                  <td align="center">10</td>
+                  <td align="center">6</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Maximum</td>
+                  <td align="center">39</td>
+                  <td align="center">39</td>
+                  <td align="center">57</td>
+                </tr>
+                <tr>
+                  <td colspan="5" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="5">Immunology</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Mean</td>
+                  <td align="center">28.4</td>
+                  <td align="center">24.0</td>
+                  <td align="center">31.4</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Standard Deviation</td>
+                  <td align="center">9.1</td>
+                  <td align="center">6.6</td>
+                  <td align="center">12.8</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Median</td>
+                  <td align="center">27</td>
+                  <td align="center">24</td>
+                  <td align="center">27</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Minimum</td>
+                  <td align="center">17</td>
+                  <td align="center">12</td>
+                  <td align="center">18</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Maximum</td>
+                  <td align="center">50</td>
+                  <td align="center">40</td>
+                  <td align="center">59</td>
+                </tr>
+              </tbody>
+            </table>
+            <table-wrap-foot>
+              <fn id="TFN01t05">
+                <p><sup>a</sup> Kruskal-Wallis test</p>
+              </fn>
+            </table-wrap-foot>
+          </table-wrap>
+        </p>
+        <p>When GS was used, the researchers from the areas of Public Health and Medicine had h-index medians significantly higher than when using the other two databases ( <xref ref-type="table" rid="t06">Tables 2</xref> and <xref ref-type="table" rid="t07">3</xref> ). The three areas did not differ with regards to the h-indices obtained using Scopus and GS, although Immunology had significantly higher medians than the other two areas when using WoS. This difference disappeared when the comparison was made using the Scopus and GS databases.</p>
+        <p>
+          <table-wrap id="t06">
+            <label>Table 2.</label>
+            <caption>
+              <title>Median of h-indices for CNPq 1-A researchers in the areas of Public Health, Medicine and Immunology estimated from different sources (Web of Science, Scopus and Google Scholar) and (A) p-values from comparing the different sources and (B) p-values from comparing the different areas for each source.</title>
+            </caption>
+            <table frame="hsides" rules="groups">
+              <colgroup width="14%">
+                <col width="1%"/>
+                <col/>
+                <col/>
+                <col/>
+                <col/>
+                <col width="1%"/>
+                <col/>
+                <col/>
+                <col/>
+              </colgroup>
+              <tbody>
+                <tr>
+                  <td style="border-bottom: thin solid; border-color: #000000" colspan="4" align="center">
+                    <bold>A</bold>
+                  </td>
+                  <td/>
+                  <td style="border-bottom: thin solid; border-color: #000000" colspan="4" align="center">
+                    <bold>B</bold>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">Source</td>
+                  <td align="center">Area</td>
+                  <td align="center">p<sup>a</sup>
+									</td>
+                  <td/>
+                  <td colspan="2">Area</td>
+                  <td align="center">Source</td>
+                  <td align="center">p<sup>a</sup>
+									</td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="border-bottom: thin solid; border-color: #000000"/>
+                  <td/>
+                  <td colspan="4" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="2">Public Health</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td colspan="2">Web of Science</td>
+                  <td/>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Web of Science</td>
+                  <td align="center">17.0</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td>Public Health</td>
+                  <td align="center">17.0</td>
+                  <td align="center">0.001</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus</td>
+                  <td align="center">19.0</td>
+                  <td align="center">0.008</td>
+                  <td/>
+                  <td/>
+                  <td>Medicine</td>
+                  <td align="center">18.0</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Google Scholar</td>
+                  <td align="center">28.0</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td>Immunology</td>
+                  <td align="center">27.0</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td colspan="4" style="border-bottom: thin solid; border-color: #000000"/>
+                  <td/>
+                  <td colspan="4" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="2">Medicine</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td colspan="2">Scopus</td>
+                  <td/>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Web of Science</td>
+                  <td align="center">M</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td>Public Health</td>
+                  <td align="center">19.0</td>
+                  <td align="center">0.157</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus</td>
+                  <td align="center">20.0</td>
+                  <td align="center">0.001</td>
+                  <td/>
+                  <td/>
+                  <td>Medicine</td>
+                  <td align="center">20.0</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Google Scholar</td>
+                  <td align="center">24.5</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td>Immunology</td>
+                  <td align="center">24.0</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td colspan="4" style="border-bottom: thin solid; border-color: #000000"/>
+                  <td/>
+                  <td colspan="4" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="2">Immunology</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td colspan="2">Google Scholar</td>
+                  <td/>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Web of Science</td>
+                  <td align="center">27.0</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td>Public Health</td>
+                  <td align="center">28.0</td>
+                  <td align="center">0.120</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus</td>
+                  <td align="center">24.0</td>
+                  <td align="center">0.145</td>
+                  <td/>
+                  <td/>
+                  <td>Medicine</td>
+                  <td align="center">24.5</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Google Scholar</td>
+                  <td align="center">27.0</td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td>Immunology</td>
+                  <td align="center">27.0</td>
+                  <td/>
+                </tr>
+              </tbody>
+            </table>
+            <table-wrap-foot>
+              <fn id="TFN01t06">
+                <p><sup>a</sup> Behrens-Fisher test</p>
+              </fn>
+            </table-wrap-foot>
+          </table-wrap>
+        </p>
+        <p>
+          <table-wrap id="t07">
+            <label>Table 3.</label>
+            <caption>
+              <title>Results of multiple comparison tests: comparison between sources for each area and comparison between areas for each source.</title>
+            </caption>
+            <table frame="hsides" rules="groups">
+              <colgroup width="10%">
+                <col width="1%"/>
+                <col width="35%"/>
+                <col width="10%"/>
+                <col/>
+                <col width="1%"/>
+                <col width="35%"/>
+                <col width="10%"/>
+              </colgroup>
+              <tbody>
+                <tr>
+                  <td colspan="2">Comparison between sources for each area</td>
+                  <td align="center">p<sup>a</sup>
+									</td>
+                  <td/>
+                  <td colspan="2">Comparison between areas for each source</td>
+                  <td align="center">p<sup>a</sup>
+									</td>
+                </tr>
+                <tr>
+                  <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+                  <td/>
+                  <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="2">Public Health</td>
+                  <td/>
+                  <td/>
+                  <td colspan="2">Web of Science</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus <italic>versus</italic> Web of Science</td>
+                  <td align="center">0.603</td>
+                  <td/>
+                  <td/>
+                  <td>Public Health <italic>versus</italic> Immunology</td>
+                  <td align="center">0.004</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus <italic>versus</italic> Google Scholar</td>
+                  <td align="center">0.003</td>
+                  <td/>
+                  <td/>
+                  <td>Public Health <italic>versus</italic> Medicine</td>
+                  <td align="center">0.404</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Web of Science <italic>versus</italic> Google Scholar</td>
+                  <td align="center">0.002</td>
+                  <td/>
+                  <td/>
+                  <td>Immunology <italic>versus</italic> Medicine</td>
+                  <td align="center">0.001</td>
+                </tr>
+                <tr>
+                  <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+                  <td/>
+                  <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="2">Medicine</td>
+                  <td/>
+                  <td/>
+                  <td colspan="2">Scopus</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus <italic>versus</italic> Web of Science</td>
+                  <td align="center">0.996</td>
+                  <td/>
+                  <td/>
+                  <td>Public Health <italic>versus</italic> Immunology</td>
+                  <td align="center">0.240</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus <italic>versus</italic> Google Scholar</td>
+                  <td align="center">0.013</td>
+                  <td/>
+                  <td/>
+                  <td>Public Health <italic>versus</italic> Medicine</td>
+                  <td align="center">0.907</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Web of Science <italic>versus</italic> Google Scholar</td>
+                  <td align="center">0.010</td>
+                  <td/>
+                  <td/>
+                  <td>Immunology <italic>versus</italic> Medicine</td>
+                  <td align="center">0.178</td>
+                </tr>
+                <tr>
+                  <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+                  <td/>
+                  <td colspan="3" style="border-bottom: thin solid; border-color: #000000"/>
+                </tr>
+                <tr>
+                  <td colspan="2">Immunology</td>
+                  <td/>
+                  <td/>
+                  <td colspan="2">Google Scholar</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus <italic>versus</italic> Web of Science</td>
+                  <td align="center">0.267</td>
+                  <td/>
+                  <td/>
+                  <td>Public Health <italic>versus</italic> Immunology</td>
+                  <td align="center">0.999</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Scopus <italic>versus</italic> Google Scholar</td>
+                  <td align="center">0.158</td>
+                  <td/>
+                  <td/>
+                  <td>Public Health <italic>versus</italic> Medicine</td>
+                  <td align="center">0.284</td>
+                </tr>
+                <tr>
+                  <td/>
+                  <td>Web of Science <italic>versus</italic> Google Scholar</td>
+                  <td align="center">0.878</td>
+                  <td/>
+                  <td/>
+                  <td>Immunology <italic>versus</italic> Medicine</td>
+                  <td align="center">0.234</td>
+                </tr>
+              </tbody>
+            </table>
+          </table-wrap>
+        </p>
+        <p>Among the researchers from Medicine and Public Health, there was a significant increase in the h-indices medians when GS was used compared with the other two databases (23% and 475 higher, respectively).</p>
+      </sec>
+      <sec sec-type="discussion">
+        <title>DISCUSSION</title>
+        <p>Using GS generates higher h-indices for public Health researchers, followed by those in Medicine, but not for Immunology, compared with h-indices generated by WoS and Scopus. Immunology had significantly higher medians that the other two areas in WoS, probably due to it being a basic science, the articles of which are traditionally published in English and much cited among peers. According to Journal Citation Reports (JCR, da ISI Web of Knowledge), in 2011 there were 139 journals indexed for Immunology and 234 for Public Health, considering the social sciences collection. In spite of this, the citation indices are higher for Immunology.</p>
+        <p>Results of this nature are relevant, as deciding which base to use for the h-index calculation has implications on the ranking of the researchers and the academic areas.</p>
+        <p>Researchers in Immunology had similar h-index median values calculated in the three different databases, whereas there were significant differences in those of researchers in Medicine and Public Health estimated using GS compared with WoS and Scopus. This difference was greater than 50% in the case of Public Health. The area of health care, in general, has a greater number of journals published in Brazil which are not indexed or have only recently been indexed in the Scopus and WoS databases.</p>
+        <p>Using a different approach, Pereira &amp;Bronhara<sup><xref ref-type="bibr" rid="B16">16</xref></sup>(2011) estimated the h-indices for all active Brazilian lecturers in Post-Graduate Public Health programs in 2009. They used WoS and found a national mean h-index of 3.1, with 29.8% of the lecturers obtaining h-indices of zero.</p>
+        <p>Using GS instead of WoS produces different results. The majority of 1-A researchers in Public Health are epidemiologists, with a publication pattern closer to that of natural or exact sciences, such as Immunology; therefore, they are well represented in the WoS. In public Health, there are lecturers of the subareas of social sciences in health care and politics and health care management, whose publishing and citation profiles are closer to those of the social sciences in general, which has a lower coverage of indexation and registered citation in WoS than in GS. This occurs because a significant part of the publication in social science is in the form of books or other types of documents, captured by GS, but not indexed in Scopus or WoS.</p>
+        <p>The emergence of GS and interfaces which maximize its use has brought a whole new level to discussions of measures of bibliographic impact of scientific publications. Areas with strong professional components, in which knowledge produced is also published, as it should be, in the native language,<italic>vis-&#224;-vis</italic> its dissemination to the international scientific community, have a different pattern of publication and citation to those areas which are exclusively or predominantly academic.</p>
+        <p>The differences found in the h-indices from the three sources are related to the particular characteristics of these sources. WoS belongs to Thomson Reuters, the third largest publishing company in the world, which charges for access. It is the most traditional of the bases, and the most commonly used, including in research institutions in Brazil. Scopus, developed by Elsevier, the second largest publishing company in the world, is private and charges for access. In spite of being more recent, it is a strong competitor with WoS. It has a wider coverage of scientific journals, including those not in English and published outside of the North American and Western Europe axis. According to information available in the respective portals, in 2012 the Scopus database had 19,500 journals, more than 240 of which were Brazilian. In WoS, of the more than 12 thousand journals indexed, around 240 were Brazilian. GS, in turn, is part of the most popular search engine on the internet.</p>
+        <p>One of the first authors to compare these three sources highlighted differences between them which need to be better explained.<sup><xref ref-type="bibr" rid="B01">1</xref></sup>Whereas Bar-Ilan<sup><xref ref-type="bibr" rid="B01">1</xref></sup>found both higher and lower variations among h-indices estimated by GS compared with the other two sources,<sup><xref ref-type="bibr" rid="B01">1</xref></sup>in this study, GS systematically generated higher results, with statistically significant differences in the cases of Public Health and Medicine.</p>
+        <p>These divergences may be due to the fact that, in the beginning, the indices were estimated directly from GS, without the possibility of excluding citations not referring to the articles, or by authors with the same names. Therefore, the creation of <italic>Publish-or-Perish</italic> and, more recently, a new interface developed by Google itself (the <italic>my citations</italic> command in GS) has improved the system, reducing inconsistencies. The current differences in results between h-indices generated in GS compared with the other two databases may better reflect the real differences between the numbers of publications and citations.</p>
+        <p>The researcher who developed the <italic>Publish-or-Perish</italic> software called attention to GS&#8217;s superiority in estimating h-indices, especially for researchers in applied and social and human sciences, whose scientific journals are not well covered in the other two databases used.<sup><xref ref-type="bibr" rid="B07">7</xref></sup>An advantage of GS is that it does not depend on closed commercial databases. As it indexes references and citations available on the internet, GS is open and allows access to a large database which is not indexed in Scopus or WoS.</p>
+        <p>Search engines also have disadvantages. There is a greater degree of &#8216;rubbish&#8217; in the data obtained, i.e., the inclusion of publications and citations of non-scientific articles, which brings limitations and means that more care is needed when using it and constructing indices based on it, which means that GS has both supporters and detractors.<sup><xref ref-type="bibr" rid="B06">6</xref> , <xref ref-type="bibr" rid="B10">10</xref>
+					</sup>The fact that estimating the h-index depends on the number of publications which is a small percentage of the total publications of an active researcher means that it is easier to verify the publications and respective citations which are entered into the index calculation, excluding incorrect mentions.</p>
+        <p>Knowing the advantages and drawbacks of each of the sources used allows a more productive use of such bibliometric indicators, better exploiting the potential of each. This may avoid their use as a form of academic control or the creation of (false) hierarchies of researchers and research institutions.</p>
+        <p>Variation in h-index according to the bibliographic source or the search engine used is not an inherent disadvantage to this measure. However, there are drawbacks in the index itself which have been highlighted by various authors. There are two types of criticism of the use of this indicator: one, of a more general character, is related to the use of indices based on citations as a measure of scientific impact; the other is related to its specificities.</p>
+        <p>More general criticism states that using citations may be affected by various factors &#8211; social, political or geographic &#8211; and contests the relationship between &#8216;popularity&#8217; for generating a high number of citations and the transparent expression of effective scientific quality.<sup><xref ref-type="bibr" rid="B13">13</xref></sup>From a more radical perspective, some argue that the use of scientific measures, especially bibliometrics, is part of a greater project aiming to impose &#8216;quantified control&#8217; on academic activities.<sup><xref ref-type="bibr" rid="B03">3</xref></sup>
+				</p>
+        <p>More specific criticism of the h-index highlights the fact that it is dependent on time. It is cumulative, and is related to the number of citations, but also the number of publications. An author with ten publications with thousands of citations will never have a h-index higher than 10. This aspect is important, and Hirsch<sup><xref ref-type="bibr" rid="B09">9</xref></sup>(2007) himself, in the original article, stipulated that the index would serve for evaluating researchers at the same stage in their careers. The h-index is useful for making comparisons between the more productive scientists, who generally have been active in their field for a greater length of time, which justifies the choice of CNPq 1-A researchers.<sup><xref ref-type="bibr" rid="B02">2</xref></sup>Another disadvantage of the h-index refers to the fact it can be manipulated by self-citation or other mechanisms.</p>
+        <p>Another relevant aspect that should be mentioned is the variation in h-index between scientific areas. A comparison of h-indices of members of the ten scientific areas of the <italic>Academia de Brasileira de Ci&#234;ncias</italic>(Brazilian Academy of Sciences) shows that higher h-index means were calculated using WoS in the areas of Biomedicine, Health and Chemistry (23, 20 and 19, respectively), lower means were found in Earth Sciences, Engineering and Mathematics (9, 8 and 7, respectively) and means of practically zero in the Human Sciences (1).<sup><xref ref-type="bibr" rid="B11">11</xref></sup>
+				</p>
+        <p>Using the appropriate database for each field of knowledge is critical. This enables a more robust use of the h-index for reporting performance of researchers, groups and research institutions and of promoting scientists, fostering research and training personnel.</p>
+        <p>
+          <fig id="f03">
+            <label>
+              <bold>Figure.</bold>
+            </label>
+            <caption>
+              <title>Estimated h-indices and medians in the Web of Science, Scopus and Google Scholar (calculated by Publish or Perish) databases for 1-A researchers from the National Council for Research and Technological Development (CNPq) in the areas of Public Health, Medicine and Immunology.</title>
+            </caption>
+            <graphic xlink:href="0034-8910-rsp-47-02-0231-gf01-en"/>
+          </fig>
+        </p>
+      </sec>
+    </body>
+    <back>
+      <fn-group>
+        <fn id="fn04">
+          <p>Article available from: <ext-link ext-link-type="uri" xlink:href="www.scielo.br/rsp">www.scielo.br/rsp</ext-link>
+					</p>
+        </fn>
+        <fn id="fn05">
+          <label>a</label>
+          <p>Behrens-Fisher test a Minist&#233;rio de Ci&#234;ncia e Tecnologia. Conselho Nacional de Desenvolvimento Cient&#237;fico e Tecnol&#243;gico. Resolu&#231;&#227;o Normativa n&#176; 9, de 24 de abril de 2009. Bras&#237;lia (DF); 2009.</p>
+        </fn>
+        <fn id="fn06">
+          <label>b</label>
+          <p>Harzing AW. Publish or Perish. Version 3.0.3813. Londres; 2010 [cited 2013 Jan]. Available from: <ext-link ext-link-type="uri" xlink:href="www.harzing.com/pop.htm">www.harzing.com/pop.htm</ext-link>
+					</p>
+        </fn>
+      </fn-group>
+    </back>
+  </sub-article>
+</article>
