@@ -125,7 +125,7 @@ def migrate_articlemeta_parser(sargs):
         "-Ofolder",
         "--ofolder",
         dest="output_folder",
-        default=config.get('SITE_SPS_PKG_PATH'),
+        default=config.get("SITE_SPS_PKG_PATH"),
         help="Output path.",
     )
 
@@ -136,6 +136,13 @@ def migrate_articlemeta_parser(sargs):
         parents=[mongodb_parser(sargs), minio_parser(sargs)],
     )
 
+    import_parser.add_argument(
+        "--folder",
+        default=config.get("SPS_PKG_PATH"),
+        metavar="",
+        help=f"""Entry path to import SPS packages. The default path
+        is: {config.get("SPS_PKG_PATH")}""",
+    )
     ################################################################################################
     args = parser.parse_args(sargs)
 
@@ -189,7 +196,9 @@ def migrate_articlemeta_parser(sargs):
             minio_secure=args.minio_is_secure,
         )
 
-        inserting.import_documents_to_kernel(session_db=DB_Session(), storage=storage)
+        inserting.import_documents_to_kernel(
+            session_db=DB_Session(), storage=storage, folder=args.folder
+        )
 
     else:
         raise SystemExit(

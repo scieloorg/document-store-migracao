@@ -14,6 +14,7 @@ from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Packa
 from documentstore.domain import utcnow, DocumentsBundle, get_static_assets
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore.interfaces import Session
+from documentstore_migracao.tools import constructor
 
 
 logger = logging.getLogger(__name__)
@@ -175,7 +176,6 @@ def register_document(folder: str, session_db, storage) -> None:
 
     for additional_path in static_additionals.values():
         storage.register(os.path.join(additional_path), prefix)
-        logger.error(additional_path)
 
     if obj_xml:
         renditions = get_document_renditions(folder, _renditions, prefix, storage)
@@ -267,30 +267,42 @@ def create_aop_bundle(session_db, issn):
     return session_db.documents_bundles.fetch(bundle_id)
 
 
-def import_documents_to_kernel(session_db, storage) -> None:
+def import_documents_to_kernel(session_db, storage, folder) -> None:
+    """Armazena os arquivos do pacote SPS em um object storage, registra o documento
+    no banco de dados do Kernel e por fim associa-o ao seu `document bundle`"""
     documents_sorter = DocumentsSorter()
-    register_documents(session_db, storage, documents_sorter)
+
+    register_documents(session_db, storage, documents_sorter, folder)
     register_documents_in_documents_bundle(
         session_db, documents_sorter.documents_bundles_with_sorted_documents
     )
 
 
-def register_documents(session_db, storage, documents_sorter) -> None:
-    logger.info("Iniciando Envio dos do xmls")
-    list_folders = files.list_files(config.get("SPS_PKG_PATH"))
+def register_documents(session_db, storage, documents_sorter, folder) -> None:
+    """Realiza o processo de importação de pacotes SPS no diretório indicado. O
+    processo de importação segue as fases: registro de assets/renditions no 
+    object storage informado, registro do manifesto na base de dados do Kernel
+    informada e ordenação dos documentos em um `documents_sorter` para posterior
+    associação aos seus respectivos fascículos"""
 
     err_filename = os.path.join(config.get("ERRORS_PATH"), "insert_documents.err")
 
-    for folder in list_folders:
+    for path, _, sps_files in os.walk(folder):
+        if not sps_files:
+            continue
+
         try:
-            document_path = os.path.join(config.get("SPS_PKG_PATH"), folder)
-            registration_result = register_document(document_path, session_db, storage)
+            xml = list(filter(lambda f: f.endswith(".xml"), sps_files))[0]
+            xml_path = os.path.join(path, xml)
+            constructor.article_xml_constructor(xml_path, path)
+            registration_result = register_document(path, session_db, storage)
+
             if registration_result:
                 document_xml, document_id = registration_result
                 documents_sorter.insert_document(document_id, document_xml)
 
-        except Exception as ex:
-            msg = "Falha ao registrar documento %s: %s" % (document_path, ex)
+        except (IndexError, ValueError, TypeError) as ex:
+            msg = "Falha ao registrar documento %s: %s" % (path, ex)
             logger.error(msg)
             files.write_file(err_filename, msg, "a")
 

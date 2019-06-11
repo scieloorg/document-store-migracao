@@ -418,6 +418,8 @@ class TestDocumentRegister(unittest.TestCase):
             "0034-8910-rsp-47-02-0403.xml",
         ]
 
+        self.session = Session()
+
     def test_get_documents_assets_should_return_assets_and_additionals(self):
         assets, additionals = get_document_assets_path(
             self.xml_etree, self.package_files, self.package_path
@@ -496,3 +498,67 @@ class TestDocumentRegister(unittest.TestCase):
             put_static_assets_into_storage(
                 assets, "some-prefix", mk_store, ignore_missing_assets=False
             )
+
+    @patch("documentstore_migracao.tools.constructor.article_xml_constructor")
+    @patch("documentstore_migracao.processing.inserting.register_document")
+    @patch("documentstore_migracao.processing.inserting.os")
+    @patch("documentstore_migracao.processing.inserting.DocumentsSorter")
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def test_register_documents_should_import_sps_package(
+        self,
+        mk_store,
+        mk_documents_sorter,
+        mk_os,
+        mk_register_document,
+        mk_article_xml_constructor,
+    ):
+        mk_article_xml_constructor.side_effect = None
+        mk_os.walk.side_effect = [
+            [("/root/path/to/folder", "", ["file1", "file2", "file3.xml"])]
+        ]
+        mk_register_document.side_effect = [["/root/path/to/folder/file3.xml", None]]
+
+        inserting.register_documents(
+            self.session, mk_store, mk_documents_sorter, "/root"
+        )
+
+        mk_article_xml_constructor.assert_called()
+        mk_register_document.assert_called_with(
+            "/root/path/to/folder", self.session, mk_store
+        )
+        mk_documents_sorter.insert_document.assert_called()
+
+    @patch("documentstore_migracao.utils.files.write_file")
+    @patch("documentstore_migracao.processing.inserting.os")
+    @patch("documentstore_migracao.processing.inserting.DocumentsSorter")
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def test_register_documents_should_not_find_xml_file(
+        self, mk_store, mk_documents_sorter, mk_os, mk_write_file
+    ):
+
+        mk_os.walk.side_effect = [[("/root/path/to/folder", "", ["file1", "file2"])]]
+
+        with self.assertLogs(level="ERROR") as log:
+            inserting.register_documents(
+                self.session, mk_store, mk_documents_sorter, "/root"
+            )
+
+            self.assertIn("list index out of range", log[1][0])
+
+            mk_write_file.assert_called()
+
+    @patch("documentstore_migracao.processing.inserting.register_document")
+    @patch("documentstore_migracao.processing.inserting.os")
+    @patch("documentstore_migracao.processing.inserting.DocumentsSorter")
+    @patch("documentstore_migracao.object_store.minio.MinioStorage")
+    def test_register_documents_should_not_register_package_if_files_is_not_found(
+        self, mk_store, mk_documents_sorter, mk_os, mk_register_document
+    ):
+
+        mk_os.walk.side_effect = [[("/root/path/to/folder", "", [])]]
+
+        inserting.register_documents(
+            self.session, mk_store, mk_documents_sorter, "/root"
+        )
+
+        mk_register_document.assert_not_called()
