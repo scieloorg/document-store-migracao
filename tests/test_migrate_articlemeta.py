@@ -72,7 +72,7 @@ class TestMigrateProcess(unittest.TestCase):
             ]
         )
         mk_import_documents_to_kernel.assert_called_once_with(
-            session_db=ANY, storage=ANY
+            session_db=ANY, storage=ANY, folder=ANY
         )
 
     def test_not_arg(self):
