@@ -388,6 +388,19 @@ class SPS_Package:
 
         return self.xmltree
 
+    def transform_article_meta_count(self):
+        count_tree = self.xmltree.find(".//counts")
+        elements = [
+            ("fig-count", "fig"),
+            ("table-count", "table"),
+            ("equation-count", "equation"),
+        ]
+        for e_count, element in elements:
+            count = len(self.xmltree.xpath("//body//%s" % element))
+            count_tree.find(e_count).set("count", str(count))
+
+        return self.xmltree
+
     def create_scielo_id(self):
         PATHS = [".//article-meta"]
 
@@ -412,17 +425,17 @@ class SPS_Package:
         return self.xmltree
 
     def transform_pubdate(self):
-        xpaths_to_change =(
-            ("pub-date[@pub-type='epub']", ("date-type", "pub",)),
-            ("pub-date[@pub-type='collection']", ("date-type", "collection",)),
-            ("pub-date[@pub-type='epub-ppub']", ("date-type", "collection",)),
+        xpaths_to_change = (
+            ("pub-date[@pub-type='epub']", ("date-type", "pub")),
+            ("pub-date[@pub-type='collection']", ("date-type", "collection")),
+            ("pub-date[@pub-type='epub-ppub']", ("date-type", "collection")),
         )
         for xpath, pubdate_element_attr in xpaths_to_change:
             pubdate = self.article_meta.find(xpath)
             if pubdate is not None:
                 pubdate.set(*pubdate_element_attr)
                 pubdate.attrib.pop("pub-type")
-        xpaths_to_update =(
+        xpaths_to_update = (
             ("pub-date[@date-type='pub']"),
             ("pub-date[@date-type='collection']"),
         )
