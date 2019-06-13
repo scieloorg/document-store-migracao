@@ -1,4 +1,4 @@
-corresp fn
+corresp corresp
 figure  fig
 tab table-wrap
 equ disp-formula
@@ -13,11 +13,11 @@ fig fig
 annex   app
 anex    app
 app app
-for disp-formula
 graf    fig
 graph   fig
 frma    disp-formula
 frm disp-formula
+for disp-formula
 anx app
 apx app
 grf fig
@@ -33,9 +33,6 @@ ap  app
 nt  fn
 fn  fn
 ref ref
-f   fig
-g   fig
-c   fig
-q   fig
 e   disp-formula
 t   table-wrap
+img graphic
