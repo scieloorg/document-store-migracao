@@ -2,6 +2,7 @@ import os
 from packtools.catalogs import XML_CATALOG
 
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
+CONVERSION_TAGS = os.path.join(BASE_PATH, "documentstore_migracao", "utils", "convert_html_body.txt")
 
 """
 SOURCE_PATH:
@@ -27,10 +28,10 @@ ERRORS_PATH:
 """
 
 _default = dict(
-    SCIELO_COLLECTION="spa",
+    SCIELO_COLLECTION="scl",
     AM_URL_API="http://articlemeta.scielo.org/api/v1",
     STATIC_URL_FILE="http://www.scielo.br/",
-    SOURCE_PATH=os.path.join(BASE_PATH, "xml/source"),
+    SOURCE_PATH=os.path.join(BASE_PATH, "xml/source_br"),
     PROCESSED_SOURCE_PATH=os.path.join(BASE_PATH, "xml/source_processed"),
     CONVERSION_PATH=os.path.join(BASE_PATH, "xml/conversion"),
     VALID_XML_PATH=os.path.join(BASE_PATH, "xml/xml_valid"),
@@ -43,7 +44,7 @@ _default = dict(
     CONSTRUCTOR_PATH=os.path.join(BASE_PATH, "xml/constructor"),
     ERRORS_PATH=os.path.join(BASE_PATH, "xml/errors"),
     CACHE_PATH=os.path.join(BASE_PATH, ".cache"),
-    VALIDATE_ALL="TRUE",
+    VALIDATE_ALL="FALSE",
 )
 
 
