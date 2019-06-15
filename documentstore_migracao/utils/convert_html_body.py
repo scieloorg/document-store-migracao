@@ -1658,12 +1658,14 @@ class AssetsPipeline(object):
             if ext in [".htm", ".html"]:
                 parts = href.split("/")
                 local = "/".join(parts[-4:])
-                remote = config.get("STATIC_URL_FILE") + href,
+                remote = config.get("STATIC_URL_FILE") + href[1:]
                 local = os.path.join(config.get("SITE_SPS_PKG_PATH"), local)
                 asset_in_html_page = AssetInHTMLPage(local, remote)
                 tree = asset_in_html_page.convert(self.super_obj)
-                tree.tag = "REMOVE_TAG"
-                return tree
+                if tree:
+                    tree.tag = "REMOVE_TAG"
+                    return tree
+                return
 
             new_graphic = etree.Element("graphic")
             new_graphic.set(
@@ -1812,10 +1814,10 @@ class AssetsPipeline(object):
 
 class HTMLPage:
 
-    def __init__(self, content=None, local=None, remote=None):
+    def __init__(self, local=None, remote=None, content=None, ):
         self.local = local
         self.remote = remote
-        self.htmltree = content, local, remote
+        self.htmltree = content
 
     @property
     def htmltree(self):
@@ -1824,24 +1826,35 @@ class HTMLPage:
     @htmltree.setter
     def htmltree(self, value):
         self._htmltree = None
-        content, local, remote = value
-        content = content or self.get_content(local, remote)
-        if content:
-            self._htmltree = etree.fromstring(content)
+        if not value:
+            xmltree = self.get_content()
+            if xmltree:
+                self._htmltree = etree.fromstring(xmltree)
+            else:
+                print(self.local, self.remote)
 
     @property
     def content(self):
         return etree.tostring(self.tree)
 
-    def get_content(self, local, remote):
-        if local and os.path.isfile(local):
-            with open(local, "rb") as fp:
+    def get_content(self):
+        if self.local and os.path.isfile(self.local):
+            print(self.local)
+            with open(self.local, "rb") as fp:
                 return fp.read()
         try:
-            with request.urlopen(remote, timeout=30) as fp:
-                return fp.read()
+            print(self.remote)
+            with request.urlopen(self.remote, timeout=30) as fp:
+                content = fp.read()
         except (error.HTTPError, error.URLError) as e:
             logger.exception(e)
+        else:
+            dirname = os.path.dirname(self.local)
+            if not os.path.isdir(dirname):
+                os.makedirs(dirname)
+            with open(self.local, "wb") as fp:
+                fp.write(content)
+            return content
 
 
 class AssetInHTMLPage(HTMLPage):
@@ -1862,12 +1875,10 @@ class AssetInHTMLPage(HTMLPage):
                     return etree.fromstring(content)
 
     def convert(self, _pipeline):
-        xmltree = self.xmltree or self._convert(_pipeline)
-        if xmltree:
-            dirname = os.path.dirname(local)
-            if not os.path.isdir(dirname):
-                os.makedirs(dirname)
-            if os.path.isdir(dirname):
+        xmltree = self.xml_tree
+        if not xmltree:
+            xmltree = self._convert(_pipeline)
+            if xmltree:
                 with open(self.local + ".xml", "wb") as fp:
                     fp.write(etree.tostring(xmltree))
-            return xmltree
+        return xmltree
