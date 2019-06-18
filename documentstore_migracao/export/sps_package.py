@@ -242,7 +242,7 @@ class SPS_Package:
         # RENDITION PDF
         obj_article = article.get_article(self.publisher_id)
         if obj_article:
-            pdfs = obj_article.fulltexts()["pdf"]
+            pdfs = obj_article.fulltexts().get("pdf", {})
             for l_pdf, u_pdf in pdfs.items():
                 f_name, ext = files.extract_filename_ext_by_path(u_pdf)
                 new_fname = self.asset_name(f_name)
