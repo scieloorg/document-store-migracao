@@ -1555,5 +1555,4 @@ class Test_ArticleMetaCount(unittest.TestCase):
     def test__transform_article_meta_count(self):
         result = self.sps_package.transform_article_meta_count()
 
-        self.assertEqual(result.find(".//fig-count").attrib["count"], "1")
-        self.assertEqual(result.find(".//table-count").attrib["count"], "1")
+        self.assertIsNone(result.find(".//counts"))

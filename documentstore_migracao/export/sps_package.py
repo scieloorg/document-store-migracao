@@ -390,14 +390,8 @@ class SPS_Package:
 
     def transform_article_meta_count(self):
         count_tree = self.xmltree.find(".//counts")
-        elements = [
-            ("fig-count", "fig"),
-            ("table-count", "table"),
-            ("equation-count", "equation"),
-        ]
-        for e_count, element in elements:
-            count = len(self.xmltree.xpath("//body//%s" % element))
-            count_tree.find(e_count).set("count", str(count))
+        if count_tree is not None:
+            count_tree.getparent().remove(count_tree)
 
         return self.xmltree
 
