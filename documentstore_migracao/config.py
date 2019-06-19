@@ -44,6 +44,7 @@ _default = dict(
     ERRORS_PATH=os.path.join(BASE_PATH, "xml/errors"),
     CACHE_PATH=os.path.join(BASE_PATH, ".cache"),
     VALIDATE_ALL="TRUE",
+    THREADPOOL_MAX_WORKERS=os.cpu_count() * 5,
 )
 
 
