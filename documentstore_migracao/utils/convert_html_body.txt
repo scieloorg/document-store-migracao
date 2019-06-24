@@ -35,4 +35,4 @@ fn  fn
 ref ref
 e   disp-formula
 t   table-wrap
-img graphic
+f fig

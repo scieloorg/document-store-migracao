@@ -9,34 +9,9 @@ from lxml import etree
 from documentstore_migracao.utils import files
 from documentstore_migracao.utils import xml as utils_xml
 from documentstore_migracao import config
-
+from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 
 logger = logging.getLogger(__name__)
-
-
-TEMP_A_HREF_TEXTS = "/tmp/dsm_ahref_texts.txt"
-TEMP_A_NAMES = "/tmp/dsm_a_names.txt"
-TEMP_FILEPATHS = "/tmp/dsm_filepaths.txt"
-
-STARTSWITH_RETURNS_TAG_AND_REFTYPE = tuple(
-    [tuple(item.strip().split()) for item in open(config.CONVERSION_TAGS).readlines()]
-)
-
-
-def join_texts(texts):
-    return " ".join([item for item in texts if item])
-
-
-def _preserve_node_tail_before_remove_node(node, node_text):
-    parent = node.getparent()
-    if node.tail:
-        text = join_texts([node_text.rstrip(), node.tail.lstrip()])
-        previous = node.getprevious()
-        if previous is not None:
-            previous.tail = join_texts([(previous.tail or "").rstrip(), text])
-        else:
-            parent.text = join_texts([(parent.text or "").rstrip(), text])
-
 
 def _remove_element_or_comment(node, remove_inner=False):
     parent = node.getparent()
@@ -95,10 +70,6 @@ def wrap_content_node(_node, elem_wrap="p"):
 
 def gera_id(_string, index_body):
     rid = _string
-    number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z0-9]+)?", _string)
-    if number_item:
-        name_item, number_item, sufix_item = number_item.groups("")
-        rid = name_item + number_item + sufix_item
 
     if not rid[0].isalpha():
         rid = "replace_by_reftype" + rid
@@ -110,24 +81,6 @@ def gera_id(_string, index_body):
     return ref_id.lower()
 
 
-def search_asset_node_backwards(node, attr="id"):
-
-    previous = node.getprevious()
-    if previous is not None:
-        if previous.attrib.get(attr):
-            if len(previous.getchildren()) == 0:
-                return previous
-
-    parent = node.getparent()
-    if parent is not None:
-        previous = parent.getprevious()
-        if previous is not None:
-            asset = previous.find(".//*[@{}]".format(attr))
-            if asset is not None:
-                if len(asset.getchildren()) == 0:
-                    return asset
-
-
 def find_or_create_asset_node(root, elem_name, elem_id, node=None):
     if elem_name is None or elem_id is None:
         return
@@ -135,15 +88,14 @@ def find_or_create_asset_node(root, elem_name, elem_id, node=None):
     asset = root.find(xpath)
     if asset is None and node is not None:
         asset = search_asset_node_backwards(node)
-    if asset is None:
-        if node is not None:
-            parent = node.getparent()
-            if parent is not None:
-                previous = parent.getprevious()
-                if previous is not None:
-                    asset = previous.find(".//*[@id]")
-                    if asset is not None and len(asset.getchildren()) > 0:
-                        asset = None
+    if asset is None and node is not None:
+        parent = node.getparent()
+        if parent is not None:
+            previous = parent.getprevious()
+            if previous is not None:
+                asset = previous.find(".//*[@id]")
+                if asset is not None and len(asset.getchildren()) > 0:
+                    asset = None
 
     if asset is None:
         asset = etree.Element(elem_name)
@@ -154,140 +106,7 @@ def find_or_create_asset_node(root, elem_name, elem_id, node=None):
 def get_node_text(node):
     if node is None:
         return ""
-    return join_texts([item for item in node.itertext() if item])
-
-
-def get_other_node_which_same_text(root, a_href_text):
-    for node in root.findall(".//xref"):
-        text = get_node_text(node)
-        if text == a_href_text:
-            return node
-
-
-def first_alpha_characteres(text):
-    t = []
-    for c in text:
-        if c.isalpha():
-            t.append(c)
-        else:
-            break
-    return "".join(t)
-
-
-class Inferer:
-
-    REFTYPE = {"table-wrap": "table", "ref": "bibr"}
-
-    def ref_type(self, elem_name):
-        return self.REFTYPE.get(elem_name, elem_name)
-
-    def tag_and_reftype_from_name(self, name):
-        if not name:
-            return
-        for prefix in ["not", "_ftnref"]:
-            if name.startswith(prefix) and name[len(prefix) :].isdigit():
-                return
-        for prefix in ["titulo", "title", "tx", "top", "home"]:
-            if name.startswith(prefix):
-                return
-        for prefix, tag in STARTSWITH_RETURNS_TAG_AND_REFTYPE:
-            if name.startswith(prefix):
-                return tag, self.ref_type(tag)
-        if not name[0].isalnum():
-            if name[0] == "*":
-                return
-            return "symbol", "fn"
-        return "fn", "fn"
-
-    def tag_and_reftype_from_a_href_text(self, a_href_text):
-        if not a_href_text.strip():
-            return
-        a_href_text = a_href_text.strip().lower()
-
-        for i, c in enumerate(a_href_text):
-            if not c.isalnum():
-                continue
-            else:
-                break
-        text = a_href_text[i:]
-        if text[0].isdigit():
-            return "fn", "fn"
-        for prefix, tag in STARTSWITH_RETURNS_TAG_AND_REFTYPE:
-            if text.startswith(prefix) and len(prefix) > 1:
-                return tag, self.ref_type(tag)
-        if "corresp" in a_href_text:
-            return "corresp", "corresp"
-
-    def tag_and_reftype_and_id_from_filepath(self, file_path):
-        filename, __ = files.extract_filename_ext_by_path(file_path)
-        for prefix, tag in STARTSWITH_RETURNS_TAG_AND_REFTYPE:
-            if tag is None:
-                continue
-            if prefix == filename:
-                return tag, self.ref_type(tag), filename
-            if prefix in filename:
-                parts = filename.split(prefix)
-                if len(parts) < 2:
-                    continue
-                if parts[0] and parts[0][-1].isalpha():
-                    continue
-                if parts[1] and parts[1][0].isalpha():
-                    continue
-                if parts[1]:
-                    return tag, self.ref_type(tag), prefix + "".join(parts[1:])
-
-
-class Document:
-    def __init__(self, xmltree):
-        self.xmltree = xmltree
-        self.inferer = Inferer()
-
-    @property
-    def a_href_items(self):
-        texts = {}
-        file_paths = {}
-        for a_href in self.xmltree.findall(".//a[@href]"):
-            href = a_href.attrib.get("href").strip()
-            text = get_node_text(a_href).lower().strip()
-
-            if text:
-                if text not in texts.keys():
-                    texts[text] = ([], [])
-                i = 0 if href and href[0] == "#" else 1
-                texts[text][i].append(a_href)
-
-            if href:
-                if href[0] != "#" and ":" not in href and "@" not in href:
-                    filename, __ = files.extract_filename_ext_by_path(href)
-                    if filename not in file_paths.keys():
-                        file_paths[filename] = []
-                    file_paths[filename].append(a_href)
-        return texts, file_paths
-
-    @property
-    def a_names(self):
-        names = {}
-        for a in self.xmltree.findall(".//a[@name]"):
-            name = a.attrib.get("name").strip()
-            if name:
-                if name not in names.keys():
-                    names[name] = (
-                        a,
-                        self.xmltree.findall('.//a[@href="#{}"]'.format(name)),
-                    )
-        return names
-
-    @property
-    def images(self):
-        items = {}
-        for img in self.xmltree.findall(".//img[@src]"):
-            value = img.attrib.get("src").lower().strip()
-            if value:
-                filename, __ = files.extract_filename_ext_by_path(value)
-                if filename not in items.keys():
-                    items[filename] = []
-                items[filename].append(img)
-        return items
+    return join_texts([item.strip() for item in node.itertext() if item.strip()])
 
 
 class CustomPipe(plumber.Pipe):
@@ -341,10 +160,15 @@ class HTML2SPSPipeline(object):
             self.TagsHPipe(),
             self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
+            self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveRefIdPipe(),
             self.SanitizationPipe(),
         )
+
+    def deploy(self, raw):
+        transformed_data = self._ppl.run(raw, rewrap=True)
+        return next(transformed_data)
 
     class SetupPipe(CustomPipe):
         def transform(self, data):
@@ -403,7 +227,7 @@ class HTML2SPSPipeline(object):
             raw, xml = data
             for tag in self.TAGS:
                 for node in xml.findall(".//" + tag):
-                    text = "".join(node.itertext()).strip()
+                    text = get_node_text(node)
                     if not text:
                         node.tag = "STRIPTAG"
             etree.strip_tags(xml, "STRIPTAG")
@@ -491,6 +315,23 @@ class HTML2SPSPipeline(object):
             "trans-subtitle",
             "trans-title",
         ]
+
+        def ___transform(self, data):
+            raw, xml = data
+            nodes = xml.findall("*[br]")
+            for node in nodes:
+                if node.tag in self.ALLOWED_IN:
+                    for br in node.findall("br"):
+                        br.tag = "break"
+                elif node.tag == "p":
+                    for br in node.findall("br"):
+                        if br.tail:
+                            p = etree.Element("p")
+                            p.text = br.tail.strip()
+                            br.tail = br.tail.replace(p.text, "")
+                            br.addnext(p)
+            etree.strip_tags(xml, "br")
+            return data
 
         def replace_CHANGE_BR_by_close_p_open_p(self, xml):
             _xml = etree.tostring(xml)
@@ -1160,7 +1001,7 @@ class HTML2SPSPipeline(object):
                     node.text = ""
                     node.insert(0, new_p)
 
-                for child in node.iterchildren():
+                for child in node.getchildren():
                     if child.tail and child.tail.strip():
                         new_p = etree.Element("p")
                         new_p.text = child.tail
@@ -1180,11 +1021,36 @@ class HTML2SPSPipeline(object):
                         node.tail = ""
                         node.addnext(new_p)
 
+        def _solve_open_p(self, xml):
+            node = xml.find(".//p[p]")
+            if node is not None:
+                new_p = etree.Element("p")
+                if node.text and node.text.strip():
+                    new_p.text = node.text
+                    node.text = ""
+                for child in node.getchildren():
+                    if child.tag != "p":
+                        new_p.append(deepcopy(child))
+                        node.remove(child)
+                    else:
+                        break
+                if new_p.text or new_p.getchildren():
+                    node.addprevious(new_p)
+                node.tag = "REMOVE_P"
+                etree.strip_tags(xml, "REMOVE_P")
+
+        def _solve_open_p_items(self, xml):
+            node = xml.find(".//p[p]")
+            while node is not None:
+                self._solve_open_p(xml)
+                node = xml.find(".//p[p]")
+
         def transform(self, data):
             raw, xml = data
-            self._tag_texts(xml)
-            self._identify_extra_p_tags(xml)
-            self._tag_text_in_body(xml)
+            self._solve_open_p_items(xml)
+            # self._tag_texts(xml)
+            # self._identify_extra_p_tags(xml)
+            # self._tag_text_in_body(xml)
             etree.strip_tags(xml, "REMOVE_P")
             return data
 
@@ -1313,9 +1179,9 @@ class HTML2SPSPipeline(object):
             self.super_obj.document.xmltree = xml
             for name, a_name_and_hrefs in self.super_obj.document.a_names.items():
                 a_name, a_hrefs = a_name_and_hrefs
-                if a_name.attrib.get("xml_new_id"):
-                    new_id = a_name.attrib.get("xml_new_id")
-                    new_tag = a_name.attrib.get("xml_new_tag")
+                if a_name.attrib.get("xml_id"):
+                    new_id = a_name.attrib.get("xml_id")
+                    new_tag = a_name.attrib.get("xml_tag")
                     reftype = a_name.attrib.get("xml_reftype")
                     self._update_a_name(a_name, new_id, new_tag)
                     self._update_a_href_items(a_hrefs, new_id, reftype)
@@ -1325,167 +1191,135 @@ class HTML2SPSPipeline(object):
             return data
 
     class DocumentPipe(CustomPipe):
+        inferer = Inferer()
+
         def _update(self, node, elem_name, ref_type, new_id, text=None):
-            node.set("xml_new_tag", elem_name)
+            node.set("xml_tag", elem_name)
             node.set("xml_reftype", ref_type)
-            node.set("xml_new_id", new_id)
+            node.set("xml_id", new_id)
             if text:
                 node.set("xml_label", text)
 
-        def _add_node_id(self, inferer, nodes_with_id, nodes_without_id):
-            _id = None
-            alt_id = None
-            for node in a_href_text_nodes:
-                href = node.attrib.get("href")
-                if href:
-                    if href[0] == "#":
-                        _id = href[1:]
-                    else:
-                        tag_reftype_id = inferer.tag_and_reftype_and_id_from_filepath(
-                            href
-                        )
-                        if tag_reftype_id is not None:
-                            alt_elem_name, alt_ref_type, alt_id = tag_reftype_id
-            return _id, alt_id
-
-        def _add_id(self, inferer, nodes_without_id, _id, tag, reftype, text):
-            for node in nodes_without_id:
-                alt_id = None
-                if not _id:
-                    href = node.attrib.get("href")
-                    tag_reftype_id = inferer.tag_and_reftype_and_id_from_filepath(
-                        href
-                    )
-                    if tag_reftype_id:
-                        alt_elem_name, alt_reftype, alt_id = tag_reftype_id
-                if _id or alt_id:
-                    new_id = gera_id(_id or alt_id, self.super_obj.index_body)
-                    self._update(node, tag, reftype, new_id, text)
-
-        def _complete_a_href_from_text(self, inferer, texts):
+        def _add_xml_attribs_to_a_href_from_text(self, texts):
             for text, data in texts.items():
                 nodes_with_id, nodes_without_id = data
-                tag_reftype = inferer.tag_and_reftype_from_a_href_text(text)
-                if tag_reftype:
-                    tag, reftype = tag_reftype
-                    _id = None
-                    for node in nodes_with_id:
-                        _id = node.attrib.get("href")[1:]
-                        new_id = gera_id(_id, self.super_obj.index_body)
-                        self._update(node, tag, reftype, new_id, text)
-                    self._add_id(
-                        inferer, nodes_without_id, _id, tag, reftype, text)
-                else:
-                    if not text.isalnum():
-                        for node in nodes_with_id:
-                            _remove_element_or_comment(node)
+                tag_reftype = self.inferer.tag_and_reftype_from_a_href_text(text)
+                if not tag_reftype:
+                    continue
 
-        def _complete_a_href_from_file_paths(self, inferer, file_paths):
+                tag, reftype = tag_reftype
+                node_id = None
+                for node in nodes_with_id:
+                    node_id = node.attrib.get("href")[1:]
+                    new_id = gera_id(node_id, self.super_obj.index_body)
+                    self._update(node, tag, reftype, new_id, text)
+
+                for node in nodes_without_id:
+                    alt_id = None
+                    if not node_id:
+                        href = node.attrib.get("href")
+                        tag_reftype_id = self.inferer.tag_and_reftype_and_id_from_filepath(
+                            href, tag
+                        )
+                        if tag_reftype_id:
+                            alt_tag, alt_reftype, alt_id = tag_reftype_id
+                    if node_id or alt_id:
+                        new_id = gera_id(node_id or alt_id, self.super_obj.index_body)
+                        self._update(node, tag, reftype, new_id, text)
+
+        def _classify_nodes(self, nodes):
+            incomplete = []
+            complete = None
+            for node in nodes:
+                data = [
+                    node.attrib.get("xml_label"),
+                    node.attrib.get("xml_tag"),
+                    node.attrib.get("xml_reftype"),
+                    node.attrib.get("xml_id"),
+                ]
+                if all(data):
+                    complete = data
+                else:
+                    incomplete.append(node)
+            return complete, incomplete
+
+        def _add_xml_attribs_to_a_href_from_file_paths(self, file_paths):
             for path, nodes in file_paths.items():
                 new_id = None
-                missing = []
-                for node in nodes:
-                    if node.attrib.get("xml_new_id"):
-                        if new_id is None:
-                            elem_name = node.attrib.get("xml_new_tag")
-                            ref_type = node.attrib.get("xml_reftype")
-                            text = node.attrib.get("xml_label")
-                            new_id = node.attrib.get("xml_new_id")
-                    else:
-                        missing.append(node)
-                if len(missing) == 0:
-                    continue
-                if not new_id:
-                    tag_reftype_id = inferer.tag_and_reftype_and_id_from_filepath(path)
+                complete, incomplete = self._classify_nodes(nodes)
+                if complete:
+                    text, tag, reftype, new_id = complete
+                else:
+                    tag_reftype_id = self.inferer.tag_and_reftype_and_id_from_filepath(
+                        path
+                    )
                     if tag_reftype_id:
-                        elem_name, ref_type, _id = tag_reftype_id
+                        tag, reftype, _id = tag_reftype_id
                         new_id = gera_id(_id, self.super_obj.index_body)
                         text = ""
                 if new_id:
-                    for node in missing:
-                        self._update(node, elem_name, ref_type, new_id, text)
+                    for node in incomplete:
+                        self._update(node, tag, reftype, new_id, text)
 
-        def _complete_a_name(self, inferer, a_names):
+        def _add_xml_attribs_to_a_name(self, a_names):
             for name, a_name_and_hrefs in a_names.items():
-                a_name, a_hrefs = a_name_and_hrefs
                 new_id = None
-                missing = []
-                for node in a_hrefs:
-                    if node.attrib.get("xml_new_id"):
-                        if new_id is None:
-                            elem_name = node.attrib.get("xml_new_tag")
-                            ref_type = node.attrib.get("xml_reftype")
-                            text = node.attrib.get("xml_label")
-                            new_id = node.attrib.get("xml_new_id")
-                    else:
-                        missing.append(node)
-                if not new_id:
-                    tag_reftype = None
-                    if a_name.tail:
-                        tag_reftype = inferer.tag_and_reftype_from_a_href_text(
-                            a_name.tail)
+                a_name, a_hrefs = a_name_and_hrefs
+                complete, incomplete = self._classify_nodes(a_hrefs)
+                if complete:
+                    text, tag, reftype, new_id = complete
+                else:
+                    tag_reftype = self.inferer.tag_and_reftype_from_a_href_text(
+                        a_name.tail
+                    )
                     if not tag_reftype:
-                        tag_reftype = inferer.tag_and_reftype_from_name(name)
+                        tag_reftype = self.inferer.tag_and_reftype_from_name(name)
                     if tag_reftype:
-                        elem_name, ref_type = tag_reftype
+                        tag, reftype = tag_reftype
                         new_id = gera_id(name, self.super_obj.index_body)
                         text = ""
                 if new_id:
-                    self._update(a_name, elem_name, ref_type, new_id, text)
-                    for node in missing:
-                        self._update(node, elem_name, ref_type, new_id, text)
+                    self._update(a_name, tag, reftype, new_id, text)
+                    for node in incomplete:
+                        self._update(node, tag, reftype, new_id, text)
 
-        def _complete_img(self, inferer, images):
+        def _search_asset_node_related_to_img(self, new_id, img):
+            if new_id:
+                asset_node = img.getroottree().find(".//*[@xml_id='{}']".format(new_id))
+                if asset_node is not None:
+                    return asset_node
+            found = search_asset_node_backwards(img, "xml_tag")
+            if found is not None and found.attrib.get("name"):
+                return found
+
+        def _add_xml_attribs_to_img(self, images):
             for path, images in images.items():
-                tag_reftype_id = inferer.tag_and_reftype_and_id_from_filepath(
-                    path)
+                text, new_id, tag, reftype = None, None, None, None
+                tag_reftype_id = self.inferer.tag_and_reftype_and_id_from_filepath(path)
                 if tag_reftype_id:
-                    text = None
-                    elem_name, ref_type, _id = tag_reftype_id
+                    tag, reftype, _id = tag_reftype_id
                     new_id = gera_id(_id, self.super_obj.index_body)
-                    asset = (
-                        images[0]
-                        .getroottree()
-                        .find(".//*[@xml_new_id='{}']".format(new_id))
-                    )
-                    if asset is not None:
-                        text = asset.attrib.get("xml_label")
-                    for node in images:
-                        elem = asset
-                        if elem is None:
-                            elem = search_asset_node_backwards(node, "xml_new_tag")
-                            if elem is not None:
-                                # and elem.attrib.get("xml_new_tag") == elem_name
-                                text = elem.attrib.get("xml_label")
-                                new_id = elem.attrib.get("xml_new_id")
-                                elem_name = elem.attrib.get("xml_new_tag")
-                                ref_type = elem.attrib.get("xml_reftype")
-                        if all([elem_name, ref_type, new_id]):
-                            self._update(node, elem_name, ref_type, new_id, text)
+
+                for img in images:
+                    found = self._search_asset_node_related_to_img(new_id, img)
+                    if found is not None:
+                        text = found.attrib.get("xml_label")
+                        new_id = found.attrib.get("xml_id")
+                        tag = found.attrib.get("xml_tag")
+                        reftype = found.attrib.get("xml_reftype")
+                    if all([tag, reftype, new_id]):
+                        self._update(img, tag, reftype, new_id, text)
 
         def transform(self, data):
             raw, xml = data
-
             self.super_obj.document.xmltree = xml
             texts, file_paths = self.super_obj.document.a_href_items
             names = self.super_obj.document.a_names
             images = self.super_obj.document.images
-
-            with open(TEMP_FILEPATHS, "a+") as fp:
-                fp.write("\n".join(file_paths.keys()))
-                fp.write("\n".join(images.keys()))
-            with open(TEMP_A_NAMES, "a+") as fp:
-                fp.write("\n".join(names.keys()))
-            with open(TEMP_A_HREF_TEXTS, "a+") as fp:
-                fp.write("\n".join(texts.keys()))
-            self._complete_a_name(self.super_obj.document.inferer, names)
-            self._complete_a_href_from_text(
-                self.super_obj.document.inferer, texts)
-
-            self._complete_a_href_from_file_paths(
-                self.super_obj.document.inferer, file_paths
-            )
-            self._complete_img(self.super_obj.document.inferer, images)
+            self._add_xml_attribs_to_a_href_from_text(texts)
+            self._add_xml_attribs_to_a_name(names)
+            self._add_xml_attribs_to_a_href_from_file_paths(file_paths)
+            self._add_xml_attribs_to_img(images)
             return data
 
     class RemoveImgSetaPipe(plumber.Pipe):
@@ -1502,9 +1336,7 @@ class HTML2SPSPipeline(object):
         def transform(self, data):
             raw, xml = data
 
-            convert = AssetsPipeline(
-                self.super_obj.pid, self.super_obj.index_body, self.super_obj.document
-            )
+            convert = AssetsPipeline(html_pipeline=self.super_obj)
             _, obj = convert.deploy(xml)
             return raw, obj
 
@@ -1526,9 +1358,55 @@ class HTML2SPSPipeline(object):
             _process(xml, "img", self.parser_node)
             return data
 
-    def deploy(self, raw):
-        transformed_data = self._ppl.run(raw, rewrap=True)
-        return next(transformed_data)
+    class FixBodyChildrenPipe(plumber.Pipe):
+        ALLOWED_CHILDREN = [
+            "address",
+            "alternatives",
+            "array",
+            "boxed-text",
+            "chem-struct-wrap",
+            "code",
+            "fig",
+            "fig-group",
+            "graphic",
+            "media",
+            "preformat",
+            "supplementary-material",
+            "table-wrap",
+            "table-wrap-group",
+            "disp-formula",
+            "disp-formula-group",
+            "def-list",
+            "list",
+            "tex-math",
+            "mml:math",
+            "p",
+            "related-article",
+            "related-object",
+            "disp-quote",
+            "speech",
+            "statement",
+            "verse-group",
+            "sec",
+            "sig-block",
+        ]
+
+        def transform(self, data):
+            raw, xml = data
+            body = xml.find(".//body")
+            if body is not None and body.tag == "body":
+                for child in body.getchildren():
+                    if child.tag not in self.ALLOWED_CHILDREN:
+                        new_child = etree.Element("p")
+                        new_child.append(deepcopy(child))
+                        child.addprevious(new_child)
+                        body.remove(child)
+                    elif child.tail:
+                        new_child = etree.Element("p")
+                        new_child.text = child.tail.strip()
+                        child.tail = child.tail.replace(new_child.text, "")
+                        child.addnext(new_child)
+            return data
 
 
 class DataSanitizationPipeline(object):
@@ -1614,15 +1492,15 @@ class DataSanitizationPipeline(object):
 
 
 class AssetsPipeline(object):
-    def __init__(self, pid, index_body=1, document=None):
-        self.pid = pid
-        self.index_body = index_body
-        self.document = document or Document(None)
+    def __init__(self, html_pipeline):
+        # self.super_obj = html_pipeline
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
-            self.AddAssetInfoToTablePipe(super_obj=self),
-            self.CreateAssetElementsFromExternalLinkElementsPipe(super_obj=self),
-            self.CreateAssetElementsFromImgOrTableElementsPipe(super_obj=self),
+            self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
+            self.CreateAssetElementsFromExternalLinkElementsPipe(
+                super_obj=html_pipeline
+            ),
+            self.CreateAssetElementsFromImgOrTableElementsPipe(super_obj=html_pipeline),
         )
 
     def deploy(self, raw):
@@ -1640,8 +1518,8 @@ class AssetsPipeline(object):
             if _id:
                 new_id = gera_id(_id, self.super_obj.index_body)
                 node.set("id", new_id)
-                node.set("xml_new_id", new_id)
-                node.set("xml_new_tag", "table-wrap")
+                node.set("xml_id", new_id)
+                node.set("xml_tag", "table-wrap")
                 node.set("xml_label", "Tab")
 
         def transform(self, data):
@@ -1650,61 +1528,64 @@ class AssetsPipeline(object):
             return data
 
     class CreateAssetElementsFromExternalLinkElementsPipe(CustomPipe):
-
-        def _create_asset_content(self, node_a):
+        def _create_asset_content_as_graphic(self, node_a):
             href = node_a.attrib.get("href")
-            fname, ext = os.path.splitext(href.lower())
-
-            if ext in [".htm", ".html"]:
-                parts = href.split("/")
-                local = "/".join(parts[-4:])
-                remote = config.get("STATIC_URL_FILE") + href[1:]
-                local = os.path.join(config.get("SITE_SPS_PKG_PATH"), local)
-                asset_in_html_page = AssetInHTMLPage(local, remote)
-                tree = asset_in_html_page.convert(self.super_obj)
-                if tree:
-                    tree.tag = "REMOVE_TAG"
-                    return tree
-                return
-
             new_graphic = etree.Element("graphic")
-            new_graphic.set(
-                "{http://www.w3.org/1999/xlink}href", href
-            )
+            new_graphic.set("{http://www.w3.org/1999/xlink}href", href)
             return new_graphic
+
+        def _create_asset_content_from_html(self, node_a, new_tag, new_id):
+            href = node_a.attrib.get("href")
+            parts = href.split("/")
+            local = "/".join(parts[-4:])
+            remote = config.get("STATIC_URL_FILE") + href[1:]
+            local = os.path.join(config.get("SITE_SPS_PKG_PATH"), local)
+            asset_in_html_page = AssetInHTMLPage(local, remote)
+            tree = asset_in_html_page.convert(self.super_obj)
+            if tree is not None:
+                tree.tag = "REMOVE_TAG"
+                return tree
+            return
 
         def _create_asset_group(self, a_href):
             root = a_href.getroottree()
-            asf_id = a_href.attrib.get("xml_new_id")
-            elem_name = a_href.attrib.get("xml_new_tag")
-            if not elem_name or not asf_id:
+            new_id = a_href.attrib.get("xml_id")
+            new_tag = a_href.attrib.get("xml_tag")
+            if not new_tag or not new_id:
                 return
-            asset = find_or_create_asset_node(root, elem_name, asf_id)
 
+            asset = find_or_create_asset_node(root, new_tag, new_id)
             if asset is not None:
-                content = self._create_asset_content(a_href)
-                asset.append(content)
-                if content.tag == "REMOVE_TAG":
-                    _remove_element_or_comment(content, False)
+                href = a_href.attrib.get("href")
+                fname, ext = os.path.splitext(href.lower())
+
+                if ext in [".htm", ".html"]:
+                    asset_content = self._create_asset_content_from_html(
+                        a_href, new_tag, new_id
+                    )
+                else:
+                    asset_content = self._create_asset_content_as_graphic(a_href)
+
+                if asset_content is not None:
+                    asset.append(asset_content)
+                    if asset_content.tag == "REMOVE_TAG":
+                        etree.strip_tags(asset, "REMOVE_TAG")
 
                 if asset.getparent() is None:
-                    new_p = etree.Element("p")
-                    new_p.append(asset)
-                    parent = a_href.getparent()
-                    parent.addnext(new_p)
+                    create_p_for_asset(a_href, asset)
 
                 self._create_xref(a_href)
 
         def _create_xref(self, a_href):
             reftype = a_href.attrib.pop("xml_reftype")
-            asf_id = a_href.attrib.pop("xml_new_id")
+            new_id = a_href.attrib.pop("xml_id")
 
-            if asf_id is None or reftype is None:
+            if new_id is None or reftype is None:
                 return
 
             a_href.tag = "xref"
             a_href.attrib.clear()
-            a_href.set("rid", asf_id)
+            a_href.set("rid", new_id)
             a_href.set("ref-type", reftype)
 
         def transform(self, data):
@@ -1712,7 +1593,7 @@ class AssetsPipeline(object):
             self.super_obj.document.xmltree = xml
             a_href_texts, file_paths = self.super_obj.document.a_href_items
             for path, nodes in file_paths.items():
-                if nodes[0].attrib.get("xml_new_tag"):
+                if nodes[0].attrib.get("xml_tag"):
                     self._create_asset_group(nodes[0])
                     for node in nodes[1:]:
                         self._create_xref(node)
@@ -1723,7 +1604,6 @@ class AssetsPipeline(object):
             node_text = node.attrib.get("xml_label")
             if node_text is None:
                 return
-
             text = get_node_text(previous_or_next)
             if text.lower().startswith(node_text.lower()):
                 _node = previous_or_next
@@ -1770,100 +1650,68 @@ class AssetsPipeline(object):
 
             if node_label_caption is not None:
                 _node, label, caption = node_label_caption
-                if _node.getparent() is not None:
-                    _node.getparent().remove(_node)
+                parent = _node.getparent()
+                if parent is not None:
+                    parent.remove(_node)
                 return label, caption
 
-        def _get_asset_node(self, img_or_table, xml_new_tag, xml_new_id):
+        def _get_asset_node(self, img_or_table, xml_new_tag, xml_id):
             asset = find_or_create_asset_node(
-                img_or_table.getroottree(), xml_new_tag, xml_new_id, img_or_table
+                img_or_table.getroottree(), xml_new_tag, xml_id, img_or_table
             )
             if asset is not None:
-                if asset.getparent() is None:
-                    img_or_table.getparent().addprevious(asset)
+                parent = asset.getparent()
+                if parent is None:
+                    parent = img_or_table.getparent()
+                    if parent.tag != "body":
+                        parent.addprevious(asset)
+                    else:
+                        parent.append(asset)
             return asset
 
         def parser_node(self, img_or_table):
-            xml_new_id = img_or_table.attrib.get("xml_new_id")
+            xml_id = img_or_table.attrib.get("xml_id")
             xml_reftype = img_or_table.attrib.get("xml_reftype")
-            xml_new_tag = img_or_table.attrib.get("xml_new_tag")
+            xml_new_tag = img_or_table.attrib.get("xml_tag")
             xml_label = img_or_table.attrib.get("xml_label")
-            if not xml_new_tag or not xml_new_id:
+            if not xml_new_tag or not xml_id:
                 return
             img_or_table_parent = img_or_table.getparent()
             label_and_caption = self._find_label_and_caption_around_node(img_or_table)
-            asset = self._get_asset_node(img_or_table, xml_new_tag, xml_new_id)
+            asset = self._get_asset_node(img_or_table, xml_new_tag, xml_id)
             if label_and_caption:
                 if label_and_caption[1] is not None:
                     asset.insert(0, label_and_caption[1])
                 asset.insert(0, label_and_caption[0])
             new_img_or_table = deepcopy(img_or_table)
             img_or_table_parent.remove(img_or_table)
-            for attr in ["xml_new_id", "xml_reftype", "xml_label",
-                         "xml_new_tag"]:
+            for attr in ["xml_id", "xml_reftype", "xml_label", "xml_tag"]:
                 if attr in new_img_or_table.attrib.keys():
                     new_img_or_table.attrib.pop(attr)
             asset.append(new_img_or_table)
 
         def transform(self, data):
             raw, xml = data
-            _process(xml, "img[@xml_new_id]", self.parser_node)
-            _process(xml, "table[@xml_new_id]", self.parser_node)
+            _process(xml, "img[@xml_id]", self.parser_node)
+            _process(xml, "table[@xml_id]", self.parser_node)
             return data
 
 
-class HTMLPage:
-
-    def __init__(self, local=None, remote=None, content=None, ):
+class AssetInHTMLPage:
+    def __init__(self, local=None, remote=None, content=None):
         self.local = local
         self.remote = remote
-        self.htmltree = content
 
-    @property
-    def htmltree(self):
-        return self._htmltree
-
-    @htmltree.setter
-    def htmltree(self, value):
-        self._htmltree = None
-        if not value:
-            xmltree = self.get_content()
-            if xmltree:
-                self._htmltree = etree.fromstring(xmltree)
-            else:
-                print(self.local, self.remote)
-
-    @property
-    def content(self):
-        return etree.tostring(self.tree)
-
-    def get_content(self):
-        if self.local and os.path.isfile(self.local):
-            print(self.local)
-            with open(self.local, "rb") as fp:
-                return fp.read()
-        try:
-            print(self.remote)
-            with request.urlopen(self.remote, timeout=30) as fp:
-                content = fp.read()
-        except (error.HTTPError, error.URLError) as e:
-            logger.exception(e)
+    def convert(self, _pipeline):
+        # xmltree = self.xml_tree
+        # if xmltree is None:
+        xmltree = self._convert(_pipeline)
+        if xmltree is not None:
+            with open(self.local + ".xml", "wb") as fp:
+                fp.write(self.ent2char(etree.tostring(xmltree)))
         else:
-            dirname = os.path.dirname(self.local)
-            if not os.path.isdir(dirname):
-                os.makedirs(dirname)
-            with open(self.local, "wb") as fp:
-                fp.write(content)
-            return content
-
-
-class AssetInHTMLPage(HTMLPage):
-
-    def _convert(self, _pipeline):
-        body_tree = self.htmltree.find(".//body")
-        if body_tree:
-            __, body_tree = _pipeline.deploy(body_tree)
-            return body_tree
+            logger.info(self.local)
+        return xmltree
 
     @property
     def xml_tree(self):
@@ -1874,11 +1722,171 @@ class AssetInHTMLPage(HTMLPage):
                 if content:
                     return etree.fromstring(content)
 
-    def convert(self, _pipeline):
-        xmltree = self.xml_tree
-        if not xmltree:
-            xmltree = self._convert(_pipeline)
-            if xmltree:
-                with open(self.local + ".xml", "wb") as fp:
-                    fp.write(etree.tostring(xmltree))
-        return xmltree
+    def _convert(self, _pipeline):
+        html_tree = self.html_tree
+        if html_tree is not None:
+            body_tree = html_tree.find(".//body")
+
+            if body_tree is not None:
+                body_tree.set("xmlns:xlink", "http://www.w3.org/1999/xlink")
+                __, xml_tree = _pipeline.deploy(body_tree)
+                return xml_tree
+
+    @property
+    def html_tree(self):
+        html_content = self.get_html_content()
+        if html_content:
+            return etree.fromstring(html_content, parser=etree.HTMLParser())
+
+    def ent2char(self, data):
+        return html.unescape(data.decode("utf-8")).encode("utf-8").strip()
+
+    def download(self):
+        with request.urlopen(self.remote, timeout=30) as fp:
+            return fp.read()
+
+    def get_html_content(self):
+        if self.local and os.path.isfile(self.local):
+            with open(self.local, "rb") as fp:
+                return fp.read()
+        try:
+            content = self.download()
+        except (error.HTTPError, error.URLError) as e:
+            logger.exception(e)
+        else:
+            dirname = os.path.dirname(self.local)
+            if not os.path.isdir(dirname):
+                os.makedirs(dirname)
+            with open(self.local, "wb") as fp:
+                fp.write(self.ent2char(content))
+            return content
+
+
+def join_texts(texts):
+    return " ".join([item for item in texts if item])
+
+
+def _preserve_node_tail_before_remove_node(node, node_text):
+    parent = node.getparent()
+    if node.tail:
+        text = join_texts([node_text.rstrip(), node.tail.lstrip()])
+        previous = node.getprevious()
+        if previous is not None:
+            previous.tail = join_texts([(previous.tail or "").rstrip(), text])
+        else:
+            parent.text = join_texts([(parent.text or "").rstrip(), text])
+
+
+def old_gera_id(_string, index_body):
+    rid = _string
+    number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z0-9]+)?", _string)
+    if number_item:
+        name_item, number_item, sufix_item = number_item.groups("")
+        rid = name_item + number_item + sufix_item
+
+    if not rid[0].isalpha():
+        rid = "replace_by_reftype" + rid
+
+    if index_body == 1:
+        return rid.lower()
+
+    ref_id = "%s-body%s" % (rid, index_body)
+    return ref_id.lower()
+
+
+def search_asset_node_backwards(node, attr="id"):
+
+    previous = node.getprevious()
+    if previous is not None:
+        if previous.attrib.get(attr):
+            if len(previous.getchildren()) == 0:
+                return previous
+
+    parent = node.getparent()
+    if parent is not None:
+        previous = parent.getprevious()
+        if previous is not None:
+            asset = previous.find(".//*[@{}]".format(attr))
+            if asset is not None:
+                if len(asset.getchildren()) == 0:
+                    return asset
+
+
+def search_backwards_for_elem_p_or_body(node):
+    up = node.getparent()
+    while up is not None and up.tag not in ["p", "body"]:
+        last = up
+        up = up.getparent()
+    if up.tag == "p":
+        return up
+    if up.tag == "body":
+        return last
+
+
+def create_p_for_asset(a_href, asset):
+
+    new_p = etree.Element("p")
+    new_p.set("content-type", "asset")
+    new_p.append(asset)
+
+    up = search_backwards_for_elem_p_or_body(a_href)
+
+    _next = up
+    while _next is not None and _next.attrib.get("content-type") == "asset":
+        up = _next
+        _next = up.getnext()
+
+    up.addnext(new_p)
+
+
+class Document:
+    def __init__(self, xmltree):
+        self.xmltree = xmltree
+
+    @property
+    def a_href_items(self):
+        texts = {}
+        file_paths = {}
+        for a_href in self.xmltree.findall(".//a[@href]"):
+            href = a_href.attrib.get("href").strip()
+            text = get_node_text(a_href).lower().strip()
+
+            if text:
+                if text not in texts.keys():
+                    # tem id, nao tem id
+                    texts[text] = ([], [])
+                i = 0 if href and href[0] == "#" else 1
+                texts[text][i].append(a_href)
+
+            if href:
+                if href[0] != "#" and ":" not in href and "@" not in href:
+                    filename, __ = files.extract_filename_ext_by_path(href)
+                    if filename not in file_paths.keys():
+                        file_paths[filename] = []
+                    file_paths[filename].append(a_href)
+        return texts, file_paths
+
+    @property
+    def a_names(self):
+        names = {}
+        for a in self.xmltree.findall(".//a[@name]"):
+            name = a.attrib.get("name").strip()
+            if name:
+                if name not in names.keys():
+                    names[name] = (
+                        a,
+                        self.xmltree.findall('.//a[@href="#{}"]'.format(name)),
+                    )
+        return names
+
+    @property
+    def images(self):
+        items = {}
+        for img in self.xmltree.findall(".//img[@src]"):
+            value = img.attrib.get("src").lower().strip()
+            if value:
+                filename, __ = files.extract_filename_ext_by_path(value)
+                if filename not in items.keys():
+                    items[filename] = []
+                items[filename].append(img)
+        return items
