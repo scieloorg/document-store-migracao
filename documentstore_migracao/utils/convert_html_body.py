@@ -1160,7 +1160,7 @@ class HTML2SPSPipeline(object):
                     node.text = ""
                     node.insert(0, new_p)
 
-                for child in node.iter():
+                for child in node.iterchildren():
                     if child.tail and child.tail.strip():
                         new_p = etree.Element("p")
                         new_p.text = child.tail

@@ -99,8 +99,8 @@ class Test_MatchPubDate1(unittest.TestCase):
     def test_transform_pubdate(self):
         self.sps_package.transform_pubdate()
         xpaths_results = (
-            ('pub-date[@date-type="pub"]', ("2010", "5", "13"),),
-            ('pub-date[@date-type="collection"]', ("2012", "2", "3"),),
+            ('pub-date[@date-type="pub"]', ("2010", "5", "13")),
+            ('pub-date[@date-type="collection"]', ("2012", "2", "3")),
         )
         for xpath, result in xpaths_results:
             with self.subTest(xpath=xpath, result=result):
@@ -133,9 +133,7 @@ class Test_MatchPubDate1_Season(unittest.TestCase):
         self.assertEqual(self.sps_package.document_pubdate, ("2010", "05", "13"))
 
     def test_documents_bundle_pubdate(self):
-        self.assertEqual(
-            self.sps_package.documents_bundle_pubdate, ("2012", "", "")
-        )
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
 
     def test_transform_pubdate(self):
         self.sps_package.transform_pubdate()
@@ -145,7 +143,9 @@ class Test_MatchPubDate1_Season(unittest.TestCase):
         self.assertEqual(pubdate.findtext("year"), "2010")
         self.assertEqual(pubdate.findtext("month"), "5")
         self.assertEqual(pubdate.findtext("day"), "13")
-        pubdate = self.sps_package.article_meta.find('pub-date[@date-type="collection"]')
+        pubdate = self.sps_package.article_meta.find(
+            'pub-date[@date-type="collection"]'
+        )
         self.assertIsNotNone(pubdate)
         self.assertEqual(pubdate.get("publication-format"), "electronic")
         self.assertEqual(pubdate.findtext("year"), "2012")
@@ -178,8 +178,8 @@ class Test_MatchPubDate2(unittest.TestCase):
     def test_transform_pubdate(self):
         self.sps_package.transform_pubdate()
         xpaths_results = (
-            ('pub-date[@date-type="pub"]', ("2010", "4", "1"),),
-            ('pub-date[@date-type="collection"]', ("2012", None, None),),
+            ('pub-date[@date-type="pub"]', ("2010", "4", "1")),
+            ('pub-date[@date-type="collection"]', ("2012", None, None)),
         )
         for xpath, result in xpaths_results:
             with self.subTest(xpath=xpath, result=result):
@@ -218,8 +218,8 @@ class Test_MatchPubDate3(unittest.TestCase):
     def test_transform_pubdate(self):
         self.sps_package.transform_pubdate()
         xpaths_results = (
-            ('pub-date[@date-type="pub"]', ("2010", "9", "10"),),
-            ('pub-date[@date-type="collection"]', ("2011", None, None),),
+            ('pub-date[@date-type="pub"]', ("2010", "9", "10")),
+            ('pub-date[@date-type="collection"]', ("2011", None, None)),
         )
         for xpath, result in xpaths_results:
             with self.subTest(xpath=xpath, result=result):
@@ -260,8 +260,8 @@ class Test_MatchPubDate4(unittest.TestCase):
     def test_transform_pubdate(self):
         self.sps_package.transform_pubdate()
         xpaths_results = (
-            ('pub-date[@date-type="pub"]', ("2010", "9", "1"),),
-            ('pub-date[@date-type="collection"]', ("2012", "2", None),),
+            ('pub-date[@date-type="pub"]', ("2010", "9", "1")),
+            ('pub-date[@date-type="collection"]', ("2012", "2", None)),
         )
         for xpath, result in xpaths_results:
             with self.subTest(xpath=xpath, result=result):
@@ -1534,3 +1534,25 @@ class Test_DocumentsSort_MoreThanOneBundle(unittest.TestCase):
             for i, location in enumerate(result[docs_bundle_id]["items"]):
                 with self.subTest((docs_bundle_id, i)):
                     self.assertEqual(location, expected[docs_bundle_id][i])
+
+
+class Test_ArticleMetaCount(unittest.TestCase):
+    def setUp(self):
+        xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+            <counts>
+                <fig-count count="0"/>
+                <table-count count="0"/>
+                <equation-count count="0"/>
+            </counts>
+            <body>
+                <fig id="i01"><graphic xlink:href="/img/fbpe/rm/v30n1/0002i01.gif"/></fig>
+                <table-wrap id="tab01"><label>Tabela 1</label><table><tr><td>TEXTO</td></tr></table></table-wrap>
+            </body>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test__transform_article_meta_count(self):
+        result = self.sps_package.transform_article_meta_count()
+
+        self.assertIsNone(result.find(".//counts"))

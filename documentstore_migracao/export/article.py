@@ -26,6 +26,10 @@ def get_articles(issn_journal):
     )
 
 
+def get_article(code):
+    return client.document(collection=config.get("SCIELO_COLLECTION"), code=code)
+
+
 @retry_gracefully(exc_list=[HTTPError, ConnectTimeout, MaxRetryError, ConnectionError])
 def ext_article(code, **ext_params):
     params = ext_params
