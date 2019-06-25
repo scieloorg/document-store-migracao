@@ -11,7 +11,18 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def get_and_write(pid, stage_path):
+class PoisonPill:
+    """Sinaliza para as threads que devem abortar a execução da rotina e 
+    retornar imediatamente.
+    """
+    def __init__(self):
+        self.poisoned = False
+
+
+def get_and_write(pid, stage_path, poison_pill):
+    if poison_pill.poisoned:
+        return
+
     documents_pid = pid.strip()
 
     logger.debug("\t coletando dados do Documento '%s'", documents_pid)
@@ -34,12 +45,13 @@ def extract_all_data(list_documents_pids: List[str]):
 
     logger.info("Iniciando extração dos Documentos")
     count = 0
+    poison_pill = PoisonPill()
 
     with concurrent.futures.ThreadPoolExecutor(
         max_workers=config.get("THREADPOOL_MAX_WORKERS")
     ) as executor:
         futures = {
-            executor.submit(get_and_write, pid, stage_path): pid
+            executor.submit(get_and_write, pid, stage_path, poison_pill): pid
             for pid in pids_to_extract
         }
 
@@ -60,6 +72,7 @@ def extract_all_data(list_documents_pids: List[str]):
                     "Finalizando as tarefas pendentes antes de encerrar."
                     " Isso poderá levar alguns segundos."
                 )
+                poison_pill.poisoned = True
                 raise
 
     logger.info("\t Total de %s artigos", count)
