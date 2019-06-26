@@ -31,7 +31,7 @@ class TestExportJournal(unittest.TestCase):
         mk_request_get.side_effect = request.HTTPGetError
         result = journal.ext_journal("1234-5678")
         mk_logger_error.assert_called_once_with(
-            "Journal nao encontrado: spa: 1234-5678"
+            "Journal nao encontrado: scl: 1234-5678"
         )
         self.assertIsNone(result)
 
