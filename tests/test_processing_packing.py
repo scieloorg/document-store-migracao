@@ -30,6 +30,7 @@ class TestProcessingPacking(unittest.TestCase):
             )
             self.assertEqual(
                 {
+                    "1809-4392-aa-33-03-353-370-gv33n3a02.pdf",
                     "1809-4392-aa-33-03-353-370-ga02fig01.gif",
                     "1809-4392-aa-33-03-353-370-ga02tab03.gif",
                     "1809-4392-aa-33-03-353-370-ga02fig02.jpg",
@@ -42,7 +43,7 @@ class TestProcessingPacking(unittest.TestCase):
                 },
                 files,
             )
-            self.assertEqual(9, len(files))
+            self.assertEqual(10, len(files))
 
     def test_pack_article_xml_has_media(self):
         with utils.environ(
