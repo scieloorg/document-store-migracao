@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
-<article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="research-article">
+<article
+  xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="research-article">
   <front>
     <journal-meta>
       <journal-id journal-id-type="publisher-id">rae</journal-id>
@@ -77,195 +78,265 @@
       <bold>ARTIGOS</bold>
     </p>
     <p>
-      <bold>Finanças da subscrição externa de capital</bold>
+      <bold>Finanças da subscrição externa de capital</bold>
     </p>
     <p>
       <bold>Yuichi Richard Tsukamoto</bold>
     </p>
-    <p>Professor-Contratado do Departamento de Contabilidade, Finanças e Controle da Escola de Administração de emprêsas de São Paulo, da Fundação Getúlio Vargas e Diretor Executivo da Companhia Paulista de Fertilizantes COPAS</p>
-    <p>A formação e o fortalecimento do capital próprio da emprêsa têm sido uma das metas principais das recentes políticas econômico-financeiras do Governo. Em face do desempenho extraordinário do mercado de ações, as autoridades monetárias fazem um apelo às emprêsas para que busquem capital em vez de crédito. Certamente, o crescente interesse de investidores brasileiros pelo mercado de ações abre grandes perspectivas à democratização do capital das emprêsas. Observamos que diversas emprêsas se aproveitaram e se aproveitarão das novas oportunidades do mercado de ações para nele lançar suas ações novas. Estas subscrições de capital, além de democratizarem as emprêsas lançadoras, permitem-lhes realizar investimentos indispensáveis, obtendo recursos financeiros por custo inferior aos conseguidos em estabelecimentos financeiros. Os consumidores receberão os benefícios da redução dos preços, uma vez que as despesas financeiras das emprêsas deverão ser diminuídas. Tal democratização das emprêsas contribuirá para a política de combate à inflação e fortalecerá o regime econômico do país.</p>
-    <p>Entretanto, existe um aspecto que merece a atenção dos dirigentes das emprêsas que realizam o aumento de capital através de novas emissões. Trata-se das responsabilidades assumidas pelas emprêsas lançadoras de ações de remunerar satisfatoriamente os novos acionistas. Neste artigo apresentamos, com exemplos concretos, as finanças da subscrição externa de capital, demonstrando as responsabilidades financeiras adicionais que as emprêsas devem assumir para retribuir os novos acionistas. A obtenção de recursos financeiros através de subscrição de ações novas cria extensas responsabilidades de remunerar o novo capital. Se não existirem as condições necessárias para o cumprimento de tais responsabilidades, as emprêsas não devem lançar as novas ações no mercado financeiro. O aproveitamento indevido dessa nova oportunidade no mercado de ações poderá levar os novos investidores a uma grande ilusão, contribuindo negativamente para o desenvolvimento bolsista do Brasil.</p>
-    <p>Para exemplificarmos as finanças da subscrição externa de capital tomamos como pressupostos os seguintes fatores:</p>
-     <list list-type="bullet">
-       <list-item>
-        <p>A Taxa de desvalorização da moeda: 1970 14% - 1971 10%</p></list-item>
-       <list-item>
-         <p>
-          A percentagem aceitável de dividendos do acionista: 12% a.a.</p>
-         <p><bold>Nota:</bold> Sendo uma companhia de capital aberto, consideramos dividendos pagos até 6% deduzíveis do lucro tributável. <xref ref-type="fn" rid="fn1b"><sup>1</sup></xref></p>
-       </list-item>
-       <list-item>
-         <p>
-          A alíquota do Imposto sôbre a Renda. 30% </p>
-         <p><bold>Nota:</bold> Para a simplificação do exemplo, não consideramos a alternativa de incentivos fiscais sôbre a aplicação do Imposto sôbre a Renda.</p></list-item>
-         <list-item>
-           <p>
-            A Reserva Legal (até 20% do capital) - 5% sôbre o lucro antes de sua distribuição.</p>
-           <p><bold>Nota:</bold> Consideramos a Reserva Legal uma parte integrante do capital próprio da emprêsa.</p></p>
-         </list-item>
-         <list-item>
-           <p>
-            Dedutibilidade do custo de manutenção do capital de giro próprio
-           <xref ref-type="fn" rid="fn2b">
-             <sup>2</sup>
-           </xref> - até 20% do lucro tributável.</p>
-         </list-item>
-         <list-item><p>
-          A Participação da Diretoria no lucro - 10%.</p></list-item>
-     </list>
-<p>Vamos, então, ao nosso exemplo, em três circunstâncias diferentes, ou seja, o recurso adicional no capital a ser utilizado para:</p>
-<list list-type="bullet">
-  <list-item><p>
-   aumento de ativo circulante;</p></list-item>
-  <list-item><p>
-   aumento de ativo imobilizado, e</p></list-item>
-  <list-item><p>
-   substituição do capital de terceiros.</p></list-item>
-</list>
-<p>
-  <bold>1. Capital Adicional para Aumento do Ativo Circulante</bold>
-</p>
-<p>A subscrição externa do capital no valor de Cr$ 1.000,00 foi efetuada em 1o de janeiro de 1970. Para não complicar desnecessariamente o exemplo, consideramos que a chamada foi feita ao valor nominal e que não houve despesas para com o lançamento de novas ações. Suponhamos que o capital adicional será utilizado exclusivamente para aumentar o ativo circulante. Assim, teremos:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img01.jpg"/>
-</p>
-<p>A função mínima do lucro numa economia inflacionária é manter a integridade do capital contra a desvalorização da moeda. O novo capital de Cr$ 1.000,00, efetuado em 1o de janeiro de 1970, deverá ser protegido contra a desvalorização da moeda que supomos seja de 14% ao ano. Assim sendo, o lucro líquido do período deverá ser, no mínimo, de Cr$ 140,00 (Cr$ 1.000,00 X 14%) para se manter o poder aquisitivo do capital adicional. A segunda função básica do lucro é proporcionar recursos financeiros para cumprimento de obrigações legais e estatutárias. Em nosso exemplo, isto significa os dividendos de Cr$ 120,00 (Cr$ 1.000,00 X 12%), a participação da diretoria em 10% do lucro do exercício e a provisão para o Imposto de Renda. A terceira função principal do lucro é gerar os fundos suficientes para as atividades produtivas e comerciais da emprêsa para o futuro próximo. Neste exemplo, supomos que não há necessidade imediata de aquisição de bens adicionais de produção porque o nível operacional da emprêsa ainda não atingiu a capacidade máxima dos equipamentos.</p>
-<p>O balanço em 31 de dezembro de 1970, portanto, deverá apresentar os seguintes valores como conseqüência do aumento do capital através da subscrição:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img02.jpg"/>
-</p>
-<list>
-<list-item><p>a) Para manutenção da integridade do capital investido: Cr$ 1.000,00 X 14% (taxa de desvalorização da moeda) = Cr$ 140,00 (inclusive a Reserva Legal)</p></list-item>
-<list-item><p>Para apropriar 5% do lucro tributável à Reserva Legal: 0,05 X (X = lucro tributável)</p></list-item>
-<list-item><p>b) Para proporcionar os recursos monetários para dividendos: Cr$ 1.000,00 X 12% (percentagem esperada dos investidores) = Cr$ 120,00</p></list-item>
-<list-item><p>c) Para apropriar 10% do lucro tributável à Participação da Diretoria no resultado do exercício: 0,10 X (X = lucro tributável)</p></list-item>
-<list-item><p>d) Para apropriar 30% do lucro tributável à Provisão para o Imposto sôbre a Renda: 0,30 X (X = lucro tributável)</p></list-item>
-</list>
-
-<p>Combinando os fatores acima, o lucro tributável (X) é calculado como segue:</p>
-
-
+    <p>Professor-Contratado do Departamento de Contabilidade, Finanças e Controle da Escola de Administração de emprêsas de São Paulo, da Fundação Getúlio Vargas e Diretor Executivo da Companhia Paulista de Fertilizantes COPAS</p>
+    <p>A formação e o fortalecimento do capital próprio da emprêsa têm sido uma das metas principais das recentes políticas econômico-financeiras do Governo. Em face do desempenho extraordinário do mercado de ações, as autoridades monetárias fazem um apelo às emprêsas para que busquem capital em vez de crédito. Certamente, o crescente interesse de investidores brasileiros pelo mercado de ações abre grandes perspectivas à democratização do capital das emprêsas. Observamos que diversas emprêsas se aproveitaram e se aproveitarão das novas oportunidades do mercado de ações para nele lançar suas ações novas. Estas subscrições de capital, além de democratizarem as emprêsas lançadoras, permitem-lhes realizar investimentos indispensáveis, obtendo recursos financeiros por custo inferior aos conseguidos em estabelecimentos financeiros. Os consumidores receberão os benefícios da redução dos preços, uma vez que as despesas financeiras das emprêsas deverão ser diminuídas. Tal democratização das emprêsas contribuirá para a política de combate à inflação e fortalecerá o regime econômico do país.</p>
+    <p>Entretanto, existe um aspecto que merece a atenção dos dirigentes das emprêsas que realizam o aumento de capital através de novas emissões. Trata-se das responsabilidades assumidas pelas emprêsas lançadoras de ações de remunerar satisfatoriamente os novos acionistas. Neste artigo apresentamos, com exemplos concretos, as finanças da subscrição externa de capital, demonstrando as responsabilidades financeiras adicionais que as emprêsas devem assumir para retribuir os novos acionistas. A obtenção de recursos financeiros através de subscrição de ações novas cria extensas responsabilidades de remunerar o novo capital. Se não existirem as condições necessárias para o cumprimento de tais responsabilidades, as emprêsas não devem lançar as novas ações no mercado financeiro. O aproveitamento indevido dessa nova oportunidade no mercado de ações poderá levar os novos investidores a uma grande ilusão, contribuindo negativamente para o desenvolvimento bolsista do Brasil.</p>
+    <p>Para exemplificarmos as finanças da subscrição externa de capital tomamos como pressupostos os seguintes fatores:</p>
+    <list list-type="bullet">
+      <list-item>
+        <p>A Taxa de desvalorização da moeda: 1970 14% - 1971 10%</p>
+      </list-item>
+      <list-item>
+        <p>
+          A percentagem aceitável de dividendos do acionista: 12% a.a.</p>
+        <p>
+          <bold>Nota:</bold> Sendo uma companhia de capital aberto, consideramos dividendos pagos até 6% deduzíveis do lucro tributável. 
+          
+          <xref ref-type="fn" rid="fn1b">
+            <sup>1</sup>
+          </xref>
+        </p>
+      </list-item>
+      <list-item>
+        <p>
+          A alíquota do Imposto sôbre a Renda. 30% </p>
+        <p>
+          <bold>Nota:</bold> Para a simplificação do exemplo, não consideramos a alternativa de incentivos fiscais sôbre a aplicação do Imposto sôbre a Renda.
+        
+        </p>
+      </list-item>
+      <list-item>
+        <p>
+            A Reserva Legal (até 20% do capital) - 5% sôbre o lucro antes de sua distribuição.</p>
+        <p>
+          <bold>Nota:</bold> Consideramos a Reserva Legal uma parte integrante do capital próprio da emprêsa.
+        
+        </p>
+      </p>
+    </list-item>
+    <list-item>
+      <p>
+            Dedutibilidade do custo de manutenção do capital de giro próprio
+           
+        
+        <xref ref-type="fn" rid="fn2b">
+          <sup>2</sup>
+        </xref> - até 20% do lucro tributável.
+      
+      </p>
+    </list-item>
+    <list-item>
+      <p>
+          A Participação da Diretoria no lucro - 10%.</p>
+    </list-item>
+  </list>
+  <p>Vamos, então, ao nosso exemplo, em três circunstâncias diferentes, ou seja, o recurso adicional no capital a ser utilizado para:</p>
+  <list list-type="bullet">
+    <list-item>
+      <p>
+   aumento de ativo circulante;</p>
+    </list-item>
+    <list-item>
+      <p>
+   aumento de ativo imobilizado, e</p>
+    </list-item>
+    <list-item>
+      <p>
+   substituição do capital de terceiros.</p>
+    </list-item>
+  </list>
+  <p>
+    <bold>1. Capital Adicional para Aumento do Ativo Circulante</bold>
+  </p>
+  <p>A subscrição externa do capital no valor de Cr$ 1.000,00 foi efetuada em 1o de janeiro de 1970. Para não complicar desnecessariamente o exemplo, consideramos que a chamada foi feita ao valor nominal e que não houve despesas para com o lançamento de novas ações. Suponhamos que o capital adicional será utilizado exclusivamente para aumentar o ativo circulante. Assim, teremos:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img01.jpg"/>
+  </p>
+  <p>A função mínima do lucro numa economia inflacionária é manter a integridade do capital contra a desvalorização da moeda. O novo capital de Cr$ 1.000,00, efetuado em 1o de janeiro de 1970, deverá ser protegido contra a desvalorização da moeda que supomos seja de 14% ao ano. Assim sendo, o lucro líquido do período deverá ser, no mínimo, de Cr$ 140,00 (Cr$ 1.000,00 X 14%) para se manter o poder aquisitivo do capital adicional. A segunda função básica do lucro é proporcionar recursos financeiros para cumprimento de obrigações legais e estatutárias. Em nosso exemplo, isto significa os dividendos de Cr$ 120,00 (Cr$ 1.000,00 X 12%), a participação da diretoria em 10% do lucro do exercício e a provisão para o Imposto de Renda. A terceira função principal do lucro é gerar os fundos suficientes para as atividades produtivas e comerciais da emprêsa para o futuro próximo. Neste exemplo, supomos que não há necessidade imediata de aquisição de bens adicionais de produção porque o nível operacional da emprêsa ainda não atingiu a capacidade máxima dos equipamentos.</p>
+  <p>O balanço em 31 de dezembro de 1970, portanto, deverá apresentar os seguintes valores como conseqüência do aumento do capital através da subscrição:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img02.jpg"/>
+  </p>
+  <list>
+    <list-item>
+      <p>a) Para manutenção da integridade do capital investido: Cr$ 1.000,00 X 14% (taxa de desvalorização da moeda) = Cr$ 140,00 (inclusive a Reserva Legal)</p>
+    </list-item>
+    <list-item>
+      <p>Para apropriar 5% do lucro tributável à Reserva Legal: 0,05 X (X = lucro tributável)</p>
+    </list-item>
+    <list-item>
+      <p>b) Para proporcionar os recursos monetários para dividendos: Cr$ 1.000,00 X 12% (percentagem esperada dos investidores) = Cr$ 120,00</p>
+    </list-item>
+    <list-item>
+      <p>c) Para apropriar 10% do lucro tributável à Participação da Diretoria no resultado do exercício: 0,10 X (X = lucro tributável)</p>
+    </list-item>
+    <list-item>
+      <p>d) Para apropriar 30% do lucro tributável à Provisão para o Imposto sôbre a Renda: 0,30 X (X = lucro tributável)</p>
+    </list-item>
+  </list>
+  <p>Combinando os fatores acima, o lucro tributável (X) é calculado como segue:</p>
   <disp-formula>X = a) + b) + c) + d)</disp-formula>
   <disp-formula>= Cr$ 140,00 + Cr$ 120,00 + 0,10X + 0,30X</disp-formula>
   <disp-formula>= Cr$ 433,33</disp-formula>
-    <p>Assim sendo, o Balanço em 31 de dezembro de 1970, após a distribuição do lucro, apresentará a seguinte posição:</p>
-    <p>
+  <p>Assim sendo, o Balanço em 31 de dezembro de 1970, após a distribuição do lucro, apresentará a seguinte posição:</p>
+  <p>
     <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img03.jpg"/>
   </p>
-   <p>Vejamos que, para o primeiro ano (1970), do aumento de capital de Cr$ 1.000,00, a emprêsa deve estar em condições de produzir o resultado econômico adicional de Cr$ 433,33.</p>
-   <p>Supomos que a margem média de contribuição, ou seja, o resultado operacional antes de despesas fixas, <xref ref-type="fn" rid="fn3b">
-     <sup>3</sup>
-   </xref>
- desta emprêsa é de 20% sôbre vendas: então, para obter o resultado adicional de Cr$ 433,33 a emprêsa deve aumentar as vendas em:</p>
-
- <p>
-
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img04.jpg"/>
-</p>
-<p>Em têrmos do poder aquisitivo de cruzeiro no início do ano, as vendas adicionais de Cr$ 2.166,66 representariam:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img05.jpg"/>
-</p>
-<p>Se, em virtude tanto dos fatôres mercadológicos como da limitação da capacidade de produção, a emprêsa não puder alcançar esse nível de vendas adicionais, ela não poderá cumprir tôdas as exigências (itens a, b, c e d no exemplo acima) perante a subscrição externa de capital de Cr$ 1.000,00.</p>
-<p>Igualmente importante é examinar se o ativo circulante adicional é suficiente para poder realizar as vendas adicionais necessárias. Suponhamos que a rotação média de vendas sôbre o ativo circulante desta emprêsa é três por ano. Então, o acréscimo do ativo circulante de Cr$ 1.140,00 poderá proporcionar as vendas adicionais de até Cr$ 3.420,00. Neste aspecto de relação Vendas-Ativos, não vemos dificuldade para 1970, porque as vendas adicionais necessárias de Cr$ 2.166,66 são bem inferiores a Cr$ 3.420,00.</p>
-<p>Prosseguimos com o mesmo exemplo no segundo ano (1971). O Balanço, em 31 de dezembro de 1971, apresenta os seguintes valores, como conseqüência do aumento de capital de Cr$ 1.000,00 efetuado no início do ano anterior:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img06.jpg"/>
-</p>
-<list>
-<list-item><p>e) O Capital foi aumentado, incorporando-se a reserva para tal finalidade de Cr$ 118,33 (ver o Balanço de 31 de dezembro de 1970, após a distribuição do lucro).</p></list-item>
-<list-item><p>f) Para manutenção da integridade do capital investido: Cr$ 1.140,00 X 10% (taxa de desvalorização da moeda em 1971) = Cr$ 114,00.</p></list-item>
-<list-item><p>A eqüidade do capital adicional deverá chegar a Cr$ 1.254,00, no fim de 1971, para manter o poder aquisitivo do investimento inicial de Cr$ 1.000,00, em 1o de janeiro de 1970 (= Cr$ 1.000,00 X 114% X 110%).</p></list-item>
-<list-item><p>g) Para proporcionar os recursos monetários para dividendos: Cr$ 1.118,33 X 12% (percentagem de rendimento esperada dos investidores) = Cr$ 134,20.</p></list-item>
-<list-item><p>h) Para considerar dedutíveis do Imposto sôbre a Renda os dividendos pagos até 6% referentes ao aumento de capital de Cr$ 1.000,00: Cr$ 1.000,00 X 6% = Cr$ 60,00</p></list-item>
-<list-item><p>i) Para abater o custo de manutenção do capital de giro próprio, até 20% do lucro antes do abatimento:</p></list-item>
-<list-item><p>O saldo inicial do capital circulante líquido em 1971 é de Cr$ 1.140,00. Conseqüentemente, o custo de manutenção de capital de giro próprio é Cr$ 114,00 (10% de desvalorização de moeda sôbre Cr$ 1.140,00). Entretanto, este valor deverá ser ajustado a 20% do lucro tributável que é o máximo permitido por lei.</p></list-item>
-<list-item><p>j) Para apropriar 10% do lucro à Participação da Diretoria no resultado do exercício.</p></list-item>
-<list-item><p>k) Para apropriar 30% do lucro tributável à Provisão para o Imposto sôbre a Renda.</p></list-item>
-</list>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img07.jpg"/>
-</p>
-
-<p>Demonstramos abaixo a posição do lucro e sua destinação: </p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img08.jpg"/>
-</p>
-<p>
-<p>Assim, teremos a seguinte posição do Balanço de 1971, após a distribuição do lucro:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img09.jpg"/>
-</p>
-<p>Suponhamos que a margem média da contribuição continua sendo de 20% como em 1970. As vendas, a fim de atingir o acréscimo necessário de Cr$ 348,79, no resultado econômico de 1971, deverão aumentar em Cr$ 1.743,95. Em termos de poder aquisitivo em cruzeiros na época da chamada de capital (início de 1970), estas vendas adicionais equivaleriam a:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img10.jpg"/>
-</p>
-<p>Agora, analisaremos a relação Vendas-Ativos. Comparando os valôres de dois exercícios, teremos a seguinte relação:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img11.jpg"/>
-</p>
-<p>É importante observar que os baixos coeficientes (o coeficiente médio presumido neste exemplo é 3) da relação Vendas-Ativos foram motivados pela aplicação do novo capital no ativo circulante, que tem apresentado uma <bold>folga</bold> substancial.</p>
-<p>
-  <bold>2. Capital Adicional para Aumento do Ativo Imobilizado</bold>
-</p>
-<p>No exemplo anterior, suponhamos que o capital adicional será utilizado exclusivamente para aumentar o ativo circulante. Suponhamos que, agora, o aumento do capital seja dirigido para aquisições de ativo imobilizado, depreciável em 10 anos, em vez de ativo circulante. Assim sendo, teremos as seguintes posições patrimoniais:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img12.jpg"/>
-</p>
-<p>Numa economia inflacionária, o investimento em ativo imobilizado é considerado, em princípio, como <bold>hedge</bold> (proteção) contra desvalorização da moeda. A eqüidade do novo capital, então, é supostamente protegida contra a erosão do poder aquisitivo da moeda, quando êle é aplicado no ativo imobilizado e quando sua valorização acompanha a inflação. Conforme as legislações fiscais em vigor, entretanto, esta proteção é permitida através de índices oficiais de correção monetária do ativo imobilizado somente no próximo exercício. Por outro lado, o lucro, neste caso, em comparação com o primeiro exemplo de aplicação em ativo circulante, deverá refletir este fator, considerando a depreciação do novo ativo imobilizado como despesa adicional.</p>
-<p>Convencionamos X como o lucro antes de deduzir a despesa com depreciação sôbre o novo ativo imobilizado. A equação será:</p>
-<disp-formula>X = Cr$ 140,00 desvalorização do capital + Cr$ 100,00 depreciação s/ novo ativo imobilizado + Cr$ 120,00 dividendos a declarar + 0,1 (X - 100,00) participação da Diretoria + 0,3 (X - 100,00) provisão para Imposto s/Renda</disp-formula>
-
-<p>então X = Cr$ 533,33, e, portanto, o lucro proveniente de vendas é Cr$ 307,33 (Cr$ 533,33 - Cr$ 100,00 Depreciação Cr$ 126,00 Valorização em 14% do Imobilizado).</p>
-<p>A emprêsa, portanto, deve aumentar as vendas, no mínimo, em Cr$ 1.536,66, para obter o resultado adicional de Cr$ 307,33, supondo a margem de contribuição de 20%. Se o coeficiente Vendas-Ativos Circulantes desta emprêsa é três, o ativo circulante deverá aumentar em Cr$ 512,22 (Cr$ 1.536,66 + 3).</p>
-<p>Observamos que o aumento de ativo circulante em 1970 foi somente de Cr$ 240,00. Isto quer dizer que a emprêsa deveria ter <bold>folga</bold> de ativo circulante em Cr$ 272,22, no mínimo, antes da realização da chamada de capital, ou a emprêsa não poderá aumentar as vendas até o nível necessário, por falta de capital de giro.</p>
-
-<p>Vamos examinar a posição do segundo ano após a chamada de capital:</p>
-<p>
-  <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img13.jpg"/>
-</p>
-<p>Notamos que no fim de 1971, o ativo circulante é de Cr$ 468,00 que corresponde a sua necessidade para 1971 da ordem de Cr$ 467,45 <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img14.jpg"/></p>
-<p>
-  <bold>3. Capital Adicional para Substituir Empréstimos</bold>
-</p>
-<p>O terceiro exemplo é de liquidação de empréstimos com novos recursos do aumento de capital. Neste exemplo, consideramos que o custo de empréstimo é igual à desvalorização dé cruzeiro. Eis as posições patrimoniais:</p>
-<p>
-<inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img15.jpg"/>
-</p>
-   <p>O lucro adicional do ano de 1970, como conseqüência da chamada de capital é de Cr$ 433,33, o que inclui a receita implícita de Cr$ 140,00, referente a não-pagamento de juros sôbre empréstimos e à despesa implícita de Cr$ 42,00 do imposto de renda sôbre Cr$ 140,00, dando o resultado líquido de Cr$ 98,00. O lucro vegetativo necessário oriundo de operações mercantis, então, é de Cr$ 335,33. A margem de contribuição sendo de 20%, as vendas deverão ser aumentadas em Cr$ 1.676,66. O ativo circulante de Cr$ 1.140,00 é idêntico ao primeiro caso de aplicação do aumento de capital em ativo circulante. A posição do segundo ano é a seguinte:</p>
-   <p>
-  <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img16.jpg"/>
-</p>
-<p>O lucro mínimo desejado para 1971 é Cr$ 376,67, o que inclui Cr$ 100,00 de reversão de juros e Cr$ 30,00 do imposto de renda que teriam sido incorridos se os empréstimos tivessem continuado. As vendas necessárias (Cr$ 1.533,35) encontrarão o amplo capital de giro (Cr$ 511,12 necessário vs. Cr$ 1.254,00 real).</p>
-<p>
-  <bold>4. Conclusão</bold>
-</p>
-<p>Nos exemplos deste artigo, demonstramos os efeitos da subscrição externa de capital sob diversas hipóteses. No primeiro ano (1970) do segundo caso de aplicação no ativo imobilizado, a chamada de capital necessitou uma retaguarda de capital de giro antes do lançamento de novas ações. Em todos os casos, as responsabilidades acionárias, estatutárias e fiscais vão sempre além de simples distribuição de dividendos. É importante que o empresário analise as possibilidades mercadológicas e as perspectivas de rentabilidade sôbre o incremento necessário de vendas, antes de decidir fazer um aumento de capital, a fim de assegurar os recursos necessários para com as responsabilidades fiscais, estatutárias e acionárias.</p>
-<p>Na realidade, as aplicações de recursos da subscrição externa de capital poderão ser múltiplas - combinação das três hipóteses citadas neste artigo. Esperamos que o raciocínio e a análise feitas neste artigo sejam úteis para estudos mais complexos de novos lançamentos de ações, chamando a atenção dos empresários para as suas responsabilidades de retribuir os novos acionistas e para a conscientização e cumprimento das mesmas.</p>
-<fn-group>
-  <fn id="fn1b">
-    <label>1</label>
-    <p>Artigo 9 do Decreto-lei no 157, de 20/2/1967.</p>
-  </fn>
-  <fn id="fn2b"><label>2</label> <p>Artigo 19 do Decreto-lei no 401 de 31/12/1968, artigo 4 do Decreto-lei no 433 de 23/1/1969, Portaria GB no 31 de 31/1/1969; do Ministério da Fazenda e artigos 10 e 11 do Decreto-lei no 1.089 de 2/3/1970.</p> </fn>
+  <p>Vejamos que, para o primeiro ano (1970), do aumento de capital de Cr$ 1.000,00, a emprêsa deve estar em condições de produzir o resultado econômico adicional de Cr$ 433,33.</p>
+  <p>Supomos que a margem média de contribuição, ou seja, o resultado operacional antes de despesas fixas, 
+    
+    <xref ref-type="fn" rid="fn3b">
+      <sup>3</sup>
+    </xref>
+ desta emprêsa é de 20% sôbre vendas: então, para obter o resultado adicional de Cr$ 433,33 a emprêsa deve aumentar as vendas em:
+  
+  </p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img04.jpg"/>
+  </p>
+  <p>Em têrmos do poder aquisitivo de cruzeiro no início do ano, as vendas adicionais de Cr$ 2.166,66 representariam:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img05.jpg"/>
+  </p>
+  <p>Se, em virtude tanto dos fatôres mercadológicos como da limitação da capacidade de produção, a emprêsa não puder alcançar esse nível de vendas adicionais, ela não poderá cumprir tôdas as exigências (itens a, b, c e d no exemplo acima) perante a subscrição externa de capital de Cr$ 1.000,00.</p>
+  <p>Igualmente importante é examinar se o ativo circulante adicional é suficiente para poder realizar as vendas adicionais necessárias. Suponhamos que a rotação média de vendas sôbre o ativo circulante desta emprêsa é três por ano. Então, o acréscimo do ativo circulante de Cr$ 1.140,00 poderá proporcionar as vendas adicionais de até Cr$ 3.420,00. Neste aspecto de relação Vendas-Ativos, não vemos dificuldade para 1970, porque as vendas adicionais necessárias de Cr$ 2.166,66 são bem inferiores a Cr$ 3.420,00.</p>
+  <p>Prosseguimos com o mesmo exemplo no segundo ano (1971). O Balanço, em 31 de dezembro de 1971, apresenta os seguintes valores, como conseqüência do aumento de capital de Cr$ 1.000,00 efetuado no início do ano anterior:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img06.jpg"/>
+  </p>
+  <list>
+    <list-item>
+      <p>e) O Capital foi aumentado, incorporando-se a reserva para tal finalidade de Cr$ 118,33 (ver o Balanço de 31 de dezembro de 1970, após a distribuição do lucro).</p>
+    </list-item>
+    <list-item>
+      <p>f) Para manutenção da integridade do capital investido: Cr$ 1.140,00 X 10% (taxa de desvalorização da moeda em 1971) = Cr$ 114,00.</p>
+    </list-item>
+    <list-item>
+      <p>A eqüidade do capital adicional deverá chegar a Cr$ 1.254,00, no fim de 1971, para manter o poder aquisitivo do investimento inicial de Cr$ 1.000,00, em 1o de janeiro de 1970 (= Cr$ 1.000,00 X 114% X 110%).</p>
+    </list-item>
+    <list-item>
+      <p>g) Para proporcionar os recursos monetários para dividendos: Cr$ 1.118,33 X 12% (percentagem de rendimento esperada dos investidores) = Cr$ 134,20.</p>
+    </list-item>
+    <list-item>
+      <p>h) Para considerar dedutíveis do Imposto sôbre a Renda os dividendos pagos até 6% referentes ao aumento de capital de Cr$ 1.000,00: Cr$ 1.000,00 X 6% = Cr$ 60,00</p>
+    </list-item>
+    <list-item>
+      <p>i) Para abater o custo de manutenção do capital de giro próprio, até 20% do lucro antes do abatimento:</p>
+    </list-item>
+    <list-item>
+      <p>O saldo inicial do capital circulante líquido em 1971 é de Cr$ 1.140,00. Conseqüentemente, o custo de manutenção de capital de giro próprio é Cr$ 114,00 (10% de desvalorização de moeda sôbre Cr$ 1.140,00). Entretanto, este valor deverá ser ajustado a 20% do lucro tributável que é o máximo permitido por lei.</p>
+    </list-item>
+    <list-item>
+      <p>j) Para apropriar 10% do lucro à Participação da Diretoria no resultado do exercício.</p>
+    </list-item>
+    <list-item>
+      <p>k) Para apropriar 30% do lucro tributável à Provisão para o Imposto sôbre a Renda.</p>
+    </list-item>
+  </list>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img07.jpg"/>
+  </p>
+  <p>Demonstramos abaixo a posição do lucro e sua destinação: </p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img08.jpg"/>
+  </p>
+  <p>Assim, teremos a seguinte posição do Balanço de 1971, após a distribuição do lucro:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img09.jpg"/>
+  </p>
+  <p>Suponhamos que a margem média da contribuição continua sendo de 20% como em 1970. As vendas, a fim de atingir o acréscimo necessário de Cr$ 348,79, no resultado econômico de 1971, deverão aumentar em Cr$ 1.743,95. Em termos de poder aquisitivo em cruzeiros na época da chamada de capital (início de 1970), estas vendas adicionais equivaleriam a:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img10.jpg"/>
+  </p>
+  <p>Agora, analisaremos a relação Vendas-Ativos. Comparando os valôres de dois exercícios, teremos a seguinte relação:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img11.jpg"/>
+  </p>
+  <p>É importante observar que os baixos coeficientes (o coeficiente médio presumido neste exemplo é 3) da relação Vendas-Ativos foram motivados pela aplicação do novo capital no ativo circulante, que tem apresentado uma 
+      
+    <bold>folga</bold> substancial.
+    
+  </p>
+  <p>
+    <bold>2. Capital Adicional para Aumento do Ativo Imobilizado</bold>
+  </p>
+  <p>No exemplo anterior, suponhamos que o capital adicional será utilizado exclusivamente para aumentar o ativo circulante. Suponhamos que, agora, o aumento do capital seja dirigido para aquisições de ativo imobilizado, depreciável em 10 anos, em vez de ativo circulante. Assim sendo, teremos as seguintes posições patrimoniais:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img12.jpg"/>
+  </p>
+  <p>Numa economia inflacionária, o investimento em ativo imobilizado é considerado, em princípio, como 
+      
+    <bold>hedge</bold> (proteção) contra desvalorização da moeda. A eqüidade do novo capital, então, é supostamente protegida contra a erosão do poder aquisitivo da moeda, quando êle é aplicado no ativo imobilizado e quando sua valorização acompanha a inflação. Conforme as legislações fiscais em vigor, entretanto, esta proteção é permitida através de índices oficiais de correção monetária do ativo imobilizado somente no próximo exercício. Por outro lado, o lucro, neste caso, em comparação com o primeiro exemplo de aplicação em ativo circulante, deverá refletir este fator, considerando a depreciação do novo ativo imobilizado como despesa adicional.
+    
+  </p>
+  <p>Convencionamos X como o lucro antes de deduzir a despesa com depreciação sôbre o novo ativo imobilizado. A equação será:</p>
+  <disp-formula>X = Cr$ 140,00 desvalorização do capital + Cr$ 100,00 depreciação s/ novo ativo imobilizado + Cr$ 120,00 dividendos a declarar + 0,1 (X - 100,00) participação da Diretoria + 0,3 (X - 100,00) provisão para Imposto s/Renda</disp-formula>
+  <p>então X = Cr$ 533,33, e, portanto, o lucro proveniente de vendas é Cr$ 307,33 (Cr$ 533,33 - Cr$ 100,00 Depreciação Cr$ 126,00 Valorização em 14% do Imobilizado).</p>
+  <p>A emprêsa, portanto, deve aumentar as vendas, no mínimo, em Cr$ 1.536,66, para obter o resultado adicional de Cr$ 307,33, supondo a margem de contribuição de 20%. Se o coeficiente Vendas-Ativos Circulantes desta emprêsa é três, o ativo circulante deverá aumentar em Cr$ 512,22 (Cr$ 1.536,66 + 3).</p>
+  <p>Observamos que o aumento de ativo circulante em 1970 foi somente de Cr$ 240,00. Isto quer dizer que a emprêsa deveria ter 
+      
+    <bold>folga</bold> de ativo circulante em Cr$ 272,22, no mínimo, antes da realização da chamada de capital, ou a emprêsa não poderá aumentar as vendas até o nível necessário, por falta de capital de giro.
+    
+  </p>
+  <p>Vamos examinar a posição do segundo ano após a chamada de capital:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img13.jpg"/>
+  </p>
+  <p>Notamos que no fim de 1971, o ativo circulante é de Cr$ 468,00 que corresponde a sua necessidade para 1971 da ordem de Cr$ 467,45 
+      
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img14.jpg"/>
+  </p>
+  <p>
+    <bold>3. Capital Adicional para Substituir Empréstimos</bold>
+  </p>
+  <p>O terceiro exemplo é de liquidação de empréstimos com novos recursos do aumento de capital. Neste exemplo, consideramos que o custo de empréstimo é igual à desvalorização dé cruzeiro. Eis as posições patrimoniais:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img15.jpg"/>
+  </p>
+  <p>O lucro adicional do ano de 1970, como conseqüência da chamada de capital é de Cr$ 433,33, o que inclui a receita implícita de Cr$ 140,00, referente a não-pagamento de juros sôbre empréstimos e à despesa implícita de Cr$ 42,00 do imposto de renda sôbre Cr$ 140,00, dando o resultado líquido de Cr$ 98,00. O lucro vegetativo necessário oriundo de operações mercantis, então, é de Cr$ 335,33. A margem de contribuição sendo de 20%, as vendas deverão ser aumentadas em Cr$ 1.676,66. O ativo circulante de Cr$ 1.140,00 é idêntico ao primeiro caso de aplicação do aumento de capital em ativo circulante. A posição do segundo ano é a seguinte:</p>
+  <p>
+    <inline-graphic xlink:href="/img/revistas/rae/v10n3/a05img16.jpg"/>
+  </p>
+  <p>O lucro mínimo desejado para 1971 é Cr$ 376,67, o que inclui Cr$ 100,00 de reversão de juros e Cr$ 30,00 do imposto de renda que teriam sido incorridos se os empréstimos tivessem continuado. As vendas necessárias (Cr$ 1.533,35) encontrarão o amplo capital de giro (Cr$ 511,12 necessário vs. Cr$ 1.254,00 real).</p>
+  <p>
+    <bold>4. Conclusão</bold>
+  </p>
+  <p>Nos exemplos deste artigo, demonstramos os efeitos da subscrição externa de capital sob diversas hipóteses. No primeiro ano (1970) do segundo caso de aplicação no ativo imobilizado, a chamada de capital necessitou uma retaguarda de capital de giro antes do lançamento de novas ações. Em todos os casos, as responsabilidades acionárias, estatutárias e fiscais vão sempre além de simples distribuição de dividendos. É importante que o empresário analise as possibilidades mercadológicas e as perspectivas de rentabilidade sôbre o incremento necessário de vendas, antes de decidir fazer um aumento de capital, a fim de assegurar os recursos necessários para com as responsabilidades fiscais, estatutárias e acionárias.</p>
+  <p>Na realidade, as aplicações de recursos da subscrição externa de capital poderão ser múltiplas - combinação das três hipóteses citadas neste artigo. Esperamos que o raciocínio e a análise feitas neste artigo sejam úteis para estudos mais complexos de novos lançamentos de ações, chamando a atenção dos empresários para as suas responsabilidades de retribuir os novos acionistas e para a conscientização e cumprimento das mesmas.</p>
+</body>
+<back>
+  <ref-list>
+    <ref id="B1">
+      <element-citation publication-type="journal">
+        <source>Revista de Administração de emprêsas</source>
+        <date>
+          <month>09</month>
+          <year>1967</year>
+        </date>
+      </element-citation>
+    </ref>
+  </ref-list>
+  <fn-group>
+    <fn id="fn1b">
+      <label>1</label>
+      <p>Artigo 9 do Decreto-lei no 157, de 20/2/1967.</p>
+    </fn>
+    <fn id="fn2b">
+      <label>2</label>
+      <p>Artigo 19 do Decreto-lei no 401 de 31/12/1968, artigo 4 do Decreto-lei no 433 de 23/1/1969, Portaria GB no 31 de 31/1/1969; do Ministério da Fazenda e artigos 10 e 11 do Decreto-lei no 1.089 de 2/3/1970.</p>
+    </fn>
   </fn>
   <fn id="fn3b">
-  <label>3</label>
-  <p>"A margem de contribuição, conhecida também por 'contribuição para o lucro', 'contribuição para cobrir o custo fixo e proporcionar lucro', 'contribuição para o custo fixo', 'saldo marginal', 'receita marginal', 'lucro marginal', e outras denominações, se refere à diferença entre o preço de venda e o custo variável..." (PINTO DIAS, Ivan. Algumas Observações sôbre a Margem de Contribuição. <italic>Revista de Administração de emprêsas, </italic>setembro de 1967, p. 81). </p>
+    <label>3</label>
+    <p>"A margem de contribuição, conhecida também por 'contribuição para o lucro', 'contribuição para cobrir o custo fixo e proporcionar lucro', 'contribuição para o custo fixo', 'saldo marginal', 'receita marginal', 'lucro marginal', e outras denominações, se refere à diferença entre o preço de venda e o custo variável..." (PINTO DIAS, Ivan. Algumas Observações sôbre a Margem de Contribuição. 
+        
+      <italic>Revista de Administração de emprêsas, </italic>setembro de 1967, p. 81). 
+      
+    </p>
   </fn>
-</fn-group>
-</body>
-  <back>
-    <ref-list>
-      <ref id="B1">
-        <element-citation publication-type="journal">
-          <source>Revista de Administração de emprêsas</source>
-          <date>
-            <month>09</month>
-            <year>1967</year>
-          </date>
-        </element-citation>
-      </ref>
-    </ref-list>
-  </back>
-</article>
+</fn-group></back></article>

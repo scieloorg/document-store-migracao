@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
-<article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="research-article">
+<article
+  xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="research-article">
   <front>
     <journal-meta>
       <journal-id journal-id-type="publisher-id">trends</journal-id>
@@ -162,129 +163,237 @@
   </front>
   <body>
     <p>
-    <bold> ARTIGO ORIGINAL</bold>
-</p>
-  <p>
-    <bold>Tradução e adaptação transcultural da Recent-Onset Arthritis Disability (ROAD) index para o português do Brasil</bold>
-</p>
-  <p>
-    <bold>Translation and cross-cultural adaptation of the Recent-Onset Arthritis Disability (ROAD) index into Brazilian Portuguese</bold>
-</p>
-  <p>
-    <bold>Natalia Pinho de Oliveira Ribeiro<sup>I</sup>; Alexandre Rafael de Mello Schier<sup>I</sup>; Antonio Egidio Nardi<sup>II</sup>; Adriana Cardoso de Oliveira e Silva<sup>III</sup>; Marwin Gutierrez<sup>IV</sup>; Fausto Salaffi<sup>IV</sup>
-</bold> </p>
-  <p>
-    <sup>I</sup>Psicólogo(a). Estágio probatório de mestrado, Programa de Pós-Graduação em Psiquiatria e Saúde Mental, Universidade Federal do Rio de Janeiro (UFRJ), Rio de Janeiro, RJ </p>
-  <p><sup>II</sup>Pós Doutor. Livre-docente e professor titular, Instituto de Psiquiatria, Faculdade de Medicina, Programa de Pós-Graduação em Psiquiatria e Saúde Mental, UFRJ. Coordenador, Laboratório de Pânico e Respiração. INCT-TM </p>
-  <p><sup>III</sup>Pós-doutora. Professora adjunta, Universidade Federal Fluminense (UFF), Niterói, RJ. Pesquisadora, Laboratório de Pânico e Respiração, Instituto de Psiquiatria, UFRJ. Instituto Nacional de Ciência e Tecnologia Translacional em Medicina (INCT-TM) </p>
-  <p><sup>IV</sup>Doutor. Clinica Reumatologica, Università Politecnica delle Marche, Jesi, Ancona, Itália</p>
-  <p>
-    <xref ref-type="corresp" rid="correspondence">Correspondência</xref>
-</p>
-  <p content-type="hr"/>
-  <p>
-    <bold>RESUMO</bold>
-</p>
-  <p>
-    <bold>INTRODUÇÃO:</bold> Com a crescente procura pelo acompanhamento psicológico de pacientes com doenças crônicas e indicações clínicas para o monitoramento de suas capacidades físicas e psíquicas, existe a necessidade de instrumentos que possibilitem essa avaliação. A artrite reumatoide é uma doença que vem sendo amplamente estudada para que novas drogas e tratamentos sejam desenvolvidos, porém instrumentos psicométricos desenvolvidos para essa população específica ainda são raros. <bold>OBJETIVO: </bold>Descrever a adaptação transcultural, para o português brasileiro, da Recent-Onset Arthritis Disability (ROAD) index. <bold>MÉTODOS:</bold> O processo envolveu duas traduções e retrotraduções realizadas por quatro tradutores independentes, a avaliação das versões fornecidas, seguida da elaboração de uma versão sintética por especialistas no assunto. O processo foi finalizado com a aplicação experimental do instrumento. <bold>RESULTADOS:</bold> Todas as etapas do processo são descritas. Não foram percebidas dificuldades de compreensão na autoaplicação da escala, que foi realizada por grupos de diferentes níveis de instrução, compreendendo desde ensino fundamental até nível universitário completo. <bold>CONCLUSÃO:</bold> Ao final do estudo, é apresentada a versão final da ROAD em português brasileiro. O instrumento adaptado foi considerado adequado e correspondente ao instrumento original.</p>
-  <p> <bold>Descritores:</bold> Reumatologia, doença crônica, psiquiatria, avaliação, diagnóstico.</p>
-  <p content-type="hr"/>
-  <p>
-    <bold>ABSTRACT</bold>
-</p>
-  <p>
-    <bold>INTRODUCTION:</bold> The increasing search for the psychological treatment of patients with chronic diseases and with clinical indications for the control of physical and psychological capacities has revealed a need for instruments aimed at assessing these patients. Rheumatoid arthritis is a condition that has been widely studied with a focus on the development of new drugs and treatment approaches. However, psychometric instruments developed for this specific population are still rare. <bold>OBJECTIVE: </bold>To describe the translation and cross-cultural adaptation into Brazilian Portuguese of the Recent-Onset Arthritis Disability (ROAD) index. <bold>METHODS:</bold> The process involved two translations and back-translations performed by four independent translators, the assessment of all versions obtained, followed by the development of a synthetic version by specialists in the field. The process was completed with an experimental application of the instrument. <bold>RESULTS:</bold> All stages of the translation/adaptation process are described. No comprehension difficulties were reported by the participants, who had different education levels, ranging from elementary school to university level. <bold>CONCLUSION:</bold> At the end of the study, the final version of the ROAD index in Brazilian Portuguese is presented. The adapted instrument was considered adequate and equivalent in meaning to the original instrument.</p>
-  <p> <bold>Keywords:</bold> Rheumatology, chronic disease, psychiatry, evaluation, diagnosis.</p>
-  <p content-type="hr"/>
-  <p>
-    <bold>Introdução</bold>
-</p>
-  <p>A artrite reumatoide é uma doença autoimune, crônica, incapacitante e de origem controversa, caracterizada principalmente por inflamação articular persistente que ataca a membrana sinovial, causando no paciente dor, rigidez, inchaço, perda da movimentação<sup>1</sup> e outros sintomas não tão comuns como febre, fraqueza, perda de apetite, entre outros<sup>2</sup>.</p>
-  <p>As articulações mais frequentemente afetadas pela sintomatologia da artrite reumatoide são joelhos, pés, mãos, punhos, cotovelos, ombros, região têmporo-mandibular e a coluna cervical. Especula-se que seja uma doença muito frequente e que esteja ligada a pelo menos 10% das queixas de dores nas articulações. No curso da doença, as complicações mais comuns são as deformidades progressivas, perda das funções da região afetada, desgaste das articulações (artrose), ruptura de tendões, instabilidade da coluna cervical e redução da expectativa de vida do indivíduo em 5 a 10 anos<sup>1,3</sup>.</p>
-  <p>O impacto gerado pela artrite reumatoide na qualidade de vida do paciente, sendo esta concebida por vários domínios<sup>4,5</sup> (físico, social, mental, etc.), pode ocorrer mesmo em fases iniciais da doença<sup>6</sup>. Apesar de existirem estudos sobre a qualidade de vida desses pacientes<sup>7,8</sup>, ainda é notada a carência de instrumentos criados especificamente para essa população<sup>9</sup>.</p>
-  <p>A Recent-Onset Arthritis Disability (ROAD) index<sup>10,11</sup>, criada por Salaffi et al., apresenta como proposta a avaliação da incapacidade de realizar determinadas funções pelos pacientes com artrite reumatoide de início recente (sintomatologia com duração menor que 2 anos), incluindo ações e questionamentos presentes no cotidiano de qualquer pessoa. </p>
-  <p>A ROAD foi originalmente desenvolvida para aplicação em pacientes italianos com quadro de artrite recente. Foi construída simultaneamente em italiano e inglês e validada após ser aplicada a 159 pacientes (119 mulheres e 40 homens) que possuíam sintomas com duração de menos de 2 anos, no Departamento de Reumatologia da Università Politecnica delle Marche<sup>10,11</sup>, em Jesi, na Itália. </p>
-  <p>A ROAD possui 12 itens que acessam três importantes dimensões reportadas pelos pacientes: a função da extremidade superior, a função da extremidade inferior e atividades diárias do cotidiano ou trabalho. Esses itens representam uma combinação de sintomas que são comuns, frequentemente recorrentes e de genuína importância aos pacientes de artrite reumatoide. </p>
-  <p>Por ser de aplicação rápida e fácil compreensão, além de seu baixo custo, a ROAD apresenta possibilidades de uso tanto clínico quanto em pesquisa<sup>12</sup>, permitindo também o acompanhamento da progressão da doença e de suas incapacitações em pacientes com sintomas recentes (menos de 2 anos). </p>
-  <p>Este estudo teve como objetivo descrever a adaptação semântica da ROAD para o português brasileiro.</p>
-  <p>
-    <bold>Metodologia</bold>
-</p>
-  <p>O processo de tradução e adaptação semântica da ROAD adotou o modelo de quatro etapas, conforme proposto por Herdman et al.<sup>13</sup>, sendo elas: tradução, retrotradução, análise de equivalência semântica e aplicação experimental. Os participantes desse processo foram orientados a privilegiar a aspectos semânticos em detrimento da tradução literal.</p>
-  <p>A versão original da escala foi entregue a dois tradutores independentes (T1 e T2), fluentes na língua do instrumento original e de naturalidade brasileira, sendo um deles especialista em saúde mental e o outro em reumatologia. Nenhum dos tradutores teve qualquer contato prévio com a escala apresentada, e não houve contato entre os tradutores durante essa fase do processo.</p>
-  <p>Na segunda fase, o produto das traduções foi encaminhado a dois outros tradutores, também sem conhecimentos sobre ROAD e sem qualquer contato com T1 e T2, assim como sem contato entre si, para a elaboração das retrotraduções (R1 e R2). Nessa fase, os tradutores também eram especialistas, um em saúde mental e o outro em ortopedia.</p>
-  <p>A inclusão de profissionais tanto de saúde mental quanto de reumatologia e ortopedia visa garantir a adequação dos termos adotados no instrumento ao construto que o mesmo mensura, considerando especificidades técnicas da área onde a escala deverá ser utilizada.</p>
-  <p>As quatro formulações geradas nesse processo (T1, T2, R1 e R2) foram analisadas conjuntamente por dois outros profissionais, conhecedores do instrumento original e especialistas na área de saúde mental, com conhecimentos de psicometria. Nessa etapa, as traduções dos itens originais foram avaliadas, e o material gerado na retrotradução foi comparado com a formulação do item original para a verificação da equivalência entre as versões produzidas.</p>
-  <p>A comparação entre as duas propostas de tradução e a versão original do item foi realizada para formar a versão sintética, em português brasileiro, representativa dessa escala. Essa versão sintética, em alguns casos, foi definida integralmente por uma das traduções fornecidas, e em outros, foi formada pela combinação das propostas apresentadas pelos dois tradutores. Os especialistas atuaram realizando alterações, quando necessário, para uma melhor adequação das formulações considerando o vocabulário técnico específico utilizado na área.</p>
-  <p>Concluída a formulação da primeira versão em português brasileiro da ROAD, a mesma ainda foi comparada com a versão final existente em italiano por outro profissional bilíngue, fluente nesse idioma e também especialista em saúde mental, para a avaliação de equivalência. </p>
-  <p>Tendo sido considerada satisfatória, iniciou-se a aplicação experimental do instrumento na população-alvo para verificar sua adequação. Buscou-se, ao longo desta etapa, a identificação de potenciais pontos de dificuldade para o entendimento dos itens pelos participantes, considerando que essas dificuldades não poderiam se tornar um fator de influência na determinação das respostas emitidas, o que poderia comprometer a avaliação. </p>
-  <p>Uma vez que existem poucos estudos sobre instrumentos psicométricos ligados a artrite reumatoide e que envolvam amostras não clínicas, este estudo optou por adotar como critério de exclusão para os sujeitos participantes da fase de aplicação experimental a existência de qualquer transtorno mental. A presença de transtornos psiquiátricos foi avaliada em entrevista de triagem prévia à aplicação experimental, com a utilização do Mini International Neuropsychiatric Interview (MINI)<sup>14</sup>, versão 5.0.0.</p>
-  <p>A primeira etapa da aplicação experimental é a execução, pelos voluntários, da tarefa de responder à escala em sua forma autoaplicável, seguida pela verificação do material produzido, realizada pelo pesquisador, avaliando omissões de respostas e registrando os itens que apresentavam esse problema, para posterior avaliação de suas possíveis causas. </p>
-  <p>Em seguida, o pesquisador questiona os participantes quanto ao sentido dos itens, buscando verificar o real entendimento deles. Os sujeitos são, então, convidados a fornecer sugestões que, segundo eles, possam facilitar o entendimento da escala ou torná-la melhor.</p>
-  <p>A partir dos dados colhidos na aplicação experimental, se necessário, são realizadas alterações na versão sintética, visando solucionar problemas que tenham sido apontados ao longo do processo, gerados por dificuldades de entendimento das frases ou mesmo por confusões na compreensão dos itens. </p>
-  <p>Com essas modificações finais, obtém-se a versão final da ROAD em português brasileiro. Para garantir a adequação do instrumento, realizou-se nova aplicação, já com essa forma final, a um grupo de 10 respondentes de ambos os gêneros portadores de artrite reumatoide, buscando verificar se ainda restava qualquer dificuldade ou confusão.</p>
-  <p>
-    <bold>Resultados e discussão</bold>
-</p>
-  <p>
-    <bold>Construção da versão sintética</bold>
-</p>
-  <p>A <xref rid="tab01" ref-type="table">Tabela 1</xref> apresenta os itens conforme formulados no instrumento original, a tradução da língua-fonte (inglês) para a língua-alvo (português brasileiro) realizada por dois profissionais independentes (T1 e T2), a retrotradução das formulações propostas (R1 e R2) e a versão sintética, elaborada conjuntamente por dois especialistas, um em saúde mental e o outro em reumatologia.</p>
-  <table-wrap id="tab01">
-    <graphic xlink:href="/img/revistas/trends/v33n3/a05tab01.jpg"/>
-  </table-wrap>
-  <p>Para a construção da versão sintética, alguns itens foram estruturados por meio da combinação das duas traduções fornecidas, enquanto em outros casos foi privilegiada a sugestão de um deles (T1 ou T2). Houve também situações em que foi realizada ligeira alteração pelos especialistas em saúde mental, além do sugerido pelos tradutores, de forma a manter a pertinência do item adaptado ao construto avaliado pela escala.</p>
-  <p>No enunciado "Answer to questions", seguido das opções numeradas de 0 a 4, assim como nos itens 7, F3 e 11, foi dada preferência ao T2, pela completa coerência com a retrotradução correspondente (R2), sem que tenha sido feita nenhuma mudança na estrutura apresentada. No enunciado "Please, answer the following questions regarding your usual activities over the past week", tanto T1 quanto T2 fizeram supressão, na tradução, do termo "over"; nesse caso, para gerar a versão sintética, foi usada uma versão composta para melhor adequação com os termos de T1 e T2, juntamente com ligeira alteração realizada pelo especialista.</p>
-  <p>No enunciado "Are you able to" e nos itens 1, 2, 8, 9 e 12, embora T1 e T2 tenham apresentado quase a mesma tradução, com pequenas alterações apenas no tempo verbal ou na ordem das sentenças, além de retrotraduções muito próximas à frase original, foi priorizada a tradução semântica em detrimento da literal, além da adequação às expressões culturais.</p>
-  <p>Em especial, no item 9, foi entendido por ambos os tradutores e pelo especialista que a dificuldade referente a entrar e sair do carro seria a mesma, portanto foi considerada desnecessária a diferenciação entre entrar e sair do carro.</p>
-  <p>Nos itens 3 e 10, na ordem, "Do up buttons" e "Wash and dry your body", as expressões idiomáticas foram alteradas por termos correspondentes utilizados habitualmente pela população brasileira, como "Abotoar" e "Tomar banho", respectivamente, mantendo-se o significado pretendido na formulação original.</p>
-  <p>Nos itens F1, 4, 5, F2 e 6, foram escolhidas as traduções realizadas por T1, por se adequarem melhor tanto à retrotradução quanto ao contexto cultural no qual a população-alvo está inserida. No entanto, pequenas alterações foram consideradas necessárias em outros pontos, como no caso do item 12, que foi alterado de "se levantar" para "levantar-se".</p>
-  <p>
-    <bold>Aplicação experimental</bold>
-</p>
-  <p>Com a versão sintética composta pelos itens da versão preliminar da ROAD, deu-se início ao processo de aplicação experimental do instrumento. Essa aplicação contou com a participação de pessoas de ambos os gêneros e diferentes níveis de escolaridade.</p>
-  <p>Os voluntários foram avaliados com o MINI quanto à presença de transtornos psiquiátricos. Nesse processo, foram excluídos quatro indivíduos dos 34 voluntários iniciais, por apresentarem copatologias psiquiátricas que os impediam de participar da aplicação experimental. Assim, participaram efetivamente do estudo 30 sujeitos. A distribuição quanto a gênero e escolaridade pode ser observada na <xref ref-type="table" rid="table2">Tabela 2</xref>.</p>
-<table-wrap id="table2">
-    <graphic xlink:href="/img/revistas/trends/v33n3/a05tab02.jpg"/>
-</table-wrap>
-<p>Após concluírem a autoaplicação da ROAD, os indivíduos foram convidados a participar de debate relativo aos aspectos linguísticos do material utilizado. Não houve recusas nessa etapa.</p>
-<p>Na discussão, foram seguidas duas fases. Primeiro, foi requisitado que o participante descrevesse com suas palavras como compreendia o enunciado contido na versão que lhe foi entregue. Em seguida, foram solicitadas sugestões de palavras, expressões ou termos alternativos que pudessem substituir e, consequentemente, melhorar o entendimento dos itens.</p>
-<p>As aplicações e os debates foram realizados, primeiro, com os participantes que possuíam escolaridade de nível fundamental; em seguida, com aqueles de nível médio; e, finalmente, com os participantes que possuíam nível superior completo.</p>
-  <p>Entre os participantes com nível fundamental, não houve omissões nas respostas fornecidas. Quando questionados sobre o significado dos itens, mostraram bom entendimento. A única sugestão veio de um participante que mencionou que talvez a substituição do termo "extremidades superiores", usado na aplicação experimental, por "mãos" poderia tornar o item F1 mais claro. </p>
-  <p>Quanto a essa colocação, dos nove outros participantes do grupo, seis foram contrários, pois consideraram o item bem apresentado no formato prévio, e os outros três declaram ser indiferentes à alteração. Em consulta a especialista, foi defendido que "extremidades superiores" é um termo que abrange maior amplitude do que apenas "mãos". Desse modo, e por não ter sido encontrada qualquer dificuldade quanto ao item, apesar da sugestão fornecida, optou-se por manter a forma inicial. </p>
-  <p>Dois participantes comentaram que acharam estranha a ocorrência de "subir escadas" e "subir degraus" no mesmo item (8), pois, segundo eles, os dois termos significariam a mesma coisa. A sugestão foi anotada para verificação com os grupos posteriores e com os especialistas.</p>
-  <p>No segundo e no terceiro grupo, novamente não observamos omissões ou dificuldades de compreensão em nenhum item do teste. Os participantes comentaram que consideravam o instrumento fácil e sem dificuldades de entendimento. O grupo ofereceu algumas sugestões de alterações e melhorias, como o uso da expressão mais curta "tomar banho" no lugar da proposta apresentada, "tomar banho e se secar". Em relação ao item 8, quando questionados, sugeriram a manutenção de "subir escadas", e não do termo redundante "subir degraus". </p>
-  <p>Após a aplicação do instrumento nos três grupos de sujeitos, não foi verificada necessidade de alteração adicional nos itens formulados. A escala em português brasileiro foi então encaminhada para um profissional bilíngue, especialista em saúde mental, para comparação com o instrumento em italiano. Também não foi detectada necessidade de alteração nessa etapa.</p>
-  <p>Finalmente, o instrumento foi aplicado oralmente a 10 pacientes com diagnóstico de artrite reumatoide. Uma vez concluída esta segunda aplicação, os pacientes foram questionados sobre possíveis dificuldades de entendimento das perguntas, já que não foram notadas dificuldades na emissão das respostas. Todos relataram completo entendimento das questões e foram capazes de esclarecer o significado de todos os itens.</p>
-  <p>Com essa segunda aplicação, concluímos o processo e obtivemos a versão final da ROAD adaptada semanticamente para o português brasileiro (<xref ref-type="app" rid="anx01">Anexo 1</xref>). O <xref ref-type="app" rid="anx02">Anexo 2</xref> apresenta uma compilação das três versões atualmente disponíveis para a ROAD, a saber, a escala original em inglês, a versão em italiano e a versão final em português, produto do presente estudo.</p>
-  <p>
-    <bold>Conclusão</bold>
-</p>
-  <p>Os instrumentos de medidas com bons parâmetros psicométricos, por serem muitas vezes de aplicação relativamente fácil e rápida e permitirem aferições seguras e confiáveis, mostram-se fundamentais como complemento ao trabalho dos profissionais de psiquiatria e saúde mental, tanto na clínica quanto na pesquisa. Este estudo descreveu o processo de tradução e adaptação semântica para português brasileiro da ROAD, uma escala utilizada para a avaliação das funções e perdas de pacientes com artrite reumatoide inicial. Ressalta-se a importância do estudo, uma vez que não há escalas semelhantes disponíveis para a avaliação dessa população específica, nem adaptações da ROAD para outros países. </p>
-  <p>A metodologia utilizada contou com a participação de quatro tradutores, gerando duas traduções e duas retrotraduções. Isso possibilitou ampla discussão quando notada divergência entre as versões fornecidas, gerando boa adequação dos enunciados ao que era proposto no instrumento original. A participação de especialistas das áreas de reumatologia, saúde mental e ortopedia, por sua vez, colaborou para a correta adaptação semântica do instrumento, pois conhecimentos referentes ao construto avaliado facilitaram a realização de ajustes finos nos vocábulos e expressões escolhidos para representar os itens originais. Finalmente, através da aplicação experimental, eventuais dificuldades no entendimento dos itens pelos sujeitos representativos da população-alvo puderam ser detectadas, permitindo alterações para a melhoria do instrumento (que, neste caso, não foram necessárias), porém mantendo sua fidelidade ao original.</p>
-  <p>Definiu-se, assim, a versão final da ROAD em português brasileiro. Sugerimos estudos posteriores para a avaliação dos parâmetros psicométricos da escala em populações brasileiras.</p>
-  <p>
-    <bold>Referências</bold> </p>
-  <p>1. Fellet AJ, Tavares A, Scotton AS. Artrite reumatóide. Rev Bras Med. 2001;58:102-11.</p>
-  <p> 2. World Health Organization (WHO). Chronic rheumatic conditions. <ext-link ext-link-type="uri" xlink:href="http://www.who.int/chp/topics/rheumatic/en">http://www.who.int/chp/topics/rheumatic/en</ext-link>. Acessado jan 2011. </p>
-  <p> 3. Walsh NC, Crotti TN, Goldring SR, Gravallese EM. Rheumatic diseases: the effects of inflammations on bone. Immunol Rev. 2005;208:228-51. </p>
-  <p> 4. Ward MM. Outcome measurement: health status and quality of life. Curr Opin Rheumatol. 2004;16:96-101. </p>
-  <p> 5. Fleck MPA, Louzada S, Xavier M, Chachamovich E, Vieira G, Santos L, et al. Aplicação da versão em português do instrumento de avaliação de qualidade de vida da Organização Mundial da Saúde (WHOQOL-100). Rev Saude Publica. 1999;33:198-205. </p>
-  <p> 6. Kosinski M, Kujawski SC, Martin R, Wanke LA, Buatti MC, Ware Jr JE, et al. Health-related quality of life in early rheumatoid arthritis: impact of disease and treatment response. Am J Manag Care. 2002;8:231-40. </p>
-  <p> 7. Mota LMH, Laurindo IMM, Santos Neto LL. Avaliação prospectiva da qualidade de vida em uma coorte de pacientes com artrite reumatoide inicial. Rev Bras Reumatol. 2010;50:249-61. </p>
-  <p> 8. Corbacho MI, Dapueto JJ. Avaliação da capacidade funcional e da qualidade de vida de pacientes com artrite reumatoide. Rev Bras Reumatol. 2010;50:31-43. </p>
-  <p> 9. Walker JG, Littlejohn GO. Measuring quality of life in rheumatic conditions. Clin Rheumatol. 2007;26:671-3. </p>
-  <p> 10. Salaffi F, Bazzichi L, Stancati A, Neri R, Cazzato M, Consensi A, et al. Development of a functional disability measurement tool to assess early arthritis. Clin Exp Rheumatol. 2005;5:628-36. </p>
-  <p> 11. Salaffi F, Stancati A, Neri R, Grassi W, Bombardieri S. Measuring functional disability in early rheumatoid arthritis: the validity, reliability and responsiveness of the Recent-Onset Arthritis Disability (ROAD) index. Clin Exp Rheumatol. 2005;23:31-42. </p>
-  <p> 12. Salaffi F, Ciapetti A, Gasparini S, Migliore A, Scarpellini M, Corsaro SM, et al. Comparison of the Recent-Onset Arthritis Disability questionnaire with the Health Assessment Questionnaire Disability Index in patients with rheumatoid arthritis. Clin Exp Rheumatol. 2010;28:855-65. </p>
-  <p> 13. Herdman M, Fox-Rushby J, Badia X. A model of equivalence in the cultural adaptation of HRQoL instruments: the universalist approach. Qual Life Res. 1998;7:323-35. </p>
-  <p> 14. Sheehan DV, Lecrubier Y, Sheehan KH, Amorim P, Janavs J, Weiller E, et al. The Mini International Neuropsychiatric Interview (MINI): the development and validation of a structured diagnostic psychiatric interview for DSM-IV and ICD-10. J Clin Psychiatry. 1998;59:22-33. </p>
-  
+      <bold> ARTIGO ORIGINAL</bold>
+    </p>
+    <p>
+      <bold>Tradução e adaptação transcultural da Recent-Onset Arthritis Disability (ROAD) index para o português do Brasil</bold>
+    </p>
+    <p>
+      <bold>Translation and cross-cultural adaptation of the Recent-Onset Arthritis Disability (ROAD) index into Brazilian Portuguese</bold>
+    </p>
+    <p>
+      <bold>Natalia Pinho de Oliveira Ribeiro
+        
+        <sup>I</sup>; Alexandre Rafael de Mello Schier
+        
+        <sup>I</sup>; Antonio Egidio Nardi
+        
+        <sup>II</sup>; Adriana Cardoso de Oliveira e Silva
+        
+        <sup>III</sup>; Marwin Gutierrez
+        
+        <sup>IV</sup>; Fausto Salaffi
+        
+        <sup>IV</sup>
+      </bold>
+    </p>
+    <p>
+      <sup>I</sup>Psicólogo(a). Estágio probatório de mestrado, Programa de Pós-Graduação em Psiquiatria e Saúde Mental, Universidade Federal do Rio de Janeiro (UFRJ), Rio de Janeiro, RJ 
+    
+    </p>
+    <p>
+      <sup>II</sup>Pós Doutor. Livre-docente e professor titular, Instituto de Psiquiatria, Faculdade de Medicina, Programa de Pós-Graduação em Psiquiatria e Saúde Mental, UFRJ. Coordenador, Laboratório de Pânico e Respiração. INCT-TM 
+    
+    </p>
+    <p>
+      <sup>III</sup>Pós-doutora. Professora adjunta, Universidade Federal Fluminense (UFF), Niterói, RJ. Pesquisadora, Laboratório de Pânico e Respiração, Instituto de Psiquiatria, UFRJ. Instituto Nacional de Ciência e Tecnologia Translacional em Medicina (INCT-TM) 
+    
+    </p>
+    <p>
+      <sup>IV</sup>Doutor. Clinica Reumatologica, Università Politecnica delle Marche, Jesi, Ancona, Itália
+    
+    </p>
+    <p>
+      <xref ref-type="corresp" rid="correspondence">Correspondência</xref>
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>RESUMO</bold>
+    </p>
+    <p>
+      <bold>INTRODUÇÃO:</bold> Com a crescente procura pelo acompanhamento psicológico de pacientes com doenças crônicas e indicações clínicas para o monitoramento de suas capacidades físicas e psíquicas, existe a necessidade de instrumentos que possibilitem essa avaliação. A artrite reumatoide é uma doença que vem sendo amplamente estudada para que novas drogas e tratamentos sejam desenvolvidos, porém instrumentos psicométricos desenvolvidos para essa população específica ainda são raros. 
+      
+      <bold>OBJETIVO: </bold>Descrever a adaptação transcultural, para o português brasileiro, da Recent-Onset Arthritis Disability (ROAD) index. 
+      
+      <bold>MÉTODOS:</bold> O processo envolveu duas traduções e retrotraduções realizadas por quatro tradutores independentes, a avaliação das versões fornecidas, seguida da elaboração de uma versão sintética por especialistas no assunto. O processo foi finalizado com a aplicação experimental do instrumento. 
+      
+      <bold>RESULTADOS:</bold> Todas as etapas do processo são descritas. Não foram percebidas dificuldades de compreensão na autoaplicação da escala, que foi realizada por grupos de diferentes níveis de instrução, compreendendo desde ensino fundamental até nível universitário completo. 
+      
+      <bold>CONCLUSÃO:</bold> Ao final do estudo, é apresentada a versão final da ROAD em português brasileiro. O instrumento adaptado foi considerado adequado e correspondente ao instrumento original.
+    
+    </p>
+    <p>
+      <bold>Descritores:</bold> Reumatologia, doença crônica, psiquiatria, avaliação, diagnóstico.
+    
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>ABSTRACT</bold>
+    </p>
+    <p>
+      <bold>INTRODUCTION:</bold> The increasing search for the psychological treatment of patients with chronic diseases and with clinical indications for the control of physical and psychological capacities has revealed a need for instruments aimed at assessing these patients. Rheumatoid arthritis is a condition that has been widely studied with a focus on the development of new drugs and treatment approaches. However, psychometric instruments developed for this specific population are still rare. 
+      
+      <bold>OBJECTIVE: </bold>To describe the translation and cross-cultural adaptation into Brazilian Portuguese of the Recent-Onset Arthritis Disability (ROAD) index. 
+      
+      <bold>METHODS:</bold> The process involved two translations and back-translations performed by four independent translators, the assessment of all versions obtained, followed by the development of a synthetic version by specialists in the field. The process was completed with an experimental application of the instrument. 
+      
+      <bold>RESULTS:</bold> All stages of the translation/adaptation process are described. No comprehension difficulties were reported by the participants, who had different education levels, ranging from elementary school to university level. 
+      
+      <bold>CONCLUSION:</bold> At the end of the study, the final version of the ROAD index in Brazilian Portuguese is presented. The adapted instrument was considered adequate and equivalent in meaning to the original instrument.
+    
+    </p>
+    <p>
+      <bold>Keywords:</bold> Rheumatology, chronic disease, psychiatry, evaluation, diagnosis.
+    
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>Introdução</bold>
+    </p>
+    <p>A artrite reumatoide é uma doença autoimune, crônica, incapacitante e de origem controversa, caracterizada principalmente por inflamação articular persistente que ataca a membrana sinovial, causando no paciente dor, rigidez, inchaço, perda da movimentação
+      
+      <sup>1</sup> e outros sintomas não tão comuns como febre, fraqueza, perda de apetite, entre outros
+      
+      <sup>2</sup>.
+    
+    </p>
+    <p>As articulações mais frequentemente afetadas pela sintomatologia da artrite reumatoide são joelhos, pés, mãos, punhos, cotovelos, ombros, região têmporo-mandibular e a coluna cervical. Especula-se que seja uma doença muito frequente e que esteja ligada a pelo menos 10% das queixas de dores nas articulações. No curso da doença, as complicações mais comuns são as deformidades progressivas, perda das funções da região afetada, desgaste das articulações (artrose), ruptura de tendões, instabilidade da coluna cervical e redução da expectativa de vida do indivíduo em 5 a 10 anos
+      
+      <sup>1,3</sup>.
+    
+    </p>
+    <p>O impacto gerado pela artrite reumatoide na qualidade de vida do paciente, sendo esta concebida por vários domínios
+      
+      <sup>4,5</sup> (físico, social, mental, etc.), pode ocorrer mesmo em fases iniciais da doença
+      
+      <sup>6</sup>. Apesar de existirem estudos sobre a qualidade de vida desses pacientes
+      
+      <sup>7,8</sup>, ainda é notada a carência de instrumentos criados especificamente para essa população
+      
+      <sup>9</sup>.
+    
+    </p>
+    <p>A Recent-Onset Arthritis Disability (ROAD) index
+      
+      <sup>10,11</sup>, criada por Salaffi et al., apresenta como proposta a avaliação da incapacidade de realizar determinadas funções pelos pacientes com artrite reumatoide de início recente (sintomatologia com duração menor que 2 anos), incluindo ações e questionamentos presentes no cotidiano de qualquer pessoa. 
+    
+    </p>
+    <p>A ROAD foi originalmente desenvolvida para aplicação em pacientes italianos com quadro de artrite recente. Foi construída simultaneamente em italiano e inglês e validada após ser aplicada a 159 pacientes (119 mulheres e 40 homens) que possuíam sintomas com duração de menos de 2 anos, no Departamento de Reumatologia da Università Politecnica delle Marche
+      
+      <sup>10,11</sup>, em Jesi, na Itália. 
+    
+    </p>
+    <p>A ROAD possui 12 itens que acessam três importantes dimensões reportadas pelos pacientes: a função da extremidade superior, a função da extremidade inferior e atividades diárias do cotidiano ou trabalho. Esses itens representam uma combinação de sintomas que são comuns, frequentemente recorrentes e de genuína importância aos pacientes de artrite reumatoide. </p>
+    <p>Por ser de aplicação rápida e fácil compreensão, além de seu baixo custo, a ROAD apresenta possibilidades de uso tanto clínico quanto em pesquisa
+      
+      <sup>12</sup>, permitindo também o acompanhamento da progressão da doença e de suas incapacitações em pacientes com sintomas recentes (menos de 2 anos). 
+    
+    </p>
+    <p>Este estudo teve como objetivo descrever a adaptação semântica da ROAD para o português brasileiro.</p>
+    <p>
+      <bold>Metodologia</bold>
+    </p>
+    <p>O processo de tradução e adaptação semântica da ROAD adotou o modelo de quatro etapas, conforme proposto por Herdman et al.
+      
+      <sup>13</sup>, sendo elas: tradução, retrotradução, análise de equivalência semântica e aplicação experimental. Os participantes desse processo foram orientados a privilegiar a aspectos semânticos em detrimento da tradução literal.
+    
+    </p>
+    <p>A versão original da escala foi entregue a dois tradutores independentes (T1 e T2), fluentes na língua do instrumento original e de naturalidade brasileira, sendo um deles especialista em saúde mental e o outro em reumatologia. Nenhum dos tradutores teve qualquer contato prévio com a escala apresentada, e não houve contato entre os tradutores durante essa fase do processo.</p>
+    <p>Na segunda fase, o produto das traduções foi encaminhado a dois outros tradutores, também sem conhecimentos sobre ROAD e sem qualquer contato com T1 e T2, assim como sem contato entre si, para a elaboração das retrotraduções (R1 e R2). Nessa fase, os tradutores também eram especialistas, um em saúde mental e o outro em ortopedia.</p>
+    <p>A inclusão de profissionais tanto de saúde mental quanto de reumatologia e ortopedia visa garantir a adequação dos termos adotados no instrumento ao construto que o mesmo mensura, considerando especificidades técnicas da área onde a escala deverá ser utilizada.</p>
+    <p>As quatro formulações geradas nesse processo (T1, T2, R1 e R2) foram analisadas conjuntamente por dois outros profissionais, conhecedores do instrumento original e especialistas na área de saúde mental, com conhecimentos de psicometria. Nessa etapa, as traduções dos itens originais foram avaliadas, e o material gerado na retrotradução foi comparado com a formulação do item original para a verificação da equivalência entre as versões produzidas.</p>
+    <p>A comparação entre as duas propostas de tradução e a versão original do item foi realizada para formar a versão sintética, em português brasileiro, representativa dessa escala. Essa versão sintética, em alguns casos, foi definida integralmente por uma das traduções fornecidas, e em outros, foi formada pela combinação das propostas apresentadas pelos dois tradutores. Os especialistas atuaram realizando alterações, quando necessário, para uma melhor adequação das formulações considerando o vocabulário técnico específico utilizado na área.</p>
+    <p>Concluída a formulação da primeira versão em português brasileiro da ROAD, a mesma ainda foi comparada com a versão final existente em italiano por outro profissional bilíngue, fluente nesse idioma e também especialista em saúde mental, para a avaliação de equivalência. </p>
+    <p>Tendo sido considerada satisfatória, iniciou-se a aplicação experimental do instrumento na população-alvo para verificar sua adequação. Buscou-se, ao longo desta etapa, a identificação de potenciais pontos de dificuldade para o entendimento dos itens pelos participantes, considerando que essas dificuldades não poderiam se tornar um fator de influência na determinação das respostas emitidas, o que poderia comprometer a avaliação. </p>
+    <p>Uma vez que existem poucos estudos sobre instrumentos psicométricos ligados a artrite reumatoide e que envolvam amostras não clínicas, este estudo optou por adotar como critério de exclusão para os sujeitos participantes da fase de aplicação experimental a existência de qualquer transtorno mental. A presença de transtornos psiquiátricos foi avaliada em entrevista de triagem prévia à aplicação experimental, com a utilização do Mini International Neuropsychiatric Interview (MINI)
+      
+      <sup>14</sup>, versão 5.0.0.
+    
+    </p>
+    <p>A primeira etapa da aplicação experimental é a execução, pelos voluntários, da tarefa de responder à escala em sua forma autoaplicável, seguida pela verificação do material produzido, realizada pelo pesquisador, avaliando omissões de respostas e registrando os itens que apresentavam esse problema, para posterior avaliação de suas possíveis causas. </p>
+    <p>Em seguida, o pesquisador questiona os participantes quanto ao sentido dos itens, buscando verificar o real entendimento deles. Os sujeitos são, então, convidados a fornecer sugestões que, segundo eles, possam facilitar o entendimento da escala ou torná-la melhor.</p>
+    <p>A partir dos dados colhidos na aplicação experimental, se necessário, são realizadas alterações na versão sintética, visando solucionar problemas que tenham sido apontados ao longo do processo, gerados por dificuldades de entendimento das frases ou mesmo por confusões na compreensão dos itens. </p>
+    <p>Com essas modificações finais, obtém-se a versão final da ROAD em português brasileiro. Para garantir a adequação do instrumento, realizou-se nova aplicação, já com essa forma final, a um grupo de 10 respondentes de ambos os gêneros portadores de artrite reumatoide, buscando verificar se ainda restava qualquer dificuldade ou confusão.</p>
+    <p>
+      <bold>Resultados e discussão</bold>
+    </p>
+    <p>
+      <bold>Construção da versão sintética</bold>
+    </p>
+    <p>A 
+      
+      <xref rid="tab01" ref-type="table">Tabela 1</xref> apresenta os itens conforme formulados no instrumento original, a tradução da língua-fonte (inglês) para a língua-alvo (português brasileiro) realizada por dois profissionais independentes (T1 e T2), a retrotradução das formulações propostas (R1 e R2) e a versão sintética, elaborada conjuntamente por dois especialistas, um em saúde mental e o outro em reumatologia.
+    
+    </p>
+    <table-wrap id="tab01">
+      <graphic xlink:href="/img/revistas/trends/v33n3/a05tab01.jpg"/>
+    </table-wrap>
+    <p>Para a construção da versão sintética, alguns itens foram estruturados por meio da combinação das duas traduções fornecidas, enquanto em outros casos foi privilegiada a sugestão de um deles (T1 ou T2). Houve também situações em que foi realizada ligeira alteração pelos especialistas em saúde mental, além do sugerido pelos tradutores, de forma a manter a pertinência do item adaptado ao construto avaliado pela escala.</p>
+    <p>No enunciado "Answer to questions", seguido das opções numeradas de 0 a 4, assim como nos itens 7, F3 e 11, foi dada preferência ao T2, pela completa coerência com a retrotradução correspondente (R2), sem que tenha sido feita nenhuma mudança na estrutura apresentada. No enunciado "Please, answer the following questions regarding your usual activities over the past week", tanto T1 quanto T2 fizeram supressão, na tradução, do termo "over"; nesse caso, para gerar a versão sintética, foi usada uma versão composta para melhor adequação com os termos de T1 e T2, juntamente com ligeira alteração realizada pelo especialista.</p>
+    <p>No enunciado "Are you able to" e nos itens 1, 2, 8, 9 e 12, embora T1 e T2 tenham apresentado quase a mesma tradução, com pequenas alterações apenas no tempo verbal ou na ordem das sentenças, além de retrotraduções muito próximas à frase original, foi priorizada a tradução semântica em detrimento da literal, além da adequação às expressões culturais.</p>
+    <p>Em especial, no item 9, foi entendido por ambos os tradutores e pelo especialista que a dificuldade referente a entrar e sair do carro seria a mesma, portanto foi considerada desnecessária a diferenciação entre entrar e sair do carro.</p>
+    <p>Nos itens 3 e 10, na ordem, "Do up buttons" e "Wash and dry your body", as expressões idiomáticas foram alteradas por termos correspondentes utilizados habitualmente pela população brasileira, como "Abotoar" e "Tomar banho", respectivamente, mantendo-se o significado pretendido na formulação original.</p>
+    <p>Nos itens F1, 4, 5, F2 e 6, foram escolhidas as traduções realizadas por T1, por se adequarem melhor tanto à retrotradução quanto ao contexto cultural no qual a população-alvo está inserida. No entanto, pequenas alterações foram consideradas necessárias em outros pontos, como no caso do item 12, que foi alterado de "se levantar" para "levantar-se".</p>
+    <p>
+      <bold>Aplicação experimental</bold>
+    </p>
+    <p>Com a versão sintética composta pelos itens da versão preliminar da ROAD, deu-se início ao processo de aplicação experimental do instrumento. Essa aplicação contou com a participação de pessoas de ambos os gêneros e diferentes níveis de escolaridade.</p>
+    <p>Os voluntários foram avaliados com o MINI quanto à presença de transtornos psiquiátricos. Nesse processo, foram excluídos quatro indivíduos dos 34 voluntários iniciais, por apresentarem copatologias psiquiátricas que os impediam de participar da aplicação experimental. Assim, participaram efetivamente do estudo 30 sujeitos. A distribuição quanto a gênero e escolaridade pode ser observada na 
+      
+      <xref ref-type="table" rid="table2">Tabela 2</xref>.
+    
+    </p>
+    <table-wrap id="table2">
+      <graphic xlink:href="/img/revistas/trends/v33n3/a05tab02.jpg"/>
+    </table-wrap>
+    <p>Após concluírem a autoaplicação da ROAD, os indivíduos foram convidados a participar de debate relativo aos aspectos linguísticos do material utilizado. Não houve recusas nessa etapa.</p>
+    <p>Na discussão, foram seguidas duas fases. Primeiro, foi requisitado que o participante descrevesse com suas palavras como compreendia o enunciado contido na versão que lhe foi entregue. Em seguida, foram solicitadas sugestões de palavras, expressões ou termos alternativos que pudessem substituir e, consequentemente, melhorar o entendimento dos itens.</p>
+    <p>As aplicações e os debates foram realizados, primeiro, com os participantes que possuíam escolaridade de nível fundamental; em seguida, com aqueles de nível médio; e, finalmente, com os participantes que possuíam nível superior completo.</p>
+    <p>Entre os participantes com nível fundamental, não houve omissões nas respostas fornecidas. Quando questionados sobre o significado dos itens, mostraram bom entendimento. A única sugestão veio de um participante que mencionou que talvez a substituição do termo "extremidades superiores", usado na aplicação experimental, por "mãos" poderia tornar o item F1 mais claro. </p>
+    <p>Quanto a essa colocação, dos nove outros participantes do grupo, seis foram contrários, pois consideraram o item bem apresentado no formato prévio, e os outros três declaram ser indiferentes à alteração. Em consulta a especialista, foi defendido que "extremidades superiores" é um termo que abrange maior amplitude do que apenas "mãos". Desse modo, e por não ter sido encontrada qualquer dificuldade quanto ao item, apesar da sugestão fornecida, optou-se por manter a forma inicial. </p>
+    <p>Dois participantes comentaram que acharam estranha a ocorrência de "subir escadas" e "subir degraus" no mesmo item (8), pois, segundo eles, os dois termos significariam a mesma coisa. A sugestão foi anotada para verificação com os grupos posteriores e com os especialistas.</p>
+    <p>No segundo e no terceiro grupo, novamente não observamos omissões ou dificuldades de compreensão em nenhum item do teste. Os participantes comentaram que consideravam o instrumento fácil e sem dificuldades de entendimento. O grupo ofereceu algumas sugestões de alterações e melhorias, como o uso da expressão mais curta "tomar banho" no lugar da proposta apresentada, "tomar banho e se secar". Em relação ao item 8, quando questionados, sugeriram a manutenção de "subir escadas", e não do termo redundante "subir degraus". </p>
+    <p>Após a aplicação do instrumento nos três grupos de sujeitos, não foi verificada necessidade de alteração adicional nos itens formulados. A escala em português brasileiro foi então encaminhada para um profissional bilíngue, especialista em saúde mental, para comparação com o instrumento em italiano. Também não foi detectada necessidade de alteração nessa etapa.</p>
+    <p>Finalmente, o instrumento foi aplicado oralmente a 10 pacientes com diagnóstico de artrite reumatoide. Uma vez concluída esta segunda aplicação, os pacientes foram questionados sobre possíveis dificuldades de entendimento das perguntas, já que não foram notadas dificuldades na emissão das respostas. Todos relataram completo entendimento das questões e foram capazes de esclarecer o significado de todos os itens.</p>
+    <p>Com essa segunda aplicação, concluímos o processo e obtivemos a versão final da ROAD adaptada semanticamente para o português brasileiro (
+      
+      <xref ref-type="app" rid="anx01">Anexo 1</xref>). O 
+      
+      <xref ref-type="app" rid="anx02">Anexo 2</xref> apresenta uma compilação das três versões atualmente disponíveis para a ROAD, a saber, a escala original em inglês, a versão em italiano e a versão final em português, produto do presente estudo.
+    
+    </p>
+    <p>
+      <bold>Conclusão</bold>
+    </p>
+    <p>Os instrumentos de medidas com bons parâmetros psicométricos, por serem muitas vezes de aplicação relativamente fácil e rápida e permitirem aferições seguras e confiáveis, mostram-se fundamentais como complemento ao trabalho dos profissionais de psiquiatria e saúde mental, tanto na clínica quanto na pesquisa. Este estudo descreveu o processo de tradução e adaptação semântica para português brasileiro da ROAD, uma escala utilizada para a avaliação das funções e perdas de pacientes com artrite reumatoide inicial. Ressalta-se a importância do estudo, uma vez que não há escalas semelhantes disponíveis para a avaliação dessa população específica, nem adaptações da ROAD para outros países. </p>
+    <p>A metodologia utilizada contou com a participação de quatro tradutores, gerando duas traduções e duas retrotraduções. Isso possibilitou ampla discussão quando notada divergência entre as versões fornecidas, gerando boa adequação dos enunciados ao que era proposto no instrumento original. A participação de especialistas das áreas de reumatologia, saúde mental e ortopedia, por sua vez, colaborou para a correta adaptação semântica do instrumento, pois conhecimentos referentes ao construto avaliado facilitaram a realização de ajustes finos nos vocábulos e expressões escolhidos para representar os itens originais. Finalmente, através da aplicação experimental, eventuais dificuldades no entendimento dos itens pelos sujeitos representativos da população-alvo puderam ser detectadas, permitindo alterações para a melhoria do instrumento (que, neste caso, não foram necessárias), porém mantendo sua fidelidade ao original.</p>
+    <p>Definiu-se, assim, a versão final da ROAD em português brasileiro. Sugerimos estudos posteriores para a avaliação dos parâmetros psicométricos da escala em populações brasileiras.</p>
+    <p>
+      <bold>Referências</bold>
+    </p>
+    <p>1. Fellet AJ, Tavares A, Scotton AS. Artrite reumatóide. Rev Bras Med. 2001;58:102-11.</p>
+    <p> 2. World Health Organization (WHO). Chronic rheumatic conditions. 
+      
+      <ext-link ext-link-type="uri" xlink:href="http://www.who.int/chp/topics/rheumatic/en">http://www.who.int/chp/topics/rheumatic/en</ext-link>. Acessado jan 2011. 
+    
+    </p>
+    <p> 3. Walsh NC, Crotti TN, Goldring SR, Gravallese EM. Rheumatic diseases: the effects of inflammations on bone. Immunol Rev. 2005;208:228-51. </p>
+    <p> 4. Ward MM. Outcome measurement: health status and quality of life. Curr Opin Rheumatol. 2004;16:96-101. </p>
+    <p> 5. Fleck MPA, Louzada S, Xavier M, Chachamovich E, Vieira G, Santos L, et al. Aplicação da versão em português do instrumento de avaliação de qualidade de vida da Organização Mundial da Saúde (WHOQOL-100). Rev Saude Publica. 1999;33:198-205. </p>
+    <p> 6. Kosinski M, Kujawski SC, Martin R, Wanke LA, Buatti MC, Ware Jr JE, et al. Health-related quality of life in early rheumatoid arthritis: impact of disease and treatment response. Am J Manag Care. 2002;8:231-40. </p>
+    <p> 7. Mota LMH, Laurindo IMM, Santos Neto LL. Avaliação prospectiva da qualidade de vida em uma coorte de pacientes com artrite reumatoide inicial. Rev Bras Reumatol. 2010;50:249-61. </p>
+    <p> 8. Corbacho MI, Dapueto JJ. Avaliação da capacidade funcional e da qualidade de vida de pacientes com artrite reumatoide. Rev Bras Reumatol. 2010;50:31-43. </p>
+    <p> 9. Walker JG, Littlejohn GO. Measuring quality of life in rheumatic conditions. Clin Rheumatol. 2007;26:671-3. </p>
+    <p> 10. Salaffi F, Bazzichi L, Stancati A, Neri R, Cazzato M, Consensi A, et al. Development of a functional disability measurement tool to assess early arthritis. Clin Exp Rheumatol. 2005;5:628-36. </p>
+    <p> 11. Salaffi F, Stancati A, Neri R, Grassi W, Bombardieri S. Measuring functional disability in early rheumatoid arthritis: the validity, reliability and responsiveness of the Recent-Onset Arthritis Disability (ROAD) index. Clin Exp Rheumatol. 2005;23:31-42. </p>
+    <p> 12. Salaffi F, Ciapetti A, Gasparini S, Migliore A, Scarpellini M, Corsaro SM, et al. Comparison of the Recent-Onset Arthritis Disability questionnaire with the Health Assessment Questionnaire Disability Index in patients with rheumatoid arthritis. Clin Exp Rheumatol. 2010;28:855-65. </p>
+    <p> 13. Herdman M, Fox-Rushby J, Badia X. A model of equivalence in the cultural adaptation of HRQoL instruments: the universalist approach. Qual Life Res. 1998;7:323-35. </p>
+    <p> 14. Sheehan DV, Lecrubier Y, Sheehan KH, Amorim P, Janavs J, Weiller E, et al. The Mini International Neuropsychiatric Interview (MINI): the development and validation of a structured diagnostic psychiatric interview for DSM-IV and ICD-10. J Clin Psychiatry. 1998;59:22-33. </p>
   </body>
   <back>
     <ref-list>
       <ref id="B1">
-        <mixed-citation>1.  Fellet AJ, Tavares A, Scotton AS. Artrite reumatóide. Rev Bras Med.  2001;58:102-11.</mixed-citation>
+        <mixed-citation>1.  Fellet AJ, Tavares A, Scotton AS. Artrite reumatóide. Rev Bras Med.  2001;58:102-11.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Artrite reumatóide</article-title>
           <source>Rev Bras Med</source>
@@ -316,7 +425,7 @@
         </element-citation>
       </ref>
       <ref id="B3">
-        <mixed-citation>3.  Walsh NC, Crotti TN, Goldring  SR, Gravallese EM. Rheumatic diseases: the effects of inflammations on bone.  Immunol Rev. 2005;208:228-51.</mixed-citation>
+        <mixed-citation>3.  Walsh NC, Crotti TN, Goldring  SR, Gravallese EM. Rheumatic diseases: the effects of inflammations on bone.  Immunol Rev. 2005;208:228-51.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Rheumatic diseases: the effects of inflammations on bone</article-title>
           <source>Immunol Rev</source>
@@ -347,7 +456,7 @@
         </element-citation>
       </ref>
       <ref id="B4">
-        <mixed-citation>4.  Ward MM. Outcome measurement: health  status and quality of life. Curr  Opin Rheumatol. 2004;16:96-101.</mixed-citation>
+        <mixed-citation>4.  Ward MM. Outcome measurement: health  status and quality of life. Curr  Opin Rheumatol. 2004;16:96-101.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Outcome measurement: health status and quality of life</article-title>
           <source>Curr Opin Rheumatol</source>
@@ -366,7 +475,7 @@
         </element-citation>
       </ref>
       <ref id="B5">
-        <mixed-citation>5.  Fleck MPA, Louzada S, Xavier M,  Chachamovich E, Vieira G, Santos L, et al. Aplicação da versão em português do  instrumento de avaliação de qualidade de vida da Organização Mundial da Saúde  (WHOQOL-100). Rev Saude Publica. 1999;33:198-205.</mixed-citation>
+        <mixed-citation>5.  Fleck MPA, Louzada S, Xavier M,  Chachamovich E, Vieira G, Santos L, et al. Aplicação da versão em português do  instrumento de avaliação de qualidade de vida da Organização Mundial da Saúde  (WHOQOL-100). Rev Saude Publica. 1999;33:198-205.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Aplicação da versão em português do instrumento de avaliação de qualidade de vida da Organização Mundial da Saúde (WHOQOL-100)</article-title>
           <source>Rev Saude Publica</source>
@@ -405,7 +514,7 @@
         </element-citation>
       </ref>
       <ref id="B6">
-        <mixed-citation>6.  Kosinski M, Kujawski  SC, Martin R, Wanke LA, Buatti MC, Ware Jr JE, et al. Health-related quality of  life in early rheumatoid arthritis: impact of disease and treatment response. Am J Manag Care. 2002;8:231-40.</mixed-citation>
+        <mixed-citation>6.  Kosinski M, Kujawski  SC, Martin R, Wanke LA, Buatti MC, Ware Jr JE, et al. Health-related quality of  life in early rheumatoid arthritis: impact of disease and treatment response. Am J Manag Care. 2002;8:231-40.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Health-related quality of life in early rheumatoid arthritis: impact of disease and treatment response</article-title>
           <source>Am J Manag Care</source>
@@ -444,7 +553,7 @@
         </element-citation>
       </ref>
       <ref id="B7">
-        <mixed-citation>7.  Mota LMH, Laurindo IMM, Santos Neto  LL. Avaliação prospectiva da qualidade de vida em uma coorte de pacientes com  artrite reumatoide inicial. Rev Bras  Reumatol. 2010;50:249-61.</mixed-citation>
+        <mixed-citation>7.  Mota LMH, Laurindo IMM, Santos Neto  LL. Avaliação prospectiva da qualidade de vida em uma coorte de pacientes com  artrite reumatoide inicial. Rev Bras  Reumatol. 2010;50:249-61.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Avaliação prospectiva da qualidade de vida em uma coorte de pacientes com artrite reumatoide inicial</article-title>
           <source>Rev Bras Reumatol</source>
@@ -471,7 +580,7 @@
         </element-citation>
       </ref>
       <ref id="B8">
-        <mixed-citation>8.  Corbacho MI, Dapueto JJ. Avaliação da  capacidade funcional e da qualidade de vida de pacientes com artrite  reumatoide. Rev Bras Reumatol. 2010;50:31-43.</mixed-citation>
+        <mixed-citation>8.  Corbacho MI, Dapueto JJ. Avaliação da  capacidade funcional e da qualidade de vida de pacientes com artrite  reumatoide. Rev Bras Reumatol. 2010;50:31-43.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Avaliação da capacidade funcional e da qualidade de vida de pacientes com artrite reumatoide</article-title>
           <source>Rev Bras Reumatol</source>
@@ -494,7 +603,7 @@
         </element-citation>
       </ref>
       <ref id="B9">
-        <mixed-citation>9.  Walker JG, Littlejohn GO. Measuring  quality of life in rheumatic conditions. Clin Rheumatol. 2007;26:671-3.</mixed-citation>
+        <mixed-citation>9.  Walker JG, Littlejohn GO. Measuring  quality of life in rheumatic conditions. Clin Rheumatol. 2007;26:671-3.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Measuring quality of life in rheumatic conditions</article-title>
           <source>Clin Rheumatol</source>
@@ -556,7 +665,7 @@
         </element-citation>
       </ref>
       <ref id="B11">
-        <mixed-citation>11.  Salaffi F, Stancati A, Neri R,  Grassi W, Bombardieri S. Measuring functional disability in early rheumatoid  arthritis: the validity, reliability and responsiveness of the Recent-Onset  Arthritis Disability (ROAD) index. Clin Exp Rheumatol. 2005;23:31-42.</mixed-citation>
+        <mixed-citation>11.  Salaffi F, Stancati A, Neri R,  Grassi W, Bombardieri S. Measuring functional disability in early rheumatoid  arthritis: the validity, reliability and responsiveness of the Recent-Onset  Arthritis Disability (ROAD) index. Clin Exp Rheumatol. 2005;23:31-42.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Measuring functional disability in early rheumatoid arthritis: the validity, reliability and responsiveness of the Recent-Onset Arthritis Disability (ROAD) index</article-title>
           <source>Clin Exp Rheumatol</source>
@@ -591,7 +700,7 @@
         </element-citation>
       </ref>
       <ref id="B12">
-        <mixed-citation>12.  Salaffi F, Ciapetti A, Gasparini S,  Migliore A, Scarpellini M, Corsaro SM, et al. Comparison of the Recent-Onset  Arthritis Disability questionnaire with the Health Assessment Questionnaire Disability  Index in patients with rheumatoid arthritis. Clin Exp Rheumatol. 2010;28:855-65.</mixed-citation>
+        <mixed-citation>12.  Salaffi F, Ciapetti A, Gasparini S,  Migliore A, Scarpellini M, Corsaro SM, et al. Comparison of the Recent-Onset  Arthritis Disability questionnaire with the Health Assessment Questionnaire Disability  Index in patients with rheumatoid arthritis. Clin Exp Rheumatol. 2010;28:855-65.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>Comparison of the Recent-Onset Arthritis Disability questionnaire with the Health Assessment Questionnaire Disability Index in patients with rheumatoid arthritis</article-title>
           <source>Clin Exp Rheumatol</source>
@@ -630,7 +739,7 @@
         </element-citation>
       </ref>
       <ref id="B13">
-        <mixed-citation>13.  Herdman M, Fox-Rushby J, Badia X. A  model of equivalence in the cultural adaptation of HRQoL instruments: the  universalist approach. Qual Life Res. 1998;7:323-35.</mixed-citation>
+        <mixed-citation>13.  Herdman M, Fox-Rushby J, Badia X. A  model of equivalence in the cultural adaptation of HRQoL instruments: the  universalist approach. Qual Life Res. 1998;7:323-35.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>A model of equivalence in the cultural adaptation of HRQoL instruments: the universalist approach</article-title>
           <source>Qual Life Res</source>
@@ -657,7 +766,7 @@
         </element-citation>
       </ref>
       <ref id="B14">
-        <mixed-citation>14.  Sheehan DV, Lecrubier Y, Sheehan KH,  Amorim P, Janavs J, Weiller E, et al. The Mini International Neuropsychiatric  Interview (MINI): the development and validation of a structured diagnostic  psychiatric interview for DSM-IV and ICD-10. J Clin Psychiatry. 1998;59:22-33.</mixed-citation>
+        <mixed-citation>14.  Sheehan DV, Lecrubier Y, Sheehan KH,  Amorim P, Janavs J, Weiller E, et al. The Mini International Neuropsychiatric  Interview (MINI): the development and validation of a structured diagnostic  psychiatric interview for DSM-IV and ICD-10. J Clin Psychiatry. 1998;59:22-33.</mixed-citation>
         <element-citation publication-type="journal">
           <article-title>The Mini International Neuropsychiatric Interview (MINI): the development and validation of a structured diagnostic psychiatric interview for DSM-IV and ICD-10</article-title>
           <source>J Clin Psychiatry</source>
@@ -698,29 +807,37 @@
     </ref-list>
     <fn-group>
       <fn id="correspondence" fn-type="corresp">
-        <label>Correspondência</label>
+        <label>Correspondência</label>
         <p>Natalia Pinho de Oliveira Ribeiro</p>
-        <p>Rua Visconde de Pirajá, 407/702</p>
+        <p>Rua Visconde de Pirajá, 407/702</p>
         <p>CEP 22410-003 - Rio de Janeiro, RJ - Brasil</p>
-        <p>E-mail: <email>pinho.natalia@yahoo.com.br</email></p>
+        <p>E-mail: 
+          
+          <email>pinho.natalia@yahoo.com.br</email>
+        </p>
       </fn>
     </fn-group>
     <fn-group>
       <fn>
         <p>Recebido em 08/02/2011.</p>
-        <p>Aceito em 13/07/2011.</p></fn>
+        <p>Aceito em 13/07/2011.</p>
+      </fn>
     </fn-group>
     <fn-group>
       <fn>
         <p>
-          <bold>Apoio financeiro: </bold> Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq).  Não foram declarados conflitos de interesse associados à publicação deste artigo.</p>
-        </fn>
+          <bold>Apoio financeiro: </bold> Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq).  Não foram declarados conflitos de interesse associados à publicação deste artigo.
+        
+        </p>
+      </fn>
     </fn-group>
     <app-group>
-    <app id="anx01"><graphic xlink:href="/img/revistas/trends/v33n3/a05anx01.jpg"/></app>
-<app id="anx02">
-    <graphic xlink:href="/img/revistas/trends/v33n3/a05anx02.jpg"/>
-</app>
-</app-group>
+      <app id="anx01">
+        <graphic xlink:href="/img/revistas/trends/v33n3/a05anx01.jpg"/>
+      </app>
+      <app id="anx02">
+        <graphic xlink:href="/img/revistas/trends/v33n3/a05anx02.jpg"/>
+      </app>
+    </app-group>
   </back>
 </article>
