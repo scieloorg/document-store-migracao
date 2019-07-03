@@ -6,12 +6,15 @@ import os
 from urllib import request, error
 from copy import deepcopy
 from lxml import etree
+# from xml.sax.saxutils import unescape
 from documentstore_migracao.utils import files
 from documentstore_migracao.utils import xml as utils_xml
 from documentstore_migracao import config
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 
+
 logger = logging.getLogger(__name__)
+
 
 def _remove_element_or_comment(node, remove_inner=False):
     parent = node.getparent()
@@ -131,7 +134,7 @@ class HTML2SPSPipeline(object):
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.RemoveCommentPipe(),
-            self.HTMLEscapingPipe(),
+            self.FixLesserThanGraterThanPipe(),
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
@@ -980,7 +983,7 @@ class HTML2SPSPipeline(object):
             logger.info("Total de %s 'comentarios' processadas", len(comments))
             return data
 
-    class HTMLEscapingPipe(plumber.Pipe):
+    class FixLesserThanGraterThanPipe(plumber.Pipe):
         def parser_node(self, node):
             text = node.text
             if text:

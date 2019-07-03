@@ -1907,3 +1907,33 @@ class TestFixBodyChildrenPipe(unittest.TestCase):
         pl = HTML2SPSPipeline(pid="pid")
         text, xml = pl.FixBodyChildrenPipe().transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
+
+
+class Test_HTML2SPSPipeline(unittest.TestCase):
+ 
+    def test_pipeline(self):
+        text = """<root>
+            <p>La nueva época de la revista
+            <italic>Salud Pública de México </italic>
+            </p></root>"""
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        _text, xml = pipeline.deploy(text)
+        resultado = etree.tostring(xml, encoding="unicode")
+        print("")
+        print("text", text)
+        print("resultado", resultado)
+        print("época" in resultado)
+        
+        self.assertIn("época", resultado)
+
+# class TestFixLesserThanAndGreaterThanPipe(unittest.TestCase):
+
+#     def test_x(self):
+#         texto = """<root><p></p></root>"""
+#         xml = etree.fromstring(texto)
+
+#         xml.find(".//p").text = "x < b"
+#         pl = HTML2SPSPipeline(pid="pid")
+#         text, xml = pl.FixLesserThanGraterThanPipe().transform((texto, xml))
+#         print(etree.tostring(xml))
+#         self.assertIn("x &lt; b", etree.tostring(xml))
