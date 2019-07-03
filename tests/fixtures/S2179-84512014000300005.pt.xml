@@ -1,0 +1,2922 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article
+  xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="editorial">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="publisher-id">tema</journal-id>
+      <journal-title-group>
+        <journal-title>TEMA (São Carlos)</journal-title>
+        <abbrev-journal-title abbrev-type="publisher">TEMA (São Carlos)</abbrev-journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">1677-1966</issn>
+      <issn pub-type="epub">2179-8451</issn>
+      <publisher>
+        <publisher-name>Sociedade Brasileira de Matemática Aplicada e Computacional</publisher-name>
+        <publisher-loc>São Carlos, SP, Brazil</publisher-loc>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="publisher-id" specific-use="scielo">3LswTbSCkRyhwqYsjTwb7NS</article-id>
+      <article-id pub-id-type="publisher-id">S2179-84512014000300005</article-id>
+      <article-id pub-id-type="doi">10.1590/S2179-84512014000300005</article-id>
+      <title-group>
+        <article-title>Solução iterativa dos sistemas lineares do método de pontos interiores</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Ghidini</surname>
+            <given-names>C.T.L.S.</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff01"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Oliveira</surname>
+            <given-names>A.R.L.</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff02"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Silva</surname>
+            <given-names>M.</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff03"/>
+        </contrib>
+      </contrib-group>
+      <aff id="aff02">
+        <addr-line>
+          <named-content content-type="city">Campinas</named-content>
+          <named-content content-type="state">São Paulo</named-content>
+        </addr-line>
+        <institution content-type="orgname">Universidade Estadual de Campinas</institution>
+        <institution content-type="orgdiv1">IMECC </institution>
+        <institution content-type="orgdiv2">Departamento de Matemática Aplicada</institution>
+        <country country="BR">Brazil</country>
+        <email>aurelio@ime.unicamp.br</email>
+      </aff>
+      <aff id="aff03">
+        <addr-line>
+          <named-content content-type="city">Campinas</named-content>
+          <named-content content-type="state">São Paulo</named-content>
+        </addr-line>
+        <institution content-type="orgname">Universidade Estadual de Campinas</institution>
+        <institution content-type="orgdiv1">IMECC </institution>
+        <institution content-type="orgdiv2">Departamento de Matemática Aplicada</institution>
+        <country country="BR">Brazil</country>
+        <email>marilene@ime.unicamp.br</email>
+      </aff>
+      <aff id="aff01">
+        <addr-line>
+          <named-content content-type="city">Limeira</named-content>
+          <named-content content-type="state">São Paulo</named-content>
+        </addr-line>
+        <institution content-type="orgname">Universidade Estadual de Campinas</institution>
+        <institution content-type="orgdiv1">FCA </institution>
+        <country country="BR">Brazil</country>
+        <email>carla.ghidini@fca.unicamp.br</email>
+      </aff>
+      <pub-date date-type="collection" publication-format="electronic">
+        <month>12</month>
+        <year>2014</year>
+      </pub-date>
+      <volume>15</volume>
+      <issue>3</issue>
+      <fpage>275</fpage>
+      <lpage>291</lpage>
+      <history>
+        <date date-type="accepted">
+          <day>27</day>
+          <month>08</month>
+          <year>2014</year>
+        </date>
+        <date date-type="received">
+          <day>28</day>
+          <month>11</month>
+          <year>2013</year>
+        </date>
+      </history>
+      <permissions>
+        <license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by/4.0/" xml:lang="en">
+          <license-p>This work is licensed under a Creative Commons Attribution 4.0 International License.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <p>Nesse trabalho, consideramos o método preditor-corretor, que é uma das variantes mais importante do método de pontos interiores devido à sua eficiência e convergência rápida. No método preditor-corretor, é preciso resolver dois sistemas lineares a cada iteração para determinar a direção preditora-corretora. A resolução desses sistemas é o passo que requer mais tempo de processamento, devendo assim ser realizada de maneira eficiente. Para obter a solução dos sistemas lineares do método preditor-corretor consideramos dois métodos iterativos de Krylov: MINRES e método dos gradientes conjugados. Para que estes métodos convirjam mais rapidamente um pré-condicionador especialmente desenvolvido para os sistemas lineares oriundos dos métodos de pontos interiores é usado. Experimentos computacionais em um conjunto variado de problemas de programação linear foram realizados com o intuito de analisar a eficiência e robustez dos métodos de solução dos sistemas.</p>
+      </abstract>
+      <trans-abstract xml:lang="en">
+        <p>In this paper, we consider the predictor-corrector method, which is one of the most important variants of the interior point methods due to its efficiency and fast convergence. In the predictor-corrector method it is necessary to solve two linear systems at each iteration to determine the search direction. The solution of such systems is the step that requires more processing time and should therefore be carried out efficiently. Two iterative Krylov methods are considered to solve these linear systems of: the MINRES and the conjugate gradient method. A preconditioner specially developed for the linear systems arising from the interior point methods is used so that the iterative methods converge faster. Computational experiments in a some sets of linear programming problems are performed in order to analyse the efficiency and robustness of the linear systems solution methods.</p>
+      </trans-abstract>
+      <kwd-group xml:lang="en" kwd-group-type="author-generated">
+        <kwd>interior point methods</kwd>
+        <kwd>linear systems</kwd>
+        <kwd>iterative methods</kwd>
+      </kwd-group>
+      <kwd-group xml:lang="pt" kwd-group-type="author-generated">
+        <kwd>métodos de pontos interiores</kwd>
+        <kwd>sistemas lineares</kwd>
+        <kwd>métodos iterativos</kwd>
+      </kwd-group>
+    </article-meta>
+  </front>
+  <body>
+    <p>
+      <bold>Solução iterativa dos sistemas lineares do método de pontos interiores</bold>
+    </p>
+    <p>
+      <bold>C.T.L.S. Ghidini
+        
+        <sup>I, </sup>
+        <sup>*</sup>; A.R.L. Oliveira
+        
+        <sup>II</sup>; M. Silva
+        
+        <sup>III</sup>
+      </bold>
+    </p>
+    <p>
+      <sup>I</sup>FCA - Faculdade de Ciências Aplicadas, UNICAMP - Universidade Estadual de Campinas, 13484-350 Limeira, SP, Brasil. E-mail: 
+      
+      <email>carla.ghidini@fca.unicamp.br</email>
+    </p>
+    <p>
+      <sup>II</sup>Departamento de Matemática Aplicada, IMECC - Instituto de Matemática, Estatística e Computação Científica, UNICAMP - Universidade Estadual de Campinas, 13083-859 Campinas, SP, Brasil. E-mail: 
+      
+      <email>aurelio@ime.unicamp.br</email>
+    </p>
+    <p>
+      <sup>III</sup>Departamento de Matemática Aplicada, IMECC - Instituto de Matemática, Estatística e Computação Científica, UNICAMP - Universidade Estadual de Campinas, 13083-859 Campinas, SP, Brasil. E-mail: 
+      
+      <email>marilene@ime.unicamp.br</email>
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>RESUMO</bold>
+    </p>
+    <p>Nesse trabalho, consideramos o método preditor-corretor, que é uma das variantes mais importante do método de pontos interiores devido à sua eficiência e convergência rápida. No método preditor-corretor, é preciso resolver dois sistemas lineares a cada iteração para determinar a direção preditora-corretora. A resolução desses sistemas é o passo que requer mais tempo de processamento, devendo assim ser realizada de maneira eficiente. Para obter a solução dos sistemas lineares do método preditor-corretor consideramos dois métodos iterativos de Krylov: MINRES e método dos gradientes conjugados. Para que estes métodos convirjam mais rapidamente um pré-condicionador especialmente desenvolvido para os sistemas lineares oriundos dos métodos de pontos interiores é usado. Experimentos computacionais em um conjunto variado de problemas de programação linear foram realizados com o intuito de analisar a eficiência e robustez dos métodos de solução dos sistemas.</p>
+    <p>
+      <bold>Palavras-chave: </bold>métodos de pontos interiores, sistemas lineares, métodos iterativos.
+    
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>ABSTRACT</bold>
+    </p>
+    <p>In this paper, we consider the predictor-corrector method, which is one of the most important variants of the interior point methods due to its efficiency and fast convergence. In the predictor-corrector method it is necessary to solve two linear systems at each iteration to determine the search direction. The solution of such systems is the step that requires more processing time and should therefore be carried out efficiently. Two iterative Krylov methods are considered to solve these linear systems of: the MINRES and the conjugate gradient method. A preconditioner specially developed for the linear systems arising from the interior point methods is used so that the iterative methods converge faster. Computational experiments in a some sets of linear programming problems are performed in order to analyse the efficiency and robustness of the linear systems solution methods.</p>
+    <p>
+      <bold>Keywords:</bold> interior point methods, linear systems, iterative methods.
+    
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>1 INTRODUÇÃO</bold>
+    </p>
+    <p>O trabalho de Karmarkar em 1984 [6] revolucionou a área de programação linear por apresentar um algoritmo com complexidade polinomial e excelente desempenho quando aplicado em problemas lineares de grande porte. A partir daí, foi desenvolvido uma nova linha de pesquisa: os métodos de pontos interiores. Esses métodos buscam a solução ótima de um problema de programação linear, percorrendo o interior da região de factibilidade, determinada pelas restrições do problema. Eles podem ser classificados em primal, dual e primal-dual ou ainda por métodos afim escala, método de redução de potencial e métodos de trajetória central.</p>
+    <p>Neste trabalho, estamos considerando o método preditor-corretor, que é um método do tipo primal-dual de trajetória central. O passo mais importante do método preditor-corretor consiste em encontrar as direções preditora (direção afim escala) e corretora. Para isso, alguns sistemas de equações lineares devem ser resolvidos a cada iteração, o que requer grande esforço computacional.</p>
+    <p>Uma forma de diminuir a complexidade computacional consiste em reduzir esses sistemas a sistemas de equações normais ou sistemas aumentados e depois aplicar algum método iterativo para resolvê-los.</p>
+    <p>Para resolver os sistemas de equações normais e aumentado foi feita uma implementação cuidadosa do método MINRES com reortogonalização [16]. Esta implementação foi comparada com uma implementação do método dos gradientes conjugados (GC) já existente [15]. Ambos métodos utilizam o subespaço de Krylov como subespaço de busca para encontrar uma solução aproximada do sistema, o que é uma estratégia vantajosa, uma vez que esse subespaço pode ser muito menor que o subespaço de busca completo.</p>
+    <p>Para que os métodos iterativos tenham um melhor desempenho é realizado o pré-condicionamento da matriz de restrições dos sistemas utilizando o pré-condicionador separador. Além disso, com o intuito de resolver um número maior de problemas e de forma mais eficiente é considerada uma abordagem que utiliza, inicialmente, o GC e depois de um certo número de iterações, se o critério pré-estabelecido para troca for satisfeito, o MINRES passa a ser utilizado. Mais detalhes sobre essa técnica são fornecidos na Seção 5.</p>
+    <p>
+      <bold>2 MÉTODO DE PONTOS INTERIORES - PRIMAL DUAL</bold>
+    </p>
+    <p>Considere o problema de programação linear na forma padrão:</p>
+    <disp-formula id="frm21">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm21.jpg"/>
+    </disp-formula>
+    <p>em que 
+      
+      <italic>A </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>m</italic>×
+        
+        <italic>n</italic>
+      </sup>, posto(
+      
+      <italic>A</italic>) = 
+      
+      <italic>m, x </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n </italic>
+      </sup>, 
+      
+      <italic>c </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n </italic>
+      </sup>e 
+      
+      <italic>b </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>m</italic>
+      </sup>. Associado ao problema (2.1), denominado de problema primal, temos o seguinte problema dual:
+    
+    </p>
+    <disp-formula id="frm22">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm22.jpg"/>
+    </disp-formula>
+    <p>em que 
+      
+      <italic>y </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>m </italic>
+      </sup>é o vetor de variáveis duais livres e 
+      
+      <italic>z </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n </italic>
+      </sup>de variáveis de folga.
+    
+    </p>
+    <p>As condições de otimalidade de primeira ordem (Karush-Kuhn-Tucker) de (2.1) e (2.2) são dadas por [18]:</p>
+    <disp-formula id="frm23">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm23.jpg"/>
+    </disp-formula>
+    <p>sendo 
+      
+      <italic>X = diag</italic>(
+      
+      <italic>x</italic>), 
+      
+      <italic>Z = diag</italic>(
+      
+      <italic>z</italic>) e 
+      
+      <italic>e </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n</italic>
+      </sup>, tal que 
+      
+      <italic>e </italic>= (1,1,...,1)
+      
+      <sup>
+        <italic>t </italic>
+      </sup>.
+    
+    </p>
+    <p>Os métodos de pontos interiores do tipo primal-dual consistem em aplicar o método de Newton às condições de otimalidade (2.3), partindo de um ponto interior e mantendo interior a cada iteração. A direção afim escala (direção de Newton) é obtida resolvendo o seguinte sistema:</p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img01.jpg"/>
+    </p>
+    <p>em que 
+      
+      <italic>r
+        
+        <sub>p</sub> = b 
+      
+      </italic>- 
+      
+      <italic>Ax, r
+        
+        <sub>d</sub> = c 
+      
+      </italic>- 
+      
+      <italic>A</italic>
+      <sup>
+        <italic>t </italic>
+      </sup>
+      <italic>y </italic>- 
+      
+      <italic>z, r
+        
+        <sub>a</sub>
+      </italic>= -
+      
+      <italic>XZe</italic>. Eliminando a variável 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>
+      <italic>z</italic>, obtemos o sistema aumentado:
+    
+    </p>
+    <disp-formula id="frm24">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm24.jpg"/>
+    </disp-formula>
+    <p>em que 
+      
+      <italic>D = XZ</italic>
+      <sup>-1</sup>. A forma mais usada para resolver o sistema (2.4) consiste em reduzi-lo, por meio da eliminação da variável 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>
+      <italic>x</italic>, a um sistema de equações normais 
+      
+      <italic>AD</italic>
+      <sup>-1 </sup>
+      <italic>A</italic>
+      <sup>
+        <italic>t</italic>
+      </sup>:
+    
+    </p>
+    <disp-formula id="frm25">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm25.jpg"/>
+    </disp-formula>
+    <p>Em geral, não é possível realizar um passo completo ao longo da direção de Newton, visto que (
+      
+      <italic>x, z</italic>) 
+      
+      <underline>&amp;gt;</underline> 0 deve ser satisfeita. Dessa forma, o novo ponto é dado por:
+    
+    </p>
+    <p>(
+      
+      <italic>x</italic>
+      <sup>
+        <italic>k</italic>+1
+      
+      </sup>, 
+      
+      <italic>y</italic>
+      <sup>
+        <italic>k</italic>+1
+      
+      </sup>, 
+      
+      <italic>z</italic>
+      <sup>
+        <italic>k</italic>+1
+      
+      </sup>) = (
+      
+      <italic>x
+        
+        <sup>k</sup>, y
+      
+      </italic>
+      <sup>
+        <italic>k </italic>
+      </sup>, 
+      
+      <italic>z</italic>
+      <sup>
+        <italic>k</italic>
+      </sup>) + 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>(
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>
+      <italic>x</italic>
+      <sup>
+        <italic>k</italic>
+      </sup>, 
+      
+      <italic>
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>y
+      
+      </italic>
+      <sup>
+        <italic>k</italic>
+      </sup>, 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>
+      <italic>z</italic>
+      <sup>
+        <italic>k</italic>
+      </sup>),
+    
+    </p>
+    <p>em que 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/> = (
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>
+      <italic>
+        <sub>p</sub>
+      </italic>, 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>
+      <italic>
+        <sub>d</sub>
+      </italic>, 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>
+      <italic>
+        <sub>d</sub>
+      </italic>)
+      
+      <sup>
+        <italic>t</italic>
+      </sup>. Os passos 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>
+      <italic>
+        <sub>p</sub>
+      </italic>e 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>
+      <italic>
+        <sub>d</sub>
+      </italic>são os passos primal e dual que preservam a não negatividade das variáveis 
+      
+      <italic>x </italic>e 
+      
+      <italic>z</italic>, respectivamente. Esses valores são determinados da seguinte forma:
+    
+    </p>
+    <disp-formula id="frm26">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm26.jpg"/>
+    </disp-formula>
+    <p>em que τ ∈(0, 1).</p>
+    <p>
+      <bold>2.1 Método Preditor-Corretor</bold>
+    </p>
+    <p>O método preditor-corretor desenvolvido por Mehrotra [9] consiste em utilizar uma direção composta por três componentes: direção afim escala, direção de centragem e direção de correção não linear [12]. Fazendo acorreção não linear e introduzindo a perturbação para centragem, temos o sistema:</p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img13.jpg"/>
+    </p>
+    <p>em que μ = 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img02.jpg"/>.
+    
+    </p>
+    <p>Mehrotra em [9] sugere 
+      
+      <italic>p </italic>= 2 ou 
+      
+      <italic>p </italic>= 3. Além disso, ao tomar 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>
+      <italic>
+        <sub>p</sub>
+      </italic>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a6_circ.jpg"/>
+      <italic>
+        <sub>d</sub>
+      </italic>= 1, obtemos um ponto primal e dual factível. Assim, 
+      
+      <italic>r
+        
+        <sub>p</sub> = r
+        
+        <sub>d</sub>
+      </italic>= 0 e 
+      
+      <italic>r
+        
+        <sub>a</sub>
+      </italic>na restrição de complementariedade é dado por 
+      
+      <italic>r
+        
+        <sub>a</sub>
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/d3_circ.jpg"/>
+        <sub>x</sub>
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/d3_circ.jpg"/>
+        <sub>z</sub>e 
+      
+      </italic>em que
+      
+      <italic>
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/d3_circ.jpg"/>
+        <sub>x</sub> = diag
+      
+      </italic>(
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>
+      <italic>x) </italic>e 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d3_circ.jpg"/>
+      <italic>z = diag</italic>(
+      
+      <italic>
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>z
+      
+      </italic>).
+    
+    </p>
+    <p>A direção preditora-corretora é dada por: 
+      
+      <italic>d = 
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_circ.jpg"/>
+      </italic> + 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d4_barra.jpg"/> e determinada resolvendo o sistema:
+    
+    </p>
+    <p>
+      <italic>Adx = r
+        
+        <sub>p</sub>
+      </italic>
+    </p>
+    <p>
+      <italic> A</italic>
+      <sup>
+        <italic>t</italic>
+      </sup>
+      <italic>dy </italic>+ 
+      
+      <italic>dz = r
+        
+        <sub>d</sub>
+      </italic>
+    </p>
+    <p>
+      <italic> Zdx </italic>+
+      
+      <italic>Xdz = r
+        
+        <sub>s</sub>
+      </italic>,
+    
+    </p>
+    <p>em que 
+      
+      <italic>r
+        
+        <sub>s</sub> = r
+        
+        <sub>a</sub>
+      </italic>+ μ
+      
+      <italic>e </italic>- 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/d3_circ.jpg"/>
+      <italic>
+        <sub>x</sub>
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/d3_circ.jpg"/>
+        <sub>z</sub>e
+      
+      </italic>.
+    
+    </p>
+    <p>
+      <bold>2.2 Pré-condicionador Separador</bold>
+    </p>
+    <p>Para uma convergência mais rápida dos métodos iterativos o pré-condicionamento da matriz de restrições do sistema linear se faz necessário. O pré-condicionador separador [14] é específico para os sistemas lineares oriundos dos métodos de pontos interiores. Quando aplicado ao método dos gradientes conjugados evita o cálculo da matriz de equações normais e sua fatoração. Apresenta resultados muito bons próximos a uma solução do problema, mas não é eficiente nas primeiras iterações. Este pré-condicionador é calculado como segue: Considere a matriz de equações normais em (2.5). Tome 
+      
+      <italic>A </italic>= [
+      
+      <italic>BN</italic>]
+      
+      <italic>P</italic>, em que 
+      
+      <italic>P </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n</italic>×
+        
+        <italic>n </italic>
+      </sup>é uma matriz de permutação tal que 
+      
+      <italic>B </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>m</italic>×
+        
+        <italic>m </italic>
+      </sup>é não singular, então
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img03.jpg"/>
+    </p>
+    <p> O pré-condicionador é dado por: 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img04.jpg"/>
+      <italic>B</italic>
+      <sup>-1</sup> e a matriz pré-condicionada 
+      
+      <italic>M</italic> é como segue:
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img05.jpg"/>
+    </p>
+    <p>em que</p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img06.jpg"/>
+    </p>
+    <p>Note que próximo a uma solução pelo menos 
+      
+      <italic>n </italic>-
+      
+      <italic> m </italic>elementos em 
+      
+      <italic>D</italic>
+      <sup>-1 </sup>são grandes. Dessa forma, uma escolha adequada das colunas de 
+      
+      <italic>B </italic>faz com que os elementos em 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img07.jpg"/> e 
+      
+      <italic>D
+        
+        <sub>N</sub>
+      </italic>sejam muito pequenos nesta situação. Neste caso, 
+      
+      <italic>G </italic>aproxima-se da matriz nula, 
+      
+      <italic>M </italic>se aproxima da matriz identidade e ambos, o menor e o maior autovalor de 
+      
+      <italic>M</italic>, se aproximam do valor 1, assim como o número de condição κ
+      
+      <sub>2</sub>(
+      
+      <italic>M</italic>)
+      
+      <xref ref-type="fn" rid="nt01">
+        <sup>1</sup>
+      </xref>.
+    
+    </p>
+    <p>
+      <bold>3 MÉTODOS DO SUBESPAÇO DE KRYLOV</bold>
+    </p>
+    <p>Considere o sistema linear:</p>
+    <disp-formula id="frm31">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm31.jpg"/>
+    </disp-formula>
+    <p>em que 
+      
+      <italic>b </italic>é um vetor do 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>m </italic>
+      </sup>e 
+      
+      <italic>A</italic> é uma matriz 
+      
+      <italic>m </italic>× 
+      
+      <italic>n</italic>. Sejam 
+      
+      <italic>K</italic> e 
+      
+      <italic>L</italic> dois subespaços do 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n</italic>
+      </sup> de dimensão 
+      
+      <italic>n</italic>.Uma técnica de projeção consiste em encontrar em 
+      
+      <italic>K</italic> uma solução aproximada 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/x4_circ.jpg"/> para (3.1), de forma que o resíduo 
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax </italic>seja ortogonal à 
+      
+      <italic>L</italic>, em que 
+      
+      <italic>L</italic> denota o espaço de restrições.
+    
+    </p>
+    <p>Métodos do subespaço de Krylov são baseados em processos de projeção em subespaços de Krylov. O subespaço de Krylov de ordem 
+      
+      <italic>m </italic>associado à 
+      
+      <italic>A </italic>e 
+      
+      <italic>b </italic>é o subespaço gerado pelos vetores da sequência de Krylov: 
+      
+      <italic>K
+        
+        <sup>m</sup>
+      </italic>(
+      
+      <italic>A, b</italic>) = 
+      
+      <italic>span</italic>{
+      
+      <italic>b, Ab, A</italic>
+      <sup>2</sup>
+      <italic>b</italic>, ..., 
+      
+      <italic>A</italic>
+      <sup>
+        <italic>m</italic>-1
+      
+      </sup>
+      <italic>b</italic>}. Nos métodos de Krylov, 
+      
+      <italic>K
+        
+        <sup>m</sup>
+      </italic> é dado por: 
+      
+      <italic>K
+        
+        <sup>m</sup>
+      </italic>(
+      
+      <italic>A, r</italic>
+      <sup>0 </sup>) = 
+      
+      <italic>span</italic>{
+      
+      <italic>r</italic>
+      <sup>0</sup>
+      <italic>, Ar</italic>
+      <sup>0</sup>, 
+      
+      <italic>A</italic>
+      <sup>2</sup>
+      <italic>r</italic>
+      <sup>0</sup>, ..., 
+      
+      <italic>A</italic>
+      <sup>
+        <italic>m</italic>-1
+      
+      </sup>
+      <italic>r</italic>
+      <sup>0</sup>}, em que 
+      
+      <italic>r</italic>
+      <sup>0</sup>
+      <italic> = b </italic>- 
+      
+      <italic>Ax</italic>
+      <sup>0 </sup>é o resíduo da solução inicial 
+      
+      <italic>x</italic>
+      <sup>0</sup>.
+    
+    </p>
+    <p>As diferentes versões dos métodos do subespaço de Krylov surgem a partir de diferentes escolhas do subespaço 
+      
+      <italic>L
+        
+        <sup>m</sup>
+      </italic> e das formas pelas quais o sistema é pré-condicionado. Os métodos GC e MINRES foram originados escolhendo 
+      
+      <italic>L
+        
+        <sup>m </sup>= AK
+        
+        <sup>m</sup>
+      </italic>.
+    
+    </p>
+    <p>
+      <bold>3.1 Método de Arnoldi</bold>
+    </p>
+    <p>O método de Arnoldi é um método de projeção ortogonal [10] utilizado para construir uma base ortonormal para o subespaço de Krylov 
+      
+      <italic>K
+        
+        <sup>m</sup>
+      </italic>(
+      
+      <italic>A, b</italic>). Este procedimento começa com 
+      
+      <italic>v</italic>
+      <sub>1</sub> = 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img08.jpg"/>. Em seguida, calcula-se 
+      
+      <italic>Av</italic>
+      <sub>1</sub> e a partir dele constrói-se um vetor ortogonal a 
+      
+      <italic>v</italic>
+      <sub>1</sub>. Normaliza-se este vetor e obtém-se 
+      
+      <italic>v</italic>
+      <sub>2</sub>. Dessa forma, se 
+      
+      <italic>v</italic>
+      <sub>1</sub>, ..., 
+      
+      <italic>v
+        
+        <sub>j</sub>
+      </italic> for uma base ortogonal para 
+      
+      <italic>K </italic>
+      <sup>
+        <italic>j </italic>
+      </sup>(
+      
+      <italic>A, r</italic>
+      <sup>0 </sup>), então para encontrar 
+      
+      <italic>v
+        
+        <sub>j</sub>
+      </italic> + 1 basta calcular 
+      
+      <italic>t = Av
+        
+        <sub>j</sub>
+      </italic> e ortonormalizá-lo com respeito a 
+      
+      <italic>v</italic>
+      <sub>1</sub>, ..., 
+      
+      <italic>v
+        
+        <sub>j</sub>
+      </italic>. Isto produz um método para a criação de uma base ortonormal para 
+      
+      <italic>K 
+        
+        <sup>j</sup>
+      </italic>
+      <sup>+1</sup>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>). Os vetores 
+      
+      <italic>v</italic>
+      <sub>1</sub>, ..., 
+      
+      <italic>v
+        
+        <sub>j</sub>
+      </italic> + 1 formam uma base para 
+      
+      <italic>K 
+        
+        <sup>j</sup>
+      </italic>
+      <sup>+1</sup>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>), a menos que 
+      
+      <italic>t </italic>seja igual a zero. A ortogonalização gera a relação expressa em termos de 
+      
+      <italic>v
+        
+        <sub>j</sub>
+      </italic> : 
+      
+      <italic>AV</italic>
+      <sub>
+        <italic>m</italic>-1
+      
+      </sub> = 
+      
+      <italic>V
+        
+        <sub>m</sub> H
+      
+      </italic>
+      <sub>
+        <italic>m, m</italic>-1
+      
+      </sub>, em que 
+      
+      <italic>V
+        
+        <sub>m</sub>
+      </italic>denota a matriz com colunas 
+      
+      <italic>v</italic>
+      <sub>1</sub> até 
+      
+      <italic>v
+        
+        <sub>m</sub>
+      </italic>. A matriz 
+      
+      <italic>H</italic>
+      <sub>
+        <italic>m, m</italic>-1
+      
+      </sub> é uma matriz Hessenberg superior de ordem 
+      
+      <italic>m </italic>× 
+      
+      <italic>m </italic>- 1, em que os elementos 
+      
+      <italic>h
+        
+        <sub>i, j</sub>
+      </italic>são definidos pelo método de Arnoldi.
+    
+    </p>
+    <p>A princípio o processo de ortogonalização pode ser realizado de diferentes formas, mas normal-mente a abordagem mais usada é o processo de Gram-Schimidt [4].</p>
+    <p>
+      <bold>3.2 Método de Lanczos</bold>
+    </p>
+    <p>Assim como o método de Arnoldi, o método de Lanczos [8] é utilizado para gerar uma base ortonormal para um subespaço de Krylov associado à 
+      
+      <italic>A </italic>e 
+      
+      <italic>b</italic>.Porém, em Lanczos 
+      
+      <italic>A </italic>deve ser uma matriz simétrica. Note que se 
+      
+      <italic>A </italic>é simétrica, então = 
+      
+      <italic>H</italic>
+      <sub>
+        <italic>m</italic>-1,
+        
+        <italic>m</italic>-1
+      
+      </sub>
+      <italic>= 
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img09.jpg"/>AV
+      
+      </italic>
+      <sub>
+        <italic>m</italic>-1
+      
+      </sub> é uma matriz tridiagonal. Assim, durante o processo de ortogonalização de 
+      
+      <italic>A</italic>, vários termos 
+      
+      <italic>h
+        
+        <sub>ij</sub>
+      </italic>se anulam, o que reduz 
+      
+      <italic>H </italic>a uma matriz tridiagonal simétrica e faz com que o custo computacional associado à ortogonalização e ao armazenamento sejam reduzidos, em comparação ao método de Arnoldi.
+    
+    </p>
+    <p>O processo de Lanczos aproxima uma matriz simétrica 
+      
+      <italic>A </italic>em uma matriz simétrica tridiagonal 
+      
+      <italic>T</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k</italic>
+      </sub>
+      <xref ref-type="fn" rid="nt02">
+        <sup>2</sup>
+      </xref> com uma linha adicional na parte inferior.
+    
+    </p>
+    <p>Se definirmos 
+      
+      <italic>T
+        
+        <sub>k</sub>
+      </italic>como sendo as primeiras 
+      
+      <italic>k </italic>linhas de 
+      
+      <italic>T</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k</italic>
+      </sub>,então 
+      
+      <italic>T
+        
+        <sub>k</sub>
+      </italic>é uma matriz quadrada e simétrica. Dessa forma:
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img10.jpg"/>
+    </p>
+    <p>em que 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img11.jpg"/> representa o vetor canônico. O processo Lanczos determina o vetor 
+      
+      <italic>v</italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> tomando como vetor inicial 
+      
+      <italic>v</italic>
+      <sub>0</sub> = 0 e β
+      
+      <sub>1</sub>
+      <italic>v</italic>
+      <sub>1</sub> = 
+      
+      <italic>b</italic>, em que β
+      
+      <sub>1</sub> serve para normalizar 
+      
+      <italic>v</italic>
+      <sub>1</sub>: β
+      
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub>
+      <italic>v</italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> = 
+      
+      <italic>p
+        
+        <sub>k</sub>
+      </italic>- α
+      
+      <italic>
+        <sub>k</sub>v
+        
+        <sub>k</sub>
+      </italic>- β
+      
+      <italic>
+        <sub>k</sub>v
+      
+      </italic>
+      <sub>
+        <italic>k</italic>-1
+      
+      </sub>, em que α
+      
+      <italic>
+        <sub>k</sub>
+      </italic>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img12.jpg"/>
+      <italic>p
+        
+        <sub>k</sub>
+      </italic> e 
+      
+      <italic>p
+        
+        <sub>k</sub>
+      </italic> = 
+      
+      <italic>Av
+        
+        <sub>k</sub>
+      </italic>. O valor β
+      
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> é usado para normalizar 
+      
+      <italic>v</italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub>. Na forma matricial,
+    
+    </p>
+    <disp-formula id="frm32">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm32.jpg"/>
+    </disp-formula>
+    <p>Em aritmética exata, as colunas de 
+      
+      <italic>V
+        
+        <sub>k</sub>
+      </italic>são vetores colunas ortonormais. O processo termina quando β
+      
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> = 0 (
+      
+      <italic>k </italic>
+      <underline>&amp;lt;</underline>
+      <italic> n</italic>),então obtemos 
+      
+      <italic>AV
+        
+        <sub>k</sub> = V
+        
+        <sub>k</sub>T
+        
+        <sub>k</sub>
+      </italic>.
+    
+    </p>
+    <p>Seja 
+      
+      <italic>A </italic>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n</italic>×
+        
+        <italic>n </italic>
+      </sup> uma matriz simétrica e 
+      
+      <italic>v</italic>
+      <sub>1</sub>∈ 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>n </italic>
+      </sup>um vetor unitário. Então, a partir do processo de Lanczos, obtemos a relação garantida pelo Teorema 9.11 em [4]: 
+      
+      <italic>AV
+        
+        <sub>k</sub> = V
+        
+        <sub>k</sub>T
+        
+        <sub>k</sub>
+      </italic>+ 
+      
+      <italic>r
+        
+        <sub>k</sub>e
+        
+        <sup>t</sup>
+      </italic>
+      <sub>
+        <italic>k </italic>
+      </sub>.
+    
+    </p>
+    <p>
+      <bold>3.3 Método dos Gradientes Conjugados</bold>
+    </p>
+    <p>O método dos Gradientes Conjugados (GC) resolve sistemas de equações lineares, cuja matriz dos coeficientes é simétrica e definida positiva. Este método é baseado em Lanczos, a partir do qual é obtida uma base ortogonal de vetores para o subespaço de Krylov 
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>). Além disso, o método GC é um método fundamentado na abordagem de Ritz-Galerkin. Na condição de Ritz-Galerkin, o novo resíduo 
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax</italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> deve ser ortogonal ao subespaço gerado por 
+      
+      <italic>v</italic>
+      <sub>1</sub>, ..., 
+      
+      <italic>v
+        
+        <sub>k</sub>
+      </italic>, ou seja, 
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>
+      </sub>
+      <sup>
+        <italic>t </italic>
+      </sup>(
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax
+        
+        <sub>k</sub>
+      </italic>) = 0.
+    
+    </p>
+    <p>Sejam 
+      
+      <italic>b </italic>=β
+      
+      <sub>1</sub>
+      <italic>v</italic>
+      <sub>1</sub>e 
+      
+      <italic>e</italic>
+      <sub>1</sub> o primeiro vetor canônico unitário em 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/r_bastao.jpg"/>
+      <sup>
+        <italic>k</italic>
+      </sup>, segue que
+    
+    </p>
+    <p>
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>
+      </sub>
+      <sup>
+        <italic>t</italic>
+      </sup>
+      <italic>b = V</italic>
+      <sub>
+        <italic>k</italic>
+      </sub>
+      <sup>
+        <italic>t </italic>
+      </sup>(β
+      
+      <sub>1</sub>
+      <italic>v</italic>
+      <sub>1</sub>) = β
+      
+      <sub>1</sub> = β
+      
+      <sub>1</sub>
+      <italic>e</italic>
+      <sub>1</sub>,
+    
+    </p>
+    <p>visto que os vetores 
+      
+      <italic>v</italic>
+      <sub>1</sub>, ..., 
+      
+      <italic>v
+        
+        <sub>k</sub>
+      </italic> formam uma base ortonormal para o subespaço de Krylov 
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, b</italic>). Procuramos por uma solução aproximada 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>para o sistema 
+      
+      <italic>Ax = b </italic>tal que 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>∈ 
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, b</italic>). Dessa forma, podemos escrever 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>como uma combinação dos vetores da base de 
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, b</italic>), ou seja, 
+      
+      <italic>x
+        
+        <sub>k</sub> = V
+        
+        <sub>k</sub> y
+      
+      </italic>. Portanto, a condição 
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>
+      </sub>
+      <sup>
+        <italic>t</italic>
+      </sup>(
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax
+        
+        <sub>k</sub>
+      </italic>) = 0 pode ser reescrita como: 
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>
+      </sub>
+      <sup>
+        <italic>t </italic>
+      </sup>
+      <italic>AV
+        
+        <sub>k</sub> y 
+      
+      </italic>=β
+      
+      <sub>1</sub>
+      <italic>e</italic>
+      <sub>1</sub>.
+    
+    </p>
+    <p>Claramente, precisamos construir a matriz 
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>
+      </sub>
+      <sup>
+        <italic>t </italic>
+      </sup>
+      <italic>AV
+        
+        <sub>k</sub>
+      </italic>. Entretanto, da relação 
+      
+      <italic>AV
+        
+        <sub>k</sub> = V
+        
+        <sub>k</sub>T
+        
+        <sub>k</sub>
+      </italic>, obtida a partir do processo de ortogonalização de Lanczos, segue que 
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>
+      </sub>
+      <sup>
+        <italic>t </italic>
+      </sup>
+      <italic>AV
+        
+        <sub>k</sub> = T
+        
+        <sub>k</sub>
+      </italic>. Assim, obtemos 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>, tal que 
+      
+      <italic>r
+        
+        <sub>k</sub>
+      </italic>⊥
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>), resolvendo o seguinte sistema: 
+      
+      <italic>T
+        
+        <sub>k</sub> y 
+      
+      </italic>=β
+      
+      <sub>1</sub>
+      <italic>e</italic>
+      <sub>1</sub>.
+    
+    </p>
+    <p>Em cada iteração do método dos Gradientes Conjugados,de acordo com [4, Seção 9.31], podemos resolver o sistema 
+      
+      <italic>T
+        
+        <sub>k</sub> y
+        
+        <sub>k</sub>
+      </italic>= β
+      
+      <sub>1</sub>
+      <italic>e</italic>
+      <sub>1</sub> aplicando a fatoração de Cholesky na matriz 
+      
+      <italic>T
+        
+        <sub>k</sub>
+      </italic>do processo de Lanczos.
+    
+    </p>
+    <p>
+      <bold>3.4 Método MINRES</bold>
+    </p>
+    <p>O método MINRES resolve sistemas lineares simétricos indefinidos. Métodos baseados na norma mínima residual, como o MINRES, determinam a solução aproximada 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>∈ 
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>) do sistema 
+      
+      <italic>Ax = b </italic>de tal forma que a norma Euclidiana ||
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax
+        
+        <sub>k</sub>||
+      
+      </italic>
+      <sub>2 </sub>seja mínima sobre 
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>).
+    
+    </p>
+    <p>Nas Seções 3.1 e 3.2, apresentamos dois processos de construção de uma base ortogonal para um subespaço de Krylov 
+      
+      <italic>K</italic>(
+      
+      <italic>A, r</italic>
+      <sup>0</sup>) que produziram a relação 
+      
+      <italic>AV
+        
+        <sub>k</sub> = V
+      
+      </italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub>
+      <italic>H</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k</italic>
+      </sub>, em que 
+      
+      <italic>V
+        
+        <sub>k</sub>
+      </italic>é uma matriz cujas colunas 
+      
+      <italic>v</italic>
+      <sub>1</sub>, ..., 
+      
+      <italic>v
+        
+        <sub>k</sub>
+      </italic> formam a base do subespaço 
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>). Dessa forma, dado β
+      
+      <sub>1</sub>
+      <italic>v</italic>
+      <sub>1</sub> = 
+      
+      <italic>b </italic>e 
+      
+      <italic>x
+        
+        <sub>k</sub> = V
+        
+        <sub>k</sub> y
+        
+        <sub>k</sub>
+      </italic>, a expressão ||
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax
+        
+        <sub>k</sub>||
+      
+      </italic>
+      <sub>2 </sub>pode ser reescrita como:
+    
+    </p>
+    <p>||
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax
+        
+        <sub>k</sub>||
+      
+      </italic>
+      <sub>2 </sub>= ||β
+      
+      <sub>1</sub>
+      <italic>v</italic>
+      <sub>1</sub> - 
+      
+      <italic>AV
+        
+        <sub>k</sub> y
+        
+        <sub>k</sub>
+      </italic>||
+      
+      <sub>2 </sub>= ||
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub>(β
+      
+      <sub>1</sub>
+      <italic>e</italic>
+      <sub>1</sub> - 
+      
+      <italic>H</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k</italic>
+      </sub>
+      <italic>y
+        
+        <sub>k</sub>
+      </italic>)||
+      
+      <sub>2</sub>.
+    
+    </p>
+    <p>Por construção, os vetores colunas da matriz 
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> são ortonormais. Portanto, 
+      
+      <italic>V</italic>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> é uma transformação ortogonal com respeito ao subespaço de Krylov 
+      
+      <italic>K</italic>
+      <sup>
+        <italic>k</italic>+1
+      
+      </sup>(
+      
+      <italic>A, r</italic>
+      <sub>0</sub>),então:
+    
+    </p>
+    <p>||
+      
+      <italic>b </italic>- 
+      
+      <italic>Ax
+        
+        <sub>k</sub>||
+      
+      </italic>
+      <sub>2 </sub>= ||β
+      
+      <sub>1</sub>
+      <italic>e</italic>
+      <sub>1</sub> - 
+      
+      <italic>H
+        
+        <italic>k</italic>+1,
+        
+        <italic>k</italic>
+      </italic>
+      <italic>y
+        
+        <sub>k</sub>
+      </italic> ||
+      
+      <sub>2</sub>.
+    
+    </p>
+    <p>Quando 
+      
+      <italic>A </italic>é simétrica a matriz 
+      
+      <italic>H</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k </italic>
+      </sub>reduz a uma matriz tridiagonal 
+      
+      <italic>T</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k</italic>
+      </sub>.
+    
+    </p>
+    <p>O método MINRES é construído utilizando o processo de Lanczos. Dentro de cada etapa de Lanczos, resolvemos o subproblema de quadrados mínimos</p>
+    <disp-formula id="frm33">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm33.jpg"/>
+    </disp-formula>
+    <p>aplicando a fatoração 
+      
+      <italic>QR</italic>
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img17.jpg"/>
+    </p>
+    <p>em que 
+      
+      <italic>Q
+        
+        <sub>k</sub> = Q
+      
+      </italic>
+      <sub>
+        <italic>k, k</italic>+1
+      
+      </sub> ···
+      
+      <italic> Q</italic>
+      <sub>2,3</sub>
+      <italic>Q</italic>
+      <sub>1,2</sub> é um produto de matrizes ortogonais, construídas para eliminar β
+      
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> da subdiagonal de 
+      
+      <italic>T</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k </italic>
+      </sub>e 
+      
+      <italic>t
+        
+        <sub>k</sub>
+      </italic>= [τ
+      
+      <sub>1</sub>τ
+      
+      <sub>2</sub> ··· τ
+      
+      <italic>
+        <sub>k</sub>
+      </italic>]
+      
+      <sup>
+        <italic>t </italic>
+      </sup>. Assim, a solução de quadrados mínimos de (3.3) obtida via fatoração QR é definida pelo seguinte sistema triangular: 
+      
+      <italic>R
+        
+        <sub>k</sub> y
+        
+        <sub>k</sub> = t
+        
+        <sub>k</sub>
+      </italic>, em que ||
+      
+      <italic>r
+        
+        <sub>k</sub>
+      </italic>||
+      
+      <sub>2 </sub>
+      <italic>= ||b -Ax
+        
+        <sub>k</sub>||
+      
+      </italic>
+      <sub>2 </sub>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img18.jpg"/> .Cada 
+      
+      <italic>Q</italic>
+      <sub>
+        <italic>i, i</italic>+1
+      
+      </sub> é isto é definida em termos de 
+      
+      <italic>c
+        
+        <sub>i</sub>
+      </italic> e 
+      
+      <italic>s
+        
+        <sub>i</sub>
+      </italic>, isto é,
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img19.jpg"/>
+    </p>
+    <p>A partir das Rotaçõesde Givens [4, Seção 5.1.8] podemos construir a matriz 
+      
+      <italic>Q
+        
+        <sub>k</sub>
+      </italic>, tal que 
+      
+      <italic>Q
+        
+        <sub>k</sub>T
+        
+        <sub>k</sub>
+      </italic>
+      <sub>+1,
+        
+        <italic>k </italic>
+      </sub>seja uma matriz triangular superior. Como a matriz 
+      
+      <italic>T</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k </italic>
+      </sub>é tridiagonal é preciso eliminar a linha abaixo da diagonal principal, assim dados 
+      
+      <italic>t
+        
+        <sub>ii</sub>
+      </italic>e 
+      
+      <italic>t</italic>
+      <sub>
+        <italic>i</italic>+1,
+        
+        <italic>i</italic>
+      </sub>, elementos da matriz 
+      
+      <italic>T</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k</italic>
+      </sub>, obtemos os fatores 
+      
+      <italic>c
+        
+        <sub>i</sub>
+      </italic>e 
+      
+      <italic>s
+        
+        <sub>i</sub>
+      </italic>: (
+      
+      <italic>Gi</italic>v
+      
+      <italic>ens</italic>(
+      
+      <italic>t
+        
+        <sub>ii</sub> , ti 
+      
+      </italic>+ 1, 
+      
+      <italic>i</italic>) → (
+      
+      <italic>c
+        
+        <sub>i</sub> , s
+        
+        <sub>i</sub> , t
+        
+        <sub>ii</sub>
+      </italic>)). O MINRES determina a solução aproximada 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>∈
+      
+      <italic>K
+        
+        <sup>k</sup>
+      </italic>(
+      
+      <italic>A, b</italic>) do problema original 
+      
+      <italic>Ax = b </italic>da seguinte forma: 
+      
+      <italic>x
+        
+        <sub>k</sub> = V
+        
+        <sub>k</sub> y
+        
+        <sub>k</sub>
+      </italic>. Pela relação 
+      
+      <italic>R
+        
+        <sub>k</sub> y
+        
+        <sub>k</sub> = t
+        
+        <sub>k</sub>
+      </italic>temos que 
+      
+      <italic>y
+        
+        <sub>k</sub> = R
+        
+        <sub>k</sub>
+      </italic>
+      <sup>-1</sup>
+      <italic>t
+        
+        <sub>k</sub>
+      </italic>. Logo,
+    
+    </p>
+    <disp-formula id="frm34">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm34.jpg"/>
+    </disp-formula>
+    <p>em que 
+      
+      <italic>V
+        
+        <sub>k</sub> R
+        
+        <sub>k</sub>
+      </italic>
+      <sup>-1 </sup>= 
+      
+      <italic>D
+        
+        <sub>k</sub>
+      </italic>, ou melhor, 
+      
+      <italic>V
+        
+        <sub>k</sub> = D
+        
+        <sub>k</sub> R
+        
+        <sub>k</sub>
+      </italic>e
+    
+    </p>
+    <disp-formula id="frm35">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm35.jpg"/>
+    </disp-formula>
+    <p>
+      <bold>4 IMPLEMENTAÇÕES</bold>
+    </p>
+    <p>Considere o sistema de equações lineares simétrico 
+      
+      <italic>Ax = b </italic>e um pré-condicionador para este sistema 
+      
+      <italic>M = L</italic>
+      <sup>
+        <italic>t</italic>
+      </sup>
+      <italic>L</italic>. Então o sistema pré-condicionado é equivalente a ao sistema (
+      
+      <italic>L</italic>
+      <sup>-1 </sup>
+      <italic>AL</italic>
+      <sup>-
+        
+        <italic>t</italic>
+      </sup>)(
+      
+      <italic>L</italic>
+      <sup>
+        <italic>t</italic>
+      </sup>
+      <italic>x</italic>) = 
+      
+      <italic>L</italic>
+      <sup>-1</sup>
+      <italic>b</italic>, em que 
+      
+      <italic>L</italic>
+      <sup>-</sup>
+      <italic>AL</italic>
+      <sup>-
+        
+        <italic>t</italic>
+      </sup>é uma matriz simétrica e definida positiva. Dado o sistema linear 
+      
+      <italic>Ax = b</italic>, obtemos MINRESP (MINRES pré-condicionado) aplicando MINRES ao sistema equivalente 
+      
+      <italic>Â
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/x4_circ.jpg"/> = 
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/b4_circ.jpg"/>
+      </italic>, em que
+      
+      <italic> Â </italic>=
+      
+      <italic>L</italic>
+      <sup>-1</sup>
+      <italic>AL</italic>
+      <sup>-1</sup>
+      <italic>, 
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/x4_circ.jpg"/> = L
+      
+      </italic>
+      <sup>-1</sup>
+      <italic>x </italic>e 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b4_circ.jpg"/> = 
+      
+      <italic>L</italic>
+      <sup>-1</sup>
+      <italic>b. </italic>Seja 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/x4_circ.jpg"/>∈ 
+      
+      <italic>K</italic>(
+      
+      <italic>Â, 
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/b4_circ.jpg"/>
+      </italic>), 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/v4_circ.jpg"/>
+      <sub>0</sub> = 0 e 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b7_circ.jpg"/>
+      <sub>1</sub>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/v4_circ.jpg"/>
+      <sub>1</sub> = 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b4_circ.jpg"/>. Definimos 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/z4_circ.jpg"/>
+      <italic>
+        <sub>k</sub>
+      </italic>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b7_circ.jpg"/>
+      <italic>
+        <sub>k</sub>L
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/v4_circ.jpg"/>
+        <sub>k</sub>
+      </italic>e 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/q4_circ.jpg"/>
+      <italic>
+        <sub>k</sub>
+      </italic>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b7_circ.jpg"/>
+      <italic>
+        <sub>k</sub>L
+      
+      </italic>
+      <sup>-1
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/v4_circ.jpg"/>
+      </sup>
+      <italic>
+        <sub>k</sub>
+      </italic>tal que 
+      
+      <italic>M
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/q4_circ.jpg"/>
+        <sub>k</sub>
+      </italic>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/z4_circ.jpg"/>
+      <italic>
+        <sub>k</sub>
+      </italic>. Então,
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img22.jpg"/>
+    </p>
+    <p>Visto que 
+      
+      <italic>M</italic>
+      <sup>-1</sup> = (
+      
+      <italic>L
+        
+        <sup>t</sup>
+      </italic>)
+      
+      <sup>-1</sup>
+      <italic>L</italic>
+      <sup>-1 </sup>e 
+      
+      <italic>M
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/q4_circ.jpg"/>
+        <sub>k</sub>
+      </italic> = 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/z4_circ.jpg"/>
+      <italic>
+        <sub>k</sub>
+      </italic>temos 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b7_circ.jpg"/>
+      <italic>
+        <sub>k</sub>
+      </italic>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img23.jpg"/>. Dessa forma, obtemos o processo de Lanczos pré-condicionado:
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img24.jpg"/>
+    </p>
+    <p>Temos que 
+      
+      <italic>q
+        
+        <sub>k</sub>
+      </italic> é a solução do sistema 
+      
+      <italic>M
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/q4_circ.jpg"/>
+        <sub>k</sub> = 
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/z4_circ.jpg"/>
+        <sub>k</sub>
+      </italic>. Assim, multiplicando a equação 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b7_circ.jpg"/>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/v4_circ.jpg"/>
+      <sub>
+        <italic>k</italic>+1
+      
+      </sub> por 
+      
+      <italic>L</italic>, obtemos:
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img25.jpg"/>
+    </p>
+    <p>Dados o pré-condicionador 
+      
+      <italic>M </italic>e 
+      
+      <italic>maxit </italic>(número máximo de iterações), obtemos a partir do 
+      
+      <ext-link ext-link-type="uri" xlink:href="/img/revistas/tema/v15n3/a05alg41.jpg">Algoritmo 1</ext-link> uma solução aproximada 
+      
+      <italic>x </italic>para o sistema 
+      
+      <italic>Ax = b</italic>.
+    
+    </p>
+    <p>O método MINRESP é construído utilizando o processo de Lanczos pré-condicionado. A cada etapa de Lanczos pré-condicionado, resolvemos o subproblema de quadrados míni-mos equivalente ao apresentado em (3.3) associado ao sistema 
+      
+      <italic>Â</italic>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/x4_circ.jpg"/> = 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b4_circ.jpg"/>. Para atualizar a solução do problema original basta multiplicar as equações equivalentes à (3.4) e (3.5), resultadas do MINRES aplicado ao sistema pré-condicionado 
+      
+      <italic>Â
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/x4_circ.jpg"/>
+      </italic> = 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b4_circ.jpg"/>, por 
+      
+      <italic>L</italic>
+      <sup>-1</sup>:
+    
+    </p>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img14.jpg"/>
+    </p>
+    <p>Um pré-condicionador adequado para GC deve ser simétrico e definido positivo. A ideia do método do GC pré-condicionado (GCP) consiste em aplicar o método GC, como apresentado na Seção 3.3, para resolver um sistema pré-condicionado. Considere o sistema simétrico e definido positivo 
+      
+      <italic>Ax = b</italic>. Pré-condicionando esse sistema obtemos o sistema equivalente: 
+      
+      <italic>Â
+        
+        <inline-graphic xlink:href="/img/revistas/tema/v15n3/x4_circ.jpg"/>
+      </italic> = 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/b4_circ.jpg"/>, em que 
+      
+      <italic>L </italic>étrica e definida positiva. Definimos o pré-condicionador simétrico e definido positivo 
+      
+      <italic>M </italic>por: 
+      
+      <italic>M = L</italic>
+      <sup>
+        <italic>t</italic>
+      </sup>
+      <italic>L</italic>. Seja 
+      
+      <italic>r
+        
+        <sub>k</sub> = b 
+      
+      </italic>-
+      
+      <italic> Ax
+        
+        <sub>k</sub>
+      </italic>o resíduo do sistema original e 
+      
+      <italic>z
+        
+        <sub>k</sub>
+      </italic>o resíduo do sistema pré-condicionado tal que 
+      
+      <italic>Mz
+        
+        <sub>k</sub> = r
+        
+        <sub>k</sub>
+      </italic>. Obtemos o processo iterativo do GCP aplicando o GC para resolver o sistema equivalente, isto é,
+    
+    </p>
+    <disp-formula id="frm41">
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05frm41.jpg"/>
+    </disp-formula>
+    <p>
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05alg42.jpg"/>
+    </p>
+    <p>Visto queamatriz 
+      
+      <italic>AD A</italic>
+      <sup>
+        <italic>t </italic>
+      </sup>do sistema de equações normais (2.5) é simétrica e definida positiva, podemos utilizaro GCP para determinar as direções de Newton nos métodos de pontos interiores. Esta versão do método do GCP fornece uma solução aproximada do sistema original diretamente sem ter que calculá-la a partir da solução aproximada do sistema de pré-condicionado. Os resultados teóricos e experimentais apresentados em [2] fornecem evidências que muitas vezes, em sistemas simétricos e definido positivo, o MINRES pode parar muito mais cedo que o GC. Em alguns casos, o MINRES pode convergir mais rapidamente que o GC. Porém, geralmente o GC converge mais rapidamente do que o MINRES considerando tanto ||
+      
+      <italic>x* </italic>- 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>||
+      
+      <sub>
+        <italic>A</italic>
+      </sub>
+      <xref ref-type="fn" rid="nt03">
+        <sup>3</sup>
+      </xref> quanto ||
+      
+      <italic>x* </italic>- 
+      
+      <italic>x
+        
+        <sub>k</sub>
+      </italic>||
+      
+      <sub>2</sub>. Nos trabalhos [13] e [5], são feitas comparações entre os métodos MINRES, CG e também outros métodos de resolução de sistemas. A seguir, apresentamos o 
+      
+      <xref ref-type="fn" rid="alg43">Algoritmo 3</xref> para a nova abordagem proposta, a qual utiliza os métodos GCP e MINRESP juntos.
+    
+    </p>
+    <p>
+      <fig id="alg43">
+        <graphic xlink:href="/img/revistas/tema/v15n3/a05alg43.jpg"/>
+      </fig>
+    </p>
+    <p>Para resolver um sistema 
+      
+      <italic>Ax = b</italic>, o 
+      
+      <xref ref-type="fn" rid="alg43">Algoritmo 3</xref> utiliza, inicialmente, o GCP. Se este método não convergir até um certo número de iterações (
+      
+      <italic>it</italic>) pré-determinado, então o MINRESP passa a ser utilizado para resolver o sistema. Nos experimentos, consideramos 
+      
+      <italic>it </italic>= número de linhas da matriz dos coeficientes.
+    
+    </p>
+    <p>
+      <bold>5 EXPERIMENTOS COMPUTACIONAIS</bold>
+    </p>
+    <p>Para comparar o desempenho do método preditor-corretor ao resolver problemas de programação linear usando os métodos iterativos GC e MINRES, ambos pré-condicionados pelo pré-condicionador separador e uma nova abordagem híbrida, a qual utiliza, inicialmente, o CGP e em seguida o MINRESP, foram realizados experimentos computacionais em um Intel Core i5, 4 GB RAM, 2,3 GHZ, 225 GB HD, com sistema operacional Linux. O código foi implementado em linguagem C e os 63 problemas de programação linear testados, pertencentes as coleções Netlib [3], Qaplib [1], Kennington [7], STOCHLP [17] e MISC [11], que estão no formato MPS, foram lidos usado 
+      
+      <italic>callable library </italic>do CPLEX.
+    
+    </p>
+    <p>O pré-condicionador separador requer o cálculo da fatoração LU da matriz do sistema. Uma nova fatoração LU é calculada de uma iteração para a outra sempre que os métodos GCP e MINRESP necessitam muitas iterações para atingir a convergência. Em [14] é proposto calcular uma segunda fatoração LU(refatoração) quando a primeira fatoração é muito densa a fim de melhorar o desempenho. Esta técnica foi considerada nos experimentos. As 
+      
+      <xref ref-type="table" rid="tab01">Tabelas 1</xref> e 
+      
+      <xref ref-type="table" rid="tab02">2</xref> comparam o tempo total e número de iterações, respectivamente, do método preditor-corretor ao resolver os problemas de programação linear usando os métodos ite-rativos GCP e MINRESP. Foram resolvidos 38 problemas pelo GCP e/ou MINRESP. Nas colunas Refact. a refatoração está sendo realizada.
+    
+    </p>
+    <p>
+      <table-wrap id="tab01">
+        <graphic xlink:href="/img/revistas/tema/v15n3/a05tab01.jpg"/>
+      </table-wrap>
+    </p>
+    <p>
+      <table-wrap id="tab02">
+        <graphic xlink:href="/img/revistas/tema/v15n3/a05tab02.jpg"/>
+      </table-wrap>
+    </p>
+    <p>Os primeiros experimentos foram feitos considerando apenas o sistema aumentado e depois o sistema de equações normais. No primeiro caso, o método GCP não convergiu para nenhum problema enquanto o MINRESP mostrou-se mais robusto e apresentou bons resultados resolvendo 25 problemas, sendo que 2 deles foram resolvidos somente nesse caso. Considerando o sistema de equações normais os dois métodos apresentaram resultados satisfatórios e equilibrados. Quando a refatoração e feita, o GCP resolveu 3 problemas a mais que o MINRESP e em menos tempo em 50% dos problemas, porém a diferença no tempo entre os métodos não foi muito significante. Com relação ao número de iterações o GCP fez menos iterações em 9 problemas contra 6 problemas do MINRESP.</p>
+    <p>Considerando o caso em que a refatoração não é feita, observa-se um melhor desempenho do MINRESP, que foi mais rápido em todos os problemas resolvidos por ambos métodos. A diferença nos tempos foi bem significante, chegando a ser 23 vezes menor em um dos problemas. Com relação ao número de iterações os resultados foram muito próximos.</p>
+    <p>Na 
+      
+      <xref ref-type="table" rid="tab02">Tabela 2</xref>, foram apresentados os resultados somente dos problemas em que houveram diferenças no número total de iterações. Com os experimentos já realizados, observamos que aproximadamente 34% dos problemas testados foram resolvidos somente por um dos métodos MINRESP ou GCP. Isso motivou a realização de mais um teste considerando o 
+      
+      <xref ref-type="fn" rid="alg43">Algoritmo 3</xref>.
+    
+    </p>
+    <p>De acordo com os resultados obtidos, temos que o método MINRESP sem refatorar e usando o sistema de equações normais apresentou o melhor desempenho com relação ao tempo e como o GCP não funciona bem com o sistema aumentado, decidimos utililizar o método híbrido com sistema de equações normais e sem refatoração. A 
+      
+      <xref ref-type="table" rid="tab03">Tabela 3</xref> compara os resultados desse novo teste.
+    
+    </p>
+    <p>
+      <table-wrap id="tab03">
+        <graphic xlink:href="/img/revistas/tema/v15n3/a05tab03.jpg"/>
+      </table-wrap>
+    </p>
+    <p>O método híbrido resolveu 61 dos 63 problemas testados, o que significa que 25 problemas passaram a ser solucionados com a nova abordagem. Além disso, este método foi mais rápido em 62% dos problemas, o MINRESP em 27% e o GCP em aproximadamente 2% dos problemas. O número de iterações foi menor em 59% dos problemas para o híbrido, 6% para o MINRESP e em torno de 2% para o GCP. Considerando os problemas resolvidos apenas pelo GCP e híbrido, vemos que somente um deles foi resolvido em menor tempo pelo GCP. Com relação ao número de iterações, o valor foi menor ou igual para o híbrido em todos os problemas. Comparando os resultados do MINRESP com o híbrido vemos que somente 2 problemas foram resolvidos mais rápido pelo híbrido e apenas 3 problemas tiveram o número de iterações menor.</p>
+    <p>
+      <bold>6 CONCLUSÕES</bold>
+    </p>
+    <p>Neste trabalho,para a resolução dos sistemas lineares a cada iteração do método preditor-corretor consideramos tanto o sistema aumentado quanto o sistema de equações normais. O método MINRESP com reortogonalização foi implementado e comparado com o método dos gradientes conjugados, ambos métodos foram pré-condicionados pelo pré-condiciona-dor separador. Experimentos computacionais foram realizados com o objetivo de determinar qual método émais eficiente e robusto. Os resultados mostraram que o MINRESP é mais robusto que o GCP quando somente o sistema aumentado é considerado. Para o sistema de equações normais com e sem refatoração os resultados foram semelhantes para o número de iterações, porém o tempo foi menor ou igual em todos os problemas para o MINRESP sem refatorar. Um método híbrido também foi considerado, o qual resolveu 40% a mais de problemas (inclusive problemas de dimensões maiores) além de ser mais rápido e fazer menos iterações que os métodos GCP e MINRESP para o sistema de equações normais sem refatoração. Dessa forma, concluímos que este método é o mais robusto e eficiente e será ainda mais investigado e utilizado em trabalhos futuros.</p>
+    <p>
+      <bold>AGRADECIMENTOS</bold>
+    </p>
+    <p>Ao CNPq e a FAPESP pelo apoio financeiro.</p>
+    <p>
+      <bold>REFERÊNCIAS</bold>
+    </p>
+    <p>[1] R.S. Burkard, S. Karisch &amp;amp; F. Rendl. Qaplib - a quadratic assignment problem library. 
+      
+      <italic>European Journal of Operations Research</italic>, 
+      
+      <bold>55 </bold>(1991), 115-119. 
+    
+    </p>
+    <p>[2] D.C. Fong &amp;amp; M. A. Saunders. CG versus MINRES: An empirical comparison. 
+      
+      <italic>SQU Journal for Science</italic>, 
+      
+      <bold>17</bold>(1) (2012), 44-62. 
+    
+    </p>
+    <p>[3] D.M. Gay. Electronic mail distribution of linear programming test problems. 
+      
+      <italic>Mathematical Programming Society Committee on Algorithms COAL Newsletter</italic>, (1985), 10-12. 
+    
+    </p>
+    <p>[4] G.H. Golub &amp;amp; C.F. Van Loan. 
+      
+      <italic>Matrix Computations</italic>.3
+      
+      <sup>a </sup>ed. Baltimore, Md., London: The Johns Hopkins University Press, (1996). 
+    
+    </p>
+    <p>[5] I.B. Kalambi. A Comparison of three Iterative Methods for the Solution of Linear Equations. 
+      
+      <italic>Journal of Applied Sciences and Environmental Management</italic>, 
+      
+      <bold>12</bold>(4) (2009), 53-55. 
+    
+    </p>
+    <p>[6] N. Karmarkar. 
+      
+      <italic>A new polynomial-time algorithm for linear programming</italic>. Combinato-rica, 
+      
+      <bold>4 </bold>(1984), 373-395. 
+    
+    </p>
+    <p>[7] J.L. Kennington, S. Niemi, W.J. Carolan, J.E. Hill &amp;amp; S.J. Wichmann. An empirical evaluation of the korbx algorithms for military airlift applications. 
+      
+      <italic>Oper. Res</italic>, 
+      
+      <bold>38 </bold>(1990), 240-248. 
+    
+    </p>
+    <p>[8] C. Lanczos. An iteration method for the solution of the eigenvalue problem of linear differential and integral operators. 
+      
+      <italic>J. Res. Nat. Bureau Standards</italic>, 
+      
+      <bold>45</bold>(4) (1950), 255-282. 
+    
+    </p>
+    <p>[9] S. Mehrotra. On the implementation of a primal-dual interior point method. 
+      
+      <italic>SIAM Journal on Optimization</italic>, 
+      
+      <bold>2</bold>(4) (1992), 575-601. 
+    
+    </p>
+    <p>[10] C.D. Meyer. 
+      
+      <italic>Matrix analysis and applied linear algebra</italic>. SIAM Publications, SIAM, (2000). 
+    
+    </p>
+    <p>[11] Miscellaneous lp models. 
+      
+      <italic>Technical report, Hungarian Academy of Sciences OR Lab. url</italic>, 
+      
+      <ext-link ext-link-type="uri" xlink:href="http://www.sztaki.hu/ ̃meszaros/publicftp/lptestset/misc">www.sztaki.hu/ ̃;meszaros/publicftp/lptestset/misc</ext-link>. 
+    
+    </p>
+    <p>[12] R.D.C. Monteiro, I. Adler &amp;amp; M.G.C. Resende. A polynomial-time primal-dual affine scaling algorithm for linear and convex quadratic programming and its power series extension. 
+      
+      <italic>Mathematics of Operations Research</italic>, 
+      
+      <bold>15 </bold>(1990), 191-214. 
+    
+    </p>
+    <p>[13] J. Noreen. A comparison of direct and indirect solvers for linear system of equations. 
+      
+      <italic>International Journal of Emerging Science</italic>, 
+      
+      <bold>2</bold>(2) (2012), 310-321. 
+    
+    </p>
+    <p>[14] A.R.L. Oliveira &amp;amp; D.C. Sorensen. A new class of preconditioners for large-scale linear systems from interior point methods for linear programming. 
+      
+      <italic>Linear Algebra and Its Applications</italic>, 
+      
+      <bold>394 </bold>(2005), 1-24. 
+    
+    </p>
+    <p>[15] Y. Saad. 
+      
+      <italic>Iterative Methods for Sparse Linear Systems</italic>, SIAM, (2003). 
+    
+    </p>
+    <p>[16] D.C. Sorensen. Implicit application of polynomial filters in a 
+      
+      <italic>k</italic>-step Arnoldi method. 
+      
+      <italic>SIAM Journal on Matrix Analysis and Applications</italic>, 
+      
+      <bold>13 </bold>(1992), 357-385. 
+    
+    </p>
+    <p>[17] Stochastic lp test sets. 
+      
+      <italic>Technical report, Hungarian Academy of Sciences OR Lab. url</italic>, 
+      
+      <ext-link ext-link-type="uri" xlink:href="http://www.sztaki.hu/ ̃meszaros/publicftp/lptestset/stochlp">www.sztaki.hu/ ̃meszaros/publicftp/lptestset/stochlp</ext-link>. 
+    
+    </p>
+    <p>[18] S.J. Wright. 
+      
+      <italic>Primal-dual interior-point methods</italic>. SIAM Publications, SIAM, Philadelphia, PA, USA, (1997). 
+    
+    </p>
+    <p>Recebido em 28 novembro, 2013  Aceito em 27 agosto, 2014</p>
+    <p>
+      <fn id="nt" fn-type="corresp">
+        <label>* Autor correspondente</label>
+        <p> Carla Ghidini</p>
+      </fn>
+      <fn id="nt01">
+        <p>1 O número de condição de uma matriz</p>
+      </fn>
+      <italic>M </italic>é definido por: κ
+      
+      <sub>2</sub>(
+      
+      <italic>M</italic>) = ||
+      
+      <italic>M</italic>||
+      
+      <sub>2</sub>||
+      
+      <italic>M</italic>
+      <sup>-1</sup>||
+      
+      <sub>2</sub>. 
+      
+      <fn id="nt02">
+        <p>2</p>
+      </fn>
+      <italic>T</italic>
+      <sub>
+        <italic>k</italic>+1,
+        
+        <italic>k </italic>
+      </sub>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img16.jpg"/>, em que α
+      
+      <italic>
+        <sub>j</sub> = h
+        
+        <sub>ij</sub>
+      </italic>, β
+      
+      <italic>
+        <sub>j</sub> = h
+      
+      </italic>
+      <sub>
+        <italic>j</italic>-1,
+        
+        <italic>j</italic>
+      </sub>. 
+      
+      <fn id="nt03">
+        <p>3 A norma-A é definida como: ||</p>
+      </fn>
+      <italic>w</italic>||
+      
+      <italic>
+        <sub>A</sub>
+      </italic>= 
+      
+      <inline-graphic xlink:href="/img/revistas/tema/v15n3/a05img15.jpg"/>.
+    
+    </p>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="B1">
+        <mixed-citation>[1] R.S. Burkard, S. Karisch &amp; F. Rendl. Qaplib  a quadratic assignment problem library. 
+          
+          <italic>European Journal of Operations Research</italic>, 
+          
+          <bold>55 </bold>(1991), 115119.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Qaplib - a quadratic assignment problem library</article-title>
+          <source>European Journal of Operations Research</source>
+          <date>
+            <year>1991</year>
+          </date>
+          <fpage>115</fpage>
+          <lpage>119</lpage>
+          <volume>55</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Burkard</surname>
+              <given-names>R.S.</given-names>
+            </name>
+            <name>
+              <surname>Karisch</surname>
+              <given-names>S.</given-names>
+            </name>
+            <name>
+              <surname>Rendl</surname>
+              <given-names>F.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B2">
+        <mixed-citation>[2] D.C. Fong &amp; M. A. Saunders. CG versus MINRES: An empirical comparison. 
+          
+          <italic>SQU Journal for Science</italic>, 
+          
+          <bold>17</bold>(1) (2012), 4462.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>CG versus MINRES: An empirical comparison</article-title>
+          <source>SQU Journal for Science</source>
+          <date>
+            <year>2012</year>
+          </date>
+          <fpage>44</fpage>
+          <lpage>62</lpage>
+          <issue>1</issue>
+          <volume>17</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Fong</surname>
+              <given-names>D.C.</given-names>
+            </name>
+            <name>
+              <surname>Saunders</surname>
+              <given-names>M. A.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B3">
+        <mixed-citation>[3] D.M. Gay. Electronic mail distribution of linear programming test problems. 
+          
+          <italic>Mathematical Programming Society Committee on Algorithms COAL Newsletter</italic>, (1985), 1012.
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Electronic mail distribution of linear programming test problems</source>
+          <date>
+            <year>1985</year>
+          </date>
+          <fpage>10</fpage>
+          <lpage>12</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Gay</surname>
+              <given-names>D.M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B4">
+        <mixed-citation>[4] G.H. Golub &amp; C.F. Van Loan. 
+          
+          <italic>Matrix Computations</italic>.3
+          
+          <sup>a </sup>ed. Baltimore, Md., London: The Johns Hopkins University Press, (1996).
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Matrix Computations</source>
+          <date>
+            <year>1996</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Golub</surname>
+              <given-names>G.H.</given-names>
+            </name>
+            <name>
+              <surname>Van Loan</surname>
+              <given-names>C.F.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B5">
+        <mixed-citation>[5] I.B. Kalambi. A Comparison of three Iterative Methods for the Solution of Linear Equations. 
+          
+          <italic>Journal of Applied Sciences and Environmental Management</italic>, 
+          
+          <bold>12</bold>(4) (2009), 5355.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A Comparison of three Iterative Methods for the Solution of Linear Equations</article-title>
+          <source>Journal of Applied Sciences and Environmental Management</source>
+          <date>
+            <year>2009</year>
+          </date>
+          <fpage>53</fpage>
+          <lpage>55</lpage>
+          <issue>4</issue>
+          <volume>12</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Kalambi</surname>
+              <given-names>I.B.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B6">
+        <mixed-citation>[6] N. Karmarkar. 
+          
+          <italic>A new polynomial-time algorithm for linear programming</italic>. Combinato-rica, 
+          
+          <bold>4 </bold>(1984), 373395.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A new polynomial-time algorithm for linear programming</article-title>
+          <source>Combinato-rica</source>
+          <date>
+            <year>1984</year>
+          </date>
+          <fpage>373</fpage>
+          <lpage>395</lpage>
+          <volume>4</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Karmarkar</surname>
+              <given-names>N.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B7">
+        <mixed-citation>[7] J.L. Kennington, S. Niemi, W.J. Carolan, J.E. Hill &amp; S.J. Wichmann. An empirical evaluation of the korbx algorithms for military airlift applications. 
+          
+          <italic>Oper. Res</italic>, 
+          
+          <bold>38 </bold>(1990), 240248.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>An empirical evaluation of the korbx algorithms for military airlift applications</article-title>
+          <source>Oper. Res</source>
+          <date>
+            <year>1990</year>
+          </date>
+          <fpage>240</fpage>
+          <lpage>248</lpage>
+          <volume>38</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Kennington</surname>
+              <given-names>J.L.</given-names>
+            </name>
+            <name>
+              <surname>Niemi</surname>
+              <given-names>S.</given-names>
+            </name>
+            <name>
+              <surname>Carolan</surname>
+              <given-names>W.J.</given-names>
+            </name>
+            <name>
+              <surname>Hill</surname>
+              <given-names>J.E.</given-names>
+            </name>
+            <name>
+              <surname>Wichmann</surname>
+              <given-names>S.J.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B8">
+        <mixed-citation>[8] C. Lanczos. An iteration method for the solution of the eigenvalue problem of linear differential and integral operators. 
+          
+          <italic>J. Res. Nat. Bureau Standards</italic>, 
+          
+          <bold>45</bold>(4) (1950), 255282.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>An iteration method for the solution of the eigenvalue problem of linear differential and integral operators</article-title>
+          <source>J. Res. Nat. Bureau Standards</source>
+          <date>
+            <year>1950</year>
+          </date>
+          <fpage>255</fpage>
+          <lpage>282</lpage>
+          <issue>4</issue>
+          <volume>45</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Lanczos</surname>
+              <given-names>C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B9">
+        <mixed-citation>[9] S. Mehrotra. On the implementation of a primal-dual interior point method. 
+          
+          <italic>SIAM Journal on Optimization</italic>, 
+          
+          <bold>2</bold>(4) (1992), 575601.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>On the implementation of a primal-dual interior point method</article-title>
+          <source>SIAM Journal on Optimization</source>
+          <date>
+            <year>1992</year>
+          </date>
+          <fpage>575</fpage>
+          <lpage>601</lpage>
+          <issue>4</issue>
+          <volume>2</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Mehrotra</surname>
+              <given-names>S.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B10">
+        <mixed-citation>[10] C.D. Meyer. 
+          
+          <italic>Matrix analysis and applied linear algebra</italic>. SIAM Publications, SIAM, (2000).
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Matrix analysis and applied linear algebra</source>
+          <date>
+            <year>2000</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Meyer</surname>
+              <given-names>C.D.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B11">
+        <mixed-citation>[11] Miscellaneous lp models. 
+          
+          <italic>Technical report, Hungarian Academy of Sciences OR Lab. url</italic>, 
+          
+          <ext-link ext-link-type="uri" xlink:href="http://www.sztaki.hu/˜meszaros/publicftp/lptestset/misc">www.sztaki.hu/˜;meszaros/publicftp/lptestset/misc</ext-link>.
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Technical report, Hungarian Academy of Sciences OR Lab. url</source>
+        </element-citation>
+      </ref>
+      <ref id="B12">
+        <mixed-citation>[12] R.D.C. Monteiro, I. Adler &amp; M.G.C. Resende. A polynomial-time primal-dual affine scaling algorithm for linear and convex quadratic programming and its power series extension. 
+          
+          <italic>Mathematics of Operations Research</italic>, 
+          
+          <bold>15 </bold>(1990), 191214.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A polynomial-time primal-dual affine scaling algorithm for linear and convex quadratic programming and its power series extension</article-title>
+          <source>Mathematics of Operations Research</source>
+          <date>
+            <year>1990</year>
+          </date>
+          <fpage>191</fpage>
+          <lpage>214</lpage>
+          <volume>15</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Monteiro</surname>
+              <given-names>R.D.C.</given-names>
+            </name>
+            <name>
+              <surname>Adler</surname>
+              <given-names>I.</given-names>
+            </name>
+            <name>
+              <surname>Resende</surname>
+              <given-names>M.G.C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B13">
+        <mixed-citation>[13] J. Noreen. A comparison of direct and indirect solvers for linear system of equations. 
+          
+          <italic>International Journal of Emerging Science</italic>, 
+          
+          <bold>2</bold>(2) (2012), 310321.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A comparison of direct and indirect solvers for linear system of equations</article-title>
+          <source>International Journal of Emerging Science</source>
+          <date>
+            <year>2012</year>
+          </date>
+          <fpage>310</fpage>
+          <lpage>321</lpage>
+          <issue>2</issue>
+          <volume>2</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Noreen</surname>
+              <given-names>J.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B14">
+        <mixed-citation>[14] A.R.L. Oliveira &amp; D.C. Sorensen. A new class of preconditioners for large-scale linear systems from interior point methods for linear programming. 
+          
+          <italic>Linear Algebra and Its Applications</italic>, 
+          
+          <bold>394 </bold>(2005), 124.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A new class of preconditioners for large-scale linear systems from interior point methods for linear programming</article-title>
+          <source>Linear Algebra and Its Applications</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <fpage>1</fpage>
+          <lpage>24</lpage>
+          <volume>394</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Oliveira</surname>
+              <given-names>A.R.L.</given-names>
+            </name>
+            <name>
+              <surname>Sorensen</surname>
+              <given-names>D.C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B15">
+        <mixed-citation>[15] Y. Saad. 
+          
+          <italic>Iterative Methods for Sparse Linear Systems</italic>, SIAM, (2003).
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Iterative Methods for Sparse Linear Systems</source>
+          <date>
+            <year>2003</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Saad</surname>
+              <given-names>Y.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B16">
+        <mixed-citation>[16] D.C. Sorensen. Implicit application of polynomial filters in a 
+          
+          <italic>k</italic>-step Arnoldi method. 
+          
+          <italic>SIAM Journal on Matrix Analysis and Applications</italic>, 
+          
+          <bold>13 </bold>(1992), 357385.
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Implicit application of polynomial filters in a k-step Arnoldi method</article-title>
+          <source>SIAM Journal on Matrix Analysis and Applications</source>
+          <date>
+            <year>1992</year>
+          </date>
+          <fpage>357</fpage>
+          <lpage>385</lpage>
+          <volume>13</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Sorensen</surname>
+              <given-names>D.C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B17">
+        <mixed-citation>[17] Stochastic lp test sets. 
+          
+          <italic>Technical report, Hungarian Academy of Sciences OR Lab. url</italic>, 
+          
+          <ext-link ext-link-type="uri" xlink:href="http://www.sztaki.hu/˜meszaros/publicftp/lptestset/stochlp">www.sztaki.hu/˜meszaros/publicftp/lptestset/stochlp</ext-link>.
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Technical report, Hungarian Academy of Sciences OR Lab. url</source>
+        </element-citation>
+      </ref>
+      <ref id="B18">
+        <mixed-citation>[18] S.J. Wright. 
+          
+          <italic>Primal-dual interior-point methods</italic>. SIAM Publications, SIAM, Philadelphia, PA, USA, (1997).
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Primal-dual interior-point methods</source>
+          <date>
+            <year>1997</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Wright</surname>
+              <given-names>S.J.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>

@@ -1,0 +1,1038 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="research-article">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="publisher-id">rac</journal-id>
+      <journal-title-group>
+        <journal-title>Revista de Administração Contemporânea</journal-title>
+        <abbrev-journal-title abbrev-type="publisher">Rev. adm. contemp.</abbrev-journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">1415-6555</issn>
+      <issn pub-type="epub">1982-7849</issn>
+      <publisher>
+        <publisher-name>Associação Nacional de Pós-Graduação e Pesquisa em Administração</publisher-name>
+        <publisher-loc>Curitiba, PR, Brazil</publisher-loc>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="publisher-id" specific-use="scielo">ZMG8Cfv47nsFtKdcznnf9jt</article-id>
+      <article-id pub-id-type="publisher-id">S1415-65551998000300005</article-id>
+      <article-id pub-id-type="doi">10.1590/S1415-65551998000300005</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Artigos</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Validação do modelo de conceitualização de três componentes do comprometimento organizacional (Meyer e Allen, 1991)</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Medeiros</surname>
+            <given-names>Carlos Alberto Freire</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff01"/>
+          <xref ref-type="aff" rid="aff02"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Enders</surname>
+            <given-names>Wayne Thomas</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff03"/>
+        </contrib>
+      </contrib-group>
+      <aff id="aff02">
+        <addr-line>
+          <named-content content-type="city">Natal</named-content>
+          <named-content content-type="state">RN</named-content>
+        </addr-line>
+        <institution content-type="orgname">Fast Grill Alimentos Ltda</institution>
+        <country country="BR">Brasil</country>
+      </aff>
+      <aff id="aff03">
+        <addr-line>
+          <named-content content-type="city">Natal</named-content>
+          <named-content content-type="state"/>
+        </addr-line>
+        <institution content-type="orgname">Universidade Federal do Rio Grande do Norte</institution>
+        <institution content-type="orgdiv1">Programa de Pós-Graduação em Administração </institution>
+        <country country="BR">Brazil</country>
+      </aff>
+      <aff id="aff01">
+        <addr-line>
+          <named-content content-type="state"/>
+        </addr-line>
+        <institution content-type="orgname">Universidade Potiguar</institution>
+        <institution content-type="orgdiv1">Departamento de Administração </institution>
+        <country country="BR">Brazil</country>
+      </aff>
+      <pub-date date-type="collection" publication-format="electronic">
+        <month>12</month>
+        <year>1998</year>
+      </pub-date>
+      <volume>2</volume>
+      <issue>3</issue>
+      <fpage>67</fpage>
+      <lpage>87</lpage>
+      <permissions>
+        <license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/4.0/" xml:lang="en">
+          <license-p>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <p>Neste estudo foi realizada a validação do modelo de conceitualização de três componentes do comprometimento organizacional de Meyer e Allen (1991), utilizando o instrumento de 18 itens, reduzido e modificado pelos autores (Meyer, Allen e Smith, 1993). Para a validação foi utilizada a Análise Fatorial, que confirmou a estrutura tri-dimensional do comprometimento: afetiva, instrumental e normativa. Com os escores fatoriais, em face dos três componentes da teoria, foram agrupados os indivíduos em oito padrões distintos de comprometimento organizacional, utilizando Análise de Cluster e combinando componentes de comprometimento. A partir dos padrões de comprometimento estabelecidos, foram examinadas as relações existentes entre estes padrões e a performance no trabalho dos indivíduos, medida através da avaliação dos supervisores, em três bases: produtividade, centralidade no trabalho e comprometimento. Com a análise de variância foram identificados os padrões de comprometimento que se diferenciam em relação a sua performance no trabalho: o padrão de comprometimento afetivo-normativo, o comprometido nas três dimensões e o padrão instrumental-afetivo. Foram entrevistados 373 empregados e seus supervisores em 201 pequenas empresas no Estado do Rio Grande do Norte, na indústria, comércio e serviços.</p>
+      </abstract>
+      <trans-abstract xml:lang="en">
+        <p>In this study, a validation of the Meyer and Allen (1991) three component conceptual model of organizational commitment was undertaken, using their reduced and modified 18 item instrument. Three hundred and seventy-three employees and their supervisors in 201 small firms in the industrial, commercial and service sectors in the State of Rio Grande do Norte, Brazil, were interviewed. Factor analysis, which confirmed the tree dimensional commitment structure: affective, continuance and normative, was utilized for the validation. Applying Cluster analysis to the factor scores and combining commitment components, individuals were grouped into eight distinct patterns of organizational commitment. The relationships existing among patterns of organizational commitment and individual job performance, measured by supervisors' evaluation on the bases of productivity, work centrality and organizational commitment, were examined. The patterns of commitment that differentiate the individuals in relation to their work performance: the affective-normative pattern of commitment, the pattern of commitment on the three components and the continuance-affective pattern, were identified by the use of analysis of variance.</p>
+      </trans-abstract>
+      <kwd-group xml:lang="en" kwd-group-type="author-generated">
+        <kwd>work commitment</kwd>
+        <kwd>organizational commitment</kwd>
+        <kwd>Meyer and Allen model</kwd>
+        <kwd>employee performance</kwd>
+        <kwd>organizational behavior</kwd>
+      </kwd-group>
+      <kwd-group xml:lang="pt" kwd-group-type="author-generated">
+        <kwd>comprometimento</kwd>
+        <kwd>comprometimento organizacional</kwd>
+        <kwd>avaliação de performance</kwd>
+        <kwd>comportamento organizacional</kwd>
+      </kwd-group>
+    </article-meta>
+  </front>
+  <body>
+    <p>
+    <bold>ARTIGOS</bold>
+</p>
+  <p>
+    <bold>Validação do modelo de conceitualização de três componentes do comprometimento organizacional (Meyer e Allen, 1991)</bold>
+</p>
+  <p>
+    <bold>Carlos Alberto Freire Medeiros; Wayne Thomas Enders </bold>
+</p>
+  <p content-type="hr"/>
+  <p>
+    <bold>RESUMO</bold>
+</p>
+  <p>
+  </p> <p>Neste estudo foi realizada a validação do modelo de conceitualização de três componentes do comprometimento organizacional de Meyer e Allen (1991), utilizando o instrumento de 18 itens, reduzido e modificado pelos autores (Meyer, Allen e Smith, 1993). Para a validação foi utilizada a Análise Fatorial, que confirmou a estrutura tri-dimensional do comprometimento: afetiva, instrumental e normativa. Com os escores fatoriais, em face dos três componentes da teoria, foram agrupados os indivíduos em oito padrões distintos de comprometimento organizacional, utilizando Análise de <italic>Cluster</italic> e combinando componentes de comprometimento. A partir dos padrões de comprometimento estabelecidos, foram examinadas as relações existentes entre estes padrões e a performance no trabalho dos indivíduos, medida através da avaliação dos supervisores, em três bases: produtividade, centralidade no trabalho e comprometimento. Com a análise de variância foram identificados os padrões de comprometimento que se diferenciam em relação a sua performance no trabalho: o padrão de comprometimento afetivo-normativo, o comprometido nas três dimensões e o padrão instrumental-afetivo. Foram entrevistados 373 empregados e seus supervisores em 201 pequenas empresas no Estado do Rio Grande do Norte, na indústria, comércio e serviços. </p>
+  <p>
+  </p> <p>
+  <bold>Palavras-chaves:</bold> comprometimento; comprometimento organizacional; avaliação de performance; comportamento organizacional. </p>
+  <p>
+  </p> <p content-type="hr"/>
+  <p>
+    <bold>ABSTRACT</bold>
+</p>
+  <p>
+  </p> <p>In this study, a validation of the Meyer and Allen (1991) three component conceptual model of organizational commitment was undertaken, using their reduced and modified 18 item instrument. Three hundred and seventy-three employees and their supervisors in 201 small firms in the industrial, commercial and service sectors in the State of Rio Grande do Norte, Brazil, were interviewed. Factor analysis, which confirmed the tree dimensional commitment structure: affective, continuance and normative, was utilized for the validation. Applying Cluster analysis to the factor scores and combining commitment components, individuals were grouped into eight distinct patterns of organizational commitment. The relationships existing among patterns of organizational commitment and individual job performance, measured by supervisors&amp;#x27; evaluation on the bases of productivity, work centrality and organizational commitment, were examined. The patterns of commitment that differentiate the individuals in relation to their work performance: the affective-normative pattern of commitment, the pattern of commitment on the three components and the continuance-affective pattern, were identified by the use of analysis of variance. </p>
+  <p>
+  </p> <p>
+  <bold>Key words:</bold> work commitment; organizational commitment; Meyer and Allen model; employee performance; organizational behavior. </p>
+  <p>
+  </p> <p content-type="hr"/>
+  <p>
+    <bold>INTRODUÇÃO</bold>
+</p>
+  <p>
+  </p> <p>O comprometimento organizacional tem sido estudado profundamente nos últimos 40 anos. O seu enfoque principal é o de encontrar resultados que expliquem os níveis de comprometimento do indivíduo no trabalho. A grande maioria dos estudos procuraram formular modelos para quantificar o comprometimento e estudá-lo em face de variáveis que o antecedem e variáveis que lhe são conseqüentes (Medeiros, 1997). </p>
+  <p>
+  </p> <p>Na década de 90 especial atenção foi dada, pelos pesquisadores do comprometimento, à validação do modelo de conceitualização de três componentes do comprometimento organizacional desenvolvido pelos professores canadenses John P. Meyer e Natalie J. Allen (1990, 1991, 1993 e 1997). Neste modelo os autores abordam o comprometimento organizacional em três bases: afetiva, instrumental e normativa. </p>
+  <p>
+  </p> <p>O presente estudo tem como objetivo geral a validação do modelo de conceitualização de três componentes do comprometimento organizacional proposto por Meyer e Allen (1991). Para essa validação aplicamos o instrumento modificado pelos autores em 1993, utilizado para se medir o comprometimento em face das três bases conceitualizadas pelo modelo de três componentes de comprometimento organizacional (Meyer, Allen e Smith, 1993). </p>
+  <p>
+  </p> <p>O objetivo deste trabalho foi também o de identificar os níveis de comprometimento dos indivíduos, em face dos três componentes do modelo e da forma desse comprometimento através da combinação dos componentes presentes em cada indivíduo. A partir da forma do comprometimento identificado e de padrões do comprometimento organizacional estabelecidos, procuramos relacionar os padrões com a performance dos indivíduos no trabalho, abordando a produtividade, a centralidade no trabalho e o próprio comprometimento, avaliado pelos seus supervisores. </p>
+  <p>
+  </p> <p>Uma das grandes preocupações das organizações, tanto no meio acadêmico como no empresarial, é a de conseguir selecionar e manter, no seu quadro funcional, indivíduos competentes, dedicados, engajados e, principalmente, envolvidos com os problemas da organização. Como afirma Valentim (1992, p. 183),&amp;quot;há vagas sim, senhores. Há vagas para quem esteja disposto ao sacrifício, ao trabalho, cuja maior recompensa não seja medida em valores taxados e passageiros&amp;quot;. O que o autor tenta mostrar é que há hoje uma busca por pessoas que não trabalham só pelo salário ou por benefícios imediatos, mas trabalham pelo prazer, pelo significado que o trabalho tem para a vida delas e que são relacionados com suas vidas. </p>
+  <p>
+  </p> <p>Nem sempre as organizações estão satisfeitas com os seus recursos humanos, apesar de tentar estimular os indivíduos através de diversos meios e com as mais variadas recompensas. McGregor (1992, p. 46) faz um questionamento que se aproxima em demasia do problema da pesquisa: &amp;quot;Por que as pessoas não são produtivas? Pagamos bons salários, oferecemos boas condições de trabalho, damos excelentes benefícios complementares e emprego estável. No entanto, parece que as pessoas não querem fazer mais que o esforço mínimo&amp;quot;. Os questionamentos levantados por McGregor (1992) poderiam ser traduzidos da seguinte forma: Por que as pessoas não são comprometidas com a organização?, ou, Que fatores estão faltando ao empregado para que ele seja comprometido? </p>
+  <p>
+  </p> <p>A importância deste trabalho reside também em se fazer um estudo sobre o comprometimento organizacional nas pequenas empresas privadas, levando-se em consideração as características regionais do Brasil e do nordeste. A maioria dos estudos realizados sobre comprometimento se concentram no exterior e os estudos brasileiros se concentraram em empresas públicas. Esse estudo em pequenas empresas privadas é de extrema importância, já que o predomínio também é o de se fazer em empresas grandes, contrariando a seqüência natural de se estudar as pequenas, que notoriamente são maioria no mundo, e também no Brasil são as maiores geradoras de emprego. </p>
+  <p>
+    <bold>O COMPROMETIMENTO ORGANIZACIONAL</bold>
+</p>
+  <p>
+  </p> <p>É importante estabelecer o significado da palavra comprometimento. Este trabalho foi desenvolvido por Bastos (1994b, p. 86), que estabeleceu vários significados para a palavra comprometimento. Dentre elas identificou o comprometimento com um significado de engajamento, agregamento e envolvimento. Mais adiante ressaltou o comprometimento e o seu caráter disposicional: &amp;quot;Como uma disposição, comprometimento é usado para descrever não só ações, mas o próprio indivíduo, é assim tomado como um estado, caracterizado por sentimentos ou reações afetivas positivas tais como lealdade em relação a algo&amp;quot;. Segundo Bastos (1994b), comprometimento é ainda uma propensão à ação, de se comportar de determinada forma, de ser um indivíduo disposto a agir. Este é o significado que vamos utilizar na pesquisa, o comprometimento como um conjunto de sentimentos e ações do indivíduo em relação a sua organização. </p>
+  <p>
+  </p> <p>Mowday, Steers e Porter (1979, p. 225), em seu clássico trabalho <italic>Measurement of Organizational Commitment</italic>, apesar de reconhecerem a existência de várias definições e linhas para o constructo, usaram a definição anteriormente elaborada por Porter e Smith (apud Mowday, Steers e Porter, 1979) para definir comprometimento: "Comprometimento é uma relação forte entre um indivíduo identificado e envolvido com uma organização, e pode ser caracterizado por três fatores: estar disposto a exercer um esforço considerável em benefício da organização; a crença e a aceitação dos valores e objetivos da organização e um forte desejo de se manter como membro da organização". Na pesquisa sobre comprometimento organizacional, essa corrente tem dominado a literatura, comumente chamada de <bold>afetiva</bold>, representada fortemente pelos trabalhos desenvolvidos pela equipe dos professores Mowday, Porter e Steers (1979, 1982). Seus estudos tiveram início no começo da década de 70 e culminaram com a validação de um instrumento para se medir o comprometimento em 1979, o OCQ - <italic>Organizational Commitment Questionnaire</italic>, e com a publicação de um livro sobre o comprometimento organizacional em 1982. O OCQ foi validado utilizando um banco de dados com 2563 empregados; obteve um índice de consistência interna ou alfa de Cronbach de 0,90. A partir de então esta escala passou a ser o instrumento mais utilizado para se medir o comprometimento. </p>
+  <p>
+  </p> <p>Outra corrente bastante estudada é chamada de <bold>instrumental </bold>ou <bold>
+  <italic>side bet</italic>
+</bold>, derivada dos estudos de Becker, notadamente de seu artigo <italic>Notes on the Concept of Commitment</italic>, publicado em 1960. Em seu trabalho Becker (1960, p. 34) inicia ressaltando a importância do tema nas discussões sociológicas: "Sociólogos fazem uso do conceito de comprometimento quando estão tentando contabilizar o engajamento das pessoas que agem em consistentes linhas de atividade". Depois descreve o comprometimento como um conceito que demarca formas de ações características de certos tipos de pessoas. Becker (1960, p. 33) descreve comprometimento como uma tendência do indivíduo em se engajar em "linhas consistentes de atividade"; esse comprometimento é chamado por ele de <italic>side bet</italic>. Para ele o indivíduo permanece na empresa devido a custos e benefícios associados a sua saída. O comprometimento instrumental foi operacionalizado pelas escalas desenvolvidas por Ritzer e Trice (1969) e por Hrebiniak e Alluto (1972). A conclusão principal do trabalho de Alluto, Hrebiniak e Alonso (1973) foi de que a pesquisa deles dá algum apoio à teoria <italic>side bet</italic>, comprovada principalmente pelas variáveis idade e experiência de trabalho, bem como pela presença de planos de aposentadoria e fundos de pensão. </p>
+  <p>
+  </p> <p>Wiener (1982) enfatiza que o elemento central, na definição do comprometimento, de aceitar os valores e objetivos organizacionais, representa uma forma de controle sobre as ações das pessoas, o qual o autor denomina de normativo-instrumental. Para o autor indivíduos comprometidos exibem certos comportamentos, porque acreditam que é <bold>certo</bold> e moral fazê-lo. O estudo de Wiener (1982) deriva do Modelo de Intenções Comportamentais de Fishbein de 1967 (apud Wiener, 1982). O modelo de Fishbein (apud Wiener, 1982) objetiva predizer e compreender as intenções comportamentais dos indivíduos. Para Fishbein (apud Wiener, 1982), este comportamento é determinado basicamente por dois fatores: o atitudinal, em que sua atitude acerca de uma ação é resultado da avaliação dos efeitos desta ação; o normativo, em que sua percepção acerca de uma ação é resultado de pressões normativas, geralmente da cultura da empresa, que impõem sua ação e o seu comportamento na organização. </p>
+  <p>
+  </p> <p>
+  <bold>O Modelo de Conceitualização em Três Componentes de Meyer e Allen (1991)</bold>
+</p>
+  <p>
+  </p> <p>Esta conceitualização em três dimensões foi uma decorrência dos estudos de Meyer e Allen (1984) que, após realizarem uma análise de variância com diversas escalas, concluíram que as escalas de Ritzer-Trice e Hrebiniak-Alluto não mediam o comprometimento instrumental como Becker (1960) conceitualizou, pois possuíam uma correlação maior com o comprometimento afetivo do que com o instrumental. Assim, Meyer e Allen (1984) desenvolveram dois questionários diferentes: o <italic>Affective Commitment Scale</italic> - ACS, para medir o comprometimento afetivo; e o <italic>Continuance Commitment Scale</italic> - CCS, para medir o comprometimento instrumental, ou <italic>side bet</italic>. </p>
+  <p>
+  </p> <p>Após o trabalho de McGee e Ford (1987), que examinaram as propriedades psicossométricas das escalas desenvolvidas por Meyer e Allen (1984), foi identificado o componente normativo do comprometimento. A conceitualização da dimensão normativa está apoiada pelo trabalho de Wiener (1982). Para o autor indivíduos comprometidos exibem certos comportamentos, porque acreditam que é <bold>certo</bold> e moral fazê-lo. </p>
+  <p>
+  </p> <p>Na revisão da literatura realizada por Allen e Meyer (1990), os autores já incorporam a nova dimensão e conceitualizam três componentes na definição do comprometimento organizacional: 1) comprometimento como um apego <italic>affective</italic>, ou <bold>afetivo</bold> com a organização; 2) comprometimento percebido como custos associados a deixar a organização, que os autores chamam de <italic>continuance</italic> e que tratamos como <bold>instrumental</bold>; 3) e comprometimento como uma obrigação em permanecer na organização, que os autores denominam de <italic>obligation</italic> e depois reconceituam como <italic>normative</italic> (Meyer, Allen e Smith, 1993), e que chamamos de <bold>normativo</bold>. Allen e Meyer (1990, p. 3) caracterizam os indivíduos das três dimensões da seguinte forma: "Empregados com um forte comprometimento afetivo permanecem na organização porque eles querem, aqueles com comprometimento instrumental permanecem porque eles precisam e aqueles com comprometimento normativo permanecem porque eles sentem que são obrigados". </p>
+  <p>
+  </p> <p>Nesta nova perspectiva de tratamento do comprometimento é que se insere o trabalho de Somers (1995), que trata dos conseqüentes do comprometimento: a) intenção de permanecer na organização; b) <italic>turnover</italic> e c) absenteísmo, relacionando-os com as três dimensões: afetiva, normativa e instrumental. Para Somers (1995, p. 54), "depois de um longo período em que a pesquisa do comprometimento foi focalizada quase que exclusivamente num apego afetivo às organizações, uma nova perspectiva baseada no modelo de múltiplos componentes de comprometimento está emergindo". Jaros et al. (1993) também estudaram o comprometimento em três dimensões. Os autores avaliaram os conseqüentes relacionados ao processo de deixar a organização: intenção de partir, intenção de buscar outro emprego e <italic>turnover</italic> com o comprometimento, relacionando-os com os três componentes do comprometimento. </p>
+  <p>
+  </p> <p>Portanto, seguindo a tendência atual de tratar o comprometimento no modelo de conceitualização em três dimensões é que realizamos esta pesquisa. Tenta-se validar o modelo para a realidade cultural brasileira, buscando relações entre os três componentes do comprometimento organizacional com a performance no trabalho. </p>
+  <p>
+  </p> <p>
+  <bold>Conseqüentes do Comprometimento Organizacional - o Estudo da Performance no Trabalho</bold>
+</p>
+  <p>
+  </p> <p>A pesquisa procura relacionar as formas e os níveis de comprometimento com a performance do indivíduo no trabalho. Apesar dos conseqüentes do comprometimento serem menos explorados que os correlatos e antecedentes, alguns autores já encontraram relação entre essas variáveis. Larson e Fukami (apud Mathieu e Zajac, 1990) afirmam que altos níveis de comprometimento devam relacionar-se com a melhora da performance no trabalho em algumas situações. Meyer et al. (1989) afirmam que existe correlação positiva entre o comprometimento afetivo e a performance no trabalho, e uma relação negativa entre o comprometimento instrumental e a performance no trabalho. Em outro estudo Meyer, Allen e Smith (1993, p. 539) sugerem que: &amp;quot;o comprometimento afetivo e em menor extensão o comprometimento normativo poderiam ser positivamente relacionados com a performance no trabalho, entretanto o comprometimento instrumental não tem relação ou está negativamente relacionado com a performance no trabalho&amp;quot;. </p>
+  <p>
+    <bold>METODOLOGIA</bold>
+</p>
+  <p>
+  </p> <p>
+  <bold>Universo, Amostra e Instrumento de Coleta de Dados</bold>
+</p>
+  <p>
+  </p> <p>A pesquisa foi realizada no universo das pequenas empresas do Estado do Rio Grande do Norte. A amostra foi de 201 empresas de três setores de atividade econômica: indústria, comércio e serviços, em municípios da grande Natal e do interior do Estado. Utilizou-se para a seleção desta amostra o cadastro industrial da FIERN, o cadastro da Secretaria de Tributação/RN, o da Secretaria Municipal de Finanças de Natal e o do SEBRAE, selecionando-se as empresas de modo aleatório. Foram entrevistados 201 gerentes das empresas da amostra e 398 funcionários, sendo 2 funcionários em 197 empresas e 1 funcionário em 4 empresas. </p>
+  <p>
+  </p> <p>O instrumento de coleta utilizado foi um questionário composto de 3 partes; 2 partes foram respondidas pelos empregados das empresas selecionadas; a parte final foi respondida pelos gerentes. A primeira parte do instrumento foi composta de questões fechadas, nas quais foram coletados dados sobre algumas características gerais e demográficas dos respondentes. A segunda parte do questionário trouxe as 18 questões do instrumento utilizado por Meyer, Allen e Smith (1993). Os seis primeiros indicadores do instrumento são indicadores de <bold>comprometimento afetivo</bold>, os seis seguintes são indicadores de <bold>comprometimento instrumental</bold>, e os seis últimos indicadores são de <bold>comprometimento normativo</bold>. A terceira e última parte foi um questionário com três indicadores: um indicador de produtividade, um indicador de comprometimento e um indicador de centralidade no trabalho dos empregados. Este questionário foi aplicado ao dono, gerente, ou supervisor dos empregados respondentes. Essa medida está apoiada pelo trabalho de Meyer, Allen e Smith (1993), que encontraram correlações entre comprometimento e performance no trabalho, quando avaliada pelos supervisores, positivamente relacionadas com o comprometimento afetivo e negativamente relacionadas com o comprometimento instrumental. Campbell, Campbell e Kenard (1994) também utilizam a avaliação feita pelos chefes dos escritórios acerca da produtividade de seus empregados. </p>
+  <p>
+  </p> <p>
+  <bold>A Análise dos Dados</bold>
+</p>
+  <p>
+  </p> <p>Para estabelecer as dimensões do comprometimento organizacional dos indivíduos, aplicamos o questionário proposto por Meyer, Allen e Smith (1993), composto de 18 itens, sendo que cada 6 itens do questionário correspondem a uma dimensão do comprometimento organizacional estabelecida pelos autores: afetiva, instrumental e normativa. O questionário utilizado foi do tipo Likert com respostas na escala de 1 a 5. As respostas foram tratadas com a técnica de <bold>análise fatorial, </bold>utilizando-se o método de <bold>componentes principais e rotação varimax </bold>para a determinação dos fatores ou dimensões do comprometimento organizacional. Com o resultado da análise fatorial foi estabelecido um escore fatorial para cada indivíduo nas três dimensões principais extraídas pela análise. Para efetuar uma classificação em que se levasse em conta a presença de um, dois ou de até três componentes do comprometimento em cada indivíduo, optou-se por fazer uma <bold>análise de <italic>cluster</italic> </bold>(Norusis, 1994). </p>
+  <p>
+  </p> <p>Para medir a performance dos indivíduos no trabalho elaboramos três indicadores: um de produtividade, um de comprometimento e um de centralidade no trabalho, com respostas tipo Likert de 1 a 5, variando de Discordo Totalmente a Concordo Totalmente. Estes indicadores foram respondidos pelo chefe imediato do empregado. Com as respostas dos três indicadores aplicamos a técnica da análise fatorial<sup>(</sup>
+  <fn id="c1">
+    <p>
+  </p>
+</fn>
+  <xref ref-type="fn" rid="b1">
+    <sup>1</sup>
+</xref>
+  <sup>)</sup>, <bold>método de componentes principais sem rotação</bold>, de que extraímos um único fator que serve de índice para se medir a performance. Foram calculados os escores fatoriais de cada indivíduo neste índice, como foi feito no caso dos componentes de comprometimento. Para se saber quais grupos de empregados, identificados pela análise de <italic>cluster</italic>, os indicadores e a dimensão performance diferenciam, utilizamos a técnica <bold>one-way ANOVA</bold>, método LSD - <italic>least siginificant difference</italic> (Glass e Hopkins, 1984). </p>
+  <p>
+    <bold> RESULTADOS E DISCUSSÃO</bold>
+</p>
+  <p>
+  </p> <p>Dos 398 empregados entrevistados na pesquisa, 25 casos foram retirados da análise por estarem com alguns dados faltando. Assim ficamos com 373 casos, dos quais podemos descrever as características a seguir. </p>
+  <p>
+  </p> <p>Na amostra, 52% é constituída de pessoas do sexo masculino e 48% do sexo feminino; 48,7% são solteiros, 43,8% são casados, 6,7% separados e 0,8% viúvos. A idade varia de 14 a 61 anos de idade, com uma média de 29,3 anos. </p>
+  <p>
+  </p> <p>Quanto ao grau de instrução, 22,5% são analfabetos ou têm o primeiro grau incompleto; 8,2% têm o primeiro grau completo; 17,6% têm o segundo grau incompleto; 38,4% têm o segundo grau completo; 3,1% além do segundo grau possuem ainda um curso técnico; 3,8% têm o curso superior incompleto; 5,6% já concluíram o curso superior e 0,5% têm curso de pós-graduação. </p>
+  <p>
+  </p> <p>O salário varia de 1 a 30 salários mínimos, com salário médio de 2,44 salários mínimos; 76,9% têm o cargo de auxiliar, 21,3% são chefes ou supervisores, e 1,8% são diretores ou gerentes. </p>
+  <p>
+  </p> <p>O tempo de serviço na empresa varia de 1 mês a 23 anos de serviço, com uma média de 3,96 anos. A experiência de trabalho varia de 1 mês a 35 anos, com uma média de 8,67 anos; 60,4% nunca trabalhou em empresas do mesmo ramo; 30,2% já trabalhou no mesmo serviço que fazem hoje e 9,5% em trabalho diferente do que desempenham na empresa. </p>
+  <p>
+  </p> <p>Quanto ao grau de instrução dos pais dos respondentes, 58,4% são analfabetos ou têm o primeiro grau incompleto; 17,6% têm o primeiro grau completo; 7,9% têm o segundo grau incompleto; 9,9% têm o segundo grau completo; 1% além do segundo grau possuem ainda um curso técnico; 0,3% têm o curso superior incompleto; 4,3% já concluíram o curso superior e 0,5% têm curso de pós-graduação. </p>
+  <p>
+  </p> <p>
+  <bold>A Identificação dos Três Componentes do Comprometimento Organizacional</bold>
+</p>
+  <p>
+  </p> <p>A análise fatorial produziu cinco fatores como resultado da extração. Dos dezoito indicadores de comprometimento organizacional utilizados da escala de Meyer, Allen e Smith (1993), cinco indicadores formaram o primeiro fator (<xref ref-type="fig" rid="quad1">Quadro 1</xref>). Desses indicadores os de posição 1, 2 e 5, são indicadores de comprometimento afetivo: <bold>Eu realmente sinto os problemas da organização como se fossem meus, Esta organização tem um imenso significado pessoal para mim</bold> e <bold>Eu seria muito feliz em dedicar o resto da minha carreira nesta organização</bold>. O indicador de posição 3 da extração é um indicador de comprometimento normativo, segundo a teoria de Meyer e Allen (1991); mas neste indicador encontra-se também, para a nossa realidade brasileira, uma presença de afetividade, pois o indicador <bold>Esta organização merece minha lealdade</bold> significa um respeito e consideração pela empresa. Talvez a palavra <italic>loyalty</italic> (lealdade) não possua na língua inglesa a mesma interpretação sentimental que na língua portuguesa. Apesar do indicador de lealdade ser classificado como normativo por Meyer, Allen e Smith (1993), o sentimento de lealdade é um indicador afetivo presente no OCQ de Mowday, Porter e Steers (1979). O indicador de posição 4 da extração é um indicador de comprometimento instrumental para a teoria de Meyer e Allen (1991): <bold>Na situação atual, ficar com minha organização é na realidade uma necessidade tanto quanto um desejo</bold>. A expressão final <bold>tanto quanto um desejo</bold> provoca um efeito moderador da primeira afirmação <bold>é na realidade uma necessidade</bold>, tornando este indicador um de componentes mistos das duas dimensões afetiva e instrumental. Portanto descreve-se aqui este fator como o da presença da <bold>dimensão afetiva</bold> na população estudada e o da presença do componente afetivo da teoria. </p>
+  <p>
+  </p> <p>
+  <fig id="quad1">
+    <graphic xlink:href="/img/revistas/rac/v2n3/a05quad01.jpg"/>
+</fig>
+</p>
+  <p/>
+    <p>O segundo fator foi formado por quatro indicadores de comprometimento normativo: <bold>Eu não deixaria minha organização agora porque eu tenho uma obrigação moral com as pessoas daqui</bold>; <bold>Eu me sentiria culpado se deixasse minha organização agora</bold>; <bold>Mesmo se fosse vantagem para mim, eu sinto que não seria certo deixar minha organização agora</bold> e <bold>Eu devo muito a minha organização</bold>. Estes indicadores denotam exatamente o comprometimento normativo, pelo qual as pessoas permanecem no emprego por uma <bold>obrigação moral</bold>. Descreve-se este segundo fator como a <bold>dimensão normativa</bold> na população do estudo e o da presença do componente normativo do modelo de Meyer e Allen (1991). </p>
+  <p>
+  </p> <p>O terceiro fator extraído pela análise fatorial inclui quatro indicadores de comprometimento instrumental, encontrando a <bold>dimensão instrumental</bold> na população, com os seguintes indicadores: <bold>Se eu decidisse deixar minha organização agora, minha vida ficaria bastante desestruturada</bold>; <bold>Eu acho que teria poucas alternativas se deixasse esta organização</bold>; Mesmo se eu quisesse, seria muito <bold>difícil para mim deixar minha organização agora</bold> e <bold>Uma das poucas conseqüências negativas de deixar esta organização seria a escassez de alternativas imediatas</bold>. Configura-se portanto a existência da dimensão instrumental, quando os empregados trabalham mais por necessidade e escassez de alternativas imediatas de emprego do que porque querem e estão dispostos a se esforçar em prol da organização. Comprova-se a presença do terceiro componente do modelo de Meyer e Allen (1991). </p>
+  <p>
+  </p> <p>O quarto fator extraído, que não apresentou um coeficiente alfa de Cronbach dentro dos limites aceitáveis, e o quinto fator, que reuniu duas questões do comprometimento afetivo, não foram tratados por estarem fora dos objetivos do estudo, mas indicam a presença em nossa população de uma dimensão nova, que merece estudos posteriores. Estes indicadores se agregam em torno de um componente emocional e refletem um sentimento de rejeição/aceitação das empresas com os empregados. </p>
+  <p>
+  </p> <p>O resultado da extração da análise fatorial comprova o poder de generalização do <bold>modelo de três componentes do comprometimento </bold>de Meyer e Allen (1991) na forma da presença das dimensões afetiva, normativa e instrumental do comprometimento organizacional. </p>
+  <p>
+  </p> <p>Os três fatores extraídos de comprometimento organizacional possuem um índice de consistência interna, ou alfa de Cronbach aceitáveis (<xref ref-type="fig" rid="quad2">Quadro 2</xref>). O primeiro fator, dimensão afetiva, possui um alfa de 0,68; o segundo, dimensão normativa, possui um alfa de 0,70 e o terceiro fator, dimensão instrumental, um alfa de 0,62. Meyer e Allen (1997) também se utilizam do coeficiente alfa para estimar a consistência interna dos componentes no instrumento. O valor do alfa encontrado na pesquisa se situa abaixo dos valores médios obtidos nas validações realizadas em outras culturas. As médias são: à = 0,85 para o componente afetivo; à = 0,73 para o componente normativo e à = 0,79 para o componente instrumental, segundo Allen e Meyer (apud Meyer e Allen, 1997). </p>
+  <p>
+  </p> <p>
+  <fig id="quad2">
+    <graphic xlink:href="/img/revistas/rac/v2n3/a05quad02.jpg"/>
+</fig>
+</p>
+  <p/>
+    <p>
+    <bold>O Estabelecimento de Padrões de Comprometimento Organizacional</bold>
+</p>
+  <p>
+  </p> <p>Com o resultado da análise fatorial e a obtenção da estrutura tridimensional do comprometimento organizacional, foi extraído um escore fatorial para cada indivíduo. Assim, passamos à tarefa de analisar como se comportavam os empregados em relação às três dimensões de comprometimento. Notou-se claramente, quando se foi estipular em que dimensão cada indivíduo estava inserido, que havia muitos indivíduos com escores fatoriais positivos em mais de uma dimensão. Realizamos assim a análise de <italic>cluster</italic> para separar os indivíduos em padrões de comprometimento que se observa quando se visualiza os escores fatoriais obtidos, formando grupos de indivíduos que possuem escores positivos com mais de uma dimensão (<xref ref-type="fig" rid="quad3">Quadro 3</xref>). Assim, os grupos foram especificados da seguinte forma, para se poder fazer a análise. O primeiro grupo especificado para a análise de <italic>cluster</italic> foi o dos <bold>comprometidos nas três dimensões - 1</bold>; o segundo, o dos que eram <bold>descomprometidos nas três dimensões - 2</bold>; o terceiro, dos indivíduos <bold>comprometidos afetivamente exclusivamente - 3</bold>; o quarto grupo, dos indivíduos <bold>comprometidos normativamente exclusivamente - 4</bold>; o quinto, dos indivíduos <bold>comprometidos instrumentalmente exclusivamente - 5</bold>; o sexto, com um padrão de <bold>comprometimento afetivo-normativo - 6</bold>; o sétimo grupo com um padrão de c<bold>omprometimento afetivo-instrumental - 7</bold>; o oitavo e último grupo, com os de padrão de <bold>comprometimento normativo-instrumental - 8</bold>. Na <xref ref-type="fig" rid="fig1">Figura 1</xref>, pode-se visualizar o resultado da classificação final após a análise de <italic>cluster</italic>. </p>
+  <p>
+  </p> <p>
+  <fig id="quad3">
+    <graphic xlink:href="/img/revistas/rac/v2n3/a05quad03.jpg"/>
+</fig>
+</p>
+  <p/>
+    <p>
+    <fig id="fig1">
+    <graphic xlink:href="/img/revistas/rac/v2n3/a05fig01.jpg"/>
+</fig>
+</p>
+  <p/>
+    <p>O estabelecimento de padrões de comprometimento organizacional já foi realizado por Bastos (1994a) e por Medeiros (1997). Bastos (1994a) reuniu focos de comprometimento: organização, carreira e sindicato, formando oito grupos de comprometimento no trabalho<sup>(</sup>
+  <fn id="c2">
+    <p>
+  </p>
+</fn>
+  <xref ref-type="fn" rid="b2">
+    <sup>2</sup>
+</xref>
+  <sup>)</sup>. Medeiros (1997) reuniu bases de comprometimento organizacional: afetiva, normativa e instrumental, formando também oito grupos. Para Bastos (1994a), "pode-se considerar os <bold>padrões</bold> como <bold>unidade de análise</bold> relevante por apreender a questão do comprometimento em um nível de maior complexidade, e por conseguinte, mais próximo da situação real em que atua o trabalhador". </p>
+  <p>
+  </p> <p>
+  <bold>Performance no Trabalho: um Estudo da Produtividade, Centralidade no Trabalho e Comprometimento Avaliado pelos Supervisores</bold>
+</p>
+  <p>
+  </p> <p>O tratamento inicial com os três indicadores de performance foi realizar uma análise fatorial para o estabelecimento dos escores fatoriais de performance dos indivíduos. A extração na análise fatorial, utilizando o método de <bold>componentes principais e nenhuma rotação </bold>produziu um fator único, um índice cuja composição está apresentada no <xref ref-type="fig" rid="quad4">Quadro 4</xref>. </p>
+  <p>
+  </p> <p>
+  <fig id="quad4">
+    <graphic xlink:href="/img/revistas/rac/v2n3/a05quad04.jpg"/>
+</fig>
+</p>
+  <p/>
+    <p>O fator extraído pela análise fatorial explicou 61,9% da variação, possui um eigenvalor de 1,858 e um coeficiente alfa de Cronbach de 0,70. </p>
+  <p>
+  </p> <p>Para encontrar quais indicadores de produtividade diferenciavam os diversos padrões de comprometimento organizacional, utilizamos a análise de comparação de médias <bold>
+  <italic>one-way ANOVA</italic>
+</bold>, método <italic>LSD - least-significant difference</italic>, cujos resultados se encontram no <xref ref-type="fig" rid="quad5">Quadro 5</xref>. </p>
+  <p>
+  </p> <p>
+  <fig id="quad5">
+    <graphic xlink:href="/img/revistas/rac/v2n3/a05quad05.jpg"/>
+</fig>
+</p>
+  <p/>
+    <p>A <bold>dimensão performance</bold>, que corresponde ao fator único extraído na análise, diferencia os grupos de comprometimento afetivo-normativo, comprometidos nas três dimensões, comprometimento instrumental-afetivo e comprometimento afetivo do grupo comprometimento normativo. Os padrões de comprometimento afetivo-normativo, comprometidos nas três dimensões de comprometimento instrumental-afetivo e de comprometimento afetivo, possuem escores de performance maiores e são significativamente diferentes do padrão de comprometimento normativo. Este resultado corresponde ao encontrado por Meyer, Allen e Smith (1993), que encontraram uma correlação positiva da performance no trabalho com o comprometimento afetivo (r=0,16 e p=0,01) e uma correlação nula com o comprometimento normativo (r=0,06). </p>
+  <p>
+  </p> <p>O <bold>indicador de produtividade Acredito que ele é um funcionário muito produtivo para a empresa </bold>é significante (F=,0262) como diferenciador dos grupos, e o teste LSD diferencia os grupos comprometimento afetivo-normativo, comprometidos nas três dimensões, comprometimento afetivo, comprometimento instrumental, descomprometidos nas três dimensões, comprometimento instrumentalafetivo e comprometimento normativo-instrumental do grupo comprometimento normativo. </p>
+  <p>
+  </p> <p>O <bold>indicador de comprometimento Ele é um funcionário que veste a camisa da empresa, faz por ela o que for preciso </bold>diferencia os grupos comprometidos nas três dimensões dos grupos descomprometidos nas três dimensões, comprometimento instrumental e comprometimento normativo; diferencia também o grupo comprometimento afetivo-normativo dos grupos descomprometidos nas três dimensões, comprometimento instrumental e comprometimento normativo. </p>
+  <p>
+  </p> <p>O <bold>indicador de centralidade no trabalho Acredito que uma das coisas mais importantes da sua vida é o trabalho</bold> diferencia os indivíduos dos grupos comprometimento afetivo-normativo e comprometidos nas três dimensões dos grupos comprometimento normativo e comprometimento instrumental. </p>
+  <p>
+  </p> <p>
+  <bold>Caracterização dos Grupos de Padrões de Comprometimento Organizacional</bold>
+</p>
+  <p>
+  </p> <p>A caracterização dos diversos grupos que se estabeleceram na pesquisa foi realizada com as descrições, que emergem das discriminações realizadas pela análise de variância obtidas no tópico anterior. Assim, descreveremos os padrões de comprometimento organizacional, segundo a avaliação realizada por seus supervisores. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Comprometido nas Três Dimensões</bold>
+</p>
+  <p>
+  </p> <p>No grupo dos comprometidos nas três dimensões é onde se encontra o maior índice de centralidade no trabalho, e o segundo maior índice de produtividade e de comprometimento, quando avaliado pelos seus supervisores. No índice de performance, que reuniu os três indicadores - produtividade, centralidade no trabalho e comprometimento - obteve o segundo melhor escore. Para Dubin, Champoux e Porter (1975, p. 411) &amp;quot;empregados com a vida centrada no trabalho têm um alto nível de comprometimento organizacional&amp;quot;. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Descomprometido nas Três Dimensões</bold>
+</p>
+  <p>
+  </p> <p>É o grupo onde se obteve o segundo menor índice de comprometimento, quando avaliado pelos seus supervisores, confirmando a avaliação feita por eles próprios, que se colocam como descomprometidos. Quanto à produtividade e à centralidade no trabalho esse padrão obteve escores medianos. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Comprometido Afetivo</bold>
+</p>
+  <p>
+  </p> <p>O padrão de comprometimento afetivo obteve o terceiro maior índice de produtividade, quanto ao comprometimento e à centralidade obteve valores medianos. No índice de performance obteve a quarta melhor média. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Comprometido Normativo</bold>
+</p>
+  <p>
+  </p> <p>O grupo de padrão de comprometimento normativo é onde se encontra o menor índice de produtividade, sendo significativamente diferente de todos os grupos. Possui também o menor índice de comprometimento na avaliação dos supervisores, e o segundo menor índice de centralidade no trabalho. Neste padrão é onde talvez estejam inseridos os indivíduos apontados por McGregor (1992, p. 46), quando afirma: &amp;quot;Por que as pessoas não são produtivas? Pagamos bons salários, oferecemos boas condições de trabalho, damos excelentes benefícios complementares e emprego estável. No entanto parece que as pessoas não querem fazer mais que o esforço mínimo&amp;quot;. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Comprometido Instrumental</bold>
+</p>
+  <p>
+  </p> <p>É o padrão de comprometimento organizacional que possui o menor índice de centralidade no trabalho. Quanto à sua produtividade, obteve um valor mediano em face dos outros grupos. Obteve o terceiro menor índice de comprometimento, sendo significativamente diferente dos padrões afetivo-normativo e comprometidos nas três dimensões. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Comprometido Afetivo-Normativo</bold>
+</p>
+  <p>
+  </p> <p>É o padrão de comprometimento organizacional de maior índice de produtividade, maior índice de comprometimento e segundo maior índice de centralidade no trabalho. No escore de performance obteve a melhor média. Este grupo talvez seja o que mais possui características que se aproximam das conceituações originais de Porter e Smith (apud Mowday, Steers e Porter, 1979), acerca do que é ser comprometido. A presença do componente afetivo predominante (de sentir os problemas da organização como se fossem seus, da organização ter um imenso significado, de merecer sua lealdade e do desejo de permanecer) e também a presença do componente normativo, que reflete o sentimento de obrigação em permanecer, como conceitualizado por Meyer e Allen (1991), e de assumir os objetivos e valores da organização, como conceitualizado por Weiner (1982), são refletidas aqui nos melhores índices de produtividade e comprometimento, quando avaliados por seus supervisores. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Comprometido Instrumental-Afetivo</bold>
+</p>
+  <p>
+  </p> <p>Este padrão de comprometimento organizacional possui a terceira maior média de comprometimento e de centralidade no trabalho. No escore geral de performance obteve a terceira maior média. Este padrão possui as características de comprometimento instrumental como conceitualizado por Becker (1960), associado às características de comprometimento afetivo como conceitualizadas por Porter e Smith (apud Mowday, Steers e Porter, 1979); indica que a associação destes dois componentes reflete o bom desempenho no trabalho. </p>
+  <p>
+  </p> <p>
+  <bold>O Padrão Comprometido Normativo-Instrumental</bold>
+</p>
+  <p>
+  </p> <p>Este padrão de comprometimento organizacional quanto à produtividade possui o segundo escore mais baixo. Quanto à centralidade e ao comprometimento, possui valores medianos. No índice de performance obteve o terceiro escore mais baixo. </p>
+  <p>
+    <bold>CONCLUSÕES</bold>
+</p>
+  <p>
+  </p> <p>A pesquisa obteve resultados concordantes com as teorias estudadas e, de maneira geral, acreditamos que um importante passo foi dado no conhecimento do comprometimento organizacional. </p>
+  <p>
+  </p> <p>A conceitualização do comprometimento em três componentes foi comprovada para a realidade brasileira, de modo especial para as pequenas empresas nos três setores de atividade econômica: indústria, comércio e serviços. Através da extração da análise fatorial obtiveram-se os três componentes do comprometimento organizacional: afetivo, normativo e instrumental, como conceitualizados por Meyer e Allen (1991). A utilização do modelo de Meyer e Allen (1991) permitiu entender-se melhor como se processa o comprometimento dentro dos indivíduos. Cada pessoa é caracterizada por relações positivas e negativas com cada dimensão do comprometimento, variando de intensidade com cada uma dessas dimensões. O estabelecimento de padrões de comprometimento organizacional, formados pela combinação de dimensões de comprometimento presentes nos indivíduos, foi uma importante conquista no conhecimento acerca do comprometimento organizacional e da sua literatura. Foi de extrema valia para a pesquisa a utilização da análise estatística, especialmente a análise fatorial, a análise de <italic>cluster</italic> e a análise de variância. Futuras pesquisas devem procurar repetir este estudo e tentar re-estabelecer os padrões de comprometimento aqui encontrados, para verificá-los e validálos. É importante também para futuros estudos a procura por novas dimensões que possam existir no comprometimento organizacional, como já citamos neste trabalho; acreditamos que possa existir uma nova dimensão latente no comprometimento, ligada a um componente de <bold>vínculo emocional </bold>entre o indivíduo e sua organização. </p>
+  <p>
+  </p> <p>A importância da pesquisa residiu não apenas no estabelecimento de padrões de comprometimento organizacional, mas também na identificação de suas relações com a performance no trabalho, aqui avaliadas com base na opinião dos supervisores. O estabelecimento de indicadores de produtividade, de centralidade no trabalho e de comprometimento e do índice de performance foi também importante para apontar as diferenciações entre os padrões de comprometimento organizacional. Novos estudos devem ser feitos para verificar se os padrões de comprometimento organizacional estabelecidos neste estudo se diferenciam em confronto com outros conseqüentes e antecedentes do comprometimento organizacional. </p>
+  <p>
+  </p> <p>Estabelecemos na pesquisa os padrões de comprometimento organizacional que se destacam em sua performance: os afetivos-normativos, os comprometidos nas três dimensões, seguidos dos instrumentais-afetivos e dos afetivos, bem como os que não possuem bons níveis, como o dos normativos puros e dos instrumentais puros. De um lado prático, as organizações deveriam procurar pessoas para trabalhar portadoras de características que não as coloquem em padrões de comprometimento organizacional que não têm relação com a produtividade. Novas pesquisas devem estudar padrões de comprometimento, buscando-se um aprofundamento nas raízes que levam os indivíduos a se inserir nesses padrões. Dever-se-ia procurar também relacionar outros antecedentes, como as características organizacionais que não foram focalizadas por esta pesquisa e que, provavelmente, determinam alguns padrões e conseqüentemente a performance no trabalho. </p>
+  <p>
+    <bold>NOTAS</bold>
+</p>
+  <p>
+  </p> <p>
+  <fn id="b1">
+    <p>
+  </p>
+</fn>
+  <xref ref-type="fn" rid="c1">1</xref> A análise fatorial foi utilizada em detrimento da média aritmética, porque ela pondera a importância do indicador na explicação da variabilidade das respostas dos indivíduos. </p>
+  <p>
+  </p> <p>
+  <fn id="b2">
+    <p>
+  </p>
+</fn>
+  <xref ref-type="fn" rid="c2">2</xref> O termo comprometimento no trabalho é utilizado pelo autor por tratar do comprometimento em face de três focos ligados ao trabalho: comprometimento organizacional, comprometimento com a carreira e comprometimento com o sindicato. </p>
+  <p>
+    <bold>REFERÊNCIAS BIBLIOGRÁFICAS</bold>
+</p>
+  <p>
+  </p> <p>ALLEN, N. J.; MEYER, J. P. The measurement and antecedents of affective, continuance and normative commitment to the organization. <bold>Journal of Occupational Psychology</bold>, v. 63, p. 01-18, 1990.</p>
+  <p>
+  </p> <p>ALLUTO, J. A.; HREBINIAK, L. G.; ALONSO, R. C. On operationalizing the concept of commitment. <bold>Social Forces</bold>, v. 51, p. 448-454, 1973.</p>
+  <p>
+  </p> <p>BASTOS, A. V. B. <bold>Comprometimento organizacional </bold>: a estrutura dos vínculos do trabalhador com a organização, a carreira e o sindicato. Brasília, 1994a. Tese (Doutorado em Psicologia) - Instituto de Psicologia, Universidade de Brasília.</p>
+  <p>
+  </p> <p>BASTOS, A. V. B. O conceito de comprometimento - sua natureza e papel nas explicações do comportamento humano no trabalho. <bold>Organização e Sociedade</bold>, v. 1, n. 2, p. 77-106, 1994b.</p>
+  <p>
+  </p> <p>BECKER, H. S. Notes on the concept of commitment. <bold>The American Journal of Sociology</bold>, v. 66, p. 32-40, 1960.</p>
+  <p>
+  </p> <p>CAMPBELL, D. J.; CAMPBELL, K. M.; KENNARD, D. The effects of family responsabilities on the work commitment and job performance of non-professional women. <bold>Journal of Occupational and Organizational Psychology</bold>, v. 67, p. 283-296, 1994.</p>
+  <p>
+  </p> <p>DUBIN, R.; CHAMPOUX, J. E.; PORTER, L. W. Central life interests and organizational commitment of blue-collar and clerical workers. <bold>Administrative Science Quaterly</bold>, v. 20, p. 411-421, 1975.</p>
+  <p>
+  </p> <p>GLASS, G. V.; HOPKINS, K. D. <bold>Statistical methods in education and psychology</bold>. Englewood Cliffs, NJ : Prentice-Hall, 1984.</p>
+  <p>
+  </p> <p>HREBINIAK, L. G.; ALLUTO, J. A. Personal and role-related factors in the development of organizational commitment. <bold>Administrative Science Quaterly</bold>, v. 17, p. 555-573, 1972.</p>
+  <p>
+  </p> <p>JAROS, S. J. et al. Effects of continuance, affective,and moral commitment on the withdrawal process : an evaluation of eight structural equations models. <bold>Academy of Management Journal</bold>, v. 36, n. 5, p. 951-995, 1993.</p>
+  <p>
+  </p> <p>MATHIEU, J. E.; ZAJAC, D. M. A review and meta-analysis of the antecedents, correlates, and consequences of organizational commitment. <bold>Psychological Bulletin</bold>, v. 108, n. 2, p. 171-194, 1990.</p>
+  <p>
+  </p> <p>MCGEE, G. W.; FORD, R. C. Two (or more?) dimensions of organizational commitment: reexamination of the affective and continuance commitment scales. <bold>Journal of Applied Psychology</bold>, v. 72, n. 4, p. 638-641, 1987.</p>
+  <p>
+  </p> <p>MCGREGOR, D. <bold>O lado humano da empresa</bold>. 2. ed. São Paulo : Martins Fontes. 1992.</p>
+  <p>
+  </p> <p>MEDEIROS, C. A. F. <bold>Comprometimento organizacional, características pessoais e performance no trabalho </bold>: um estudo dos padrões de comprometimento organizacional. Natal, 1997. Dissertação (Mestrado) - Universidade Federal do Rio Grande do Norte.</p>
+  <p>
+  </p> <p>MEYER, J. P.; ALLEN, N. J. Testing &amp;quot;side-bet theory&amp;quot; of organizational commitment : some methodological considerations.<bold> Journal of Applied Psychology</bold>, v. 69, n. 3, p. 372-378, 1984.</p>
+  <p>
+  </p> <p>MEYER, J. P.; ALLEN, N. J. A three-component conceptualization of organizational commitment. <bold>Human Resource Management Review</bold>, v. 1, p. 61-89, 1991.</p>
+  <p>
+  </p> <p>MEYER, J. P.; ALLEN, N. J. <bold>Commitment in the workplace </bold>: theory, research and application. London : Sage Publications, 1997.</p>
+  <p>
+  </p> <p>MEYER, J. P.; ALLEN, N. J.; GELLATLY, I. R. Affective and continuance commitment to the organization: evaluation of measures and analysis of concurrent and time-lagged relations. <bold>Journal of Applied Psychology</bold>, v. 75, n. 6, p. 710-720, 1990.</p>
+  <p>
+  </p> <p>MEYER, J. P.; ALLEN, N. J.; SMITH, C. A. Commitment to organizations and occupations : extension and test of a three-component conceptualization. <bold>Journal of Applied Psychology</bold>, v. 78, n. 4, p. 538-551, 1993.</p>
+  <p>
+  </p> <p>MEYER, J. P. et al. Organizational commitment and job performance : it&amp;#x27;s the nature of the commitment that counts. <bold>Journal of Applied Psychology</bold>, v. 74, n. 1, p. 152-156, 1989.</p>
+  <p>
+  </p> <p>MOWDAY, R. T.; STEERS, R. M.; PORTER, L. W. The measurement of organizational commitment.<bold> Journal of Vocational Behavior</bold>, v. 14, p. 224-247, 1979.</p>
+  <p>
+  </p> <p>MOWDAY, R. T., PORTER, L. W.; STEERS, R. M. <bold>Employee-organization linkages </bold>- the psychology of commitment, absenteism and turnover. New York : Academic Press, 1982.</p>
+  <p>
+  </p> <p>NORUSIS, M. J. <bold>SPSS </bold>- professional statistics 6.1. Chicago: SPSS, 1994.</p>
+  <p>
+  </p> <p>SOMERS, M. J. Organizational commitment, turnover and absenteism : an examination of direct and interaction effects. <bold>Journal of Organizational Behavior</bold>, v. 16, p. 49-58, 1995.</p>
+  <p>
+  </p> <p>SPSS. <bold>SPSS </bold>- base 7.0 for windows. Chicago: SPSS, 1996.</p>
+  <p>
+  </p> <p>VALENTIM, O. Há vagas. In: <bold>Recursos humanos </bold>- foco na modernidade. Rio de Janeiro : Qualitymark, 1992. p. 183-185.</p>
+  <p>
+  </p> <p>WIENER, Y. Commitment in organizations : anormative view.<bold> Academy of Management Review</bold>, v. 7, n. 3, p. 418-428, 1982.</p>
+  <p>
+    <bold>Carlos Alberto Freire Medeiros, </bold>é Mestre em Administração de Recursos Humanos e Graduado em Administração de Empresas pela Universidade Federal do Rio Grande do Norte. Professor do Departamento de Administração da Universidade Potiguar, Diretor da Fast Grill Alimentos Ltda., além de Consultor Empresarial. Suas áreas de interesse em pesquisa são comprometimento organizacional, formação profissional do administrador de empresas e desenvolvimento organizacional.  Endereço: Rua do Espinheiro, 2094, San Vale, 59067-750, Natal, RN, Brasil. E-mail: <email>carlosalberto@digi.com.br</email>
+</p>
+  <p>
+  </p> <p>
+  <bold>Wayne Thomas Enders, </bold>realizou Pós-Doutorado em Micro-Informática e Tecnologia Aplicada na University of Dallas, USA, e Doutorado em Geografia Econômica na Universityof Texas at Austin, USA. É Professor do Programa de Pós-Graduação em Administração da Universidade Federal do Rio Grande do Norte, além de Consultor Empresarial. Suas áreas de interesse em pesquisa são administração de projetos, comportamento organizacional, cultura organizacional e estatística aplicada.  Endereço: Universidade Federal do Rio Grande do Norte - UFRN, Programa de Pós-Graduação em Administração - PPGA, Edifício Goiabão, Campus Universitário, 59072-970, Natal, RN, Brasil. E-mail: não fornecido.</p>
+</body>
+  <back>
+    <ref-list>
+      <ref id="B1">
+        <mixed-citation>ALLEN, N. J.; MEYER, J. P. The measurement and antecedents of affective, continuance and normative commitment to the organization. <bold>Journal of Occupational Psychology</bold>, v. 63, p. 01-18, 1990.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>The measurement and antecedents of affective, continuance and normative commitment to the organization</article-title>
+          <source>Journal of Occupational Psychology</source>
+          <date>
+            <year>1990</year>
+          </date>
+          <fpage>01</fpage>
+          <lpage>18</lpage>
+          <volume>63</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>ALLEN</surname>
+              <given-names>N. J</given-names>
+            </name>
+            <name>
+              <surname>MEYER</surname>
+              <given-names>J. P</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B2">
+        <mixed-citation>ALLUTO, J. A.; HREBINIAK, L. G.; ALONSO, R. C. On operationalizing the concept of commitment. <bold>Social Forces</bold>, v. 51, p. 448-454, 1973.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>On operationalizing the concept of commitment</article-title>
+          <source>Social Forces</source>
+          <date>
+            <year>1973</year>
+          </date>
+          <fpage>448</fpage>
+          <lpage>454</lpage>
+          <volume>51</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>ALLUTO</surname>
+              <given-names>J. A</given-names>
+            </name>
+            <name>
+              <surname>HREBINIAK</surname>
+              <given-names>L. G</given-names>
+            </name>
+            <name>
+              <surname>ALONSO</surname>
+              <given-names>R. C</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B3">
+        <mixed-citation>BASTOS, A. V. B. <bold>Comprometimento organizacional </bold>: a estrutura dos vínculos do trabalhador com a organização, a carreira e o sindicato. Brasília, 1994a. Tese (Doutorado em Psicologia) - Instituto de Psicologia, Universidade de Brasília.</mixed-citation>
+        <element-citation publication-type="thesis">
+          <source>Comprometimento organizacional: a estrutura dos vínculos do trabalhador com a organização, a carreira e o sindicato</source>
+          <date>
+            <year>1994</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BASTOS</surname>
+              <given-names>A. V. B</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B4">
+        <mixed-citation>BASTOS, A. V. B. O conceito de comprometimento - sua natureza e papel nas explicações do comportamento humano no trabalho. <bold>Organização e Sociedade</bold>, v. 1, n. 2, p. 77-106, 1994b.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>O conceito de comprometimento: sua natureza e papel nas explicações do comportamento humano no trabalho</article-title>
+          <source>Organização e Sociedade</source>
+          <date>
+            <year>1994</year>
+          </date>
+          <fpage>77</fpage>
+          <lpage>106</lpage>
+          <issue>2</issue>
+          <volume>1</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BASTOS</surname>
+              <given-names>A. V. B</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B5">
+        <mixed-citation>BECKER, H. S. Notes on the concept of commitment. <bold>The American Journal of Sociology</bold>, v. 66, p. 32-40, 1960.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Notes on the concept of commitment</article-title>
+          <source>The American Journal of Sociology</source>
+          <date>
+            <year>1960</year>
+          </date>
+          <fpage>32</fpage>
+          <lpage>40</lpage>
+          <volume>66</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BECKER</surname>
+              <given-names>H. S</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B6">
+        <mixed-citation>CAMPBELL, D. J.; CAMPBELL, K. M.; KENNARD, D. The effects of family responsabilities on the work commitment and job performance of non-professional women. <bold>Journal of Occupational and Organizational Psychology</bold>, v. 67, p. 283-296, 1994.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>The effects of family responsabilities on the work commitment and job performance of non-professional women</article-title>
+          <source>Journal of Occupational and Organizational Psychology</source>
+          <date>
+            <year>1994</year>
+          </date>
+          <fpage>283</fpage>
+          <lpage>296</lpage>
+          <volume>67</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>CAMPBELL</surname>
+              <given-names>D. J</given-names>
+            </name>
+            <name>
+              <surname>CAMPBELL</surname>
+              <given-names>K. M</given-names>
+            </name>
+            <name>
+              <surname>KENNARD</surname>
+              <given-names>D</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B7">
+        <mixed-citation>DUBIN, R.; CHAMPOUX, J. E.; PORTER, L. W. Central life interests and organizational commitment of blue-collar and clerical workers. <bold>Administrative Science Quaterly</bold>, v. 20, p. 411-421, 1975.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Central life interests and organizational commitment of blue-collar and clerical workers</article-title>
+          <source>Administrative Science Quaterly</source>
+          <date>
+            <year>1975</year>
+          </date>
+          <fpage>411</fpage>
+          <lpage>421</lpage>
+          <volume>20</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>DUBIN</surname>
+              <given-names>R</given-names>
+            </name>
+            <name>
+              <surname>CHAMPOUX</surname>
+              <given-names>J. E</given-names>
+            </name>
+            <name>
+              <surname>PORTER</surname>
+              <given-names>L. W</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B8">
+        <mixed-citation>GLASS, G. V.; HOPKINS, K. D. <bold>Statistical methods in education and psychology</bold>. Englewood Cliffs, NJ : Prentice-Hall, 1984.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Statistical methods in education and psychology</source>
+          <date>
+            <year>1984</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>GLASS</surname>
+              <given-names>G. V</given-names>
+            </name>
+            <name>
+              <surname>HOPKINS</surname>
+              <given-names>K. D</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B9">
+        <mixed-citation>HREBINIAK, L. G.; ALLUTO, J. A. Personal and role-related factors in the development of organizational commitment. <bold>Administrative Science Quaterly</bold>, v. 17, p. 555-573, 1972.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Personal and role-related factors in the development of organizational commitment</article-title>
+          <source>Administrative Science Quaterly</source>
+          <date>
+            <year>1972</year>
+          </date>
+          <fpage>555</fpage>
+          <lpage>573</lpage>
+          <volume>17</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>HREBINIAK</surname>
+              <given-names>L. G</given-names>
+            </name>
+            <name>
+              <surname>ALLUTO</surname>
+              <given-names>J. A</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B10">
+        <mixed-citation>JAROS, S. J. et al. Effects of continuance, affective,and moral commitment on the withdrawal process : an evaluation of eight structural equations models. <bold>Academy of Management Journal</bold>, v. 36, n. 5, p. 951-995, 1993.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Effects of continuance, affective,and moral commitment on the withdrawal process: an evaluation of eight structural equations models</article-title>
+          <source>Academy of Management Journal</source>
+          <date>
+            <year>1993</year>
+          </date>
+          <fpage>951</fpage>
+          <lpage>995</lpage>
+          <issue>5</issue>
+          <volume>36</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>JAROS</surname>
+              <given-names>S. J</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B11">
+        <mixed-citation>MATHIEU, J. E.; ZAJAC, D. M. A review and meta-analysis of the antecedents, correlates, and consequences of organizational commitment. <bold>Psychological Bulletin</bold>, v. 108, n. 2, p. 171-194, 1990.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A review and meta-analysis of the antecedents, correlates, and consequences of organizational commitment</article-title>
+          <source>Psychological Bulletin</source>
+          <date>
+            <year>1990</year>
+          </date>
+          <fpage>171</fpage>
+          <lpage>194</lpage>
+          <issue>2</issue>
+          <volume>108</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MATHIEU</surname>
+              <given-names>J. E</given-names>
+            </name>
+            <name>
+              <surname>ZAJAC</surname>
+              <given-names>D. M</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B12">
+        <mixed-citation>MCGEE, G. W.; FORD, R. C. Two (or more?) dimensions of organizational commitment: reexamination of the affective and continuance commitment scales. <bold>Journal of Applied Psychology</bold>, v. 72, n. 4, p. 638-641, 1987.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Two (or more?) dimensions of organizational commitment: reexamination of the affective and continuance commitment scales</article-title>
+          <source>Journal of Applied Psychology</source>
+          <date>
+            <year>1987</year>
+          </date>
+          <fpage>638</fpage>
+          <lpage>641</lpage>
+          <issue>4</issue>
+          <volume>72</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MCGEE</surname>
+              <given-names>G. W</given-names>
+            </name>
+            <name>
+              <surname>FORD</surname>
+              <given-names>R. C</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B13">
+        <mixed-citation>MCGREGOR, D. <bold>O lado humano da empresa</bold>. 2. ed. São Paulo : Martins Fontes. 1992.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>O lado humano da empresa</source>
+          <date>
+            <year>1992</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MCGREGOR</surname>
+              <given-names>D</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B14">
+        <mixed-citation>MEDEIROS, C. A. F. <bold>Comprometimento organizacional, características pessoais e performance no trabalho </bold>: um estudo dos padrões de comprometimento organizacional. Natal, 1997. Dissertação (Mestrado) - Universidade Federal do Rio Grande do Norte.</mixed-citation>
+        <element-citation publication-type="thesis">
+          <source>Comprometimento organizacional, características pessoais e performance no trabalho: um estudo dos padrões de comprometimento organizacional</source>
+          <date>
+            <year>1997</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MEDEIROS</surname>
+              <given-names>C. A. F</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B15">
+        <mixed-citation>MEYER, J. P.; ALLEN, N. J. Testing "side-bet theory" of organizational commitment : some methodological considerations.<bold> Journal of Applied Psychology</bold>, v. 69, n. 3, p. 372-378, 1984.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Testing "side-bet theory" of organizational commitment: some methodological considerations</article-title>
+          <source>Journal of Applied Psychology</source>
+          <date>
+            <year>1984</year>
+          </date>
+          <fpage>372</fpage>
+          <lpage>378</lpage>
+          <issue>3</issue>
+          <volume>69</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MEYER</surname>
+              <given-names>J. P</given-names>
+            </name>
+            <name>
+              <surname>ALLEN</surname>
+              <given-names>N. J</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B16">
+        <mixed-citation>MEYER, J. P.; ALLEN, N. J. A three-component conceptualization of organizational commitment. <bold>Human Resource Management Review</bold>, v. 1, p. 61-89,  1991.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A three-component conceptualization of organizational commitment</article-title>
+          <source>Human Resource Management Review</source>
+          <date>
+            <year>1991</year>
+          </date>
+          <fpage>61</fpage>
+          <lpage>89</lpage>
+          <volume>1</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MEYER</surname>
+              <given-names>J. P</given-names>
+            </name>
+            <name>
+              <surname>ALLEN</surname>
+              <given-names>N. J</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B17">
+        <mixed-citation>MEYER, J. P.; ALLEN, N. J. <bold>Commitment in the workplace </bold>: theory, research and application. London : Sage Publications, 1997.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Commitment in the workplace: theory, research and application</source>
+          <date>
+            <year>1997</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MEYER</surname>
+              <given-names>J. P</given-names>
+            </name>
+            <name>
+              <surname>ALLEN</surname>
+              <given-names>N. J</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B18">
+        <mixed-citation>MEYER, J. P.; ALLEN, N. J.; GELLATLY, I. R. Affective and continuance commitment to the organization: evaluation of measures and analysis of concurrent and time-lagged relations. <bold>Journal of Applied Psychology</bold>, v. 75, n. 6, p. 710-720, 1990.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Affective and continuance commitment to the organization: evaluation of measures and analysis of concurrent and time-lagged relations</article-title>
+          <source>Journal of Applied Psychology</source>
+          <date>
+            <year>1990</year>
+          </date>
+          <fpage>710</fpage>
+          <lpage>720</lpage>
+          <issue>6</issue>
+          <volume>75</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MEYER</surname>
+              <given-names>J. P</given-names>
+            </name>
+            <name>
+              <surname>ALLEN</surname>
+              <given-names>N. J</given-names>
+            </name>
+            <name>
+              <surname>GELLATLY</surname>
+              <given-names>I. R</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B19">
+        <mixed-citation>MEYER, J. P.; ALLEN, N. J.; SMITH, C. A. Commitment to organizations and occupations : extension and test of a three-component conceptualization. <bold>Journal of Applied Psychology</bold>, v. 78, n. 4, p. 538-551, 1993.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Commitment to organizations and occupations: extension and test of a three-component conceptualization</article-title>
+          <source>Journal of Applied Psychology</source>
+          <date>
+            <year>1993</year>
+          </date>
+          <fpage>538</fpage>
+          <lpage>551</lpage>
+          <issue>4</issue>
+          <volume>78</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MEYER</surname>
+              <given-names>J. P</given-names>
+            </name>
+            <name>
+              <surname>ALLEN</surname>
+              <given-names>N. J</given-names>
+            </name>
+            <name>
+              <surname>SMITH</surname>
+              <given-names>C. A</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B20">
+        <mixed-citation>MEYER, J. P. et al. Organizational commitment and job performance : it's the nature of the commitment that counts. <bold>Journal of Applied Psychology</bold>, v. 74, n. 1, p. 152-156, 1989.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Organizational commitment and job performance: it's the nature of the commitment that counts</article-title>
+          <source>Journal of Applied Psychology</source>
+          <date>
+            <year>1989</year>
+          </date>
+          <fpage>152</fpage>
+          <lpage>156</lpage>
+          <issue>1</issue>
+          <volume>74</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MEYER</surname>
+              <given-names>J. P</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B21">
+        <mixed-citation>MOWDAY, R. T.; STEERS, R. M.; PORTER, L. W. The measurement of organizational commitment.<bold> Journal of Vocational Behavior</bold>, v. 14, p. 224-247, 1979.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>The measurement of organizational commitment</article-title>
+          <source>Journal of Vocational Behavior</source>
+          <date>
+            <year>1979</year>
+          </date>
+          <fpage>224</fpage>
+          <lpage>247</lpage>
+          <volume>14</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MOWDAY</surname>
+              <given-names>R. T</given-names>
+            </name>
+            <name>
+              <surname>STEERS</surname>
+              <given-names>R. M</given-names>
+            </name>
+            <name>
+              <surname>PORTER</surname>
+              <given-names>L. W</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B22">
+        <mixed-citation>MOWDAY, R. T., PORTER, L. W.; STEERS, R. M. <bold>Employee-organization linkages </bold>- the psychology of commitment, absenteism and turnover. New York : Academic Press, 1982.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Employee-organization linkages: the psychology of commitment, absenteism and turnover</source>
+          <date>
+            <year>1982</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MOWDAY</surname>
+              <given-names>R. T</given-names>
+            </name>
+            <name>
+              <surname>PORTER</surname>
+              <given-names>L. W</given-names>
+            </name>
+            <name>
+              <surname>STEERS</surname>
+              <given-names>R. M</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B23">
+        <mixed-citation>NORUSIS, M. J. <bold>SPSS </bold>- professional statistics 6.1. Chicago: SPSS, 1994.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>SPSS: professional statistics 6.1.</source>
+          <date>
+            <year>1994</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>NORUSIS</surname>
+              <given-names>M. J</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B24">
+        <mixed-citation>SOMERS, M. J. Organizational commitment, turnover and absenteism : an examination of direct and interaction effects. <bold>Journal of Organizational Behavior</bold>, v. 16, p. 49-58, 1995.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Organizational commitment, turnover and absenteism: an examination of direct and interaction effects</article-title>
+          <source>Journal of Organizational Behavior</source>
+          <date>
+            <year>1995</year>
+          </date>
+          <fpage>49</fpage>
+          <lpage>58</lpage>
+          <volume>16</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>SOMERS</surname>
+              <given-names>M. J</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B25">
+        <element-citation publication-type="book">
+          <source>SPSS: base 7.0 for windows</source>
+          <date>
+            <year>1996</year>
+          </date>
+        </element-citation>
+      </ref>
+      <ref id="B26">
+        <mixed-citation>VALENTIM, O. Há vagas. In: <bold>Recursos humanos </bold>- foco na modernidade. Rio de Janeiro : Qualitymark, 1992. p. 183-185.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Recursos humanos: foco na modernidade</source>
+          <date>
+            <year>1992</year>
+          </date>
+          <fpage>183</fpage>
+          <lpage>185</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>VALENTIM</surname>
+              <given-names>O</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B27">
+        <mixed-citation>WIENER, Y. Commitment in organizations : anormative view.<bold> Academy of Management Review</bold>, v. 7, n. 3, p. 418-428, 1982.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Commitment in organizations: anormative view</article-title>
+          <source>Academy of Management Review</source>
+          <date>
+            <year>1982</year>
+          </date>
+          <fpage>418</fpage>
+          <lpage>428</lpage>
+          <issue>3</issue>
+          <volume>7</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>WIENER</surname>
+              <given-names>Y</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>

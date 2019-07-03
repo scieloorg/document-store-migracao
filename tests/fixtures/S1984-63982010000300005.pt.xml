@@ -1,0 +1,3257 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article
+  xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="research-article">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="publisher-id">rbla</journal-id>
+      <journal-title-group>
+        <journal-title>Revista Brasileira de Linguística Aplicada</journal-title>
+        <abbrev-journal-title abbrev-type="publisher">Rev. bras. linguist. apl.</abbrev-journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">1984-6398</issn>
+      <publisher>
+        <publisher-name>Faculdade de Letras - Universidade Federal de Minas Gerais</publisher-name>
+        <publisher-loc>Belo Horizonte, MG, Brazil</publisher-loc>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="publisher-id" specific-use="scielo">JRq7ypnJzbTS3PDGgRdKByK</article-id>
+      <article-id pub-id-type="publisher-id">S1984-63982010000300005</article-id>
+      <article-id pub-id-type="doi">10.1590/S1984-63982010000300005</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Artigos</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Mesclagens metafóricas e suas funções no discurso sobre a sociedade: um estudo comparativo</article-title>
+        <trans-title-group xml:lang="en">
+          <trans-title>Metaphorical blends and their functions in the discourse about society: a comparative study</trans-title>
+        </trans-title-group>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Schröder</surname>
+            <given-names>Ulrike</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff01"/>
+        </contrib>
+      </contrib-group>
+      <aff id="aff01">
+        <addr-line>
+          <named-content content-type="state">Minas Gerais</named-content>
+        </addr-line>
+        <institution content-type="orgname">Universidade Federal de Minas Gerais</institution>
+        <country country="BR">Brazil</country>
+      </aff>
+      <pub-date date-type="collection" publication-format="electronic">
+        <year>2010</year>
+      </pub-date>
+      <volume>10</volume>
+      <issue>3</issue>
+      <fpage>575</fpage>
+      <lpage>602</lpage>
+      <permissions>
+        <license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/4.0/" xml:lang="en">
+          <license-p>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <p>Com base em um corpus constituído por quatro gêneros textuais - entrevistas orais e escritas, artigos jornalísticos e livros de não-ficção - o foco do estudo a ser apresentado está no modo como o conceito 'sociedade' é construído em discursos alemães e brasileiros atuais. Assim, o interesse principal se centraliza nas 'metáforas mescladas' (LAKOFF; JOHNSON, 1980) analisadas no estudo em questão como 'redes de integração', no sentido preconizado por Fauconnier e Turner (2003, 2008). Será ilustrada também a necessidade de ampliação dessa teoria por meio da inclusão de uma perspectiva semiótico-contextual (BRANDT; BRANDT, 2005), para uma melhor compreensão da variedade cultural encontrada nos dois corpora e, finalmente, interligar as mesclagens com funções comunicativas envolvidas.</p>
+      </abstract>
+      <trans-abstract xml:lang="en">
+        <p>Based on two corpora composed of four discourse genres - spoken interviews, written interviews, newspaper articles and non-fictional books - the article focuses on the way how 'society' is talked about metaphorically in current German and Brazilian discourse. We want to discuss mainly culture-specific 'mixed metaphors' (LAKOFF; JOHNSON, 1980) which can be seen as blending scenarios or 'integration networks' in the sense of Fauconnier &amp; Turner (2003, 2008). Furthermore, we shall also demonstrate that Blending Theory has to be extended by a semiotic-contextual view in order to integrate elements like the 'Relevance Space' (BRANDT; BRANDT, 2005) to grasp culture-dependent variation and the involved speech functions displayed by real speakers / writers and hearers / readers in specific communication situations.</p>
+      </trans-abstract>
+      <kwd-group xml:lang="en" kwd-group-type="author-generated">
+        <kwd>Metaphorical blending</kwd>
+        <kwd>image schemas</kwd>
+        <kwd>integration networks</kwd>
+        <kwd>society</kwd>
+      </kwd-group>
+      <kwd-group xml:lang="pt" kwd-group-type="author-generated">
+        <kwd>Mesclagem metafórica</kwd>
+        <kwd>esquemas imagéticos</kwd>
+        <kwd>redes de integração</kwd>
+        <kwd>sociedade</kwd>
+      </kwd-group>
+    </article-meta>
+  </front>
+  <body>
+    <p>
+      <bold>ARTIGO</bold>
+    </p>
+    <p>
+      <bold>Mesclagens metafóricas e suas funções no discurso sobre a sociedade: um estudo comparativo</bold>
+    </p>
+    <p>
+      <bold>Metaphorical blends and their functions in the discourse about society: a comparative study</bold>
+    </p>
+    <p>
+      <bold>Ulrike Schröder</bold>
+    </p>
+    <p>Universidade Federal de Minas Gerais. E-mail: 
+      
+      
+      <email>schroederulrike@gmx.com</email>
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>RESUMO</bold>
+    </p>
+    <p>Com base em um 
+      
+      
+      <italic>corpus</italic> constituído por quatro gêneros textuais - entrevistas orais e escritas, artigos jornalísticos e livros de não-ficção - o foco do estudo a ser apresentado está no modo como o conceito 'sociedade' é construído em discursos alemães e brasileiros atuais. Assim, o interesse principal se centraliza nas 'metáforas mescladas' (LAKOFF; JOHNSON, 1980) analisadas no estudo em questão como 'redes de integração', no sentido preconizado por Fauconnier e Turner (2003, 2008). Será ilustrada também a necessidade de ampliação dessa teoria por meio da inclusão de uma perspectiva semiótico-contextual (BRANDT; BRANDT, 2005), para uma melhor compreensão da variedade cultural encontrada nos dois 
+      
+      
+      <italic>corpora</italic> e, finalmente, interligar as mesclagens com funções comunicativas envolvidas.
+    
+    
+    </p>
+    <p>
+      <bold>PALAVRAS-CHAVE:</bold> Mesclagem metafórica; esquemas imagéticos; redes de integração; sociedade.
+    
+    
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>ABSTRACT</bold>
+    </p>
+    <p>Based on two corpora composed of four discourse genres - spoken interviews, written interviews, newspaper articles and non-fictional books - the article focuses on the way how &amp;#x27;society&amp;#x27; is talked about metaphorically in current German and Brazilian discourse. We want to discuss mainly culture-specific &amp;#x27;mixed metaphors&amp;#x27; (LAKOFF; JOHNSON, 1980) which can be seen as blending scenarios or &amp;#x27;integration networks&amp;#x27; in the sense of Fauconnier &amp;amp; Turner (2003, 2008). Furthermore, we shall also demonstrate that Blending Theory has to be extended by a semiotic-contextual view in order to integrate elements like the &amp;#x27;Relevance Space&amp;#x27; (BRANDT; BRANDT, 2005) to grasp culture-dependent variation and the involved speech functions displayed by real speakers / writers and hearers / readers in specific communication situations.</p>
+    <p>
+      <bold>KEYWORDS:</bold> Metaphorical blending; image schemas; integration networks; society.
+    
+    
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>Introdução</bold>
+    </p>
+    <p>Desde o surgimento da teoria conceptual da metáfora (LAKOFF; JOHNSON, 1980) ela não é mais vista exclusivamente como ornamento retórico, mas, sim, como fenômeno cognitivo no qual se percebe um &amp;quot;mapeamento entre os domínios no sistema conceptual&amp;quot;
+      
+      
+      <sup/>
+      <xref rid="nt01" ref-type="fn">(LAKOFF, 1993, p. 203)</xref>, sendo um domínio alvo ('target domain') e um domínio fonte ('source domain'), formando ambos a base de um mapeamento metafórico.
+    
+    
+    </p>
+  </fn>
+  <sup>
+    <fn id="nt02"></fn>
+  </sup>
+</p>
+<p>Já em seu primeiro livro, Lakoff e Johnson (1980, p. 97) dedicam sua atenção às assim chamadas &amp;quot;justaposição nas metáforas&amp;quot;
+  
+  
+  <sup>3
+    
+    
+    <fn id="nt03"></fn>
+  </sup> e ilustram, por meio da expressão metafórica "Vamos 
+  
+  
+  <italic>ir profundo em</italic> uma variedade de tópicos",
+  
+  
+  <sup>
+    <fn id="nt04"></fn>
+  </sup>como metáforas podem se sobrepor no uso atual. Enquanto, segundo os autores, a expressão 
+  
+  
+  <italic>profundo </italic>(
+  
+  
+  <italic>deeply</italic>) aponta as metáforas conceptuais PRÉDIO e CONTÊINER, 
+  
+  
+  <italic>entrar </italic>(
+  
+  
+  <italic>going into</italic>) pode ser vista como derivação da metáfora conceptual VIAGEM.
+  
+  
+  <sup>
+    <fn id="nt05"></fn>
+  </sup> Porém, especialmente no que tange ao uso da linguagem, a visão dos autores continua idealizada, uma vez que os exemplos procedem da introspecção, e não de um 
+  
+  
+  <italic>corpus</italic> autêntico.Baseado em uma pesquisa realizada na 
+  
+  
+  <italic>internet</italic> por Sardinha (2007, p. 139-140), pode-se comprovar que muitos dos exemplos elencados por Lakoff e Johnson se revelam artificiais. Ademais, como Leezenberg (2001, p. 145) e Melo Moura (2005, p. 116) ilustram, a expressão linguística não pode ser considerada como logicamente posterior à estrutura conceptual: língua e estrutura conceptual interagem de forma bidirecional, uma vez que fatores linguísticos e conceptuais são mutuamente dependentes no uso da metáfora. Martins (2002) retorna a um essencialismo tradicional quando aponta o tratamento da linguagem como sistema de representação secundário e subordinado ao pensamento; perspectiva essa que não mais se destaca e da qual os autores supracitados quiseram despedir-se.
+
+
+</p>
+<p>Em contrapartida, em muitos estudos atuais sobre a reciprocidade entre os níveis linguístico e cognitivo no uso de metáforas, cada vez mais o uso da língua, o contexto discursivo, a situacionalidade cultural e processos 
+  
+  
+  <italic>online </italic>estão no centro da atenção. Ademais, não são mais analisadas apenas expressões isoladas, reconduzidas a metáforas conceptuais isoladas, mas, sim, o foco das pesquisas voltou-se para expressões no seu contexto textual e cultural mais amplo. Dessa forma, Kimmel (2005) frisa que, no seu uso cultural, a maioria dos esquemas imagéticos deveria ser mais entendida como esquemas imagéticos compostos e dinâmicos do que estáticos e isolados. Cameron (2007, 2008) substitui o termo 'metáfora conceptual' ('conceptual metaphor'), que se baseia em uma metodologia dedutiva, por um conceito gerado indutivamente denominado 'metáfora sistemática' ('systematic metaphor'). Com isso, a autora se refere a metáforas no nível da linguagem que são usadas com uma certa frequência por participantes no decorrer de um evento discursivo. Tais metáforas podem condensar-se, estruturando seu respectivo domínio alvo.
+
+
+</p>
+<p>De modo semelhante, Ponterotto (2003, p. 290-293) cita uma &amp;#x27;rede cognitiva da metáfora&amp;#x27; (&amp;#x27;cognitive metaphor network&amp;#x27;) construída no decorrer do discurso, assumindo um papel coesivo. Finalmente, Fauconnier e Turner (2003, 2008) ampliam seu modelo de quatro espaços mentais por meio de uma teoria da &amp;#x27;rede de integração conceptual&amp;#x27; (&amp;#x27;conceptual integration networks&amp;#x27;) que, por sua vez, é estendida por meio de uma perspectiva semiótica nas abordagens de Brandt (BRANDT; BRANDT, 2005; BRANDT, 2005).</p>
+<p>Perante esse pano de fundo teórico atual, apresentaremos uma reflexão ligada a um estudo com base em quatro 
+  
+  
+  <italic>corpora</italic> de duas comunidades de fala distintas - a comunidade brasileira e a comunidade alemã. Esse estudo teve como objetivo tentar descobrir as diferenças cruciais no uso de metáforas que servem para a construção do domínio discursivo 'sociedade' nas duas culturas em questão (SCHRÖDER, 2009a). Um resultado desse estudo foi que, já no nível dos esquemas imagéticos, a mesclagem de domínios fonte distintos é um fenômeno muito frequente e que, além disso, aparentemente, são fatores culturais e sociais que assumem uma importância significativa na geração de tais mesclagens integradas. Até que ponto esse fenômeno ocorre é uma das questões centrais da qual nossa reflexão se dirige em seguida. Como referencial teórico principal, foi escolhida a Teoria da Mesclagem (Blending Theory). Também procuramos revelar como, por meio de uma aplicação a fenômenos linguísticos manifestados culturalmente, a Teoria da Mesclagem poderia, por sua vez, ser ampliada; aspecto este que apenas começou a ser explorado recentemente (SINHA, 2005, p. 1538; BRANDT, 2005; BRANDT; BRANDT, 2005).
+
+
+</p>
+<p>
+  <bold>Redes de integração conceptuais na Teoria da Mesclagem segundo Fauconnier e Turner</bold>
+</p>
+<p>Para Fauconnier e Turner (2003), metáforas representam um subcaso da mesclagem ao qual eles se dedicam cada vez mais. Mapeamentos entre espaços mentais são vistos como o núcleo da habilidade cognitiva humana da produção, transposição e do processamento de significado. Dessa forma, a linguagem visível é apenas a &amp;quot;ponta do iceberg&amp;quot;
+  
+  
+  <sup>
+    <fn id="nt06"></fn>
+  </sup> (FAUCONNIER, 1999, p. 1) da construção invisível que permanece enquanto pensamos e falamos. O fenômeno-chave responsável pelo fato de que não apenas reproduzimos os mundos simbólicos já existentes mas também produzimos novidades é a mesclagem: "[a mesclagem] consiste em integrar estruturas parciais de dois domínios separados em uma única estrutura com propriedades emergentes em um terceiro domínio"
+  
+  
+  <sup>
+    <fn id="nt07"></fn>
+  </sup> (FAUCONNIER, 1999, p. 22).
+  
+  
+  <sup>
+    <fn id="nt08"></fn>
+  </sup>
+</p>
+<p>Com a teoria da mesclagem, os autores recorrem a um tema já abordado pelo egiptólogo Alan Henderson Gardiner e pelos psicólogos Karl Bühler e Wilhelm Stählin no início do século 20 (SCHRÖDER, 2009b). Como Gardiner (1951/1932) destaca no seu livro 
+  
+  
+  <italic>A Theory of Speech and Language</italic>, o processamento da fusão ou "mesclagem" ("blending") (GARDINER, 1951/ 1932, p. 169) é mais espetacular no caso da metáfora.
+
+
+</p>
+<p>Bühler (1982/1934) descreve o processo metafórico como uma fusão de esferas distintas na qual conhecimentos linguísticos e não-linguísticos se mesclam. Ele compara esse processo a uma projeção visual que passa por dois filtros que se cobrem reciprocamente em parte. Já Stählin estabelece a distinção entre &amp;#x27;objeto&amp;#x27; e &amp;#x27;imagem&amp;#x27;, realçando que tanto o domínio fonte como o domínio alvo da terminologia de Lakoff e Johnson contribuem para a mesclagem: &amp;quot;resumindo: eu não apenas puxo a imagem para dentro da esfera do objeto mas também puxo o objeto para dentro da esfera da imagem. Há um intercâmbio das características, uma união das duas esferas, uma fusão.&amp;quot;
+  
+  
+  <sup>
+    <fn id="nt09"></fn>
+  </sup>(STÄHLIN, 1913, p. 324).
+
+
+</p>
+<p>A teoria da mesclagem de Fauconnier e Turner baseia-se na metáfora de espaços mentais, que são vistos como estruturas parciais e temporariamente representadas, criadas por locutores falando ou refletindo sobre situações percebidas ou imaginadas no passado, presente ou futuro. Sendo assim, como Grady, Oakley e Soulson (1999) observam, espaços mentais não são equivalentes aos domínios de Lakoff e Johnson, mas, sim, espaços mentais dependem de domínios por representarem cenários particulares estruturados com base em domínios dados. O ponto crucial é que, ao contrário de Lakoff e Johnson, na teoria da mesclagem, como ilustra a 
+  
+  
+  <xref ref-type="fig" rid="img01">FIG. 1</xref>, os 
+  
+  
+  <italic>dois</italic> espaços 
+  
+  
+  <italic>input </italic>trazem sua própria estrutura ao espaço mescla, o que rompe com a tese da unidirecionalidade de Lakoff e Johnson
+
+
+</p>
+<p>
+  <fig id="img01">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04img01.jpg"/>
+  </fig>
+</p>
+<p/>
+<p>No seu livro 
+  
+  
+  <italic>Mappings in Thought and Language</italic>, Fauconnier (1999) observa, pela primeira vez, o fenômeno da metáfora como subcaso da mesclagem explicitamente, dirigindo sua atenção à desconcordância entre os dois espaços 
+  
+  
+  <italic>input</italic>. A partir do exemplo 
+  
+  
+  <italic>cavar seu próprio túmulo</italic>, Fauconnier mostra como, a despeito da 'tese da invariância' estabelecida por Lakoff (1993), inferências do domínio fonte são violadas na mescla: a estrutura causal é invertida por ações tolas que causam falhas, embora cavar um túmulo não cause a morte. A estrutura intencional também não coincide, pois ninguém cava um túmulo inconscientemente. A estrutura do 
+  
+  
+  <italic>frame</italic> de agentes, pacientes e sequência não é preservada. Sabemos que o paciente morre e o agente cava o túmulo.
+
+
+</p>
+<p>No entanto, na metáfora, os papéis do agente e do paciente se mesclam e a ordem de eventos é inversa. Por consequência, a mesclagem cria uma estrutura emergente, por herdar do domínio fonte a estrutura concreta de túmulos, cavar e enterro, e por herdar do domínio alvo as estruturas causal, intencional e do evento interno. Para tal, mais tarde, Fauconnier e Turner (2003, p. 131-132) introduzem o conceito &amp;#x27;rede do escopo duplo&amp;#x27; (&amp;#x27;doublescope network&amp;#x27;) no qual os dois 
+  
+  
+  <italic>input</italic> trazem seu 
+  
+  
+  <italic>frame</italic> próprio para a mesclagem. Com isso, esse tipo de rede opõe-se à 'rede do escopo singular' ('single-scope network') que corresponde mais ao mapeamento unidirecional da visão tradicional de Lakoff e Johnson.
+
+
+</p>
+<p>Atualmente, Fauconnier e Turner (2008) já apresentam uma terminologia modificada e não apenas discorrem acerca de dois espaços 
+  
+  
+  <italic>input</italic>, mas, sim, de uma rede de integração que indica uma estrutura mais rica do que as meclagens aos pares:
+
+
+</p>
+<disp-quote>
+  <p>[p]rodutos conceptuais nunca representam o resultado de um único mapeamento. O que nós chamamos metáforas conceptuais, como TEMPO É DINHEIRO ou TEMPO É ESPAÇO, vem a ser construções mentais envolvendo muitos espaços e muitos mapeamentos em redes de integração elaborados, construídos por meio de princípios gerais distintos. Essas redes de integração são muito mais ricas do que os feixes de ligações aos pares tratados em teorias recentes da metáfora
+    
+    
+    <sup>
+      <fn id="nt10"></fn>
+    </sup>(FAUCONNIER; TURNER, 2008, p. 53).
+  
+  
+  </p>
+</disp-quote>
+<p>Portanto, tais redes de integração são criadas a partir de vários espaços 
+  
+  
+  <italic>input</italic> e constituídas por estruturas convencionais e inovações; trata-se de um processo dinâmico denominado 'pavimentar e esculturar' ('cobbling e sculpting') pelos autores. Isto é, por um lado, culturas constroem redes que são transmitidas através das gerações no decorrer do tempo. Por outro lado, as pessoas são capazes de criar algo novo em qualquer contexto particular. Por isso, em redes de integração, encontramos partes convencionais, e também mapeamentos novos e as assim chamadas compressões, que surgem logo que topologias de espaços distintos se chocam. Nesse momento, a partir de processos de compressão e descompressão, na mesclagem, são criadas contrafactuais nas relações temporais, espaciais ou de identidade (FAUCONNIER; TURNER, 2003, p. 126-129).
+
+
+</p>
+<p>As frases &amp;quot;Nosso casamento foi ontem. Para onde foram todos aqueles anos?&amp;quot; fornece um exemplo para tal (FAUCONNIER; TURNER, 2008, p. 63), como é demonstrado na 
+  
+  
+  <xref ref-type="fig" rid="img02">FIG. 2</xref>. Em um primeiro nível, temos uma mesclagem entre 
+  
+  
+  <italic>input</italic> 1 'Eventos' (casamento) e 
+  
+  
+  <italic>input</italic> 2 'Tempo' (movimento experimentado através do espaço físico) que resulta no espaço mescla 'Metáfora da Estrutura do Evento' (nós passamos por um casamento como passamos por um parque), formando o novo 
+  
+  
+  <italic>input</italic> 1 que, com o 
+  
+  
+  <italic>input</italic> 2 'Longitude do Tempo Objetivamente Medido' (todos aqueles anos), choca com o 
+  
+  
+  <italic>input</italic> 3 'Experiência Subjetiva' (ontem). Por fim, esse novo espaço mescla forma o 
+  
+  
+  <italic>input</italic> 1, ao qual se acrescenta um 
+  
+  
+  <italic>input</italic> 2, formando, por sua vez, um espaço mescla como resultado da fusão entre 'Memória' e 'Espaço Físico', de modo que o resultado final consiste em vários espaços 
+  
+  
+  <italic>input</italic> de níveis diferentes, que podem ser ilustrados da seguinte forma:
+
+
+</p>
+<p>
+  <fig id="img02">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04img02.jpg"/>
+  </fig>
+</p>
+<p/>
+<p>
+  <bold>Procedimento Metodológico</bold>
+</p>
+<p>Para a realização do estudo, foi compilado um 
+  
+  
+  <italic>corpus</italic> com base em quatro gêneros distintos dentro de uma escala contínua que parte da oralidade à escrita:
+
+
+</p>
+<p>1) entrevistas orais com 25 sujeitos em cada cultura (1 a 3 entrevistados por entrevista), resultando em um 
+  
+  
+  <italic>corpus</italic> de 15.926 palavras, no caso brasileiro, e 15.406 palavras, no caso alemão;
+
+
+</p>
+<p>2) entrevistas escritas com 25 sujeitos em cada cultura, resultando em um 
+  
+  
+  <italic>corpus</italic> de 7.086 palavras, no caso brasileiro, e 7.625 palavras, no caso alemão;
+
+
+</p>
+<p>3) artigos jornalísticos 
+  
+  
+  <italic>online</italic> que explicitamente tratam do assunto 'sociedade brasileira / alemã atual', pré-selecionados pela busca eletrônica, resultando em um 
+  
+  
+  <italic>corpus</italic> de 113.760 palavras, no caso brasileiro, e 102.455 palavras, no caso alemão;
+  
+  
+  <sup>
+    <fn id="nt11"></fn>
+  </sup>
+</p>
+<p>4) cinco livros de não-ficção de cada cultura publicados entre 2005-2008, relacionados ao tema &amp;#x27;sociedade brasileira / alemã atual&amp;#x27; e cuja seleção baseou-se nas listas de 
+  
+  
+  <italic>bestseller</italic> e sua discussão nos meios de comunicação relevantes.
+  
+  
+  <sup>
+    <fn id="nt12"></fn>
+  </sup>
+</p>
+<p>Uma hipótese central que conduziu a escolha dos 
+  
+  
+  <italic>corpora</italic> foi que supomos que esse contínuo pudesse representar uma 'escala da convencionalidade' ('scale of conventionality') (KÖVECSES, 2002, p . 31; BECKMANN, 2001, p. 71-82), no que concerne a metáforas mais lexicalizadas nas entrevistas e também metáforas criativas ou inovativas nos artigos jornalísticos e livros em questão. Sendo assim, seria possível observar tendências que se desenvolvem nas respectivas culturas quanto ao surgimento, o desdobramento e a habitualização de certas metáforas-chave. O que faz com que nossa investigação parta de um macronível até um micronível de análise.
+
+
+</p>
+<p>É nesse sentido que esboçamos os percursos de análise de nosso 
+  
+  
+  <italic>corpus. </italic>Em um primeiro momento, foram apenas contadas e categorizadas as expressões utilizadas metaforicamente. Para a identificação das metáforas, foi aplicado o método 'Pragglejaz' (STEEN, 2002; 2007, p. 88-91). Em um segundo momento, em um micronível, foram investigadas certas características metafóricas em seu contexto discursivo e cultural, contemplando também as mesclagens metafóricas. Nesse sentido, o estudo combina procedimentos quantitativos com qualitativos. A questão central de nossa reflexão na presente abordagem concentra-se exclusivamente nesse aspecto da mesclagem e nos resultados ligados a esse fenômeno, que foram trazidos à luz a partir da análise.
+
+
+</p>
+<p>
+  <bold>Redes de integração conceptuais no discurso sobre a sociedade</bold>
+</p>
+<p>
+  <bold>Mesclagem conceptual no nível de esquemas imagéticos</bold>
+</p>
+<p>Em sua introdução à teoria conceptual da metáfora, Kövecses (2002, p. 36) distinge dois tipos de metáforas, as esquemáticas e aquelas que se baseiam em estruturas de conhecimento. Ele descreve o primeiro tipo como &amp;quot;metáfora de esquema imagético, na qual não são os elementos do conhecimento (como viajante, destino, obstáculos etc., no caso da VIAGEM) que são mapeados da fonte para o alvo, mas, sim, elementos conceptuais do esquema imagético&amp;quot;.
+  
+  
+  <sup>
+    <fn id="nt13"></fn>
+  </sup>Tais esquemas são, por exemplo, DENTRO-FORA, EM FRENTE-ATRÁS, ACIMA-ABAIXO, CONTATO, MOVIMENTO ou FORÇA.
+
+
+</p>
+<p>Em sintonia com o exposto, Baldauf (1997) distinge entre metáforas de esquemas imagéticos&amp;#x27; e &amp;#x27;metáforas de constelação&amp;#x27;. Nossa análise seguirá essa distinção principal proposta pelos autores supracitados. Com relação aos esquemas imagéticos, revelou-se que, no uso atual da linguagem, não tratamos simplesmente de esquemas imagéticos universais e estáticos conforme a visão tradicional (LAKOFF, 1987; JOHNSON, 1987), mas, sim, consideramos que tais esquemas são frequentemente compostos (KIMMEL, 2005, p. 289), construindo um cenário tanto vertical quanto horizontalmente comparável a um filme, no qual um esquema segue o anterior.</p>
+<p>No que diz respeito ao número dos 
+  
+  
+  <italic>types</italic> e 
+  
+  
+  <italic>tokens</italic> dos esquemas imagéticos, observa-se na 
+  
+  
+  <xref ref-type="table" rid="tab01">TAB. 1</xref> os resultados quantitativos com relação ao total do 
+  
+  
+  <italic>corpus</italic>:
+  
+  
+  <sup>
+    <fn id="nt14"></fn>
+  </sup>
+</p>
+<p>
+  <table-wrap id="tab01">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04tab01.jpg"/>
+  </table-wrap>
+</p>
+<p/>
+<p>Para nossos objetivos, o que é de interesse, é a descoberta de que uma série de mesclagens de esquemas imagéticos representam &amp;#x27;redes de escopo duplo&amp;#x27; nas quais cada 
+  
+  
+  <italic>input</italic> traz seu próprio 
+  
+  
+  <italic>frame</italic> para a fusão, o que é demonstrado na 
+  
+  
+  <xref ref-type="table" rid="tab02">TAB. 2</xref>. Embora a Teoria da Mesclagem, como concebida por muitos autores, em primeiro lugar, enquadrasse a investigação de enunciações singulares e inovativas, a nosso ver, a teoria já poderia ser aplicada a esse uso entrincheirado de linguagem. Nisso, concomitantemente, o uso de tais 'metáforas misturadas' ('mixed metaphors') revela certas tendências de desenvolvimento, especialmente por esses cenários aparentemente não representarem casos singluares, mas, sim, elementos do discurso culturalmente cunhados. Sendo assim, no caso do 
+  
+  
+  <italic>corpus</italic> alemão, por exemplo, o conjunto dos esquemas imagéticos VERTICALIDADE, CONTÊINER e CAMINHO é muito saliente, como se observa na 
+  
+  
+  <xref ref-type="table" rid="tab02">TAB. 2</xref>. Foram apenas contadas expressões nas quais há efeitos de simultaneidade, de modo que nascem composições nas quais os esquemas são misturados, gerando uma só imagem:
+
+
+</p>
+<p>
+  <fn id="nt15"></fn>
+  <fn id="nt16"></fn>
+  <fn id="nt17"></fn>
+  <fn id="nt18"></fn>
+  <table-wrap id="tab02">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04tab02.jpg"/>
+  </table-wrap>
+</p>
+<p/>
+<p>A partir da 
+  
+  
+  <xref ref-type="table" rid="tab02">TAB. 2</xref>, observa-se que no 
+  
+  
+  <italic>corpus</italic> alemão, para todas as constelações de mesclagem, há ocorrências significativamente maiores do que no caso brasileiro. Nos dois 
+  
+  
+  <italic>corpora</italic>, é interessante notar o número de ocorrências para a mesclagem de VERTICALIDADE + CAMINHO. Nessa categoria, constitui-se uma série de expressões lexicalizadas como 
+  
+  
+  <italic>subir</italic>, 
+  
+  
+  <italic>descer</italic>, 
+  
+  
+  <italic>cair</italic>, 
+  
+  
+  <italic>elevador</italic> e 
+  
+  
+  <italic>degrau,</italic> no caso brasileiro, e 
+  
+  
+  <italic>escada </italic>(
+  
+  
+  <italic>Leiter</italic>), 
+  
+  
+  <italic>degrau</italic> (
+  
+  
+  <italic>Sprosse</italic>), 
+  
+  
+  <italic>rastejar para cima </italic>(
+  
+  
+  <italic>hinauskriechen</italic>), 
+  
+  
+  <italic>subir para cima</italic> (
+  
+  
+  <italic>aufsteigen</italic>), 
+  
+  
+  <italic>alpinar</italic> (
+  
+  
+  <italic>klettern</italic>), 
+  
+  
+  <italic>cair </italic>(
+  
+  
+  <italic>fallen</italic>), 
+  
+  
+  <italic>levantar</italic> (
+  
+  
+  <italic>abheben</italic>), 
+  
+  
+  <italic>precipitar-se</italic> (
+  
+  
+  <italic>abstürzen</italic>), 
+  
+  
+  <italic>descer</italic> (
+  
+  
+  <italic>absteigen</italic>), 
+  
+  
+  <italic>escorregar</italic> (
+  
+  
+  <italic>rutschen</italic>), 
+  
+  
+  <italic>morro abaixo</italic> (
+  
+  
+  <italic>bergab</italic>), 
+  
+  
+  <italic>espiral</italic> (
+  
+  
+  <italic>Spriale</italic>), 
+  
+  
+  <italic>turbilhão </italic>(
+  
+  
+  <italic>Strudel</italic>), 
+  
+  
+  <italic>esteira</italic> (
+  
+  
+  <italic>Sog</italic>), 
+  
+  
+  <italic>elevador</italic> (
+  
+  
+  <italic>Fahrstuhl</italic>), no 
+  
+  
+  <italic>corpus</italic> alemão.
+
+
+</p>
+<p>Destarte, a elaboração lexical para esse domínio já abrange o triplo de ocorrências no 
+  
+  
+  <italic>corpus</italic> alemão em comparação ao 
+  
+  
+  <italic>corpus</italic> brasileiro. Ao mesmo tempo, esse resultado aponta uma mudança paradigmática no discurso alemão sobre a própria sociedade que cada vez mais vem à tona desde o ínicio do assim chamado 'debate sobre as classes baixas' ('Unterschichtendebatte'), que surgiu no ano 2006 ao lado da discussão sobre a demolição do estado social e a desigualdade crescente: trata-se de uma revitalização do esquema da VERTICALIDADE (POR CIMA - POR BAIXO) em conexão com uma MUDANÇA DA DIREÇÃO (CAMINHO) no que tange à política alemã que, para muitos, introduziu o fim do modelo do estado social. Isso parece resultar em uma dinâmica forte dentro da 'pirâmide da sociedade', de modo que a percepção do estado atual da sociedade, para muitos alemães, é caracterizada por uma tendência negativa, aliás, 'para baixo', como é ilustrado pelos seguintes exemplos:
+
+
+</p>
+<p>1) Uns 
+  
+  
+  <italic>cairam profundamente</italic>, outros nunca se 
+  
+  
+  <italic>levantaram</italic>
+  <sup>
+    <fn id="nt19"></fn>
+  </sup> (Z32); 
+
+
+</p>
+<p>2) 
+  
+  
+  <italic>queda para as catacumbas</italic> da sociedade
+  
+  
+  <sup>
+    <fn id="nt20"></fn>
+  </sup> (S2); 
+
+
+</p>
+<p>3) os
+  
+  
+  <italic> degraus da escada</italic>, em geral, tornaram-se mais 
+  
+  
+  <italic>escorregadios</italic>. A 
+  
+  
+  <italic>queda </italic>parece possível em qualquer lugar
+  
+  
+  <sup>
+    <fn id="nt21"></fn>
+  </sup> (BUDE, 2008, p. 33); 
+
+
+</p>
+<p>4) cair 
+  
+  
+  <italic>no turbilhão da espiral para baixo&amp;#x27;</italic>
+  <sup>
+    <fn id="nt22"></fn>
+  </sup> (LESSENICH 
+  
+  
+  <italic>et al.</italic>, 2006, p. 35); 
+
+
+</p>
+<p>5) A sociedade alemã continua 
+  
+  
+  <italic>descendo riacho abaixo</italic>
+  <sup>
+    <fn id="nt23"></fn>
+  </sup>(EoA10);
+
+
+</p>
+<p> 6) Uma nova &amp;quot;burguesia&amp;quot; poderia 
+  
+  
+  <italic>lançar uma ponte entre o superior e o inferior</italic>
+  <sup>
+    <fn id="nt24"></fn>
+  </sup>(NEUGEBAUER 
+  
+  
+  <italic>et al.</italic>, 2007, p. 41).
+
+
+</p>
+<p>Uma segunda imagem de orientação que cada vez mais vem sendo integrada no primeiro esquema do BAIXO e ALTO é a do CONTÊINER e CENTRO-PERIFERIA em conexão a CAMINHO:</p>
+<p>7) Quem nasce 
+  
+  
+  <italic>dentro</italic> da 
+  
+  
+  <italic>parte baixa</italic> da sociedade, hoje, tem apenas poucas chances 
+  
+  
+  <italic>subir de lá </italic>no decorrer da sua vida
+  
+  
+  <sup>
+    <fn id="nt25"></fn>
+  </sup> (S8);
+
+
+</p>
+<p>8) Melhor do que as oportunidade dos probres para 
+  
+  
+  <italic>ascender à classe média </italic>são as chances de 
+  
+  
+  <italic>ascensão</italic> da 
+  
+  
+  <italic>classe média</italic> para 
+  
+  
+  <italic>chegar ao topo</italic>. No mesmo período, aproximadamente 11% dos ocupados conseguiram o 
+  
+  
+  <italic>salto para as classes </italic>assalariadas
+  
+  
+  <italic> superiores</italic>
+  <sup>
+    <fn id="nt26"></fn>
+  </sup>(Z12);
+
+
+</p>
+<p>9) Há 
+  
+  
+  <italic>pressão nas margens</italic>, Hartz IV. Entrementes, faço parte daqueles que acham boa essa 
+  
+  
+  <italic>pressão</italic>, pela perspectiva sociopedagógica, enquanto aqueles que realmente necessitam do apoio estatal não 
+  
+  
+  <italic>caírem para fora do retículo</italic>
+  <sup>
+    <fn id="nt27"></fn>
+  </sup>(EoA5,1);
+
+
+</p>
+<p>10) Imagina-se um processo de 
+  
+  
+  <italic>turbilhão</italic> que, pouco a pouco, integra domínios distintos e os 
+  
+  
+  <italic>puxa para a exclusão </italic>social através de um 
+  
+  
+  <italic>movimento rotativo</italic>
+  <sup>
+    <fn id="nt28"></fn>
+  </sup> (BUDE, 2008, p. 106).
+
+
+</p>
+<p>Já nos livros alemães, preponderam as expressões ligadas ao esquema imagético CONTÊINER, em detrimento daquelas do esquema imagético VERTICALIDADE, com uma percentagem de 34,6% de todas as expressões pertencentes a esquemas imagéticos, o que corresponde à hipótese formulada anteriormente, a de que nos livros é mais provável que se encontrem metáforas mais inovativas e que revelem mudanças no discurso sobre a sociedade em geral. Isso também pode ser explicado pela proximidade àquelas disciplinas cuja tarefa principal é observar e descrever a socieade e suas mudanças. Portanto, muitas vezes, tais transposições semânticas também são explicitadas, como mostra o seguinte exemplo:</p>
+<disp-quote>
+  <p>(11) O que essas observações e experiências diferentes têm em comum é que elas tratam da 
+    
+    
+    <italic>exclusão</italic> social: os 
+    
+    
+    <italic>excluídos</italic> que se 
+    
+    
+    <italic>exiliaram nas zonas</italic> da sociedade cansada, os 
+    
+    
+    <italic>excluídos</italic> que 
+    
+    
+    <italic>foram lançados para fora dos trilhos</italic> por causa de uma 
+    
+    
+    <italic>ruptura na sua carreia</italic> e os 
+    
+    
+    <italic>excluídos</italic> que surgem 
+    
+    
+    <italic>na esfera </italic>do consumo. A questão não é quem está 
+    
+    
+    <italic>por cima</italic> e quem está 
+    
+    
+    <italic>por baixo</italic>, mas, sim, quem está 
+    
+    
+    <italic>dentro</italic> e quem está 
+    
+    
+    <italic>fora</italic>. Essas pessoas sofrem com o desrespeito com que são tratadas e com a paralisia causada por um sentimento de inalteralidade e desespero. A sociologia criou um novo conceito para isso: não se trata mais apenas de desigualdade social, e nem de probreza material, mas, sim, de 
+    
+    
+    <italic>exclusão</italic> social
+    
+    
+    <sup>
+      <fn id="nt29"></fn>
+    </sup> (BUDE, 2008, 13).
+  
+  
+  </p>
+</disp-quote>
+<p>Dessa forma, os esquemas imagéticos compostos ilustrados nascem por processos complexos da mesclagem como redes de integração, nas quais espaços 
+  
+  
+  <italic>input</italic> distintos podem ser mesclados em um único espaço mescla, o que é ilustrado na 
+  
+  
+  <xref ref-type="fig" rid="img03">FIG. 3</xref>, que reflete as possíveis sobreposições de esquemas imagéticos encontrados:
+
+
+</p>
+<p>
+  <fig id="img03">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04img03.jpg"/>
+  </fig>
+</p>
+<p/>
+<p>No 
+  
+  
+  <italic>corpus</italic> brasileiro, uma dinâmica comparável se encontra em apenas sete artigos jornalísticos, que recorrem todos a uma estatística publicada no início de 2008, em que se afirma um crescimento da classe média pela melhoria de condições salariais de uma parte da antiga classe baixa. Apesar disso, os esquemas imagéticos brasileiros permanecem com mais frequência estáticos, em oposição ao 
+  
+  
+  <italic>corpus</italic> alemão. Em parte, aponta-se explicitamente para o fato de a sociedade brasileira não ter se modificado tanto, de modo que CONTÊINER ou VERTICALIDADE e mesmo CAMINHO, algumas vezes, são até esboçados conscientemente como modelos imóveis ou sem direção:
+
+
+</p>
+<p>12) Quem 
+  
+  
+  <italic>está dentro não sai</italic>, quem 
+  
+  
+  <italic>está fora não entra</italic> (V1); 
+
+
+</p>
+<p>13) o negro conhece o 
+  
+  
+  <italic>seu lugar</italic> (ALMEIDA, 2007, p. 231); 
+
+
+</p>
+<p>14) fazendo a sociedade 
+  
+  
+  <italic>permanecer no ciclo vicioso</italic> do apadrinhamento e se contentando com migalhas (ESP6); 
+
+
+</p>
+<p>15) Ela [a sociedade] ainda 
+  
+  
+  <italic>tá rodando círculo</italic> e não se achou (EoB4,1); 
+
+
+</p>
+<p>16) [a sociedade] vive num 
+  
+  
+  <italic>fluxo que leva de nada para lugar nenhum </italic>(EoB4,2).
+
+
+</p>
+<p>
+  <bold>Mesclagem Conceptual no nível de metáforas complexas</bold>
+</p>
+<p>A Teoria da Mesclagem é de grande utilidade quando se trata da reconstrução de feixes complexos de metáforas - também denominados &amp;#x27;metáforas misturadas&amp;#x27; (&amp;#x27;mixed metaphors&amp;#x27;) (LAKOFF; JOHNSON, 1980, p. 95) ou &amp;#x27;metáforas compostas&amp;#x27; (&amp;#x27;composite metaphors&amp;#x27;) (LAKOFF; TURNER, 1989, p. 70).</p>
+<p>Procuramos começar com dois exemplos do 
+  
+  
+  <italic>corpus</italic> brasileiro que vão além do mero nível oracional, assumindo um caráter narrativo. A seguinte alegoria, que procura explicar ao leitor da 
+  
+  
+  <italic>Folha de S. Paulo</italic> o processo difícil da democratização da sociedade brasileira, serve a fins didático-morais, por fazer da ideia abstrata da democracia uma narração viva e, destarte, compreensível. Nisso, o autor oscila simultaneamente entre um nível abstrato e um nível concreto, integralizando mais do que apenas uma imagem singular:
+
+
+</p>
+<disp-quote>
+  <p>17) A democracia no Brasil ainda passa por um 
+    
+    
+    <italic>natural processo</italic> de 
+    
+    
+    <italic>amadurecimento</italic> e, como uma 
+    
+    
+    <italic>planta tenra</italic>, necessita de 
+    
+    
+    <italic>cuidados</italic> especiais por parte dos diversos 
+    
+    
+    <italic>segmentos</italic> da sociedade, de forma a 
+    
+    
+    <italic>crescer</italic> e 
+    
+    
+    <italic>consolidar suas bases</italic> de 
+    
+    
+    <italic>sustentação</italic>, 
+    
+    
+    <italic>oferecendo saudáveis frutos</italic> a todos que se 
+    
+    
+    <italic>abrigam sob sua sombra protetora </italic>e
+    
+    
+    <italic> acolhedora</italic> (FSP5).
+  
+  
+  </p>
+</disp-quote>
+<p>À primeira vista, trata-se do domínio fonte simples PLANTA e do domínio alvo DEMOCRACIA BRASILEIRA. Não obstante, a narração é construida de modo a ativar, concomitantemente, a partir da polissemia das palavras 
+  
+  
+  <italic>amadurecimento</italic>, 
+  
+  
+  <italic>cuidados</italic>, 
+  
+  
+  <italic>crescer</italic>, 
+  
+  
+  <italic>frutos</italic>, 
+  
+  
+  <italic>sustentação</italic>, 
+  
+  
+  <italic>abrigam</italic> e 
+  
+  
+  <italic>protetora</italic>, subconscientemente outro domínio - CRIANÇA A SER CRIADA - efeito obtido pela alta densidade de tais lexemas e pela frase 
+  
+  
+  <italic>oferecendo suadáveis frutos a todos que se abrigam sob sua sombra protetora e acolhedora</italic>, pois é nessa frase que a planta se torna protetora e fornecedora de alimentos ao mesmo tempo. Finalmente, há mais um domínio introduzido pelos lexemas 
+  
+  
+  <italic>consolidar suas bases</italic> e 
+  
+  
+  <italic>sustentação</italic>: EDIFÍCIO. Não há colisões, uma vez que a ideia-chave retirada de todos os domínios é a do DEVENVOLVIMENTO ou da CONSTRUÇÃO, o que fornece coerência ao espaço mescla.
+
+
+</p>
+<p>Essa coerência que surge na mesclagem é fundamental para o próprio ato de fala realizado pelo autor, uma vez que o que está no primeiro plano é a intenção didática de explicar ao leitor como ele deveria imaginar a democracia brasileira. De acordo com isso, colisões do tipo como vimos anteriormente seriam embaraçosas. A interface ou compatibilidade entre os três espaços 
+  
+  
+  <italic>input </italic>concretos é, por conseguinte, muito alta, o que também se reflete na 
+  
+  
+  <xref ref-type="fig" rid="img04">FIG. 4</xref>:
+
+
+</p>
+<p>
+  <fig id="img04">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04img04.jpg"/>
+  </fig>
+</p>
+<p/>
+<p>No segundo cenário, em um primeiro nível, percebe-se a compreessão da existência de categorias étnicas no Brasil na imagem de uma seringa de veneno resultando em racismo. Nisso, a imagem em sua totalidade é animada simultaneamente por uma personificação, o que dá complexidade ao cenário inteiro:</p>
+<disp-quote>
+  <p>18) A 
+    
+    
+    <italic>fabricação</italic> de "raças oficiais" e a 
+    
+    
+    <italic>distribuição</italic> seletiva de privilégios segundo 
+    
+    
+    <italic>rótulos</italic> de raça 
+    
+    
+    <italic>inocula na circulação sanguínea </italic>da sociedade
+    
+    
+    <italic> o </italic>
+    <italic>veneno do racismo</italic>, com seu 
+    
+    
+    <italic>cortejo</italic> de 
+    
+    
+    <italic>rancores</italic> e
+    
+    
+    <italic> ódios </italic>(FSP30).
+  
+  
+  </p>
+</disp-quote>
+<p>O quadro discursivo é formado pela discussão sobre a introdução de cotas nas faculdades. A primeira mesclagem consiste na fabricação de categorias étnicas; todavia, há um agente no pano de fundo indicado pelas substantivações 
+  
+  
+  <italic>distribuição</italic> e 
+  
+  
+  <italic>fabricação</italic>. Os 
+  
+  
+  <italic>rótulos</italic> apontam o produto final do processo da fabricação quando os produtos recebem uma etiqueta, nesse caso, as categorias raciais. Essa mesclagem serve como base para um novo 
+  
+  
+  <italic>input</italic> que, com o 
+  
+  
+  <italic>input </italic>da seringa de veneno, forma o espaço mescla CATEGORIAS ÉTNICAS COMO VENENO EM UMA SERINGA.
+
+
+</p>
+<p>Não obstante, surge agora um elemento novo que não se encontra nos espaços 
+  
+  
+  <italic>input</italic>: o RACISMO. Fauconnier e Turner (2003, p. 43, 48) falam de 'acabamento' ('completion') e referem-se à observação de que na mesclagem, frequentemente e subconscientemente, outras estruturas são acrescentadas, oriundas do conhecimento cultural de uma comunidade de fala. Brandt e Brandt (2005) focalizam esse aspecto, pouco aprofundado por Fauconnier e Turner na teoria das redes semióticas como versão ampliada da Teoria da Mesclagem.
+
+
+</p>
+<p>De acordo com os teóricos, essas estruturas inconscientes que entram na mesclagem representam até um
+  
+  
+  <italic> input</italic> próprio, um esquema ético, a que eles mesmos denominam de 'espaço de relevância' ('relevance space'), uma vez que indicam certa intenção do locutor: "a rede dos espaços que é ativa no processo da produção metafórica tem propriedades semióticas inerentes. A mescla é um signo."
+  
+  
+  <sup>
+    <fn id="nt30"></fn>
+  </sup> (BRANDT; BRANDT, 2005, p. 245). Com isso, Brandt e Brandt enfatizam o processo da comunicação em si, no qual, em nível pragmático, para realizar o cenário mesclado inteiro, o interlocutor deveria construir inferências por conta própria com base em seu próprio conhecimento de mundo e em suas próprias convenções de enquadramento (
+  
+  
+  <italic>framing</italic>).
+
+
+</p>
+<p>A segunda mesclagem apresenta um processo metonímico no qual a sociedade brasileira - percebida como um grupo de pessoas - é comprimida em uma pessoa só. Ora, as mesclagens &amp;#x27;sociedade como pessoa&amp;#x27; e &amp;#x27;seringa com veneno de racismo&amp;#x27; são integradas na imagem da sociedade como organismo, em cuja circulação sanguínea o veneno do racismo é inoculado. Ademais, uma vez que 
+  
+  
+  <italic>rancores</italic> e 
+  
+  
+  <italic>ódios</italic> são atributos que se aplicam exclusivamente a seres humanos, a personificação da sociedade é significativamente reforçada. Porém,
+
+
+</p>
+<p>o agente continua opaco, pois as substantivações (
+  
+  
+  <italic>fabricação</italic> e 
+  
+  
+  <italic>distribuição</italic>) e objetivações (
+  
+  
+  <italic>rótulos de raça</italic>) ocupam o lugar do sujeito da frase, causando um "empurrão do sujeito com desaparecimento do AGENTE"
+  
+  
+  <sup>
+    <fn id="nt31"></fn>
+  </sup> (POLENZ, 1988, p. 186). A despeito do primeiro exemplo, a mesclagem metafórica assume agora uma função argumentativa de modo que se precisa acrescentar o espaço 
+  
+  
+  <italic>input </italic>da relevância como esquema ético:
+
+
+</p>
+<p>Ora, convém salientar que até esses dois exemplos particulares podem ser interpretados em contexto cultural. A preferência de metáforas ligadas à natureza (FLORA, PAISAGEM) como no primeiro exemplo e também a personificação e sua especificação na percepção da própria sociedade como infetada ou infantil já se encontra no nível das metáforas da constelação simples:</p>
+<p>a percentagem da variação dos 
+  
+  
+  <italic>types</italic> da personificação no total das expressões metafóricas é 25,5% no 
+  
+  
+  <italic>corpus</italic> brasileiro, contra 13,7% no 
+  
+  
+  <italic>corpus</italic> alemão. Enquanto os dois 
+  
+  
+  <italic>corpora </italic>DOENÇA e FAMÍLIA representam domínios fonte frequentes para mapeamentos metafóricos, o domínio FLORA, com uma variação dos 
+  
+  
+  <italic>types,</italic> é destacado no 
+  
+  
+  <italic>corpus</italic> brasileiro com 9% contra apenas 5,4% no 
+  
+  
+  <italic>corpus</italic> alemão (SCHRÖDER, 2009a). Mesclagens que integram cenários com 
+  
+  
+  <italic>input</italic> complexos originados nos domínios mencionados, desenvolvendo a ideia fundamental da sociedade como organismo, foram encontradas 12 vezes no 
+  
+  
+  <italic>corpus</italic> brasileiro e três vezes no 
+  
+  
+  <italic>corpus</italic> alemão. Destarte, a mesclagem ilustrada na 
+  
+  
+  <xref ref-type="fig" rid="img05">FIG. 5</xref> pode ser vista como um caso prototípico:
+
+
+</p>
+<p>
+  <fig id="img05">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04img05.jpg"/>
+  </fig>
+</p>
+<p/>
+<p>No 
+  
+  
+  <italic>corpus</italic> brasileiro predominam mesclagens com imagens muito comprimidas e imaginativas, ao passo que, no 
+  
+  
+  <italic>corpus</italic> alemão, mais frequentemente, observam-se mesclagens de imagens com uma dinâmica de movimentação, o que atribui aos cenários mais características topológicas e acionais:
+
+
+</p>
+<disp-quote>
+  <p>19) &amp;quot;central é o medo de 
+    
+    
+    <italic>ser infectado pelo bacilo da desagregação</italic>, da dependência e da 
+    
+    
+    <italic>apatia</italic>. É com esse medo que os 
+    
+    
+    <italic>incluídos enfrentam</italic> os 
+    
+    
+    <italic>excluídos</italic>. É a 
+    
+    
+    <italic>imagem</italic> de pobres passivos, de vagabundos hostis e de existências que desistiram de agir, é essa 
+    
+    
+    <italic>imagem</italic> que 
+    
+    
+    <italic>importuna</italic> as pessoas 
+    
+    
+    <italic>no centro</italic> da nossa sociedade."
+    
+    
+    <sup>
+      <fn id="nt32"></fn>
+    </sup> (BUDE, 2008, p. 116).
+  
+  
+  </p>
+</disp-quote>
+<p>Mesclagens desse tipo são características de enunciações em discursos aos quais se impõe uma certa metáfora de orientação ou direção, o que se observa na 
+  
+  
+  <xref ref-type="fig" rid="img06">FIG. 6.</xref> Nesse caso, trata-se da metáfora da sociedade como CONTÊINER, do qual são excluídos cada vez mais pessoas. Esse motivo principal pode ser visto como fio condutor da abordagem do livro de BUDE (2008): 51,4% dos esquemas imagéticos vêm do domínio CONTÊINER. Aqui, esse esquema ganha um perfil mais concreto, pelo acréscimo da imagem do BACILO, que desperta a associação com PACIENTE DÉBIL psiquicamente e da imagem da OBSERVAÇÃO dos EXCLUÍDOS pelos INCLUÍDOS, que constroem uma certa IMAGEM daqueles LÁ FORA.
+
+
+</p>
+<p>
+  <fig id="img06">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04img06.jpg"/>
+  </fig>
+</p>
+<p/>
+<p>A introdução dessa metaperspectiva relativista - o autor fala sobre uma imagem que um certo grupo de pessoas cria sobre outras pessoas - tem como consequência o fato de o autor se distanciar explicitamente dessa imagem, que é justamente apenas uma imagem, e não a realidade. Mais uma vez, o efeito surge por meio do acréscimo do espaço de relevância, que junta conhecimento de pano de fundo à mesclagem, o que se reflete em certos estereótipos que são vistos na analogização de 
+  
+  
+  <italic>bacilo</italic> com 
+  
+  
+  <italic>vagabundos hostis</italic> e 
+  
+  
+  <italic>existências que desistiram de agir</italic>. Tais metaníveis autorreflexivos e a metáfora da OBSERVAÇÃO, muitas vezes associada a tais cenários, parecem representar um fenômeno específico da cultura alemã.
+
+
+</p>
+<p>Já no nível da metáfora conceptual, no 
+  
+  
+  <italic>corpus</italic> alemão, há 23 lexemas diferentes, ligados ao domínio OBSERVAÇÃO; ao contrário do 
+  
+  
+  <italic>corpus</italic> brasileiro, que contém apenas cinco lexemas.
+
+
+</p>
+<p>No segundo exemplo, exposto na 
+  
+  
+  <xref ref-type="fig" rid="img07">FIG. 7</xref>, percebe-se uma referência mais oculta com relação ao nível do esquema imagético, embora o cenário inteiro seja composto perante o pano de fundo do esquema CAMINHO:
+
+
+</p>
+<p>
+  <fig id="img07">
+    <graphic xlink:href="/img/revistas/rbla/v10n3/a04img07.jpg"/>
+  </fig>
+</p>
+<p/>
+<p>(20) o 
+  
+  
+  <italic>veneno da esquerda,</italic> da igualdade e justiça 
+  
+  
+  <italic>paralisaria energias criativas</italic> e 
+  
+  
+  <italic>jogaria a</italic> Alemanha 
+  
+  
+  <italic>para os últimos lugares na roleta pelo melhor local</italic>
+  <sup>
+    <fn id="nt33"></fn>
+  </sup>(Z8).
+
+
+</p>
+<p>Uma semântica recorrente no discurso alemão atual sobre a própria sociedade é a dicotomia VENCEDOR / VENCIDO, surgindo no contexto e cotexto JOGO / COMPETIÇÃO como domínio fonte. De acordo com isso, a análise quantiativa já revelou uma discrepância incisiva entre os 
+  
+  
+  <italic>corpora</italic> brasileiro e alemão: 12,3% dos 
+  
+  
+  <italic>tokens</italic> alemães do total das expressões das metáforas da constelação originam-se desse domínio, ao passo que no 
+  
+  
+  <italic>corpus</italic> brasileiro são apenas 1,9%, isto é, nem um sexto do número alemão. Não somente a metáfora em si mas também o argumento como um todo é conhecido, pois o autor se distancia da proposição pelo uso consciente do conjuntivo no presente (
+  
+  
+  <italic>paralise/lähme</italic>, 
+  
+  
+  <italic>jogue/werfe</italic>) como indicador do discurso indireto. Além disso, opõe-se a essa imagem conhecida outra, para destruir essa argumentação estereotipada por meio da metáfora da roleta, que introduz o aspecto do acaso, pelo qual é negada a controlabilidade do desenvolvimento positivo da sociedade por uma mera flexibilização da economia. Aqui também essas estruturas sutis e emergentes podem ser visualizadas apenas por meio de uma introdução de um espaço de relevância, para considerar a intenção comunicativa do autor e o trabalho interpretativo do leitor. Nisso, um esquema ético, que etiqueta as ações dos agentes como éticas ou antiéticas é ativado, o que é entendido apenas implicitamente. Na mesclagem analisada, o autor opõe o valor da vida de cada pessoa ao jogo da economia, uma vez que a direção que a sociedade tomará depende apenas dos interesses particulares de seus envolvidos.
+
+
+</p>
+<p>
+  <bold>Conclusão</bold>
+</p>
+<p>Com base em um 
+  
+  
+  <italic>corpus</italic> de quatro genêros textuais distintos, investigouse quais seriam as diferenças entre os 
+  
+  
+  <italic>corpora</italic> brasileiro e alemão, no que concerne a construção metafórica da sociedade. Dentro desse estudo mais amplo, nossa abordagem teve como objetivo específico a investigação do conjunto de metáforas distintas em redes de integração e seu cunho cultural, contextual e discursivo.
+
+
+</p>
+<p>Concomitantemente, nossa atenção dirigiu-se ao surgimento, ao desdobramneto e à habitualização de certos tipos de mesclagens que vêm à tona especialmente no caso dos esquemas imagéticos. Assim, no 
+  
+  
+  <italic>corpus</italic> alemão, observou-se uma tendência significativamente maior a esquemas imagéticos compostos e dinamizados, fenômeno que pode ser explicado por meio de uma série de transformações reais que a sociedade alemã enfrentou recentemente. Com o uso frequente de certas expressões metafóricas em novos contextos, no nível cognitivo, certos esquemas ganham importância crescente.
+
+
+</p>
+<p>Por meio de quatro cenários, foi ilustrado como mesclagens semióticas, nas quais espaços 
+  
+  
+  <italic>input</italic> se tornam signos, adquirem relevância semânticopragmática contextualmente específica em construções 
+  
+  
+  <italic>online</italic>. No 
+  
+  
+  <italic>corpus </italic>brasileiro, puderam ser descobertas mais mesclagens, implicando uma plasticidade maior, efeito obtido, por exemplo, por uma tendência forte a personificações, tendo apresentado, por outro lado, menos esquemas imagéticos. Esses, por sua vez, pareceram estar mais presentes no 
+  
+  
+  <italic>corpus</italic> alemão, no qual aspectos figurativos e dinâmicos acerca da movimentação atuam em conjunto. Nesse sentido, discutiu-se a possibilidade de tal fenômeno ser interpretado à luz da discussão sobre uma sociedade em transformação radical, impregnada pela preocupação dos alemães com relação ao declínio do estado social.
+
+
+</p>
+<p>A ampliação da Teoria da Mesclagem por fator
+  
+  
+  <bold>e</bold>s semióticos como o 'espaço de relevância', encaixando as redes de integração em uma situação comunicativa, que inclui locutores com intenções e interlocutores com tarefas interpretativas, mostrou-se imprescindível para que se possa compreender o caráter contextual e cultural das redes de integração.
+
+
+</p>
+<p>
+  <bold>Referências</bold>
+</p>
+<p>ALMEIDA, A. C. 
+  
+  
+  <italic>A cabeça do brasileiro</italic>. Rio de Janeiro; São Paulo: Editora Record, 2007. p. 277. 
+
+
+</p>
+<p>AZEVEDO, A. M. T. 
+  
+  
+  <italic>Estrutura Narrativa &amp;amp; Espaços Mentais</italic>. Belo Horizonte: Faculdade de Letras da UFMG, 2006. 249p. 
+
+
+</p>
+<p>BALDAUF, C. 
+  
+  
+  <italic>Metapher und Kognition. Grundlagen einer neuen Theorie der Alltagsmetapher</italic>. Frankfurt am Main: Peter Lang, 1997. 357p. 
+
+
+</p>
+<p>BECK, U. 
+  
+  
+  <italic>Was zur Wahl steht</italic>. Franfurt am Main: Suhrkamp, 2005. p. 127.
+
+
+</p>
+<p>BECKMANN, S. 
+  
+  
+  <italic>Die Grammatik der Metapher. Eine gebrauchstheoretische Untersuchung des metaphorischen Sprechens</italic>. Tübingen: Max Niemeyer Verlag, 2001. 241p. 
+
+
+</p>
+<p>BLACK, M. 
+  
+  
+  <italic>Models and Metaphors</italic>. Ithaca, New York: Cornell University Press, 1962. 278p.
+
+
+</p>
+<p>BRANDT, P. A. Mental spaces and cognitive semantics: a critical comment. 
+  
+  
+  <italic>Journal of Pragmatics</italic>, Odense, n. 37, p. 1578-1594, 2005. 
+
+
+</p>
+<p>BRANDT, L.; BRANDT, P. A. Making sense of a blend. A cognitive-semiotic approach to metaphor. 
+  
+  
+  <italic>Annual Review of Cognitive Linguistics</italic>, Rioja, n. 3, p. 216149, 2005. 
+
+
+</p>
+<p>BUDE, H. 
+  
+  
+  <italic>Die Ausgeschlossenen. Das Ende vom Traum einer gerechten Gesellschaft</italic>. München: Carl Hanser Verlag, 2008. p. 141.
+
+
+</p>
+<p>BÜHLER, K. 
+  
+  
+  <italic>Sprachtheorie</italic>: die Darstellungsfunktion der Sprache. Stuttgart: Fischer, 1982/1934. 434p. 
+
+
+</p>
+<p>CAMERON, L. Metaphor and talk. In: GIBBS, R. W. Jr. (Ed.). 
+  
+  
+  <italic>The Cambridge Handbook of Metaphor and Thought</italic>. Cambridge: Cambridge University Press, 2008. p. 197-211. 
+
+
+</p>
+<p>CAMERON, L. Confrontation or complementarity? Metaphor in language use and cognitive metaphor theory. 
+  
+  
+  <italic>Annual Review of Cognitive Linguistics</italic>, Rioja, n. 5, p. 107-135, 2007. 
+
+
+</p>
+<p>CHAUI, M.; BOFF, L.; STEDILE, J. P.; DOS SANTOS, W. G. 
+  
+  
+  <italic>Leituras da crise. </italic>Diálogos sobre o PT, a democracia brasileira e o socialismo. São Paulo: Editora Funcação Perseu Abramo, 2006. p. 255. 
+
+
+</p>
+<p>FAUCONNIER, G. 
+  
+  
+  <italic>Mappings in Thought and Language</italic>. Cambridge: Cambridge University Press, 1999. 205p.
+
+
+</p>
+<p>FAUCONNIER, G.; TURNER, M. Rethinking Metaphor. In: GIBBS, R. W. Jr. (Ed.). 
+  
+  
+  <italic>The Cambridge Handbook of Metaphor and Thought</italic>. Cambridge: Cambridge University Press, 2008. p. 53-66. 
+
+
+</p>
+<p>FAUCONNIER, G.; TURNER, M. 
+  
+  
+  <italic>The Way We Think</italic>. New York: Basic Books, 2003. 440p.
+
+
+</p>
+<p>FELTES, H. P. 
+  
+  
+  <italic>Semântica Cognitiva - </italic>ilhas, pontes e teias. Porto Alegre: EDIPUCRS, 2007. p. 392. 
+
+
+</p>
+<p>GARDINER, A. H. 
+  
+  
+  <italic>The Theory of Speech and Language</italic>. Oxford: Clarendon, 1963/1932. 348p.
+
+
+</p>
+<p>GRADY, J. E.; OAKLEY, T.; SOULSON, S. Blending and Metaphor. In: STEEN, G.; GIBBS, R. W. Jr. (Ed.). 
+  
+  
+  <italic>Metaphor in cognitive linguistics</italic>. Philadelphia: John Benjamins, 1999. p. 101-124. 
+
+
+</p>
+<p>JOHNSON, M. 
+  
+  
+  <italic>The Body in the Mind</italic>: The Bodily Basis of Meaning, Imagination, and Reason. Chicago: University of Chicago Press, 1987. 272p.
+
+
+</p>
+<p>KIMMEL, M. Culture regained: situated and compound image schemas. In: HAMPE, B.; GRADY, J. E. (Ed.). 
+  
+  
+  <italic>From Perception to Meaning</italic>. Image Schemas in Cognitive Linguistics. Berlin, New York: Mouton de Gruyter, 2005. p. 285-311.
+
+
+</p>
+<p>KÖVECSES, Z. 
+  
+  
+  <italic>Metaphor</italic>: a Practical Introduction. Oxford: Oxford University Press, 2002. 285p.
+
+
+</p>
+<p>LAKOFF, G. The contemporary theory of metaphor. In: ORTONY, A. (Ed.). 
+  
+  
+  <italic>Metaphor and Thought</italic>. Cambridge: Cambridge University Press, 1993. p. 202-251. 
+
+
+</p>
+<p>LAKOFF, G. 
+  
+  
+  <italic>Women, Fire and Dangerous Things</italic>: What Categories Reveal about the Mind. Chicago: University of Chicago Press, 1987. 632p.
+
+
+</p>
+<p>LAKOFF, G.; JOHNSON, M. 
+  
+  
+  <italic>Philosophy in the Flesh. </italic>The Embodied Mind and its Challenge to Western Thought. New York: Basic Books, 1999. 624p. 
+
+
+</p>
+<p>LAKOFF, G.; JOHNSON, M. 
+  
+  
+  <italic>Metaphors We Live By</italic>. Chicago: The University of Chicago Press, 1980. 256p.
+
+
+</p>
+<p>LAKOFF, G.; TURNER, M. 
+  
+  
+  <italic>More than Cool Reason. A Field Guide to Poetic </italic>
+  <italic>Metaphor.</italic> Chicago, London: The University of Chicago Press, 1989. 237p. 
+
+
+</p>
+<p>LESSENICH, S.; NULLMEIER, F. 
+  
+  
+  <italic>Deutschland - eine gespaltene Gesellschaft</italic>. Frankfurt, New York: Campus Verlag, 2006. p. 374.
+
+
+</p>
+<p>LEEZENBERG, M. 
+  
+  
+  <italic>Contexts of Metaphor</italic>. Amsterdam: Elsevier, 2001. MARTINS, H. Sobre linguagem e pensamento no paradigma experiencialista. 
+  
+  
+  <italic>Veredas</italic>, Revista de Estudos Linguísticos, Juíz de Fora, v. 6, n. 1, p. 75-90, 2002.
+
+
+</p>
+<p>MELO MOURA, H. M. Metáforas e Regularidades Lingüísticas. In: MIRANDA, N. S.; NAME, M. C. (Ed.). 
+  
+  
+  <italic>Lingüística e Cognição</italic>. Juíz de Fora: Editora UFJF, 2005. p. 109-119. 
+
+
+</p>
+<p>NEUGEBAUER, G. 
+  
+  
+  <italic>Politische Milieus in Deutschland. </italic>Die Studie der Friedrich Ebert-Stiftung. Bonn: Verlag J.H.W. Dietz, 2007. p. 145.
+
+
+</p>
+<p>POLENZ, P. 
+  
+  
+  <italic>Deutsche Satzsemantik. </italic>Grundbegriffe des Zwischen-den-Zeilen- Lesens
+  
+  
+  <italic>.</italic> Berlin, New York: Walter de Gruyter, 1988. 389p. 
+
+
+</p>
+<p>PONTEROTTO, D. The cohesive role of metaphor in discourse and conversation. In: BARCELONA, A. (Ed.). 
+  
+  
+  <italic>Metaphor and metonymy at the crossroads</italic>: A cognitive perspective. Berlin, New York: Mouton de Gruyter, 2003. p. 283-298. 
+
+
+</p>
+<p>SARDINHA, T. B. 
+  
+  
+  <italic>Metáfora</italic>. São Paulo: Parábola Editorial, 2007. p. 167.
+
+
+</p>
+<p>SCHRÖDER, U. A construção metafórica do conceito sociedade em perspectiva comparativa. 
+  
+  
+  <italic>Pandaemonium Germanicum</italic>, São Paulo, v. 14, n. 2, p. 105-141, 2009.
+
+
+</p>
+<p>SCHRÖDER, U. A mesclagem metafórica de Fauconnier &amp;amp; Turner nas teorias de Karl Bühler e Wilhelm Stählin: antecipações e complementos. In: ABRALIN 40 ANOS - VI CONGRESSO INTERNACIONAL DA ABRALIN, 2009, João Pessoa, Anais... João Pessoa: Idéia, 2009b. p. 2913-2922. </p>
+<p>SCHÜLER, F.; AXT, G. 
+  
+  
+  <italic>Brasil Contemporâneo. </italic>Crônicas de um país incógnito. Porto Alegre: Arte e Ofícios, 2006. p. 518.
+
+
+</p>
+<p>SINHA, C. Blending out of the background: Play, props and staging in the material world. 
+  
+  
+  <italic>Journal of Pragmatics</italic>, Odense, n. 37, p. 1537-1554, 2005. 
+
+
+</p>
+<p>SORJ, B. 
+  
+  
+  <italic>A nova sociedade brasileira</italic>. Rio de Janeiro: Jorge Zahar, 2006. p. 169.
+
+
+</p>
+<p>STÄHLIN, W. Zur Psychologie und Statistik der Metaphern. Eine methodologische Untersuchung. 
+  
+  
+  <italic>Archiv für die gesamte Psychologie XXXI</italic>, Frankfurt, p. 297-425, 1913.
+
+
+</p>
+<p>STEEN, G. 
+  
+  
+  <italic>Finding Metaphor in Grammar and Usage</italic>. Amsterdam, Philadelphia: John Benjamins, 2007. p. 430. 
+
+
+</p>
+<p>STEEN, G. Identifying Metaphor in Language: A Cognitive Approach. 
+  
+  
+  <italic>Style</italic>, DeKalb, v. 36, n. 3, p. 386-407, 2002.
+
+
+</p>
+<p>STEINGART, G. 
+  
+  
+  <italic>Deutschland. </italic>Der Abstieg eines Superstars. München: Piper, 2005. p. 303.
+
+
+</p>
+<p>VELLOSO, J. P.; CAVALCANTI DE ALBUQUERQUE, R. 
+  
+  
+  <italic>Brasil, um país do futuro?</italic> Rio de Janeiro: José Olympio, 2006. p. 154. 
+
+
+</p>
+<p>
+  <bold>Anexo</bold>
+</p>
+<p>
+  <bold>Abreviações</bold>
+</p>
+<p>Z8 DIE ZEIT: 
+  
+  
+  <italic>Der große Ausverkauf</italic>, 27.03.2008. Z12 DIE ZEIT: 
+  
+  
+  <italic>Die Angst geht um</italic>, 5.03.2008. Z32 DIE ZEIT, 
+  
+  
+  <italic>Die neue Unterschicht</italic>, 10.3.2006. S2 DER SPIEGEL: 
+  
+  
+  <italic>Die Überflüssigen</italic>, 23.10.2006. S8 DER SPIEGEL: 
+  
+  
+  <italic>Der große Graben</italic>, 17.12.2007. EoA5,1 Entrevista oral Alemanha: masculino, 32 anos, pedagogo social. EoA10 Entrevista oral Alemanha: feminino, 36 anos, desempregada. EeA4 Entrevista escrita Alemanha: masculino, 26 anos, estudante de engenharia ambiental. V1 Veja: 
+  
+  
+  <italic>Congelaram a Classe Média</italic>, 20.12.2006. ESP3 Estado de S. Paulo: 
+  
+  
+  <italic>As pirâmides perpétuas de Faoro</italic>, 25.01.2008. ESP6 Estado de S. Paulo: 
+  
+  
+  <italic>Brasil, junção de três rios</italic>, 18.05.2008. FSP20 Folha de S. Paulo: 
+  
+  
+  <italic>Fim da mobilidade social ajudou Lula</italic>, 30.12.2006. FSP5 Folha de S. Paulo: 
+  
+  
+  <italic>O grito dos necessitados</italic>, 6.11.2006. FSP30 Folha de S. Paulo: 
+  
+  
+  <italic>Cidadãos anti-racistas contra as leis raciais</italic>, 14.05.2008. EoB4,1 Entrevista oral Brasil: masculino, 25 anos, cantor (MC). EoB4,2 Entrevista oral Brasil: masculino, 30 anos, produtor musical. EeB9 Entrevista escrita Brasilien: masculino, 24 anos, estudante de engenharia.
+
+
+</p>
+<p>Recebido em outubro de 2009.  Aprovado em março de 2010.</p>
+<p>
+  <fn-group>
+    <fn id="nt01">
+      <label>1</label>
+      <p>"cross-domain mapping in the conceptual system."</p>
+    </fn>
+    <fn id="nt02">
+      <label>2</label>
+      <p>Uma introdução à teoria de Lakoff e Johnson em português é dada por Feltes (2007). </p>
+    </fn>
+    <fn id="nt03">
+      <label>3</label>
+      <p>"overlaps in the metaphors." </p>
+    </fn>
+    <fn id="nt04">
+      <label>4</label>
+      <p>"We will be 
+        
+        
+        <italic>going deeply into</italic> a variety of topics." 
+      
+      
+      </p>
+    </fn>
+    <fn id="nt05">
+      <label>5</label>
+      <p>Nesse momento, os autores ainda não distingem de modo nítido entre 
+        
+        
+        <italic>image schemas</italic> ou 
+        
+        
+        <italic>primary metaphors</italic> e 
+        
+        
+        <italic>structural metaphors</italic> ou 
+        
+        
+        <italic>complex metaphors</italic> como fazem mais tarde (LAKOFF; JOHNSON, 1999, p. 45-73).
+      
+      
+      </p>
+    </fn>
+    <fn id="nt06">
+      <label>6</label>
+      <p>"tip of the iceberg." </p>
+    </fn>
+    <fn id="nt07">
+      <label>7</label>
+      <p>"it [blending] consists in integrating partial structures from two separate domains into a single structure with emergent properties within a third domain."</p>
+      <p>Um
+ a introdução geral à teoria de Fauconnier e Turner em português encontra-se em Azevedo (2006).</p>
+    </fn>
+    <fn id="nt08">
+      <label>8</label>
+      <p>"k
+ urzum: ich ziehe nicht nur das Bild in die Sphäre des Sachgegenstandes, sondern auch die Sache in die Sphäre des Bildes hinein. Es findet ein Austausch der Merkmale, eine Vereinigung der beiderseitigen Sphären, eine Verschmelzung von Bild und Sache statt."</p>
+    </fn>
+    <fn id="nt09">
+      <label>9</label>
+      <p></p>
+      <fn id="nt10">
+        <label>10</label>
+        <p>"Conceptual products are never the result of a single mapping. What we have come to call conceptual metaphors like TIME IS MONEY or TIME IS SPACE, turn out to be mental constructions involving many spaces and many mappings in elaborate integration networks constructed by means of overarching general principles. These integration networks are far richer than the bundles of pairwise bindings considered in recent theories of metaphor."</p>
+      </fn>
+      <fn id="nt11">
+        <label>11</label>
+        <p>O 
+          
+          
+          <italic>corpus</italic> brasileiro abrange artigos de 2006-2008 dos jornais 
+          
+          
+          <italic>Folha de S. Paulo</italic>, 
+          
+          
+          <italic>Estado de S. Paulo</italic>, 
+          
+          
+          <italic>Estado de Minas</italic>, 
+          
+          
+          <italic>Jornal do Brasil</italic> e das revistas 
+          
+          
+          <italic>Veja</italic>, 
+          
+          
+          <italic>Carta Capital </italic>e 
+          
+          
+          <italic>Época</italic>. O 
+          
+          
+          <italic>corpus</italic> alemão compreende artigos de 2006-2008 dos jornais 
+          
+          
+          <italic>TAZ</italic>, 
+          
+          
+          <italic>DIE ZEIT</italic>, 
+          
+          
+          <italic>Frankfurter Rundschau</italic>, 
+          
+          
+          <italic>Die Welt</italic> e da revista 
+          
+          
+          <italic>DER SPIEGEL</italic>. Uma explicação das abreviações relacionadas às citações encontra-se no ANEXO.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt12">
+        <label>12</label>
+        <p>Livros brasileiros analisados: 
+          
+          
+          <italic>Leituras da Crise</italic> de Marilena Chaui, Leonardo Boff, João Pedro Stedile e Wanderley Guilherme dos Santos (2006), 
+          
+          
+          <italic>Brasil, um país do futuro?</italic> de João Paulo dos Reis Velloso e Roberto Cavalcanti de Alburquerque (2006), 
+          
+          
+          <italic>A Cabeça do Brasileiro</italic> de Alberto Carlos Almeida (2007), 
+          
+          
+          <italic>Brasil Contemporâneo. Crônicas de Um País Incógnito</italic> de Fernando Schüler e Gunter Axt (2006) e 
+          
+          
+          <italic>A Nova Sociedade Brasileira</italic> de Bernardo Sorj (2006). Livros alemães analisados: 
+          
+          
+          <italic>Was zur Wahl steht </italic>de Ulrich Beck (2005), 
+          
+          
+          <italic>Die Ausgeschlossenen. Das Ende vom Traum einer gerechten Gesellschaft</italic> de Heinz Bude (2008), 
+          
+          
+          <italic>Politische Milieus in Deutschland. Eine Studie der Friedrich-Ebert-Stiftung</italic> de Gero Neugebauer (2007), 
+          
+          
+          <italic>Deutschland. Der Abstieg eines Superstars</italic> de Gabor Steingart (2005) e 
+          
+          
+          <italic>Deutschland eine gespaltene Gesellschaft</italic> de Stephan Lessenich &amp; Frank Nullemeier (2006).
+        
+        
+        </p>
+      </fn>
+      <fn id="nt13">
+        <label>13</label>
+        <p>"image-schema metaphor, in which it is not conceptual elements of knowledge (like traveler, destination, obstacles, etc. in the case of JOURNEY) that get mapped from a source to a target, but conceptual elements of image-schemas."</p>
+      </fn>
+      <fn id="nt14">
+        <label>14</label>
+        <p>Uma apresentação e discussão mais abrangente encontra-se em Schröder (2009a).</p>
+      </fn>
+      <fn id="nt15">
+        <label>15</label>
+        <p>Während der 
+          
+          
+          <italic>Weg</italic> von der 
+          
+          
+          <italic>Unterschicht zur Mittelschicht</italic> weitgehend 
+          
+          
+          <italic>versperrt</italic> ist, 
+          
+          
+          <italic>rutschten</italic> zwischen 2000 und 2006 rund 13 Prozent aller Beschäftigten in die 
+          
+          
+          <italic>unteren </italic>Einkommensklassen.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt16">
+        <label>16</label>
+        <p>Ich hoffe, dass sich die Gesellschaft in eine europäische 
+          
+          
+          <italic>Richtung</italic> zu 
+          
+          
+          <italic>öffnen</italic> vermag.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt17">
+        <label>17</label>
+        <p>Die 
+          
+          
+          <italic>Schere zwischen</italic> denen, die 
+          
+          
+          <italic>drinnen</italic>, und denen, die 
+          
+          
+          <italic>draußen</italic> sind, geht zuverlässig 
+          
+          
+          <italic>auseinande</italic>. 
+        
+        
+        </p>
+      </fn>
+      <fn id="nt18">
+        <label>18</label>
+        <p>Er schildert seinen 
+          
+          
+          <italic>Weg aus der Mitte</italic> der Arbeit und der 
+          
+          
+          <italic>Mitte</italic> der Gesellschaft 
+          
+          
+          <italic>an</italic>
+          <italic>den Rand</italic> und immer 
+          
+          
+          <italic>tiefer nach unten</italic>.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt19">
+        <label>19</label>
+        <p>Die einen sind 
+          
+          
+          <italic>tief gefallen</italic>, die anderen haben nie 
+          
+          
+          <italic>abgehoben</italic>. 
+        
+        
+        </p>
+      </fn>
+      <fn id="nt20">
+        <label>20</label>
+        <p>
+          <italic>Abstieg in die Katakomben</italic> der Gesellschaft. 
+        
+        
+        </p>
+      </fn>
+      <fn id="nt21">
+        <label>21</label>
+        <p>die soziale 
+          
+          
+          <italic>Stufenleiter</italic> ist überhaupt 
+          
+          
+          <italic>glitschiger</italic> geworden. Der 
+          
+          
+          <italic>Absturz</italic> scheint von überall möglich. 
+        
+        
+        </p>
+      </fn>
+      <fn id="nt22">
+        <label>22</label>
+        <p>in den Strudel einer‚ Abwärtsspirale' zu geraten. </p>
+      </fn>
+      <fn id="nt23">
+        <label>23</label>
+        <p>Die deutsche Gesellschaft 
+          
+          
+          <italic>geht</italic> immer weiter 
+          
+          
+          <italic>den Bach runter</italic>. 
+        
+        
+        </p>
+      </fn>
+      <fn id="nt24">
+        <label>24</label>
+        <p>Ein neues "Bürgertum" würde eine 
+          
+          
+          <italic>Brücke zwischen oben und unten schlagen</italic> können.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt25">
+        <label>25</label>
+        <p>
+ Wer heute 
+          
+          
+          <italic>in</italic> den 
+          
+          
+          <italic>unteren Teil</italic> der Gesellschaft 
+          
+          
+          <italic>hinein</italic>geboren wird, hat nur wenige Chancen, dort im Laufe seines Lebens wieder 
+          
+          
+          <italic>herauszuklettern</italic>. 
+        
+        
+        </p>
+      </fn>
+      <fn id="nt26">
+        <label>26</label>
+        <p>
+ Besser als die Möglichkeiten der Armen, 
+          
+          
+          <italic>in</italic> die Mittelschicht zu 
+          
+          
+          <italic>klettern</italic>, sind die 
+          
+          
+          <italic>Aufstieg</italic>schancen der 
+          
+          
+          <italic>Mittelschichtler nach ganz oben</italic>. Rund elf Prozent der Beschäftigten schafften im gleichen Zeitraum den 
+          
+          
+          <italic>Sprung in</italic> die oberen Gehalts
+          
+          
+          <italic>klassen</italic>.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt27">
+        <label>27</label>
+        <p>
+ Es gibt 
+          
+          
+          <italic>Druck</italic> auf die 
+          
+          
+          <italic>Ränder</italic>, Hartz IV. Ich gehör' mittlerweile zu denjenigen, die den 
+          
+          
+          <italic>Druck </italic>gut finden, sozialpädagogisch, solange diejenigen, die wirklich staatliche Unterstützung brauchen, nicht 
+          
+          
+          <italic>aus dem Raster fallen</italic>.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt28">
+        <label>28</label>
+        <p>
+ Man stellt sich einen Prozeß des 
+          
+          
+          <italic>Strudelns</italic> vor, der nach und nach die verschiedenen Bereiche einbezieht und in einer 
+          
+          
+          <italic>rotierenden Bewegung ins </italic>soziale
+          
+          
+          <italic> Aus zieht</italic>.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt29">
+        <label>29</label>
+        <p>
+ Gemeinsam ist diesen verschiedenen Beobachtungen und Erfahrungen, daß sie vom sozialen 
+          
+          
+          <italic>Ausschluß</italic> handeln: die 
+          
+          
+          <italic>Ausgeschlossenen</italic>, 
+          
+          
+          <italic>die in den Bezirken</italic> der müden Gesellschaft 
+          
+          
+          <italic>exiliert</italic> sind, die 
+          
+          
+          <italic>Ausgeschlossenen</italic>, die von einem Knick in der 
+          
+          
+          <italic>Karriere aus der Bahn geworfen</italic> worden sind, und die 
+          
+          
+          <italic>Ausgeschlossenen</italic>, die 
+          
+          
+          <italic>in der Sphäre</italic> des Konsums auftauchen. Die Frage ist nicht, wer 
+          
+          
+          <italic>oben</italic> und wer 
+          
+          
+          <italic>unten</italic>, sondern wer 
+          
+          
+          <italic>drinnen</italic> und wer 
+          
+          
+          <italic>draußen</italic> ist. Diese Menschen leiden darunter, daß sie Mißachtung erfahren und daß sie vom Gefühl der Unabänderlichkeit und Aussichtslosigkeit gelähmt sind. Die Soziologie hat dafür einen neuen Begriff geprägt: Es geht nicht allein um soziale Ungleichheit, auch nicht nur um materielle Armut, sondern um soziale 
+          
+          
+          <italic>Exklusion</italic>.
+        
+        
+        </p>
+      </fn>
+      <fn id="nt30">
+        <label>30</label>
+        <p>
+ "the network of spaces that is active in the process of metaphor production has inherent semiotic properties. The blend is a sign." </p>
+      </fn>
+      <fn id="nt31">
+        <label>31</label>
+        <p>
+ "Subjektschub mit AGENS-Schwund."</p>
+      </fn>
+      <fn id="nt32">
+        <label>32</label>
+        <p>
+ "wesentlich ist die Angst, vom 
+          
+          
+          <italic>Bazillus des Verfalls</italic>, der Abhängigkeit und der 
+          
+          
+          <italic>Apathie infiziert</italic> zu werden, mit der die 
+          
+          
+          <italic>Einbezogenen</italic> den 
+          
+          
+          <italic>Ausgeschlossenen begegnen</italic>. Es ist das 
+          
+          
+          <italic>Bild</italic> passiver Armer, feindseliger Herumtreiber und sich selbst aufgebender Existenzen, das die Leute 
+          
+          
+          <italic>in der Mitte </italic>unserer Gesellschaft 
+          
+          
+          <italic>bedrängt</italic>."
+        
+        
+        </p>
+      </fn>
+      <fn id="nt33">
+        <label>33</label>
+        <p>
+ das 
+          
+          
+          <italic>linke Gift</italic> von Gleichheit und Gerechtigkeit 
+          
+          
+          <italic>lähme kreative Energien</italic> und 
+          
+          
+          <italic>werfe </italic>Deutschland im 
+          
+          
+          <italic>Standort-Roulette auf hintere Plätze zurück.</italic>
+        </p>
+      </fn>
+    </fn-group>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="B1">
+        <mixed-citation>ALMEIDA, A. C. 
+          
+          
+          <italic>A cabeça do brasileiro</italic>.    Rio de Janeiro; São Paulo: Editora Record,    2007. p. 277.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>A cabeça do brasileiro</source>
+          <date>
+            <year>2007</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>ALMEIDA</surname>
+              <given-names>A. C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B2">
+        <mixed-citation>AZEVEDO, A. M. T. 
+          
+          
+          <italic>Estrutura Narrativa &amp;    Espaços Mentais</italic>. Belo Horizonte: Faculdade de Letras da UFMG, 2006.    249p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Estrutura Narrativa &amp; Espaços Mentais</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>AZEVEDO</surname>
+              <given-names>A. M. T.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B3">
+        <mixed-citation>BALDAUF, C. 
+          
+          
+          <italic>Metapher und Kognition. Grundlagen    einer neuen Theorie der Alltagsmetapher</italic>. Frankfurt am Main: Peter Lang,    1997. 357p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Metapher und Kognition: Grundlagen einer neuen Theorie der Alltagsmetapher</source>
+          <date>
+            <year>1997</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BALDAUF</surname>
+              <given-names>C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B4">
+        <mixed-citation>BECK, U. 
+          
+          
+          <italic>Was zur Wahl steht</italic>. Franfurt    am Main: Suhrkamp, 2005. p. 127.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Was zur Wahl steht</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BECK</surname>
+              <given-names>U.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B5">
+        <mixed-citation>BECKMANN, S. 
+          
+          
+          <italic>Die Grammatik der Metapher. Eine    gebrauchstheoretische Untersuchung des metaphorischen Sprechens</italic>. Tübingen:    Max Niemeyer Verlag, 2001. 241p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Die Grammatik der Metapher: Eine gebrauchstheoretische Untersuchung des metaphorischen Sprechens</source>
+          <date>
+            <year>2001</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BECKMANN</surname>
+              <given-names>S.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B6">
+        <mixed-citation>BLACK, M. 
+          
+          
+          <italic>Models and Metaphors</italic>. Ithaca,    New York: Cornell University Press, 1962.    278p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Models and Metaphors</source>
+          <date>
+            <year>1962</year>
+          </date>
+          <fpage>278</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BLACK</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B7">
+        <mixed-citation>BRANDT, P. A. Mental spaces and cognitive semantics:    a critical comment. 
+          
+          
+          <italic>Journal of Pragmatics</italic>, Odense, n. 37, p. 1578-1594,    2005.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Mental spaces and cognitive semantics: a critical comment</article-title>
+          <source>Journal of Pragmatics</source>
+          <fpage>1578</fpage>
+          <lpage>1594</lpage>
+          <volume>37</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BRANDT</surname>
+              <given-names>P. A.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B8">
+        <mixed-citation>BRANDT, L.; BRANDT, P. A. Making sense of a blend.    A cognitive-semiotic approach to metaphor. 
+          
+          
+          <italic>Annual Review of Cognitive Linguistics</italic>,    Rioja, n. 3, p. 216149, 2005.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Making sense of a blend: A cognitive-semiotic approach to metaphor</article-title>
+          <source>Annual Review of Cognitive Linguistics</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <fpage>216149</fpage>
+          <issue>3</issue>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BRANDT</surname>
+              <given-names>L.</given-names>
+            </name>
+            <name>
+              <surname>BRANDT</surname>
+              <given-names>P. A.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B9">
+        <mixed-citation>BUDE, H. 
+          
+          
+          <italic>Die Ausgeschlossenen. Das Ende vom    Traum einer gerechten Gesellschaft</italic>. München:    Carl Hanser Verlag, 2008. p. 141.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Die Ausgeschlossenen: Das Ende vom Traum einer gerechten Gesellschaft</source>
+          <date>
+            <year>2008</year>
+          </date>
+          <fpage>141</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BUDE</surname>
+              <given-names>H.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B10">
+        <mixed-citation>BÜHLER, K. 
+          
+          
+          <italic>Sprachtheorie</italic>: die Darstellungsfunktion    der Sprache. Stuttgart: Fischer, 1982/1934. 434p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Sprachtheorie: die Darstellungsfunktion der Sprache</source>
+          <date>
+            <year>1982</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>BÜHLER</surname>
+              <given-names>K.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B11">
+        <mixed-citation>CAMERON, L. Metaphor and talk. In: GIBBS, R.    W. Jr. (Ed.). 
+          
+          
+          <italic>The Cambridge Handbook of Metaphor and Thought</italic>. Cambridge:    Cambridge University Press, 2008. p. 197-211.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>The Cambridge Handbook of Metaphor and Thought</source>
+          <date>
+            <year>2008</year>
+          </date>
+          <fpage>197</fpage>
+          <lpage>211</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>CAMERON</surname>
+              <given-names>L.</given-names>
+            </name>
+            <name>
+              <surname>GIBBS</surname>
+              <given-names>R. W. Jr.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B12">
+        <mixed-citation>CAMERON, L. Confrontation or complementarity?    Metaphor in language use and cognitive metaphor theory. 
+          
+          
+          <italic>Annual Review of    Cognitive Linguistics</italic>, Rioja, n. 5, p. 107-135, 2007.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Confrontation or complementarity?: Metaphor in language use and cognitive metaphor theory</article-title>
+          <source>Annual Review of Cognitive Linguistics</source>
+          <date>
+            <year>2007</year>
+          </date>
+          <fpage>107</fpage>
+          <lpage>135</lpage>
+          <issue>5</issue>
+          <person-group person-group-type="author">
+            <name>
+              <surname>CAMERON</surname>
+              <given-names>L.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B13">
+        <mixed-citation>CHAUI, M.; BOFF, L.; STEDILE, J. P.; DOS SANTOS,    W. G. 
+          
+          
+          <italic>Leituras da crise. </italic>Diálogos sobre o PT, a democracia brasileira    e o socialismo. São Paulo: Editora Funcação Perseu Abramo,    2006. p. 255.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Leituras da crise: Diálogos sobre o PT, a democracia brasileira e o socialismo</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>CHAUI</surname>
+              <given-names>M.</given-names>
+            </name>
+            <name>
+              <surname>BOFF</surname>
+              <given-names>L.</given-names>
+            </name>
+            <name>
+              <surname>STEDILE</surname>
+              <given-names>J. P.</given-names>
+            </name>
+            <name>
+              <surname>DOS SANTOS</surname>
+              <given-names>W. G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B14">
+        <mixed-citation>FAUCONNIER, G. 
+          
+          
+          <italic>Mappings in Thought and Language</italic>.    Cambridge: Cambridge University Press,    1999. 205p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Mappings in Thought and Language</source>
+          <date>
+            <year>1999</year>
+          </date>
+          <fpage>205</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>FAUCONNIER</surname>
+              <given-names>G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B15">
+        <mixed-citation>FAUCONNIER, G.; TURNER, M. Rethinking Metaphor.    In: GIBBS, R. W. Jr. (Ed.). 
+          
+          
+          <italic>The Cambridge Handbook of Metaphor and Thought</italic>.    Cambridge: Cambridge University Press, 2008. p. 53-66.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>The Cambridge Handbook of Metaphor and Thought</source>
+          <date>
+            <year>2008</year>
+          </date>
+          <fpage>53</fpage>
+          <lpage>66</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>FAUCONNIER</surname>
+              <given-names>G.</given-names>
+            </name>
+            <name>
+              <surname>TURNER</surname>
+              <given-names>M.</given-names>
+            </name>
+            <name>
+              <surname>GIBBS</surname>
+              <given-names>R. W. Jr.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B16">
+        <mixed-citation>FAUCONNIER, G.; TURNER, M. 
+          
+          
+          <italic>The Way We Think</italic>.    New York: Basic Books, 2003. 440p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>The Way We Think</source>
+          <date>
+            <year>2003</year>
+          </date>
+          <fpage>440</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>FAUCONNIER</surname>
+              <given-names>G.</given-names>
+            </name>
+            <name>
+              <surname>TURNER</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B17">
+        <mixed-citation>FELTES, H. P. 
+          
+          
+          <italic>Semântica Cognitiva -    </italic>ilhas, pontes e teias. Porto Alegre: EDIPUCRS, 2007. p. 392.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Semântica Cognitiva: ilhas, pontes e teias</source>
+          <date>
+            <year>2007</year>
+          </date>
+          <fpage>392</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>FELTES</surname>
+              <given-names>H. P.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B18">
+        <mixed-citation>GARDINER, A. H. 
+          
+          
+          <italic>The Theory of Speech and Language</italic>.    Oxford: Clarendon, 1963/1932. 348p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>The Theory of Speech and Language</source>
+          <date>
+            <year>1963</year>
+          </date>
+          <fpage>348p</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>GARDINER</surname>
+              <given-names>A. H.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B19">
+        <mixed-citation>GRADY, J. E.; OAKLEY, T.; SOULSON, S. Blending    and Metaphor. In: STEEN, G.; GIBBS, R. W. Jr. (Ed.). 
+          
+          
+          <italic>Metaphor in cognitive    linguistics</italic>. Philadelphia: John Benjamins, 1999. p. 101-124.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Metaphor in cognitive linguistics</source>
+          <date>
+            <year>1999</year>
+          </date>
+          <fpage>101</fpage>
+          <lpage>124</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>GRADY</surname>
+              <given-names>J. E.</given-names>
+            </name>
+            <name>
+              <surname>OAKLEY</surname>
+              <given-names>T.</given-names>
+            </name>
+            <name>
+              <surname>SOULSON</surname>
+              <given-names>S.</given-names>
+            </name>
+            <name>
+              <surname>STEEN</surname>
+              <given-names>G.</given-names>
+            </name>
+            <name>
+              <surname>GIBBS</surname>
+              <given-names>R. W. Jr.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B20">
+        <mixed-citation>JOHNSON, M. 
+          
+          
+          <italic>The Body in the Mind</italic>: The    Bodily Basis of Meaning, Imagination, and Reason. Chicago: University of Chicago    Press, 1987. 272p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>The Body in the Mind: The Bodily Basis of Meaning, Imagination, and Reason</source>
+          <date>
+            <year>1987</year>
+          </date>
+          <fpage>272</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>JOHNSON</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B21">
+        <mixed-citation>KIMMEL, M. Culture regained: situated and compound    image schemas. In: HAMPE, B.; GRADY, J. E. (Ed.). 
+          
+          
+          <italic>From Perception to Meaning</italic>.    Image Schemas in Cognitive Linguistics. Berlin, New York: Mouton de Gruyter,    2005. p. 285-311.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>From Perception to Meaning: Image Schemas in Cognitive Linguistics</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <fpage>285</fpage>
+          <lpage>311</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>KIMMEL</surname>
+              <given-names>M.</given-names>
+            </name>
+            <name>
+              <surname>HAMPE</surname>
+              <given-names>B.</given-names>
+            </name>
+            <name>
+              <surname>GRADY</surname>
+              <given-names>J. E.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B22">
+        <mixed-citation>KÖVECSES, Z. 
+          
+          
+          <italic>Metaphor</italic>: a Practical    Introduction. Oxford: Oxford University Press,    2002. 285p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Metaphor: Practical Introduction</source>
+          <date>
+            <year>2002</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>KÖVECSES</surname>
+              <given-names>Z.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B23">
+        <mixed-citation>LAKOFF, G. The contemporary theory of metaphor.    In: ORTONY, A. (Ed.). 
+          
+          
+          <italic>Metaphor and Thought</italic>. Cambridge: Cambridge University    Press, 1993. p. 202-251.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Metaphor and Thought</source>
+          <date>
+            <year>1993</year>
+          </date>
+          <fpage>202</fpage>
+          <lpage>251</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>LAKOFF</surname>
+              <given-names>G.</given-names>
+            </name>
+            <name>
+              <surname>ORTONY</surname>
+              <given-names>A.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B24">
+        <mixed-citation>LAKOFF, G. 
+          
+          
+          <italic>Women, Fire and Dangerous Things</italic>:    What Categories Reveal about the Mind. Chicago: University of Chicago Press,    1987. 632p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Women, Fire and Dangerous Things: What Categories Reveal about the Mind</source>
+          <date>
+            <year>1987</year>
+          </date>
+          <fpage>632</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>LAKOFF</surname>
+              <given-names>G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B25">
+        <mixed-citation>LAKOFF, G.; JOHNSON, M. 
+          
+          
+          <italic>Philosophy in the    Flesh. </italic>The Embodied Mind and its Challenge    to Western Thought. New York: Basic Books, 1999. 624p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Philosophy in the Flesh: The Embodied Mind and its Challenge to Western Thought</source>
+          <date>
+            <year>1999</year>
+          </date>
+          <fpage>624</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>LAKOFF</surname>
+              <given-names>G.</given-names>
+            </name>
+            <name>
+              <surname>JOHNSON</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B26">
+        <mixed-citation>LAKOFF, G.; JOHNSON, M. 
+          
+          
+          <italic>Metaphors We Live    By</italic>. Chicago: The University of Chicago Press, 1980. 256p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Metaphors We Live By</source>
+          <date>
+            <year>1980</year>
+          </date>
+          <fpage>256</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>LAKOFF</surname>
+              <given-names>G.</given-names>
+            </name>
+            <name>
+              <surname>JOHNSON</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B27">
+        <mixed-citation>LAKOFF, G.; TURNER, M. 
+          
+          
+          <italic>More than Cool Reason.    A Field Guide to Poetic </italic>
+          <italic>Metaphor.</italic>    Chicago, London: The University of Chicago Press, 1989. 237p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>More than Cool Reason: A Field Guide to Poetic Metaphor</source>
+          <date>
+            <year>1989</year>
+          </date>
+          <fpage>237</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>LAKOFF</surname>
+              <given-names>G.</given-names>
+            </name>
+            <name>
+              <surname>TURNER</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B28">
+        <mixed-citation>LESSENICH, S.; NULLMEIER, F. 
+          
+          
+          <italic>Deutschland -    eine gespaltene Gesellschaft</italic>. Frankfurt, New York: Campus Verlag, 2006.    p. 374.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Deutschland - eine gespaltene Gesellschaft</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <fpage>374</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>LESSENICH</surname>
+              <given-names>S.</given-names>
+            </name>
+            <name>
+              <surname>NULLMEIER</surname>
+              <given-names>F.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B29">
+        <mixed-citation>LEEZENBERG, M. 
+          
+          
+          <italic>Contexts of Metaphor</italic>. Amsterdam:    Elsevier, 2001.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Contexts of Metaphor</source>
+          <date>
+            <year>2001</year>
+          </date>
+          <person-group person-group-type="author">
+            <name>
+              <surname>LEEZENBERG</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B30">
+        <mixed-citation>MARTINS, H. Sobre linguagem e pensamento no paradigma experiencialista.
+          
+          
+          <italic></italic>
+          <italic>Veredas</italic>, Revista de Estudos    Linguísticos, Juíz de Fora, v. 6, n. 1, p. 75-90, 2002.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Sobre linguagem e pensamento no paradigma experiencialista</article-title>
+          <source>Veredas, Revista de Estudos Linguísticos</source>
+          <date>
+            <year>2002</year>
+          </date>
+          <fpage>75</fpage>
+          <lpage>90</lpage>
+          <issue>1</issue>
+          <volume>6</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MARTINS</surname>
+              <given-names>H.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B31">
+        <mixed-citation>MELO MOURA, H. M. Metáforas e Regularidades    Lingüísticas. In: MIRANDA, N. S.; NAME, M. C. (Ed.). 
+          
+          
+          <italic>Lingüística    e Cognição</italic>. Juíz de Fora: Editora UFJF, 2005. p. 109-119.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Lingüística e Cognição</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <fpage>109</fpage>
+          <lpage>119</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>MELO MOURA</surname>
+              <given-names>H. M.</given-names>
+            </name>
+            <name>
+              <surname>MIRANDA</surname>
+              <given-names>N. S.</given-names>
+            </name>
+            <name>
+              <surname>NAME</surname>
+              <given-names>M. C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B32">
+        <mixed-citation>NEUGEBAUER, G. 
+          
+          
+          <italic>Politische Milieus in Deutschland.    </italic>Die Studie der Friedrich Ebert-Stiftung.    Bonn: Verlag J.H.W. Dietz, 2007. p. 145.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Politische Milieus in Deutschland: Die Studie der Friedrich Ebert-Stiftung</source>
+          <date>
+            <year>2007</year>
+          </date>
+          <fpage>145</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>NEUGEBAUER</surname>
+              <given-names>G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B33">
+        <mixed-citation>POLENZ, P. 
+          
+          
+          <italic>Deutsche Satzsemantik. </italic>Grundbegriffe    des Zwischen-den-Zeilen- Lesens
+          
+          
+          <italic>.</italic> Berlin, New York: Walter de Gruyter,    1988. 389p.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Deutsche Satzsemantik: Grundbegriffe des Zwischen-den-Zeilen- Lesens</source>
+          <date>
+            <year>1988</year>
+          </date>
+          <fpage>389</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>POLENZ</surname>
+              <given-names>P.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B34">
+        <mixed-citation>PONTEROTTO, D. The cohesive role of metaphor    in discourse and conversation. In: BARCELONA, A. (Ed.). 
+          
+          
+          <italic>Metaphor and metonymy    at the crossroads</italic>: A cognitive perspective. Berlin, New York: Mouton de    Gruyter, 2003. p. 283-298.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Metaphor and metonymy at the crossroads: cognitive perspective</source>
+          <date>
+            <year>2003</year>
+          </date>
+          <fpage>283</fpage>
+          <lpage>298</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>PONTEROTTO</surname>
+              <given-names>D.</given-names>
+            </name>
+            <name>
+              <surname>BARCELONA</surname>
+              <given-names>A.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B35">
+        <mixed-citation>SARDINHA, T. B. 
+          
+          
+          <italic>Metáfora</italic>. São    Paulo: Parábola Editorial, 2007. p. 167.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Metáfora</source>
+          <date>
+            <year>2007</year>
+          </date>
+          <fpage>167</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>SARDINHA</surname>
+              <given-names>T. B.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B36">
+        <mixed-citation>SCHRÖDER, U. A construção    metafórica do conceito sociedade em perspectiva comparativa.    
+          
+          
+          <italic>Pandaemonium Germanicum</italic>, São Paulo, v. 14, n. 2, p. 105-141, 2009.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A construção metafórica do conceito sociedade em perspectiva comparativa</article-title>
+          <source>Pandaemonium Germanicum</source>
+          <date>
+            <year>2009</year>
+          </date>
+          <fpage>105</fpage>
+          <lpage>141</lpage>
+          <issue>2</issue>
+          <volume>14</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>SCHRÖDER</surname>
+              <given-names>U.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B37">
+        <mixed-citation>SCHRÖDER, U. A mesclagem metafórica    de Fauconnier &amp; Turner nas teorias de    Karl Bühler e Wilhelm Stählin: antecipações e complementos.    In: ABRALIN 40 ANOS - VI CONGRESSO INTERNACIONAL DA ABRALIN, 2009, João    Pessoa, Anais... João Pessoa: Idéia, 2009b. p. 2913-2922.</mixed-citation>
+        <element-citation publication-type="confproc">
+          <source>Anais...</source>
+          <date>
+            <year>2009</year>
+          </date>
+          <fpage>2913</fpage>
+          <lpage>2922</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>SCHRÖDER</surname>
+              <given-names>U.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B38">
+        <mixed-citation>SCHÜLER, F.; AXT, G. 
+          
+          
+          <italic>Brasil Contemporâneo.    </italic>Crônicas de um país incógnito. Porto    Alegre: Arte e Ofícios, 2006. p. 518.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Brasil Contemporâneo: Crônicas de um país incógnito</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <fpage>518</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>SCHÜLER</surname>
+              <given-names>F.</given-names>
+            </name>
+            <name>
+              <surname>AXT</surname>
+              <given-names>G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B39">
+        <mixed-citation>SINHA, C. Blending out of the background: Play,    props and staging in the material world. 
+          
+          
+          <italic>Journal of Pragmatics</italic>, Odense,    n. 37, p. 1537-1554, 2005.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Blending out of the background: Play, props and staging in the material world</article-title>
+          <source>Journal of Pragmatics</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <fpage>1537</fpage>
+          <lpage>1554</lpage>
+          <issue>37</issue>
+          <person-group person-group-type="author">
+            <name>
+              <surname>SINHA</surname>
+              <given-names>C.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B40">
+        <mixed-citation>SORJ, B. 
+          
+          
+          <italic>A nova sociedade brasileira</italic>.    Rio de Janeiro: Jorge Zahar, 2006. p. 169.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>A nova sociedade brasileira</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <fpage>169</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>SORJ</surname>
+              <given-names>B.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B41">
+        <mixed-citation>STÄHLIN, W. Zur Psychologie und Statistik    der Metaphern. Eine methodologische Untersuchung.    
+          
+          
+          <italic>Archiv für die gesamte Psychologie XXXI</italic>, Frankfurt, p. 297-425,    1913.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Zur Psychologie und Statistik der Metaphern: Eine methodologische Untersuchung</article-title>
+          <source>Archiv für die gesamte Psychologie</source>
+          <date>
+            <year>1913</year>
+          </date>
+          <fpage>297</fpage>
+          <lpage>425</lpage>
+          <volume>XXXI</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>STÄHLIN</surname>
+              <given-names>W.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B42">
+        <mixed-citation>STEEN, G. 
+          
+          
+          <italic>Finding Metaphor in Grammar and    Usage</italic>. Amsterdam, Philadelphia: John    Benjamins, 2007. p. 430.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Finding Metaphor in Grammar and Usage</source>
+          <date>
+            <year>2007</year>
+          </date>
+          <fpage>430</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>STEEN</surname>
+              <given-names>G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B43">
+        <mixed-citation>STEEN, G. Identifying Metaphor in Language: A    Cognitive Approach. 
+          
+          
+          <italic>Style</italic>, DeKalb, v. 36, n. 3, p. 386-407, 2002.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Identifying Metaphor in Language: A Cognitive Approach</article-title>
+          <source>Style</source>
+          <date>
+            <year>2002</year>
+          </date>
+          <fpage>386</fpage>
+          <lpage>407</lpage>
+          <issue>3</issue>
+          <volume>36</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>STEEN</surname>
+              <given-names>G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B44">
+        <mixed-citation>STEINGART, G. 
+          
+          
+          <italic>Deutschland. </italic>Der Abstieg    eines Superstars. München: Piper, 2005.    p. 303.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Deutschland: Der Abstieg eines Superstars</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <fpage>303</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>STEINGART</surname>
+              <given-names>G.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B45">
+        <mixed-citation>VELLOSO, J. P.; CAVALCANTI DE ALBUQUERQUE, R.    
+          
+          
+          <italic>Brasil, um país do futuro?</italic> Rio de Janeiro: José Olympio,    2006. p. 154.
+        
+        
+        </mixed-citation>
+        <element-citation publication-type="book">
+          <source>Brasil, um país do futuro?</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <fpage>154</fpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>VELLOSO</surname>
+              <given-names>J. P.</given-names>
+            </name>
+            <name>
+              <surname>CAVALCANTI DE ALBUQUERQUE</surname>
+              <given-names>R.</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>

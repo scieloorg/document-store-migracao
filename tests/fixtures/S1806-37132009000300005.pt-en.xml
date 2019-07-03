@@ -1,0 +1,1302 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article
+  xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="pt" article-type="research-article">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="publisher-id">jbpneu</journal-id>
+      <journal-title-group>
+        <journal-title>Jornal Brasileiro de Pneumologia</journal-title>
+        <abbrev-journal-title abbrev-type="publisher">J. bras. pneumol.</abbrev-journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">1806-3713</issn>
+      <issn pub-type="epub">1806-3756</issn>
+      <publisher>
+        <publisher-name>Sociedade Brasileira de Pneumologia e Tisiologia</publisher-name>
+        <publisher-loc>São Paulo, SP, Brazil</publisher-loc>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="publisher-id" specific-use="scielo">3Xg8cJVpwrp3ZZPnSNK74wv</article-id>
+      <article-id pub-id-type="publisher-id">S1806-37132009000300005</article-id>
+      <article-id pub-id-type="doi">10.1590/S1806-37132009000300005</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Artigos Originais</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Prevalência de pectus carinatum e pectus excavatum em escolares de Manaus</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Westphal</surname>
+            <given-names>Fernando Luiz</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff01"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Lima</surname>
+            <given-names>Luiz Carlos de</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff02"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Lima Neto</surname>
+            <given-names>José Corrêia</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff02"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Chaves</surname>
+            <given-names>Altair Rodrigues</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff03"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Santos Júnior</surname>
+            <given-names>Vítor Lazarini dos</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff03"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Ferreira</surname>
+            <given-names>Brena Luize Cunha</given-names>
+          </name>
+          <role>ND</role>
+          <xref ref-type="aff" rid="aff04"/>
+        </contrib>
+      </contrib-group>
+      <aff id="aff04">
+        <addr-line>
+          <named-content content-type="city">Manaus</named-content>
+          <named-content content-type="state"/>
+        </addr-line>
+        <institution content-type="orgname">Universidade do Estado do Amazonas</institution>
+        <institution content-type="orgdiv1">Hospital Adriano Jorge </institution>
+        <country country="BR">Brazil</country>
+      </aff>
+      <aff id="aff03">
+        <addr-line>
+          <named-content content-type="city">Manaus</named-content>
+          <named-content content-type="state"/>
+        </addr-line>
+        <institution content-type="orgname">Universidade Federal do Amazonas</institution>
+        <country country="BR">Brazil</country>
+      </aff>
+      <aff id="aff02">
+        <addr-line>
+          <named-content content-type="city">Manaus</named-content>
+          <named-content content-type="state"/>
+        </addr-line>
+        <institution content-type="orgname">Universidade Federal do Amazonas</institution>
+        <institution content-type="orgdiv1">Hospital Universitário Getúlio Vargas </institution>
+        <institution content-type="orgdiv2">Serviço de Cirurgia Torácica</institution>
+        <country country="BR">Brazil</country>
+      </aff>
+      <aff id="aff01">
+        <addr-line>
+          <named-content content-type="city">Manaus</named-content>
+          <named-content content-type="state"/>
+        </addr-line>
+        <institution content-type="orgname">Universidade do Estado do Amazonas</institution>
+        <institution content-type="orgdiv1">Disciplina de Cirurgia Torácica </institution>
+        <country country="BR">Brazil</country>
+      </aff>
+      <pub-date date-type="collection" publication-format="electronic">
+        <month>03</month>
+        <year>2009</year>
+      </pub-date>
+      <volume>35</volume>
+      <issue>3</issue>
+      <fpage>221</fpage>
+      <lpage>226</lpage>
+      <history>
+        <date date-type="received">
+          <day>24</day>
+          <month>03</month>
+          <year>2008</year>
+        </date>
+        <date date-type="accepted">
+          <day>18</day>
+          <month>08</month>
+          <year>2008</year>
+        </date>
+      </history>
+      <permissions>
+        <license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/4.0/" xml:lang="en">
+          <license-p>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <p>OBJETIVO: Determinar a prevalência das deformidades congênitas da parede torácica anterior em escolares de 11 a 14 anos. MÉTODOS: Participaram do estudo escolares da rede estadual de ensino da cidade de Manaus (AM). Para a composição de uma amostra estatisticamente significativa, com precisão de 1% e IC95%, foram incluídos 1.332 escolares. A deformidade pectus foi identificada através de exame físico do tórax, e os indivíduos com esta deformidade responderam a um questionário com questões sobre hereditariedade e sintomatologia decorrente da anomalia torácica. RESULTADOS: A idade média dos participantes foi de 11,7 anos. A prevalência da deformidade pectus foi de 1,95% (pectus excavatum: 1,275%; pectus carinatum: 0,675%). Dos 26 escolares com deformidades pectus, 17 (65,4%) tinham pectus excavatum, e 18 (69,2%) eram do sexo masculino. Houve associação com a escoliose em 3 casos (11,5%). História familiar de pectus foi relatada por 17 escolares (65,4%), e 17 (65,4%) relataram dor torácica, dispneia ou palpitações. CONCLUSÕES: A prevalência das deformidades pectus encontrada neste estudo (1,95%) foi inferior àquela de trabalhos em outras regiões do país (3,6-4,9%), porém, superior àquela relatada na literatura (média, 1%).</p>
+      </abstract>
+      <kwd-group xml:lang="pt" kwd-group-type="author-generated">
+        <kwd>Anormalidades musculosqueléticas</kwd>
+        <kwd>Prevalência</kwd>
+        <kwd>Tórax em funil</kwd>
+      </kwd-group>
+    </article-meta>
+  </front>
+  <body>
+    <p>
+      <bold>ARTIGO ORIGINAL</bold>
+    </p>
+    <p>
+      <bold>Prevalência de pectus carinatum e pectus excavatum em escolares de Manaus
+        
+        <sup>*</sup>
+      </bold>
+    </p>
+    <p>
+      <bold>Fernando Luiz Westphal
+        
+        <sup>I</sup>; Luiz Carlos de Lima
+        
+        <sup>II</sup>; José Corrêia Lima Neto
+        
+        <sup>III</sup>; Altair Rodrigues Chaves
+        
+        <sup>IV</sup>; Vítor Lazarini dos Santos Júnior
+        
+        <sup>V</sup>; Brena Luize Cunha Ferreira
+        
+        <sup>VI</sup>
+      </bold>
+    </p>
+    <p>
+      <sup>I</sup>Professor Adjunto. Disciplina de Cirurgia Torácica. Universidade Estadual do Amazonas, Manaus (AM) Brasil 
+      
+      <sup>II</sup>Chefe do Serviço de Cirurgia Torácica. Hospital Universitário Getúlio Vargas, Universidade Federal do Amazonas, Manaus (AM) Brasil 
+      
+      <sup>III</sup>Médico Assistencial do Serviço de Cirurgia Torácica. Hospital Universitário Getúlio Vargas, Universidade Federal do Amazonas, Manaus (AM) Brasil 
+      
+      <sup>IV</sup>Acadêmico de Medicina. Universidade do Estado do Amazonas, Manaus (AM) Brasil 
+      
+      <sup>V</sup>Acadêmico de Medicina. Universidade do Estado do Amazonas, Manaus (AM) Brasil 
+      
+      <sup>VI</sup>Médica Residente em Cirurgia Geral. Hospital Adriano Jorge, Universidade Estadual do Amazonas, Manaus (AM) Brasil
+    
+    </p>
+    <p>
+      <xref ref-type="corresp" rid="end">Endereço para correspondência</xref>
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>RESUMO</bold>
+    </p>
+    <p>
+      <bold>OBJETIVO: </bold>Determinar a prevalência das deformidades congênitas da parede torácica anterior em escolares de 11 a 14 anos. 
+      
+      <bold>MÉTODOS: </bold>Participaram do estudo escolares da rede estadual de ensino da cidade de Manaus (AM). Para a composição de uma amostra estatisticamente significativa, com precisão de 1% e IC95%, foram incluídos 1.332 escolares. A deformidade pectus foi identificada através de exame físico do tórax, e os indivíduos com esta deformidade responderam a um questionário com questões sobre hereditariedade e sintomatologia decorrente da anomalia torácica. 
+      
+      <bold>RESULTADOS: </bold>A idade média dos participantes foi de 11,7 anos. A prevalência da deformidade pectus foi de 1,95% (pectus excavatum: 1,275%; pectus carinatum: 0,675%). Dos 26 escolares com deformidades pectus, 17 (65,4%) tinham pectus excavatum, e 18 (69,2%) eram do sexo masculino. Houve associação com a escoliose em 3 casos (11,5%). História familiar de pectus foi relatada por 17 escolares (65,4%), e 17 (65,4%) relataram dor torácica, dispneia ou palpitações. 
+      
+      <bold>CONCLUSÕES: </bold>A prevalência das deformidades pectus encontrada neste estudo (1,95%) foi inferior àquela de trabalhos em outras regiões do país (3,6-4,9%), porém, superior àquela relatada na literatura (média, 1%).
+    
+    </p>
+    <p>
+      <bold>Descritores:</bold> Anormalidades musculosqueléticas; Prevalência; Tórax em funil.
+    
+    </p>
+    <p content-type="hr"/>
+    <p>
+      <bold>Introdução</bold>
+    </p>
+    <p>As deformidades congênitas da parede torácica anterior acometem aproximadamente 1:300 pessoas e são originadas por desordens genéticas ainda não completamente conhecidas, caracterizadas pelo desenvolvimento anormal das cartilagens costais. O esterno pode ser empurrado posteriormente, denominado pectus excavatum, ou anteriormente, pectus carinatum.
+      
+      <sup>(1)</sup>
+    </p>
+    <p>O pectus excavatum, também chamado tórax em funil, é a deformidade mais comum da parede torácica, representando perto de 85% dos casos. O crescimento excessivo ou desequilibrado das cartilagens costais inferiores leva a uma depressão no esterno. As anomalias podem ser desde um leve desvio ântero-posterior até a uma severa depressão esternal que pode se aproximar da coluna vertebral. Alguns pacientes também apresentam assimetria significativa entre os hemitoraces direito e esquerdo, o que resulta em rotação do esterno.
+      
+      <sup>(2)</sup>
+    </p>
+    <p>O pectus carinatum, conhecido também como peito de pombo, caracteriza-se por uma protrusão do esterno e das cartilagens costais. Essa anomalia afeta mais o sexo masculino, na proporção de 4:1, sendo menos frequente do que o pectus excavatum (aproximadamente 15% dos casos).
+      
+      <sup>(1)</sup>
+    </p>
+    <p>A desinformação sobre a prevalência das deformidades congênitas da parede torácica e suas características clínicas ainda existe, necessitando-se, portanto, de estudos de divulgação que visem o conhecimento sobre as deformidades pectus e, sobretudo, a possibilidade de sua correção.
+      
+      <sup>(3)</sup> O objetivo deste trabalho foi determinar a prevalência das deformidades da parede torácica anterior entre escolares de 11 a 14 anos na cidade de Manaus (AM).
+    
+    </p>
+    <p>
+      <bold>Métodos</bold>
+    </p>
+    <p>A cidade de Manaus, baseado nos estudos técnicos realizados pelo Instituto Municipal de Planejamento Urbano e Informática, é dividida em 126 bairros que são distribuídos em seis zonas urbanas: Sul, Leste, Oeste, Centro-Oeste, Centro-Sul e uma área denominada de Expansão Urbânica, considerada como zona rural. Segundo estatísticas da Secretaria Estadual de Educação do Amazonas, no ano de 2003, 299.263 alunos foram matriculados no ensino fundamental e 102.917 no ensino médio, englobando as redes municipal e estadual de educação.
+      
+      <sup>(4)</sup>
+    </p>
+    <p>Participaram do estudo alunos de escolas públicas, com distribuição proporcional por número de alunos matriculados nas zonas geográficas da cidade. Com base na prevalência de um estudo de pectus carinatum e pectus excavatum em Brasília, que foi de 3,6%, calculou-se a amostragem significante para a estimativa de deformidades da parede torácica anterior em escolares da rede pública de ensino de Manaus com idade entre 11 e 14 anos, com precisão de 1% e IC95%, o que totalizou 1.332 alunos.
+      
+      <sup>(5)</sup>
+    </p>
+    <p>Após o sorteio dos estabelecimentos, procedeu-se com o agendamento da visita para o exame físico dos alunos, o qual foi realizado por acadêmicos de medicina previamente treinados para o projeto, no período de fevereiro a novembro de 2005. O trabalho foi aprovado no Comitê de Ética e Pesquisa do Hospital Geral Adriano Jorge.</p>
+    <p>O perfil físico do portador de uma deformidade pectus e dos alunos considerados normais foi traçado por intermédio da verificação das variáveis antropométricas de peso e altura, com o uso de uma balança com medidor de altura (Filizola S.A., São Paulo, Brasil). O exame físico de cada aluno foi direcionado para a detecção de deformidades da parede torácica por meio da inspeção do tórax.</p>
+    <p>Os escolares com anomalia torácica constatada responderam a um questionário com itens acerca de hereditariedade e sintomatologia (
+      
+      <xref rid="qua01" ref-type="fig">Quadro 1</xref>).
+    
+    </p>
+    <p content-type="asset">
+      <fig id="qua01">
+        <graphic xlink:href="/img/revistas/jbpneu/v35n3/a05qua01.jpg"/>
+      </fig>
+    </p>
+    <p>O tipo e o grau da deformidade torácica foram analisados conforme a classificação recomendada por alguns autores
+      
+      <sup>(3,6)</sup>: pectus excavatum amplo, pectus excavatum localizado, pectus carinatum superior, pectus carinatum inferior e pectus carinatum lateral. O grau da deformidade foi classificado em discreto, moderado e severo.
+      
+      <sup>(3,6)</sup>
+    </p>
+    <p>
+      <bold>Resultados</bold>
+    </p>
+    <p>Foram examinados 1.332 alunos na faixa de 11 a 14 anos. Destes, a média de idade foi de 12,03 ± 0,95 anos, com predomínio do sexo feminino (712/1.332; 53,5%). O perfil antropométrico revelou um peso médio de 38,85 ± 6,14 kg, com amplitude de 24 a 105 kg, e a altura média foi de 144,55 ± 5,95 cm, com amplitude de 1,29 a 1,62 m. Do total de alunos, 1.110 (83,3%) eram pardos, 157 (11,8%) eram brancos, e 65 (4,9%) eram negros.</p>
+    <p>A prevalência de anomalias torácicas entre escolares de 11 a 14 anos de Manaus foi de 1,95% (26 casos; IC95%: 1,30-2,89). A prevalência do pectus excavatum foi de 1,275%, e a do pectus carinatum foi de 0,675%. A idade média no grupo acometido foi de 11,7 ± 0,68 anos, enquanto no grupo não-acometido foi de 12,0 ± 0,95 anos (p = 0,054). A proporção do sexo masculino com anomalia foi de 69,2% (18/26), e essa proporção nos pacientes sem anomalia foi de 45,2% (602/1.306; p = 0,057). Nos pacientes com deformidades torácicas, o peso médio foi de 38,6 ± 4,8 kg, e este, nos pacientes sem deformidades, foi de 38,8 ± 6,2 kg (p = 0,639). A altura média nos grupos com e sem anomalias foi de 151,4 ± 3,8 cm e 144,4 ± 5,9 cm, respectivamente (p &amp;lt; 0,001).</p>
+    <p>Entre os pacientes com deformidade pectus, 13 (50%), 12 (46,2%) e 1 (3,8%) eram, respectivamente, pardos, brancos e negros.</p>
+    <p>Dos alunos sem deformidade pectus, 5 (0,38%) apresentaram escolioses, e 1 (0,076%) apresentou cifose. Dos escolares com deformidade pectus, 3 (11,5%) apresentaram escolioses.</p>
+    <p>A deformidade pectus excavatum foi a mais encontrada, com 17 casos (65,4%), em relação ao pectus carinatum, com 9 (34,6%).</p>
+    <p>Os subtipos das duas deformidades torácicas e suas respectivas mensurações de gravidade foram listados, prevalecendo as deformidades consideradas discretas, o pectus excavatum localizado e o pectus carinatum inferior (
+      
+      <xref rid="tab01" ref-type="table">Tabela 1</xref>).
+    
+    </p>
+    <p content-type="asset">
+      <table-wrap id="tab01">
+        <graphic xlink:href="/img/revistas/jbpneu/v35n3/a05tab01.jpg"/>
+      </table-wrap>
+    </p>
+    <p>Quando os indivíduos do grupo com deformidades pectus foram questionados sobre a presença dessas deformidades em familiares, 17 (65%) responderam afirmativamente, e 9 (35%) não referiram quaisquer componentes hereditários. Os achados de caráter familiar aventados foram positivos em 13 pacientes (59,1%) com deformidades pectus discretas e em todos os 4 com deformidades pectus moderadas. Entre os tipos de deformidade pectus, 2 pacientes (22,2%) com pectus carinatum e 15 (88,2%) com pectus excavatum tinham história familiar positiva.</p>
+    <p>Sintomas cardiorrespiratórios foram relatados por 17 alunos (65,4%) com deformidades torácicas. Entre os indivíduos portadores de pectus excavatum, 8 (47,%) apresentaram dor torácica, 5 (29,4%) apresentaram dispneia e 4 (23,5%) apresentaram palpitações. Entre os indivíduos identificados com pectus carinatum, 1 (11,1%) apresentou dor torácica, 2 (22,2%) apresentaram dispneia e 1 (11,1%) apresentou palpitações (
+      
+      <xref ref-type="table" rid="tab02">Tabela 2</xref>).
+    
+    </p>
+    <p>
+      <table-wrap id="tab02">
+        <graphic xlink:href="/img/revistas/jbpneu/v35n3/a05tab02.jpg"/>
+      </table-wrap>
+    </p>
+    <p/>
+    <p>
+      <bold>Discussão</bold>
+    </p>
+    <p>As deformidades torácicas têm uma prevalência variável na população, sendo que alguns autores relataram uma prevalência de aproximadamente 1% na população.
+      
+      <sup>(2)</sup> Em estudos post mortem, foram identificados 0,12% de casos de pectus excavatum.
+      
+      <sup>(7)</sup> Em nosso país, há poucos trabalhos sobre a prevalência de deformidades da parede torácica anterior na população. Na região sudeste, observou-se uma prevalência de 4,9% em pré-escolares,
+      
+      <sup>(8)</sup> enquanto na região centro-oeste a prevalência relatada foi de 3,6%.
+      
+      <sup>(5)</sup> Neste estudo, realizado na região norte, foi encontrada uma prevalência inferior aos relatados anteriormente (1,95%).
+    
+    </p>
+    <p>A prevalência das deformidades torácicas em brancos é considerada maior em comparação aos não-brancos e, em um estudo brasileiro, esta prevalência foi de 80% do total de casos identificados.
+      
+      <sup>(8)</sup> A análise destes dados em nosso trabalho revelou uma prevalência em indivíduos pardos e brancos, em números absolutos, de 50% e 46,2%, respectivamente (13 e 12 indivíduos em 26 com deformidades), visto que a raça parda é predominante em nossa região.
+      
+      <sup>(9)</sup> Entretanto, quando calculamos a prevalência relativa, observamos que a raça branca apresentou uma prevalência maior, pois foram encontradas deformidades em 12/157 indivíduos, em comparação com 13/1.110 indivíduos de cor parda.
+    
+    </p>
+    <p>Em relação ao gênero, em uma pesquisa realizada em escolares na região centro-oeste, a prevalência de deformidades pectus no sexo masculino foi de 63,4%.
+      
+      <sup>(5)</sup> Em um estudo realizado na região sudeste em pré-escolares, a prevalência de deformidades pectus no sexo masculino foi inferior àquela relatada anteriormente, ficando em torno de 57%.
+      
+      <sup>(8)</sup> A análise de pacientes encaminhados para tratamento cirúrgico das deformidades da parede torácica, em estudos realizados nos Estados Unidos e Europa, demonstrou um maior predomínio do sexo masculino (78% e 76%, respectivamente).
+      
+      <sup>(10,11)</sup> Na estratificação por sexo, também houve predomínio do sexo masculino (69,2%) no presente estudo, corroborando os dados encontrados na literatura.
+    
+    </p>
+    <p>Quando analisadas as deformidades separadamente, encontramos divergência quanto à frequência entre os tipos de deformidades pectus. O pectus excavatum é encontrado mais frequentemente quando comparado ao pectus carinatum; porém, a prevalência é diferente entre as populações estudadas, variando entre 2,2:1 e 5:1.
+      
+      <sup>(1,5,10,11)</sup> Neste estudo, foi identificada a predominância de pectus excavatum em relação ao pectus carinatum entre escolares numa relação de 1,8:1. Em um estudo com escolares no Distrito Federal,
+      
+      <sup>(5)</sup> entretanto, identificou-se uma prevalência de 0,9% de pectus carinatum e de 0,04% de pectus excavatum.
+    
+    </p>
+    <p>Na observação de séries cirúrgicas, há uma nítida predominância de pectus excavatum; porém, a relação é variável conforme o estudo analisado (5:1; 2,2:1 e 12,3:1).
+      
+      <sup>(10-12)</sup> Nos serviços nos quais o tratamento para pectus carinatum é preferencialmente realizado por órteses, verifica-se uma predominância deste tipo.
+      
+      <sup>(5)</sup>
+    </p>
+    <p>Os pacientes com deformidades pectus podem ter sua deformidade classificada por meio do exame clínico ou objetivamente por intermédio de medidas clínicas ou radiológicas. O índice de Haller, no qual se divide o diâmetro transverso da caixa torácica pelo diâmetro ântero-posterior no nível da maior depressão na tomografia axial computadorizada, é um dos métodos radiológicos mais utilizados para quantificar a gravidade do pectus excavatum. Em um estudo realizado na Universidade de São Paulo, desenvolveu-se um índice antropométrico para a classificação quantitativa do pectus excavatum que é de fácil execução com uso de instrumental simples (esquadro articulado, régua acoplada a um nível, pino rosqueado com porca limitadora e régua convencional) para quantificar esta deformidade no atendimento ambulatorial, apresentando 86% de correlação com o índice de Haller.
+      
+      <sup>(13)</sup> No entanto, em nosso estudo, utilizamos a classificação recomendada por alguns autores,
+      
+      <sup>(3,6)</sup> por ser mais viável para ser usada em um grande número de pacientes.
+    
+    </p>
+    <p>Em um trabalho realizado na região centro-oeste de nosso país, baseado na mesma classificação, a deformidade pectus foi classificada em pectus carinatum (superior, inferior e lateral) e pectus excavatum (localizado e amplo), sendo o pectus carinatum encontrado em 95% dos pacientes (subtipo inferior em 61% dos casos), prevalecendo as deformidades discretas em 72% dos pacientes.
+      
+      <sup>(5)</sup> No presente trabalho, pectus excavatum localizado foi encontrado em 65% dos pacientes, com as deformidades discretas ocorrendo em 82% dos casos. O segundo subtipo mais frequente foi pectus carinatum inferior, encontrado em 19% dos pacientes, todos apresentando deformidades discretas.
+    
+    </p>
+    <p>Embora não esteja comprovada uma predisposição genética, uma história familiar de pectus foi encontrada em torno de 30% dos casos.
+      
+      <sup>(2)</sup> No Brasil, em uma pesquisa realizada em Brasília, a prevalência de hereditariedade relacionada à deformidade pectus foi de 44%.
+      
+      <sup>(5)</sup> Neste estudo, a história familiar em pacientes com pectus (65%) foi bastante superior aos valores encontrados na literatura.
+    
+    </p>
+    <p>Em um trabalho realizado com crianças,
+      
+      <sup>(14)</sup> encontraram-se valores distintos para os diferentes níveis de gravidade da deformidade e associação com hereditariedade, predominante nos pacientes com pectus moderado/acentuado, corroborando os achados do presente estudo, no qual todos os pacientes com deformidade pectus moderada tinham história familiar positiva.
+    
+    </p>
+    <p>A escoliose pode estar associada com a deformidade pectus em cerca de 15% dos pacientes.
+      
+      <sup>(1)</sup> A associação entre a deformidade pectus e a escoliose está bem estabelecida na literatura. Apesar de algumas teorias serem aventadas para explicar tal associação, as causas permanecem indefinidas.
+      
+      <sup>(15)</sup> Em séries cirúrgicas, a prevalência varia amplamente, de 16% a 45%.
+      
+      <sup>(10,11)</sup> Em uma pesquisa realizada com escolares no centro-oeste brasileiro, a prevalência de escoliose foi bastante superior à média da literatura, ficando em torno de 51%.
+      
+      <sup>(5)</sup> Ao avaliar-se esta associação, foram identificados 3 pacientes, correspondendo a 11,5%. Estes dados são concordantes com os de certos trabalhos.
+      
+      <sup>(1,15)</sup> Em um estudo realizado nos Estados Unidos,
+      
+      <sup>(15)</sup> não houve associação entre o grau de severidade da deformidade pectus e a prevalência de escoliose, assim como no presente estudo.
+    
+    </p>
+    <p>A presença de sintomas é outro ponto controverso na literatura, mas encontramos trabalhos com relatos de poucos pacientes com sintomatologia de hipotensão e síncope,
+      
+      <sup>(14)</sup> mesmo com um grau de severidade importante. A análise de várias séries cirúrgicas na literatura revelou uma diversidade grande na presença de sintomas, com descrição de dor torácica, taquicardia, taquipneia e limitação da resistência ao exercício físico, que variaram de 26,8% a 67% dos casos.
+      
+      <sup>(10,11,16)</sup> Outros autores alegam que a sintomatologia referida pelos pacientes é decorrente de doenças associadas ou de perturbações psicológicas.
+      
+      <sup>(17)</sup> No presente estudo, da totalidade de pacientes com deformidades pectus, 17 (65%) referiam possuir alguma sintomatologia (dor torácica, 34,6%; dispneia, 27%; palpitações, 23%).
+    
+    </p>
+    <p>Existem trabalhos recentes avaliando a função pulmonar e cardiovascular em pacientes com pectus excavatum antes e após a cirurgia, mostrando uma melhora na função cardiovascular destes pacientes após o procedimento cirúrgico, o que talvez possa explicar a melhora da sintomatologia apresentada por eles na maioria das séries cirúrgicas.
+      
+      <sup>(18-21)</sup>
+    </p>
+    <p>Em conclusão, este trabalho foi o único na literatura que determinou a prevalência de deformidades congênitas da parede torácica anterior na cidade de Manaus, região norte do Brasil. Essa prevalência foi de 1,95%. Apesar de a cor parda ser predominante na amostra estudada, as deformidades apresentaram uma incidência proporcionalmente maior na raça branca em comparação às demais raças. Quanto ao sexo, o tipo de deformidade e características clínicas, os dados encontrados foram similares aos da literatura.</p>
+    <p>
+      <bold>Referências</bold>
+    </p>
+    <p>1. Lukanich MJ, Grodin SC. Parede do tórax e pleura. In: Townsend MC, editor. Sabiston - Tratado de Cirurgia. Rio de Janeiro: Guanabara Koogan; 2003. p. 1281-98. </p>
+    <p>2. Williams AM, Crabbe DC. Pectus deformities of the anterior chest wall. Paediatr Respir Rev. 2003;4(3):237-42. </p>
+    <p>3. Haje SA. Tórax e Cintura Escapular. In: Hebert S, Xavier R, Pardini Junior AG, Barros-Filho TE, editors. Ortopedia e traumatologia: princípios e prática. Porto Alegre: Artmed; 2003. p. 161-84. </p>
+    <p>4. Secretaria Estadual de Educação do Amazonas. Estatística de Matrícula da rede Estadual e Municipal de Ensino. Manaus: SEDUC, 2003. </p>
+    <p>5. Haje DP, Haje SA, Simioni MA. Prevalência das deformidades pectus carinatum e excavatum em escolares do Distrito Federal. Brasília Med. 2002;39(1/4):10-5. </p>
+    <p>6. Haje SA, Bowen JR. Preliminary results of orthotic treatment of pectus deformities in children and adolescents. J Pediatr Orthop. 1992;12(6):795-800. </p>
+    <p>7. Kelly RE, Lawson ML, Paidas CN, Hruban RH. Pectus excavatum in a 112-year autopsy series: anatomic findings and the effect on survival [abstract]. J Pediatr Surg. 2005;40(8):1275-8. </p>
+    <p>8. Gonçalves A, Ferrari I. Características da ocorrência de peito escavado em estudo de malformação torácica em pré-escolares da cidade de São Paulo. Rev Bras Ortop. 1987;22(1):19-22. </p>
+    <p>9. Sistema IBGE de Recuperação Automática - SIDRA [homepage on the Internet]. Brasilia: Ministério do Planejamento, Orçamento e Gestão. [cited 2007 Mar 17]. Available from: 
+      
+      <ext-link ext-link-type="uri" xlink:href="http://www.sidra.ibge.gov.br">http://www.sidra.ibge.gov.br</ext-link>
+    </p>
+    <p>10. Fonkalsrud EW, Dunn JC, Atkinson JB. Repair of pectus excavatum deformities: 30 years of experience with 375 patientes. Ann Surg. 2000;231(3):443-8. </p>
+    <p>11. de Matos AC, Bernardo JE, Fernandes LE, Antunes MJ. Surgery of chest wall deformities. Eur J Cardiothorac Surg. 1997;12(3):345-50. </p>
+    <p>12. Willekes CH, Backer CL, Mavroudis C. A 26-year review of pectus deformity repairs, including simultaneous intracardiac repair. Ann Thorac Surg. 1999;67(2):511-8. </p>
+    <p>13. Rebeis EB, Samano MN, Dias CT, Fernandez A, Campos JR, Jatene FB, et al. Índice antropométrico para classificação quantitativa do pectus excavatum. J Pneumol. 2004;30(6):501-7. </p>
+    <p>14. Guller B, Hable K. Cardiac findings in pectus excavatum in children: review and differential diagnosis. Chest. 1974;66(2):165-71. </p>
+    <p>15. Frick SL. Scoliosis in children with anterior chest wall deformities [abstract]. Chest Surg Clin N Am. 2000;10(2):427-36. </p>
+    <p>16. Porto CC, Rassi S. Sistema Cardiovascular. In: Porto CC, editor. Semiologia Médica. Rio de Janeiro: Guanabara Koogan; 2001. p. 429-600. </p>
+    <p>17. Coelho MS, Guimarães PS. Pectus Carinatum. J Bras Pneumol. 2007;33(4):463-74. </p>
+    <p>18. Fonkalsrud EW, Mendoza J, Finn PJ, Cooper CB. Recent experience with open repair of pectus excavatum with minimal cartilage resection. Arch Surg. 2006;141(8):823-9. </p>
+    <p>19. Malek MH, Berger DE, Housh TJ, Marelich WD, Coburn JW, Beck TW. Cardiovascular function following surgical repair of pectus excavatum: a metaanalysis. Chest. 2006;130(2):506-16. </p>
+    <p>20. Malek MH, Fonkalsrud EW, Cooper CB. Ventilatory and cardiovascular responses to exercise in patients with pectus excavatum. Chest. 2003;124(3):870-82. </p>
+    <p>21. Morshuis W, Folgering H, Barentsz J, van Lier H, Lacquet L. Pulmonary function before surgery for pectus excavatum and at long-term follow-up. Chest. 1994;105(6):1646-52. </p>
+    <p> Recebido para publicação em 24/3/2008.  Aprovado, após revisão, em 18/8/2008.  Apoio financeiro: Nenhum.</p>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="B1">
+        <mixed-citation>1. Lukanich MJ, Grodin SC. Parede do tórax e pleura. In: Townsend MC, editor. Sabiston - Tratado de Cirurgia. Rio de Janeiro: Guanabara Koogan; 2003. p. 1281-98.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Sabiston: Tratado de Cirurgia</source>
+          <date>
+            <year>2003</year>
+          </date>
+          <fpage>1281</fpage>
+          <lpage>98</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Lukanich</surname>
+              <given-names>MJ</given-names>
+            </name>
+            <name>
+              <surname>Grodin</surname>
+              <given-names>SC</given-names>
+            </name>
+            <name>
+              <surname>Townsend</surname>
+              <given-names>MC</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B2">
+        <mixed-citation>2. Williams AM, Crabbe DC. Pectus deformities of the anterior chest wall. Paediatr Respir Rev. 2003;4(3):237-42.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Pectus deformities of the anterior chest wall</article-title>
+          <source>Paediatr Respir Rev</source>
+          <date>
+            <year>2003</year>
+          </date>
+          <fpage>237</fpage>
+          <lpage>42</lpage>
+          <issue>3</issue>
+          <volume>4</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Williams</surname>
+              <given-names>AM</given-names>
+            </name>
+            <name>
+              <surname>Crabbe</surname>
+              <given-names>DC</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B3">
+        <mixed-citation>3. Haje SA. Tórax e Cintura Escapular. In: Hebert S, Xavier R, Pardini Junior AG, Barros-Filho TE, editors. Ortopedia e traumatologia: princípios e prática. Porto Alegre: Artmed; 2003. p. 161-84.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Ortopedia e traumatologia: princípios e prática</source>
+          <date>
+            <year>2003</year>
+          </date>
+          <fpage>161</fpage>
+          <lpage>84</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Haje</surname>
+              <given-names>SA</given-names>
+            </name>
+            <name>
+              <surname>Hebert</surname>
+              <given-names>S</given-names>
+            </name>
+            <name>
+              <surname>Xavier</surname>
+              <given-names>R</given-names>
+            </name>
+            <name>
+              <surname>Pardini Junior</surname>
+              <given-names>AG</given-names>
+            </name>
+            <name>
+              <surname>Barros-Filho</surname>
+              <given-names>TE</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B4">
+        <mixed-citation>4. Secretaria  Estadual de Educação do Amazonas. Estatística de Matrícula da rede Estadual e Municipal de Ensino. Manaus: SEDUC, 2003.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Estatística de Matrícula da rede Estadual e Municipal de Ensino</source>
+          <date>
+            <year>2003</year>
+          </date>
+        </element-citation>
+      </ref>
+      <ref id="B5">
+        <mixed-citation>5. Haje  DP, Haje SA, Simioni MA. Prevalência das deformidades pectus carinatum e excavatum em escolares do Distrito Federal. Brasília Med. 2002;39(1/4):10-5.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Prevalência das deformidades pectus carinatum e excavatum em escolares do Distrito Federal</article-title>
+          <source>Brasília Med</source>
+          <date>
+            <year>2002</year>
+          </date>
+          <fpage>10</fpage>
+          <lpage>5</lpage>
+          <issue>1/4</issue>
+          <volume>39</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Haje</surname>
+              <given-names>DP</given-names>
+            </name>
+            <name>
+              <surname>Haje</surname>
+              <given-names>SA</given-names>
+            </name>
+            <name>
+              <surname>Simioni</surname>
+              <given-names>MA</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B6">
+        <mixed-citation>6. Haje SA, Bowen JR. Preliminary results of orthotic treatment of pectus deformities in children and adolescents. J Pediatr Orthop. 1992;12(6):795-800.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Preliminary results of orthotic treatment of pectus deformities in children and adolescents</article-title>
+          <source>J Pediatr Orthop</source>
+          <date>
+            <year>1992</year>
+          </date>
+          <fpage>795</fpage>
+          <lpage>800</lpage>
+          <issue>6</issue>
+          <volume>12</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Haje</surname>
+              <given-names>SA</given-names>
+            </name>
+            <name>
+              <surname>Bowen</surname>
+              <given-names>JR</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B7">
+        <mixed-citation>7. Kelly RE, Lawson ML, Paidas CN, Hruban RH. Pectus excavatum in a 112-year autopsy series: anatomic findings and the effect on survival [abstract]. J Pediatr Surg. 2005;40(8):1275-8.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Pectus excavatum in a 112-year autopsy series: anatomic findings and the effect on survival</article-title>
+          <source>J Pediatr Surg</source>
+          <date>
+            <year>2005</year>
+          </date>
+          <fpage>1275</fpage>
+          <lpage>8</lpage>
+          <issue>8</issue>
+          <volume>40</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Kelly</surname>
+              <given-names>RE</given-names>
+            </name>
+            <name>
+              <surname>Lawson</surname>
+              <given-names>ML</given-names>
+            </name>
+            <name>
+              <surname>Paidas</surname>
+              <given-names>CN</given-names>
+            </name>
+            <name>
+              <surname>Hruban</surname>
+              <given-names>RH</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B8">
+        <mixed-citation>8. Gonçalves A, Ferrari I. Características da ocorrência de peito escavado em estudo de malformação torácica em pré-escolares da cidade de São Paulo. Rev Bras Ortop. 1987;22(1):19-22.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Características da ocorrência de peito escavado em estudo de malformação torácica em pré-escolares da cidade de São Paulo</article-title>
+          <source>Rev Bras Ortop</source>
+          <date>
+            <year>1987</year>
+          </date>
+          <fpage>19</fpage>
+          <lpage>22</lpage>
+          <issue>1</issue>
+          <volume>22</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Gonçalves</surname>
+              <given-names>A</given-names>
+            </name>
+            <name>
+              <surname>Ferrari</surname>
+              <given-names>I</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B9">
+        <element-citation publication-type="webpage">
+          <comment>Available at:
+            
+            <ext-link ext-link-type="uri" xlink:href="http://http://www.sidra.ibge.gov.br">link</ext-link>
+          </comment>
+        </element-citation>
+      </ref>
+      <ref id="B10">
+        <mixed-citation>10. Fonkalsrud EW, Dunn JC, Atkinson JB. Repair of pectus excavatum deformities: 30 years of experience with 375 patientes. Ann Surg. 2000;231(3):443-8.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Repair of pectus excavatum deformities: 30 years of experience with 375 patientes</article-title>
+          <source>Ann Surg</source>
+          <date>
+            <year>2000</year>
+          </date>
+          <fpage>443</fpage>
+          <lpage>8</lpage>
+          <issue>3</issue>
+          <volume>231</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Fonkalsrud</surname>
+              <given-names>EW</given-names>
+            </name>
+            <name>
+              <surname>Dunn</surname>
+              <given-names>JC</given-names>
+            </name>
+            <name>
+              <surname>Atkinson</surname>
+              <given-names>JB</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B11">
+        <mixed-citation>11. de Matos AC, Bernardo JE, Fernandes LE, Antunes MJ. Surgery of chest wall deformities. Eur J Cardiothorac Surg. 1997;12(3):345-50.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Surgery of chest wall deformities</article-title>
+          <source>Eur J Cardiothorac Surg</source>
+          <date>
+            <year>1997</year>
+          </date>
+          <fpage>345</fpage>
+          <lpage>50</lpage>
+          <issue>3</issue>
+          <volume>12</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>de Matos</surname>
+              <given-names>AC</given-names>
+            </name>
+            <name>
+              <surname>Bernardo</surname>
+              <given-names>JE</given-names>
+            </name>
+            <name>
+              <surname>Fernandes</surname>
+              <given-names>LE</given-names>
+            </name>
+            <name>
+              <surname>Antunes</surname>
+              <given-names>MJ</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B12">
+        <mixed-citation>12. Willekes CH, Backer CL, Mavroudis C. A 26-year review of pectus deformity repairs, including simultaneous intracardiac repair. Ann Thorac Surg. 1999;67(2):511-8.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>A 26-year review of pectus deformity repairs, including simultaneous intracardiac repair</article-title>
+          <source>Ann Thorac Surg</source>
+          <date>
+            <year>1999</year>
+          </date>
+          <fpage>511</fpage>
+          <lpage>8</lpage>
+          <issue>2</issue>
+          <volume>67</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Willekes</surname>
+              <given-names>CH</given-names>
+            </name>
+            <name>
+              <surname>Backer</surname>
+              <given-names>CL</given-names>
+            </name>
+            <name>
+              <surname>Mavroudis</surname>
+              <given-names>C</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B13">
+        <mixed-citation>13. Rebeis  EB, Samano MN, Dias CT, Fernandez A, Campos JR, Jatene FB, et al. Índice antropométrico para classificação quantitativa do pectus excavatum. J Pneumol. 2004;30(6):501-7.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Índice antropométrico para classificação quantitativa do pectus excavatum</article-title>
+          <source>J Pneumol</source>
+          <date>
+            <year>2004</year>
+          </date>
+          <fpage>501</fpage>
+          <lpage>7</lpage>
+          <issue>6</issue>
+          <volume>30</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Rebeis</surname>
+              <given-names>EB</given-names>
+            </name>
+            <name>
+              <surname>Samano</surname>
+              <given-names>MN</given-names>
+            </name>
+            <name>
+              <surname>Dias</surname>
+              <given-names>CT</given-names>
+            </name>
+            <name>
+              <surname>Fernandez</surname>
+              <given-names>A</given-names>
+            </name>
+            <name>
+              <surname>Campos</surname>
+              <given-names>JR</given-names>
+            </name>
+            <name>
+              <surname>Jatene</surname>
+              <given-names>FB</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B14">
+        <mixed-citation>14. Guller B, Hable K. Cardiac findings in pectus excavatum in children: review and differential diagnosis. Chest. 1974;66(2):165-71.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Cardiac findings in pectus excavatum in children: review and differential diagnosis</article-title>
+          <source>Chest</source>
+          <date>
+            <year>1974</year>
+          </date>
+          <fpage>165</fpage>
+          <lpage>71</lpage>
+          <issue>2</issue>
+          <volume>66</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Guller</surname>
+              <given-names>B</given-names>
+            </name>
+            <name>
+              <surname>Hable</surname>
+              <given-names>K</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B15">
+        <mixed-citation>15. Frick  SL. Scoliosis in children with anterior chest wall deformities [abstract]. Chest Surg Clin N Am. 2000;10(2):427-36.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Scoliosis in children with anterior chest wall deformities</article-title>
+          <source>Chest Surg Clin N Am</source>
+          <date>
+            <year>2000</year>
+          </date>
+          <fpage>427</fpage>
+          <lpage>36</lpage>
+          <issue>2</issue>
+          <volume>10</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Frick</surname>
+              <given-names>SL</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B16">
+        <mixed-citation>16. Porto CC, Rassi S. Sistema Cardiovascular. In: Porto CC, editor. Semiologia Médica. Rio de Janeiro: Guanabara Koogan; 2001. p. 429-600.</mixed-citation>
+        <element-citation publication-type="book">
+          <source>Semiologia Médica</source>
+          <date>
+            <year>2001</year>
+          </date>
+          <fpage>429</fpage>
+          <lpage>600</lpage>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Porto</surname>
+              <given-names>CC</given-names>
+            </name>
+            <name>
+              <surname>Rassi</surname>
+              <given-names>S</given-names>
+            </name>
+            <name>
+              <surname>Porto</surname>
+              <given-names>CC</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B17">
+        <mixed-citation>17. Coelho MS, Guimarães PS. Pectus Carinatum. J Bras Pneumol. 2007;33(4):463-74.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Pectus Carinatum</article-title>
+          <source>J Bras Pneumol</source>
+          <date>
+            <year>2007</year>
+          </date>
+          <fpage>463</fpage>
+          <lpage>74</lpage>
+          <issue>4</issue>
+          <volume>33</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Coelho</surname>
+              <given-names>MS</given-names>
+            </name>
+            <name>
+              <surname>Guimarães</surname>
+              <given-names>PS</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B18">
+        <mixed-citation>18. Fonkalsrud  EW, Mendoza J, Finn PJ, Cooper CB. Recent experience with open repair of pectus excavatum with minimal cartilage resection. Arch Surg. 2006;141(8):823-9.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Recent experience with open repair of pectus excavatum with minimal cartilage resection</article-title>
+          <source>Arch Surg</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <fpage>823</fpage>
+          <lpage>9</lpage>
+          <issue>8</issue>
+          <volume>141</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Fonkalsrud</surname>
+              <given-names>EW</given-names>
+            </name>
+            <name>
+              <surname>Mendoza</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Finn</surname>
+              <given-names>PJ</given-names>
+            </name>
+            <name>
+              <surname>Cooper</surname>
+              <given-names>CB</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B19">
+        <mixed-citation>19. Malek MH, Berger DE, Housh TJ, Marelich WD, Coburn JW, Beck TW. Cardiovascular function following surgical repair of pectus excavatum: a metaanalysis. Chest. 2006;130(2):506-16.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Cardiovascular function following surgical repair of pectus excavatum: a metaanalysis</article-title>
+          <source>Chest</source>
+          <date>
+            <year>2006</year>
+          </date>
+          <fpage>506</fpage>
+          <lpage>16</lpage>
+          <issue>2</issue>
+          <volume>130</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Malek</surname>
+              <given-names>MH</given-names>
+            </name>
+            <name>
+              <surname>Berger</surname>
+              <given-names>DE</given-names>
+            </name>
+            <name>
+              <surname>Housh</surname>
+              <given-names>TJ</given-names>
+            </name>
+            <name>
+              <surname>Marelich</surname>
+              <given-names>WD</given-names>
+            </name>
+            <name>
+              <surname>Coburn</surname>
+              <given-names>JW</given-names>
+            </name>
+            <name>
+              <surname>Beck</surname>
+              <given-names>TW</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B20">
+        <mixed-citation>20. Malek MH, Fonkalsrud EW, Cooper CB. Ventilatory and cardiovascular responses to exercise in patients with pectus excavatum. Chest. 2003;124(3):870-82.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Ventilatory and cardiovascular responses to exercise in patients with pectus excavatum</article-title>
+          <source>Chest</source>
+          <date>
+            <year>2003</year>
+          </date>
+          <fpage>870</fpage>
+          <lpage>82</lpage>
+          <issue>3</issue>
+          <volume>124</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Malek</surname>
+              <given-names>MH</given-names>
+            </name>
+            <name>
+              <surname>Fonkalsrud</surname>
+              <given-names>EW</given-names>
+            </name>
+            <name>
+              <surname>Cooper</surname>
+              <given-names>CB</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+      <ref id="B21">
+        <mixed-citation>21. Morshuis  W, Folgering H, Barentsz J, van Lier H, Lacquet L. Pulmonary function before surgery for pectus excavatum and at long-term follow-up. Chest. 1994;105(6):1646-52.</mixed-citation>
+        <element-citation publication-type="journal">
+          <article-title>Pulmonary function before surgery for pectus excavatum and at long-term follow-up</article-title>
+          <source>Chest</source>
+          <date>
+            <year>1994</year>
+          </date>
+          <fpage>1646</fpage>
+          <lpage>52</lpage>
+          <issue>6</issue>
+          <volume>105</volume>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Morshuis</surname>
+              <given-names>W</given-names>
+            </name>
+            <name>
+              <surname>Folgering</surname>
+              <given-names>H</given-names>
+            </name>
+            <name>
+              <surname>Barentsz</surname>
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>van Lier</surname>
+              <given-names>H</given-names>
+            </name>
+            <name>
+              <surname>Lacquet</surname>
+              <given-names>L</given-names>
+            </name>
+          </person-group>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
+  <sub-article article-type="translation" id="TRen" xml:lang="en">
+    <front-stub>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Original Articles</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title xml:lang="en">Prevalence of pectus carinatum and pectus excavatum in students in the city of Manaus, Brazil</article-title>
+      </title-group>
+      <abstract xml:lang="en">
+        <p>OBJECTIVE: To determine the prevalence of congenital anterior chest wall deformities in 11- to 14-year-old students. METHODS: Students participating in the study were recruited from public schools in the city of Manaus, Brazil. The statistically significant sample (precision, 1%; 95% CI) comprised 1,332 students. Pectus deformities were identified by physical examination of the chest, and the individuals with one of these deformities completed a questionnaire regarding heredity and symptoms resulting from the chest abnormality. RESULTS: The mean age of the participants was 11.7 years. The prevalence of pectus abnormalities was 1.95% (pectus excavatum: 1.275%; pectus carinatum: 0.675%). Of the 26 students with a pectus deformity, 17 (65.4%) had pectus excavatum, and 18 (69.2%) were male. Concomitant scoliosis was observed in 3 cases (11.5%). A family history of pectus was reported by 17 students (65.4%), and 17 (65.4%) reported chest pain, dyspnea or palpitations. CONCLUSIONS: In this study, the prevalence of pectus deformities (1.95%) was lower than that reported in other studies conducted in Brazil (3.6-4.9%) but was higher than that reported in the literature (mean, 1%).</p>
+      </abstract>
+      <kwd-group xml:lang="en">
+        <kwd>Musculoskeletal abnormalities</kwd>
+        <kwd>Prevalence</kwd>
+        <kwd>Funnel chest</kwd>
+      </kwd-group>
+    </front-stub>
+    <body>
+      <p>
+        <bold>ORIGINAL ARTICLE</bold>
+      </p>
+      <p>
+        <bold>
+          <fn id="corr2-body2">
+            <p>Prevalence of pectus carinatum and pectus excavatum in students in the city of Manaus, Brazil</p>
+          </fn>
+          <sup>*</sup>
+        </bold>
+      </p>
+      <p>
+        <bold>Prevalência de pectus carinatum e pectus excavatum em escolares de Manaus</bold>
+      </p>
+      <p>
+        <bold>Fernando Luiz Westphal
+          
+          <sup>I</sup>; Luiz Carlos de Lima
+          
+          <sup>II</sup>; José Corrêia Lima Neto
+          
+          <sup>III</sup>; Altair Rodrigues Chaves
+          
+          <sup>IV</sup>; Vítor Lazarini dos Santos Júnior
+          
+          <sup>V</sup>; Brena Luize Cunha Ferreira
+          
+          <sup>VI</sup>
+        </bold>
+      </p>
+      <p>
+        <sup>I</sup>Adjunct Professor. Department of Thoracic Surgery. Amazonas State University, Manaus, Brazil
+        
+        <sup>II</sup>Head of the Department of Thoracic Surgery. Getúlio Vargas University Hospital, Federal University of Amazonas, Manaus, Brazil
+        
+        <sup>III</sup>Attending Physician in the Department of Thoracic Surgery. Getúlio Vargas University Hospital, Federal University of Amazonas, Manaus, Brazil
+        
+        <sup>IV</sup>Medical Student. Amazonas State University, Manaus, Brazil
+        
+        <sup>V</sup>Medical Student. Amazonas State University, Manaus, Brazil
+        
+        <sup>VI</sup>Resident in General Surgery. Adriano Jorge Hospital, Amazonas State University, Manaus, Brazil
+      
+      </p>
+      <p>
+        <xref ref-type="corresp" rid="corr1-body2">Correspondence to</xref>
+      </p>
+      <p content-type="hr"/>
+      <p>
+        <bold>ABSTRACT </bold>
+      </p>
+      <p>
+        <bold>OBJECTIVE: </bold>To determine the prevalence of congenital anterior chest wall deformities in 11- to 14-year-old students. 
+        
+        <bold>METHODS: </bold>Students participating in the study were recruited from public schools in the city of Manaus, Brazil. The statistically significant sample (precision, 1%; 95% CI) comprised 1,332 students. Pectus deformities were identified by physical examination of the chest, and the individuals with one of these deformities completed a questionnaire regarding heredity and symptoms resulting from the chest abnormality. 
+        
+        <bold>RESULTS: </bold>The mean age of the participants was 11.7 years. The prevalence of pectus abnormalities was 1.95% (pectus excavatum: 1.275%; pectus carinatum: 0.675%). Of the 26 students with a pectus deformity, 17 (65.4%) had pectus excavatum, and 18 (69.2%) were male. Concomitant scoliosis was observed in 3 cases (11.5%). A family history of pectus was reported by 17 students (65.4%), and 17 (65.4%) reported chest pain, dyspnea or palpitations.
+        
+        <bold>CONCLUSIONS: </bold>In this study, the prevalence of pectus deformities (1.95%) was lower than that reported in other studies conducted in Brazil (3.6-4.9%) but was higher than that reported in the literature (mean, 1%).
+      
+      </p>
+      <p>
+        <bold>Descritores:</bold> Anormalidades musculosqueléticas; Prevalência; Tórax em funil.
+      
+      </p>
+      <p content-type="hr"/>
+      <p>
+        <bold>INTRODUCTION</bold>
+      </p>
+      <p>Congenital deformities of the anterior chest wall affect approximately 1 in 300 people. Such deformities are caused by genetic disorders that have yet to be clarified and are characterized by abnormal development of the costal cartilages. The sternum can be displaced posteriorly or anteriorly, conditions known as pectus excavatum and pectus carinatum, respectively.
+        
+        <sup>(1)</sup>
+      </p>
+      <p>Pectus excavatum, also known as funnel chest, is the most common chest wall deformity, accounting for approximately 85% of the cases. The excessive or unbalanced growth of the costal cartilages leads to a depression of the sternum. The anomalies can range from a slight anteroposterior deviation to a severe sternal depression that can come close to the spinal column. Some patients also present significant asymmetry between the right and the left hemithorax, which results in rotation of the sternum.
+        
+        <sup>(2)</sup>
+      </p>
+      <p>Pectus carinatum, also known as pigeon breast, is characterized by protrusion of the sternum and costal cartilages. This anomaly predominantly affects males, at a ratio of 4:1, and is less common than is pectus excavatum (accounting for only approximately 15% of congenital chest wall deformities).
+        
+        <sup>(1)</sup>
+      </p>
+      <p>There continues to be a lack of information regarding the prevalence of congenital chest wall deformities and their clinical characteristics; therefore, studies aimed at disseminating knowledge regarding pectus deformities, especially regarding the possibility of their correction, are needed.
+        
+        <sup>(3)</sup> The objective of the present study was to determine the prevalence of congenital anterior chest wall deformities in 11- to 14-year-old students in the city of Manaus, Brazil.
+      
+      </p>
+      <p>
+        <bold>Methods</bold>
+      </p>
+      <p>The city of Manaus is located in the northern region of Brazil. According to technical studies carried out by the Municipal Institute for Urban Planning and Information Technology, the city is divided into 126 neighborhoods that are distributed in six urban areas: southern; eastern; western; central-western; and an area designated the Urban Expansion area, which is considered rural. In 2003, according to the Amazonas State Department of Education, enrollment at state and municipal public schools reached 299,263 and 102,917 students in junior high and high school, respectively.
+        
+        <sup>(4)</sup>
+      </p>
+      <p>Students participating in the study were recruited from public schools, being proportionally distributed by the number of students enrolled in the various geographic areas of the city. Based on the prevalence of pectus carinatum and pectus excavatum in the city of Brasília, Brazil, reported in a study (3.6%), the statistically significant sample size required to estimate the prevalence of anterior chest wall deformities in 11- to 14-year-old students from public schools (precision, 1%; 95% CI) was determined to be 1,332 students.
+        
+        <sup>(5)</sup>
+      </p>
+      <p>By random drawing, a number of schools were selected for study, after which the visit for the physical examination of the students was scheduled. Physical examinations were conducted between February and November of 2005 by medical students who had been previously trained for the project. The present study was approved by the Ethics in Research Committee of the Adriano Jorge General Hospital.</p>
+      <p>The physical profiles of students with a pectus deformity and of students without such deformity were established based on the anthropometric variables weight and height, determined using a scale with a stadiometer (Filizola S.A., São Paulo, Brazil). The physical examination of each student was directed at detecting chest wall deformities by inspection of the chest.</p>
+      <p>The students with a confirmed chest abnormality completed a questionnaire regarding heredity and symptoms (
+        
+        <xref rid="qua01-body2" ref-type="fig">Chart 1</xref>).
+      
+      </p>
+      <p content-type="asset">
+        <fig id="qua01-body2">
+          <graphic xlink:href="/img/revistas/jbpneu/v35n3/en_a05qua01.jpg"/>
+        </fig>
+      </p>
+      <p>The type and degree of chest abnormality were analyzed according to the classification system previously recommended
+        
+        <sup>(3,6)</sup>: invasive pectus excavatum; localized pectus excavatum; superior pectus carinatum; inferior pectus carinatum; and lateral pectus carinatum. The degree of deformity was classified as mild, moderate and severe.
+        
+        <sup>(3,6)</sup>
+      </p>
+      <p>
+        <bold>Results </bold>
+      </p>
+      <p>A total of 1,332 11- to 14-year-old students were examined. The mean age was 12.03 ± 0.95 tyears, and there was a predominance of females (712/1,332; 53.5%). The anthropometric evaluation revealed a mean weight of 38.85 ± 6.14 kg (range, 24-105 kg) and a mean height of 144.55 ± 5.95 cm (range, 1.29-1.62 m). Of the 1,332 students evaluated, 1,110 (83.3%) were mulatto, 157 (11.8%) were white, and 65 (4.9%) were black.</p>
+      <p>The prevalence of chest abnormalities in 11- to 14-year-old students in the city of Manaus was 1.95% (26 cases; 95% CI: 1.30-2.89). The prevalence of pectus excavatum was 1.275%, and the prevalence of pectus carinatum was 0.675%. The mean age in the group with chest abnormalities was 11.7 ± 0.68 years, compared with 12.0 ± 0.95 years in the group without (p = 0.054). The proportion of males among the patients with a chest abnormality was 69.2% (18/26), compared with 45.2% (602/1,306) among those without (p = 0.057). The mean weight was 38.6 ± 4.8 kg in the patients with a chest deformity and 38.8 ± 6.2 kg in those without (p = 0.639). The mean height in the groups with and without chest abnormalities was 151.4 ± 3.8 cm and 144.4 ± 5.9 cm, respectively (p &amp;lt; 0.001).</p>
+      <p>Of the 26 patients with a pectus deformity, 13 (50%), 12 (46.2%) and 1 (3.8%) were mulatto, white and black, respectively.</p>
+      <p>Of the 1,306 students without a pectus deformity, 5 (0.38%) presented scoliosis and 1 (0.076%) presented kyphosis. Of the 26 students with a pectus deformity, 3 (11.5%) presented scoliosis.</p>
+      <p>Pectus excavatum was more common than was pectus carinatum-17 cases (65.4%) vs. 9 cases (34.6%).</p>
+      <p>The subtypes of the two chest deformities and their respective degree of severity were listed, revealing that deformities considered mild predominated, as did localized pectus excavatum and inferior pectus carinatum (
+        
+        <xref rid="tab01-body2" ref-type="table">Table 1</xref>).
+      
+      </p>
+      <p content-type="asset">
+        <table-wrap id="tab01-body2">
+          <graphic xlink:href="/img/revistas/jbpneu/v35n3/en_a05tab01.jpg"/>
+        </table-wrap>
+      </p>
+      <p>When the individuals in the group with pectus deformities were asked if these deformities had occurred in other members of their family, 17 (65%) responded affirmatively and 9 (35%) responded negatively. Family history was considered positive in 13 (59.1%) of the 22 patients with a mild pectus deformity and in all 4 of the patients with a moderate pectus deformity. In terms of the types of pectus deformities, 2 patients (22.2%) with pectus carinatum and 15 (88.2%) with pectus excavatum had a positive family history.</p>
+      <p>Cardiorespiratory symptoms were reported by 17 students (65.4%) with a chest deformity. Of the 17 individuals with pectus excavatum, 8 (47%) presented chest pain, 5 (29.4%) presented dyspnea, and 4 (23.5%) presented palpitations. Of the 4 individuals identified as having pectus carinatum, 1 (11.1%) presented chest pain, 2 (22.2%) presented dyspnea, and 1 (11.1%) presented palpitations (
+        
+        <xref ref-type="table" rid="tab2-body2">Table 2</xref>).
+      
+      </p>
+      <p>
+        <table-wrap id="tab2-body2">
+          <graphic xlink:href="/img/revistas/jbpneu/v35n3/en_a05tab02.jpg"/>
+        </table-wrap>
+      </p>
+      <p/>
+      <p>
+        <bold>Discussion</bold>
+      </p>
+      <p>The prevalence of chest deformities in the general population is variable, some authors reporting it to be approximately 1%.
+        
+        <sup>(2)</sup> In postmortem studies, 0.12% of cases were identified as pectus excavatum.
+        
+        <sup>(7)</sup> In Brazil, there have been few studies on the prevalence of anterior chest wall deformities in the general population. In the southeastern region, the prevalence of these deformities in preschool children was found to be 4.9%,
+        
+        <sup>(8)</sup> whereas, in the central-west region, the prevalence reported was 3.6%.
+        
+        <sup>(5)</sup> In the present study, conducted in the northern region, the prevalence found (1.95%) was lower than that reported in previous studies conducted in Brazil.
+      
+      </p>
+      <p>The prevalence of chest deformities is considered to be higher in whites than in nonwhites. In a study conducted in Brazil, whites accounted for 80% of the total number of cases identified.
+        
+        <sup>(8)</sup> The analysis of these data in our study revealed that the prevalence of mulattos and whites, in absolute numbers, was 50% and 46.2% (13/26 and 12/26 individuals with a chest deformity), respectively, which is to be expected, since there is a predominance of mulattos in our region.
+        
+        <sup>(9)</sup> However, when the relative prevalence was calculated, the prevalence of chest deformities was found to be higher in whites (12/157 individuals) than in mulattos (13/1,110 individuals).
+      
+      </p>
+      <p>Regarding gender, a study of students conducted in the central-west region of Brazil revealed that the prevalence of pectus deformities in males was 63.4%.
+        
+        <sup>(5)</sup> In a study of preschool children conducted in the southeastern region, the prevalence of pectus deformities in males (approximately 57%) was lower than that reported in previous studies.
+        
+        <sup>(8)</sup> In studies conducted in the United States and in Europe, the analysis of patients referred for surgical treatment of chest wall deformities revealed a predominance of males (78% and 76%, respectively).
+        
+        <sup>(10,11)</sup> In the present study, stratification by gender revealed a predominance of males (69.2%), corroborating findings in the literature.
+      
+      </p>
+      <p>When the deformities were analyzed separately, there was a divergence between the types of pectus deformities in terms of frequency. Pectus excavatum is more common than is pectus carinatum, although their prevalence is different in the populations studied, ranging from 2.2:1 to 5:1.
+        
+        <sup>(1,5,10,11)</sup> The present study revealed a predominance of pectus excavatum over pectus carinatum in the students (ratio, 1.8:1). However, a study of students conducted in the Federal District of Brasília, Brazil,
+        
+        <sup>(5)</sup> revealed that the prevalence of pectus carinatum was 0.9% and the prevalence of pectus excavatum was 0.04%.
+      
+      </p>
+      <p>In surgical studies, there is a marked predominance of pectus excavatum, although ratios vary among studies (5:1, 2.2:1 and 12.3:1).
+        
+        <sup>(10-12)</sup> At facilities where the treatment for pectus carinatum is preferably performed using orthoses, there is a predominance of this type.
+        
+        <sup>(5)</sup>
+      </p>
+      <p>Pectus deformities can be classified subjectively, by clinical examination, or objectively, by clinical or radiological measurements. The Haller index, which is calculated by dividing the transverse diameter of the rib cage by the anteroposterior diameter at the level of the greatest depression on the computed axial tomography scan, is one of the most widely used radiological methods to quantify pectus excavatum severity. In a study carried out at the University of São Paulo, in São Paulo, Brazil, the researchers developed an anthropometric index for the quantitative classification of pectus excavatum that can be easily calculated during outpatient treatment using simple instruments (a square, a ruler with a level, a screw pin with a limiting nut and a conventional ruler) and presents an 86% correlation with the Haller index.
+        
+        <sup>(13)</sup> However, in our study, we used the classification system recommended by other authors,
+        
+        <sup>(3,6)</sup> since it is more appropriate for use in a large number of patients.
+      
+      </p>
+      <p>In a study based on the same classification system, conducted in the central-west region of Brazil, pectus deformities were classified as pectus carinatum (superior, inferior and lateral) and pectus excavatum (localized and invasive)- pectus carinatum was found in 95% of the patients (inferior pectus carinatum was seen in 61% of the cases) and mild deformities predominated (in 72% of the patients).
+        
+        <sup>(5)</sup> In the present study, localized pectus excavatum was found in 65% of the patients and mild deformities occurred in 82% of the cases. The second most common subtype was inferior pectus carinatum, found in 19% of the patients, all of whom presented mild deformities.
+      
+      </p>
+      <p>Although a genetic predisposition has not been confirmed, a family history of pectus was found in approximately 30% of the cases.
+        
+        <sup>(2)</sup> In a study conducted in the city of Brasília, Brazil, the prevalence of heredity related to pectus deformities was 44%.
+        
+        <sup>(5)</sup> In the present study, the proportion of patients presenting a family history of pectus deformities (65%) was much higher than that found in the literature.
+      
+      </p>
+      <p>A study involving children
+        
+        <sup>(14)</sup> demonstrated that the association with heredity varies according to the degree of severity and is stronger among patients with moderate/severe pectus, corroborating the findings of the present study, in which all patients with a moderate pectus deformity had a positive family history.
+      
+      </p>
+      <p>Concomitant scoliosis and pectus deformities are seen in approximately 15% of the patients.
+        
+        <sup>(1)</sup> The concomitance of pectus deformities and scoliosis is well established in the literature. Although some theories have been proposed to explain this concomitance, the causes remain undefined.
+        
+        <sup>(15)</sup> In surgical studies, the prevalence varies widely, ranging from 16% to 45%.
+        
+        <sup>(10,11)</sup> In a study of students conducted in central-west Brazil, the prevalence of scoliosis (approximately 51%) was much higher than the mean found in the literature.
+        
+        <sup>(5)</sup> The authors identified 3 patients presenting this concomitance, corresponding to 11.5%. These data are in agreement with those presented in certain studies.
+        
+        <sup>(1,15)</sup> As in the present study, a study conducted in the United States
+        
+        <sup>(15)</sup> revealed no association between the degree of pectus deformity severity and the prevalence of scoliosis.
+      
+      </p>
+      <p>The presence of symptoms is also controversial in the literature, although we found studies reporting few patients with symptoms of hypotension and syncope,
+        
+        <sup>(14)</sup> even among those presenting a significant degree of severity. The analysis of various surgical studies in the literature revealed a wide diversity in terms of the presence of symptoms, with descriptions of chest pain, tachycardia, tachypnea and limited exercise tolerance in 26.8% to 67.0% of the cases.
+        
+        <sup>(10,11,16)</sup> Other authors allege that the symptoms reported by the patients result from accompanying diseases or from psychological disorders.
+        
+        <sup>(17)</sup> In the present study, 17 (65%) of the 26 patients with a pectus deformity reported having a symptom (chest pain, 34.6%; dyspnea, 27.0%; palpitations, 23.0%).
+      
+      </p>
+      <p>Recent studies evaluating pulmonary and cardiovascular function in patients with pectus excavatum prior to and after surgery have shown that such patients present improved cardiovascular function after the surgical procedure, which might explain the reduction in the symptoms presented by such patients in most surgical studies.
+        
+        <sup>(18-21)</sup>
+      </p>
+      <p>In conclusion, the present study is unique in the literature in that it determined the prevalence of congenital anterior chest wall deformities among students in the city of Manaus, Brazil. This prevalence was found to be 1.95%. Despite the fact that mulattos were predominant in the sample studied, the incidence of deformities was proportionally greater in whites than in the other races. Regarding gender, type of deformity and clinical characteristics, the findings of the present study were similar to those reported in the literature.</p>
+      <p>
+        <bold>References</bold>
+      </p>
+      <p>1. Lukanich MJ, Grodin SC. Parede do tórax e pleura. In: Townsend MC, editor. Sabiston - Tratado de Cirurgia. Rio de Janeiro: Guanabara Koogan; 2003. p. 1281-98. </p>
+      <p>2. Williams AM, Crabbe DC. Pectus deformities of the anterior chest wall. Paediatr Respir Rev. 2003;4(3):237-42. </p>
+      <p>3. Haje SA. Tórax e Cintura Escapular. In: Hebert S, Xavier R, Pardini Junior AG, Barros-Filho TE, editors. Ortopedia e traumatologia: princípios e prática. Porto Alegre: Artmed; 2003. p. 161-84. </p>
+      <p>4. Secretaria Estadual de Educação do Amazonas. Estatística de Matrícula da rede Estadual e Municipal de Ensino. Manaus: SEDUC, 2003. </p>
+      <p>5. Haje DP, Haje SA, Simioni MA. Prevalência das deformidades pectus carinatum e excavatum em escolares do Distrito Federal. Brasília Med. 2002;39(1/4):10-5. </p>
+      <p>6. Haje SA, Bowen JR. Preliminary results of orthotic treatment of pectus deformities in children and adolescents. J Pediatr Orthop. 1992;12(6):795-800. </p>
+      <p>7. Kelly RE, Lawson ML, Paidas CN, Hruban RH. Pectus excavatum in a 112-year autopsy series: anatomic findings and the effect on survival [abstract]. J Pediatr Surg. 2005;40(8):1275-8. </p>
+      <p>8. Gonçalves A, Ferrari I. Características da ocorrência de peito escavado em estudo de malformação torácica em pré-escolares da cidade de São Paulo. Rev Bras Ortop. 1987;22(1):19-22. </p>
+      <p>9. Sistema IBGE de Recuperação Automática - SIDRA [homepage on the Internet]. Brasilia: Ministério do Planejamento, Orçamento e Gestão. [cited 2007 Mar 17]. Available from: 
+        
+        <ext-link ext-link-type="uri" xlink:href="http://www.sidra.ibge.gov.br">http://www.sidra.ibge.gov.br</ext-link>
+      </p>
+      <p>10. Fonkalsrud EW, Dunn JC, Atkinson JB. Repair of pectus excavatum deformities: 30 years of experience with 375 patientes. Ann Surg. 2000;231(3):443-8. </p>
+      <p>11. de Matos AC, Bernardo JE, Fernandes LE, Antunes MJ. Surgery of chest wall deformities. Eur J Cardiothorac Surg. 1997;12(3):345-50. </p>
+      <p>12. Willekes CH, Backer CL, Mavroudis C. A 26-year review of pectus deformity repairs, including simultaneous intracardiac repair. Ann Thorac Surg. 1999;67(2):511-8. </p>
+      <p>13. Rebeis EB, Samano MN, Dias CT, Fernandez A, Campos JR, Jatene FB, et al. Índice antropométrico para classificação quantitativa do pectus excavatum. J Pneumol. 2004;30(6):501-7. </p>
+      <p>14. Guller B, Hable K. Cardiac findings in pectus excavatum in children: review and differential diagnosis. Chest. 1974;66(2):165-71. </p>
+      <p>15. Frick SL. Scoliosis in children with anterior chest wall deformities [abstract]. Chest Surg Clin N Am. 2000;10(2):427-36. </p>
+      <p>16. Porto CC, Rassi S. Sistema Cardiovascular. In: Porto CC, editor. Semiologia Médica. Rio de Janeiro: Guanabara Koogan; 2001. p. 429-600. </p>
+      <p>17. Coelho MS, Guimarães PS. Pectus Carinatum. J Bras Pneumol. 2007;33(4):463-74. </p>
+      <p>18. Fonkalsrud EW, Mendoza J, Finn PJ, Cooper CB. Recent experience with open repair of pectus excavatum with minimal cartilage resection. Arch Surg. 2006;141(8):823-9. </p>
+      <p>19. Malek MH, Berger DE, Housh TJ, Marelich WD, Coburn JW, Beck TW. Cardiovascular function following surgical repair of pectus excavatum: a metaanalysis. Chest. 2006;130(2):506-16. </p>
+      <p>20. Malek MH, Fonkalsrud EW, Cooper CB. Ventilatory and cardiovascular responses to exercise in patients with pectus excavatum. Chest. 2003;124(3):870-82. </p>
+      <p>21. Morshuis W, Folgering H, Barentsz J, van Lier H, Lacquet L. Pulmonary function before surgery for pectus excavatum and at long-term follow-up. Chest. 1994;105(6):1646-52. </p>
+      <p>
+        <fn id="corr1-body2" fn-type="corresp"></fn>
+        <xref ref-type="fn" rid="corr2-body2"/>
+        <bold>Correspondence to: </bold> Fernando Luiz Westphal Av. Grande Otelo, 100, Residencial Jardim Itália Edifício Turin, apto. 401, Parque 10 CEP 69055-021, Manaus, AM, Brasil Tel 55 92 234-6334 E-mail: 
+        
+        <email>f.l.westphal@uol.com.br </email>
+      </p>
+      <p> Submitted: 24 March 2008.  Accepted, after review: 18 August 2008.  Financial support: None.</p>
+      <p>
+        <fn id="ast-body2">
+          <label>*</label>
+          <p>Study carried out at the Amazonas State University, at the Getúlio Vargas University Hospital of the Federal University of Amazonas and at the Portuguese Beneficent Hospital, Manaus, Brazil.</p>
+        </fn>
+      </p>
+    </body>
+  </sub-article>
+  <fn-group>
+    <fn id="end" fn-type="corresp">
+      <p>
+        <bold>Endereço para correspondência:</bold>  Fernando Luiz Westphal  Av. Grande Otelo, 100, Residencial Jardim Itália  Edifício Turin, apto. 401, Parque 10  CEP 69055-021, Manaus, AM, Brasil  Tel 55 92 234-6334  E-mail: 
+    
+        <email>f.l.westphal@uol.com.br</email>
+      </fn>
+      <fn id="not">
+        <label>*</label>
+        <p>Trabalho realizado na Universidade do Estado do Amazonas, no Hospital Universitário Getúlio Vargas da Universidade Federal do Amazonas e no Hospital Beneficente Português, Manaus (AM) Brasil.</p>
+      </fn>
+    </fn-group>
+  </article>

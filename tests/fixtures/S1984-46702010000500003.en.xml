@@ -1,0 +1,1577 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article
+	xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="en" article-type="research-article">
+	<front>
+		<journal-meta>
+			<journal-id journal-id-type="publisher-id">zool</journal-id>
+			<journal-title-group>
+				<journal-title>Zoologia (Curitiba)</journal-title>
+				<abbrev-journal-title abbrev-type="publisher">Zoologia (Curitiba)</abbrev-journal-title>
+			</journal-title-group>
+			<issn pub-type="ppub">1984-4670</issn>
+			<issn pub-type="epub">1984-4689</issn>
+			<publisher>
+				<publisher-name>Sociedade Brasileira de Zoologia</publisher-name>
+				<publisher-loc>Curitiba, PR, Brazil</publisher-loc>
+			</publisher>
+		</journal-meta>
+		<article-meta>
+			<article-id pub-id-type="publisher-id" specific-use="scielo">3hYtHF4W8HW6vGXc4sXY3Kc</article-id>
+			<article-id pub-id-type="publisher-id">S1984-46702010000500003</article-id>
+			<article-id pub-id-type="doi">10.1590/S1984-46702010000500003</article-id>
+			<article-categories>
+				<subj-group subj-group-type="heading">
+					<subject>Biogeography</subject>
+				</subj-group>
+			</article-categories>
+			<title-group>
+				<article-title>Historical relationships among Neotropical endemic areas based on Sepedonea (Diptera: Sciomyzidae) phylogenetic and distribution data</article-title>
+			</title-group>
+			<contrib-group>
+				<contrib contrib-type="author">
+					<name>
+						<surname>Pires</surname>
+						<given-names>Amanda Ciprandi</given-names>
+					</name>
+					<role>ND</role>
+					<xref ref-type="aff" rid="aff01"/>
+				</contrib>
+				<contrib contrib-type="author">
+					<name>
+						<surname>Marinoni</surname>
+						<given-names>Luciane</given-names>
+					</name>
+					<role>ND</role>
+					<xref ref-type="aff" rid="aff01"/>
+				</contrib>
+			</contrib-group>
+			<aff id="aff01">
+				<addr-line>
+					<named-content content-type="city">Curitiba</named-content>
+					<named-content content-type="state">Paraná</named-content>
+				</addr-line>
+				<institution content-type="orgname">Universidade Federal do Paraná</institution>
+				<institution content-type="orgdiv1">Departamento de Zoologia </institution>
+				<institution content-type="orgdiv2">Programa de Pós-Graduação em Entomologia</institution>
+				<country country="BR">Brazil</country>
+			</aff>
+			<pub-date date-type="collection" publication-format="electronic">
+				<month>10</month>
+				<year>2010</year>
+			</pub-date>
+			<volume>27</volume>
+			<issue>5</issue>
+			<fpage>681</fpage>
+			<lpage>690</lpage>
+			<history>
+				<date date-type="accepted">
+					<day>19</day>
+					<month>09</month>
+					<year>2010</year>
+				</date>
+				<date date-type="received">
+					<day>19</day>
+					<month>04</month>
+					<year>2010</year>
+				</date>
+			</history>
+			<permissions>
+				<license license-type="open-access" xlink:href="http://creativecommons.org/licenses/by-nc/4.0/" xml:lang="en">
+					<license-p>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</license-p>
+				</license>
+			</permissions>
+			<abstract>
+				<p>The present study used the previously defined relationships among the snail-killing species of Sepedonea as the starting point for a cladistic biogeography analysis of endemic areas in the Neotropical region. The goal of the study was to use two different data sets to test the possible monophyly of two important biomes in the region: the Amazon and the Atlantic Forest. The possible historical significance of the arid biomes was also investigated. The study used Brooks Parsimony Analysis (Primary BPA). The area groups were based on previous biogeographical classifications of the Neotropial region. The analyses showed Amazonia to be non-monophyletic whereas the Atlantic forest was found to be a natural unit. The importance of including dry areas in the analyses, was highlighted by Sepedonea individuals that probably inhabit enclaves of humid forest present in the area. In general, the results indicate incongruence with the prior pattern of area relationships. In fact, one single history of the current distribution of organisms in the region is unlikely. This situation has been supported by several studies proposing incongruent hypotheses of historical relationships between endemic areas of the region.</p>
+			</abstract>
+			<kwd-group xml:lang="en" kwd-group-type="author-generated">
+				<kwd>Amazonia</kwd>
+				<kwd>arid areas</kwd>
+				<kwd>Atlantic forest</kwd>
+				<kwd>BPA</kwd>
+				<kwd>Neotropical region</kwd>
+			</kwd-group>
+		</article-meta>
+	</front>
+	<body>
+		<p>
+			<bold>BIOGEOGRAPHY</bold>
+		</p>
+		<p>
+			<bold>Historical relationships among Neotropical endemic areas based on 
+				<italic>Sepedonea</italic> (Diptera: Sciomyzidae) phylogenetic and distribution data
+			</bold>
+		</p>
+		<p>
+			<bold>Amanda Ciprandi Pires
+				<sup>
+					<xref rid="corresp" ref-type="corresp">*</xref>
+				</sup>; Luciane Marinoni
+			</bold>
+		</p>
+		<p>Programa de Pós-Graduação em Entomologia, Departamento de Zoologia, Universidade Federal do Paraná. Caixa Postal 19020, 81531-980, Curitiba, PR, Brazil. E-mail: 
+			<email>amandaciprandi@yahoo.com.br</email>; 
+			<email>lmarinoni@ufpr.br</email>
+		</p>
+		<p content-type="hr"/>
+		<p>
+			<bold>ABSTRACT</bold>
+		</p>
+		<p>The present study used the previously defined relationships among the snail-killing species of 
+			<italic>Sepedonea</italic> as the starting point for a cladistic biogeography analysis of endemic areas in the Neotropical region. The goal of the study was to use two different data sets to test the possible monophyly of two important biomes in the region: the Amazon and the Atlantic Forest. The possible historical significance of the arid biomes was also investigated. The study used Brooks Parsimony Analysis (Primary BPA). The area groups were based on previous biogeographical classifications of the Neotropial region. The analyses showed Amazonia to be non-monophyletic whereas the Atlantic forest was found to be a natural unit. The importance of including dry areas in the analyses, was highlighted by 
+			<italic>Sepedonea</italic> individuals that probably inhabit enclaves of humid forest present in the area. In general, the results indicate incongruence with the prior pattern of area relationships. In fact, one single history of the current distribution of organisms in the region is unlikely. This situation has been supported by several studies proposing incongruent hypotheses of historical relationships between endemic areas of the region.
+		</p>
+		<p>
+			<bold>Key words:</bold> Amazonia; arid areas; Atlantic forest; BPA; Neotropical region.
+		</p>
+		<p content-type="hr"/>
+		<p>
+			<italic>Sepedonea</italic> Steyskal, 1973 belongs to Sciomyzidae Fallén and is characterized by the larva feeding on aquatic, semi-aquatic or even terrestrial mollusks. The genus currently presents thirteen known species: 
+			<italic>S. barbosai</italic> Knutson &amp; Bredt, 1976; 
+			<italic>S. canabravana</italic> Knutson &amp; Bredt, 1976; 
+			<italic>S. guatemalana</italic> (Steyskal, 1951); 
+			<italic>S. guianica</italic> (Steyskal, 1951); 
+			<italic>S. incipiens</italic> Freidberg, Knutson &amp; Abercrombie, 1991; 
+			<italic>S. isthmi</italic> (Steyskal, 1951); 
+			<italic>S. lagoa</italic> (Steyskal, 1951); 
+			<italic>S. lindneri</italic> (Hendel, 1932) [type species of the genus]; 
+			<italic>S. neffi</italic> Freidberg, Knutson &amp; Abercrombie, 1991; 
+			<italic>S. telson</italic> (Steyskal, 1951); 
+			<italic>S. trichotypa</italic> Freidberg, Knutson &amp; Abercrombie, 1991; 
+			<italic>S. veredae</italic> Freidberg, Knutson &amp; Abercrombie, 1991 and 
+			<italic>S. giovana</italic> Marinoni &amp; Mathis, 2006. It is an exclusively Neotropical monophyletic group found from southern Mexico to northeastern Argentina (FREIDBERG 
+			<italic>et al.</italic> 1991, MARINONI &amp; MATHIS 2006).
+		</p>
+		<p>The region where these species live, the Neotropical, is well known for its remarkable biodiversity and in recent years has become the focus of studies aimed at understanding the distribution patterns of its biota. The studies have emphasized species rich areas, such as Atlantic and Amazonian rainforests (AMORIM &amp;amp; PIRES 1996, NIHEI &amp;amp; CARVALHO 2007, SIGRIST &amp;amp; CARVALHO 2009). In this sense, several studies have analyzed and proposed classifications of the Neotropical region into smaller areas of endemism (CRACRAFT 1985, PATTON 
+			<italic>et al.</italic> 1994, AMORIM &amp; PIRES 1996, CAMARGO 1996, BATES 
+			<italic>et al.</italic> 1998, COSTA 
+			<italic>et al.</italic> 2000, MORRONE 2001, 2006, MARKS 
+			<italic>et al.</italic> 2002, COSTA 2003, GOLDANI &amp; CARVALHO 2003, SILVA 
+			<italic>et al.</italic> 2004, PINTO-DA-ROCHA 
+			<italic>et al.</italic> 2005, PORZECANSKI &amp; CRACRAFT 2005, QUIJANO-ABRIL 
+			<italic>et al.</italic> 2006). The smaller areas of endemism are the minimal units of a biogeographical study and could be defined as areas composed by different organisms with peculiar distributions caused by historical factors (HAROLD &amp; MOOI 1994, MORRONE 1994).
+		</p>
+		<p>An historical approach to the study of these endemic areas, however, has not been used extensively before. Therefore, some studies have accepted areas that do not constitute natural units (see MORRONE 2001 for a review). Hypotheses of area relationships for the region have been developed through approaches that do not rely on detailed phylogenetic information, such as Parsimony Analysis of Endemicity (PAE) (SILVA &amp;amp; OREN 1996, BATES 
+			<italic>et al.</italic> 1998, GOLDANI &amp; CARVALHO 2003). On the other hand, using Brooks Parsimony Analysis (BPA), as in this study, the phylogenetic data is included in order to infer historical relationships among the endemic areas (BROOKS 
+			<italic>et al.</italic> 2001).
+		</p>
+		<p>The present study applied BPA to distribution data of 
+			<italic>Sepedonea</italic>, aiming to test combinations of previously proposed areas of endemism for the Neotropical region. There are three important proposals of endemism areas in the region based on a historical perspective. One was developed by AMORIM &amp; PIRES (1996) and a second by MORRONE (2001, 2006). These two proposals have brought a clearer understanding of biogeographical schemes of the Neotropics. One of the analyses was based exclusively on fauna of humid forest, and was applied only to this kind of environment (AMORIM &amp; PIRES 1996), whereas the other analysis includes areas of open vegetation (chacoan subregion) as well as humid areas (MORRONE 2001, 2006). The third biogeographical proposal for the neotropics was suggested by NIHEI &amp; CARVALHO (2007), and resulted from a combination of AMORIM &amp; PIRES' (1996) and MORRONE's (2001, 2006) classifications. Nihei &amp; Carvalho suggested that the Amazonian subregion could be a compound formed by the smaller areas, Northwestern (NWAm) and Southeastern (SEAm). These authors place the areas of AMORIM &amp; PIRES (1996) in a more general biogeographical model that can be applied to wider distributional patterns in the Neotropical region (forested and non-forested endemism areas) (NIHEI &amp; CARVALHO 2007). The set of analysed areas in this paper was based on the three earlier classifications.
+		</p>
+		<p>The use of forested areas associated with intervening savanas forests or open grasslands allows to test the influence of these unrelated biomes (open vegetation) on the humid areas relationships (SIGRIST &amp;amp; CARVALHO 2009). Given that 
+			<italic>Sepedonea</italic> flies inhabit humid environments and are distributed within this area in open vegetation areas (FREIDBERG 
+			<italic>et al.</italic> 1991), they are excellent organisms for this investigation proposal. Another aspect investigated was the monophyly of Amazonian and Atlantic forests. The high biodiversity found in these biomes has been the topic of a series of debates in the literature, and these have questioned whether the two areas are biogeographical units or not (AMORIM &amp; PIRES 1996, NIHEI &amp; CARVALHO 2007, SIGRIST &amp; CARVALHO 2009). The results we obtained from our analysis enabled us to present some conclusions regarding the evolutionary history of the Neotropical region. The inclusion of areas such as caatinga, cerrado and pampa in the analysis along with rainforest led to some interesting new results.
+		</p>
+		<p>
+			<bold>MATERIAL AND METHODS</bold>
+		</p>
+		<p>Primary Brooks Parsimony analysis (BPA) was carried out in order to reconstruct area relationships within the Neotropical region (BROOKS 
+			<italic>et al.</italic> 2001). This biogeographical analysis was based on distributional data of 
+			<italic>Sepedonea</italic> reconciled to its phylogenetic hypothesis (
+			<xref ref-type="fig" rid="f1">Fig. 1</xref>) (MARINONI &amp; MATHIS 2006). The analysis consists of constructing an individual area cladogram for the analyzed taxa by replacing species names in the phylogeny with the endemic areas where they occur. All internal and terminal nodes are numbered for later representation in data matrices that will be analyzed by a parsimony algorithm (see the matrices in 
+			<xref rid="a01" ref-type="app">Appendixes 1</xref> and 
+			<xref rid="a02" ref-type="app">2</xref>). From this procedure, general area cladograms were established as a general pattern of area relationships (BROOKS 
+			<italic>et al.</italic> 2001). A hypothetical ancestral area, with total absence of species, was added to the data matrices in order to group by presence rather than by absence of taxa. It was used to root the general area cladograms (CRISCI 
+			<italic>et al.</italic> 2003). The program Winclada (NIXON 2002) was used to build the data matrix and as a subsequent interface for parsimony analysis using NONA (GOLOBOFF 1993). Non-supported nodes in resulting trees were collapsed and, if more than one tree was found, a strict consensus was established.
+		</p>
+		<p content-type="asset">
+			<app id="a02">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03a02.jpg"/>
+			</app>
+		</p>
+		<p content-type="asset">
+			<app id="a01">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03a01.jpg"/>
+			</app>
+		</p>
+		<p>
+			<fig id="f1">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f01.jpg"/>
+			</fig>
+		</p>
+		<p/>
+		<p>BPA, as a cladistic biogeographic method, has been criticized in the literature (EBACH &amp;amp; HUMPHRIES 2002). The focus of these critics is based on the &amp;#x27;generational&amp;#x27; character of the method, as debated by EBACH &amp;amp; HUMPHRIES (2002). Actually, cladistic biogeography is about &amp;#x27;discovering&amp;#x27; congruence among taxon-area cladograms, rather than &amp;#x27;generating&amp;#x27; its presence. In this sense, BPA interprets ambiguity (incongruence) as congruence, based on preconceived beliefs, in this case, of evolution and biogeography, rather than on facts (EBACH &amp;amp; HUMPHRIES 2002). However, this is a criticism regarding not only to BPA, but also to other methods employed in cladistic biogeography [
+			<italic>a posteriori</italic> methods (VAN VELLER &amp; BROOKS 2001)]. As SANTOS &amp; AMORIM (2007: 64) have already stated: "from a methodological point of view, none of the presently available algorithms for biogeographical analysis are able to deal at the same time with the complete multivariate properties of real data that should be considered during a biogeographical analysis". The complexities include, for example, widespread taxa and missing areas due to extinction. Thus BPA, along with many other methods, does indeed have the cited shortcoming, and the area relationships presented here should be treated as preliminary results that can be further tested using different approaches of cladistic biogeography (SIGRIST &amp; CARVALHO 2009).
+		</p>
+		<p>Two area groups were analyzed based on former classifications of endemism in the Neotropical region (AMORIM &amp;amp; PIRES 1996, MORRONE 2001, 2006, NIHEI &amp;amp; CARVALHO 2007). The BPA&amp;#x27;s were performed using the area sets previously described by SIGRIST &amp;amp; CARVALHO (2009). The first analysis used the inner subdivisions of Southeast and Northwest components of AMORIM &amp;amp; PIRES (1996) (
+			<xref rid="f02" ref-type="fig">Figs 2</xref> and 
+			<xref rid="f02" ref-type="fig">3</xref>) in an attempt to test the monophyly of the Atlantic Forest. An area named Venezuela/Colombia (Ven/Col) was included in this analysis because some distributions were present there (SIGRIST &amp; CARVALHO 2009). The results were discussed in light of the results obtained by AMORIM &amp; PIRES (1996).
+		</p>
+		<p content-type="asset">
+			<fig id="f02">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f02.jpg"/>
+			</fig>
+		</p>
+		<p>For the second analysis the areas postulated by MORRONE (2001, 2006), with modifications proposed by NIHEI &amp;amp; CARVALHO (2007), were used (SIGRIST &amp;amp; CARVALHO 2009). The Amazonian subregion was divided into three portions: Northern Amazonia, Southwestern Amazonia and Southeastern Amazonia (
+			<xref ref-type="fig" rid="f4">Fig. 4</xref>). The divisions used in Amazonia aimed to test the monophyly of the area from 
+			<italic>Sepedonea</italic> distribution data, as well as investigate the results found by NIHEI &amp; CARVALHO (2007) using the same divisions. The inner subdivisions of Chacoan and Parana subregions, as defined in Morrone's proposal (
+			<xref ref-type="fig" rid="f4">Fig. 4</xref>) (SIGRIST &amp; CARVALHO 2009) were also utilized in this BPA. This study thus aims to investigate Chacoan and Parana sister-area relationships previously found by NIHEI &amp; CARVALHO (2007), as well as to test the influence caused by the dry areas on the humid areas relationships.
+		</p>
+		<p>
+			<fig id="f4">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f03.jpg"/>
+			</fig>
+		</p>
+		<p/>
+		<p>
+			<bold>RESULTS</bold>
+		</p>
+		<p>The cladistic analysis of the inner subdivisions of Southeast and Northwest components of AMORIM &amp;amp; PIRES (1996) resulted in a single cladogram of length 32, consistency index of 78 and retention index of 87 (
+			<xref ref-type="fig" rid="f5">Fig. 5</xref>). For the second analysis two most parsimonious trees were obtained (
+			<xref rid="f05" ref-type="fig">Figs 6</xref> and 
+			<xref rid="f05" ref-type="fig">7</xref>). In a strict concensus, the resulting cladogram had a length of 43, a consistency index of 58 and a retention index of 60 (
+			<xref rid="f05" ref-type="fig">Fig. 8</xref>).
+		</p>
+		<p content-type="asset">
+			<fig id="f05">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f05.jpg"/>
+			</fig>
+		</p>
+		<p>
+			<fig id="f5">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f04.jpg"/>
+			</fig>
+		</p>
+		<p/>
+		<p>
+			<bold>DISCUSSION</bold>
+		</p>
+		<p>
+			<bold>Relationships between areas of endemism in the Neotropical region</bold>
+		</p>
+		<p>In attempt to test the monophyly of the Atlantic forest areas, the relationships between the internal sub-components within the Southeast and Northwest components of AMORIM &amp;amp; PIRES (1996) was investigated (
+			<xref ref-type="fig" rid="f5">Fig. 5</xref>). The monophyly of Atlantic component was found and this implication is congruent with AMORIM &amp; PIRES (1996). The relationships of areas in this BPA, however, was inconsistent with that presented originally by those authors, who found a basal dichotomy separating the areas of Northwest (NW) and Southeast (SE) components, instead of sequential disjunctions separating them (compare 
+			<xref ref-type="fig" rid="f5">figures 5</xref> and 
+			<xref ref-type="fig" rid="f9">9</xref>). One can observe that the areas directly related to the Amazon appear as the first to derive, then followed by the apical dichotomy separating the Atlantic component from the (Ven/Col (AnMA + Guy)) clade (
+			<xref ref-type="fig" rid="f5">Fig. 5</xref>). Although the basal dichotomy between the 'NW' and 'SE' components (AMORIM &amp; PIRES 1996) has not been established for 
+			<italic>Sepedonea</italic> distribution, the result suggests a phylogenetic distinction between their correspondent areas. The 'SEAm' is an exception in that it groups within the Northwest component areas, instead of grouping itself with areas from the Southeast component, as referred by AMORIM &amp; PIRES (1996).
+		</p>
+		<p>
+			<fig id="f9">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f06.jpg"/>
+			</fig>
+		</p>
+		<p/>
+		<p>On the basis of this cladogram, the Colombian Amazon (CoAm) and the area West of the Negro River (WNe) presented a polytomy, in contrast with the other analyzed areas. The positioning of these two minor components is certainly underestimated in the analysis due to the total absence of representatives of the genus in these areas. After the differentiation of &amp;#x27;NEAm&amp;#x27;, the Southeastern (SEAm) and Southwestern (SWAm) Amazon diversified creating a monophyletic clade. These two areas showed the same sister relationship in SIGRIST &amp;amp; CARVALHO (2009) as well as in NIHEI &amp;amp; CARVALHO (2007), using unrelated organisms. AMORIM &amp;amp; PIRES (1996), on the other hand, found that &amp;#x27;SEAm&amp;#x27; grouped with the Atlantic Forest areas, and classifies the Amazon rainforest from this point as non-monophyletic (
+			<xref ref-type="fig" rid="f9">Fig. 9</xref>). Despite the close relationship between the Southeastern and Southwestern Amazon, the clade formed by the two areas in this BPA had little support, given that it was based on a single homoplastic taxon, suggesting that the relationship between these two areas was not resolved by the analysis. Although 'SEAm' and 'SWAm' are sister-areas in the present BPA, the Amazon does not constitute a monophyletic group.
+		</p>
+		<p>The cladistic relationship among the areas that form the Atlantic component also differs in our results from the one presented by AMORIM &amp;amp; PIRES (1996) (
+			<xref ref-type="fig" rid="f5">Figs 5</xref> and 
+			<xref ref-type="fig" rid="f9">9</xref>). The dichotomy separating North and South areas, as found by AMORIM &amp; PIRES (1996), has not been confirmed and is obscured by the formation of a polytomic relationship between Northern Rio de Janeiro (NRJ) and two other clades [(NEBR + SBA) and (MGBA (SPRJ + ArgSBR))]. What merits attention in this component are the positions defined for the 'NRJ' and 'MGBA' areas. The grouping of 'MGBA' nearest to the clade formed by São Paulo/Rio de Janeiro (SPRJ) and the Argentinian and Southern Brazil (ArgSBR) is incongruous with the original proposal (
+			<xref ref-type="fig" rid="f9">Fig. 9</xref>), but the relationship found was also determined by the study of SIGRIST &amp; CARVALHO (2009), and was also congruent with the results found by SILVA 
+			<italic>et al.</italic> (2004) for the grouping (SPRJ + ArgSBR). In this latter study the authors studied areas of endemism for birds, discriminating slightly different regions within the Atlantic Forest. With respect to the area 'NRJ', a likely conclusion to be drawn is that its position will be amended as other taxa are added in later analyses. This becomes evident by its polytomic position compared to the other areas. AMORIM &amp; PIRES (1996) defined it within the South Atlantic component forming a monophyletic clade with 'SPRJ' (
+			<xref ref-type="fig" rid="f9">Fig. 9</xref>).
+		</p>
+		<p>Despite the lack of internal resolution in the cladogram of areas in the Atlantic region, the areas grouped as a monophyletic clade, as already stated. Atlantic forest has been recently regarded as a biogeographical unit by SIGRIST &amp;amp; CARVALHO (2009) who investigated area relationships in the biome determined by BPA analysis with 12 unrelated taxa, and also by other studies that did not always use a phylogenetic approach (BATES 
+			<italic>et. al.</italic> 1998, COSTA 
+			<italic>et al.</italic> 2000). However, monophyly of the Atlantic forest - one of the most biodiverse regions in South America - has been focus of several studies and some of these indicate that the area is hybrid (non monophyletic) (CRACRAFT &amp; PRUM 1988, COSTA 2003, NIHEI &amp; CARVALHO 2007). One possible explanation for the disagreement could be the treatment of Atlantic forest as a disconnected area, long separated from the other biomes in the region. It is possible that central Brasilian forests have played an important role in the evolutionary history of both the humid forest blocks in the Neotropics, thus interfering in the monophyly of each (COSTA 2003). Note that the scheme for the Neotropical region presented by AMORIM &amp; PIRES (1996) does not include areas related with dry environments, and the Altlantic component areas are treated in this analysis as distinct relative to the other biomes in the region.
+		</p>
+		<p>On the other hand, BPAs using Morrone&amp;#x27;s classification reveal the relationships involving xeric environments (Chacoan subregion) and others in the region. Although 
+			<italic>Sepedonea</italic> characteristically inhabits humid environments, there are records confirming that some species dwell in regions with areas of open vegetation, probably in wet forest enclaves (see distributions of species in 
+			<xref rid="f07" ref-type="fig">figures 10-15</xref>).
+		</p>
+		<p content-type="asset">
+			<fig id="f07">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f07.jpg"/>
+			</fig>
+		</p>
+		<p>In this manner a BPA analysis was conducted on the Parana and Chacoan subregions divided into their biogeographical provinces (MORRONE 2001, 2006). The Amazonian subregion was treated as NAm, SEAm, SWAm, following NIHEI &amp;amp; CARVALHO (2007). This analysis sought to investigate the monophyly of Amazonia as well as the results found by NIHEI &amp;amp; CARVALHO (2007) using these divisions in the area. The more specific relationships between the biomes constituents of Chacoan and Parana subregions and the possible influence of dry areas on the historical relationships of humid environments was also investigated.</p>
+		<p>Two most parsimonious trees were obtained (
+			<xref rid="f05" ref-type="fig">Figs 6</xref> and 
+			<xref rid="f05" ref-type="fig">7</xref>), and a strict concensus was reached and analyzed (
+			<xref rid="f05" ref-type="fig">Fig. 8</xref>). In this BPA the area 'SEAm' was classified as a sister-component to the remaining areas. This is inconsistent with the results of NIHEI &amp; CARVALHO (2007), who found it more closely related to areas associated with Parana and Chacoan subregions (
+			<xref ref-type="fig" rid="f16">Fig. 16</xref>), and with the results of AMORIM &amp; PIRES (1996), who treated 'SEAm' together with the Atlantic forest clade (
+			<xref ref-type="fig" rid="f9">Fig. 9</xref>). Thus, the relationships found indicate that the Amazon Forest does not constitute a monophyletic unit.
+		</p>
+		<p>
+			<fig id="f16">
+				<graphic xlink:href="/img/revistas/zool/v27n5/03f08.jpg"/>
+			</fig>
+		</p>
+		<p/>
+		<p>Although determined by different relationships, the hypothesis of a composite Amazonia has been found in several phylogenetic studies (including NIHEI &amp;amp; CARVALHO 2007, and also CRACRAFT &amp;amp; PRUM 1988, AMORIM &amp;amp; PIRES 1996, CAMARGO 1996, ROIG-JUÑENT &amp;amp; COSCARÓN 2001, MARKS 
+			<italic>et al.</italic> 2002, CAMARGO &amp; PEDRO 2003, CARVALHO 
+			<italic>et al.</italic> 2003, SIGRIST &amp; CARVALHO 2009). Many hypotheses invoking historical factors have been proposed to explain barrier formations (vicariant events) in Amazonia (HAFFER 1997) and some have strongly supported a composite Amazonia. AMORIM &amp; PIRES (1996), for example, suggested that their grouping of SEAm together with the Atlantic forest clade was probably due to marine transgressions. This involved lake formation along the Amazonas/Madeira/Mamoré rivers in Late Cretaceous. However, see some of the proposed barriers in the literature provide little support for the relationships found. Only one genus fits this assumption. The results found in this study need to be compared with studies of additional taxa, which may lead to a general pattern, before a explanatory vicariant event can be inferred to explain the biogeographical history of Amazonia.
+		</p>
+		<p>A close relationship involving the Amazon component areas and the Caribbean subregion was established. This close relationship is also supported by previous studies using slightly modified areas (AMORIM &amp;amp; PIRES 1996, CAMARGO 1996, CAMARGO &amp;amp; MOURE 1996, MARKS 
+			<italic>et al.</italic> 2002, SIGRIST &amp; CARVALHO 2009).
+		</p>
+		<p>The sister-area relationship between Parana and Chacoan subregions, previously defined by NIHEI &amp;amp; CARVALHO (2007) (
+			<xref ref-type="fig" rid="f16">Fig. 16</xref>), was unclear due to the basal polytomy comprising this clade. In addition, the Pampa province and Parana subregions were grouped together. Nevertheless, provinces of both subregions together formed a monophyletic grouping (
+			<xref rid="f05" ref-type="fig">Fig. 8</xref>).
+		</p>
+		<p>From this BPA the influence of dry biomes (open vegetation) on the humid areas&amp;#x27; relationships was observed. The lack of resolution on grouping provinces from Chacoan and Parana subregions in a polytomic clade can clearly be associated with 
+			<italic>Sepedonea</italic> species dependent on wet vegetation that are distributed over open vegetation areas. Especially in the Cerrado, PORZECANSKI &amp; CRACRAFT (2005) concluded that the presence of forest-dependent species in that region would be the main factor influencing the polytomic outcome of the Atlantic forest and South America's arid areas (Cerrado, Chaco and Caatinga) in their study.
+		</p>
+		<p>In the current analysis the grouping identified from the Pampa region suggests that the Chacoan subregion, as well as the Parana subregion, are actually compound entities, not natural units. In this case, dividing Chacoan and Parana subregions into minor areas of endemism altered the hypothesis of monophyly for the Atlantic Forest. The Pampa province has been commonly associated with other constituent areas making up the &amp;quot;diagonal of open formations&amp;quot;, in the center of South America, producing unexpected results in this analysis (MORRONE 2001, 2006). The existence of 
+			<italic>Sepedonea</italic> individuals in areas corresponding to the Pampa biome precipitated the grouping of this province and the humid environments. As was previously suggested, the reason for the grouping is that these species probably occur in enclaves of humid forest present in the area. In fact, the Pampa region has been considered as a mosaic of biotic elements originating from the Chaco and Monte provinces, and the Atlantic and Parana Forests (PORZECANSKI &amp; CRACRAFT 2005, MORRONE 2006).
+		</p>
+		<p>The results obtained from this BPA emphasize the importance of including savana biomes in the investigation of humid environment relationships. The inclusion of these dry areas in biogeographic analyses of forested areas in Neotropical region has been previously advocated (COSTA 2003, SIGRIST &amp;amp; CARVALHO 2009). In this manner, the Central Brazilian areas could be the site of historical factors that have influenced the evolutionary history of Amazon and Atlantic forests. Central Brazilian areas probably still play an important role as present and past habitats for rain forest species (COSTA 2003). 
+			<italic>Sepedonea</italic> as well as many other taxa living in dry areas are, in fact, present in the gallery forests found along rivers in these areas. Thus, if these chacoan areas were neglected in the analysis, the true evolutionary history of the region could be masked.
+		</p>
+		<p>From this point of view, we agreed with NIHEI &amp;amp; CARVALHO (2007) as well as SIGRIST &amp;amp; CARVALHO (2009), in that a mixed classification for the Neotropical region, using both AMORIM &amp;amp; PIRES&amp;#x27; (1996) and MORRONE&amp;#x27;s (2001, 2006) areas, will reflect the results more clearly. The use of forested areas of endemism associated with non-forested areas provides a more explanatory pattern for the biogeographical history of the Neotropical region.</p>
+		<p>
+			<bold>Final considerations: the incongruence of branching pattern</bold>
+		</p>
+		<p>In general the results produced in this study were not congruent with earlier proposals. Although the principal idea behind cladistic biogeography involves general explanations (vicariance) as the cause of widespread biogeographic patterns, the biogeographic history involving areas and distributed organisms are in fact more complex than expected in a simple search for congruent patterns. The phylogenies of species are mostly divergent among organisms whereas the relationships between geographic areas are commonly lattices, showing repeated episodes of connection and disconnection among them (DONOGHUE &amp;amp; MOORE 2003). The Neotropical region is a good example of this intricate biogeographical pattern, and this is evident in various hypotheses about relationships between areas of endemism. The different hypotheses lend themselves to different explanatory proposals (CRACRAFT &amp;amp; PRUM 1988, PRUM 1988, AMORIM &amp;amp; PIRES 1996, SILVA &amp;amp; OREN 1996, BATES 
+			<italic>et al.</italic> 1998, MORRONE &amp; COSCARÓN 1998, RON 2000, MARKS 
+			<italic>et al.</italic> 2002, PORZECANSKI &amp; CRACRAFT 2005, BORTOLANZA 
+			<italic>et al.</italic> 2006, HUBERT &amp; RENNO 2006, NIHEI &amp; CARVALHO 2007).
+		</p>
+		<p>It can be concluded that a single history explaining the current distribution of organisms in the Neotropical region is unlikely (COSTA 2003). BATES 
+			<italic>et al.</italic> (1998) concluded in the same way after finding relationships between areas inconsistent with topologies previously hypothesized for the region. Thus the pattern found here for 
+			<italic>Sepedonea</italic> should not be necessarily consistent with more general classifications previously established, as this pattern may not be related to the same events involved in the diversification of the groups used in the determination of those patterns (pseudoincongruence) (DONOGHUE &amp; MOORE 2003, BORTOLANZA 
+			<italic>et al.</italic> 2006). In this context, however, the possibility of similar patterns in time and space is not excluded, as theoretically assumed by cladistic biogeography. This indicates the need to include temporal information in this type of study, more precisely the time of diversification inferred from molecular phylogeny. In this way, the expected patterns from cladistic biogeography can be discovered with less doubt. Further, comparable standards may be approached with greater reliability, as well as allowing more objective associations between them and pre-defined geological events (DONOGHUE &amp; MOORE 2003).
+		</p>
+		<p>Another issue that could be related to the incongruence found are the shortcomings attributed to the employed method, discussed above under &amp;#x27;Material and Methods&amp;#x27;. However, in the case which the original proposal was based on the same method (NIHEI &amp;amp; CARVALHO 2007), this shortcoming is unlikely to be the cause of incongruence. In fact, the results here obtained are preliminary and should be tested by other methods of cladistic biogeography. Their relevance, on the other hand, is assumed, given the necessity of analyzing further taxa to help uncover the biogeographical history of the region.</p>
+		<p>Finally, with respect to the different biomes of the Neotropical region and their historical relationships, it is important to note that although the analysis of AMORIM &amp;amp; PIRES&amp;#x27; (1996) areas found Atlantic forest to be monophyletic, and the Amazon in general was found to be a composite area, the open grassland areas, if excluded from the analysis, can mask the true results. For this reason they should always be included in studies of area relationships in the Neotropics.</p>
+		<p>
+			<bold>ACKNOWLEDGEMENTS</bold>
+		</p>
+		<p>We would like to thank Michael Heads (Buffalo Museum of Science, USA) by english revision on manuscript. ACP received financial support from Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES); LM was supported by Conselho Nacional de Desenvolvimento Científico (CNPq process 477024/2004-1).</p>
+		<p>
+			<bold>LITERATURE CITED</bold>
+		</p>
+		<p>AMORIM, D.S. &amp;amp; M.R.S. PIRES. 1996. Neotropical biogeography and a method for maximum biodiversity estimation, p. 183-219. 
+			<italic>In</italic>: C.E.M. BICUDO &amp; N.A. MENEZES (Ed.). 
+			<bold>Biodiversity in Brazil, a first approach.</bold> São Paulo, CNPq. 
+		</p>
+		<p>BATES, J.M.; S.J. HACKETT &amp;amp; J. CRACRAFT. 1998. Area-relationships in the Neotropical lowlands: an hypothesis based on raw distributions of passerine birds. 
+			<bold>Journal of biogeography 25</bold>: 783-793. 
+		</p>
+		<p>BORTOLANZA, M.; C.J.B. DE CARVALHO &amp;amp; A.P.C. LARA. 2006. A new species of 
+			<italic>Coenosopsia</italic> Malloch (Diptera, Anthomyiidae) from southern Brazil and a reappraisal of the cladistic relationships of the genus. 
+			<bold>Zootaxa 1242</bold>: 37-52. 
+		</p>
+		<p>BROOKS, D.R.; M. VAN VELLER &amp;amp; D.A. MACLENNAN. 2001. How to do BPA, really. 
+			<bold>Journal of Biogeography 28</bold>: 343-358. 
+		</p>
+		<p>CAMARGO, J.M.F. 1996. Meliponini neotropicais (Apinae, Apidae, Hymenoptera): biogeografia histórica. 
+			<bold>Anais do Encontro Sobre Abelhas de Ribeirão Preto, USP 2</bold>: 107-121. 
+		</p>
+		<p>CAMARGO, J. M.F. &amp;amp; J.S. MOURE. 1996. Meliponini neotropicais: o gênero 
+			<italic>Geotrigona</italic> Moure, 1943 (Apinae, Apidae, Hymenop-tera), com especial referência à filogenia e biogeografia. 
+			<bold>Arquivos de Zoologia</bold>
+			<bold>33</bold>: 95-161. 
+		</p>
+		<p>CAMARGO, J. M.F. &amp;amp; S.R.M. PEDRO. 2003. Meliponini neotropicais: o gênero 
+			<italic>Partamona</italic> Schwarz, 1939 (Hymenoptera, Apidae, Apinae) - bionomia e biogeografia. 
+			<bold>Revista Brasileira de Entomologia 47</bold>: 311-372. 
+		</p>
+		<p>CARVALHO, C. J.B. DE; M. BORTOLANZA; M.C.C. SILVA &amp;amp; E.D.G. SOARES. 2003. Distributional patterns of the Neotropical Muscidae (Diptera), p. 263-274. 
+			<italic>In</italic>: J.J. MORRONE &amp; J. LLORENTE (Ed.). 
+			<bold>Una Perspectiva Latinoamericana de la Biogeografía.</bold> Mexico, D.F, Las Prensas de Ciencias, Facultad de Ciencias, UNAM. 
+		</p>
+		<p>COSTA, L.P. 2003. The historical bridge between the Amazon and the Atlantic Forest of Brazil: a study of molecular phylogeography with small mammals. 
+			<bold>Journal of Bio-geography 30</bold>: 71-86. 
+		</p>
+		<p>COSTA, L.P.; Y.L.R. LEITE; G.A B. D. FONSECA &amp;amp; M.T D. FONSECA. 2000. Biogeography of South American forest mammals: endemism and diversity in the Atlantic Forest. 
+			<bold>Biotropica</bold>
+			<bold>32</bold>: 872-881. 
+		</p>
+		<p>CRACRAFT, J. 1985. Historical biogeography and patterns of differentiation within the South American avifauna: areas of endemism, p. 49-84. 
+			<italic>In</italic>: P.A. BUCKLEY; M.S. FOSTER; E.S. MORTON; R.S. RIDGELY &amp; F.G. BUCKLEY (Ed.). 
+			<bold>Neotropical ornithology.</bold> Washington, D.C., The American Ornithologists' Union, Ornithological Monographs 36. 
+		</p>
+		<p>CRACRAFT, J. &amp;amp; R.O. PRUM. 1988. Patterns and processes of diversification: speciation and historical congruence in some Neotropical birds. 
+			<bold>Evolution 42</bold>: 603-620. 
+		</p>
+		<p>CRISCI, J.V.; L. KATINAS &amp;amp; P. POSADAS. 2003. 
+			<bold>Historical biogeography: an introduction.</bold> Cambridge, Havard University Press. 
+		</p>
+		<p>DONOGHUE, M.J. &amp;amp; B.R. MOORE. 2003. Toward an integrative historical biogeography. 
+			<bold>Integrative and Comparative Biology 43</bold>: 261-270. 
+		</p>
+		<p>EBACH, M.C. &amp;amp; C.J. HUMPHRIES. 2002. Cladistic biogeography and the art of discovery. 
+			<bold>Journal of Biogeography 29</bold>: 427-444. 
+		</p>
+		<p>FREIDBERG, A.; L. KNUTSON &amp;amp; J. ABERCROMBIE. 1991. A revision of 
+			<italic>Sepedonea</italic>, a Neotropical genus of Snail-killing flies (Diptera: Sciomyzidae). 
+			<bold>Smithsonian Contributions to Zoology 506</bold>: 1-48. 
+		</p>
+		<p>GOLDANI, A. &amp;amp; G.S. CARVALHO. 2003. Análise de parcimônia de endemismo de cercopídeos neotropicais (Hemíptera, Cercopidae). 
+			<bold>Revista Brasileira de Entomologia 47</bold>: 437-442. 
+		</p>
+		<p>GOLOBOFF, P.A. 1993. 
+			<bold>NONA, version 2.0.</bold> Program and documentation distributed by the author. 
+		</p>
+		<p>HAFFER, J. 1997. Alternative models of vertebrate speciation in Amazonia: an overview. 
+			<bold>Biodiversity and Conservation 6</bold>: 451-476. 
+		</p>
+		<p>HAROLD, A.S. &amp;amp; R.D. MOOI. 1994. Areas of endemism: definition and recognition criteria. 
+			<bold>Systematic Biology</bold>
+			<bold>43</bold>: 261-266. 
+		</p>
+		<p>HUBERT, N. &amp;amp; J-F. RENNO. 2006. Historical biogeography of South American freshwater fishes. 
+			<bold>Journal of Biogeography 33</bold>: 1414-1436. 
+		</p>
+		<p>MARINONI, L. &amp;amp; W.N. MATHIS. 2006. A cladistic analyses of the Neotropical genus 
+			<italic>Sepedonea</italic> Steyskal (Diptera: Sciomyzidae). 
+			<bold>Zootaxa 1236</bold>: 37-52. 
+		</p>
+		<p>MARKS, B.D.; S.J. HACKETT &amp;amp; A.P. CAPPARELLA. 2002. Historical relationships among Neotropical lowland forest areas of endemism as determined by mitochondrial DNA sequence variation within the Wedge-billed Woodcreeper (Aves: Dendrocolaptidae: (
+			<italic>Glyphorynchus spirurus</italic>). 
+			<bold>Molecular Phy-logenetics and Evolution 24</bold>: 153-167. 
+		</p>
+		<p>MORRONE, J.J. 1994. On the identification of areas of endemism. 
+			<bold>Systematic Biology 43</bold>: 438-441. 
+		</p>
+		<p>MORRONE, J.J. 2001. 
+			<bold>Biogeografia de América Latina y el Caribe.</bold> Zaragoza, Sociedad Entomológica Aragoneza, Manuales &amp; Tesis SEA. 
+		</p>
+		<p>MORRONE, J.J. 2006. Biogeographic areas and transition zones of Latin America and the Caribbean Islands based on Panbiogeographic and Cladistic analysis of the entomofauna. 
+			<bold>Annual Review of Entomology 51</bold>: 467-494. 
+		</p>
+		<p>MORRONE, J.J. &amp;amp; M.C. COSCARÓN. 1998. Cladistics and biogeography of the assassin bug genus 
+			<italic>Rasahus</italic> Amyot &amp; Serville (Hete-roptera: Reduviidae: Peiratiinae). 
+			<bold>Zoologische Mededelingen Leiden 72</bold>: 73-87. 
+		</p>
+		<p>NIHEI, S.S. &amp;amp; C.J.B. DE CARVALHO. 2007. Systematics and biogeography of 
+			<italic>Polietina</italic> Schnabl &amp; Dziedzicki (Diptera, Muscidae): Neotropical area relationships and Amazonia as a composite area. 
+			<bold>Systematic Entomology 32</bold>: 477-501. 
+		</p>
+		<p>NIXON, K.C. 2002. 
+			<bold>WINCLADA.</bold> Program and documentation distributed by the author. 
+		</p>
+		<p>PATTON, J.L.; M.N.F. SILVA &amp;amp; J.R. MALCOLM. 1994. Gene genealogy and differentiation among arboreal spiny rats (Rodentia: Echimyidae) of the Amazon Basin: a test of the riverine barrier hypothesis. 
+			<bold>Evolution 48</bold>: 1314-1323. 
+		</p>
+		<p>PINTO-DA-ROCHA, R.; M.B. SILVA &amp;amp; C. BRAGAGNOLO. 2005. Faunistic similarity and historic biogeography of the harvestmen of southern and southeastern Atlantic rain Forest of Brazil. 
+			<bold>Journal of Arachnology 33</bold>: 290-299. 
+		</p>
+		<p>PORZECANSKI, A.L. &amp;amp; J. CRACRAFT. 2005. Cladistic Analysis of distributions and endemism (CADE): using raw distributions of birds to unravel the biogeography of the South American aridlands. 
+			<bold>Journal of Biogeography 32</bold>: 261-275. 
+		</p>
+		<p>PRUM, R.O. 1988. Historical relationships among avian forest areas of endemism in the Neotropics. 
+			<bold>Acta XIX Congressus Internationalis Ornithologici 19</bold>: 2562-2572. 
+		</p>
+		<p>QUIJANO-ABRIL, M.A.; R. CALLEJAS-POSADA &amp;amp; D.R. MIRANDA-ESQUIVEL. 2006. Areas of endemism and distribution patterns for Neotropical 
+			<italic>Piper</italic> species (Piperaceae). 
+			<bold>Journal of Biogeo-graphy 33</bold>: 1266-1278. 
+		</p>
+		<p>ROIG-JUÑENT, S. &amp;amp; S. COSCARÓN. 2001. Biogeographical history of the Neotropical and Neantarctic Simuliidae (Diptera). 
+			<bold>Revista del Museo Argentino de Ciencias Naturales 3</bold>: 119-134. 
+		</p>
+		<p>RON, S.R. 2000. Biogeographic area relationships of lowland neotropical rainforest based on raw distributions of vertebrate groups. 
+			<bold>Biological Journal of the Linnean Society</bold>
+			<bold>71</bold>: 379-402. 
+		</p>
+		<p>SANTOS, C.M.D. &amp;amp; AMORIM, D.S. 2007. Why biogeographical hypotheses need a well supported phylogenetic framework: A conceptual evaluation. 
+			<bold>Papéis Avulsos de Zoologia 47</bold>: 63-73. 
+		</p>
+		<p>SIGRIST, M.S. &amp;amp; C.J.B. DE CARVALHO. 2009. Historical relationships among areas of endemism in the tropical South America using Brooks Parsimony Analysis (BPA). 
+			<bold>Biota Neotropica 9</bold>: 1-12. 
+		</p>
+		<p>SILVA, J.M.C. &amp;amp; D.C. OREN. 1996. Application of the parsimony analysis of endemicity in Amazonian biogeography: an example with primates. 
+			<bold>Biological Journal of the Linnean Society 59</bold>: 427-437. 
+		</p>
+		<p>SILVA, J.M.C.; M.C. SOUSA &amp;amp; C.H.M. CASTELLETTI. 2004. Areas of endemism for passerine birds in the Atlantic forest, South America. 
+			<bold>Global Ecology and Biogeography 13</bold>: 85-92. 
+		</p>
+		<p>with two new genera. 
+			<bold>Entomological News 84</bold>: 143-146. 
+		</p>
+		<p>VAN VELLER, M.G.P. &amp;amp; D.J. BROOKS. 2001. When simplicity is not parsimonious: a priori and a posteriori methods in historical biogeography. 
+			<bold>Journal of Biogeography 28</bold>: 1-11. 
+		</p>
+		<p>Submitted: 19.IV.2010; Accepted: 19.IX.2010</p>
+		<p>Editorial responsibility: Claudio J.B. de Carvalho</p>
+	</body>
+	<back>
+		<ref-list>
+			<ref id="B1">
+				<mixed-citation>AMORIM, D.S. &amp;    M.R.S. PIRES. 1996. Neotropical biogeography and a method for maximum biodiversity    estimation, p. 183-219. 
+					<italic>In</italic>: C.E.M. BICUDO &amp; N.A. MENEZES (Ed.). 
+					<bold>Biodiversity    in Brazil, a first approach.</bold> São Paulo, CNPq.
+				</mixed-citation>
+				<element-citation publication-type="book">
+					<source>Biodiversity in Brazil, a first approach</source>
+					<date>
+						<year>1996</year>
+					</date>
+					<fpage>183</fpage>
+					<lpage>219</lpage>
+					<person-group person-group-type="author">
+						<name>
+							<surname>AMORIM</surname>
+							<given-names>D.S.</given-names>
+						</name>
+						<name>
+							<surname>PIRES</surname>
+							<given-names>M.R.S.</given-names>
+						</name>
+						<name>
+							<surname>BICUDO</surname>
+							<given-names>C.E.M.</given-names>
+						</name>
+						<name>
+							<surname>MENEZES</surname>
+							<given-names>N.A.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B2">
+				<mixed-citation>BATES, J.M.; S.J.    HACKETT &amp; J. CRACRAFT. 1998. Area-relationships in the Neotropical lowlands:    an hypothesis based on raw distributions of passerine birds. 
+					<bold>Journal of biogeography    25</bold>: 783-793.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Area-relationships in the Neotropical lowlands: an hypothesis based on raw distributions of passerine birds</article-title>
+					<source>Journal of biogeography</source>
+					<date>
+						<year>1998</year>
+					</date>
+					<fpage>783</fpage>
+					<lpage>793</lpage>
+					<volume>25</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>BATES</surname>
+							<given-names>J.M.</given-names>
+						</name>
+						<name>
+							<surname>HACKETT</surname>
+							<given-names>S.J.</given-names>
+						</name>
+						<name>
+							<surname>CRACRAFT</surname>
+							<given-names>J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B3">
+				<mixed-citation>BORTOLANZA, M.;    C.J.B. DE CARVALHO &amp; A.P.C. LARA. 2006. A new species of 
+					<italic>Coenosopsia</italic>    Malloch (Diptera, Anthomyiidae) from southern Brazil and a reappraisal of the    cladistic relationships of the genus. 
+					<bold>Zootaxa 1242</bold>: 37-52.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>A new species of Coenosopsia Malloch (Diptera, Anthomyiidae) from southern Brazil and a reappraisal of the cladistic relationships of the genus</article-title>
+					<source>Zootaxa</source>
+					<date>
+						<year>2006</year>
+					</date>
+					<fpage>37</fpage>
+					<lpage>52</lpage>
+					<volume>1242</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>BORTOLANZA</surname>
+							<given-names>M.</given-names>
+						</name>
+						<name>
+							<surname>CARVALHO</surname>
+							<given-names>C.J.B. DE</given-names>
+						</name>
+						<name>
+							<surname>LARA</surname>
+							<given-names>A.P.C.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B4">
+				<mixed-citation>BROOKS, D.R.; M.    VAN VELLER &amp; D.A. MACLENNAN. 2001. How to do BPA, really. 
+					<bold>Journal of    Biogeography 28</bold>: 343-358.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>How to do BPA, really</article-title>
+					<source>Journal of Biogeography</source>
+					<date>
+						<year>2001</year>
+					</date>
+					<fpage>343</fpage>
+					<lpage>358</lpage>
+					<volume>28</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>BROOKS</surname>
+							<given-names>D.R.</given-names>
+						</name>
+						<name>
+							<surname>VELLER</surname>
+							<given-names>M. VAN</given-names>
+						</name>
+						<name>
+							<surname>MACLENNAN</surname>
+							<given-names>D.A.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B5">
+				<mixed-citation>CAMARGO, J.M.F.    1996. Meliponini neotropicais (Apinae, Apidae, Hymenoptera): biogeografia histórica.    
+					<bold>Anais do Encontro Sobre Abelhas de Ribeirão Preto, USP 2</bold>: 107-121.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Meliponini neotropicais (Apinae, Apidae, Hymenoptera): biogeografia histórica</article-title>
+					<source>Anais do Encontro Sobre Abelhas de Ribeirão Preto, USP</source>
+					<date>
+						<year>1996</year>
+					</date>
+					<fpage>107</fpage>
+					<lpage>121</lpage>
+					<volume>2</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>CAMARGO</surname>
+							<given-names>J.M.F.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B6">
+				<mixed-citation>CAMARGO, J. M.F.    &amp; J.S. MOURE. 1996. Meliponini neotropicais: o gênero 
+					<italic>Geotrigona</italic>    Moure, 1943 (Apinae, Apidae, Hymenop-tera), com especial referência à    filogenia e biogeografia. 
+					<bold>Arquivos de Zoologia</bold>
+					<bold>33</bold>: 95-161.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Meliponini neotropicais: o gênero Geotrigona Moure, 1943 (Apinae, Apidae, Hymenop-tera), com especial referência à filogenia e biogeografia</article-title>
+					<source>Arquivos de Zoologia</source>
+					<date>
+						<year>1996</year>
+					</date>
+					<fpage>95</fpage>
+					<lpage>161</lpage>
+					<volume>33</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>CAMARGO</surname>
+							<given-names>J. M.F.</given-names>
+						</name>
+						<name>
+							<surname>MOURE</surname>
+							<given-names>J.S.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B7">
+				<mixed-citation>CAMARGO, J. M.F.    &amp; S.R.M. PEDRO. 2003. Meliponini neotropicais: o gênero 
+					<italic>Partamona</italic>    Schwarz, 1939 (Hymenoptera, Apidae, Apinae) - bionomia e biogeografia. 
+					<bold>Revista    Brasileira de Entomologia 47</bold>: 311-372.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Meliponini neotropicais: o gênero Partamona Schwarz, 1939 (Hymenoptera, Apidae, Apinae) - bionomia e biogeografia</article-title>
+					<source>Revista Brasileira de Entomologia</source>
+					<date>
+						<year>2003</year>
+					</date>
+					<fpage>311</fpage>
+					<lpage>372</lpage>
+					<volume>47</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>CAMARGO</surname>
+							<given-names>J. M.F.</given-names>
+						</name>
+						<name>
+							<surname>PEDRO</surname>
+							<given-names>S.R.M.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B8">
+				<mixed-citation>CARVALHO, C. J.B.    DE; M. BORTOLANZA; M.C.C. SILVA &amp; E.D.G. SOARES. 2003. Distributional patterns    of the Neotropical Muscidae (Diptera), p. 263-274. 
+					<italic>In</italic>: J.J. MORRONE &amp;    J. LLORENTE (Ed.). 
+					<bold>Una Perspectiva Latinoamericana de la Biogeografía.</bold>    Mexico, D.F, Las Prensas de Ciencias, Facultad de Ciencias, UNAM.
+				</mixed-citation>
+				<element-citation publication-type="book">
+					<source>Una Perspectiva Latinoamericana de la Biogeografía</source>
+					<date>
+						<year>2003</year>
+					</date>
+					<fpage>263</fpage>
+					<lpage>274</lpage>
+					<person-group person-group-type="author">
+						<name>
+							<surname>CARVALHO</surname>
+							<given-names>C. J.B. DE</given-names>
+						</name>
+						<name>
+							<surname>M.</surname>
+							<given-names>BORTOLANZA</given-names>
+						</name>
+						<name>
+							<surname>M.C.C.</surname>
+							<given-names>SILVA</given-names>
+						</name>
+						<name>
+							<surname>E.D.G.</surname>
+							<given-names>SOARES</given-names>
+						</name>
+						<name>
+							<surname>MORRONE</surname>
+							<given-names>J.J.</given-names>
+						</name>
+						<name>
+							<surname>LLORENTE</surname>
+							<given-names>J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B9">
+				<mixed-citation>COSTA, L.P. 2003.    The historical bridge between the Amazon and the Atlantic Forest of Brazil:    a study of molecular phylogeography with small mammals. 
+					<bold>Journal of Bio-geography    30</bold>: 71-86.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>The historical bridge between the Amazon and the Atlantic Forest of Brazil: a study of molecular phylogeography with small mammals</article-title>
+					<source>Journal of Bio-geography</source>
+					<date>
+						<year>2003</year>
+					</date>
+					<fpage>71</fpage>
+					<lpage>86</lpage>
+					<volume>30</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>COSTA</surname>
+							<given-names>L.P.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B10">
+				<mixed-citation>COSTA, L.P.; Y.L.R.    LEITE; G.A B. D. FONSECA &amp; M.T D. FONSECA. 2000. Biogeography of South American    forest mammals: endemism and diversity in the Atlantic Forest. 
+					<bold>Biotropica</bold>
+					<bold>32</bold>: 872-881.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Biogeography of South American forest mammals: endemism and diversity in the Atlantic Forest</article-title>
+					<source>Biotropica</source>
+					<date>
+						<year>2000</year>
+					</date>
+					<fpage>872</fpage>
+					<lpage>881</lpage>
+					<volume>32</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>COSTA</surname>
+							<given-names>L.P.</given-names>
+						</name>
+						<name>
+							<surname>LEITE</surname>
+							<given-names>Y.L.R.</given-names>
+						</name>
+						<name>
+							<surname>FONSECA</surname>
+							<given-names>G.A B. D.</given-names>
+						</name>
+						<name>
+							<surname>FONSECA</surname>
+							<given-names>M.T D.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B11">
+				<mixed-citation>CRACRAFT, J. 1985.    Historical biogeography and patterns of differentiation within the South American    avifauna: areas of endemism, p. 49-84. 
+					<italic>In</italic>: P.A. BUCKLEY; M.S. FOSTER;    E.S. MORTON; R.S. RIDGELY &amp; F.G. BUCKLEY (Ed.). 
+					<bold>Neotropical ornithology.</bold>    Washington, D.C., The American Ornithologists' Union, Ornithological Monographs    36.
+				</mixed-citation>
+				<element-citation publication-type="book">
+					<source>Neotropical ornithology</source>
+					<date>
+						<year>1985</year>
+					</date>
+					<fpage>49</fpage>
+					<lpage>84</lpage>
+					<person-group person-group-type="author">
+						<name>
+							<surname>CRACRAFT</surname>
+							<given-names>J.</given-names>
+						</name>
+						<name>
+							<surname>BUCKLEY</surname>
+							<given-names>P.A.</given-names>
+						</name>
+						<name>
+							<surname>FOSTER</surname>
+							<given-names>M.S.</given-names>
+						</name>
+						<name>
+							<surname>MORTON</surname>
+							<given-names>E.S.</given-names>
+						</name>
+						<name>
+							<surname>RIDGELY</surname>
+							<given-names>R.S.</given-names>
+						</name>
+						<name>
+							<surname>BUCKLEY</surname>
+							<given-names>F.G.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B12">
+				<mixed-citation>CRACRAFT, J. &amp;    R.O. PRUM. 1988. Patterns and processes of diversification: speciation and historical    congruence in some Neotropical birds. 
+					<bold>Evolution 42</bold>: 603-620.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Patterns and processes of diversification: speciation and historical congruence in some Neotropical birds</article-title>
+					<source>Evolution</source>
+					<date>
+						<year>1988</year>
+					</date>
+					<fpage>603</fpage>
+					<lpage>620</lpage>
+					<volume>42</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>CRACRAFT</surname>
+							<given-names>J.</given-names>
+						</name>
+						<name>
+							<surname>PRUM</surname>
+							<given-names>R.O.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B13">
+				<mixed-citation>CRISCI, J.V.; L.    KATINAS &amp; P. POSADAS. 2003. 
+					<bold>Historical biogeography: an introduction.</bold>    Cambridge, Havard University Press.
+				</mixed-citation>
+				<element-citation publication-type="book">
+					<source>Historical biogeography: an introduction</source>
+					<date>
+						<year>2003</year>
+					</date>
+					<person-group person-group-type="author">
+						<name>
+							<surname>CRISCI</surname>
+							<given-names>J.V.</given-names>
+						</name>
+						<name>
+							<surname>KATINAS</surname>
+							<given-names>L.</given-names>
+						</name>
+						<name>
+							<surname>POSADAS</surname>
+							<given-names>P.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B14">
+				<mixed-citation>DONOGHUE, M.J.    &amp; B.R. MOORE. 2003. Toward an integrative historical biogeography. 
+					<bold>Integrative    and Comparative Biology 43</bold>: 261-270.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Toward an integrative historical biogeography</article-title>
+					<source>Integrative and Comparative Biology</source>
+					<date>
+						<year>2003</year>
+					</date>
+					<fpage>261</fpage>
+					<lpage>270</lpage>
+					<volume>43</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>DONOGHUE</surname>
+							<given-names>M.J.</given-names>
+						</name>
+						<name>
+							<surname>MOORE</surname>
+							<given-names>B.R.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B15">
+				<mixed-citation>EBACH, M.C. &amp;    C.J. HUMPHRIES. 2002. Cladistic biogeography and the art of discovery. 
+					<bold>Journal    of Biogeography 29</bold>: 427-444.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Cladistic biogeography and the art of discovery</article-title>
+					<source>Journal of Biogeography</source>
+					<date>
+						<year>2002</year>
+					</date>
+					<fpage>427</fpage>
+					<lpage>444</lpage>
+					<volume>29</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>EBACH</surname>
+							<given-names>M.C.</given-names>
+						</name>
+						<name>
+							<surname>HUMPHRIES</surname>
+							<given-names>C.J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B16">
+				<mixed-citation>FREIDBERG, A.;    L. KNUTSON &amp; J. ABERCROMBIE. 1991. A revision of 
+					<italic>Sepedonea</italic>, a Neotropical    genus of Snail-killing flies (Diptera: Sciomyzidae). 
+					<bold>Smithsonian Contributions    to Zoology 506</bold>: 1-48.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>A revision of Sepedonea, a Neotropical genus of Snail-killing flies (Diptera: Sciomyzidae)</article-title>
+					<source>Smithsonian Contributions to Zoology</source>
+					<date>
+						<year>1991</year>
+					</date>
+					<fpage>1</fpage>
+					<lpage>48</lpage>
+					<volume>506</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>FREIDBERG</surname>
+							<given-names>A.</given-names>
+						</name>
+						<name>
+							<surname>KNUTSON</surname>
+							<given-names>L.</given-names>
+						</name>
+						<name>
+							<surname>ABERCROMBIE</surname>
+							<given-names>J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B17">
+				<mixed-citation>GOLDANI, A. &amp;    G.S. CARVALHO. 2003. Análise de parcimônia de endemismo de cercopídeos    neotropicais (Hemíptera, Cercopidae). 
+					<bold>Revista Brasileira de Entomologia    47</bold>: 437-442.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Análise de parcimônia de endemismo de cercopídeos neotropicais (Hemíptera, Cercopidae)</article-title>
+					<source>Revista Brasileira de Entomologia</source>
+					<date>
+						<year>2003</year>
+					</date>
+					<fpage>437</fpage>
+					<lpage>442</lpage>
+					<volume>47</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>GOLDANI</surname>
+							<given-names>A.</given-names>
+						</name>
+						<name>
+							<surname>CARVALHO</surname>
+							<given-names>G.S.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B18">
+				<mixed-citation>GOLOBOFF, P.A.    1993. 
+					<bold>NONA, version 2.0.</bold> Program and documentation distributed by the    author.
+				</mixed-citation>
+				<element-citation publication-type="book">
+					<source>NONA, version 2.0</source>
+					<date>
+						<year>1993</year>
+					</date>
+					<person-group person-group-type="author">
+						<name>
+							<surname>GOLOBOFF</surname>
+							<given-names>P.A.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B19">
+				<mixed-citation>HAFFER, J. 1997.    Alternative models of vertebrate speciation in Amazonia: an overview. 
+					<bold>Biodiversity    and Conservation 6</bold>: 451-476.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Alternative models of vertebrate speciation in Amazonia: an overview</article-title>
+					<source>Biodiversity and Conservation</source>
+					<date>
+						<year>1997</year>
+					</date>
+					<fpage>451</fpage>
+					<lpage>476</lpage>
+					<volume>6</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>HAFFER</surname>
+							<given-names>J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B20">
+				<mixed-citation>HAROLD, A.S. &amp;    R.D. MOOI. 1994. Areas of endemism: definition and recognition criteria. 
+					<bold>Systematic    Biology</bold>
+					<bold>43</bold>: 261-266.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Areas of endemism: definition and recognition criteria</article-title>
+					<source>Systematic Biology</source>
+					<date>
+						<year>1994</year>
+					</date>
+					<fpage>261</fpage>
+					<lpage>266</lpage>
+					<volume>43</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>HAROLD</surname>
+							<given-names>A.S.</given-names>
+						</name>
+						<name>
+							<surname>MOOI</surname>
+							<given-names>R.D.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B21">
+				<mixed-citation>HUBERT, N. &amp;    J-F. RENNO. 2006. Historical biogeography of South American freshwater fishes.    
+					<bold>Journal of Biogeography 33</bold>: 1414-1436.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Historical biogeography of South American freshwater fishes</article-title>
+					<source>Journal of Biogeography</source>
+					<date>
+						<year>2006</year>
+					</date>
+					<fpage>1414</fpage>
+					<lpage>1436</lpage>
+					<volume>33</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>HUBERT</surname>
+							<given-names>N.</given-names>
+						</name>
+						<name>
+							<surname>RENNO</surname>
+							<given-names>J-F.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B22">
+				<mixed-citation>MARINONI, L. &amp;    W.N. MATHIS. 2006. A cladistic analyses of the Neotropical genus 
+					<italic>Sepedonea</italic>    Steyskal (Diptera: Sciomyzidae). 
+					<bold>Zootaxa 1236</bold>: 37-52.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>A cladistic analyses of the Neotropical genus Sepedonea Steyskal (Diptera: Sciomyzidae)</article-title>
+					<source>Zootaxa</source>
+					<date>
+						<year>2006</year>
+					</date>
+					<fpage>37</fpage>
+					<lpage>52</lpage>
+					<volume>1236</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>MARINONI</surname>
+							<given-names>L.</given-names>
+						</name>
+						<name>
+							<surname>MATHIS</surname>
+							<given-names>W.N.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B23">
+				<mixed-citation>MARKS, B.D.; S.J.    HACKETT &amp; A.P. CAPPARELLA. 2002. Historical relationships among Neotropical    lowland forest areas of endemism as determined by mitochondrial DNA sequence    variation within the Wedge-billed Woodcreeper (Aves: Dendrocolaptidae: (
+					<italic>Glyphorynchus    spirurus</italic>). 
+					<bold>Molecular Phy-logenetics and Evolution 24</bold>: 153-167.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Historical relationships among Neotropical lowland forest areas of endemism as determined by mitochondrial DNA sequence variation within the Wedge-billed Woodcreeper (Aves: Dendrocolaptidae: (Glyphorynchus spirurus)</article-title>
+					<source>Molecular Phy-logenetics and Evolution</source>
+					<date>
+						<year>2002</year>
+					</date>
+					<fpage>153</fpage>
+					<lpage>167</lpage>
+					<volume>24</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>MARKS</surname>
+							<given-names>B.D.</given-names>
+						</name>
+						<name>
+							<surname>HACKETT</surname>
+							<given-names>S.J.</given-names>
+						</name>
+						<name>
+							<surname>CAPPARELLA</surname>
+							<given-names>A.P.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B24">
+				<mixed-citation>MORRONE, J.J. 1994.    On the identification of areas of endemism. 
+					<bold>Systematic Biology 43</bold>: 438-441.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>On the identification of areas of endemism</article-title>
+					<source>Systematic Biology</source>
+					<date>
+						<year>1994</year>
+					</date>
+					<fpage>438</fpage>
+					<lpage>441</lpage>
+					<volume>43</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>MORRONE</surname>
+							<given-names>J.J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B25">
+				<mixed-citation>MORRONE, J.J. 2001.    
+					<bold>Biogeografia de América Latina y el Caribe.</bold> Zaragoza, Sociedad    Entomológica Aragoneza, Manuales &amp; Tesis SEA.
+				</mixed-citation>
+				<element-citation publication-type="book">
+					<source>Biogeografia de América Latina y el Caribe</source>
+					<date>
+						<year>2001</year>
+					</date>
+					<person-group person-group-type="author">
+						<name>
+							<surname>MORRONE</surname>
+							<given-names>J.J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B26">
+				<mixed-citation>MORRONE, J.J. 2006.    Biogeographic areas and transition zones of Latin America and the Caribbean    Islands based on Panbiogeographic and Cladistic analysis of the entomofauna.    
+					<bold>Annual Review of Entomology 51</bold>: 467-494.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Biogeographic areas and transition zones of Latin America and the Caribbean Islands based on Panbiogeographic and Cladistic analysis of the entomofauna</article-title>
+					<source>Annual Review of Entomology</source>
+					<date>
+						<year>2006</year>
+					</date>
+					<fpage>467</fpage>
+					<lpage>494</lpage>
+					<volume>51</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>MORRONE</surname>
+							<given-names>J.J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B27">
+				<mixed-citation>MORRONE, J.J. &amp;    M.C. COSCARÓN. 1998. Cladistics and biogeography of the assassin bug    genus 
+					<italic>Rasahus</italic> Amyot &amp; Serville (Hete-roptera: Reduviidae: Peiratiinae).    
+					<bold>Zoologische Mededelingen Leiden 72</bold>: 73-87.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Cladistics and biogeography of the assassin bug genus Rasahus Amyot &amp; Serville (Hete-roptera: Reduviidae: Peiratiinae)</article-title>
+					<source>Zoologische Mededelingen Leiden</source>
+					<date>
+						<year>1998</year>
+					</date>
+					<fpage>73</fpage>
+					<lpage>87</lpage>
+					<volume>72</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>MORRONE</surname>
+							<given-names>J.J.</given-names>
+						</name>
+						<name>
+							<surname>COSCARÓN</surname>
+							<given-names>M.C.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B28">
+				<mixed-citation>NIHEI, S.S. &amp;    C.J.B. DE CARVALHO. 2007. Systematics and biogeography of 
+					<italic>Polietina</italic> Schnabl    &amp; Dziedzicki (Diptera, Muscidae): Neotropical area relationships and Amazonia    as a composite area. 
+					<bold>Systematic Entomology 32</bold>: 477-501.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Systematics and biogeography of Polietina Schnabl &amp; Dziedzicki (Diptera, Muscidae): Neotropical area relationships and Amazonia as a composite area</article-title>
+					<source>Systematic Entomology</source>
+					<date>
+						<year>2007</year>
+					</date>
+					<fpage>477</fpage>
+					<lpage>501</lpage>
+					<volume>32</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>NIHEI</surname>
+							<given-names>S.S.</given-names>
+						</name>
+						<name>
+							<surname>CARVALHO</surname>
+							<given-names>C.J.B. DE</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B29">
+				<mixed-citation>NIXON, K.C. 2002.    
+					<bold>WINCLADA.</bold> Program and documentation distributed by the author.
+				</mixed-citation>
+				<element-citation publication-type="book">
+					<source>WINCLADA</source>
+					<date>
+						<year>2002</year>
+					</date>
+					<person-group person-group-type="author">
+						<name>
+							<surname>NIXON</surname>
+							<given-names>K.C.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B30">
+				<mixed-citation>PATTON, J.L.; M.N.F.    SILVA &amp; J.R. MALCOLM. 1994. Gene genealogy and differentiation among arboreal    spiny rats (Rodentia: Echimyidae) of the Amazon Basin: a test of the riverine    barrier hypothesis. 
+					<bold>Evolution 48</bold>: 1314-1323.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Gene genealogy and differentiation among arboreal spiny rats (Rodentia: Echimyidae) of the Amazon Basin: a test of the riverine barrier hypothesis</article-title>
+					<source>Evolution</source>
+					<date>
+						<year>1994</year>
+					</date>
+					<fpage>1314</fpage>
+					<lpage>1323</lpage>
+					<volume>48</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>PATTON</surname>
+							<given-names>J.L.</given-names>
+						</name>
+						<name>
+							<surname>SILVA</surname>
+							<given-names>M.N.F.</given-names>
+						</name>
+						<name>
+							<surname>MALCOLM</surname>
+							<given-names>J.R.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B31">
+				<mixed-citation>PINTO-DA-ROCHA,    R.; M.B. SILVA &amp; C. BRAGAGNOLO. 2005. Faunistic similarity and historic    biogeography of the harvestmen of southern and southeastern Atlantic rain Forest    of Brazil. 
+					<bold>Journal of Arachnology 33</bold>: 290-299.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Faunistic similarity and historic biogeography of the harvestmen of southern and southeastern Atlantic rain Forest of Brazil</article-title>
+					<source>Journal of Arachnology</source>
+					<date>
+						<year>2005</year>
+					</date>
+					<fpage>290</fpage>
+					<lpage>299</lpage>
+					<volume>33</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>PINTO-DA-ROCHA</surname>
+							<given-names>R.</given-names>
+						</name>
+						<name>
+							<surname>SILVA</surname>
+							<given-names>M.B.</given-names>
+						</name>
+						<name>
+							<surname>BRAGAGNOLO</surname>
+							<given-names>C.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B32">
+				<mixed-citation>PORZECANSKI, A.L.    &amp; J. CRACRAFT. 2005. Cladistic Analysis of distributions and endemism (CADE):    using raw distributions of birds to unravel the biogeography of the South American    aridlands. 
+					<bold>Journal of Biogeography 32</bold>: 261-275.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Cladistic Analysis of distributions and endemism (CADE): using raw distributions of birds to unravel the biogeography of the South American aridlands</article-title>
+					<source>Journal of Biogeography</source>
+					<date>
+						<year>2005</year>
+					</date>
+					<fpage>261</fpage>
+					<lpage>275</lpage>
+					<volume>32</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>PORZECANSKI</surname>
+							<given-names>A.L.</given-names>
+						</name>
+						<name>
+							<surname>CRACRAFT</surname>
+							<given-names>J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B33">
+				<mixed-citation>PRUM, R.O. 1988.    Historical relationships among avian forest areas of endemism in the Neotropics.    
+					<bold>Acta XIX Congressus Internationalis Ornithologici 19</bold>: 2562-2572.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Historical relationships among avian forest areas of endemism in the Neotropics</article-title>
+					<source>Acta XIX Congressus Internationalis Ornithologici</source>
+					<date>
+						<year>1988</year>
+					</date>
+					<fpage>2562</fpage>
+					<lpage>2572</lpage>
+					<volume>19</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>PRUM</surname>
+							<given-names>R.O.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B34">
+				<mixed-citation>QUIJANO-ABRIL,    M.A.; R. CALLEJAS-POSADA &amp; D.R. MIRANDA-ESQUIVEL. 2006. Areas of endemism    and distribution patterns for Neotropical 
+					<italic>Piper</italic> species (Piperaceae).    
+					<bold>Journal of Biogeo-graphy 33</bold>: 1266-1278.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Areas of endemism and distribution patterns for Neotropical Piper species (Piperaceae)</article-title>
+					<source>Journal of Biogeo-graphy</source>
+					<date>
+						<year>2006</year>
+					</date>
+					<fpage>1266</fpage>
+					<lpage>1278</lpage>
+					<volume>33</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>QUIJANO-ABRIL</surname>
+							<given-names>M.A.</given-names>
+						</name>
+						<name>
+							<surname>CALLEJAS-POSADA</surname>
+							<given-names>R.</given-names>
+						</name>
+						<name>
+							<surname>MIRANDA-ESQUIVEL</surname>
+							<given-names>D.R.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B35">
+				<mixed-citation>ROIG-JUÑENT,    S. &amp; S. COSCARÓN. 2001. Biogeographical history of the Neotropical    and Neantarctic Simuliidae (Diptera). 
+					<bold>Revista del Museo Argentino de Ciencias    Naturales 3</bold>: 119-134.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Biogeographical history of the Neotropical and Neantarctic Simuliidae (Diptera)</article-title>
+					<source>Revista del Museo Argentino de Ciencias Naturales</source>
+					<date>
+						<year>2001</year>
+					</date>
+					<fpage>119</fpage>
+					<lpage>134</lpage>
+					<volume>3</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>ROIG-JUÑENT</surname>
+							<given-names>S.</given-names>
+						</name>
+						<name>
+							<surname>COSCARÓN</surname>
+							<given-names>S.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B36">
+				<mixed-citation>RON, S.R. 2000.    Biogeographic area relationships of lowland neotropical rainforest based on    raw distributions of vertebrate groups. 
+					<bold>Biological Journal of the Linnean    Society</bold>
+					<bold>71</bold>: 379-402.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Biogeographic area relationships of lowland neotropical rainforest based on raw distributions of vertebrate groups</article-title>
+					<source>Biological Journal of the Linnean Society</source>
+					<date>
+						<year>2000</year>
+					</date>
+					<fpage>379</fpage>
+					<lpage>402</lpage>
+					<volume>71</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>RON</surname>
+							<given-names>S.R.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B37">
+				<mixed-citation>SANTOS, C.M.D.    &amp; AMORIM, D.S. 2007. Why biogeographical hypotheses need a well supported    phylogenetic framework: A conceptual evaluation. 
+					<bold>Papéis Avulsos de    Zoologia 47</bold>: 63-73.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Why biogeographical hypotheses need a well supported phylogenetic framework: A conceptual evaluation</article-title>
+					<source>Papéis Avulsos de Zoologia</source>
+					<date>
+						<year>2007</year>
+					</date>
+					<fpage>63</fpage>
+					<lpage>73</lpage>
+					<volume>47</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>SANTOS</surname>
+							<given-names>C.M.D.</given-names>
+						</name>
+						<name>
+							<surname>AMORIM</surname>
+							<given-names>D.S.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B38">
+				<mixed-citation>SIGRIST, M.S. &amp;    C.J.B. DE CARVALHO. 2009. Historical relationships among areas of endemism in    the tropical South America using Brooks Parsimony Analysis (BPA). 
+					<bold>Biota Neotropica    9</bold>: 1-12.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Historical relationships among areas of endemism in the tropical South America using Brooks Parsimony Analysis (BPA)</article-title>
+					<source>Biota Neotropica</source>
+					<date>
+						<year>2009</year>
+					</date>
+					<fpage>1</fpage>
+					<lpage>12</lpage>
+					<volume>9</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>SIGRIST</surname>
+							<given-names>M.S.</given-names>
+						</name>
+						<name>
+							<surname>CARVALHO</surname>
+							<given-names>C.J.B. DE</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B39">
+				<mixed-citation>SILVA, J.M.C. &amp;    D.C. OREN. 1996. Application of the parsimony analysis of endemicity in Amazonian    biogeography: an example with primates. 
+					<bold>Biological Journal of the Linnean    Society 59</bold>: 427-437.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Application of the parsimony analysis of endemicity in Amazonian biogeography: an example with primates</article-title>
+					<source>Biological Journal of the Linnean Society</source>
+					<date>
+						<year>1996</year>
+					</date>
+					<fpage>427</fpage>
+					<lpage>437</lpage>
+					<volume>59</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>SILVA</surname>
+							<given-names>J.M.C.</given-names>
+						</name>
+						<name>
+							<surname>OREN</surname>
+							<given-names>D.C.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B40">
+				<mixed-citation>SILVA, J.M.C.;    M.C. SOUSA &amp; C.H.M. CASTELLETTI. 2004. Areas of endemism for passerine birds    in the Atlantic forest, South America. 
+					<bold>Global Ecology and Biogeography 13</bold>:    85-92.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>Areas of endemism for passerine birds in the Atlantic forest, South America</article-title>
+					<source>Global Ecology and Biogeography</source>
+					<date>
+						<year>2004</year>
+					</date>
+					<fpage>85</fpage>
+					<lpage>92</lpage>
+					<volume>13</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>SILVA</surname>
+							<given-names>J.M.C.</given-names>
+						</name>
+						<name>
+							<surname>SOUSA</surname>
+							<given-names>M.C.</given-names>
+						</name>
+						<name>
+							<surname>CASTELLETTI</surname>
+							<given-names>C.H.M.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+			<ref id="B41">
+				<mixed-citation>with two new genera.    
+					<bold>Entomological News 84</bold>: 143-146.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<source>Entomological News</source>
+					<fpage>143</fpage>
+					<lpage>146</lpage>
+					<volume>84</volume>
+				</element-citation>
+			</ref>
+			<ref id="B42">
+				<mixed-citation>VAN VELLER, M.G.P.    &amp; D.J. BROOKS. 2001. When simplicity is not parsimonious: a priori and a    posteriori methods in historical biogeography. 
+					<bold>Journal of Biogeography 28</bold>:    1-11.
+				</mixed-citation>
+				<element-citation publication-type="journal">
+					<article-title>When simplicity is not parsimonious: a priori and a posteriori methods in historical biogeography</article-title>
+					<source>Journal of Biogeography</source>
+					<date>
+						<year>2001</year>
+					</date>
+					<fpage>1</fpage>
+					<lpage>11</lpage>
+					<volume>28</volume>
+					<person-group person-group-type="author">
+						<name>
+							<surname>VAN VELLER</surname>
+							<given-names>M.G.P.</given-names>
+						</name>
+						<name>
+							<surname>BROOKS</surname>
+							<given-names>D.J.</given-names>
+						</name>
+					</person-group>
+				</element-citation>
+			</ref>
+		</ref-list>
+		<fn-group>
+			<fn id="corresp" fn-type="corresp">
+				<p>* Corresponding author.</p>
+			</fn>
+		</fn-group>
+		<app-group>
+			<app>
+				<label>Appendix 1</label>
+				<graphic xlink:href="/img/revistas/zool/v27n5/03a01.jpg"/>
+			</app>
+			<app>
+				<label>Appendix 2</label>
+				<graphic xlink:href="/img/revistas/zool/v27n5/03a02.jpg"/>
+			</app>
+		</app-group>
+	</back>
+</article>
