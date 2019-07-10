@@ -134,7 +134,6 @@ class HTML2SPSPipeline(object):
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.RemoveCommentPipe(),
-            self.FixLesserThanGraterThanPipe(),
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
@@ -983,7 +982,7 @@ class HTML2SPSPipeline(object):
             logger.info("Total de %s 'comentarios' processadas", len(comments))
             return data
 
-    class FixLesserThanGraterThanPipe(plumber.Pipe):
+    class HTMLEscapingPipe(plumber.Pipe):
         def parser_node(self, node):
             text = node.text
             if text:
@@ -991,7 +990,6 @@ class HTML2SPSPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-
             _process(xml, "*", self.parser_node)
             return data
 

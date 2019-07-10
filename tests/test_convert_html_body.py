@@ -1910,30 +1910,58 @@ class TestFixBodyChildrenPipe(unittest.TestCase):
 
 
 class Test_HTML2SPSPipeline(unittest.TestCase):
- 
+
     def test_pipeline(self):
         text = """<root>
+        <p>&#60;</p>
+        <p> a &lt; b</p>
             <p>La nueva época de la revista
             <italic>Salud Pública de México </italic>
             </p></root>"""
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        _text, xml = pipeline.deploy(text)
+        xml = etree.fromstring(text)
+        text, xml = pipeline.SetupPipe(pipeline).transform(text)
+        text, xml = pipeline.SaveRawBodyPipe(pipeline).transform((text, xml))
+        text, xml = pipeline.DeprecatedHTMLTagsPipe().transform((text, xml))
+        text, xml = pipeline.RemoveImgSetaPipe().transform((text, xml))
+        text, xml = pipeline.RemoveDuplicatedIdPipe().transform((text, xml))
+        text, xml = pipeline.RemoveExcedingStyleTagsPipe().transform((text, xml))
+        text, xml = pipeline.RemoveEmptyPipe().transform((text, xml))
+        text, xml = pipeline.RemoveStyleAttributesPipe().transform((text, xml))
+        text, xml = pipeline.RemoveCommentPipe().transform((text, xml))
+        text, xml = pipeline.BRPipe().transform((text, xml))
+        text, xml = pipeline.PPipe().transform((text, xml))
+        text, xml = pipeline.DivPipe().transform((text, xml))
+        text, xml = pipeline.LiPipe().transform((text, xml))
+        text, xml = pipeline.OlPipe().transform((text, xml))
+        text, xml = pipeline.UlPipe().transform((text, xml))
+        text, xml = pipeline.DefListPipe().transform((text, xml))
+        text, xml = pipeline.DefItemPipe().transform((text, xml))
+        text, xml = pipeline.IPipe().transform((text, xml))
+        text, xml = pipeline.EmPipe().transform((text, xml))
+        text, xml = pipeline.UPipe().transform((text, xml))
+        text, xml = pipeline.BPipe().transform((text, xml))
+        text, xml = pipeline.StrongPipe().transform((text, xml))
+        text, xml = pipeline.RemoveThumbImgPipe().transform((text, xml))
+        text, xml = pipeline.FixElementAPipe(pipeline).transform((text, xml))
+        text, xml = pipeline.InternalLinkAsAsteriskPipe(pipeline).transform((text, xml))
+        text, xml = pipeline.DocumentPipe(pipeline).transform((text, xml))
+        text, xml = pipeline.AnchorAndInternalLinkPipe(pipeline).transform((text, xml))
+        text, xml = pipeline.AssetsPipe(pipeline).transform((text, xml))
+        text, xml = pipeline.APipe(pipeline).transform((text, xml))
+        text, xml = pipeline.ImgPipe(pipeline).transform((text, xml))
+        text, xml = pipeline.TdCleanPipe().transform((text, xml))
+        text, xml = pipeline.TableCleanPipe().transform((text, xml))
+        text, xml = pipeline.BlockquotePipe().transform((text, xml))
+        text, xml = pipeline.HrPipe().transform((text, xml))
+        text, xml = pipeline.TagsHPipe().transform((text, xml))
+        text, xml = pipeline.DispQuotePipe().transform((text, xml))
+        text, xml = pipeline.GraphicChildrenPipe().transform((text, xml))
+        text, xml = pipeline.FixBodyChildrenPipe().transform((text, xml))
+        text, xml = pipeline.RemovePWhichIsParentOfPPipe().transform((text, xml))
+        text, xml = pipeline.RemoveRefIdPipe().transform((text, xml))
+        text, xml = pipeline.SanitizationPipe().transform((text, xml))
         resultado = etree.tostring(xml, encoding="unicode")
-        print("")
-        print("text", text)
-        print("resultado", resultado)
-        print("época" in resultado)
-        
         self.assertIn("época", resultado)
-
-# class TestFixLesserThanAndGreaterThanPipe(unittest.TestCase):
-
-#     def test_x(self):
-#         texto = """<root><p></p></root>"""
-#         xml = etree.fromstring(texto)
-
-#         xml.find(".//p").text = "x < b"
-#         pl = HTML2SPSPipeline(pid="pid")
-#         text, xml = pl.FixLesserThanGraterThanPipe().transform((texto, xml))
-#         print(etree.tostring(xml))
-#         self.assertIn("x &lt; b", etree.tostring(xml))
+        self.assertIn("&lt;", resultado)
+    
