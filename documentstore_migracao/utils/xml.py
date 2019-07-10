@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def str2objXML(_string):
-    _string = string.normalize_spaces(_string)
+    _string = string.normalize(_string)
     try:
         parser = etree.HTMLParser(remove_blank_text=True, recover=True)
         return etree.fromstring("<body>%s</body>" % (_string), parser=parser)

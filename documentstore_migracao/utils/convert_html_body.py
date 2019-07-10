@@ -6,7 +6,6 @@ import os
 from urllib import request, error
 from copy import deepcopy
 from lxml import etree
-# from xml.sax.saxutils import unescape
 from documentstore_migracao.utils import files
 from documentstore_migracao.utils import xml as utils_xml
 from documentstore_migracao import config

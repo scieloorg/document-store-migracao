@@ -3,6 +3,7 @@
 import os
 import unittest
 from lxml import etree
+from documentstore_migracao.utils.xml import objXML2file
 
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 from documentstore_migracao.utils.convert_html_body import (
@@ -1921,47 +1922,72 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
         xml = etree.fromstring(text)
         text, xml = pipeline.SetupPipe(pipeline).transform(text)
-        text, xml = pipeline.SaveRawBodyPipe(pipeline).transform((text, xml))
-        text, xml = pipeline.DeprecatedHTMLTagsPipe().transform((text, xml))
-        text, xml = pipeline.RemoveImgSetaPipe().transform((text, xml))
-        text, xml = pipeline.RemoveDuplicatedIdPipe().transform((text, xml))
-        text, xml = pipeline.RemoveExcedingStyleTagsPipe().transform((text, xml))
-        text, xml = pipeline.RemoveEmptyPipe().transform((text, xml))
-        text, xml = pipeline.RemoveStyleAttributesPipe().transform((text, xml))
-        text, xml = pipeline.RemoveCommentPipe().transform((text, xml))
-        text, xml = pipeline.BRPipe().transform((text, xml))
-        text, xml = pipeline.PPipe().transform((text, xml))
-        text, xml = pipeline.DivPipe().transform((text, xml))
-        text, xml = pipeline.LiPipe().transform((text, xml))
-        text, xml = pipeline.OlPipe().transform((text, xml))
-        text, xml = pipeline.UlPipe().transform((text, xml))
-        text, xml = pipeline.DefListPipe().transform((text, xml))
-        text, xml = pipeline.DefItemPipe().transform((text, xml))
-        text, xml = pipeline.IPipe().transform((text, xml))
-        text, xml = pipeline.EmPipe().transform((text, xml))
-        text, xml = pipeline.UPipe().transform((text, xml))
-        text, xml = pipeline.BPipe().transform((text, xml))
-        text, xml = pipeline.StrongPipe().transform((text, xml))
-        text, xml = pipeline.RemoveThumbImgPipe().transform((text, xml))
-        text, xml = pipeline.FixElementAPipe(pipeline).transform((text, xml))
-        text, xml = pipeline.InternalLinkAsAsteriskPipe(pipeline).transform((text, xml))
-        text, xml = pipeline.DocumentPipe(pipeline).transform((text, xml))
-        text, xml = pipeline.AnchorAndInternalLinkPipe(pipeline).transform((text, xml))
-        text, xml = pipeline.AssetsPipe(pipeline).transform((text, xml))
-        text, xml = pipeline.APipe(pipeline).transform((text, xml))
-        text, xml = pipeline.ImgPipe(pipeline).transform((text, xml))
-        text, xml = pipeline.TdCleanPipe().transform((text, xml))
-        text, xml = pipeline.TableCleanPipe().transform((text, xml))
-        text, xml = pipeline.BlockquotePipe().transform((text, xml))
-        text, xml = pipeline.HrPipe().transform((text, xml))
-        text, xml = pipeline.TagsHPipe().transform((text, xml))
-        text, xml = pipeline.DispQuotePipe().transform((text, xml))
-        text, xml = pipeline.GraphicChildrenPipe().transform((text, xml))
-        text, xml = pipeline.FixBodyChildrenPipe().transform((text, xml))
-        text, xml = pipeline.RemovePWhichIsParentOfPPipe().transform((text, xml))
-        text, xml = pipeline.RemoveRefIdPipe().transform((text, xml))
-        text, xml = pipeline.SanitizationPipe().transform((text, xml))
-        resultado = etree.tostring(xml, encoding="unicode")
-        self.assertIn("época", resultado)
-        self.assertIn("&lt;", resultado)
-    
+        pipes = (
+            pipeline.SaveRawBodyPipe(pipeline),
+            pipeline.DeprecatedHTMLTagsPipe(),
+            pipeline.RemoveImgSetaPipe(),
+            pipeline.RemoveDuplicatedIdPipe(),
+            pipeline.RemoveExcedingStyleTagsPipe(),
+            pipeline.RemoveEmptyPipe(),
+            pipeline.RemoveStyleAttributesPipe(),
+            pipeline.RemoveCommentPipe(),
+            pipeline.BRPipe(),
+            pipeline.PPipe(),
+            pipeline.DivPipe(),
+            pipeline.LiPipe(),
+            pipeline.OlPipe(),
+            pipeline.UlPipe(),
+            pipeline.DefListPipe(),
+            pipeline.DefItemPipe(),
+            pipeline.IPipe(),
+            pipeline.EmPipe(),
+            pipeline.UPipe(),
+            pipeline.BPipe(),
+            pipeline.StrongPipe(),
+            pipeline.RemoveThumbImgPipe(),
+            pipeline.FixElementAPipe(pipeline),
+            pipeline.InternalLinkAsAsteriskPipe(pipeline),
+            pipeline.DocumentPipe(pipeline),
+            pipeline.AnchorAndInternalLinkPipe(pipeline),
+            pipeline.AssetsPipe(pipeline),
+            pipeline.APipe(pipeline),
+            pipeline.ImgPipe(pipeline),
+            pipeline.TdCleanPipe(),
+            pipeline.TableCleanPipe(),
+            pipeline.BlockquotePipe(),
+            pipeline.HrPipe(),
+            pipeline.TagsHPipe(),
+            pipeline.DispQuotePipe(),
+            pipeline.GraphicChildrenPipe(),
+            pipeline.FixBodyChildrenPipe(),
+            pipeline.RemovePWhichIsParentOfPPipe(),
+            pipeline.RemoveRefIdPipe(),
+            pipeline.SanitizationPipe()
+            )
+        for pipe in pipes:
+            with self.subTest(str(pipe)):
+                text, xml = pipe.transform((text, xml))
+                resultado_unicode = etree.tostring(xml, encoding="unicode")
+                resultado_b = etree.tostring(xml)
+                self.assertIn(b"&#233;poca", resultado_b)
+                self.assertIn("época", resultado_unicode)
+                self.assertIn("&lt;", resultado_unicode)
+
+class TestHTMLEscapingPipe(unittest.TestCase):
+
+    def test_pipe(self):
+        text = """<root>
+        <p>&#60;</p>
+        <p> a &lt; b</p>
+            <p>La nueva época de la revista
+            <italic>Salud Pública de México </italic>
+            </p></root>"""
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        xml = etree.fromstring(text)
+        text, xml = pipeline.SetupPipe(pipeline).transform(text)
+        text, xml = pipeline.HTMLEscapingPipe().transform((text, xml))
+        resultado_unicode = etree.tostring(xml, encoding="unicode")
+        resultado_b = etree.tostring(xml)
+        self.assertIn(b"&#233;poca", resultado_b)
+        self.assertIn("época", resultado_unicode)
+        self.assertIn("&amp;lt;", resultado_unicode)

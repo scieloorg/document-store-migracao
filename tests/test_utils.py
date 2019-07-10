@@ -4,7 +4,7 @@ import tempfile
 from requests.exceptions import HTTPError
 from unittest.mock import patch, MagicMock
 from lxml import etree
-from documentstore_migracao.utils.string import normalize_spaces
+from documentstore_migracao.utils.string import normalize
 from documentstore_migracao.utils import files, xml, request, dicts, string
 
 from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
@@ -93,10 +93,10 @@ class TestUtilsFiles(unittest.TestCase):
 
 
 class TestString(unittest.TestCase):
-    def test_string_normalize_spaces_excludes_exceding_spaces(self):
+    def test_string_normalize_excludes_exceding_spaces(self):
         text = "<a><b>barão  </b>             \t\n<b>serão</b></a>"
         expected_text = "<a><b>barão </b> <b>serão</b></a>"
-        resultado = normalize_spaces(text)
+        resultado = normalize(text)
         self.assertEqual(expected_text, resultado)
 
 
