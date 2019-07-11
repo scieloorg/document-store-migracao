@@ -11,7 +11,9 @@ from documentstore_migracao.utils import xml as utils_xml
 from documentstore_migracao import config
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 
+
 logger = logging.getLogger(__name__)
+
 
 def _remove_element_or_comment(node, remove_inner=False):
     parent = node.getparent()
@@ -131,7 +133,6 @@ class HTML2SPSPipeline(object):
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.RemoveCommentPipe(),
-            self.HTMLEscapingPipe(),
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
@@ -988,7 +989,6 @@ class HTML2SPSPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-
             _process(xml, "*", self.parser_node)
             return data
 

@@ -3,6 +3,7 @@
 import os
 import unittest
 from lxml import etree
+from documentstore_migracao.utils.xml import objXML2file
 
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 from documentstore_migracao.utils.convert_html_body import (
@@ -1907,3 +1908,86 @@ class TestFixBodyChildrenPipe(unittest.TestCase):
         pl = HTML2SPSPipeline(pid="pid")
         text, xml = pl.FixBodyChildrenPipe().transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
+
+
+class Test_HTML2SPSPipeline(unittest.TestCase):
+
+    def test_pipeline(self):
+        text = """<root>
+        <p>&#60;</p>
+        <p> a &lt; b</p>
+            <p>La nueva época de la revista
+            <italic>Salud Pública de México </italic>
+            </p></root>"""
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        xml = etree.fromstring(text)
+        text, xml = pipeline.SetupPipe(pipeline).transform(text)
+        pipes = (
+            pipeline.SaveRawBodyPipe(pipeline),
+            pipeline.DeprecatedHTMLTagsPipe(),
+            pipeline.RemoveImgSetaPipe(),
+            pipeline.RemoveDuplicatedIdPipe(),
+            pipeline.RemoveExcedingStyleTagsPipe(),
+            pipeline.RemoveEmptyPipe(),
+            pipeline.RemoveStyleAttributesPipe(),
+            pipeline.RemoveCommentPipe(),
+            pipeline.BRPipe(),
+            pipeline.PPipe(),
+            pipeline.DivPipe(),
+            pipeline.LiPipe(),
+            pipeline.OlPipe(),
+            pipeline.UlPipe(),
+            pipeline.DefListPipe(),
+            pipeline.DefItemPipe(),
+            pipeline.IPipe(),
+            pipeline.EmPipe(),
+            pipeline.UPipe(),
+            pipeline.BPipe(),
+            pipeline.StrongPipe(),
+            pipeline.RemoveThumbImgPipe(),
+            pipeline.FixElementAPipe(pipeline),
+            pipeline.InternalLinkAsAsteriskPipe(pipeline),
+            pipeline.DocumentPipe(pipeline),
+            pipeline.AnchorAndInternalLinkPipe(pipeline),
+            pipeline.AssetsPipe(pipeline),
+            pipeline.APipe(pipeline),
+            pipeline.ImgPipe(pipeline),
+            pipeline.TdCleanPipe(),
+            pipeline.TableCleanPipe(),
+            pipeline.BlockquotePipe(),
+            pipeline.HrPipe(),
+            pipeline.TagsHPipe(),
+            pipeline.DispQuotePipe(),
+            pipeline.GraphicChildrenPipe(),
+            pipeline.FixBodyChildrenPipe(),
+            pipeline.RemovePWhichIsParentOfPPipe(),
+            pipeline.RemoveRefIdPipe(),
+            pipeline.SanitizationPipe()
+            )
+        for pipe in pipes:
+            with self.subTest(str(pipe)):
+                text, xml = pipe.transform((text, xml))
+                resultado_unicode = etree.tostring(xml, encoding="unicode")
+                resultado_b = etree.tostring(xml)
+                self.assertIn(b"&#233;poca", resultado_b)
+                self.assertIn("época", resultado_unicode)
+                self.assertIn("&lt;", resultado_unicode)
+
+class TestHTMLEscapingPipe(unittest.TestCase):
+
+    def test_pipe(self):
+        text = """<root>
+        <p>&#60;</p>
+        <p> a &lt; b</p>
+            <p>La nueva época de la revista
+            <italic>Salud Pública de México </italic>
+            </p></root>"""
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        xml = etree.fromstring(text)
+        text, xml = pipeline.SetupPipe(pipeline).transform(text)
+        text, xml = pipeline.HTMLEscapingPipe().transform((text, xml))
+        resultado_unicode = etree.tostring(xml, encoding="unicode")
+        resultado_b = etree.tostring(xml)
+        self.assertIn(b"&#233;poca", resultado_b)
+        self.assertIn("época", resultado_unicode)
+        self.assertIn("&amp;lt;", resultado_unicode)

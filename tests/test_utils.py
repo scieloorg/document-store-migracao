@@ -4,7 +4,7 @@ import tempfile
 from requests.exceptions import HTTPError
 from unittest.mock import patch, MagicMock
 from lxml import etree
-
+from documentstore_migracao.utils.string import normalize
 from documentstore_migracao.utils import files, xml, request, dicts, string
 
 from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
@@ -12,7 +12,6 @@ from . import SAMPLES_PATH, COUNT_SAMPLES_FILES
 
 class TestUtilsFiles(unittest.TestCase):
     def test_extract_filename_ext_by_path(self):
-
         filename, extension = files.extract_filename_ext_by_path(
             "xml/conversion/S0044-59672014000400003/S0044-59672014000400003.pt.xml"
         )
@@ -90,17 +89,22 @@ class TestUtilsFiles(unittest.TestCase):
 
     def test_sha1(self):
         str_hash = files.sha1(os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml"))
-
         self.assertEqual("efaa1e0fc26b5b5266be343526434a67c8aca530", str_hash)
+
+
+class TestString(unittest.TestCase):
+    def test_string_normalize_excludes_exceding_spaces(self):
+        text = "<a><b>barão  </b>             \t\n<b>serão</b></a>"
+        expected_text = "<a><b>barão </b> <b>serão</b></a>"
+        resultado = normalize(text)
+        self.assertEqual(expected_text, resultado)
 
 
 class TestUtilsXML(unittest.TestCase):
     def test_str2objXML(self):
-
-        expected_text = "<a><b>bar</b></a>"
+        expected_text = "<a><b>barão</b></a>"
         obj = xml.str2objXML(expected_text)
-
-        self.assertIn(expected_text, str(etree.tostring(obj)))
+        self.assertIn(expected_text, etree.tostring(obj, encoding="unicode"))
 
     def test_file2objXML(self):
         file_path = os.path.join(SAMPLES_PATH, "any.xml")
@@ -119,7 +123,6 @@ class TestUtilsXML(unittest.TestCase):
             xml.file2objXML(file_path)
 
     def test_objXML2file(self):
-
         xml_obj = etree.fromstring(
             """<root>
                 <p>TEXTO é ç á à è</p>
@@ -127,11 +130,9 @@ class TestUtilsXML(unittest.TestCase):
         )
         test_dir = tempfile.mkdtemp()
         file_name = os.path.join(test_dir, "test.xml")
-
         xml.objXML2file(file_name, xml_obj)
         with open(file_name) as f:
             text = f.read()
-
             self.assertIn("<?xml version='1.0' encoding='utf-8'?>", text)
             self.assertIn("é ç á à è", text)
 
@@ -169,10 +170,3 @@ class TestUtilsDicts(unittest.TestCase):
     def test_grouper(self):
         result = dicts.grouper(3, "abcdefg", "x")
         self.assertEqual(list(result)[0], ("a", "b", "c"))
-
-
-class TestUtilsStrings(unittest.TestCase):
-    def test_remove_spaces(self):
-        self.assertEqual(
-            string.remove_spaces("MUITO    ESPACO   PALAVRA"), "MUITO ESPACO PALAVRA"
-        )
