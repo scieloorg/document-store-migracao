@@ -59,7 +59,14 @@ def download_asset(old_path, new_fname, dest_path):
     if old_path.startswith("http"):
         location = old_path
     else:
-        location = urljoin(config.get("STATIC_URL_FILE"), old_path)
+        try:
+            location = urljoin(config.get("STATIC_URL_FILE"), old_path)
+        except ValueError as exc:
+            return 'cannot join URL parts "%s" and "%s": %s' % (
+                config.get("STATIC_URL_FILE"),
+                old_path,
+                exc,
+            )
     try:
         request_file = request.get(location, timeout=int(config.get("TIMEOUT") or 10))
     except request.HTTPGetError as e:

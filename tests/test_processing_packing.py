@@ -167,6 +167,14 @@ class TestProcessingPackingDownloadAsset(unittest.TestCase):
         error = packing.download_asset(old_path, new_fname, dest_path)
         self.assertIsNotNone(error)
 
+    def test_invalid_relative_URL_returns_error(self):
+        """
+        Testa correção do bug:
+        https://github.com/scieloorg/document-store-migracao/issues/158
+        """
+        error = packing.download_asset("//www. [ <a href=", "novo", TEMP_TEST_PATH)
+        self.assertTrue(error.startswith("cannot join URL parts"))
+
 
 class TestProcessingpack_PackingAssets(unittest.TestCase):
     def setUp(self):
