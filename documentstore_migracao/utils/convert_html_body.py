@@ -1096,7 +1096,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.RemoveThumbImgPipe(),
-            self.FixElementAPipe(super_obj=html_pipeline),
+            self.AddNameAndIdToElementAPipe(super_obj=html_pipeline),
             self.InternalLinkAsAsteriskPipe(super_obj=html_pipeline),
             self.DocumentPipe(super_obj=html_pipeline),
             self.AnchorAndInternalLinkPipe(super_obj=html_pipeline),
@@ -1320,7 +1320,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "img", self.parser_node)
             return data
 
-    class FixElementAPipe(CustomPipe):
+    class AddNameAndIdToElementAPipe(CustomPipe):
         def parser_node(self, node):
             _id = node.attrib.get("id")
             _name = node.attrib.get("name")
