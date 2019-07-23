@@ -8,7 +8,7 @@ from documentstore_migracao.utils.xml import objXML2file
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 from documentstore_migracao.utils.convert_html_body import (
     HTML2SPSPipeline,
-    AssetsPipeline,
+    ConvertElementsWhichHaveIdPipeline,
     Document,
     _process,
     _remove_element_or_comment,
@@ -234,8 +234,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
     def test_pipe_remove_empty_p(self):
-        text = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p> <p/> </root>"
-        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p></root>"
+        text = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p> <p/> </root>"
+        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p></root>"
         raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
@@ -244,8 +244,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
     def test_pipe_remove_empty_bold(self):
-        text = "<root><p>Colonização micorrízica e concentração de nutrientes <bold> </bold> em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
-        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
+        text = "<root><p>Colonização micorrízica e concentração de nutrientes <bold> </bold> em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
+        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
         raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
 
         resultado = etree.tostring(transformed, encoding="unicode")
@@ -1413,7 +1413,7 @@ class TestRemoveElementOrComment(unittest.TestCase):
 class TestAddAssetInfoToTablePipe(unittest.TestCase):
     def setUp(self):
         self.html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        self.pipeline = AssetsPipeline(self.html_pl)
+        self.pipeline = ConvertElementsWhichHaveIdPipeline(self.html_pl)
 
     def test_pipe_table(self):
         text = """<root><table id="B1"><tr><td>Texto</td></tr></table></root>"""
@@ -1429,7 +1429,7 @@ class TestAddAssetInfoToTablePipe(unittest.TestCase):
 
 class TestCreateAssetElementsFromImgOrTableElementsPipe(unittest.TestCase):
     def setUp(self):
-        pipeline = AssetsPipeline(HTML2SPSPipeline(pid="S1234-56782018000100011"))
+        pipeline = ConvertElementsWhichHaveIdPipeline(HTML2SPSPipeline(pid="S1234-56782018000100011"))
         self.pipe = pipeline.CreateAssetElementsFromImgOrTableElementsPipe(pipeline)
 
     def _transform(self, text):
@@ -1625,7 +1625,7 @@ class TestCreateAssetElementsFromImgOrTableElementsPipe(unittest.TestCase):
 class TestCreateAssetElementsFromExternalLinkElementsPipe(unittest.TestCase):
     def setUp(self):
         html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        self.pipeline = AssetsPipeline(html_pl)
+        self.pipeline = ConvertElementsWhichHaveIdPipeline(html_pl)
         self.pipe = self.pipeline.CreateAssetElementsFromExternalLinkElementsPipe(
             html_pl
         )
@@ -1670,10 +1670,10 @@ class TestCreateAssetElementsFromExternalLinkElementsPipe(unittest.TestCase):
         self.assertIsNone(xml.find(".//fig/a"))
 
 
-class TestAssetsPipeline(unittest.TestCase):
+class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
     def test_transform_two_internal_link_img_aname(self):
         text = """<root>
-        <p>Para uma avalição mais precisa das formulações semi-discretas,
+        <p>Para uma avalição mais precisa das formulações semi-discretas,
         calculamos os logaritmos dos erros considerando malhas na
         <a href="#tab02">Tabela 2</a>. </p>
         <p><a name="tab02" id="tab02"/></p>
@@ -1684,7 +1684,7 @@ class TestAssetsPipeline(unittest.TestCase):
         raw = text
         xml = etree.fromstring(text)
         pl_html = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        pl_asset = AssetsPipeline(pl_html)
+        pl_asset = ConvertElementsWhichHaveIdPipeline(pl_html)
 
         raw, xml = pl_html.DocumentPipe(pl_html).transform((raw, xml))
         print(etree.tostring(xml))
@@ -1695,7 +1695,7 @@ class TestAssetsPipeline(unittest.TestCase):
         self.assertEqual(len(xml.findall(".//xref[@ref-type='table']")), 2)
         self.assertIsNone(xml.find(".//table-wrap[@id]/img"))
 
-        raw, xml = pl_html.AssetsPipe(pl_html).transform((raw, xml))
+        raw, xml = pl_html.ConvertElementsWhichHaveIdPipe(pl_html).transform((raw, xml))
         self.assertIsNotNone(xml.find(".//table-wrap[@id]/img"))
         self.assertIsNotNone(xml.find(".//table-wrap[@id]/label"))
         self.assertIsNone(xml.find(".//table-wrap[@id]/caption"))
@@ -1731,7 +1731,7 @@ class TestConversionToAnnex(unittest.TestCase):
         <p><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
         </root>""",
         )
-        assetpl = AssetsPipeline(htmlpl)
+        assetpl = ConvertElementsWhichHaveIdPipeline(htmlpl)
         text, xml = assetpl.CreateAssetElementsFromExternalLinkElementsPipe(
             htmlpl
         ).transform((text, xml))
@@ -1772,7 +1772,7 @@ class TestConversionToTableWrap(unittest.TestCase):
         text, xml = html_pl.DocumentPipe(html_pl).transform((text, xml))
         text, xml = html_pl.AnchorAndInternalLinkPipe(html_pl).transform((text, xml))
 
-        asset_pl = AssetsPipeline(html_pl)
+        asset_pl = ConvertElementsWhichHaveIdPipeline(html_pl)
         text, xml = asset_pl.CreateAssetElementsFromImgOrTableElementsPipe(
             asset_pl
         ).transform((text, xml))
@@ -1855,7 +1855,7 @@ class TestConversionToFig(unittest.TestCase):
         self.assertIn(b'<xref ref-type="fig" rid="fig01en">Figure 1</xref>', _xml)
         self.assertIn(b'<fig id="fig01en"/>', _xml)
 
-        apl = AssetsPipeline(pl)
+        apl = ConvertElementsWhichHaveIdPipeline(pl)
         text, xml = apl.CreateAssetElementsFromImgOrTableElementsPipe(apl).transform(
             (text, xml)
         )
@@ -1873,7 +1873,7 @@ class TestRemoveThumbImg(unittest.TestCase):
 
         xml = etree.fromstring(text)
         pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        apl = AssetsPipeline(pl)
+        apl = ConvertElementsWhichHaveIdPipeline(pl)
 
         text, xml = pl.RemoveThumbImgPipe().transform((text, xml))
         self.assertNotIn(
@@ -1949,7 +1949,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.InternalLinkAsAsteriskPipe(pipeline),
             pipeline.DocumentPipe(pipeline),
             pipeline.AnchorAndInternalLinkPipe(pipeline),
-            pipeline.AssetsPipe(pipeline),
+            pipeline.ConvertElementsWhichHaveIdPipe(pipeline),
             pipeline.APipe(pipeline),
             pipeline.ImgPipe(pipeline),
             pipeline.TdCleanPipe(),
