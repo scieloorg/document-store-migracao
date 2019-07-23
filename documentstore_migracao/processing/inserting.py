@@ -77,10 +77,7 @@ def get_document_renditions(
 
 
 def get_document_assets_path(
-    xml: lxml.etree,
-    folder_files: list,
-    folder: str,
-    prefered_types=[".tif"]
+    xml: lxml.etree, folder_files: list, folder: str, prefered_types=[".tif"]
 ) -> Tuple[dict, dict]:
     """Retorna a lista de assets e seus respectivos paths no
     filesystem. Também retorna um dicionário com `arquivos adicionais`
@@ -198,11 +195,15 @@ def register_document(folder: str, session_db, storage) -> None:
 
 
 def get_documents_bundle(session_db, data):
-    issns = list(set([
-        data[issn_type]
-        for issn_type in ("eissn", "pissn", "issn")
-        if data.get(issn_type)
-    ]))
+    issns = list(
+        set(
+            [
+                data[issn_type]
+                for issn_type in ("eissn", "pissn", "issn")
+                if data.get(issn_type)
+            ]
+        )
+    )
     is_issue = data.get("volume") or data.get("number")
     bad_bundle_id = []
     for issn in issns:
@@ -249,21 +250,11 @@ def create_aop_bundle(session_db, issn):
     )
     session_db.documents_bundles.add(data=manifest_data)
     session_db.changes.add(
-        {
-            "timestamp": utcnow(),
-            "entity": "DocumentsBundle",
-            "id": bundle_id,
-        }
+        {"timestamp": utcnow(), "entity": "DocumentsBundle", "id": bundle_id}
     )
     _journal.ahead_of_print_bundle = bundle_id
     session_db.journals.update(_journal)
-    session_db.changes.add(
-        {
-            "timestamp": utcnow(),
-            "entity": "journal",
-            "id": issn,
-        }
-    )
+    session_db.changes.add({"timestamp": utcnow(), "entity": "Journal", "id": issn})
     return session_db.documents_bundles.fetch(bundle_id)
 
 

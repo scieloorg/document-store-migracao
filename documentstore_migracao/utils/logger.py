@@ -38,6 +38,7 @@ def configure_logger():
                 "documentstore_migracao.export.sps_package": SUB_DICT_CONFIG,
                 "documentstore_migracao.utils.convert_html_body": SUB_DICT_CONFIG,
                 "documentstore_migracao.processing.packing": SUB_DICT_CONFIG,
+                "documentstore_migracao.processing.conversion": SUB_DICT_CONFIG,
             },
             "root": {"level": "DEBUG", "handlers": ["console", "file"]},
         }
