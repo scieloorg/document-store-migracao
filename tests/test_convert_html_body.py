@@ -2015,3 +2015,13 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         xml = etree.fromstring(text)
         text, xml = self.pl.FixElementAPipe(self.pl).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
+
+    def test_pipe_asterisk_in_a_href(self):
+        text = '<root><a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>'
+        expected = b'<root><a name="1a" id="1a"/><sup>*</sup></root>'
+        xml = etree.fromstring(text)
+
+        text, xml = self.pl.InternalLinkAsAsteriskPipe(
+            super_obj=self.pl
+        ).transform((text, xml))
+        self.assertEqual(etree.tostring(xml), expected)
