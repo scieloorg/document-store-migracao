@@ -1196,7 +1196,7 @@ class TestConversionToAnnex(unittest.TestCase):
         xml = etree.fromstring(text)
         htmlpl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = ConvertElementsWhichHaveIdPipeline(htmlpl)
-        text, xml = pl.DocumentPipe(htmlpl).transform((text, xml))
+        text, xml = pl.DeduceAndSuggestConversionPipe(htmlpl).transform((text, xml))
         self.assertEqual(
             etree.tostring(xml),
             b"""<root>
@@ -1294,7 +1294,7 @@ class TestConversionToCorresp(unittest.TestCase):
             etree.tostring(xml), expected_after_internal_link_as_asterisk_pipe
         )
 
-        text, xml = pl.DocumentPipe(html_pl).transform((text, xml))
+        text, xml = pl.DeduceAndSuggestConversionPipe(html_pl).transform((text, xml))
         self.assertIn(
             b'<a name="back" id="back" xml_tag="corresp" xml_reftype="corresp" xml_id="back"/>',
             etree.tostring(xml),
@@ -1324,7 +1324,7 @@ class TestConversionToFig(unittest.TestCase):
         pl = ConvertElementsWhichHaveIdPipeline(html_pl)
 
         text, xml = pl.AddNameAndIdToElementAPipe(html_pl).transform((text, xml))
-        text, xml = pl.DocumentPipe(html_pl).transform((text, xml))
+        text, xml = pl.DeduceAndSuggestConversionPipe(html_pl).transform((text, xml))
         _xml = etree.tostring(xml)
         self.assertIn(
             b'<a href="#fig01en" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1">Figure 1</a>',
@@ -1517,7 +1517,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
 
         raw, transformed = text, etree.fromstring(text)
 
-        raw, transformed = self.pl.DocumentPipe(self.html_pl).transform(
+        raw, transformed = self.pl.DeduceAndSuggestConversionPipe(self.html_pl).transform(
             (raw, transformed)
         )
         raw, transformed = self.pl.AnchorAndInternalLinkPipe(
@@ -1537,7 +1537,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         expected = b'<root><fn id="fn1"><label>*</label><p>texto</p></fn></root>'
         xml = etree.fromstring(text)
 
-        text, xml = self.pl.DocumentPipe(self.html_pl).transform(
+        text, xml = self.pl.DeduceAndSuggestConversionPipe(self.html_pl).transform(
             (text, xml)
         )
         text, xml = self.pl.AnchorAndInternalLinkPipe(
@@ -1567,11 +1567,11 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.assertEqual(etree.tostring(transformed), b"<root/>")
 
 
-class TestDocumentPipe(unittest.TestCase):
+class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def setUp(self):
         pipeline = HTML2SPSPipeline("PID")
         pl = ConvertElementsWhichHaveIdPipeline(pipeline)
-        self.pipe = pl.DocumentPipe(pipeline)
+        self.pipe = pl.DeduceAndSuggestConversionPipe(pipeline)
         self.inferer = Inferer()
         self.text = """
         <root>

@@ -1098,7 +1098,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveThumbImgPipe(),
             self.AddNameAndIdToElementAPipe(super_obj=html_pipeline),
             self.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(super_obj=html_pipeline),
-            self.DocumentPipe(super_obj=html_pipeline),
+            self.DeduceAndSuggestConversionPipe(super_obj=html_pipeline),
             self.AnchorAndInternalLinkPipe(super_obj=html_pipeline),
             self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
             self.CreateAssetElementsFromExternalLinkElementsPipe(
@@ -1368,12 +1368,25 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "a[@href]", self.parser_node)
             return data
 
-    class DocumentPipe(CustomPipe):
+    class DeduceAndSuggestConversionPipe(CustomPipe):
+        """Este pipe analisa os dados doss elementos a[@href] e a[@name],
+        deduz e sugere tag, id, ref-type para a conversão de elementos,
+        adicionando aos elementos a, os atributos: @xml_tag, @xml_id,
+        @xml_reftype, @xml_label.
+        Por exemplo:
+        - a[@href] pode ser convertido para link para um
+        ativo digital, pode ser link para uma nota de rodapé, ...
+        - a[@name] pode ser convertido para a fig, table-wrap,
+        disp-formula, fn, app etc
+        Nota: este pipe não executa a conversão.
+        """
         inferer = Inferer()
 
         def _update(self, node, elem_name, ref_type, new_id, text=None):
             node.set("xml_tag", elem_name)
             node.set("xml_reftype", ref_type)
+            if new_id.startswith("replace_by_reftype") and ref_type:
+                new_id = new_id.replace("replace_by_reftype", ref_type)
             node.set("xml_id", new_id)
             if text:
                 node.set("xml_label", text)
@@ -1468,7 +1481,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     return asset_node
             found = search_asset_node_backwards(img, "xml_tag")
             if found is not None and found.attrib.get("name"):
-                return found
+                if found.attrib.get("xml_tag") in ["app", "fig", "table-wrap", "disp-formula"]:
+                    return found
 
         def _add_xml_attribs_to_img(self, images):
             for path, images in images.items():
@@ -1477,7 +1491,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if tag_reftype_id:
                     tag, reftype, _id = tag_reftype_id
                     new_id = gera_id(_id, self.super_obj.index_body)
-
                 for img in images:
                     found = self._search_asset_node_related_to_img(new_id, img)
                     if found is not None:
