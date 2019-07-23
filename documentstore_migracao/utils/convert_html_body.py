@@ -1097,7 +1097,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.SetupPipe(),
             self.RemoveThumbImgPipe(),
             self.AddNameAndIdToElementAPipe(super_obj=html_pipeline),
-            self.InternalLinkAsAsteriskPipe(super_obj=html_pipeline),
+            self.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(super_obj=html_pipeline),
             self.DocumentPipe(super_obj=html_pipeline),
             self.AnchorAndInternalLinkPipe(super_obj=html_pipeline),
             self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
@@ -1321,6 +1321,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
     class AddNameAndIdToElementAPipe(CustomPipe):
+        """Garante que todos os elemento a[@name] e a[@id] tenham @name e @id"""
         def parser_node(self, node):
             _id = node.attrib.get("id")
             _name = node.attrib.get("name")
@@ -1344,12 +1345,22 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "a[@name]", self.parser_node)
             return data
 
-    class InternalLinkAsAsteriskPipe(CustomPipe):
+    class RemoveInternalLinksToTextIdentifiedByAsteriskPipe(CustomPipe):
+        """
+        Ao encontrar ```<a href="#tx">*</a>```, remove a tag e atributos,
+        deixando apenas *. Também localiza a referência cruzada correspondente,
+        por exemplo, ```<a name="tx">*</a>``` para remover também.
+        """
         def parser_node(self, node):
             href = node.attrib.get("href")
-            if href.startswith("#"):
-                texts = get_node_text(node)
-                if texts and texts[0] == "*":
+            texts = get_node_text(node)
+            if href.startswith("#") and texts and texts[0] == "*":
+                previous = node.getprevious()
+                if previous is not None and previous.tag == "a":
+                    root = node.getroottree()
+                    related = root.find(".//*[@name='{}']".format(href[1:]))
+                    if related is not None:
+                        _remove_element_or_comment(related)
                     _remove_element_or_comment(node)
 
         def transform(self, data):
