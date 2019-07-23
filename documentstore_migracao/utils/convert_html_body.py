@@ -1696,6 +1696,24 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "table[@xml_id]", self.parser_node)
             return data
 
+    class RemoveThumbImgPipe(plumber.Pipe):
+        def parser_node(self, node):
+            path = node.attrib.get("src") or ""
+            if "thumb" in path:
+                parent = node.getparent()
+                _remove_element_or_comment(node, True)
+                if parent.tag == "a" and parent.attrib.get("href"):
+                    for child in parent.getchildren():
+                        _remove_element_or_comment(child, True)
+                    parent.tag = "img"
+                    parent.set("src", parent.attrib.pop("href"))
+                    parent.text = ""
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "img", self.parser_node)
+            return data
+
 
 class AssetInHTMLPage:
     def __init__(self, local=None, remote=None, content=None):

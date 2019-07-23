@@ -1991,3 +1991,20 @@ class TestHTMLEscapingPipe(unittest.TestCase):
         self.assertIn(b"&#233;poca", resultado_b)
         self.assertIn("época", resultado_unicode)
         self.assertIn("&amp;lt;", resultado_unicode)
+
+
+class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
+    def setUp(self):
+        self.html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        self.apl = ConvertElementsWhichHaveIdPipeline(self.html_pl)
+
+    def test_remove_thumb_img_pipe(self):
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg"><img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/><br/> Clique para ampliar</a></p></root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><img src="/img/revistas/hoehnea/v37n3/a05img01.jpg"></img></p></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.apl.RemoveThumbImgPipe().transform((text, xml))
+        self.assertNotIn(
+            b'<img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/>',
+            etree.tostring(xml),
+        )
+        self.assertEqual(etree.tostring(xml), expected)
