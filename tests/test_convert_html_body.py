@@ -1876,7 +1876,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         text = """<root><a name="_ftnref19" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
         expected = b"""<root><a name="_ftnref19" id="_ftnref19"/><a href="#_ftn2"><sup>1</sup></a></root>"""
         xml = etree.fromstring(text)
-        text, xml = self.pl.FixElementAPipe(self.pl).transform((text, xml))
+        text, xml = self.pl.FixElementAPipe(self.html_pl).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
     def test_pipe_asterisk_in_a_href(self):
@@ -1884,10 +1884,26 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         expected = b'<root><a name="1a" id="1a"/><sup>*</sup></root>'
         xml = etree.fromstring(text)
 
-        text, xml = self.pl.InternalLinkAsAsteriskPipe(
-            super_obj=self.pl
-        ).transform((text, xml))
+        text, xml = self.pl.InternalLinkAsAsteriskPipe(self.html_pl
+            ).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
+
+    def test_anchor_and_internal_link_pipe(self):
+        text = b"""<root>
+            <a href="#anx01" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1">Anexo 1</a>
+            <p><a name="anx01" id="anx01" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
+            <p><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
+            </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pl.AnchorAndInternalLinkPipe(self.html_pl).transform((text, xml))
+        self.assertEqual(
+            etree.tostring(xml),
+            b"""<root>
+            <xref ref-type="app" rid="anx01">Anexo 1</xref>
+            <p><app id="anx01"/></p>
+            <p><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
+            </root>"""
+        )
 
 
 class TestDocumentPipe(unittest.TestCase):
