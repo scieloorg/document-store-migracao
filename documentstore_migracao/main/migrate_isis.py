@@ -38,10 +38,6 @@ def migrate_isis_parser(sargs):
         help="Generate JSON file of journals' ids and their issues linked by ISSN",
     )
     link_parser.add_argument(
-        "journals",
-        help="JSON file path that contains mst extraction result, e.g: ~/json/collection-title.json",
-    )
-    link_parser.add_argument(
         "issues",
         help="JSON file path that contains mst extraction result, e.g: ~/json/collection-issues.json",
     )
@@ -65,8 +61,6 @@ def migrate_isis_parser(sargs):
                 args.import_file, session=Session()
             )
     elif args.command == "link":
-        pipeline.link_documents_bundles_with_journals(
-            args.journals, args.issues, args.output
-        )
+        pipeline.link_documents_bundles_with_journals(args.issues, args.output)
     else:
         parser.print_help()
