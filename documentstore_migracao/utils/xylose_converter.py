@@ -162,7 +162,7 @@ def issue_to_kernel(issue):
     de dados equivalente ao persistido pelo Kernel em um banco
     mongodb"""
 
-    issn_id = get_journal_issn_in_issue(issue)
+    issn_id = issue.data['issue']['v35'][0]['_']
     _creation_date = parse_date(issue.publication_date)
     _metadata = {}
     _bundle = {
