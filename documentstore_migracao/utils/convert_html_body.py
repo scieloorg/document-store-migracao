@@ -151,7 +151,7 @@ class HTML2SPSPipeline(object):
             self.InternalLinkAsAsteriskPipe(super_obj=self),
             self.DocumentPipe(super_obj=self),
             self.AnchorAndInternalLinkPipe(super_obj=self),
-            self.AssetsPipe(super_obj=self),
+            self.ConvertElementsWhichHaveIdPipe(super_obj=self),
             self.APipe(super_obj=self),
             self.ImgPipe(super_obj=self),
             self.TdCleanPipe(),
@@ -1332,11 +1332,11 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[img]", self.parser_node)
             return data
 
-    class AssetsPipe(CustomPipe):
+    class ConvertElementsWhichHaveIdPipe(CustomPipe):
         def transform(self, data):
             raw, xml = data
 
-            convert = AssetsPipeline(html_pipeline=self.super_obj)
+            convert = ConvertElementsWhichHaveIdPipeline(html_pipeline=self.super_obj)
             _, obj = convert.deploy(xml)
             return raw, obj
 
@@ -1491,7 +1491,7 @@ class DataSanitizationPipeline(object):
             return data
 
 
-class AssetsPipeline(object):
+class ConvertElementsWhichHaveIdPipeline(object):
     def __init__(self, html_pipeline):
         # self.super_obj = html_pipeline
         self._ppl = plumber.Pipeline(
