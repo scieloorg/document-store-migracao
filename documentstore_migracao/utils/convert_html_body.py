@@ -1497,6 +1497,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             # self.RemoveThumbImgPipe(),
+            # self.FixElementAPipe(super_obj=self),
+            # self.InternalLinkAsAsteriskPipe(super_obj=self),
             self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
             self.CreateAssetElementsFromExternalLinkElementsPipe(
                 super_obj=html_pipeline
@@ -1739,7 +1741,20 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "a[@name]", self.parser_node)
             return data
 
+    class InternalLinkAsAsteriskPipe(CustomPipe):
+        def parser_node(self, node):
+            href = node.attrib.get("href")
+            if href.startswith("#"):
+                texts = get_node_text(node)
+                if texts and texts[0] == "*":
+                    _remove_element_or_comment(node)
 
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            return data
+
+            
 class AssetInHTMLPage:
     def __init__(self, local=None, remote=None, content=None):
         self.local = local
