@@ -146,11 +146,11 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
-            self.RemoveThumbImgPipe(),
-            self.FixElementAPipe(super_obj=self),
-            self.InternalLinkAsAsteriskPipe(super_obj=self),
-            self.DocumentPipe(super_obj=self),
-            self.AnchorAndInternalLinkPipe(super_obj=self),
+            # self.RemoveThumbImgPipe(),
+            # self.FixElementAPipe(super_obj=self),
+            # self.InternalLinkAsAsteriskPipe(super_obj=self),
+            # self.DocumentPipe(super_obj=self),
+            # self.AnchorAndInternalLinkPipe(super_obj=self),
             self.ConvertElementsWhichHaveIdPipe(super_obj=self),
             self.APipe(super_obj=self),
             self.ImgPipe(super_obj=self),
@@ -1496,11 +1496,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
         # self.super_obj = html_pipeline
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
-            # self.RemoveThumbImgPipe(),
-            # self.FixElementAPipe(super_obj=html_pipeline),
-            # self.InternalLinkAsAsteriskPipe(super_obj=html_pipeline),
-            # self.DocumentPipe(super_obj=html_pipeline)
-            # self.AnchorAndInternalLinkPipe(super_obj=html_pipeline),
+            self.RemoveThumbImgPipe(),
+            self.FixElementAPipe(super_obj=html_pipeline),
+            self.InternalLinkAsAsteriskPipe(super_obj=html_pipeline),
+            self.DocumentPipe(super_obj=html_pipeline),
+            self.AnchorAndInternalLinkPipe(super_obj=html_pipeline),
             self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
             self.CreateAssetElementsFromExternalLinkElementsPipe(
                 super_obj=html_pipeline
@@ -1968,7 +1968,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._remove_a(a_name, a_hrefs)
 
             return data
-            
+
 
 class AssetInHTMLPage:
     def __init__(self, local=None, remote=None, content=None):
