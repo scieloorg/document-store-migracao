@@ -146,7 +146,6 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
-            # self.RemoveThumbImgPipe(),
             # self.FixElementAPipe(super_obj=self),
             # self.InternalLinkAsAsteriskPipe(super_obj=self),
             # self.DocumentPipe(super_obj=self),
@@ -1071,30 +1070,6 @@ class HTML2SPSPipeline(object):
             convert = DataSanitizationPipeline()
             _, obj = convert.deploy(xml)
             return raw, obj
-
-    class FixElementAPipe(CustomPipe):
-        def parser_node(self, node):
-            _id = node.attrib.get("id")
-            _name = node.attrib.get("name")
-            if _id is None or (_name and _id != _name):
-                node.set("id", _name)
-            if _name is None:
-                node.set("name", _id)
-            href = node.attrib.get("href")
-            if href:
-                if href[0] == "#":
-                    a = etree.Element("a")
-                    a.set("name", node.attrib.get("name"))
-                    a.set("id", node.attrib.get("id"))
-                    node.addprevious(a)
-                    node.attrib.pop("id")
-                    node.attrib.pop("name")
-
-        def transform(self, data):
-            raw, xml = data
-            _process(xml, "a[@id]", self.parser_node)
-            _process(xml, "a[@name]", self.parser_node)
-            return data
 
     class InternalLinkAsAsteriskPipe(CustomPipe):
         def parser_node(self, node):
