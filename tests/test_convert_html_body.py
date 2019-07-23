@@ -530,13 +530,6 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             "). Correspondence should be addressed to Dr Yip at this address.",
         )
 
-    def test_fix_element_a(self):
-        text = """<root><a name="_ftnref19" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
-        expected = b"""<root><a name="_ftnref19" id="_ftnref19"/><a href="#_ftn2"><sup>1</sup></a></root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.pipeline.FixElementAPipe(self.pipeline).transform((text, xml))
-        self.assertEqual(etree.tostring(xml), expected)
-
     def test_pipe_asterisk_in_a_name(self):
         text = '<root><a name="*" id="*"/></root>'
         expected = b"<root/>"
@@ -1695,12 +1688,12 @@ class TestConversionToFig(unittest.TestCase):
         <img src="/img/revistas/jped/v86n3/en_a05fig01.gif"/></p></root>"""
 
         xml = etree.fromstring(text)
-        pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        pl = ConvertElementsWhichHaveIdPipeline(html_pl)
 
-        text, xml = pl.FixElementAPipe(pl).transform((text, xml))
-        text, xml = pl.DocumentPipe(pl).transform((text, xml))
+        text, xml = pl.FixElementAPipe(html_pl).transform((text, xml))
+        text, xml = pl.DocumentPipe(html_pl).transform((text, xml))
         _xml = etree.tostring(xml)
-
         self.assertIn(
             b'<a href="#fig01en" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1">Figure 1</a>',
             _xml,
@@ -1713,42 +1706,16 @@ class TestConversionToFig(unittest.TestCase):
             b'<img src="/img/revistas/jped/v86n3/en_a05fig01.gif" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1"/>',
             _xml,
         )
-        text, xml = pl.AnchorAndInternalLinkPipe(pl).transform((text, xml))
+        text, xml = pl.AnchorAndInternalLinkPipe(html_pl).transform((text, xml))
         _xml = etree.tostring(xml)
         self.assertIn(b'<xref ref-type="fig" rid="fig01en">Figure 1</xref>', _xml)
         self.assertIn(b'<fig id="fig01en"/>', _xml)
-
-        apl = ConvertElementsWhichHaveIdPipeline(pl)
-        text, xml = apl.CreateAssetElementsFromImgOrTableElementsPipe(apl).transform(
+        text, xml = pl.CreateAssetElementsFromImgOrTableElementsPipe(html_pl).transform(
             (text, xml)
         )
         self.assertIsNotNone(xml.findall(".//fig/img"))
-
-        text, xml = pl.ImgPipe(pl).transform((text, xml))
+        text, xml = html_pl.ImgPipe(html_pl).transform((text, xml))
         self.assertIsNotNone(xml.findall(".//fig/graphic"))
-
-
-class TestRemoveThumbImg(unittest.TestCase):
-    def test_convert_to_figure(self):
-        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg"><img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/><br/> Clique para ampliar</a></p></root>"""
-
-        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><graphic xlink:href="/img/revistas/hoehnea/v37n3/a05img01.jpg"></graphic></p></root>"""
-
-        xml = etree.fromstring(text)
-        pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        apl = ConvertElementsWhichHaveIdPipeline(pl)
-
-        text, xml = pl.RemoveThumbImgPipe().transform((text, xml))
-        self.assertNotIn(
-            b'<img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/>',
-            etree.tostring(xml),
-        )
-        text, xml = apl.CreateAssetElementsFromExternalLinkElementsPipe(pl).transform(
-            (text, xml)
-        )
-        text, xml = pl.ImgPipe(pl).transform((text, xml))
-
-        self.assertEqual(etree.tostring(xml), expected)
 
 
 class TestFixBodyChildrenPipe(unittest.TestCase):
@@ -1807,8 +1774,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.UPipe(),
             pipeline.BPipe(),
             pipeline.StrongPipe(),
-            pipeline.RemoveThumbImgPipe(),
-            pipeline.FixElementAPipe(pipeline),
             pipeline.InternalLinkAsAsteriskPipe(pipeline),
             pipeline.DocumentPipe(pipeline),
             pipeline.AnchorAndInternalLinkPipe(pipeline),
