@@ -35,143 +35,6 @@ class TestConvertHMTLBodySearchAssetNodeBackwards(unittest.TestCase):
         self.assertIsNone(result)
 
 
-class TestDocumentPipe(unittest.TestCase):
-    def setUp(self):
-        pipeline = HTML2SPSPipeline("PID")
-        self.pipe = pipeline.DocumentPipe(pipeline)
-        self.inferer = Inferer()
-        self.text = """
-        <root>
-            <a href="#tab01">Tabela 1</a>
-            <a href="#tab01">Tabela 1</a>
-            <a name="tab01"/>
-            <img src="tabela.jpg"/>
-
-            <a href="f01.jpg">Figure 1</a>
-
-            <a href="f02.jpg">2</a>
-
-            <img src="app.jpg"/>
-
-            <a href="f03.jpg">Figure 3</a>
-            <a href="f03.jpg">3</a>
-        </root>
-        """
-        self.xml = etree.fromstring(self.text)
-        self.document = Document(self.xml)
-        self.texts, self.files = self.document.a_href_items
-
-    def test_identify_data(self):
-
-        nodes = self.xml.findall("./a")
-        img = self.xml.findall(".//img")
-        self.assertEqual(
-            self.document.a_names, {"tab01": (nodes[2], [nodes[0], nodes[1]])}
-        )
-        self.assertEqual(
-            self.texts,
-            {
-                "tabela 1": ([nodes[0], nodes[1]], []),
-                "figure 1": ([], [nodes[3]]),
-                "2": ([], [nodes[4]]),
-                "figure 3": ([], [nodes[5]]),
-                "3": ([], [nodes[6]]),
-            },
-        )
-        self.assertEqual(
-            self.files,
-            {"f01": [nodes[3]], "f02": [nodes[4]], "f03": [nodes[5], nodes[6]]},
-        )
-        self.assertEqual(self.document.images, {"app": [img[1]], "tabela": [img[0]]})
-
-    def _assert(self, expected, step, xpath=".//a"):
-        expected_node = etree.fromstring(expected).findall(xpath)
-        for i, node in enumerate(self.xml.findall(xpath)):
-            with self.subTest(step + " " + str(i)):
-                self.assertEqual(etree.tostring(node), etree.tostring(expected_node[i]))
-
-    def test_add_xml_attribs(self):
-        expected = """
-        <root>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a name="tab01"/>
-            <img src="tabela.jpg"/>
-
-            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
-
-            <a href="f02.jpg">2</a>
-
-            <img src="app.jpg"/>
-
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
-            <a href="f03.jpg">3</a>
-        </root>
-        """
-        self.pipe._add_xml_attribs_to_a_href_from_text(self.texts)
-        self._assert(expected, "a_href_from_text")
-
-        expected = """
-        <root>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a name="tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
-            <img src="tabela.jpg"/>
-
-            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
-
-            <a href="f02.jpg">2</a>
-
-            <img src="app.jpg"/>
-
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
-            <a href="f03.jpg">3</a>
-        </root>
-        """
-        self.pipe._add_xml_attribs_to_a_name(self.document.a_names)
-        self._assert(expected, "a_names")
-
-        expected = """
-        <root>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a name="tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
-            <img src="tabela.jpg"/>
-
-            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
-
-            <a href="f02.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f02">2</a>
-
-            <img src="app.jpg"/>
-
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">3</a>
-        </root>
-        """
-        self.pipe._add_xml_attribs_to_a_href_from_file_paths(self.files)
-        self._assert(expected, "file_paths")
-
-        expected = """
-        <root>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a name="tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
-            <img src="tabela.jpg" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
-
-            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
-
-            <a href="f02.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f02">2</a>
-
-            <img src="app.jpg" xml_tag="app" xml_reftype="app" xml_id="app"/>
-
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">3</a>
-        </root>
-        """
-        self.pipe._add_xml_attribs_to_img(self.document.images)
-        self._assert(expected, "images", ".//img")
-
-
 class TestHTML2SPSPipeline(unittest.TestCase):
     def _transform(self, text, pipe):
         tree = etree.fromstring(text)
@@ -1670,7 +1533,7 @@ class TestCreateAssetElementsFromExternalLinkElementsPipe(unittest.TestCase):
         self.assertIsNone(xml.find(".//fig/a"))
 
 
-class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
+class TestOldConvertElementsWhichHaveIdPipeline(unittest.TestCase):
     def test_transform_two_internal_link_img_aname(self):
         text = """<root>
         <p>Para uma avalição mais precisa das formulações semi-discretas,
@@ -2025,3 +1888,141 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
             super_obj=self.pl
         ).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
+
+
+class TestDocumentPipe(unittest.TestCase):
+    def setUp(self):
+        pipeline = HTML2SPSPipeline("PID")
+        pl = ConvertElementsWhichHaveIdPipeline(pipeline)
+        self.pipe = pl.DocumentPipe(pipeline)
+        self.inferer = Inferer()
+        self.text = """
+        <root>
+            <a href="#tab01">Tabela 1</a>
+            <a href="#tab01">Tabela 1</a>
+            <a name="tab01"/>
+            <img src="tabela.jpg"/>
+
+            <a href="f01.jpg">Figure 1</a>
+
+            <a href="f02.jpg">2</a>
+
+            <img src="app.jpg"/>
+
+            <a href="f03.jpg">Figure 3</a>
+            <a href="f03.jpg">3</a>
+        </root>
+        """
+        self.xml = etree.fromstring(self.text)
+        self.document = Document(self.xml)
+        self.texts, self.files = self.document.a_href_items
+
+    def test_identify_data(self):
+
+        nodes = self.xml.findall("./a")
+        img = self.xml.findall(".//img")
+        self.assertEqual(
+            self.document.a_names, {"tab01": (nodes[2], [nodes[0], nodes[1]])}
+        )
+        self.assertEqual(
+            self.texts,
+            {
+                "tabela 1": ([nodes[0], nodes[1]], []),
+                "figure 1": ([], [nodes[3]]),
+                "2": ([], [nodes[4]]),
+                "figure 3": ([], [nodes[5]]),
+                "3": ([], [nodes[6]]),
+            },
+        )
+        self.assertEqual(
+            self.files,
+            {"f01": [nodes[3]], "f02": [nodes[4]], "f03": [nodes[5], nodes[6]]},
+        )
+        self.assertEqual(self.document.images, {"app": [img[1]], "tabela": [img[0]]})
+
+    def _assert(self, expected, step, xpath=".//a"):
+        expected_node = etree.fromstring(expected).findall(xpath)
+        for i, node in enumerate(self.xml.findall(xpath)):
+            with self.subTest(step + " " + str(i)):
+                self.assertEqual(etree.tostring(node), etree.tostring(expected_node[i]))
+
+    def test_add_xml_attribs(self):
+        expected = """
+        <root>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a name="tab01"/>
+            <img src="tabela.jpg"/>
+
+            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
+
+            <a href="f02.jpg">2</a>
+
+            <img src="app.jpg"/>
+
+            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
+            <a href="f03.jpg">3</a>
+        </root>
+        """
+        self.pipe._add_xml_attribs_to_a_href_from_text(self.texts)
+        self._assert(expected, "a_href_from_text")
+
+        expected = """
+        <root>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a name="tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
+            <img src="tabela.jpg"/>
+
+            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
+
+            <a href="f02.jpg">2</a>
+
+            <img src="app.jpg"/>
+
+            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
+            <a href="f03.jpg">3</a>
+        </root>
+        """
+        self.pipe._add_xml_attribs_to_a_name(self.document.a_names)
+        self._assert(expected, "a_names")
+
+        expected = """
+        <root>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a name="tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
+            <img src="tabela.jpg"/>
+
+            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
+
+            <a href="f02.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f02">2</a>
+
+            <img src="app.jpg"/>
+
+            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
+            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">3</a>
+        </root>
+        """
+        self.pipe._add_xml_attribs_to_a_href_from_file_paths(self.files)
+        self._assert(expected, "file_paths")
+
+        expected = """
+        <root>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a name="tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
+            <img src="tabela.jpg" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1"/>
+
+            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
+
+            <a href="f02.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f02">2</a>
+
+            <img src="app.jpg" xml_tag="app" xml_reftype="app" xml_id="app"/>
+
+            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
+            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">3</a>
+        </root>
+        """
+        self.pipe._add_xml_attribs_to_img(self.document.images)
+        self._assert(expected, "images", ".//img")
