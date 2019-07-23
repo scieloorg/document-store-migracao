@@ -50,10 +50,7 @@ def journal_to_kernel(journal):
 
     # TODO: Virá algo do xylose para popular o campo de métricas?
 
-    _id = journal.any_issn()
-
-    if not _id:
-        _id = journal.scielo_issn
+    _id = journal.scielo_issn
 
     if not _id:
         raise ValueError("É preciso que o periódico possua um id")

@@ -45,7 +45,7 @@ class TestXyloseJournalConverter(unittest.TestCase):
             ],
             "v151": [{"_": "sample."}],
             "v150": [{"_": "sample"}],
-            "v400": [{"_": "0001"}],
+            "v400": [{"_": "0001-3714"}],
             "v435": [{"t": "PRINT", "_": "0001"}, {"t": "ONLIN", "_": "2448-167X"}],
             "v51": [
                 {
@@ -70,8 +70,9 @@ class TestXyloseJournalConverter(unittest.TestCase):
 
     def test_bundle_id_joins_acronym_and_collection(self):
         journal = journal_to_kernel(self._journal)
-        self.assertEqual("2448-167X", journal["id"])
-        self.assertEqual("2448-167X", journal["_id"])
+        self.assertEqual("0001-3714", journal["id"])
+        self.assertEqual("0001-3714", journal["_id"])
+
 
     def test_bundle_metadata_fields_timestamps_and_created_date_should_be_equals(self):
         journal = journal_to_kernel(self._journal)
@@ -113,7 +114,7 @@ class TestXyloseJournalConverter(unittest.TestCase):
 
     def test_journal_has_scielo_issn(self):
         journal = journal_to_kernel(self._journal)
-        self.assertEqual("0001", get_metadata_item(journal, "scielo_issn"))
+        self.assertEqual("0001-3714", get_metadata_item(journal, "scielo_issn"))
 
     def test_journal_has_print_issn(self):
         journal = journal_to_kernel(self._journal)
