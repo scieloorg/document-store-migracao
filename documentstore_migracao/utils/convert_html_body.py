@@ -1099,7 +1099,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AddNameAndIdToElementAPipe(super_obj=html_pipeline),
             self.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(super_obj=html_pipeline),
             self.DeduceAndSuggestConversionPipe(super_obj=html_pipeline),
-            self.AnchorAndInternalLinkPipe(super_obj=html_pipeline),
+            self.ApplySuggestedConversionPipe(super_obj=html_pipeline),
             self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
             self.CreateAssetElementsFromExternalLinkElementsPipe(
                 super_obj=html_pipeline
@@ -1513,49 +1513,16 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self._add_xml_attribs_to_img(images)
             return data
 
-    class AnchorAndInternalLinkPipe(CustomPipe):
+    class ApplySuggestedConversionPipe(CustomPipe):
         """
-        Identifica pelo a/@name:
-        - para qual elemento, a[@name] será convertido
-            (table-wrap, fig, disp-formula, fn, app)
-        - para que ref-type a[@href=#name] (xref[@ref-type])
+        Converte os elementos a, para as tags correspondentes, considerando
+        os valores dos atributos: @xml_tag, @xml_id, @xml_reftype, @xml_label,
+        inseridos por DeduceAndSuggestConversionPipe()
         """
-
         def _remove_a(self, a_name, a_href_items):
             _remove_element_or_comment(a_name, True)
             for a_href in a_href_items:
                 _remove_element_or_comment(a_href, True)
-
-        def _create_fn(self, node):
-            texts = (node.tail or "").strip()
-            if texts and not texts[0].isalnum():
-                node.tail = ""
-                label = etree.Element("label")
-                label.text = texts[0]
-                texts = texts[1:].strip()
-                node.append(label)
-            p = etree.Element("p")
-            p.text = texts
-            node.tail = None
-            node.text = None
-            node.append(p)
-
-        def _create_corresp(self, node):
-            texts = join_texts((node.tail or "").strip().split())
-            node.set("fn-type", "corresp")
-            node.tag = "fn"
-            label = etree.Element("label")
-            p = etree.Element("p")
-            if ":" in texts:
-                texts = texts.split(":")
-            else:
-                texts = "", texts
-            label.text = texts[0]
-            p.text = texts[1]
-            if label.text:
-                node.append(label)
-            node.append(p)
-            node.tail = None
 
         def _update_a_name(self, node, new_id, new_tag):
             _name = node.attrib.get("name")
@@ -1564,12 +1531,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if new_tag == "symbol":
                 node.set("symbol", _name)
                 new_tag = "fn"
-            if new_tag == "fn":
-                self._create_fn(node)
-            if new_tag == "corresp":
-                self._create_corresp(node)
-            else:
-                node.tag = new_tag
+            elif new_tag == "corresp":
+                node.set("fn-type", "corresp")
+                new_tag = "fn"
+            node.tag = new_tag
 
         def _update_a_href_items(self, a_href_items, new_id, reftype):
             for ahref in a_href_items:
@@ -1591,9 +1556,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._update_a_href_items(a_hrefs, new_id, reftype)
                 else:
                     self._remove_a(a_name, a_hrefs)
-
             return data
-
 
     class APipe(CustomPipe):
         def _parser_node_external_link(self, node, extlinktype="uri"):
