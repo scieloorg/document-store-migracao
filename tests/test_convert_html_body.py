@@ -427,248 +427,6 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 0)
                 self.assertEqual(text, etree.tostring(node))
 
-    def test_pipe_a__parser_node_external_link_for_uri(self):
-        expected = {
-            "{http://www.w3.org/1999/xlink}href": "http://bla.org",
-            "ext-link-type": "uri",
-        }
-        xml = etree.fromstring('<root><a href="http://bla.org">texto</a></root>')
-        node = xml.find(".//a")
-
-        self.pipeline.APipe(super_obj=self.pipeline)._parser_node_external_link(node)
-
-        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
-        self.assertEqual(
-            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "http://bla.org"
-        )
-        self.assertEqual(node.attrib.get("ext-link-type"), "uri")
-        self.assertEqual(node.tag, "ext-link")
-        self.assertEqual(node.text, "texto")
-        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
-
-    def test_pipe_a__creates_email_element_with_href_attribute(self):
-        expected = """<root>
-        <p><email xlink:href="mailto:a@scielo.org">Enviar e-mail para A</email></p>
-        </root>"""
-        text = """<root>
-        <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
-        </root>"""
-        xml = etree.fromstring(text)
-
-        node = xml.find(".//a")
-        self.pipeline.APipe(super_obj=self.pipeline)._create_email(node)
-
-        self.assertIn(
-            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "mailto:a@scielo.org"
-        )
-        self.assertEqual(node.tag, "email")
-        self.assertEqual(node.text, "Enviar e-mail para A")
-
-    def test_pipe_a__creates_email_(self):
-        expected = """<root>
-        <p>Enviar e-mail para <email>a@scielo.org</email>.</p>
-        </root>"""
-        text = """<root>
-        <p><a href="mailto:a@scielo.org">Enviar e-mail para a@scielo.org.</a></p>
-        </root>"""
-        xml = etree.fromstring(text)
-
-        node = xml.find(".//a")
-        self.pipeline.APipe(super_obj=self.pipeline)._create_email(node)
-        p = xml.find(".//p")
-        self.assertEqual(p.text, "Enviar e-mail para ")
-        email = p.find("email")
-        self.assertEqual(email.text, "a@scielo.org")
-        self.assertEqual(email.tail, ".")
-
-    def test_pipe_a__creates_graphic_email(self):
-        expected = b"""<root><p><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="email.gif"><email>mailto:x@scielo.org</email></graphic></p></root>"""
-        text = """<root>
-        <p><a href="mailto:x@scielo.org"><img src="mail.gif" /></a></p>
-        </root>"""
-        xml = etree.fromstring(text)
-
-        node = xml.find(".//a")
-        self.pipeline.APipe(super_obj=self.pipeline)._create_email(node)
-
-        self.assertEqual(
-            xml.find(".//graphic").attrib.get("{http://www.w3.org/1999/xlink}href"),
-            "mail.gif",
-        )
-        self.assertEqual(xml.findtext(".//graphic/email"), "x@scielo.org")
-
-    def test_pipe_a__creates_email(self):
-        text = """<root>
-        <p><a href="mailto:a@scielo.org">a@scielo.org</a></p>
-        </root>"""
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        node = transformed.find(".//email")
-        self.assertEqual(node.text, "a@scielo.org")
-        self.assertEqual(node.tag, "email")
-
-    def test_pipe_a__create_email_mailto_empty(self):
-        text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        node = transformed.find(".//email")
-        self.assertEqual(node.text, "a@scielo.org")
-        self.assertEqual(node.tag, "email")
-
-    def test_pipe_a__create_email_mailto_empty(self):
-        text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
-        raw, transformed = self._transform(text, self.pipeline.APipe())
-
-        node = transformed.find(".//email")
-        self.assertEqual(node.text, "sfpyip@hku.hk")
-        self.assertEqual(
-            node.tail,
-            "). Correspondence should be addressed to Dr Yip at this address.",
-        )
-
-
-    def test_pipe_a_anchor__remove_xref_with_graphic(self):
-        text = """<root><a href="#top"><graphic xmlns:ns2="http://www.w3.org/1999/xlink"
-            ns2:href="/img/revistas/gs/v29n2/seta.gif"/></a></root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        node = transformed.find(".//xref")
-        self.assertIsNone(node)
-
-        node = transformed.find(".//graphic")
-        self.assertIsNone(node)
-
-        self.assertEqual(etree.tostring(transformed), b"<root/>")
-
-    def test_pipe_a_anchor__remove_xref(self):
-        text = """<root>Demographic and Health Surveys. Available from: <a href="#fn1">b</a></root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b"<root>Demographic and Health Surveys. Available from: b</root>",
-        )
-
-    def test_pipe_a_anchor__keep_xref(self):
-        text = """<root><table-wrap id="tab1" xref_id="tab1"/><a href="#tab1">Tabela 1</a> Demographic and Health Surveys. Available from: </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><table-wrap id="tab1"/><xref rid="tab1" ref-type="table">Tabela 1</xref> Demographic and Health Surveys. Available from: </root>',
-        )
-
-    def test_pipe_a_anchor__xref_bibr_case1(self):
-        text = """<root><a href="#ref">(9,10)</a>Tabela 1 </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><xref rid="B9" ref-type="bibr">(9,10)</xref>Tabela 1 </root>',
-        )
-
-    def test_pipe_a_anchor__xref_bibr_case2(self):
-        text = """<root><a href="#ref">9</a>Tabela 1 </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><xref rid="B9" ref-type="bibr">9</xref>Tabela 1 </root>',
-        )
-
-    def test_pipe_a_anchor__xref_bibr_case3(self):
-        text = """<root><a href="#ref">(9-10)</a>Tabela 1 </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><xref rid="B9" ref-type="bibr">(9-10)</xref>Tabela 1 </root>',
-        )
-
-    @unittest.skip("TODO")
-    def test_pipe_a_anchor__xref_figure(self):
-        text = """<root><a href="#tabela1">Tabela 1</a> resultado global do levantamento efetuado <img src="/img/revistas/rsp/v8n3/05t1.gif"/></root>"""
-
-        data = self._transform(text, self.pipeline.ImgPipe())
-        raw, transformed = self.pipeline.APipe(super_obj=self.pipeline).transform(data)
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b"""<root><xref rid="t1" ref-type="table">Tabela 1</xref> resultado global do levantamento efetuado <table-wrap id="t1"><graphic xmlns:ns0="http://www.w3.org/1999/xlink" ns0:href="/img/revistas/rsp/v8n3/05t1.gif"/></table-wrap></root>""",
-        )
-
-    def test_pipe_a_hiperlink(self):
-
-        text = [
-            "<root>",
-            '<p><a href="https://new.scielo.br"/></p>',
-            '<p><a href="//www.google.com"><img src="mail.gif"/></a></p>',
-            '<p><a href="ftp://www.bbc.com">BBC</a></p>',
-            '<p><a href="../www.bbc.com">Enviar <b>e-mail para</b> mim</a></p>',
-            "</root>",
-        ]
-        text = "".join(text)
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-
-        nodes = transformed.findall(".//ext-link")
-        self.assertEqual(len(nodes), 4)
-        data = [
-            ("https://new.scielo.br", b""),
-            ("//www.google.com", b'<img src="mail.gif"/>'),
-            ("ftp://www.bbc.com", b"BBC"),
-            ("../www.bbc.com", b"Enviar <b>e-mail para</b> mim"),
-        ]
-        for node, item in zip(nodes, data):
-            link, content = item
-            with self.subTest(node=node):
-                self.assertIn(content, etree.tostring(node).strip())
-                self.assertEqual(
-                    link, node.attrib["{http://www.w3.org/1999/xlink}href"]
-                )
-                self.assertEqual("uri", node.attrib["ext-link-type"])
-                self.assertEqual(len(node.attrib), 2)
-
-    def test_pipe_remove_a_without_href(self):
-        text = "<root><a>Teste</a></root>"
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-        self.assertIsNone(transformed.find(".//a"))
-
-    def test_pipe_a_href_error(self):
-        text = '<root><a href="error">Teste</a></root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe(super_obj=self.pipeline)
-        )
-        self.assertEqual(
-            etree.tostring(transformed).strip(),
-            b'<root><a href="error">Teste</a></root>',
-        )
-
     def test_pipe_td(self):
         text = '<root><td width="" height="" style="style"><p>Teste</p></td></root>'
         raw, transformed = self._transform(text, self.pipeline.TdCleanPipe())
@@ -1673,7 +1431,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.BPipe(),
             pipeline.StrongPipe(),
             pipeline.ConvertElementsWhichHaveIdPipe(pipeline),
-            pipeline.APipe(pipeline),
             pipeline.ImgPipe(pipeline),
             pipeline.TdCleanPipe(),
             pipeline.TableCleanPipe(),
@@ -1971,3 +1728,263 @@ class TestDocumentPipe(unittest.TestCase):
         """
         self.pipe._add_xml_attribs_to_img(self.document.images)
         self._assert(expected, "images", ".//img")
+
+
+class TestAPipe(unittest.TestCase):
+
+    def _transform(self, text, pipe):
+        tree = etree.fromstring(text)
+        data = text, tree
+        raw, transformed = pipe.transform(data)
+        self.assertEqual(raw, text)
+        return raw, transformed
+
+    def setUp(self):
+        filename = os.path.join(SAMPLES_PATH, "example_convert_html.xml")
+        with open(filename, "r") as f:
+            self.xml_txt = f.read()
+        self.etreeXML = etree.fromstring(self.xml_txt)
+        self.html_pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        self.pipeline = ConvertElementsWhichHaveIdPipeline(self.html_pipeline)
+
+    def test_pipe_a__parser_node_external_link_for_uri(self):
+        expected = {
+            "{http://www.w3.org/1999/xlink}href": "http://bla.org",
+            "ext-link-type": "uri",
+        }
+        xml = etree.fromstring('<root><a href="http://bla.org">texto</a></root>')
+        node = xml.find(".//a")
+
+        self.pipeline.APipe(super_obj=self.html_pipeline)._parser_node_external_link(node)
+
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
+        self.assertEqual(
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "http://bla.org"
+        )
+        self.assertEqual(node.attrib.get("ext-link-type"), "uri")
+        self.assertEqual(node.tag, "ext-link")
+        self.assertEqual(node.text, "texto")
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
+
+    def test_pipe_a__creates_email_element_with_href_attribute(self):
+        expected = """<root>
+        <p><email xlink:href="mailto:a@scielo.org">Enviar e-mail para A</email></p>
+        </root>"""
+        text = """<root>
+        <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+
+        node = xml.find(".//a")
+        self.pipeline.APipe(super_obj=self.html_pipeline)._create_email(node)
+
+        self.assertIn(
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "mailto:a@scielo.org"
+        )
+        self.assertEqual(node.tag, "email")
+        self.assertEqual(node.text, "Enviar e-mail para A")
+
+    def test_pipe_a__creates_email_(self):
+        expected = """<root>
+        <p>Enviar e-mail para <email>a@scielo.org</email>.</p>
+        </root>"""
+        text = """<root>
+        <p><a href="mailto:a@scielo.org">Enviar e-mail para a@scielo.org.</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+
+        node = xml.find(".//a")
+        self.pipeline.APipe(super_obj=self.html_pipeline)._create_email(node)
+        p = xml.find(".//p")
+        self.assertEqual(p.text, "Enviar e-mail para ")
+        email = p.find("email")
+        self.assertEqual(email.text, "a@scielo.org")
+        self.assertEqual(email.tail, ".")
+
+    def test_pipe_a__creates_graphic_email(self):
+        expected = b"""<root><p><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="email.gif"><email>mailto:x@scielo.org</email></graphic></p></root>"""
+        text = """<root>
+        <p><a href="mailto:x@scielo.org"><img src="mail.gif" /></a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+
+        node = xml.find(".//a")
+        self.pipeline.APipe(super_obj=self.html_pipeline)._create_email(node)
+
+        self.assertEqual(
+            xml.find(".//graphic").attrib.get("{http://www.w3.org/1999/xlink}href"),
+            "mail.gif",
+        )
+        self.assertEqual(xml.findtext(".//graphic/email"), "x@scielo.org")
+
+    def test_pipe_a__creates_email(self):
+        text = """<root>
+        <p><a href="mailto:a@scielo.org">a@scielo.org</a></p>
+        </root>"""
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        node = transformed.find(".//email")
+        self.assertEqual(node.text, "a@scielo.org")
+        self.assertEqual(node.tag, "email")
+
+    def test_pipe_a__create_email_mailto_empty(self):
+        text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        node = transformed.find(".//email")
+        self.assertEqual(node.text, "a@scielo.org")
+        self.assertEqual(node.tag, "email")
+
+    def test_pipe_a__create_email_mailto_empty(self):
+        text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
+        raw, transformed = self._transform(text, self.pipeline.APipe())
+
+        node = transformed.find(".//email")
+        self.assertEqual(node.text, "sfpyip@hku.hk")
+        self.assertEqual(
+            node.tail,
+            "). Correspondence should be addressed to Dr Yip at this address.",
+        )
+
+
+    def test_pipe_a_anchor__remove_xref_with_graphic(self):
+        text = """<root><a href="#top"><graphic xmlns:ns2="http://www.w3.org/1999/xlink"
+            ns2:href="/img/revistas/gs/v29n2/seta.gif"/></a></root>"""
+
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        node = transformed.find(".//xref")
+        self.assertIsNone(node)
+
+        node = transformed.find(".//graphic")
+        self.assertIsNone(node)
+
+        self.assertEqual(etree.tostring(transformed), b"<root/>")
+
+    def test_pipe_a_anchor__remove_xref(self):
+        text = """<root>Demographic and Health Surveys. Available from: <a href="#fn1">b</a></root>"""
+
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"<root>Demographic and Health Surveys. Available from: b</root>",
+        )
+
+    def test_pipe_a_anchor__keep_xref(self):
+        text = """<root><table-wrap id="tab1" xref_id="tab1"/><a href="#tab1">Tabela 1</a> Demographic and Health Surveys. Available from: </root>"""
+
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><table-wrap id="tab1"/><xref rid="tab1" ref-type="table">Tabela 1</xref> Demographic and Health Surveys. Available from: </root>',
+        )
+
+    def test_pipe_a_anchor__xref_bibr_case1(self):
+        text = """<root><a href="#ref">(9,10)</a>Tabela 1 </root>"""
+
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><xref rid="B9" ref-type="bibr">(9,10)</xref>Tabela 1 </root>',
+        )
+
+    def test_pipe_a_anchor__xref_bibr_case2(self):
+        text = """<root><a href="#ref">9</a>Tabela 1 </root>"""
+
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><xref rid="B9" ref-type="bibr">9</xref>Tabela 1 </root>',
+        )
+
+    def test_pipe_a_anchor__xref_bibr_case3(self):
+        text = """<root><a href="#ref">(9-10)</a>Tabela 1 </root>"""
+
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><xref rid="B9" ref-type="bibr">(9-10)</xref>Tabela 1 </root>',
+        )
+
+    @unittest.skip("TODO")
+    def test_pipe_a_anchor__xref_figure(self):
+        text = """<root><a href="#tabela1">Tabela 1</a> resultado global do levantamento efetuado <img src="/img/revistas/rsp/v8n3/05t1.gif"/></root>"""
+
+        data = self._transform(text, self.pipeline.ImgPipe())
+        raw, transformed = self.pipeline.APipe(super_obj=self.html_pipeline).transform(data)
+
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"""<root><xref rid="t1" ref-type="table">Tabela 1</xref> resultado global do levantamento efetuado <table-wrap id="t1"><graphic xmlns:ns0="http://www.w3.org/1999/xlink" ns0:href="/img/revistas/rsp/v8n3/05t1.gif"/></table-wrap></root>""",
+        )
+
+    def test_pipe_a_hiperlink(self):
+
+        text = [
+            "<root>",
+            '<p><a href="https://new.scielo.br"/></p>',
+            '<p><a href="//www.google.com"><img src="mail.gif"/></a></p>',
+            '<p><a href="ftp://www.bbc.com">BBC</a></p>',
+            '<p><a href="../www.bbc.com">Enviar <b>e-mail para</b> mim</a></p>',
+            "</root>",
+        ]
+        text = "".join(text)
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+
+        nodes = transformed.findall(".//ext-link")
+        self.assertEqual(len(nodes), 4)
+        data = [
+            ("https://new.scielo.br", b""),
+            ("//www.google.com", b'<img src="mail.gif"/>'),
+            ("ftp://www.bbc.com", b"BBC"),
+            ("../www.bbc.com", b"Enviar <b>e-mail para</b> mim"),
+        ]
+        for node, item in zip(nodes, data):
+            link, content = item
+            with self.subTest(node=node):
+                self.assertIn(content, etree.tostring(node).strip())
+                self.assertEqual(
+                    link, node.attrib["{http://www.w3.org/1999/xlink}href"]
+                )
+                self.assertEqual("uri", node.attrib["ext-link-type"])
+                self.assertEqual(len(node.attrib), 2)
+
+    def test_pipe_remove_a_without_href(self):
+        text = "<root><a>Teste</a></root>"
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+        self.assertIsNone(transformed.find(".//a"))
+
+    def test_pipe_a_href_error(self):
+        text = '<root><a href="error">Teste</a></root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.APipe(super_obj=self.html_pipeline)
+        )
+        self.assertEqual(
+            etree.tostring(transformed).strip(),
+            b'<root><a href="error">Teste</a></root>',
+        )
