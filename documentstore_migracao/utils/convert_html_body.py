@@ -1496,6 +1496,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         # self.super_obj = html_pipeline
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
+            # self.RemoveThumbImgPipe(),
             self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
             self.CreateAssetElementsFromExternalLinkElementsPipe(
                 super_obj=html_pipeline
@@ -1712,6 +1713,30 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def transform(self, data):
             raw, xml = data
             _process(xml, "img", self.parser_node)
+            return data
+
+    class FixElementAPipe(CustomPipe):
+        def parser_node(self, node):
+            _id = node.attrib.get("id")
+            _name = node.attrib.get("name")
+            if _id is None or (_name and _id != _name):
+                node.set("id", _name)
+            if _name is None:
+                node.set("name", _id)
+            href = node.attrib.get("href")
+            if href:
+                if href[0] == "#":
+                    a = etree.Element("a")
+                    a.set("name", node.attrib.get("name"))
+                    a.set("id", node.attrib.get("id"))
+                    node.addprevious(a)
+                    node.attrib.pop("id")
+                    node.attrib.pop("name")
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@id]", self.parser_node)
+            _process(xml, "a[@name]", self.parser_node)
             return data
 
 
