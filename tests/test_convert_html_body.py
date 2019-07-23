@@ -540,16 +540,6 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         ).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
-    def test_pipe_asterisk_in_a_href(self):
-        text = '<root><a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>'
-        expected = b'<root><a name="1a" id="1a"/><sup>*</sup></root>'
-        xml = etree.fromstring(text)
-
-        text, xml = self.pipeline.InternalLinkAsAsteriskPipe(
-            super_obj=self.pipeline
-        ).transform((text, xml))
-        self.assertEqual(etree.tostring(xml), expected)
-
     def test_pipe_asterisk_in_fn(self):
         text = '<root><a name="fn1" id="fn1"/>* texto</root>'
         expected = b'<root><fn id="fn1"><label>*</label><p>texto</p></fn></root>'
@@ -1654,21 +1644,22 @@ class TestConversionToCorresp(unittest.TestCase):
         expected_after_anchor_and_internal_link_pipe = b"""<root><fn id="back" fn-type="corresp"><p>* Corresponding author</p></fn></root>"""
 
         xml = etree.fromstring(text)
-        pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        pl = ConvertElementsWhichHaveIdPipeline(html_pl)
 
-        text, xml = pl.InternalLinkAsAsteriskPipe(pl).transform((text, xml))
+        text, xml = pl.InternalLinkAsAsteriskPipe(html_pl).transform((text, xml))
         self.assertNotIn(b'<a href="#home">*</a>', etree.tostring(xml))
         self.assertEqual(
             etree.tostring(xml), expected_after_internal_link_as_asterisk_pipe
         )
 
-        text, xml = pl.DocumentPipe(pl).transform((text, xml))
+        text, xml = pl.DocumentPipe(html_pl).transform((text, xml))
         self.assertIn(
             b'<a name="back" id="back" xml_tag="corresp" xml_reftype="corresp" xml_id="back"/>',
             etree.tostring(xml),
         )
 
-        text, xml = pl.AnchorAndInternalLinkPipe(pl).transform((text, xml))
+        text, xml = pl.AnchorAndInternalLinkPipe(html_pl).transform((text, xml))
         self.assertEqual(
             etree.tostring(xml), expected_after_anchor_and_internal_link_pipe
         )
@@ -1774,7 +1765,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.UPipe(),
             pipeline.BPipe(),
             pipeline.StrongPipe(),
-            pipeline.InternalLinkAsAsteriskPipe(pipeline),
             pipeline.DocumentPipe(pipeline),
             pipeline.AnchorAndInternalLinkPipe(pipeline),
             pipeline.ConvertElementsWhichHaveIdPipe(pipeline),
