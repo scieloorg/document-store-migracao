@@ -530,46 +530,6 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             "). Correspondence should be addressed to Dr Yip at this address.",
         )
 
-    def test_pipe_asterisk_in_a_name(self):
-        text = '<root><a name="*" id="*"/></root>'
-        expected = b"<root/>"
-        xml = etree.fromstring(text)
-
-        text, xml = self.pipeline.AnchorAndInternalLinkPipe(
-            super_obj=self.pipeline
-        ).transform((text, xml))
-        self.assertEqual(etree.tostring(xml), expected)
-
-    def test_pipe_aname__removes__ftn(self):
-        text = """<root><a name="_ftnref19" title="" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
-        raw, transformed = text, etree.fromstring(text)
-        raw, transformed = self.pipeline.AnchorAndInternalLinkPipe(
-            self.pipeline
-        ).transform((raw, transformed))
-        node = transformed.find(".//xref")
-        self.assertIsNone(node)
-        node = transformed.find(".//a")
-        self.assertIsNone(node)
-        # self.assertIsNotNone(transformed.find(".//sup"))
-        self.assertEqual(etree.tostring(transformed), b"<root/>")
-
-    def test_pipe_aname__removes_navigation_to_note_go_and_back(self):
-        text = """<root><a href="#tx01">
-            <graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/>
-        </a><a name="tx01" id="tx01"/></root>"""
-
-        raw, transformed = text, etree.fromstring(text)
-        raw, transformed = self.pipeline.AnchorAndInternalLinkPipe(
-            self.pipeline
-        ).transform((raw, transformed))
-
-        node = transformed.find(".//xref")
-        self.assertIsNone(node)
-
-        node = transformed.find(".//a")
-        self.assertIsNone(node)
-
-        self.assertIsNone(transformed.find(".//graphic"))
 
     def test_pipe_a_anchor__remove_xref_with_graphic(self):
         text = """<root><a href="#top"><graphic xmlns:ns2="http://www.w3.org/1999/xlink"
@@ -1548,14 +1508,9 @@ class TestConversionToTableWrap(unittest.TestCase):
         </root>
         """
         xml = etree.fromstring(text)
-
         html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        pl = ConvertElementsWhichHaveIdPipeline(html_pl)
-        text, xml = pl.DocumentPipe(html_pl).transform((text, xml))
-        text, xml = pl.AnchorAndInternalLinkPipe(html_pl).transform((text, xml))
-        text, xml = pl.CreateAssetElementsFromImgOrTableElementsPipe(
-            html_pl
-        ).transform((text, xml))
+        pl = html_pl.ConvertElementsWhichHaveIdPipe(html_pl)
+        text, xml = pl.transform((text, xml))
         self.assertIsNotNone(xml.find(".//table-wrap/img"))
 
     def test_convert_to_table_wrap_which_has_two_internal_links(self):
@@ -1717,7 +1672,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.UPipe(),
             pipeline.BPipe(),
             pipeline.StrongPipe(),
-            pipeline.AnchorAndInternalLinkPipe(pipeline),
             pipeline.ConvertElementsWhichHaveIdPipe(pipeline),
             pipeline.APipe(pipeline),
             pipeline.ImgPipe(pipeline),
@@ -1811,6 +1765,21 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
             </root>"""
         )
 
+    def test_pipe_aname__removes_navigation_to_note_go_and_back(self):
+        text = """<root><a href="#tx01">
+            <graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/>
+        </a><a name="tx01" id="tx01"/></root>"""
+
+        raw, transformed = text, etree.fromstring(text)
+        raw, transformed = self.pl.AnchorAndInternalLinkPipe(
+            self.html_pl
+        ).transform((raw, transformed))
+        node = transformed.find(".//xref")
+        self.assertIsNone(node)
+        node = transformed.find(".//a")
+        self.assertIsNone(node)
+        self.assertIsNone(transformed.find(".//graphic"))
+
     def test_pipe_aname__removes_navigation_to_note_go_and_back_case2(self):
         text = """<root><a name="1not" id="1not"/>TEXTO NOTA</root>"""
 
@@ -1842,6 +1811,28 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         text, xml = self.pl.AnchorAndInternalLinkPipe(
             self.html_pl).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
+
+    def test_pipe_asterisk_in_a_name(self):
+        text = '<root><a name="*" id="*"/></root>'
+        expected = b"<root/>"
+        xml = etree.fromstring(text)
+        text, xml = self.pl.AnchorAndInternalLinkPipe(
+            self.html_pl
+            ).transform((text, xml))
+        self.assertEqual(etree.tostring(xml), expected)
+
+    def test_pipe_aname__removes__ftn(self):
+        text = """<root><a name="_ftnref19" title="" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
+        raw, transformed = text, etree.fromstring(text)
+        raw, transformed = self.pl.AnchorAndInternalLinkPipe(
+            self.html_pl
+        ).transform((raw, transformed))
+        node = transformed.find(".//xref")
+        self.assertIsNone(node)
+        node = transformed.find(".//a")
+        self.assertIsNone(node)
+        # self.assertIsNotNone(transformed.find(".//sup"))
+        self.assertEqual(etree.tostring(transformed), b"<root/>")
 
 
 class TestDocumentPipe(unittest.TestCase):
