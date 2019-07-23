@@ -175,22 +175,6 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             etree.tostring(transformed), b'<root><p id="intro">bla</p><p/></root>'
         )
 
-    def test_pipe_img(self):
-        text = '<root><img align="x" src="a04qdr04.gif"/><img align="x" src="a04qdr08.gif"/></root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.ImgPipe(super_obj=self.pipeline)
-        )
-
-        nodes = transformed.findall(".//graphic")
-
-        self.assertEqual(len(nodes), 2)
-        for node, href in zip(nodes, ["a04qdr04.gif", "a04qdr08.gif"]):
-            with self.subTest(node=node):
-                self.assertEqual(
-                    href, node.attrib["{http://www.w3.org/1999/xlink}href"]
-                )
-                self.assertEqual(len(node.attrib), 1)
-
     def test_pipe_li(self):
         text = """<root>
         <li><p>Texto dentro de <b>li</b> 1</p></li>
@@ -1269,7 +1253,8 @@ class TestConversionToTableWrap(unittest.TestCase):
         html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = html_pl.ConvertElementsWhichHaveIdPipe(html_pl)
         text, xml = pl.transform((text, xml))
-        self.assertIsNotNone(xml.find(".//table-wrap/img"))
+        self.assertIsNone(xml.find(".//table-wrap/img"))
+        self.assertIsNotNone(xml.find(".//table-wrap/graphic"))
 
     def test_convert_to_table_wrap_which_has_two_internal_links(self):
         text = """<root>
@@ -1286,7 +1271,8 @@ class TestConversionToTableWrap(unittest.TestCase):
         pl_html = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = pl_html.ConvertElementsWhichHaveIdPipe(pl_html)
         raw, xml = pl.transform((raw, xml))
-        self.assertIsNotNone(xml.find(".//table-wrap[@id]/img"))
+        self.assertIsNone(xml.find(".//table-wrap[@id]/img"))
+        self.assertIsNotNone(xml.find(".//table-wrap[@id]/graphic"))
         self.assertIsNotNone(xml.find(".//table-wrap[@id]/label"))
         self.assertIsNone(xml.find(".//table-wrap[@id]/caption"))
 
@@ -1370,7 +1356,7 @@ class TestConversionToFig(unittest.TestCase):
             (text, xml)
         )
         self.assertIsNotNone(xml.findall(".//fig/img"))
-        text, xml = html_pl.ImgPipe(html_pl).transform((text, xml))
+        text, xml = pl.ImgPipe(html_pl).transform((text, xml))
         self.assertIsNotNone(xml.findall(".//fig/graphic"))
 
 
@@ -1431,7 +1417,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.BPipe(),
             pipeline.StrongPipe(),
             pipeline.ConvertElementsWhichHaveIdPipe(pipeline),
-            pipeline.ImgPipe(pipeline),
             pipeline.TdCleanPipe(),
             pipeline.TableCleanPipe(),
             pipeline.BlockquotePipe(),
@@ -1988,3 +1973,36 @@ class TestAPipe(unittest.TestCase):
             etree.tostring(transformed).strip(),
             b'<root><a href="error">Teste</a></root>',
         )
+
+
+class TestImgPipe(unittest.TestCase):
+    def _transform(self, text, pipe):
+        tree = etree.fromstring(text)
+        data = text, tree
+        raw, transformed = pipe.transform(data)
+        self.assertEqual(raw, text)
+        return raw, transformed
+
+    def setUp(self):
+        filename = os.path.join(SAMPLES_PATH, "example_convert_html.xml")
+        with open(filename, "r") as f:
+            self.xml_txt = f.read()
+        self.etreeXML = etree.fromstring(self.xml_txt)
+        self.html_pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        self.pipeline = ConvertElementsWhichHaveIdPipeline(self.html_pipeline)
+
+    def test_pipe_img(self):
+        text = '<root><img align="x" src="a04qdr04.gif"/><img align="x" src="a04qdr08.gif"/></root>'
+        raw, transformed = self._transform(
+            text, self.pipeline.ImgPipe(super_obj=self.pipeline)
+        )
+
+        nodes = transformed.findall(".//graphic")
+
+        self.assertEqual(len(nodes), 2)
+        for node, href in zip(nodes, ["a04qdr04.gif", "a04qdr08.gif"]):
+            with self.subTest(node=node):
+                self.assertEqual(
+                    href, node.attrib["{http://www.w3.org/1999/xlink}href"]
+                )
+                self.assertEqual(len(node.attrib), 1)

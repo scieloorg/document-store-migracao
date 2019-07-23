@@ -146,9 +146,7 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
-            # self.AnchorAndInternalLinkPipe(super_obj=self),
             self.ConvertElementsWhichHaveIdPipe(super_obj=self),
-            self.ImgPipe(super_obj=self),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
             self.BlockquotePipe(),
@@ -416,19 +414,6 @@ class HTML2SPSPipeline(object):
             raw, xml = data
 
             _process(xml, "div", self.parser_node)
-            return data
-
-    class ImgPipe(CustomPipe):
-        def parser_node(self, node):
-            node.tag = "graphic"
-            src = node.attrib.pop("src")
-            node.attrib.clear()
-            node.set("{http://www.w3.org/1999/xlink}href", src)
-
-        def transform(self, data):
-            raw, xml = data
-
-            _process(xml, "img", self.parser_node)
             return data
 
     class LiPipe(plumber.Pipe):
@@ -1121,6 +1106,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             ),
             self.CreateAssetElementsFromImgOrTableElementsPipe(super_obj=html_pipeline),
             self.APipe(super_obj=html_pipeline),
+            self.ImgPipe(super_obj=html_pipeline),
         )
 
     def deploy(self, raw):
@@ -1696,6 +1682,19 @@ class ConvertElementsWhichHaveIdPipeline(object):
             raw, xml = data
 
             _process(xml, "a", self.parser_node)
+            return data
+
+    class ImgPipe(CustomPipe):
+        def parser_node(self, node):
+            node.tag = "graphic"
+            src = node.attrib.pop("src")
+            node.attrib.clear()
+            node.set("{http://www.w3.org/1999/xlink}href", src)
+
+        def transform(self, data):
+            raw, xml = data
+
+            _process(xml, "img", self.parser_node)
             return data
 
 
