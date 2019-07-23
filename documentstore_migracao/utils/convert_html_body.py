@@ -146,7 +146,6 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
-            # self.FixElementAPipe(super_obj=self),
             # self.InternalLinkAsAsteriskPipe(super_obj=self),
             # self.DocumentPipe(super_obj=self),
             # self.AnchorAndInternalLinkPipe(super_obj=self),
@@ -1070,19 +1069,6 @@ class HTML2SPSPipeline(object):
             convert = DataSanitizationPipeline()
             _, obj = convert.deploy(xml)
             return raw, obj
-
-    class InternalLinkAsAsteriskPipe(CustomPipe):
-        def parser_node(self, node):
-            href = node.attrib.get("href")
-            if href.startswith("#"):
-                texts = get_node_text(node)
-                if texts and texts[0] == "*":
-                    _remove_element_or_comment(node)
-
-        def transform(self, data):
-            raw, xml = data
-            _process(xml, "a[@href]", self.parser_node)
-            return data
 
     class AnchorAndInternalLinkPipe(CustomPipe):
         """
