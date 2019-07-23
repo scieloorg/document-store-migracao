@@ -19,7 +19,7 @@ from documentstore.domain import DocumentsBundle
 from documentstore.exceptions import DoesNotExist
 from documentstore_migracao.processing.inserting import (
     get_document_assets_path,
-    put_static_assets_into_storage
+    put_static_assets_into_storage,
 )
 from documentstore_migracao.utils.xml import loadToXML
 
@@ -71,11 +71,7 @@ class TestProcessingInserting(unittest.TestCase):
             ]
         )
         self.aop_data = dict(
-            [
-                ("eissn", "0001-3714"),
-                ("issn", "0001-3714"),
-                ("year", "2019"),
-            ]
+            [("eissn", "0001-3714"), ("issn", "0001-3714"), ("year", "2019")]
         )
         if not os.path.isdir(config.get("ERRORS_PATH")):
             os.makedirs(config.get("ERRORS_PATH"))
@@ -83,9 +79,7 @@ class TestProcessingInserting(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(config.get("ERRORS_PATH"))
 
-    @patch(
-        "documentstore_migracao.processing.inserting.scielo_ids_generator.issue_id"
-    )
+    @patch("documentstore_migracao.processing.inserting.scielo_ids_generator.issue_id")
     def test_get_documents_bundle_uses_scielo_ids_generator_issue_id_if_issue(
         self, mk_issue_bundle_id
     ):
@@ -101,9 +95,7 @@ class TestProcessingInserting(unittest.TestCase):
     @patch(
         "documentstore_migracao.processing.inserting.scielo_ids_generator.aops_bundle_id"
     )
-    @patch(
-        "documentstore_migracao.processing.inserting.scielo_ids_generator.issue_id"
-    )
+    @patch("documentstore_migracao.processing.inserting.scielo_ids_generator.issue_id")
     def test_get_documents_bundle_uses_scielo_ids_generator_aops_bundle_id_if_aop(
         self, mk_issue_bundle_id, mk_aops_bundle_id
     ):
@@ -135,18 +127,11 @@ class TestProcessingInserting(unittest.TestCase):
         self, mk_create_aop_bundle
     ):
         issns = ["1234-0001", "1234-0002", "1234-0003"]
-        data = {
-            "eissn": issns[0],
-            "pissn": issns[1],
-            "issn": issns[2],
-            "year": "2019",
-        }
+        data = {"eissn": issns[0], "pissn": issns[1], "issn": issns[2], "year": "2019"}
         session_db = MagicMock()
         session_db.documents_bundles.fetch.side_effect = DoesNotExist
         mk_create_aop_bundle.side_effect = DoesNotExist
-        self.assertRaises(
-            ValueError, inserting.get_documents_bundle, session_db, data
-        )
+        self.assertRaises(ValueError, inserting.get_documents_bundle, session_db, data)
         mk_create_aop_bundle.assert_has_calls(
             [call(session_db, issn) for issn in issns], True
         )
@@ -162,10 +147,7 @@ class TestProcessingInserting(unittest.TestCase):
         session_db.documents_bundles.fetch.side_effect = DoesNotExist
         mk_create_aop_bundle.side_effect = DoesNotExist
         self.assertRaises(
-            ValueError,
-            inserting.get_documents_bundle,
-            session_db,
-            self.aop_data
+            ValueError, inserting.get_documents_bundle, session_db, self.aop_data
         )
 
     @patch("documentstore_migracao.processing.inserting.create_aop_bundle")
@@ -179,26 +161,17 @@ class TestProcessingInserting(unittest.TestCase):
         result = inserting.get_documents_bundle(session_db, self.aop_data)
         self.assertEqual(result, mocked_aop_bundle)
 
-    def test_create_aop_bundle_gets_journal(
-        self
-    ):
+    def test_create_aop_bundle_gets_journal(self):
         issn = "1234-0001"
         session_db = MagicMock()
         inserting.create_aop_bundle(session_db, issn)
         session_db.journals.fetch.assert_called_once_with(issn)
 
-    def test_create_aop_bundle_raises_exception_if_journal_not_found(
-        self
-    ):
+    def test_create_aop_bundle_raises_exception_if_journal_not_found(self):
         issn = "1234-0001"
         session_db = MagicMock()
         session_db.journals.fetch.side_effect = DoesNotExist
-        self.assertRaises(
-            DoesNotExist,
-            inserting.create_aop_bundle,
-            session_db,
-            issn
-        )
+        self.assertRaises(DoesNotExist, inserting.create_aop_bundle, session_db, issn)
 
     @patch(
         "documentstore_migracao.processing.inserting.scielo_ids_generator.aops_bundle_id"
@@ -220,12 +193,12 @@ class TestProcessingInserting(unittest.TestCase):
     ):
         mk_utcnow.return_value = "2019-01-02T05:00:00.000000Z"
         expected = {
-            "_id" : "0001-3714-aop",
-            "created" : "2019-01-02T05:00:00.000000Z",
-            "updated" : "2019-01-02T05:00:00.000000Z",
-            "items" : [],
-            "metadata" : {},
-            "id" : "0001-3714-aop",
+            "_id": "0001-3714-aop",
+            "created": "2019-01-02T05:00:00.000000Z",
+            "updated": "2019-01-02T05:00:00.000000Z",
+            "items": [],
+            "metadata": {},
+            "id": "0001-3714-aop",
         }
         mk_bundle_manifest = Mock()
         MockManifestDomainAdapter.return_value = mk_bundle_manifest
@@ -235,7 +208,9 @@ class TestProcessingInserting(unittest.TestCase):
         )
         inserting.create_aop_bundle(session_db, SAMPLE_KERNEL_JOURNAL["id"])
         MockManifestDomainAdapter.assert_any_call(manifest=expected)
-        session_db.documents_bundles.add.assert_called_once_with(data=mk_bundle_manifest)
+        session_db.documents_bundles.add.assert_called_once_with(
+            data=mk_bundle_manifest
+        )
         session_db.changes.add.assert_any_call(
             {
                 "timestamp": "2019-01-02T05:00:00.000000Z",
@@ -245,9 +220,7 @@ class TestProcessingInserting(unittest.TestCase):
         )
 
     @patch("documentstore_migracao.processing.inserting.utcnow")
-    def test_create_aop_bundle_links_aop_bundle_to_journal(
-        self, mk_utcnow
-    ):
+    def test_create_aop_bundle_links_aop_bundle_to_journal(self, mk_utcnow):
         mk_utcnow.return_value = "2019-01-02T05:00:00.000000Z"
         mocked_journal_data = inserting.ManifestDomainAdapter(
             manifest=SAMPLE_KERNEL_JOURNAL
@@ -260,7 +233,7 @@ class TestProcessingInserting(unittest.TestCase):
         session_db.changes.add.assert_any_call(
             {
                 "timestamp": "2019-01-02T05:00:00.000000Z",
-                "entity": "journal",
+                "entity": "Journal",
                 "id": SAMPLE_KERNEL_JOURNAL["id"],
             }
         )
@@ -340,19 +313,18 @@ class TestProcessingInserting(unittest.TestCase):
         inserting.register_documents_in_documents_bundle(
             session_db, documents_sorted_in_bundles
         )
-        mk_get_documents_bundle.assert_any_call(
-            session_db, self.data
-        )
-        mk_get_documents_bundle.assert_any_call(
-            session_db, self.aop_data
-        )
+        mk_get_documents_bundle.assert_any_call(session_db, self.data)
+        mk_get_documents_bundle.assert_any_call(session_db, self.aop_data)
 
 
 class TestDocumentManifest(unittest.TestCase):
     @patch("documentstore_migracao.object_store.minio.MinioStorage")
     def setUp(self, mock_minio_storage):
         self.package_path = os.path.join(SAMPLES_PATH, "0034-8910-rsp-47-02-0231")
-        self.renditions_names = ["0034-8910-rsp-47-02-0231.pdf", "0034-8910-rsp-47-02-0231-en.pdf"]
+        self.renditions_names = [
+            "0034-8910-rsp-47-02-0231.pdf",
+            "0034-8910-rsp-47-02-0231-en.pdf",
+        ]
         self.renditions_urls_mock = [
             "prefix/0034-8910-rsp-47-02-0231.pdf.pdf",
             "prefix/0034-8910-rsp-47-02-0231.pdf-en.pdf",
@@ -365,7 +337,9 @@ class TestDocumentManifest(unittest.TestCase):
 
     def test_rendition_should_contains_file_name(self):
         self.assertEqual("0034-8910-rsp-47-02-0231.pdf", self.renditions[0]["filename"])
-        self.assertEqual("0034-8910-rsp-47-02-0231-en.pdf", self.renditions[1]["filename"])
+        self.assertEqual(
+            "0034-8910-rsp-47-02-0231-en.pdf", self.renditions[1]["filename"]
+        )
 
     def test_rendition_should_contains_url_link(self):
         self.assertEqual(self.renditions_urls_mock[0], self.renditions[0]["url"])
@@ -378,10 +352,10 @@ class TestDocumentManifest(unittest.TestCase):
     def test_rendition_should_contains_mimetype(self):
         self.assertEqual("application/pdf", self.renditions[0]["mimetype"])
         self.assertEqual("application/pdf", self.renditions[1]["mimetype"])
-    
+
     def test_renditon_should_contains_language(self):
         self.assertEqual("en", self.renditions[1]["lang"])
-    
+
     def test_rendtion_should_not_contains_language(self):
         self.assertIsNone(self.renditions[0].get("lang"))
 
