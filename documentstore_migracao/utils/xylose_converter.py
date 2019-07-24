@@ -50,10 +50,7 @@ def journal_to_kernel(journal):
 
     # TODO: Virá algo do xylose para popular o campo de métricas?
 
-    _id = journal.any_issn()
-
-    if not _id:
-        _id = journal.scielo_issn
+    _id = journal.scielo_issn
 
     if not _id:
         raise ValueError("É preciso que o periódico possua um id")
@@ -165,7 +162,7 @@ def issue_to_kernel(issue):
     de dados equivalente ao persistido pelo Kernel em um banco
     mongodb"""
 
-    issn_id = get_journal_issn_in_issue(issue)
+    issn_id = issue.data['issue']['v35'][0]['_']
     _creation_date = parse_date(issue.publication_date)
     _metadata = {}
     _bundle = {

@@ -8,7 +8,7 @@ from documentstore_migracao.processing import reading, conversion
 from documentstore.interfaces import Session
 from documentstore.domain import utcnow
 from documentstore.exceptions import AlreadyExists, DoesNotExist
-from documentstore_migracao.utils.xylose_converter import find_documents_bundles
+from documentstore_migracao.utils.xylose_converter import issue_to_kernel
 
 logger = logging.getLogger(__name__)
 
@@ -132,9 +132,7 @@ def import_documents_bundles_link_with_journal(file_path: str, session: Session)
             )
 
 
-def link_documents_bundles_with_journals(
-    journal_path: str, issue_path: str, output_path: str
-):
+def link_documents_bundles_with_journals(issue_path: str, output_path: str):
     """Busca pelo relacionamento entre periódicos e fascículos a partir
     de arquivos JSON extraídos de uma base MST. O resultado é escrito
     em um arquivo JSON contendo um objeto (dict) com identificadores de
@@ -143,15 +141,17 @@ def link_documents_bundles_with_journals(
 
     journals_bundles = {}
     extract_isis.create_output_dir(output_path)
-
-    journals_as_json = reading.read_json_file(journal_path)
     issues_as_json = reading.read_json_file(issue_path)
-    journals = conversion.conversion_journals_to_kernel(journals_as_json)
     issues = conversion.conversion_issues_to_xylose(issues_as_json)
     issues = filter_issues(issues)
 
-    for journal in journals:
-        journals_bundles[journal["id"]] = find_documents_bundles(journal, issues)
+    for issue in issues:
+        journal_id = issue.data["issue"]["v35"][0]["_"]
+        journals_bundles.setdefault(journal_id, [])
+        _issue_id = issue_to_kernel(issue)["_id"]
+
+        if not _issue_id in journals_bundles[journal_id]:
+            journals_bundles[journal_id].append(_issue_id)
 
     with open(output_path, "w") as output:
         output.write(json.dumps(journals_bundles, indent=4, sort_keys=True))

@@ -211,7 +211,7 @@ class IsisCommandLineTests(unittest.TestCase):
     ):
         migrate_isis_parser("link".split())
         error_mock.assert_called_with(
-            "the following arguments are required: journals, issues, --output"
+            "the following arguments are required: issues, --output"
         )
 
     @mock.patch(
@@ -220,13 +220,10 @@ class IsisCommandLineTests(unittest.TestCase):
     def test_link_command_should_link_journals_and_bundles(
         self, link_documents_bundles_with_journals_mock
     ):
-        migrate_isis_parser(
-            """link journals.json
-            issues.json --output linked.json""".split()
-        )
+        migrate_isis_parser("""link issues.json --output linked.json""".split())
 
         link_documents_bundles_with_journals_mock.assert_called_once_with(
-            "journals.json", "issues.json", "linked.json"
+            "issues.json", "linked.json"
         )
 
 
@@ -303,7 +300,7 @@ class TestLinkDocumentsBundlesWithJournals(unittest.TestCase):
 
         read_json_file_mock.return_value = []
         pipeline.link_documents_bundles_with_journals(
-            "~/title.json", "~/issues.json", "~/json/output.json"
+            "~/issues.json", "~/json/output.json"
         )
         create_output_dir_mock.return_value = None
         create_output_dir_mock.assert_called_once()
@@ -313,14 +310,14 @@ class TestLinkDocumentsBundlesWithJournals(unittest.TestCase):
         "documentstore_migracao.processing.pipeline.extract_isis.create_output_dir"
     )
     @mock.patch("builtins.open")
-    def test_should_read_journals_and_issues(
+    def test_should_read_issues(
         self, open_mock, create_output_dir_mock, read_json_file_mock
     ):
-        read_json_file_mock.side_effect = [SAMPLE_JOURNALS_JSON, SAMPLE_ISSUES_JSON]
+        read_json_file_mock.side_effect = [SAMPLE_ISSUES_JSON]
         pipeline.link_documents_bundles_with_journals(
-            "~/title.json", "~/issues.json", "~/json/output.json"
+            "~/issues.json", "~/json/output.json"
         )
-        self.assertEqual(2, read_json_file_mock.call_count)
+        self.assertEqual(1, read_json_file_mock.call_count)
 
     @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
     @mock.patch(
@@ -330,11 +327,11 @@ class TestLinkDocumentsBundlesWithJournals(unittest.TestCase):
     def test_should_write_output_file(
         self, open_mock, create_output_dir_mock, read_json_file_mock
     ):
-        read_json_file_mock.side_effect = [SAMPLE_JOURNALS_JSON, SAMPLE_ISSUES_JSON]
+        read_json_file_mock.side_effect = [SAMPLE_ISSUES_JSON]
         open_mock.side_effect = mock.mock_open()
 
         pipeline.link_documents_bundles_with_journals(
-            "~/title.json", "~/issues.json", "~/json/output.json"
+            "~/issues.json", "~/json/output.json"
         )
 
         open_mock.assert_called_once_with("~/json/output.json", "w")
