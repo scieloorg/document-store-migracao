@@ -1107,6 +1107,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.CreateAssetElementsFromImgOrTableElementsPipe(super_obj=html_pipeline),
             self.APipe(super_obj=html_pipeline),
             self.ImgPipe(super_obj=html_pipeline),
+            self.CompleteFnConversionPipe(),
         )
 
     def deploy(self, raw):
@@ -1680,8 +1681,151 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-
             _process(xml, "img", self.parser_node)
+            return data
+
+    class CompleteFnConversionPipe(plumber.Pipe):
+        """
+        """
+        def _remove_invalid_node(self, node, parent, _next):
+            if _next is not None and _next.tag == "xref" and get_node_text(node) == "":
+                _id = node.attrib.get("id")
+                if _id.startswith("fn") or _id.startswith("replace_by_reftype"):
+                    if _id.endswith("a"):
+                        _remove_element_or_comment(node)
+                    else:
+                        _remove_element_or_comment(_next)
+                    return True
+
+        def _move_fn_tail_into_fn(self, node):
+            _next = node.getnext()
+            parent = node.getparent()
+            items = []
+            while _next is not None:
+                if (_next.tag == "fn" or
+                    _next.tag == "p" and get_node_text(_next) != ""
+                    ):
+                    break
+                else:
+                    items.append(_next)
+                    _next = _next.getnext()
+            if len(items) > 0 or node.tail:
+                node.text = node.tail
+                for item in items:
+                    node.append(deepcopy(item))
+                    parent.remove(item)
+                node.tail = ""
+
+        def _identify_label_and_p(self, node):
+            """Para fn que contém text, mas nao contém filhos,
+            identificar label (se houver) e p.
+            """
+            print("")
+            print("\nnode", etree.tostring(node))
+            children = node.getchildren()
+            self._create_label(node)
+            print("\nlabel", etree.tostring(node))
+            if len(children) == 0:
+                self._create_p_for_simple_content(node)
+                print("\np1", etree.tostring(node))
+            else:
+                self._create_p_for_complex_content(node)
+                print("\np2", etree.tostring(node))
+
+        def _create_label(self, node):
+            parent = node.getparent()
+            node_text = get_node_text(node)
+            children = node.getchildren()
+            if (node.text or "").strip():
+                texts = node.text.split()
+                if not texts[0].isalpha():
+                    label = etree.Element("label")
+                    label.text = texts[0]
+                    node.insert(0, label)
+
+                    label.tail = node.text.replace(texts[0], "")
+                    node.text = ""
+
+            else:
+                if children and children[0].tag in ["strong", "italic", "sup"]:
+                    if len(children[0].text.split()) <= 3 and \
+                       children[0].text != get_node_text(node):
+                        label = etree.Element("label")
+                        label_content = deepcopy(children[0])
+                        label_content.tail = ""
+                        label.append(label_content)
+                        label.tail = children[0].tail
+                        node.insert(0, label)
+                        node.remove(children[0])
+
+        def _create_p_for_simple_content(self, node):
+            p = etree.Element("p")
+            label = node.find("label")
+            if label is None:
+                p.text = node.text
+                node.text = ""
+            else:
+                p.text = label.tail.strip()
+                label.tail = ""
+            node.append(p)
+
+        def _create_p_for_complex_content(self, node):
+            parent = node.getparent()
+            node_text = get_node_text(node)
+            children = node.getchildren()
+            p = [child.tag
+                 for child in children
+                 if child.tag == "p" and child.attrib.get("content-type") != "break"]
+            if len(p) == 0:
+                new_p = etree.Element("p")
+                for child in children:
+                    if child.tag == "label":
+                        new_p.text = child.tail
+                        child.tail = ""
+                    else:
+                        new_p.append(deepcopy(child))
+                        node.remove(child)
+                node.append(new_p)
+            else:
+                for child in children:
+                    if child.tag in ["p", "label"]:
+                        if (child.tail or "").strip():
+                            new_p = etree.Element("p")
+                            new_p.text = child.tail
+                            child.tail = ""
+                            child.addnext(new_p)
+                    else:
+                        new_p = etree.Element("p")
+                        new_p.append(deepcopy(child))
+                        child.addprevious(new_p)
+                        node.remove(child)
+
+        def update(self, node):
+            parent = node.getparent()
+            _next = node.getnext()
+            fn_text = get_node_text(node)
+            fn_children = node.getchildren()
+            invalid_node = self._remove_invalid_node(node, parent, _next)
+            if not invalid_node:
+                if not fn_text:
+                    self._move_fn_tail_into_fn(node)
+                self._identify_label_and_p(node)
+                print(etree.tostring(node))
+
+        def transform(self, data):
+            raw, xml = data
+            items = []
+            for fn in xml.findall(".//fn"):
+                self.update(fn)
+                items.append(etree.tostring(fn))
+
+            text = etree.tostring(xml)
+            for item in items:
+                if not item in text:
+                    print("\nNOT FOUND")
+                    print(item)
+            print("\n")
+            print(items)
             return data
 
 
