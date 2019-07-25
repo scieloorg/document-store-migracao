@@ -1720,17 +1720,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
             """Para fn que contém text, mas nao contém filhos,
             identificar label (se houver) e p.
             """
-            print("")
-            print("\nnode", etree.tostring(node))
             children = node.getchildren()
             self._create_label(node)
-            print("\nlabel", etree.tostring(node))
             if len(children) == 0:
                 self._create_p_for_simple_content(node)
-                print("\np1", etree.tostring(node))
             else:
                 self._create_p_for_complex_content(node)
-                print("\np2", etree.tostring(node))
 
         def _create_label(self, node):
             parent = node.getparent()
@@ -1810,7 +1805,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if not fn_text:
                     self._move_fn_tail_into_fn(node)
                 self._identify_label_and_p(node)
-                print(etree.tostring(node))
 
         def transform(self, data):
             raw, xml = data
@@ -1818,14 +1812,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for fn in xml.findall(".//fn"):
                 self.update(fn)
                 items.append(etree.tostring(fn))
-
-            text = etree.tostring(xml)
-            for item in items:
-                if not item in text:
-                    print("\nNOT FOUND")
-                    print(item)
-            print("\n")
-            print(items)
             return data
 
 
