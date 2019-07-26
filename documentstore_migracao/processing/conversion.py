@@ -50,11 +50,8 @@ def convert_article_ALLxml():
     for file_xml in tqdm(list_files_xmls):
 
         try:
-            logger.info("inicio " + file_xml)
             convert_article_xml(
                 os.path.join(config.get("SOURCE_PATH"), file_xml))
-            logger.info("fim " + file_xml)
-
         except Exception as ex:
             logger.error(file_xml)
             logger.exception(ex)

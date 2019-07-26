@@ -1099,6 +1099,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AddNameAndIdToElementAPipe(super_obj=html_pipeline),
             self.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(super_obj=html_pipeline),
             self.DeduceAndSuggestConversionPipe(super_obj=html_pipeline),
+            self.RemoveAnchorAndLinksToTextPipe(),
             self.ApplySuggestedConversionPipe(super_obj=html_pipeline),
             self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
             self.CreateAssetElementsFromExternalLinkElementsPipe(
@@ -1514,6 +1515,33 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self._add_xml_attribs_to_img(images)
             return data
 
+    class RemoveAnchorAndLinksToTextPipe(plumber.Pipe):
+        """
+        No texto há ancoras e referencias cruzada do texto para as notas e
+        também das notas para o texto. Este pipe é para remover as
+        âncoras e referências cruzadas das notas para o texto.
+        """
+        def _identify_order(self, xml):
+            items_by_id = {}
+            for a in xml.findall(".//a[@xml_tag]"):
+                if a.attrib.get("xml_tag") == "fn":
+                    _id = a.attrib.get("xml_id")
+                    items_by_id[_id] = items_by_id.get(_id, [])
+                    items_by_id[_id].append(a)
+            return items_by_id
+
+        def _exclude(self, items_by_id):
+            for _id, nodes in items_by_id.items():
+                if len(nodes) >= 2 and nodes[0].attrib.get("name"):
+                    for n in nodes:
+                        _remove_element_or_comment(n)
+
+        def transform(self, data):
+            raw, xml = data
+            items_by_id = self._identify_order(xml)
+            self._exclude(items_by_id)
+            return data
+
     class ApplySuggestedConversionPipe(CustomPipe):
         """
         Converte os elementos a, para as tags correspondentes, considerando
@@ -1703,7 +1731,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             items = []
             while _next is not None:
                 if (_next.tag == "fn" or
-                    _next.tag == "p" and get_node_text(_next) != ""
+                    _next.tag == "p" and _next.attrib.get("content-type") != "break"
                     ):
                     break
                 else:

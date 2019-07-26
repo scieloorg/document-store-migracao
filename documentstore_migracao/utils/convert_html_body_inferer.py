@@ -25,6 +25,8 @@ class Inferer:
                 return
         for prefix, tag in STARTSWITH_RETURNS_TAG_AND_REFTYPE:
             if name.startswith(prefix):
+                if len(prefix) == 1 and not name[len(prefix) :].isdigit():
+                    return "fn", "fn"
                 return tag, self.ref_type(tag)
         if not name[0].isalnum():
             if name[0] == "*":
@@ -50,6 +52,7 @@ class Inferer:
                 return tag, self.ref_type(tag)
         if "corresp" in a_href_text:
             return "corresp", "corresp"
+        #return "fn", "fn"
 
     def tag_and_reftype_and_id_from_filepath(self, file_path, elem_name=None):
         filename, __ = files.extract_filename_ext_by_path(file_path)
