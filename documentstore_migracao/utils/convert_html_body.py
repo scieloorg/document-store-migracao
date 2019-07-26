@@ -134,7 +134,7 @@ class HTML2SPSPipeline(object):
             self.RemoveStyleAttributesPipe(),
             self.RemoveCommentPipe(),
             self.BRPipe(),
-            self.PPipe(),
+            #self.PPipe(),
             self.DivPipe(),
             self.LiPipe(),
             self.OlPipe(),
@@ -310,28 +310,6 @@ class HTML2SPSPipeline(object):
             "trans-title",
         ]
 
-        def ___transform(self, data):
-            raw, xml = data
-            nodes = xml.findall("*[br]")
-            for node in nodes:
-                if node.tag in self.ALLOWED_IN:
-                    for br in node.findall("br"):
-                        br.tag = "break"
-                elif node.tag == "p":
-                    for br in node.findall("br"):
-                        if br.tail:
-                            p = etree.Element("p")
-                            p.text = br.tail.strip()
-                            br.tail = br.tail.replace(p.text, "")
-                            br.addnext(p)
-            etree.strip_tags(xml, "br")
-            return data
-
-        def replace_CHANGE_BR_by_close_p_open_p(self, xml):
-            _xml = etree.tostring(xml)
-            _xml = _xml.replace(b"<CHANGE_BR/>", b"</p><p>")
-            return etree.fromstring(_xml)
-
         def transform(self, data):
             raw, xml = data
             changed = False
@@ -341,13 +319,20 @@ class HTML2SPSPipeline(object):
                     for br in node.findall("br"):
                         br.tag = "break"
                 elif node.tag == "p":
+                    if node.text:
+                        p = etree.Element("p")
+                        p.text = node.text
+                        node.insert(0, p)
+                        node.text = ""
                     for br in node.findall("br"):
-                        br.tag = "CHANGE_BR"
-                        changed = True
+                        br.tag = "p"
+                        br.set("content-type", "break")
+                        if br.tail:
+                            br.text = br.tail
+                            br.tail = ""
+                    _remove_element_or_comment(node)
 
             etree.strip_tags(xml, "br")
-            if changed:
-                return data[0], self.replace_CHANGE_BR_by_close_p_open_p(xml)
             return data
 
     class PPipe(plumber.Pipe):
@@ -398,7 +383,6 @@ class HTML2SPSPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-
             _process(xml, "p", self.parser_node)
             return data
 

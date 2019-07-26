@@ -153,10 +153,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_br(self):
         text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
-        print("?", etree.tostring(transformed))
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p align="x">bla</p><p> continua outra linha</p><p baljlba="1"/><td><break/></td><sec/></root>',
+            b'<root><p>bla</p><p content-type="break"> continua outra linha</p><p baljlba="1"/><td><break/></td><sec/></root>',
         )
 
     def test_pipe_p(self):
