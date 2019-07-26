@@ -1184,6 +1184,7 @@ class TestCreateAssetElementsFromExternalLinkElementsPipe(unittest.TestCase):
         self.assertIsNone(xml.find(".//fig/a"))
 
 
+
 class TestConversionToAnnex(unittest.TestCase):
     def test_convert_to_app(self):
         text = """<root>
@@ -1451,6 +1452,8 @@ class TestHTMLEscapingPipe(unittest.TestCase):
 class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
     def setUp(self):
         self.html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        self.pipe = self.html_pl.ConvertElementsWhichHaveIdPipe(
+            self.html_pl)
         self.pl = ConvertElementsWhichHaveIdPipeline(self.html_pl)
 
     def test_remove_thumb_img_pipe(self):
@@ -1512,7 +1515,6 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.assertIsNone(node)
         self.assertIsNone(transformed.find(".//graphic"))
 
-
     def test_pipe_asterisk_in_a_name(self):
         text = '<root><a name="*" id="*"/></root>'
         expected = b"<root/>"
@@ -1534,6 +1536,43 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.assertIsNone(node)
         # self.assertIsNotNone(transformed.find(".//sup"))
         self.assertEqual(etree.tostring(transformed), b"<root/>")
+
+    def test_pipe_remove_anchor_and_links_to_text_removes_some_elements(self):
+        text = """<root>
+        <a href="#nota" xml_tag="xref" xml_id="nota" xml_label="1" xml_reftype="fn">1</a>
+        <a name="texto" xml_tag="fn" xml_id="texto" xml_reftype="fn"/>
+        <a name="nota"  xml_tag="fn" xml_id="nota" xml_reftype="fn"/>
+        <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
+        </root>"""
+        raw, transformed = text, etree.fromstring(text)
+        raw, transformed = self.pl.RemoveAnchorAndLinksToTextPipe().transform((raw, transformed))
+        nodes = transformed.findall(".//a[@name='nota']")
+        self.assertEqual(len(nodes), 1)
+        nodes = transformed.findall(".//a[@href='#nota']")
+        self.assertEqual(len(nodes), 1)
+
+    def test_convert_elements_which_have_id_pipeline_removes_some_elements(self):
+        text = """<root>
+        <a href="#nt1">1</a>
+        <a name="xnt1"/>
+        <a name="nt1"/>
+        <a href="#xnt1">1</a> Nota bla bla
+        </root>"""
+        expected = b"""
+        <root>
+        <xref ref-type="fn" rid="nt1">1</xref>
+        <fn id="nt1"><label>1</label><p>Nota bla bla</p></fn></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        nodes = xml.findall(".//fn")
+        self.assertEqual(len(nodes), 1)
+        nodes = xml.findall(".//fn")
+        self.assertEqual(nodes[0].find("label").text, "1")
+        self.assertEqual(nodes[0].find("p").text, "Nota bla bla")
+
+        nodes = xml.findall(".//xref")
+        self.assertEqual(len(nodes), 1)
+        self.assertEqual(nodes[0].text, "1")
 
 
 class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
@@ -2148,14 +2187,12 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         </root>"""
         xml = etree.fromstring(text)
         node = xml.find(".//fn")
-
         self.pipe._move_fn_tail_into_fn(node)
         self.assertIn("**", node.text)
         self.assertIn("Isso", node.find("italic").text)
         self.assertIn(".", node.find("italic").tail)
         self.assertIsNone(node.find("p"))
         self.assertIsNotNone(node.getparent().find("p"))
-
         text, xml = self.pipe.transform((text, xml))
         fn = xml.find(".//fn")
         self.assertEqual(fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como")
@@ -2262,7 +2299,3 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         self.assertIn("O número de condição", fn[1].find("p").text)
         self.assertIn("T", fn[2].find("p/i").text)
         self.assertIn("A norma-A", fn[3].find("p").text)
-
-
-        print("")
-        print(etree.tostring(xml))
