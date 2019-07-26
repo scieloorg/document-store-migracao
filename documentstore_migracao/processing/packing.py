@@ -26,8 +26,6 @@ def pack_article_xml(file_xml_path):
     pkg_path = os.path.join(SPS_PKG_PATH, original_filename)
     bad_pkg_path = os.path.join(INCOMPLETE_SPS_PKG_PATH, original_filename)
 
-    files.make_empty_dir(pkg_path)
-
     asset_replacements = list(set(sps_package.replace_assets_names()))
     logger.info("%s possui %s ativos digitais", file_xml_path, len(asset_replacements))
 
@@ -60,13 +58,21 @@ def download_asset(old_path, new_fname, dest_path):
         location = old_path
     else:
         try:
-            location = urljoin(config.get("STATIC_URL_FILE"), old_path)
+            location = urljoin(config.get("STATIC_URL_FILE"), old_path.strip())
         except ValueError as exc:
             return 'cannot join URL parts "%s" and "%s": %s' % (
                 config.get("STATIC_URL_FILE"),
                 old_path,
                 exc,
             )
+
+    # Verifica se o arquivo ja foi baixado anteriormente
+    filename_m, ext_m = files.extract_filename_ext_by_path(old_path)
+    dest_path_file = os.path.join(dest_path, "%s%s" % (new_fname.strip(), ext_m))
+    if os.path.exists(dest_path_file):
+        logger.info("Arquivo ja baixado: %s", dest_path_file)
+        return
+
     try:
         request_file = request.get(location, timeout=int(config.get("TIMEOUT") or 10))
     except request.HTTPGetError as e:
@@ -77,10 +83,7 @@ def download_asset(old_path, new_fname, dest_path):
         logger.error(e)
         return msg
     else:
-        filename_m, ext_m = files.extract_filename_ext_by_path(old_path)
-        files.write_file_binary(
-            os.path.join(dest_path, "%s%s" % (new_fname, ext_m)), request_file.content
-        )
+        files.write_file_binary(dest_path_file, request_file.content)
 
 
 def packing_assets(asset_replacements, pkg_path, bad_pkg_path, pkg_name):
