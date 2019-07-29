@@ -155,7 +155,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p>bla</p><p content-type="break"> continua outra linha</p><p baljlba="1"/><td><break/></td><sec/></root>',
+            b'<root><p content-type="break">bla</p><p content-type="break"> continua outra linha</p><p baljlba="1"/><td><break/></td><sec/></root>',
         )
 
     def test_pipe_p(self):
@@ -2200,16 +2200,16 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
 
     def test__move_fn_tail_into_fn__includes_p_break(self):
         text = """<root><fn id="nt01"/>**
-           <italic>Isso é conhecido pelos pesquisadores como</italic> .
-           <p content-type="break"/> .
+           <italic>Isso é conhecido pelos pesquisadores como</italic>
+           <p content-type="break">Email: a@x.org</p>
          </root>"""
         expected = """<root><fn id="nt01">**
-            <italic>Isso é conhecido pelos pesquisadores como</italic> .
-            <p content-type="break"/> . </fn>
+            <italic>Isso é conhecido pelos pesquisadores como</italic>
+            <p content-type="break">Email: a@x.org</p></fn>
         </root>"""
         expected_final = """<root><fn id="nt01"><label>**</label>
-            <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p>
-            <p content-type="break"/><p> . </p></fn>
+            <p><italic>Isso é conhecido pelos pesquisadores como</italic></p>
+            <p content-type="break">Email: a@x.org</p></fn>
         </root>"""
         xml = etree.fromstring(text)
         node = xml.find(".//fn")
@@ -2217,14 +2217,12 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         self.pipe._move_fn_tail_into_fn(node)
         self.assertIn("**", node.text)
         self.assertIn("Isso", node.find("italic").text)
-        self.assertIn(".", node.find("italic").tail)
-        self.assertIsNotNone(node.find("p"))
-        self.assertIsNone(node.getparent().find("p"))
+        self.assertIn("Email", node.find("p").text)
 
         text, xml = self.pipe.transform((text, xml))
         fn = xml.find(".//fn")
         self.assertEqual(fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como")
-        self.assertEqual(fn.find("p/italic").tail.strip(), ".")
+        self.assertEqual(fn.find(".//p[2]").text, "Email: a@x.org")
         self.assertEqual(fn.find("label").text, "**")
 
     def test__create_p_for_complex_content__creates_p(self):
@@ -2251,10 +2249,10 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         self.assertIsNone(fn.find("p/italic").tail)
         self.assertIsNone(fn.find("label"))
 
-    def test_fn_corresp(self):
+    def test__convert_elements_which_have_id_pipe_creates_fn_with_some_paragraphs(self):
         text = """<root>
-          <p><fn id="nt"><p/></fn>
-          <b>Correspondence to:</b>
+          <p><fn id="nt"></fn>
+          <bold>Correspondence to:</bold>
           <br/>
           Maria Auxiliadora Prolungatti Cesar
           <br/>
@@ -2269,8 +2267,26 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
           </p>
         </root>"""
         xml = etree.fromstring(text)
-        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe(self.html_pl).transform((text, xml))
-        self.assertEqual(xml.find(".//fn/p/email").text, "prolungatti@uol.com.br")
+        text, xml = self.html_pl.BRPipe().transform((text, xml))
+        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe(
+            self.html_pl).transform((text, xml))
+        p = xml.findall(".//p")
+        self.assertEqual(
+            xml.find(".//fn/label/bold").text, "Correspondence to:")
+        self.assertEqual(
+            p[0].text.strip(),
+            "Maria Auxiliadora Prolungatti Cesar")
+        self.assertEqual(
+            p[1].text.strip(),
+            "Serviço de Clínica Cirúrgica do Hospital Universitário de Taubaté")
+        self.assertEqual(
+            p[2].text.strip(),
+            "Avenida Granadeiro Guimarães, 270")
+        self.assertEqual(
+            p[3].text.strip(),
+            "CEP: 12100-000 – Taubaté (SP), Brazil.")
+        self.assertEqual(
+            p[5].find("email").text, "prolungatti@uol.com.br")
 
     def test_fn_list(self):
         text = """
@@ -2298,3 +2314,32 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         self.assertIn("O número de condição", fn[1].find("p").text)
         self.assertIn("T", fn[2].find("p/i").text)
         self.assertIn("A norma-A", fn[3].find("p").text)
+
+    def test_convert_elements_which_have_id_pipe_for_asterisk_corresponding_author(self):
+        text = """<root><big>Peter M. Gaylarde; Christine C. Gaylarde
+        <a href="#back"><sup>*</sup></a></big>
+        <a name="back"></a><a href="#home">*</a> Corresponding author.
+        Mailing Address:
+        MIRCEN, Departamento de Solos, UFRGS, Caixa Postal 776, CEP 90001-970,
+        Porto Alegre, RS, Brasil. Fax (+5551) 316-6029.
+        Email
+        <a href="mailto:chrisg@vortex.ufrgs.br">chrisg@vortex.ufrgs.br</a>
+        </root>
+        """
+        expected = b"""<root><big>Peter M. Gaylarde; Christine C. Gaylarde
+        <xref ref-type="fn" rid="back"><sup>*</sup></xref></big>
+        <fn id="back"><label>*</label><p> Corresponding author.
+        Mailing Address:
+        MIRCEN, Departamento de Solos, UFRGS, Caixa Postal 776, CEP 90001-970,
+        Porto Alegre, RS, Brasil. Fax (+5551) 316-6029.
+        Email
+        <email>chrisg@vortex.ufrgs.br</email>
+        </p></fn></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe(
+            self.html_pl).transform((text, xml))
+        self.assertEqual(xml.find(".//xref/sup").text, "*")
+        self.assertEqual(xml.find(".//fn/label").text, "*")
+        self.assertEqual(
+            xml.find(".//fn/p/email").text, "chrisg@vortex.ufrgs.br")
+        self.assertIn("Corresponding author", xml.find(".//fn/p").text, "*")

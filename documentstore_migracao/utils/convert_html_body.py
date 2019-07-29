@@ -134,7 +134,7 @@ class HTML2SPSPipeline(object):
             self.RemoveStyleAttributesPipe(),
             self.RemoveCommentPipe(),
             self.BRPipe(),
-            #self.PPipe(),
+            self.PPipe(),
             self.DivPipe(),
             self.LiPipe(),
             self.OlPipe(),
@@ -321,6 +321,7 @@ class HTML2SPSPipeline(object):
                 elif node.tag == "p":
                     if node.text:
                         p = etree.Element("p")
+                        p.set("content-type", "break")
                         p.text = node.text
                         node.insert(0, p)
                         node.text = ""
@@ -1081,7 +1082,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.SetupPipe(),
             self.RemoveThumbImgPipe(),
             self.AddNameAndIdToElementAPipe(super_obj=html_pipeline),
-            self.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(super_obj=html_pipeline),
             self.DeduceAndSuggestConversionPipe(super_obj=html_pipeline),
             self.RemoveAnchorAndLinksToTextPipe(),
             self.ApplySuggestedConversionPipe(super_obj=html_pipeline),
@@ -1749,14 +1749,17 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     label = etree.Element("label")
                     label.text = texts[0]
                     node.insert(0, label)
-
                     label.tail = node.text.replace(texts[0], "")
                     node.text = ""
-
-            else:
-                if children and children[0].tag in ["strong", "italic", "sup"]:
-                    if len(children[0].text.split()) <= 3 and \
-                       children[0].text != get_node_text(node):
+            elif children:
+                if children[0].tag == "p":
+                    elem = children[0].find("*")
+                    if elem is not None and elem.tag in ["sup", "bold"]:
+                        children[0].tag = "label"
+                elif children[0].tag in ["sup", "bold"]:
+                    children_text = get_node_text(children[0])
+                    if len(children_text.split()) <= 3 and \
+                            children_text != get_node_text(node):
                         label = etree.Element("label")
                         label_content = deepcopy(children[0])
                         label_content.tail = ""
@@ -1780,32 +1783,18 @@ class ConvertElementsWhichHaveIdPipeline(object):
             parent = node.getparent()
             node_text = get_node_text(node)
             children = node.getchildren()
-            p = [child.tag
-                 for child in children
-                 if child.tag == "p" and child.attrib.get("content-type") != "break"]
-            if len(p) == 0:
-                new_p = etree.Element("p")
-                for child in children:
-                    if child.tag == "label":
+            for child in children:
+                if child.tag in ["label", "p"]:
+                    if (child.tail or "").strip():
+                        new_p = etree.Element("p")
                         new_p.text = child.tail
                         child.tail = ""
-                    else:
-                        new_p.append(deepcopy(child))
-                        node.remove(child)
-                node.append(new_p)
-            else:
-                for child in children:
-                    if child.tag in ["p", "label"]:
-                        if (child.tail or "").strip():
-                            new_p = etree.Element("p")
-                            new_p.text = child.tail
-                            child.tail = ""
-                            child.addnext(new_p)
-                    else:
-                        new_p = etree.Element("p")
-                        new_p.append(deepcopy(child))
-                        child.addprevious(new_p)
-                        node.remove(child)
+                        child.addnext(new_p)
+                else:
+                    new_p = etree.Element("p")
+                    new_p.append(deepcopy(child))
+                    child.addprevious(new_p)
+                    node.remove(child)
 
         def update(self, node):
             parent = node.getparent()

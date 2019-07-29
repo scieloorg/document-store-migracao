@@ -45,14 +45,12 @@ class Inferer:
             else:
                 break
         text = a_href_text[i:]
-        # if text[0].isdigit() and :
-        #     return "fn", "fn"
         for prefix, tag in STARTSWITH_RETURNS_TAG_AND_REFTYPE:
             if text.startswith(prefix) and len(prefix) > 1:
                 return tag, self.ref_type(tag)
         if "corresp" in a_href_text:
             return "corresp", "corresp"
-        #return "fn", "fn"
+
 
     def tag_and_reftype_and_id_from_filepath(self, file_path, elem_name=None):
         filename, __ = files.extract_filename_ext_by_path(file_path)
