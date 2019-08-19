@@ -20,7 +20,7 @@ class TestMainTools(unittest.TestCase):
 
         with utils.environ(VALID_XML_PATH="/tmp", CONSTRUCTOR_PATH="/tmp"):
             tools_parser(["construction"])
-            mk_article_ALL_constructor.assert_called_once_with("/tmp", "/tmp")
+            mk_article_ALL_constructor.assert_called_once_with("/tmp", "/tmp", False)
 
 
 class TestProcessingConstructor(unittest.TestCase):
@@ -28,7 +28,7 @@ class TestProcessingConstructor(unittest.TestCase):
     def test_article_xml_constructor(self, mk_write_file):
 
         constructor.article_xml_constructor(
-            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), "/tmp"
+            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), "/tmp", False
         )
         mk_write_file.assert_called_with(
             "/tmp/S0044-59672003000300001.pt.xml", ANY, pretty=True
@@ -37,15 +37,15 @@ class TestProcessingConstructor(unittest.TestCase):
     @patch("documentstore_migracao.tools.constructor.article_xml_constructor")
     def test_article_ALL_constructor(self, mk_article_xml_constructor):
 
-        constructor.article_ALL_constructor(SAMPLES_PATH, "/tmp")
-        mk_article_xml_constructor.assert_called_with(ANY, "/tmp")
+        constructor.article_ALL_constructor(SAMPLES_PATH, "/tmp", False)
+        mk_article_xml_constructor.assert_called_with(ANY, "/tmp", False)
 
     @patch("documentstore_migracao.tools.constructor.article_xml_constructor")
     def test_article_ALL_constructor_with_exception(self, mk_article_xml_constructor):
 
         mk_article_xml_constructor.side_effect = KeyError("Test Error - constructor")
         with self.assertLogs("documentstore_migracao.tools.constructor") as log:
-            constructor.article_ALL_constructor(SAMPLES_PATH, "/tmp")
+            constructor.article_ALL_constructor(SAMPLES_PATH, "/tmp", False)
 
         has_message = False
         for log_message in log.output:
