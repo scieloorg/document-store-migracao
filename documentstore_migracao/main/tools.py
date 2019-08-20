@@ -44,7 +44,7 @@ def tools_parser(sargs):
         }
     )
     parents_construction.add_argument(
-        "--in-place", type=bool, default=False,
+        "--in-place", action='store_true', default=False,
         help="Realiza a alteração dos mesmos arquivos xmls que foram recebidos como source"
     )
     construction_parser = subparsers.add_parser(
