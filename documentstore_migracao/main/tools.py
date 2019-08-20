@@ -34,21 +34,26 @@ def tools_parser(sargs):
     )
 
     # CONSTRUCTOR XML
+    parents_construction = paths_parser(
+        sargs,
+        **{
+            "d_source": config.get("VALID_XML_PATH"),
+            "h_source": "Pasta onde esta os xml para transformação, default: VALID_XML_PATH",
+            "d_desc": config.get("CONSTRUCTOR_PATH"),
+            "h_desc": "Pasta onde sera salvo os XML alterados, default: CONSTRUCTOR_PATH",
+        }
+    )
+    parents_construction.add_argument(
+        "--in-place", action='store_true', default=False,
+        help="Realiza a alteração dos mesmos arquivos xmls que foram recebidos como source"
+    )
     construction_parser = subparsers.add_parser(
         "construction",
         help="Alterá todos os XML contidos na pasta informada pelo argumento '--source-path' ou '-p' "
         "ou o default é a pasta 'VALID_XML_PATH' e salva os arquivos na pasta informada pelo '--desc-path' ou '-d' "
         "ou o default é a pasta 'CONSTRUCTOR_PATH' e gerando a tag `article-id` com o scielo-id nos xml",
         parents=[
-            paths_parser(
-                sargs,
-                **{
-                    "d_source": config.get("VALID_XML_PATH"),
-                    "h_source": "Pasta onde esta os xml para transformação, default: VALID_XML_PATH",
-                    "d_desc": config.get("CONSTRUCTOR_PATH"),
-                    "h_desc": "Pasta onde sera salvo os XML alterados, default: CONSTRUCTOR_PATH",
-                }
-            )
+            parents_construction
         ],
     )
 
@@ -64,7 +69,7 @@ def tools_parser(sargs):
         generation.article_ALL_html_generator(args.source_path, args.desc_path)
 
     elif args.command == "construction":
-        constructor.article_ALL_constructor(args.source_path, args.desc_path)
+        constructor.article_ALL_constructor(args.source_path, args.desc_path, args.in_place)
 
     else:
         raise SystemExit(
