@@ -143,6 +143,9 @@ def migrate_articlemeta_parser(sargs):
         help=f"""Entry path to import SPS packages. The default path
         is: {config.get("SPS_PKG_PATH")}""",
     )
+
+    import_parser.add_argument("--output", required=True, help="The output file path")
+
     ################################################################################################
     args = parser.parse_args(sargs)
 
@@ -197,7 +200,7 @@ def migrate_articlemeta_parser(sargs):
         )
 
         inserting.import_documents_to_kernel(
-            session_db=DB_Session(), storage=storage, folder=args.folder
+            session_db=DB_Session(), storage=storage, folder=args.folder, output_path=args.output
         )
 
     else:

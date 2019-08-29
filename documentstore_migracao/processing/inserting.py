@@ -3,6 +3,7 @@
 import os
 import re
 import logging
+import json
 from typing import List, Tuple
 from mimetypes import MimeTypes
 import lxml
@@ -206,6 +207,7 @@ def get_documents_bundle(session_db, data):
     )
     is_issue = data.get("volume") or data.get("number")
     bad_bundle_id = []
+
     for issn in issns:
         if is_issue:
             bundle_id = scielo_ids_generator.issue_id(
@@ -258,20 +260,19 @@ def create_aop_bundle(session_db, issn):
     return session_db.documents_bundles.fetch(bundle_id)
 
 
-def import_documents_to_kernel(session_db, storage, folder) -> None:
+def import_documents_to_kernel(session_db, storage, folder, output_path) -> None:
     """Armazena os arquivos do pacote SPS em um object storage, registra o documento
     no banco de dados do Kernel e por fim associa-o ao seu `document bundle`"""
     documents_sorter = DocumentsSorter()
 
     register_documents(session_db, storage, documents_sorter, folder)
-    register_documents_in_documents_bundle(
-        session_db, documents_sorter.documents_bundles_with_sorted_documents
-    )
+    with open(output_path, "w") as output:
+        output.write(json.dumps(documents_sorter.documents_bundles, indent=4, sort_keys=True))
 
 
 def register_documents(session_db, storage, documents_sorter, folder) -> None:
     """Realiza o processo de importação de pacotes SPS no diretório indicado. O
-    processo de importação segue as fases: registro de assets/renditions no 
+    processo de importação segue as fases: registro de assets/renditions no
     object storage informado, registro do manifesto na base de dados do Kernel
     informada e ordenação dos documentos em um `documents_sorter` para posterior
     associação aos seus respectivos fascículos"""
@@ -285,14 +286,14 @@ def register_documents(session_db, storage, documents_sorter, folder) -> None:
         try:
             xml = list(filter(lambda f: f.endswith(".xml"), sps_files))[0]
             xml_path = os.path.join(path, xml)
-            constructor.article_xml_constructor(xml_path, path)
+            constructor.article_xml_constructor(xml_path, path, False)
             registration_result = register_document(path, session_db, storage)
 
             if registration_result:
                 document_xml, document_id = registration_result
                 documents_sorter.insert_document(document_id, document_xml)
 
-        except (IndexError, ValueError, TypeError) as ex:
+        except (IndexError, ValueError, TypeError, exceptions.XMLError) as ex:
             msg = "Falha ao registrar documento %s: %s" % (path, ex)
             logger.error(msg)
             files.write_file(err_filename, msg, "a")

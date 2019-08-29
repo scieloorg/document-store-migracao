@@ -69,10 +69,12 @@ class TestMigrateProcess(unittest.TestCase):
                 "minio",
                 "--minio_secret_key",
                 "minio123",
+                "--output",
+                "/tmp/docs.json"
             ]
         )
         mk_import_documents_to_kernel.assert_called_once_with(
-            session_db=ANY, storage=ANY, folder=ANY
+            session_db=ANY, storage=ANY, folder=ANY, output_docs=ANY
         )
 
     def test_not_arg(self):

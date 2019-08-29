@@ -460,15 +460,6 @@ class SPS_Package:
                 pubdate.set("publication-format", "electronic")
 
 
-def sort_documents(documents):
-    """
-    documents é uma lista de tuplas (localizacao no kernel, XML)
-    """
-    documents_sorter = DocumentsSorter()
-    documents_sorter.insert_documents(documents)
-    return documents_sorter.documents_bundles_with_sorted_documents
-
-
 class DocumentsSorter:
     def __init__(self):
         self._documents_bundles = {}
@@ -484,22 +475,19 @@ class DocumentsSorter:
 
     def insert_document(self, document_id, document_xml):
         pkg = SPS_Package(document_xml, "none")
-        pkg_docs_bundle_id = pkg.documents_bundle_id
-        if pkg_docs_bundle_id not in self.documents_bundles.keys():
-            self._reverse[pkg_docs_bundle_id] = pkg.is_only_online_publication
-            self._documents_bundles[pkg_docs_bundle_id] = {}
-            self._documents_bundles[pkg_docs_bundle_id]["items"] = {}
-            self._documents_bundles[pkg_docs_bundle_id]["data"] = {
-                "eissn": dict(pkg.journal_meta).get("eissn"),
-                "pissn": dict(pkg.journal_meta).get("pissn"),
-                "issn": dict(pkg.journal_meta).get("issn"),
-                "acron": dict(pkg.journal_meta).get("acron"),
-                "year": pkg.year,
-                "volume": pkg.volume,
-                "number": pkg.number,
-                "supplement": pkg.supplement,
-            }
-        self._documents_bundles[pkg_docs_bundle_id]["items"][pkg.order] = document_id
+
+        self._documents_bundles[document_id] = {
+            "eissn": dict(pkg.journal_meta).get("eissn"),
+            "pissn": dict(pkg.journal_meta).get("pissn"),
+            "issn": dict(pkg.journal_meta).get("issn"),
+            "acron": dict(pkg.journal_meta).get("acron"),
+            "pid": pkg.publisher_id,
+            "year": pkg.year,
+            "volume": pkg.volume,
+            "number": pkg.number,
+            "supplement": pkg.supplement,
+            "order": pkg.order_meta,
+        }
 
     def insert_documents(self, documents):
         """
