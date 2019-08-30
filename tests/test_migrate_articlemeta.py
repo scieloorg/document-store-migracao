@@ -74,7 +74,25 @@ class TestMigrateProcess(unittest.TestCase):
             ]
         )
         mk_import_documents_to_kernel.assert_called_once_with(
-            session_db=ANY, storage=ANY, folder=ANY, output_docs=ANY
+            session_db=ANY, storage=ANY, folder=ANY, output_path=ANY
+        )
+
+    @patch("documentstore_migracao.processing.inserting.register_documents_in_documents_bundle")
+    def test_command_link_documents_issues(self, mk_register_documents_in_documents_bundle):
+
+        migrate_articlemeta_parser(
+            [
+                "link_documents_issues",
+                "--uri",
+                "mongodb://user:password@mongodb-host/?authSource=admin",
+                "--db",
+                "document-store",
+                "/tmp/docs.json",
+                "/tmp/jornal.json",
+            ]
+        )
+        mk_register_documents_in_documents_bundle.assert_called_once_with(
+            session_db=ANY, file_documents=ANY, file_journals=ANY
         )
 
     def test_not_arg(self):
