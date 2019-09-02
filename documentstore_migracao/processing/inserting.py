@@ -7,10 +7,12 @@ import json
 from typing import List, Tuple
 from mimetypes import MimeTypes
 import lxml
-from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
+from xylose.scielodocument import Journal
 
+from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
 from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
+from documentstore_migracao.processing import reading
 
 from documentstore.domain import utcnow, DocumentsBundle, get_static_assets
 from documentstore.exceptions import AlreadyExists, DoesNotExist
@@ -195,53 +197,24 @@ def register_document(folder: str, session_db, storage) -> None:
     return obj_xml, manifest_data.id()
 
 
-def get_documents_bundle(session_db, data):
-    issns = list(
-        set(
-            [
-                data[issn_type]
-                for issn_type in ("eissn", "pissn", "issn")
-                if data.get(issn_type)
-            ]
-        )
-    )
-    is_issue = data.get("volume") or data.get("number")
-    bad_bundle_id = []
-
-    for issn in issns:
+def get_documents_bundle(session_db, bundle_id, is_issue, issn):
+    logger.debug("Fetch documents bundle {}".format(bundle_id))
+    try:
+        documents_bundle = session_db.documents_bundles.fetch(bundle_id)
+    except DoesNotExist:
         if is_issue:
-            bundle_id = scielo_ids_generator.issue_id(
-                issn,
-                data.get("year"),
-                data.get("volume"),
-                data.get("number"),
-                data.get("supplement"),
-            )
+            raise ValueError("Nenhum documents_bundle encontrado %s" % bundle_id)
         else:
-            bundle_id = scielo_ids_generator.aops_bundle_id(issn)
-        logger.debug("Fetch documents bundle {}".format(bundle_id))
-        try:
-            documents_bundle = session_db.documents_bundles.fetch(bundle_id)
-        except DoesNotExist:
-            bad_bundle_id.append(bundle_id)
-        else:
-            return documents_bundle
-    if is_issue:
-        raise ValueError(
-            "Nenhum documents_bundle encontrado %s" % ", ".join(bad_bundle_id)
-        )
-    else:
-        bad_issn = []
-        for issn in issns:
             try:
                 documents_bundle = create_aop_bundle(session_db, issn)
             except DoesNotExist:
-                bad_issn.append(issn)
+                raise ValueError(
+                    "Nenhum periódico encontrado para criação do AOP %s" % issn
+                )
             else:
                 return documents_bundle
-        raise ValueError(
-            "Nenhum periódico encontrado para criação do AOP %s" % ", ".join(bad_issn)
-        )
+    else:
+        return documents_bundle
 
 
 def create_aop_bundle(session_db, issn):
@@ -267,7 +240,9 @@ def import_documents_to_kernel(session_db, storage, folder, output_path) -> None
 
     register_documents(session_db, storage, documents_sorter, folder)
     with open(output_path, "w") as output:
-        output.write(json.dumps(documents_sorter.documents_bundles, indent=4, sort_keys=True))
+        output.write(
+            json.dumps(documents_sorter.documents_bundles, indent=4, sort_keys=True)
+        )
 
 
 def register_documents(session_db, storage, documents_sorter, folder) -> None:
@@ -326,7 +301,7 @@ def link_documents_bundles_with_documents(
 
 
 def register_documents_in_documents_bundle(
-    session_db, documents_sorted_in_bundles
+    session_db, file_documents: str, file_journals: str
 ) -> None:
 
     err_filename = os.path.join(
@@ -334,14 +309,52 @@ def register_documents_in_documents_bundle(
     )
 
     not_registered = []
+    journals = reading.read_json_file(file_journals)
+    documents = reading.read_json_file(file_documents)
 
-    for key, documents_bundle in documents_sorted_in_bundles.items():
+    data_journal = {}
+    for journal in journals:
+        o_journal = Journal(journal)
+        data_journal[o_journal.print_issn] = o_journal.scielo_issn
+        data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
+        data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
+
+    documents_bundles = {}
+    for document in documents.values():
+        is_issue = bool(document.get("volume") or document.get("number"))
+        if is_issue:
+            bundle_id = scielo_ids_generator.issue_id(
+                data_journal[document.get("issn")],
+                document.get("year"),
+                document.get("volume"),
+                document.get("number"),
+                document.get("supplement"),
+            )
+        else:
+            bundle_id = scielo_ids_generator.aops_bundle_id(
+                data_journal[document.get("issn")]
+            )
+
+        documents_bundles.setdefault(bundle_id, {})
+        documents_bundles[bundle_id].setdefault("items", [])
+
+        documents_bundles[bundle_id]["items"].append(document.get("scielo_id"))
+        documents_bundles[bundle_id]["data"] = {
+            "is_issue": is_issue,
+            "bundle_id": bundle_id,
+            "issn": data_journal[document.get("issn")],
+        }
+
+    for documents_bundle in documents_bundles.values():
+
         data = documents_bundle["data"]
         items = documents_bundle["items"]
         try:
-            documents_bundle = get_documents_bundle(session_db, data)
+            documents_bundle = get_documents_bundle(
+                session_db, data["bundle_id"], data["is_issue"], data["issn"]
+            )
         except ValueError as error:
-            files.write_file(err_filename, key + "\n", "a")
-            not_registered.append(key)
+            files.write_file(err_filename, data["bundle_id"] + "\n", "a")
+            not_registered.append(data["bundle_id"])
         else:
             link_documents_bundles_with_documents(documents_bundle, items, session_db)
