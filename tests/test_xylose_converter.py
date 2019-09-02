@@ -73,7 +73,6 @@ class TestXyloseJournalConverter(unittest.TestCase):
         self.assertEqual("0001-3714", journal["id"])
         self.assertEqual("0001-3714", journal["_id"])
 
-
     def test_bundle_metadata_fields_timestamps_and_created_date_should_be_equals(self):
         journal = journal_to_kernel(self._journal)
 
@@ -252,26 +251,26 @@ class TestXyloseIssueConverter(unittest.TestCase):
             self.issue["metadata"]["titles"],
         )
 
-    def test_issue_has_publication_month(self):
+    def test_issue_has_publication_months(self):
         self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", "1"]],
-            self.issue["metadata"]["publication_month"],
+            [["2019-01-29T00:00:00.000000Z", {"month": 1}]],
+            self.issue["metadata"]["publication_months"],
         )
 
-    def test_publication_season_start_and_end_is_equal(self):
+    def test_publication_months_start_and_end_is_equal(self):
         self.issue_json["v43"] = [{"m": "Feb./Feb."}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", [2]]],
-            self.issue["metadata"]["publication_season"],
+            [["2019-01-29T00:00:00.000000Z", {"start_month": 2, "end_month": 2}]],
+            self.issue["metadata"]["publication_months"],
         )
 
-    def test_publication_season_range_of_six_months(self):
+    def test_publication_months_range_of_six_months(self):
         self.issue_json["v43"] = [{"m": "Jan./Jun."}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", [1, 6]]],
-            self.issue["metadata"]["publication_season"],
+            [["2019-01-29T00:00:00.000000Z", {"start_month": 1, "end_month": 6}]],
+            self.issue["metadata"]["publication_months"],
         )
 
 

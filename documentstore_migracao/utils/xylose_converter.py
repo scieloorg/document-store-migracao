@@ -162,7 +162,7 @@ def issue_to_kernel(issue):
     de dados equivalente ao persistido pelo Kernel em um banco
     mongodb"""
 
-    issn_id = issue.data['issue']['v35'][0]['_']
+    issn_id = issue.data["issue"]["v35"][0]["_"]
     _creation_date = parse_date(issue.publication_date)
     _metadata = {}
     _bundle = {
@@ -175,7 +175,6 @@ def issue_to_kernel(issue):
     _year = str(date_to_datetime(_creation_date).year)
     _month = str(date_to_datetime(_creation_date).month)
     _metadata["publication_year"] = set_metadata(_creation_date, _year)
-    _metadata["publication_month"] = set_metadata(_creation_date, _month)
 
     if issue.volume:
         _metadata["volume"] = set_metadata(_creation_date, issue.volume)
@@ -200,11 +199,14 @@ def issue_to_kernel(issue):
         ]
         _metadata["titles"] = set_metadata(_creation_date, _titles)
 
+    publication_months = {}
     if issue.start_month and issue.end_month:
-        _publication_season = [int(issue.start_month), int(issue.end_month)]
-        _metadata["publication_season"] = set_metadata(
-            _creation_date, sorted(set(_publication_season))
-        )
+        publication_months["start_month"] = int(issue.start_month)
+        publication_months["end_month"] = int(issue.end_month)
+    elif _month:
+        publication_months["month"] = int(_month)
+
+    _metadata["publication_months"] = set_metadata(_creation_date, publication_months)
 
     _id = scielo_ids_generator.issue_id(
         issn_id, _year, issue.volume, issue.number, _supplement
