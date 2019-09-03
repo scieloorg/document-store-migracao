@@ -46,7 +46,7 @@ regex==2019.4.14
 repoze.lru==0.7
 requests==2.21.0
 scielo-clea==0.3.0
--e git://github.com/scieloorg/document-store.git@96585ce99fb09503605416dceb5207a4ac70c43e#egg=scielo_documentstore
+https://github.com/scieloorg/document-store/archive/master.tar.gz#egg=scielo_documentstore
 simplejson==3.16.0
 six==1.12.0
 soupsieve==1.9

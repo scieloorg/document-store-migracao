@@ -476,6 +476,12 @@ class DocumentsSorter:
     def insert_document(self, document_id, document_xml):
         pkg = SPS_Package(document_xml, "none")
 
+        def format(value):
+            if value and value.isdigit():
+                return value.zfill(5)
+            return value or ""
+
+        data = dict(pkg.parse_article_meta)
         self._documents_bundles[document_id] = {
             "eissn": dict(pkg.journal_meta).get("eissn"),
             "pissn": dict(pkg.journal_meta).get("pissn"),
@@ -486,7 +492,7 @@ class DocumentsSorter:
             "volume": pkg.volume,
             "number": pkg.number,
             "supplement": pkg.supplement,
-            "order": pkg.order_meta,
+            "order": format(data.get("other")) or format(data.get("fpage")),
         }
 
     def insert_documents(self, documents):

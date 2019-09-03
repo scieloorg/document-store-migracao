@@ -256,14 +256,7 @@ class TestProcessingInserting(unittest.TestCase):
                 "eissn": None,
                 "issn": "0036-3634",
                 "number": "04",
-                "order": [
-                    ["other", ""],
-                    ["fpage", "00349"],
-                    ["lpage", "00352"],
-                    ["documents_bundle_pubdate", ["2009", "12", ""]],
-                    ["document_pubdate", ["2009", "12", ""]],
-                    ["elocation-id", ""],
-                ],
+                "order": "00349",
                 "pid": "S0021-25712009000400001",
                 "pissn": "0036-3634",
                 "supplement": None,
@@ -304,14 +297,7 @@ class TestProcessingInserting(unittest.TestCase):
                 "eissn": None,
                 "issn": "0036-3634",
                 "number": "04",
-                "order": [
-                    ["other", ""],
-                    ["fpage", "00349"],
-                    ["lpage", "00352"],
-                    ["documents_bundle_pubdate", ["2009", "12", ""]],
-                    ["document_pubdate", ["2009", "12", ""]],
-                    ["elocation-id", ""],
-                ],
+                "order": "00349",
                 "pid": "S0021-25712009000400001",
                 "pissn": "0036-3634",
                 "supplement": None,
@@ -322,14 +308,7 @@ class TestProcessingInserting(unittest.TestCase):
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
-                "order": [
-                    ["other", ""],
-                    ["fpage", "00392"],
-                    ["lpage", "00397"],
-                    ["documents_bundle_pubdate", ["2009", "12", ""]],
-                    ["document_pubdate", ["2009", "12", ""]],
-                    ["elocation-id", ""],
-                ],
+                "order": "00349",
                 "pid": "S0021-25712009000400007",
                 "pissn": "0036-3634",
                 "supplement": None,
@@ -360,14 +339,7 @@ class TestProcessingInserting(unittest.TestCase):
                 "eissn": None,
                 "issn": "0036-3634",
                 "number": "04",
-                "order": [
-                    ["other", ""],
-                    ["fpage", "00349"],
-                    ["lpage", "00352"],
-                    ["documents_bundle_pubdate", ["2009", "12", ""]],
-                    ["document_pubdate", ["2009", "12", ""]],
-                    ["elocation-id", ""],
-                ],
+                "order": "00349",
                 "pid": "S0021-25712009000400001",
                 "pissn": "0036-3634",
                 "supplement": None,
@@ -378,14 +350,7 @@ class TestProcessingInserting(unittest.TestCase):
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
-                "order": [
-                    ["other", ""],
-                    ["fpage", "00392"],
-                    ["lpage", "00397"],
-                    ["documents_bundle_pubdate", ["2009", "12", ""]],
-                    ["document_pubdate", ["2009", "12", ""]],
-                    ["elocation-id", ""],
-                ],
+                "order": "00349",
                 "pid": "S0021-25712009000400007",
                 "pissn": "0036-3634",
                 "supplement": None,
@@ -405,11 +370,16 @@ class TestProcessingInserting(unittest.TestCase):
             session_db, "0036-3634-aop", False, "0036-3634"
         )
 
-    @patch("documentstore_migracao.processing.inserting.link_documents_bundles_with_documents")
+    @patch(
+        "documentstore_migracao.processing.inserting.link_documents_bundles_with_documents"
+    )
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
     def test_register_documents_in_documents_bundle_link_documents_bundles_with_documents(
-        self, mk_get_documents_bundle, mk_read_json_file, mk_link_documents_bundles_with_documents
+        self,
+        mk_get_documents_bundle,
+        mk_read_json_file,
+        mk_link_documents_bundles_with_documents,
     ):
         documents = {
             "JwqGdMDrdcV3Z7MFHgtKvVk": {
@@ -417,38 +387,24 @@ class TestProcessingInserting(unittest.TestCase):
                 "eissn": None,
                 "issn": "0036-3634",
                 "number": "04",
-                "order": [
-                    ["other", ""],
-                    ["fpage", "00349"],
-                    ["lpage", "00352"],
-                    ["documents_bundle_pubdate", ["2009", "12", ""]],
-                    ["document_pubdate", ["2009", "12", ""]],
-                    ["elocation-id", ""],
-                ],
+                "order": "00349",
                 "pid": "S0021-25712009000400001",
                 "pissn": "0036-3634",
                 "supplement": None,
                 "volume": "45",
                 "year": "2009",
-                "scielo_id": "JwqGdMDrdcV3Z7MFHgtKvVk"
+                "scielo_id": "JwqGdMDrdcV3Z7MFHgtKvVk",
             },
             "WCDX9F8pMhHDzy3fDYvth9x": {
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
-                "order": [
-                    ["other", ""],
-                    ["fpage", "00392"],
-                    ["lpage", "00397"],
-                    ["documents_bundle_pubdate", ["2009", "12", ""]],
-                    ["document_pubdate", ["2009", "12", ""]],
-                    ["elocation-id", ""],
-                ],
+                "order": "00350",
                 "pid": "S0021-25712009000400007",
                 "pissn": "0036-3634",
                 "supplement": None,
                 "year": "2009",
-                "scielo_id": "WCDX9F8pMhHDzy3fDYvth9x"
+                "scielo_id": "WCDX9F8pMhHDzy3fDYvth9x",
             },
         }
         journals = [SAMPLES_JOURNAL]
@@ -461,8 +417,16 @@ class TestProcessingInserting(unittest.TestCase):
             session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
         mk_link_documents_bundles_with_documents.assert_any_call(
-            documents_bundle, ["JwqGdMDrdcV3Z7MFHgtKvVk"], session_db
+            documents_bundle,
+            [
+                {
+                    "id": "JwqGdMDrdcV3Z7MFHgtKvVk",
+                    "order": "00349",
+                }
+            ],
+            session_db,
         )
+
 
 class TestDocumentManifest(unittest.TestCase):
     @patch("documentstore_migracao.object_store.minio.MinioStorage")

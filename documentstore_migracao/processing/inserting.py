@@ -320,7 +320,7 @@ def register_documents_in_documents_bundle(
         data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
 
     documents_bundles = {}
-    for document in documents.values():
+    for scielo_id, document in documents.items():
         is_issue = bool(document.get("volume") or document.get("number"))
         if is_issue:
             bundle_id = scielo_ids_generator.issue_id(
@@ -338,7 +338,12 @@ def register_documents_in_documents_bundle(
         documents_bundles.setdefault(bundle_id, {})
         documents_bundles[bundle_id].setdefault("items", [])
 
-        documents_bundles[bundle_id]["items"].append(document.get("scielo_id"))
+        documents_bundles[bundle_id]["items"].append(
+            {
+                "id": scielo_id,
+                "order": document.get("order", ""),
+            }
+        )
         documents_bundles[bundle_id]["data"] = {
             "is_issue": is_issue,
             "bundle_id": bundle_id,
