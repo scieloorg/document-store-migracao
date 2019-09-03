@@ -201,8 +201,7 @@ def issue_to_kernel(issue):
 
     publication_months = {}
     if issue.start_month and issue.end_month:
-        publication_months["start_month"] = int(issue.start_month)
-        publication_months["end_month"] = int(issue.end_month)
+        publication_months["range"] = (int(issue.start_month), int(issue.end_month))
     elif _month:
         publication_months["month"] = int(_month)
 

@@ -261,7 +261,7 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.issue_json["v43"] = [{"m": "Feb./Feb."}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", {"start_month": 2, "end_month": 2}]],
+            [["2019-01-29T00:00:00.000000Z", {"range": (2,2)}]],
             self.issue["metadata"]["publication_months"],
         )
 
@@ -269,7 +269,7 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.issue_json["v43"] = [{"m": "Jan./Jun."}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", {"start_month": 1, "end_month": 6}]],
+            [["2019-01-29T00:00:00.000000Z", {"range": (1,6)}]],
             self.issue["metadata"]["publication_months"],
         )
 
