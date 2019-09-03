@@ -501,7 +501,7 @@ SAMPLE_ISSUES_KERNEL = [
         "items": [],
         "metadata": {
             "publication_year": [["1998-09-01T00:00:00.000000Z", "1998"]],
-            "publication_month": [["1998-09-01T00:00:00.000000Z", "9"]],
+            "publication_months": [["1998-09-01T00:00:00.000000Z", {"month": 9}]],
             "volume": [["1998-09-01T00:00:00.000000Z", "29"]],
             "number": [["1998-09-01T00:00:00.000000Z", "3"]],
             "publication_season": [["1998-09-01T00:00:00.000000Z", [9]]],
