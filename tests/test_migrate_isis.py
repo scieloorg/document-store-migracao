@@ -357,7 +357,18 @@ class TestImportDocumentsBundlesLink(unittest.TestCase):
 
     @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
     def test_should_update_journals_with_document_bundle_ids(self, read_json_file_mock):
-        read_json_file_mock.return_value = {"0001-3714": ["0001-3714-1998-v29-n3"]}
+        read_json_file_mock.return_value = {
+            "0001-3714": [
+                {
+                    "id": "0034-8910-1978-v12-n2",
+                    "number": "2",
+                    "order": "2",
+                    "supplement": "",
+                    "volume": "12",
+                    "year": "1978",
+                }
+            ]
+        }
 
         pipeline.import_documents_bundles_link_with_journal(
             "~/json/output.json", self.session
@@ -365,7 +376,17 @@ class TestImportDocumentsBundlesLink(unittest.TestCase):
         _journal = self.session.journals.fetch("0001-3714")
         _changes = self.session.changes.filter()
 
-        self.assertIn("0001-3714-1998-v29-n3", _journal.issues)
+        self.assertIn(
+            {
+                "id": "0034-8910-1978-v12-n2",
+                "number": "2",
+                "order": "2",
+                "supplement": "",
+                "volume": "12",
+                "year": "1978",
+            },
+            _journal.issues,
+        )
         self.assertEqual(1, len(_changes))
 
     @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
@@ -384,20 +405,91 @@ class TestImportDocumentsBundlesLink(unittest.TestCase):
         self, read_json_file_mock
     ):
         read_json_file_mock.return_value = {
-            "0001-3714": ["issue-1", "issue-1", "issue-2"]
+            "0001-3714": [
+                {
+                    "id": "issue-1",
+                    "order": "0001",
+                    "number": "01",
+                    "volume": "01",
+                    "year": "2019",
+                    "supplement": "supplement",
+                },
+                {
+                    "id": "issue-2",
+                    "order": "0002",
+                    "number": "02",
+                    "volume": "02",
+                    "year": "2019",
+                    "supplement": "supplement",
+                },
+                {
+                    "id": "issue-2",
+                    "order": "0002",
+                    "number": "02",
+                    "volume": "02",
+                    "year": "2019",
+                    "supplement": "supplement",
+                },
+            ]
         }
-
         pipeline.import_documents_bundles_link_with_journal(
             "~/json/output.json", self.session
         )
         _journal = self.session.journals.fetch("0001-3714")
 
-        self.assertEqual(["issue-1", "issue-2"], _journal.issues)
+        self.assertEqual(
+            [
+                {
+                    "id": "issue-1",
+                    "order": "0001",
+                    "number": "01",
+                    "volume": "01",
+                    "year": "2019",
+                    "supplement": "supplement",
+                },
+                {
+                    "id": "issue-2",
+                    "order": "0002",
+                    "number": "02",
+                    "volume": "02",
+                    "year": "2019",
+                    "supplement": "supplement",
+                },
+            ],
+            _journal.issues,
+        )
 
     @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
     def test_should_log_dabase_exceptions(self, read_json_file_mock):
         read_json_file_mock.side_effect = [
-            {"0001-3714": ["issue-1", "issue-1", "issue-2"]},
+            {
+                "0001-3714": [
+                    {
+                        "id": "issue-1",
+                        "order": "0001",
+                        "number": "01",
+                        "volume": "01",
+                        "year": "2019",
+                        "supplement": "supplement",
+                    },
+                    {
+                        "id": "issue-1",
+                        "order": "0001",
+                        "number": "01",
+                        "volume": "01",
+                        "year": "2019",
+                        "supplement": "supplement",
+                    },
+                    {
+                        "id": "issue-2",
+                        "order": "0002",
+                        "number": "02",
+                        "volume": "02",
+                        "year": "2019",
+                        "supplement": "supplement",
+                    },
+                ]
+            },
             {"missing-journal": []},
         ]
 

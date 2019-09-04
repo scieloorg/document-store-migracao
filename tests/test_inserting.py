@@ -34,21 +34,32 @@ class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
 
     def test_should_link_documents_bundle_with_documents(self):
         inserting.link_documents_bundles_with_documents(
-            self.documents_bundle, ["doc-1", "doc-2"], self.session
+            self.documents_bundle,
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-2", "order": "0002"}],
+            self.session,
         )
 
-        self.assertEqual(["doc-1", "doc-2"], self.documents_bundle.documents)
+        self.assertEqual(
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-2", "order": "0002"}],
+            self.documents_bundle.documents,
+        )
 
     def test_should_not_insert_duplicated_documents(self):
         inserting.link_documents_bundles_with_documents(
-            self.documents_bundle, ["doc-1", "doc-1"], self.session
+            self.documents_bundle,
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-1", "order": "0001"}],
+            self.session,
         )
 
-        self.assertEqual(["doc-1"], self.documents_bundle.documents)
+        self.assertEqual(
+            [{"id": "doc-1", "order": "0001"}], self.documents_bundle.documents
+        )
 
     def test_should_register_changes(self):
         inserting.link_documents_bundles_with_documents(
-            self.documents_bundle, ["doc-1", "doc-2"], self.session
+            self.documents_bundle,
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-2", "order": "0002"}],
+            self.session,
         )
 
         _changes = self.session.changes.filter()
@@ -418,12 +429,7 @@ class TestProcessingInserting(unittest.TestCase):
         )
         mk_link_documents_bundles_with_documents.assert_any_call(
             documents_bundle,
-            [
-                {
-                    "id": "JwqGdMDrdcV3Z7MFHgtKvVk",
-                    "order": "00349",
-                }
-            ],
+            [{"id": "JwqGdMDrdcV3Z7MFHgtKvVk", "order": "00349"}],
             session_db,
         )
 
