@@ -92,7 +92,7 @@ class SPS_Package:
 
     @property
     def acron(self):
-        return self.xmltree.findtext('.//journal-id[@journal-id-type="publisher-id"]')
+        return self.xmltree.findtext('.//journal-id[@journal-id-type="publisher-id"]') or ""
 
     @property
     def publisher_id(self):
@@ -388,7 +388,7 @@ class SPS_Package:
         if not self.scielo_id:
             raise exceptions.XMLError("Não existe Scielo-Id no XML: %s", repr(self))
 
-        return f"{self.issn}_{self.acron}/{self.scielo_id}"
+        return f"{self.issn}/{self.scielo_id}"
 
     def transform_body(self):
 
