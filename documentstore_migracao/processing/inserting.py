@@ -315,16 +315,25 @@ def register_documents_in_documents_bundle(
     data_journal = {}
     for journal in journals:
         o_journal = Journal(journal)
-        data_journal[o_journal.print_issn] = o_journal.scielo_issn
-        data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
-        data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
+        if o_journal.print_issn:
+            data_journal[o_journal.print_issn] = o_journal.scielo_issn
+        if o_journal.electronic_issn:
+            data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
+        if o_journal.scielo_issn:
+            data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
 
     documents_bundles = {}
     for scielo_id, document in documents.items():
         is_issue = bool(document.get("volume") or document.get("number"))
+
+        issn = ""
+        for issn_type in ("eissn", "pissn", "issn"):
+            issn = document.get(issn_type)
+            if issn: break
+
         if is_issue:
             bundle_id = scielo_ids_generator.issue_id(
-                data_journal[document.get("issn")],
+                data_journal[issn],
                 document.get("year"),
                 document.get("volume"),
                 document.get("number"),
@@ -332,7 +341,7 @@ def register_documents_in_documents_bundle(
             )
         else:
             bundle_id = scielo_ids_generator.aops_bundle_id(
-                data_journal[document.get("issn")]
+                data_journal[issn]
             )
 
         documents_bundles.setdefault(bundle_id, {})
