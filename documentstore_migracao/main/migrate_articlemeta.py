@@ -143,6 +143,24 @@ def migrate_articlemeta_parser(sargs):
         help=f"""Entry path to import SPS packages. The default path
         is: {config.get("SPS_PKG_PATH")}""",
     )
+
+    import_parser.add_argument("--output", required=True, help="The output file path")
+
+    # IMPORTACAO
+    link_documents_issues = subparsers.add_parser(
+        "link_documents_issues",
+        help="Processa todos os documentos importados e relaciona eles com suas respectivas issues",
+        parents=[mongodb_parser(sargs)],
+    )
+    link_documents_issues.add_argument(
+        "documents",
+        help="JSON file de documentos importados, e.g: ~/json/collection-issues.json",
+    )
+    link_documents_issues.add_argument(
+        "journals",
+        help="JSON file de journals result, e.g: ~/json/journal.json",
+    )
+
     ################################################################################################
     args = parser.parse_args(sargs)
 
@@ -197,7 +215,15 @@ def migrate_articlemeta_parser(sargs):
         )
 
         inserting.import_documents_to_kernel(
-            session_db=DB_Session(), storage=storage, folder=args.folder
+            session_db=DB_Session(), storage=storage, folder=args.folder, output_path=args.output
+        )
+
+    elif args.command == "link_documents_issues":
+        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
+        DB_Session = ds_adapters.Session.partial(mongo)
+
+        inserting.register_documents_in_documents_bundle(
+            session_db=DB_Session(), file_documents=args.documents, file_journals=args.journals
         )
 
     else:

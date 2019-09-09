@@ -8,7 +8,11 @@ from documentstore_migracao.processing import reading, conversion
 from documentstore.interfaces import Session
 from documentstore.domain import utcnow
 from documentstore.exceptions import AlreadyExists, DoesNotExist
-from documentstore_migracao.utils.xylose_converter import issue_to_kernel
+from documentstore_migracao.utils.xylose_converter import (
+    issue_to_kernel,
+    parse_date,
+    date_to_datetime,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -98,11 +102,29 @@ def import_documents_bundles_link_with_journal(file_path: str, session: Session)
     """Fachada responsável por ler o arquivo de link entre
     journals e documents bundles e atualizar os journals com os
     identificadores dos bundles
-    
+
     O formato esperado para o arquivo de link é:
     ```
     {
-        "journal_id": ["bundle-id-1", "bundle-id-2"]
+        "journal_id": [
+            {
+                "id": "issue-2",
+                "order": "0002",
+                "number": "02",
+                "volume": "02",
+                "year": "2019",
+                "supplement": "supplement",
+            },
+            {
+                "id": "issue-2",
+                "order": "0002",
+                "number": "02",
+                "volume": "02",
+                "year": "2019",
+                "supplement": "supplement",
+            },
+
+        ]
     }
     ```
     """
@@ -119,7 +141,7 @@ def import_documents_bundles_link_with_journal(file_path: str, session: Session)
                 except AlreadyExists:
                     logger.debug(
                         "Bundle %s already exists in journal %s"
-                        % (bundle_id, journal_id)
+                        % (bundle_id["id"], journal_id)
                     )
 
             session.journals.update(_journal)
@@ -150,8 +172,32 @@ def link_documents_bundles_with_journals(issue_path: str, output_path: str):
         journals_bundles.setdefault(journal_id, [])
         _issue_id = issue_to_kernel(issue)["_id"]
 
-        if not _issue_id in journals_bundles[journal_id]:
-            journals_bundles[journal_id].append(_issue_id)
+        exist_item = len(
+            list(filter(lambda d: d["id"] == _issue_id, journals_bundles[journal_id]))
+        )
+
+        if not exist_item:
+            _creation_date = parse_date(issue.publication_date)
+
+            _supplement = ""
+            if issue.type is "supplement":
+                _supplement = "0"
+
+                if issue.supplement_volume:
+                    _supplement = issue.supplement_volume
+                elif issue.supplement_number:
+                    _supplement = issue.supplement_number
+
+            journals_bundles[journal_id].append(
+                {
+                    "id": _issue_id,
+                    "order": issue.order,
+                    "number": issue.number,
+                    "volume": issue.volume,
+                    "year": str(date_to_datetime(_creation_date).year),
+                    "supplement": _supplement,
+                }
+            )
 
     with open(output_path, "w") as output:
         output.write(json.dumps(journals_bundles, indent=4, sort_keys=True))

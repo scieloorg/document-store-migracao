@@ -7,6 +7,7 @@ from . import (
     SAMPLE_AOPS_KERNEL,
     SAMPLE_KERNEL_JOURNAL,
     SAMPLES_PATH,
+    SAMPLES_JOURNAL,
 )
 
 import os
@@ -33,21 +34,32 @@ class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
 
     def test_should_link_documents_bundle_with_documents(self):
         inserting.link_documents_bundles_with_documents(
-            self.documents_bundle, ["doc-1", "doc-2"], self.session
+            self.documents_bundle,
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-2", "order": "0002"}],
+            self.session,
         )
 
-        self.assertEqual(["doc-1", "doc-2"], self.documents_bundle.documents)
+        self.assertEqual(
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-2", "order": "0002"}],
+            self.documents_bundle.documents,
+        )
 
     def test_should_not_insert_duplicated_documents(self):
         inserting.link_documents_bundles_with_documents(
-            self.documents_bundle, ["doc-1", "doc-1"], self.session
+            self.documents_bundle,
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-1", "order": "0001"}],
+            self.session,
         )
 
-        self.assertEqual(["doc-1"], self.documents_bundle.documents)
+        self.assertEqual(
+            [{"id": "doc-1", "order": "0001"}], self.documents_bundle.documents
+        )
 
     def test_should_register_changes(self):
         inserting.link_documents_bundles_with_documents(
-            self.documents_bundle, ["doc-1", "doc-2"], self.session
+            self.documents_bundle,
+            [{"id": "doc-1", "order": "0001"}, {"id": "doc-2", "order": "0002"}],
+            self.session,
         )
 
         _changes = self.session.changes.filter()
@@ -73,45 +85,23 @@ class TestProcessingInserting(unittest.TestCase):
         self.aop_data = dict(
             [("eissn", "0001-3714"), ("issn", "0001-3714"), ("year", "2019")]
         )
+        self.bundle_id = "0001-3714-1998-v29-n3"
+        self.issn = "0987-0987"
+
         if not os.path.isdir(config.get("ERRORS_PATH")):
             os.makedirs(config.get("ERRORS_PATH"))
 
     def tearDown(self):
         shutil.rmtree(config.get("ERRORS_PATH"))
 
-    @patch("documentstore_migracao.processing.inserting.scielo_ids_generator.issue_id")
-    def test_get_documents_bundle_uses_scielo_ids_generator_issue_id_if_issue(
-        self, mk_issue_bundle_id
-    ):
-        result = inserting.get_documents_bundle(MagicMock(), self.data)
-        mk_issue_bundle_id.assert_called_with(
-            ANY,
-            self.data["year"],
-            self.data["volume"],
-            self.data["number"],
-            self.data["supplement"],
-        )
-
-    @patch(
-        "documentstore_migracao.processing.inserting.scielo_ids_generator.aops_bundle_id"
-    )
-    @patch("documentstore_migracao.processing.inserting.scielo_ids_generator.issue_id")
-    def test_get_documents_bundle_uses_scielo_ids_generator_aops_bundle_id_if_aop(
-        self, mk_issue_bundle_id, mk_aops_bundle_id
-    ):
-        result = inserting.get_documents_bundle(MagicMock(), self.aop_data)
-        mk_aops_bundle_id.assert_called()
-        mk_issue_bundle_id.assert_not_called()
-
     def test_get_documents_bundle_success(self):
         session_db = Session()
         session_db.documents_bundles.add(
             inserting.ManifestDomainAdapter(SAMPLE_ISSUES_KERNEL[0])
         )
-        session_db.documents_bundles.add(
-            inserting.ManifestDomainAdapter(SAMPLE_AOPS_KERNEL[0])
+        result = inserting.get_documents_bundle(
+            session_db, self.bundle_id, True, self.issn
         )
-        result = inserting.get_documents_bundle(session_db, self.data)
         self.assertIsInstance(result, DocumentsBundle)
         self.assertEqual(result.id(), "0001-3714-1998-v29-n3")
 
@@ -119,22 +109,30 @@ class TestProcessingInserting(unittest.TestCase):
         session_db = MagicMock()
         session_db.documents_bundles.fetch.side_effect = DoesNotExist
         self.assertRaises(
-            ValueError, inserting.get_documents_bundle, session_db, self.data
+            ValueError,
+            inserting.get_documents_bundle,
+            session_db,
+            self.bundle_id,
+            True,
+            self.issn,
         )
 
     @patch("documentstore_migracao.processing.inserting.create_aop_bundle")
     def test_get_documents_bundle_creates_aop_bundle_is_aop_and_not_found(
         self, mk_create_aop_bundle
     ):
-        issns = ["1234-0001", "1234-0002", "1234-0003"]
-        data = {"eissn": issns[0], "pissn": issns[1], "issn": issns[2], "year": "2019"}
         session_db = MagicMock()
         session_db.documents_bundles.fetch.side_effect = DoesNotExist
         mk_create_aop_bundle.side_effect = DoesNotExist
-        self.assertRaises(ValueError, inserting.get_documents_bundle, session_db, data)
-        mk_create_aop_bundle.assert_has_calls(
-            [call(session_db, issn) for issn in issns], True
+        self.assertRaises(
+            ValueError,
+            inserting.get_documents_bundle,
+            session_db,
+            self.bundle_id,
+            False,
+            self.issn,
         )
+        mk_create_aop_bundle.assert_any_call(session_db, self.issn)
 
     @patch(
         "documentstore_migracao.processing.inserting.scielo_ids_generator.aops_bundle_id"
@@ -147,7 +145,12 @@ class TestProcessingInserting(unittest.TestCase):
         session_db.documents_bundles.fetch.side_effect = DoesNotExist
         mk_create_aop_bundle.side_effect = DoesNotExist
         self.assertRaises(
-            ValueError, inserting.get_documents_bundle, session_db, self.aop_data
+            ValueError,
+            inserting.get_documents_bundle,
+            session_db,
+            self.bundle_id,
+            False,
+            self.issn,
         )
 
     @patch("documentstore_migracao.processing.inserting.create_aop_bundle")
@@ -158,7 +161,9 @@ class TestProcessingInserting(unittest.TestCase):
         mocked_aop_bundle = Mock()
         session_db.documents_bundles.fetch.side_effect = DoesNotExist
         mk_create_aop_bundle.return_value = mocked_aop_bundle
-        result = inserting.get_documents_bundle(session_db, self.aop_data)
+        result = inserting.get_documents_bundle(
+            session_db, self.bundle_id, False, self.issn
+        )
         self.assertEqual(result, mocked_aop_bundle)
 
     def test_create_aop_bundle_gets_journal(self):
@@ -249,33 +254,29 @@ class TestProcessingInserting(unittest.TestCase):
         self.assertIsInstance(result, DocumentsBundle)
         self.assertEqual(result.id(), "0001-3714-aop")
 
+    @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     @patch(
         "documentstore_migracao.processing.inserting.link_documents_bundles_with_documents"
     )
     def test_register_documents_in_documents_bundle(
-        self, mk_link_documents_bundle_with_documents
+        self, mk_link_documents_bundle_with_documents, mk_read_json_file
     ):
-        data1 = self.data
-        data2 = dict(
-            [
-                ("eissn", "0003-3714"),
-                ("issn", "0003-3714"),
-                ("year", "1998"),
-                ("volume", "29"),
-                ("number", "3"),
-                ("supplement", None),
-            ]
-        )
-        documents_sorted_in_bundles = {
-            "0001-3714-1998-29-03": {
-                "items": ["0001-3714-1998-v29-n3-01", "0001-3714-1998-v29-n3-02"],
-                "data": data1,
-            },
-            "0003-3714-1998-29-03": {
-                "items": ["0003-3714-1998-v29-n3-01", "0003-3714-1998-v29-n3-02"],
-                "data": data2,
-            },
+        documents = {
+            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634",
+                "number": "04",
+                "order": "00349",
+                "pid": "S0021-25712009000400001",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "volume": "45",
+                "year": "2009",
+            }
         }
+        journals = [SAMPLES_JOURNAL]
+        mk_read_json_file.side_effect = [journals, documents]
 
         err_filename = os.path.join(
             config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
@@ -286,35 +287,151 @@ class TestProcessingInserting(unittest.TestCase):
         session_db.documents_bundles.add(manifest)
 
         inserting.register_documents_in_documents_bundle(
-            session_db, documents_sorted_in_bundles
+            session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
 
         self.assertEqual(os.path.isfile(err_filename), True)
         with open(err_filename) as fp:
             content = fp.read()
 
-            self.assertEqual(content, "0003-3714-1998-29-03\n")
+            self.assertEqual(content, "0036-3634-2009-v45-n4\n")
 
     @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
-    def test_register_documents_in_documents_bundle_get_aop_bundle(
-        self, mk_get_documents_bundle
+    @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
+    @patch("documentstore_migracao.processing.inserting.scielo_ids_generator")
+    def test_register_documents_in_documents_bundle_scielo_ids_generator(
+        self, mk_scielo_ids_generator, mk_read_json_file, mk_get_documents_bundle
     ):
-        documents_sorted_in_bundles = {
-            "0001-3714-1998-29-03": {
-                "items": ["0001-3714-1998-v29-n3-01", "0001-3714-1998-v29-n3-02"],
-                "data": self.data,
+        documents = {
+            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634",
+                "number": "04",
+                "order": "00349",
+                "pid": "S0021-25712009000400001",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "volume": "45",
+                "year": "2009",
             },
-            "0003-3714-aop": {
-                "items": ["0003-3714-aop-01", "0003-3714-aop-02"],
-                "data": self.aop_data,
+            "WCDX9F8pMhHDzy3fDYvth9x": {
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634",
+                "order": "00349",
+                "pid": "S0021-25712009000400007",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "year": "2009",
             },
         }
+        journals = [SAMPLES_JOURNAL]
+
+        mk_read_json_file.side_effect = [journals, documents]
+
         session_db = Session()
         inserting.register_documents_in_documents_bundle(
-            session_db, documents_sorted_in_bundles
+            session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
-        mk_get_documents_bundle.assert_any_call(session_db, self.data)
-        mk_get_documents_bundle.assert_any_call(session_db, self.aop_data)
+        mk_scielo_ids_generator.issue_id.assert_any_call(
+            "0036-3634", "2009", "45", "04", None
+        )
+        mk_scielo_ids_generator.aops_bundle_id.assert_any_call("0036-3634")
+
+    @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
+    @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
+    def test_register_documents_in_documents_bundle_get_documents_bundle(
+        self, mk_get_documents_bundle, mk_read_json_file
+    ):
+        documents = {
+            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634",
+                "number": "04",
+                "order": "00349",
+                "pid": "S0021-25712009000400001",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "volume": "45",
+                "year": "2009",
+            },
+            "WCDX9F8pMhHDzy3fDYvth9x": {
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634",
+                "order": "00349",
+                "pid": "S0021-25712009000400007",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "year": "2009",
+            },
+        }
+        journals = [SAMPLES_JOURNAL]
+        mk_read_json_file.side_effect = [journals, documents]
+        session_db = Session()
+        inserting.register_documents_in_documents_bundle(
+            session_db, "/tmp/documents.json", "/tmp/journals.json"
+        )
+        mk_get_documents_bundle.assert_any_call(
+            session_db, "0036-3634-2009-v45-n4", True, "0036-3634"
+        )
+        mk_get_documents_bundle.assert_any_call(
+            session_db, "0036-3634-aop", False, "0036-3634"
+        )
+
+    @patch(
+        "documentstore_migracao.processing.inserting.link_documents_bundles_with_documents"
+    )
+    @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
+    @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
+    def test_register_documents_in_documents_bundle_link_documents_bundles_with_documents(
+        self,
+        mk_get_documents_bundle,
+        mk_read_json_file,
+        mk_link_documents_bundles_with_documents,
+    ):
+        documents = {
+            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634",
+                "number": "04",
+                "order": "00349",
+                "pid": "S0021-25712009000400001",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "volume": "45",
+                "year": "2009",
+                "scielo_id": "JwqGdMDrdcV3Z7MFHgtKvVk",
+            },
+            "WCDX9F8pMhHDzy3fDYvth9x": {
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634",
+                "order": "00350",
+                "pid": "S0021-25712009000400007",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "year": "2009",
+                "scielo_id": "WCDX9F8pMhHDzy3fDYvth9x",
+            },
+        }
+        journals = [SAMPLES_JOURNAL]
+        mk_read_json_file.side_effect = [journals, documents]
+        documents_bundle = Mock()
+        mk_get_documents_bundle.return_value = documents_bundle
+        session_db = Session()
+
+        inserting.register_documents_in_documents_bundle(
+            session_db, "/tmp/documents.json", "/tmp/journals.json"
+        )
+        mk_link_documents_bundles_with_documents.assert_any_call(
+            documents_bundle,
+            [{"id": "JwqGdMDrdcV3Z7MFHgtKvVk", "order": "00349"}],
+            session_db,
+        )
 
 
 class TestDocumentManifest(unittest.TestCase):
