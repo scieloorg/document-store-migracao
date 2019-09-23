@@ -2343,3 +2343,68 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         self.assertEqual(
             xml.find(".//fn/p/email").text, "chrisg@vortex.ufrgs.br")
         self.assertIn("Corresponding author", xml.find(".//fn/p").text, "*")
+
+
+class TestConvertRemote2LocalPipe(unittest.TestCase):
+
+    def test_transform_imports_html_content(self):
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        text = """<root><body>
+        <p>
+        <a href="/img/revistas/eq/v33n3/html/a05tab01.htm">Tables 1-5</a>
+        </p>
+        </body></root>"""
+        xml = etree.fromstring(text)
+
+        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        self.assertEqual(
+            xml.find(".//a[@name]").get("name"), "a05tab01")
+
+        self.assertEqual(
+            xml.find(".//a[@href]").get("href"), "#a05tab01")
+
+    def test_transform_makes_remote_image_local(self):
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        text = """<root><body>
+        <p>
+        <a href="/img/revistas/rbs/v28n3/05t1.gif">Table 1</a>
+        </p>
+        </body></root>"""
+        xml = etree.fromstring(text)
+
+        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        self.assertEqual(
+            xml.find(".//a[@name]").get("name"), "05t1")
+        self.assertEqual(
+            xml.find(".//a[@name]/img").get("src"),
+            "/img/revistas/rbs/v28n3/05t1.gif")
+        self.assertEqual(
+            xml.find(".//a[@href]").get("href"), "#05t1")
+
+    def test_transform_imports_html_content_once(self):
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        text = """<root><body>
+        <p>
+        <a href="/img/revistas/eq/v33n3/html/a05tab01.htm">Tables 1-5</a>
+        </p>
+        <p>
+        <a href="/img/revistas/eq/v33n3/html/a05tab01.htm">Tables 1-5</a>
+        </p>
+        </body></root>"""
+        xml = etree.fromstring(text)
+
+        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        self.assertEqual(
+            xml.find(".//a[@name]").get("name"), "a05tab01")
+        self.assertEqual(
+            len(xml.findall(".//a[@name]")), 1)
+        self.assertEqual(
+            len(xml.findall(".//a[@href]")), 2)
+
+        a_href_items = xml.findall(".//a[@href]")
+        self.assertEqual(
+            a_href_items[0].get("href"), "#a05tab01")
+        self.assertEqual(
+            a_href_items[1].get("href"), "#a05tab01")
+
+    
