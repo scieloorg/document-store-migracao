@@ -568,11 +568,21 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
     def test_pipe_remove_id_duplicated(self):
-        text = """<root><a id="B1">Texto</a><p>Texto</p><a id="B1">Texto</a></root>"""
-        raw, transformed = self._transform(text, self.pipeline.RemoveDuplicatedIdPipe())
+        text = """<root>
+        <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
+        <a id="B1" name="B1">Texto 3</a></root>"""
+        expected = b"""<root>
+        <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
+        Texto 3</root>"""
+
+        raw, transformed = self._transform(
+            text,
+            ConvertElementsWhichHaveIdPipeline(
+                self.pipeline
+            ).EvaluateElementAToDeleteOrMarkAsFnLabelPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b"""<root><a id="B1">Texto</a><p>Texto</p><a id="B1-duplicate-0">Texto</a></root>""",
+            expected,
         )
 
 
@@ -1279,19 +1289,30 @@ class TestConversionToTableWrap(unittest.TestCase):
 
 class TestConversionToCorresp(unittest.TestCase):
     def test_convert_to_corresp(self):
-        text = """<root><a name="home" id="home"/><a name="back" id="back"/><a href="#home">*</a> Corresponding author</root>"""
-        expected_after_internal_link_as_asterisk_pipe = b"""<root><a name="back" id="back"/>* Corresponding author</root>"""
-        expected_after_anchor_and_internal_link_pipe = b"""<root><fn id="back" fn-type="corresp"/>* Corresponding author</root>"""
+        text = """<root>
+        <a href="#back">*</a>
+        <a name="home" id="home"/>
+        <a name="back" id="back"/>
+        <a href="#home">*</a> Corresponding author</root>"""
+        expected_1 = b"""<root>
+        <a href="#back">*</a>
+        <a name="back" id="back"/> * Corresponding author</root>"""
+        expected_2 = b"""<root>
+        <xref ref-type="corresp" rid="back">*</xref>
+        <fn id="back" fn-type="corresp"/> * Corresponding author</root>"""
 
         xml = etree.fromstring(text)
         html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = ConvertElementsWhichHaveIdPipeline()
 
-        text, xml = pl.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(
+        text, xml = pl.CompleteElementAWithNameAndIdPipe(
+            ).transform((text, xml))
+        text, xml = pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(
             ).transform((text, xml))
         self.assertNotIn(b'<a href="#home">*</a>', etree.tostring(xml))
         self.assertEqual(
-            etree.tostring(xml), expected_after_internal_link_as_asterisk_pipe
+            [i for i in etree.tostring(xml).split() if i.strip()],
+            [i for i in expected_1.split() if i.strip()]
         )
 
         text, xml = pl.DeduceAndSuggestConversionPipe().transform((text, xml))
@@ -1302,7 +1323,8 @@ class TestConversionToCorresp(unittest.TestCase):
 
         text, xml = pl.ApplySuggestedConversionPipe().transform((text, xml))
         self.assertEqual(
-            etree.tostring(xml), expected_after_anchor_and_internal_link_pipe
+            [i for i in etree.tostring(xml).split() if i.strip()],
+            [i for i in expected_2.split() if i.strip()]
         )
 
 
@@ -1323,8 +1345,8 @@ class TestConversionToFig(unittest.TestCase):
         html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = ConvertElementsWhichHaveIdPipeline()
 
-        text, xml = pl.AddNameAndIdToElementAPipe().transform((text, xml))
-        text, xml = pl.DeduceAndSuggestConversionPipe().transform((text, xml))
+        text, xml = pl.CompleteElementAWithNameAndIdPipe().transform((text, xml))
+        text, xml = pl.DeduceAndSuggestConversionPipe(html_pl).transform((text, xml))
         _xml = etree.tostring(xml)
         self.assertIn(
             b'<a href="#fig01en" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1">Figure 1</a>',
@@ -1388,7 +1410,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.SaveRawBodyPipe(pipeline),
             pipeline.DeprecatedHTMLTagsPipe(),
             pipeline.RemoveImgSetaPipe(),
-            pipeline.RemoveDuplicatedIdPipe(),
             pipeline.RemoveExcedingStyleTagsPipe(),
             pipeline.RemoveEmptyPipe(),
             pipeline.RemoveStyleAttributesPipe(),
@@ -1469,15 +1490,17 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         text = """<root><a name="_ftnref19" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
         expected = b"""<root><a name="_ftnref19" id="_ftnref19"/><a href="#_ftn2"><sup>1</sup></a></root>"""
         xml = etree.fromstring(text)
-        text, xml = self.pl.AddNameAndIdToElementAPipe().transform((text, xml))
+        text, xml = self.pl.CompleteElementAWithNameAndIdPipe().transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
     def test_pipe_asterisk_in_a_href(self):
-        text = '<root><a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>'
-        expected = b'<root><a name="1a" id="1a"/><sup>*</sup></root>'
+        text = """<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>"""
+        expected = b"""<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><sup>*</sup></root>"""
         xml = etree.fromstring(text)
 
-        text, xml = self.pl.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(
+        text, xml = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(
             ).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
@@ -1542,7 +1565,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
         </root>"""
         raw, transformed = text, etree.fromstring(text)
-        raw, transformed = self.pl.RemoveAnchorAndLinksToTextPipe().transform((raw, transformed))
+        raw, transformed = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe().transform((raw, transformed))
         nodes = transformed.findall(".//a[@name='nota']")
         self.assertEqual(len(nodes), 1)
         nodes = transformed.findall(".//a[@href='#nota']")
@@ -1565,7 +1588,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.assertEqual(len(nodes), 1)
         nodes = xml.findall(".//fn")
         self.assertEqual(nodes[0].find("label").text, "1")
-        self.assertEqual(nodes[0].find("p").text, "Nota bla bla")
+        self.assertEqual(nodes[0].find("p").text.strip(), "Nota bla bla")
 
         nodes = xml.findall(".//xref")
         self.assertEqual(len(nodes), 1)
@@ -2292,6 +2315,10 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
          <p><b>C.T.L.S. Ghidini<sup>I, </sup>
          <a href="#nt"><sup>*</sup></a>;
          A.R.L. Oliveira<sup>II</sup>; M. Silva<sup>III</sup></b></p>
+
+         <p>Conforme a nota 1<a href="#nt01">1</a></p>
+         <p>Conforme a nota 2<a href="#nt02">2</a></p>
+         <p>Conforme a nota 3<a href="#nt03">3</a></p>
          <p><a name="nt"></a><a href="#tx">*</a>
          Autor correspondente: Carla Ghidini    <br/>
          <a name="nt01"></a>
