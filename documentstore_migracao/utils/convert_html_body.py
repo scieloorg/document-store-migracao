@@ -71,19 +71,6 @@ def wrap_content_node(_node, elem_wrap="p"):
     _node.insert(0, p)
 
 
-def gera_id(_string, index_body):
-    rid = _string
-
-    if not rid[0].isalpha():
-        rid = "replace_by_reftype" + rid
-
-    if index_body == 1:
-        return rid.lower()
-
-    ref_id = "%s-body%s" % (rid, index_body)
-    return ref_id.lower()
-
-
 def find_or_create_asset_node(root, elem_name, elem_id, node=None):
     if elem_name is None or elem_id is None:
         return
@@ -125,7 +112,7 @@ class HTML2SPSPipeline(object):
         self.index_body = index_body
         self.document = Document(None)
         self._ppl = plumber.Pipeline(
-            self.SetupPipe(super_obj=self),
+            self.SetupPipe(),
             self.SaveRawBodyPipe(super_obj=self),
             self.ConvertRemote2LocalPipe(),
             self.DeprecatedHTMLTagsPipe(),
@@ -148,7 +135,7 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
-            self.ConvertElementsWhichHaveIdPipe(super_obj=self),
+            self.ConvertElementsWhichHaveIdPipe(),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
             self.BlockquotePipe(),
@@ -159,6 +146,7 @@ class HTML2SPSPipeline(object):
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveRefIdPipe(),
+            self.FixIdAndRidPipe(super_obj=self),
             self.SanitizationPipe(),
         )
 
@@ -166,7 +154,7 @@ class HTML2SPSPipeline(object):
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
 
-    class SetupPipe(CustomPipe):
+    class SetupPipe(plumber.Pipe):
         def transform(self, data):
             try:
                 text = etree.tostring(data)
@@ -182,7 +170,9 @@ class HTML2SPSPipeline(object):
             raw, xml = data
             root = xml.getroottree()
             root.write(
-                os.path.join("/tmp/", "%s.xml" % self.super_obj.pid),
+                os.path.join(
+                    "/tmp/", "%s.%s.xml" % (
+                        self.super_obj.pid, self.super_obj.index_body)),
                 encoding="utf-8",
                 doctype=config.DOC_TYPE_XML,
                 xml_declaration=True,
@@ -199,7 +189,7 @@ class HTML2SPSPipeline(object):
             logger.info("ConvertRemote2LocalPipe - fim")
             return data
 
-    class DeprecatedHTMLTagsPipe(CustomPipe):
+    class DeprecatedHTMLTagsPipe(plumber.Pipe):
         TAGS = ["font", "small", "big", "dir", "span", "s", "lixo", "center"]
 
         def transform(self, data):
@@ -927,6 +917,34 @@ class HTML2SPSPipeline(object):
             _process(xml, "*[@xref_id]", self.parser_node)
             return data
 
+    class FixIdAndRidPipe(CustomPipe):
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//*[@rid]"):
+                self._update(node, "rid")
+            for node in xml.findall(".//*[@id]"):
+                self._update(node, "id")
+            return data, xml
+
+        def _update(self, node, attr_name):
+            value = node.get(attr_name)
+            value = self._fix(node.get("ref-type") or node.tag, value)
+            node.attrib[attr_name] = value
+
+        def _fix(self, tag, value):
+            if not value:
+                value = tag
+            if not value.isalnum():
+                value = "".join([c if c.isalnum() else "_" for c in value])
+            if not value[0].isalpha():
+                if tag[0] in value:
+                    value = value[value.find(tag[0]):]
+                else:
+                    value = tag[:3] + value
+            if self.super_obj.index_body > 1:
+                value = value + "-body{}".format(self.super_obj.index_body)
+            return value.lower()
+
     class SanitizationPipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
@@ -945,11 +963,11 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[img]", self.parser_node)
             return data
 
-    class ConvertElementsWhichHaveIdPipe(CustomPipe):
+    class ConvertElementsWhichHaveIdPipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
 
-            convert = ConvertElementsWhichHaveIdPipeline(html_pipeline=self.super_obj)
+            convert = ConvertElementsWhichHaveIdPipeline()
             _, obj = convert.deploy(xml)
             return raw, obj
 
@@ -1087,22 +1105,21 @@ class DataSanitizationPipeline(object):
 
 
 class ConvertElementsWhichHaveIdPipeline(object):
-    def __init__(self, html_pipeline):
-        # self.super_obj = html_pipeline
+    def __init__(self):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.RemoveThumbImgPipe(),
-            self.AddNameAndIdToElementAPipe(super_obj=html_pipeline),
-            self.DeduceAndSuggestConversionPipe(super_obj=html_pipeline),
+            self.AddNameAndIdToElementAPipe(),
+            self.DeduceAndSuggestConversionPipe(),
             self.RemoveAnchorAndLinksToTextPipe(),
-            self.ApplySuggestedConversionPipe(super_obj=html_pipeline),
-            self.AddAssetInfoToTablePipe(super_obj=html_pipeline),
+            self.ApplySuggestedConversionPipe(),
+            self.AddAssetInfoToTablePipe(),
             self.CreateAssetElementsFromExternalLinkElementsPipe(
-                super_obj=html_pipeline
+                
             ),
-            self.CreateAssetElementsFromImgOrTableElementsPipe(super_obj=html_pipeline),
-            self.APipe(super_obj=html_pipeline),
-            self.ImgPipe(super_obj=html_pipeline),
+            self.CreateAssetElementsFromImgOrTableElementsPipe(),
+            self.APipe(),
+            self.ImgPipe(),
             self.CompleteFnConversionPipe(),
         )
 
@@ -1115,11 +1132,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             new_obj = deepcopy(data)
             return data, new_obj
 
-    class AddAssetInfoToTablePipe(CustomPipe):
+    class AddAssetInfoToTablePipe(plumber.Pipe):
         def parser_node(self, node):
             _id = node.attrib.get("id")
             if _id:
-                new_id = gera_id(_id, self.super_obj.index_body)
+                new_id = _id
                 node.set("id", new_id)
                 node.set("xml_id", new_id)
                 node.set("xml_tag", "table-wrap")
@@ -1130,7 +1147,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "table[@id]", self.parser_node)
             return data
 
-    class CreateAssetElementsFromExternalLinkElementsPipe(CustomPipe):
+    class CreateAssetElementsFromExternalLinkElementsPipe(plumber.Pipe):
         def _create_asset_content_as_graphic(self, node_a):
             href = node_a.attrib.get("href")
             new_graphic = etree.Element("graphic")
@@ -1174,8 +1191,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-            self.super_obj.document.xmltree = xml
-            a_href_texts, file_paths = self.super_obj.document.a_href_items
+            document = Document(xml)
+            a_href_texts, file_paths = document.a_href_items
             for path, nodes in file_paths.items():
                 if nodes[0].attrib.get("xml_tag"):
                     self._create_asset_group(nodes[0])
@@ -1183,7 +1200,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         self._create_xref(node)
             return data
 
-    class CreateAssetElementsFromImgOrTableElementsPipe(CustomPipe):
+    class CreateAssetElementsFromImgOrTableElementsPipe(plumber.Pipe):
         def _find_label_and_caption_in_node(self, node, previous_or_next):
             node_text = node.attrib.get("xml_label")
             if node_text is None:
@@ -1301,7 +1318,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "img", self.parser_node)
             return data
 
-    class AddNameAndIdToElementAPipe(CustomPipe):
+    class AddNameAndIdToElementAPipe(plumber.Pipe):
         """Garante que todos os elemento a[@name] e a[@id] tenham @name e @id"""
         def parser_node(self, node):
             _id = node.attrib.get("id")
@@ -1326,7 +1343,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "a[@name]", self.parser_node)
             return data
 
-    class RemoveInternalLinksToTextIdentifiedByAsteriskPipe(CustomPipe):
+    class RemoveInternalLinksToTextIdentifiedByAsteriskPipe(plumber.Pipe):
         """
         Ao encontrar ```<a href="#tx">*</a>```, remove a tag e atributos,
         deixando apenas *. Também localiza a referência cruzada correspondente,
@@ -1349,7 +1366,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "a[@href]", self.parser_node)
             return data
 
-    class DeduceAndSuggestConversionPipe(CustomPipe):
+    class DeduceAndSuggestConversionPipe(plumber.Pipe):
         """Este pipe analisa os dados doss elementos a[@href] e a[@name],
         deduz e sugere tag, id, ref-type para a conversão de elementos,
         adicionando aos elementos a, os atributos: @xml_tag, @xml_id,
@@ -1366,8 +1383,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def _update(self, node, elem_name, ref_type, new_id, text=None):
             node.set("xml_tag", elem_name)
             node.set("xml_reftype", ref_type)
-            if new_id.startswith("replace_by_reftype") and ref_type:
-                new_id = new_id.replace("replace_by_reftype", ref_type)
             node.set("xml_id", new_id)
             if text:
                 node.set("xml_label", text)
@@ -1383,7 +1398,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 node_id = None
                 for node in nodes_with_id:
                     node_id = node.attrib.get("href")[1:]
-                    new_id = gera_id(node_id, self.super_obj.index_body)
+                    new_id = node_id
                     self._update(node, tag, reftype, new_id, text)
 
                 for node in nodes_without_id:
@@ -1396,7 +1411,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         if tag_reftype_id:
                             alt_tag, alt_reftype, alt_id = tag_reftype_id
                     if node_id or alt_id:
-                        new_id = gera_id(node_id or alt_id, self.super_obj.index_body)
+                        new_id = node_id or alt_id
                         self._update(node, tag, reftype, new_id, text)
 
         def _classify_nodes(self, nodes):
@@ -1427,7 +1442,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     )
                     if tag_reftype_id:
                         tag, reftype, _id = tag_reftype_id
-                        new_id = gera_id(_id, self.super_obj.index_body)
+                        new_id = _id
                         text = ""
                 if new_id:
                     for node in incomplete:
@@ -1448,7 +1463,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         tag_reftype = self.inferer.tag_and_reftype_from_name(name)
                     if tag_reftype:
                         tag, reftype = tag_reftype
-                        new_id = gera_id(name, self.super_obj.index_body)
+                        new_id = name
                         text = ""
                 if new_id:
                     self._update(a_name, tag, reftype, new_id, text)
@@ -1471,7 +1486,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 tag_reftype_id = self.inferer.tag_and_reftype_and_id_from_filepath(path)
                 if tag_reftype_id:
                     tag, reftype, _id = tag_reftype_id
-                    new_id = gera_id(_id, self.super_obj.index_body)
+                    new_id = _id
                 for img in images:
                     found = self._search_asset_node_related_to_img(new_id, img)
                     if found is not None:
@@ -1484,10 +1499,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-            self.super_obj.document.xmltree = xml
-            texts, file_paths = self.super_obj.document.a_href_items
-            names = self.super_obj.document.a_names
-            images = self.super_obj.document.images
+            document = Document(xml)
+            texts, file_paths = document.a_href_items
+            names = document.a_names
+            images = document.images
             self._add_xml_attribs_to_a_href_from_text(texts)
             self._add_xml_attribs_to_a_name(names)
             self._add_xml_attribs_to_a_href_from_file_paths(file_paths)
@@ -1521,7 +1536,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self._exclude(items_by_id)
             return data
 
-    class ApplySuggestedConversionPipe(CustomPipe):
+    class ApplySuggestedConversionPipe(plumber.Pipe):
         """
         Converte os elementos a, para as tags correspondentes, considerando
         os valores dos atributos: @xml_tag, @xml_id, @xml_reftype, @xml_label,
@@ -1553,8 +1568,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-            self.super_obj.document.xmltree = xml
-            for name, a_name_and_hrefs in self.super_obj.document.a_names.items():
+            document = Document(xml)
+            for name, a_name_and_hrefs in document.a_names.items():
                 a_name, a_hrefs = a_name_and_hrefs
                 if a_name.attrib.get("xml_id"):
                     new_id = a_name.attrib.get("xml_id")
@@ -1566,7 +1581,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._remove_a(a_name, a_hrefs)
             return data
 
-    class APipe(CustomPipe):
+    class APipe(plumber.Pipe):
         def _parser_node_external_link(self, node, extlinktype="uri"):
             node.tag = "ext-link"
 
@@ -1644,7 +1659,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 node.set("rid", "B%s" % rid)
                 node.set("ref-type", "bibr")
             else:
-                rid = gera_id(xref_name, self.super_obj.index_body)
+                rid = xref_name
                 ref_node = root.find("//*[@xref_id='%s']" % rid)
 
                 node.set("rid", rid)
@@ -1679,7 +1694,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "a", self.parser_node)
             return data
 
-    class ImgPipe(CustomPipe):
+    class ImgPipe(plumber.Pipe):
         def parser_node(self, node):
             node.tag = "graphic"
             src = node.attrib.pop("src")
@@ -1825,22 +1840,6 @@ def _preserve_node_tail_before_remove_node(node, node_text):
         else:
             parent.text = join_texts([(parent.text or "").rstrip(), text])
 
-
-def old_gera_id(_string, index_body):
-    rid = _string
-    number_item = re.search(r"([a-zA-Z]{1,3})(\d+)([a-zA-Z0-9]+)?", _string)
-    if number_item:
-        name_item, number_item, sufix_item = number_item.groups("")
-        rid = name_item + number_item + sufix_item
-
-    if not rid[0].isalpha():
-        rid = "replace_by_reftype" + rid
-
-    if index_body == 1:
-        return rid.lower()
-
-    ref_id = "%s-body%s" % (rid, index_body)
-    return ref_id.lower()
 
 
 def search_asset_node_backwards(node, attr="id"):
