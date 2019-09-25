@@ -97,10 +97,15 @@ class MinioStorage:
         url = self._client.presigned_get_object(self.bucket_name, media_path)
         return url.split("?")[0]
 
-    def register(self, file_path, prefix="") -> str:
+    def register(self, file_path, prefix="", original_uri=None) -> str:
         object_name = self._generator_object_name(file_path, prefix)
         metadata = {"origin_name": os.path.basename(file_path)}
+        if original_uri is not None:
+            metadata.update({"origin_uri": original_uri})
 
+        logger.debug(
+            "Registering %s in %s with metadata %s", file_path, object_name, metadata
+        )
         try:
             self._client.fput_object(
                 self.bucket_name,

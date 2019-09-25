@@ -8,6 +8,7 @@ from typing import List, Tuple
 from mimetypes import MimeTypes
 import lxml
 from xylose.scielodocument import Journal
+from urllib.parse import urlparse
 
 from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
 from documentstore_migracao import config, exceptions
@@ -57,16 +58,38 @@ def get_document_renditions(
 
     mimetypes = MimeTypes()
 
+    try:
+        _manifest_json = json.loads(
+            files.read_file(os.path.join(folder, "manifest.json"))
+        )
+    except Exception as exc:
+        logger.info("Could not read manifest: %s", str(exc))
+        _manifest = {}
+    else:
+        _manifest = {
+            lang: urlparse(url).path
+            for lang, url in _manifest_json.items()
+        }
+        logger.debug("Renditions lang and legacy url: %s", _manifest)
+
     _renditions = []
 
     for rendition in renditions:
         _mimetype = mimetypes.guess_type(rendition)[0]
         _rendition_path = os.path.join(folder, rendition)
         _lang = get_language(rendition)
+        logger.debug('Rendition path "%s", lang: "%s"', _rendition_path, _lang)
+        if _lang is None:
+            for lang, legacy_url in _manifest.items():
+                if os.path.basename(legacy_url) == rendition:
+                    logger.info(
+                        'Language "%s" detected to rendition "%s"', lang, rendition
+                    )
+                    _lang = lang
 
         _rendition = {
             "filename": rendition,
-            "url": storage.register(_rendition_path, file_prefix),
+            "url": storage.register(_rendition_path, file_prefix, _manifest.get(_lang)),
             "size_bytes": os.path.getsize(_rendition_path),
             "mimetype": _mimetype,
         }
