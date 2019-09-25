@@ -1,6 +1,7 @@
 import os
 import shutil
 import logging
+import json
 
 from tqdm import tqdm
 from requests.compat import urljoin
@@ -29,8 +30,19 @@ def pack_article_xml(file_xml_path):
     asset_replacements = list(set(sps_package.replace_assets_names()))
     logger.info("%s possui %s ativos digitais", file_xml_path, len(asset_replacements))
 
+    renditions, renditions_metadata = sps_package.get_renditions_metadata()
+    logger.info("%s possui %s renditions", file_xml_path, len(renditions))
+
     package_path = packing_assets(
-        asset_replacements, pkg_path, bad_pkg_path, sps_package.package_name
+        asset_replacements + renditions,
+        pkg_path,
+        bad_pkg_path,
+        sps_package.package_name
+    )
+
+    files.write_file(
+        os.path.join(package_path, "manifest.json"),
+        json.dumps(renditions_metadata)
     )
 
     xml.objXML2file(
