@@ -121,6 +121,7 @@ class HTML2SPSPipeline(object):
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.RemoveCommentPipe(),
+            self.AHrefPipe(),
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
@@ -818,6 +819,72 @@ class HTML2SPSPipeline(object):
             logger.info("Total de %s 'comentarios' processadas", len(comments))
             return data
 
+    class AHrefPipe(plumber.Pipe):
+        def _create_ext_link(self, node, extlinktype="uri"):
+            node.tag = "ext-link"
+            href = node.attrib.get("href")
+            node.attrib.clear()
+            node.set("ext-link-type", extlinktype)
+            node.set("{http://www.w3.org/1999/xlink}href", href)
+
+        def _create_email(self, node):
+            href = node.get("href").strip()
+            if "mailto:" in href:
+                href = href.split("mailto:")[1]
+
+            node_text = (node.text or "").strip()
+            node.tag = "email"
+            node.attrib.clear()
+            if not href and node_text and "@" in node_text:
+                texts = node_text.split()
+                for text in texts:
+                    if "@" in text:
+                        href = text
+                        break
+            if not href:
+                # devido ao caso do href estar mal
+                # formado devemos so trocar a tag
+                # e retorna para continuar o Pipe
+                return
+
+            node.set("{http://www.w3.org/1999/xlink}href", href)
+
+            if href == node_text:
+                return
+            if href in node_text:
+                root = node.getroottree()
+                temp = etree.Element("AHREFPIPEREMOVETAG")
+                texts = node_text.split(href)
+                temp.text = texts[0]
+                email = etree.Element("email")
+                email.text = href
+                temp.append(email)
+                temp.tail = texts[1]
+                node.addprevious(temp)
+                etree.strip_tags(root, "AHREFPIPEREMOVETAG")
+            else:
+                # https://jats.nlm.nih.gov/publishing/tag-library/1.2/element/email.html
+                node.tag = "ext-link"
+                node.set("ext-link-type", "email")
+                node.set(
+                    "{http://www.w3.org/1999/xlink}href", "mailto:" + href)
+
+        def parser_node(self, node):
+            href = node.get("href")
+            if href.startswith("#") or node.get("link-type") == "internal":
+                return
+            if "mailto" in href or "@" in href:
+                return self._create_email(node)
+            if ":" in href or node.get("link-type") == "external":
+                return self._create_ext_link(node)
+            if href.startswith("//"):
+                return self._create_ext_link(node)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            return data
+
     class HTMLEscapingPipe(plumber.Pipe):
         def parser_node(self, node):
             text = node.text
@@ -1096,11 +1163,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
             self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
+            self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
             self.AddAssetInfoToTablePipe(),
             self.CreateAssetElementsFromExternalLinkElementsPipe(),
             self.CreateAssetElementsFromImgOrTableElementsPipe(),
-            self.APipe(),
             self.ImgPipe(),
             self.CompleteFnConversionPipe(),
         )
@@ -1645,119 +1712,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._update_a_href_items(a_hrefs, new_id, reftype)
                 else:
                     self._remove_a(a_name, a_hrefs)
-            return data
-
-    class APipe(plumber.Pipe):
-        def _parser_node_external_link(self, node, extlinktype="uri"):
-            node.tag = "ext-link"
-
-            href = node.attrib.get("href")
-            node.attrib.clear()
-            _attrib = {
-                "ext-link-type": extlinktype,
-                "{http://www.w3.org/1999/xlink}href": href,
-            }
-            node.attrib.update(_attrib)
-
-        def _create_email(self, node):
-            a_node_copy = deepcopy(node)
-            href = a_node_copy.attrib.get("href")
-            if "mailto:" in href:
-                href = href.split("mailto:")[1]
-
-            node.attrib.clear()
-            node.tag = "email"
-
-            if not href:
-                # devido ao caso do href estar mal
-                # formado devemos so trocar a tag
-                # e retorna para continuar o Pipe
-                return
-
-            img = node.find("img")
-            if img is not None:
-                graphic = etree.Element("graphic")
-                graphic.attrib["{http://www.w3.org/1999/xlink}href"] = img.attrib["src"]
-                _remove_element_or_comment(img)
-                parent = node.getprevious() or node.getparent()
-                graphic.append(node)
-                parent.append(graphic)
-
-            if not href:
-                return
-
-            if node.text and node.text.strip():
-                if href == node.text:
-                    pass
-                elif href in node.text:
-                    node.tag = "REMOVE_TAG"
-                    texts = node.text.split(href)
-                    node.text = texts[0]
-                    email = etree.Element("email")
-                    email.text = href
-                    email.tail = texts[1]
-                    node.append(email)
-                    etree.strip_tags(node.getparent(), "REMOVE_TAG")
-                else:
-                    node.attrib["{http://www.w3.org/1999/xlink}href"] = href
-            if not node.text:
-                node.text = href
-
-        def _parser_node_anchor(self, node):
-            root = node.getroottree()
-
-            href = node.attrib.pop("href")
-
-            node.tag = "xref"
-            node.attrib.clear()
-
-            xref_name = href.replace("#", "")
-            if xref_name == "ref":
-                rid = node.text or ""
-                if not rid.isdigit():
-                    rid = (
-                        rid.replace("(", "")
-                        .replace(")", "")
-                        .replace("-", ",")
-                        .split(",")
-                    )
-                    rid = rid[0]
-                node.set("rid", "B%s" % rid)
-                node.set("ref-type", "bibr")
-            else:
-                rid = xref_name
-                ref_node = root.find("//*[@xref_id='%s']" % rid)
-
-                node.set("rid", rid)
-                if ref_node is not None:
-                    ref_type = ref_node.tag
-                    if ref_type == "table-wrap":
-                        ref_type = "table"
-                    node.set("ref-type", ref_type)
-                    ref_node.attrib.pop("xref_id")
-                else:
-                    # nao existe a[@name=rid]
-                    _remove_element_or_comment(node, xref_name == "top")
-
-        def parser_node(self, node):
-            try:
-                href = node.attrib["href"].strip()
-            except KeyError:
-                if "id" not in node.attrib.keys():
-                    logger.debug("\tTag 'a' sem href removendo node do xml")
-                    _remove_element_or_comment(node)
-            else:
-                if href.startswith("#"):
-                    self._parser_node_anchor(node)
-                elif "mailto" in href or "@" in href:
-                    self._create_email(node)
-                elif "/" in href or href.startswith("www") or "http" in href:
-                    self._parser_node_external_link(node)
-
-        def transform(self, data):
-            raw, xml = data
-
-            _process(xml, "a", self.parser_node)
             return data
 
     class ImgPipe(plumber.Pipe):
