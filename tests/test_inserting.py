@@ -12,6 +12,7 @@ from . import (
 
 import os
 import shutil
+import json
 
 from documentstore_migracao.processing import inserting
 from documentstore_migracao.utils import manifest
@@ -448,9 +449,21 @@ class TestDocumentManifest(unittest.TestCase):
         ]
 
         mock_minio_storage.register.side_effect = self.renditions_urls_mock
+        self.json_manifest = os.path.join(self.package_path, "manifest.json")
+        with open(self.json_manifest, 'w') as json_file:
+            json_file.write(
+                json.dumps({
+                    "pt": "rsp/v47n2/0034-8910-rsp-47-02-0231.pdf",
+                    "en": "rsp/v47n2/0034-8910-rsp-47-02-0231-en.pdf",
+                })
+            )
+
         self.renditions = inserting.get_document_renditions(
             self.package_path, self.renditions_names, "prefix", mock_minio_storage
         )
+
+    def tearDown(self):
+        os.remove(self.json_manifest)
 
     def test_rendition_should_contains_file_name(self):
         self.assertEqual("0034-8910-rsp-47-02-0231.pdf", self.renditions[0]["filename"])
@@ -474,7 +487,7 @@ class TestDocumentManifest(unittest.TestCase):
         self.assertEqual("en", self.renditions[1]["lang"])
 
     def test_rendtion_should_not_contains_language(self):
-        self.assertIsNone(self.renditions[0].get("lang"))
+        self.assertEqual("pt", self.renditions[0]["lang"])
 
 
 class TestDocumentRegister(unittest.TestCase):
