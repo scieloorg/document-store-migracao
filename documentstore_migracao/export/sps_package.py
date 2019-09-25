@@ -238,17 +238,18 @@ class SPS_Package:
                 new_fname = self.asset_name(f_name)
                 node.set(attr_name, "%s%s" % (new_fname, ext))
                 replacements.append((old_path, new_fname))
+        return replacements
 
-        # RENDITION PDF
+    def get_renditions_metadata(self):
+        renditions = []
+        metadata = {}
         obj_article = article.get_article(self.publisher_id)
         if obj_article:
-            pdfs = obj_article.fulltexts().get("pdf", {})
-            for l_pdf, u_pdf in pdfs.items():
-                f_name, ext = files.extract_filename_ext_by_path(u_pdf)
-                new_fname = self.asset_name(f_name)
-                replacements.append((u_pdf, new_fname))
-
-        return replacements
+            metadata = obj_article.fulltexts().get("pdf", {})
+            for lang, url in metadata.items():
+                filename, ext = files.extract_filename_ext_by_path(url)
+                renditions.append((url, filename))
+        return renditions, metadata
 
     @property
     def volume(self):

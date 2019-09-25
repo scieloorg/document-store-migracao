@@ -1,4 +1,5 @@
 import unittest
+from unittest import mock
 
 from lxml import etree
 
@@ -348,6 +349,47 @@ class Test_SPS_Package(unittest.TestCase):
             with self.subTest(i):
                 self.assertEqual(expected[i][0], item[0])
                 self.assertEqual(expected[i][1], item[1])
+
+    @mock.patch("documentstore_migracao.export.sps_package.article.get_article")
+    def test_get_renditions_metadata_no_renditions(self, mk_get_article):
+        mk_article = mock.Mock()
+        mk_article.fulltexts.return_value = {}
+        mk_get_article.return_value = mk_article
+        renditions, renditions_metadata = self.sps_package.get_renditions_metadata()
+        self.assertEqual(renditions, [])
+        self.assertEqual(renditions_metadata, {})
+
+    @mock.patch("documentstore_migracao.export.sps_package.article.get_article")
+    def test_get_renditions_metadata(self, mk_get_article):
+        fulltexts = {
+            "pdf": {
+                "en": "http://www.scielo.br/pdf/aa/v1n1/a01.pdf",
+                "pt": "http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf",
+            },
+            "html": {
+                "en": "http://www.scielo.br/scielo.php?script=sci_arttext&tlng=en",
+                "pt": "http://www.scielo.br/scielo.php?script=sci_arttext&tlng=pt",
+            },
+        }
+        mk_article = mock.Mock()
+        mk_article.fulltexts.return_value = fulltexts
+        mk_get_article.return_value = mk_article
+        renditions, renditions_metadata = self.sps_package.get_renditions_metadata()
+        for lang, link in fulltexts.get("pdf"):
+            self.assertEqual(
+                renditions,
+                [
+                    ('http://www.scielo.br/pdf/aa/v1n1/a01.pdf', 'a01'),
+                    ('http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf', 'pt_a01'),
+                ]
+            )
+            self.assertEqual(
+                renditions_metadata,
+                {
+                    'en': 'http://www.scielo.br/pdf/aa/v1n1/a01.pdf',
+                    'pt': 'http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf',
+                }
+            )
 
 
 class Test_SPS_Package_No_Metadata(unittest.TestCase):

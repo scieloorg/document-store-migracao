@@ -1,4 +1,5 @@
 import os
+import json
 import shutil
 import unittest
 from unittest.mock import patch, ANY, Mock
@@ -30,7 +31,6 @@ class TestProcessingPacking(unittest.TestCase):
             )
             self.assertEqual(
                 {
-                    "1809-4392-aa-33-03-353-370-gv33n3a02.pdf",
                     "1809-4392-aa-33-03-353-370-ga02fig01.gif",
                     "1809-4392-aa-33-03-353-370-ga02tab03.gif",
                     "1809-4392-aa-33-03-353-370-ga02fig02.jpg",
@@ -40,10 +40,12 @@ class TestProcessingPacking(unittest.TestCase):
                     "1809-4392-aa-33-03-353-370-ga02tab05.gif",
                     "1809-4392-aa-33-03-353-370.xml",
                     "1809-4392-aa-33-03-353-370-ga02tab02.gif",
+                    "v33n3a02.pdf",
+                    "manifest.json",
                 },
                 files,
             )
-            self.assertEqual(10, len(files))
+            self.assertEqual(11, len(files))
 
     def test_pack_article_xml_has_media(self):
         with utils.environ(
@@ -72,11 +74,47 @@ class TestProcessingPacking(unittest.TestCase):
                     "1809-4392-aa-33-03-353-370-ga02fig01.gif",
                     "1809-4392-aa-33-03-353-370-ga02tab01a.gif",
                     "1809-4392-aa-33-03-353-370-ga02tab01b.gif",
-                    "1809-4392-aa-33-03-353-370-gv33n3a02.pdf",
+                    "v33n3a02.pdf",
+                    "manifest.json",
                 },
                 files,
             )
-            self.assertEqual(11, len(files))
+            self.assertEqual(12, len(files))
+
+    @patch("documentstore_migracao.processing.packing.SPS_Package.get_renditions_metadata")
+    @patch("documentstore_migracao.processing.packing.download_asset")
+    def test_pack_article_write_manifest_json_file_with_renditions(
+        self, mk_download_asset, mk_get_renditions_metadata
+    ):
+        with utils.environ(
+            VALID_XML_PATH=SAMPLES_PATH,
+            SPS_PKG_PATH=SAMPLES_PATH,
+            INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
+            SCIELO_COLLECTION="scl",
+        ):
+            mk_download_asset.return_value = None
+            mk_get_renditions_metadata.return_value = (
+                [
+                    ("http://scielo.br/a01.pdf", "a01"),
+                    ("http://scielo.br/pt_a01.pdf", "pt_a01"),
+                ],
+                {
+                    'en': 'http://www.scielo.br/pdf/aa/v1n1/a01.pdf',
+                    'pt': 'http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf',
+                }
+            )
+            xml_path_dir = os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_completo.xml")
+            packing.pack_article_xml(xml_path_dir)
+            manifest_file = os.path.join(
+                SAMPLES_PATH, "S0044-59672003000300002_sps_completo", "manifest.json")
+            with open(manifest_file) as f:
+                self.assertEqual(
+                    json.loads(f.read()),
+                    {
+                        'en': 'http://www.scielo.br/pdf/aa/v1n1/a01.pdf',
+                        'pt': 'http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf',
+                    }
+                )
 
     def test_pack_article_xml_has_no_media(self):
         with utils.environ(
@@ -86,8 +124,8 @@ class TestProcessingPacking(unittest.TestCase):
         ):
             packing.pack_article_xml(os.path.join(SAMPLES_PATH, "any.xml"))
             files = set(os.listdir(os.path.join(SAMPLES_PATH, "any")))
-            self.assertEqual({"any.xml"}, files)
-            self.assertEqual(1, len(files))
+            self.assertEqual({"any.xml", "manifest.json"}, files)
+            self.assertEqual(2, len(files))
 
     @patch("documentstore_migracao.processing.packing.pack_article_xml")
     def test_pack_article_ALLxml(self, mk_pack_article_xml):

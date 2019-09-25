@@ -4,11 +4,14 @@
 import sys
 import argparse
 import textwrap
+import json
 
 import fs
 from fs import path, copy, errors
 from fs.walk import Walker
 
+from documentstore_migracao.utils import xml
+from documentstore_migracao.export.sps_package import SPS_Package
 
 import logging
 
@@ -137,11 +140,39 @@ class BuildPSPackage(object):
             return path.basename(filename)
 
     def collect_pdf(self, acron, issue_folder, pack_name):
+        def get_rendition_info(languages, pdf_filename):
+            pdf_uri = path.join("pdf", acron, issue_folder, pdf_filename)
+            if pdf_filename.find("_") == 2:
+                return {
+                    lang: pdf_uri
+                    for lang in languages
+                    if lang in pdf_filename
+                }
+            else:
+                pdf_lang = [lang for lang in languages if lang in pdf_filename]
+                if len(pdf_lang) == 0:
+                    return {languages[0]: pdf_uri}
+
+        def save_renditions_manifest(metadata):
+            if len(metadata) > 0:
+                logging.info(
+                    "Saving %s/%s/%s/manifest.json", acron, issue_folder, pack_name
+                )
+                _renditions_manifest_path = path.join(
+                    self.out_fs.root_path, acron, issue_folder, pack_name, "manifest.json"
+                )
+                with open(_renditions_manifest_path, "w") as jfile:
+                    jfile.write(json.dumps(metadata))
 
         walker = Walker(filter=["*" + pack_name + "*.pdf"], max_depth=2)
 
         pdf_path = path.join(self.pdf_fs.root_path, acron, issue_folder)
 
+        xml_dir_path = path.join(self.out_fs.root_path, acron, issue_folder, pack_name)
+        xml_sps = SPS_Package(
+            xml.loadToXML(path.join(xml_dir_path, pack_name + ".xml"))
+        )
+        renditions_manifest = {}
         for pdf in walker.files(fs.open_fs(pdf_path)):
 
             pdf_path = path.join(acron, issue_folder, path.basename(pdf))
@@ -151,6 +182,13 @@ class BuildPSPackage(object):
             )
 
             self.copy(pdf_path, target_pdf_path, src_fs=self.pdf_fs)
+
+            rendition_info = get_rendition_info(xml_sps.languages, path.basename(pdf))
+            if rendition_info is not None:
+                logging.info("Updating renditions manifest with %s", rendition_info)
+                renditions_manifest.update(rendition_info)
+
+        save_renditions_manifest(renditions_manifest)
 
     def collect_img(self, acron, issue_folder, pack_name):
 
