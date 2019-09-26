@@ -139,7 +139,7 @@ class TestXyloseJournalConverter(unittest.TestCase):
     def test_journal_has_subject_areas(self):
         journal = journal_to_kernel(self._journal)
         self.assertEqual(
-            ["HEALTH SCIENCES"], get_metadata_item(journal, "subject_areas")
+            ["Health Sciences"], get_metadata_item(journal, "subject_areas")
         )
 
     def test_journal_has_sponsors(self):

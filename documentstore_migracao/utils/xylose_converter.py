@@ -112,9 +112,7 @@ def journal_to_kernel(journal):
             _metadata["status"].append([parse_date(status[0]), _status])
 
     if journal.subject_areas:
-        _metadata["subject_areas"] = set_metadata(
-            _creation_date, [area.upper() for area in journal.subject_areas]
-        )
+        _metadata["subject_areas"] = set_metadata(_creation_date, journal.subject_areas)
 
     if journal.sponsors:
         _sponsors = [{"name": sponsor} for sponsor in journal.sponsors]
