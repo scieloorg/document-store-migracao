@@ -3,8 +3,9 @@ import plumber
 import html
 import re
 import os
-from urllib import request, error
 from copy import deepcopy
+
+import requests
 from lxml import etree
 from documentstore_migracao.utils import files
 from documentstore_migracao.utils import xml as utils_xml
@@ -1963,10 +1964,6 @@ class FileLocation:
     def ent2char(self, data):
         return html.unescape(data.decode("utf-8")).encode("utf-8").strip()
 
-    def get_remote_content(self, timeout=TIMEOUT):
-        with request.urlopen(self.remote, timeout=timeout) as fp:
-            return fp.read()
-
     @property
     def content(self):
         _content = self.local_content
@@ -1985,26 +1982,24 @@ class FileLocation:
                 return fp.read()
 
     def download(self):
-        try:
-            _content = self.get_remote_content()
-        except (error.HTTPError, error.URLError) as e:
-            logger.exception("Falha ao acessar %s: %s" % (self.remote, e))
-        else:
-            dirname = os.path.dirname(self.local)
-            if not dirname.startswith(config.get("SITE_SPS_PKG_PATH")):
-                logger.info(
-                    "%s: valor inválido de caminho local para ativo digital"
-                    % self.local
-                )
-                return
-            if not os.path.isdir(dirname):
-                os.makedirs(dirname)
-            with open(self.local, "wb") as fp:
-                if self.ext in [".html", ".htm"]:
-                    fp.write(self.ent2char(_content))
-                else:
-                    fp.write(_content)
-            return _content
+        r = requests.get(self.remote, timeout=TIMEOUT)
+        if not r.status_code == 200:
+            logger.error(
+                "Falha ao acessar %s: %s" % (self.remote, r.status_code))
+            return
+        dirname = os.path.dirname(self.local)
+        if not dirname.startswith(config.get("SITE_SPS_PKG_PATH")):
+            logger.info(
+                "%s: valor inválido de caminho local para ativo digital"
+                % self.local
+            )
+            return
+        _content = r.content
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
+        with open(self.local, "wb") as fp:
+            fp.write(_content)
+        return _content
 
 
 def fix_img_revistas_path(node):
