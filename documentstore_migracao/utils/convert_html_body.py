@@ -13,6 +13,7 @@ from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 
 
 logger = logging.getLogger(__name__)
+TIMEOUT = config.get("TIMEOUT") or 5
 
 
 def _remove_element_or_comment(node, remove_inner=False):
@@ -126,6 +127,7 @@ class HTML2SPSPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(super_obj=self),
             self.SaveRawBodyPipe(super_obj=self),
+            self.ConvertRemote2LocalPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
             self.RemoveDuplicatedIdPipe(),
@@ -187,6 +189,15 @@ class HTML2SPSPipeline(object):
                 pretty_print=True,
             )
             return data, xml
+
+    class ConvertRemote2LocalPipe(plumber.Pipe):
+        def transform(self, data):
+            logger.info("ConvertRemote2LocalPipe")
+            raw, xml = data
+            html_page = Remote2LocalConversion(xml)
+            html_page.remote_to_local()
+            logger.info("ConvertRemote2LocalPipe - fim")
+            return data
 
     class DeprecatedHTMLTagsPipe(CustomPipe):
         TAGS = ["font", "small", "big", "dir", "span", "s", "lixo", "center"]
@@ -1126,19 +1137,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             new_graphic.set("{http://www.w3.org/1999/xlink}href", href)
             return new_graphic
 
-        def _create_asset_content_from_html(self, node_a, new_tag, new_id):
-            href = node_a.attrib.get("href")
-            parts = href.split("/")
-            local = "/".join(parts[-4:])
-            remote = config.get("STATIC_URL_FILE") + href[1:]
-            local = os.path.join(config.get("SITE_SPS_PKG_PATH"), local)
-            asset_in_html_page = AssetInHTMLPage(local, remote)
-            tree = asset_in_html_page.convert(self.super_obj)
-            if tree is not None:
-                tree.tag = "REMOVE_TAG"
-                return tree
-            return
-
         def _create_asset_group(self, a_href):
             root = a_href.getroottree()
             new_id = a_href.attrib.get("xml_id")
@@ -1150,13 +1148,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if asset is not None:
                 href = a_href.attrib.get("href")
                 fname, ext = os.path.splitext(href.lower())
-
-                if ext in [".htm", ".html"]:
-                    asset_content = self._create_asset_content_from_html(
-                        a_href, new_tag, new_id
-                    )
-                else:
-                    asset_content = self._create_asset_content_as_graphic(a_href)
+                asset_content = self._create_asset_content_as_graphic(a_href)
 
                 if asset_content is not None:
                     asset.append(asset_content)
@@ -1268,19 +1260,22 @@ class ConvertElementsWhichHaveIdPipeline(object):
             xml_label = img_or_table.attrib.get("xml_label")
             if not xml_new_tag or not xml_id:
                 return
-            img_or_table_parent = img_or_table.getparent()
-            label_and_caption = self._find_label_and_caption_around_node(img_or_table)
+
+            label_and_caption = self._find_label_and_caption_around_node(
+                img_or_table)
             asset = self._get_asset_node(img_or_table, xml_new_tag, xml_id)
             if label_and_caption:
                 if label_and_caption[1] is not None:
                     asset.insert(0, label_and_caption[1])
                 asset.insert(0, label_and_caption[0])
+
+            img_or_table_parent = img_or_table.getparent()
             new_img_or_table = deepcopy(img_or_table)
-            img_or_table_parent.remove(img_or_table)
             for attr in ["xml_id", "xml_reftype", "xml_label", "xml_tag"]:
                 if attr in new_img_or_table.attrib.keys():
                     new_img_or_table.attrib.pop(attr)
             asset.append(new_img_or_table)
+            img_or_table_parent.remove(img_or_table)
 
         def transform(self, data):
             raw, xml = data
@@ -1816,71 +1811,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
 
-class AssetInHTMLPage:
-    def __init__(self, local=None, remote=None, content=None):
-        self.local = local
-        self.remote = remote
-
-    def convert(self, _pipeline):
-        # xmltree = self.xml_tree
-        # if xmltree is None:
-        xmltree = self._convert(_pipeline)
-        if xmltree is not None:
-            with open(self.local + ".xml", "wb") as fp:
-                fp.write(self.ent2char(etree.tostring(xmltree)))
-        else:
-            logger.info(self.local)
-        return xmltree
-
-    @property
-    def xml_tree(self):
-        xml_filepath = self.local + ".xml"
-        if os.path.isfile(xml_filepath):
-            with open(xml_filepath, "rb") as fp:
-                content = fp.read()
-                if content:
-                    return etree.fromstring(content)
-
-    def _convert(self, _pipeline):
-        html_tree = self.html_tree
-        if html_tree is not None:
-            body_tree = html_tree.find(".//body")
-
-            if body_tree is not None:
-                body_tree.set("xmlns:xlink", "http://www.w3.org/1999/xlink")
-                __, xml_tree = _pipeline.deploy(body_tree)
-                return xml_tree
-
-    @property
-    def html_tree(self):
-        html_content = self.get_html_content()
-        if html_content:
-            return etree.fromstring(html_content, parser=etree.HTMLParser())
-
-    def ent2char(self, data):
-        return html.unescape(data.decode("utf-8")).encode("utf-8").strip()
-
-    def download(self):
-        with request.urlopen(self.remote, timeout=30) as fp:
-            return fp.read()
-
-    def get_html_content(self):
-        if self.local and os.path.isfile(self.local):
-            with open(self.local, "rb") as fp:
-                return fp.read()
-        try:
-            content = self.download()
-        except (error.HTTPError, error.URLError) as e:
-            logger.exception(e)
-        else:
-            dirname = os.path.dirname(self.local)
-            if not os.path.isdir(dirname):
-                os.makedirs(dirname)
-            with open(self.local, "wb") as fp:
-                fp.write(self.ent2char(content))
-            return content
-
-
 def join_texts(texts):
     return " ".join([item for item in texts if item])
 
@@ -2009,3 +1939,342 @@ class Document:
                     items[filename] = []
                 items[filename].append(img)
         return items
+
+
+class FileLocation:
+    def __init__(self, href):
+        self.href = href
+        self.basename = os.path.basename(href)
+        self.new_href, self.ext = os.path.splitext(self.basename)
+
+    @property
+    def remote(self):
+        file_path = self.href
+        if file_path.startswith("/"):
+            file_path = file_path[1:]
+        return os.path.join(config.get("STATIC_URL_FILE"), file_path)
+
+    @property
+    def local(self):
+        parts = self.remote.split("/")
+        _local = "/".join(parts[-4:])
+        _local = os.path.join(config.get("SITE_SPS_PKG_PATH"), _local)
+        return _local.replace("//", "/")
+
+    def ent2char(self, data):
+        return html.unescape(data.decode("utf-8")).encode("utf-8").strip()
+
+    def get_remote_content(self, timeout=TIMEOUT):
+        with request.urlopen(self.remote, timeout=timeout) as fp:
+            return fp.read()
+
+    @property
+    def content(self):
+        _content = self.local_content
+        if not _content:
+            logger.info("Baixar %s" % self.remote)
+            self.download()
+            _content = self.local_content
+        logger.info("%s %s" % (len(_content or ""), self.local))
+        return _content
+
+    @property
+    def local_content(self):
+        logger.info("Existe %s: %s" % (self.local, os.path.isfile(self.local)))
+        if self.local and os.path.isfile(self.local):
+            with open(self.local, "rb") as fp:
+                return fp.read()
+
+    def download(self):
+        try:
+            _content = self.get_remote_content()
+        except (error.HTTPError, error.URLError) as e:
+            logger.exception("Falha ao acessar %s: %s" % (self.remote, e))
+        else:
+            dirname = os.path.dirname(self.local)
+            if not dirname.startswith(config.get("SITE_SPS_PKG_PATH")):
+                logger.info(
+                    "%s: valor inválido de caminho local para ativo digital"
+                    % self.local
+                )
+                return
+            if not os.path.isdir(dirname):
+                os.makedirs(dirname)
+            with open(self.local, "wb") as fp:
+                if self.ext in [".html", ".htm"]:
+                    fp.write(self.ent2char(_content))
+                else:
+                    fp.write(_content)
+            return _content
+
+
+def fix_img_revistas_path(node):
+    attr = "src" if node.get("src") else "href"
+    location = node.get(attr)
+    old_location = location
+    if location.startswith("img/"):
+        location = "/" + location
+    if "/img" in location:
+        location = location[location.find("/img") :]
+    if " " in location:
+        location = "".join(location.split())
+    location = location.replace("/img/fbpe", "/img/revistas")
+    if old_location != location:
+        logger.info(
+            "fix_img_revistas_path: de {} para {}".format(old_location, location)
+        )
+        node.set(attr, location)
+
+
+class Remote2LocalConversion:
+    """
+    - Identifica os a[@href] e os classifica
+    - Se o arquivo é um HTML, baixa-o do site config.get("STATIC_URL_FILE")
+    - Armazena-o em config.get("SITE_SPS_PKG_PATH"),
+      mantendo a estrutura de acron/volnum
+    - Insere seu conteúdo dentro de self.body
+    - Se o arquivo é um link para uma imagem externa, transforma em img
+    """
+
+    IMG_EXTENSIONS = (".gif", ".jpg", ".jpeg", ".svg", ".png", ".tif", ".bmp")
+
+    def __init__(self, xml):
+        self.xml = xml
+        self.body = self.xml.find(".//body")
+        self._digital_assets_path = self.find_digital_assets_path()
+        self.names = []
+
+    def find_digital_assets_path(self):
+        for node in self.xml.xpath(".//*[@src]|.//*[@href]"):
+            location = node.get("src", node.get("href"))
+            if location.startswith("/img/"):
+                dirnames = os.path.dirname(location).split("/")
+                return "/".join(dirnames[:5])
+
+    @property
+    def digital_assets_path(self):
+        if self._digital_assets_path:
+            return self._digital_assets_path
+        self._digital_assets_path = self.find_digital_assets_path()
+
+    @property
+    def body_children(self):
+        if self.body is not None:
+            return self.body.findall("*")
+        return []
+
+    def remote_to_local(self):
+        self._import_all_href_html_files()
+        self._convert_a_href_into_images_or_media()
+
+    def _classify_a_href(self):
+        for node in self.xml.findall(".//*[@src]"):
+            src = node.get("src")
+            if ":" in src:
+                node.set("link-type", "external")
+                logger.info("Classificou: %s" % etree.tostring(node))
+                continue
+
+            value = src.split("/")[0]
+            if "." in value:
+                if src.startswith("./") or src.startswith("../"):
+                    node.set(
+                        "src",
+                        os.path.join(
+                            self.digital_assets_path, src[src.find("/")+1:]))
+                else:
+                    # pode ser URL
+                    node.set("link-type", "external")
+                    logger.info("Classificou: %s" % etree.tostring(node))
+                    continue
+                fix_img_revistas_path(node)
+
+        for a_href in self.xml.findall(".//*[@href]"):
+            if not a_href.get("link-type"):
+
+                href = a_href.get("href")
+                if ":" in href:
+                    a_href.set("link-type", "external")
+                    logger.info("Classificou: %s" % etree.tostring(a_href))
+                    continue
+
+                if href and href[0] == "#":
+                    a_href.set("link-type", "internal")
+                    logger.info("Classificou: %s" % etree.tostring(a_href))
+                    continue
+
+                value = href.split("/")[0]
+                if "." in value:
+                    if href.startswith("./") or href.startswith("../"):
+                        a_href.set("href", os.path.join(self.digital_assets_path, href[href.find("/")+1:]))
+                    else:
+                        # pode ser URL
+                        a_href.set("link-type", "external")
+                        logger.info("Classificou a[@href]: %s" % etree.tostring(a_href))
+                        continue
+
+                fix_img_revistas_path(a_href)
+
+                basename = os.path.basename(href)
+                f, ext = os.path.splitext(basename)
+                if ".htm" in ext:
+                    a_href.set("link-type", "html")
+                elif href.startswith("/pdf/"):
+                    a_href.set("link-type", "pdf")
+                elif href.startswith("/img/revistas"):
+                    a_href.set("link-type", "asset")
+                else:
+                    logger.info("link-type=???")
+                logger.info("Classificou a[@href]: %s" % etree.tostring(a_href))
+
+    def _import_all_href_html_files(self):
+        self._classify_a_href()
+        while True:
+            self._import_html_files_content()
+            self._classify_a_href()
+            if self.body.find(".//a[@link-type='html']") is None:
+                break
+
+    def _import_html_files_content(self):
+        new_p_items = []
+        for bodychild in self.body_children:
+            for a_link_type in bodychild.findall(".//a[@link-type='html']"):
+                new_p = self._import_html_file_content(a_link_type)
+                if new_p is not None:
+                    new_p_items.append((bodychild, new_p))
+        for bodychild, new_p in new_p_items[::-1]:
+            logger.info(
+                "Insere novo p com conteudo do HTML: %s"
+                % etree.tostring(new_p)
+            )
+            bodychild.addnext(new_p)
+        return len(new_p_items)
+
+    def _import_html_file_content(self, node_a):
+        logger.info("Importar HTML de %s" % etree.tostring(node_a))
+        href = node_a.get("href")
+        if "#" in href:
+            href, anchor = href.split("#")
+        f, ext = os.path.splitext(href)
+        new_href = os.path.basename(f)
+        file_location = FileLocation(href)
+        if file_location.content:
+            html_tree = etree.fromstring(
+                file_location.content, parser=etree.HTMLParser()
+            )
+            if html_tree is not None:
+                html_body = html_tree.find(".//body")
+                if html_body is not None:
+                    return self._convert_a_href(node_a, new_href, html_body)
+
+    def _convert_a_href_into_images_or_media(self):
+        new_p_items = []
+        for child in self.body_children:
+            for node_a in child.findall(".//a[@link-type='asset']"):
+                logger.info("Converter %s" % etree.tostring(node_a))
+                href = node_a.get("href")
+                f, ext = os.path.splitext(href)
+                new_href = os.path.basename(f)
+                if ext:
+                    new_p = self._convert_a_href(node_a, new_href)
+                    if new_p is not None:
+                        new_p_items.append((child, new_p))
+        for bodychild, new_p in new_p_items[::-1]:
+            logger.info("Insere novo p: %s" % etree.tostring(new_p))
+            bodychild.addnext(new_p)
+        return len(new_p_items)
+
+    def _convert_a_href(self, node_a, new_href, html_body=None):
+        location = node_a.get("href")
+
+        self._update_a_href(node_a, new_href)
+        content_type = "asset"
+        if html_body is not None:
+            content_type = "html"
+        delete_tag = "REMOVE_" + content_type
+
+        found_a_name = self.find_a_name(node_a, new_href, delete_tag)
+        if not found_a_name:
+            if html_body is not None:
+                node_content = self._imported_html_body(
+                    new_href, html_body, delete_tag)
+            else:
+                node_content = self._asset_data(node_a, location, new_href)
+            if node_content is not None:
+                new_p = self._create_new_p(
+                    new_href, node_content, content_type, delete_tag)
+                return new_p
+
+    def _update_a_href(self, a_href, new_href):
+        a_href.set("href", "#" + new_href)
+        a_href.set("link-type", "internal")
+        logger.info("Atualiza a[@href]: %s" % etree.tostring(a_href))
+
+    def find_a_name(self, a_href, new_href, delete_tag="REMOVETAG"):
+        if new_href in self.names:
+            logger.info("Será criado")
+            return True
+        a_name = a_href.getroottree().find(".//a[@name='{}']".format(new_href))
+        if a_name is not None:
+            if a_name.getchildren():
+                logger.info("Já importado")
+                return True
+            else:
+                # existe um a[@name] mas é inválido porque está sem conteúdo
+                a_name.tag = delete_tag
+                return True
+
+    def _create_new_p(self, new_href, node_content, content_type, delete_tag):
+        self.names.append(new_href)
+        a_name = etree.Element("a")
+        a_name.set("id", new_href)
+        a_name.set("name", new_href)
+        a_name.append(node_content)
+
+        new_p = etree.Element("p")
+        new_p.set("content-type", content_type)
+        new_p.append(a_name)
+        etree.strip_tags(new_p, delete_tag)
+        logger.info("Cria novo p: %s" % etree.tostring(new_p))
+
+        return new_p
+
+    def _imported_html_body(self, new_href, html_body, delete_tag="REMOVETAG"):
+        # Criar o a[@name] com o conteúdo do body
+        body = deepcopy(html_body)
+        body.tag = delete_tag
+        for a in body.findall(".//a"):
+            logger.info(
+                "Encontrado elem a no body importado: %s" % etree.tostring(a))
+            href = a.get("href")
+            if href and href[0] == "#":
+                a.set("href", "#" + new_href + href[1:].replace("#", "X"))
+            elif a.get("name"):
+                a.set("name", new_href + "X" + a.get("name"))
+            logger.info("Atualiza elem a importado: %s" % etree.tostring(a))
+
+        a_name = body.find(".//a[@name='{}']".format(new_href))
+        if a_name is not None:
+            a_name.tag = delete_tag
+        return body
+
+    def _asset_data(self, node_a, location, new_href):
+        asset = node_a.getroottree().find(".//*[@src='{}']".format(location))
+        if asset is None:
+            # Criar o a[@name] com o <img src=""/>
+            tag = "img"
+            ign, ext = os.path.splitext(location)
+            if ext.lower() not in self.IMG_EXTENSIONS:
+                tag = "media"
+            asset = etree.Element(tag)
+            asset.set("src", location)
+            return asset
+        elif asset.getparent().get("name") != new_href:
+            a = etree.Element("a")
+            a.set("name", new_href)
+            a.set("id", new_href)
+            asset.addprevious(a)
+            a.append(deepcopy(asset))
+            parent = asset.getparent()
+            parent.remove(asset)
+            self.names.append(new_href)
