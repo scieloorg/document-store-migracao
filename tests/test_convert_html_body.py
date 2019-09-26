@@ -643,7 +643,6 @@ class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
 
         data = self.text, self.xml
         raw, transformed = self.pipe.transform(data)
-        print("?????", etree.tostring(transformed))
 
         self.assertEqual(len(transformed.findall(".//body//p")), 2)
         self.assertEqual(len(transformed.findall(".//body//*")), 2)
@@ -1575,7 +1574,6 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         <fn id="nt1"><label>1</label><p>Nota bla bla</p></fn></root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
-        print(etree.tostring(xml))
         nodes = xml.findall(".//fn")
         self.assertEqual(len(nodes), 1)
         nodes = xml.findall(".//fn")
@@ -1589,7 +1587,6 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
 
 class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def setUp(self):
-        pipeline = HTML2SPSPipeline("PID")
         pl = ConvertElementsWhichHaveIdPipeline()
         self.pipe = pl.DeduceAndSuggestConversionPipe()
         self.inferer = Inferer()
@@ -1641,11 +1638,6 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
         expected_node = etree.fromstring(expected).findall(xpath)
         for i, node in enumerate(self.xml.findall(xpath)):
             with self.subTest(step + " " + str(i)):
-                if etree.tostring(node) != etree.tostring(expected_node[i]):
-                    print("-")
-                    print(etree.tostring(node))
-                    print(etree.tostring(expected_node[i]))
-
                 self.assertEqual(etree.tostring(node), etree.tostring(expected_node[i]))
 
     def test_add_xml_attribs_to_a_href_from_text(self):
