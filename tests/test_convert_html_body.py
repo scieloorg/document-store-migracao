@@ -560,19 +560,21 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 found = tree.findall(".//%s" % expected_tag)
                 self.assertIsNotNone(found)
 
-    def test_pipe_remove_ref_id(self):
-        text = """<root><a xref_id="B1" id="B1">Texto</a></root>"""
-        raw, transformed = self._transform(text, self.pipeline.RemoveRefIdPipe())
-        self.assertEqual(
-            etree.tostring(transformed), b"""<root><a id="B1">Texto</a></root>"""
-        )
-
     def test_pipe_remove_id_duplicated(self):
-        text = """<root><a id="B1">Texto</a><p>Texto</p><a id="B1">Texto</a></root>"""
-        raw, transformed = self._transform(text, self.pipeline.RemoveDuplicatedIdPipe())
+        text = """<root>
+        <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
+        <a id="B1" name="B1">Texto 3</a></root>"""
+        expected = b"""<root>
+        <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
+        Texto 3</root>"""
+
+        raw, transformed = self._transform(
+            text,
+            ConvertElementsWhichHaveIdPipeline(
+            ).EvaluateElementAToDeleteOrMarkAsFnLabelPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b"""<root><a id="B1">Texto</a><p>Texto</p><a id="B1-duplicate-0">Texto</a></root>""",
+            expected,
         )
 
 
@@ -1010,7 +1012,7 @@ class TestCreateAssetElementsFromImgOrTableElementsPipe(unittest.TestCase):
 
     def test_transform__completes_fig_with_label_and_caption(self):
         text = """<root>
-            <p><fig id="qdr04" xref_id="qdr04"></fig></p>
+            <p><fig id="qdr04"></fig></p>
             <p>Quadro 1. Esta é descriçãp da Doc...</p>
             <p><img align="x" src="a04qdr04.gif"
                 xml_id="qdr04" xml_reftype="fig"
@@ -1031,7 +1033,7 @@ class TestCreateAssetElementsFromImgOrTableElementsPipe(unittest.TestCase):
 
     def test_transform__completes_table_wrap(self):
         text = """<root>
-            <p><table-wrap id="t04" xref_id="t04"></table-wrap></p>
+            <p><table-wrap id="t04"></table-wrap></p>
             <p>Tabela 1. Esta é descriçãp da Doc...</p>
             <p><img align="x" src="a04t04.gif"
                 xml_id="t04" xml_reftype="table"
@@ -1279,19 +1281,30 @@ class TestConversionToTableWrap(unittest.TestCase):
 
 class TestConversionToCorresp(unittest.TestCase):
     def test_convert_to_corresp(self):
-        text = """<root><a name="home" id="home"/><a name="back" id="back"/><a href="#home">*</a> Corresponding author</root>"""
-        expected_after_internal_link_as_asterisk_pipe = b"""<root><a name="back" id="back"/>* Corresponding author</root>"""
-        expected_after_anchor_and_internal_link_pipe = b"""<root><fn id="back" fn-type="corresp"/>* Corresponding author</root>"""
+        text = """<root>
+        <a href="#back">*</a>
+        <a name="home" id="home"/>
+        <a name="back" id="back"/>
+        <a href="#home">*</a> Corresponding author</root>"""
+        expected_1 = b"""<root>
+        <a href="#back">*</a>
+        <a name="back" id="back"/> * Corresponding author</root>"""
+        expected_2 = b"""<root>
+        <xref ref-type="corresp" rid="back">*</xref>
+        <fn id="back" fn-type="corresp"/> * Corresponding author</root>"""
 
         xml = etree.fromstring(text)
         html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = ConvertElementsWhichHaveIdPipeline()
 
-        text, xml = pl.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(
+        text, xml = pl.CompleteElementAWithNameAndIdPipe(
+            ).transform((text, xml))
+        text, xml = pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(
             ).transform((text, xml))
         self.assertNotIn(b'<a href="#home">*</a>', etree.tostring(xml))
         self.assertEqual(
-            etree.tostring(xml), expected_after_internal_link_as_asterisk_pipe
+            [i for i in etree.tostring(xml).split() if i.strip()],
+            [i for i in expected_1.split() if i.strip()]
         )
 
         text, xml = pl.DeduceAndSuggestConversionPipe().transform((text, xml))
@@ -1302,7 +1315,8 @@ class TestConversionToCorresp(unittest.TestCase):
 
         text, xml = pl.ApplySuggestedConversionPipe().transform((text, xml))
         self.assertEqual(
-            etree.tostring(xml), expected_after_anchor_and_internal_link_pipe
+            [i for i in etree.tostring(xml).split() if i.strip()],
+            [i for i in expected_2.split() if i.strip()]
         )
 
 
@@ -1323,7 +1337,7 @@ class TestConversionToFig(unittest.TestCase):
         html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = ConvertElementsWhichHaveIdPipeline()
 
-        text, xml = pl.AddNameAndIdToElementAPipe().transform((text, xml))
+        text, xml = pl.CompleteElementAWithNameAndIdPipe().transform((text, xml))
         text, xml = pl.DeduceAndSuggestConversionPipe().transform((text, xml))
         _xml = etree.tostring(xml)
         self.assertIn(
@@ -1388,7 +1402,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.SaveRawBodyPipe(pipeline),
             pipeline.DeprecatedHTMLTagsPipe(),
             pipeline.RemoveImgSetaPipe(),
-            pipeline.RemoveDuplicatedIdPipe(),
             pipeline.RemoveExcedingStyleTagsPipe(),
             pipeline.RemoveEmptyPipe(),
             pipeline.RemoveStyleAttributesPipe(),
@@ -1416,7 +1429,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.GraphicChildrenPipe(),
             pipeline.FixBodyChildrenPipe(),
             pipeline.RemovePWhichIsParentOfPPipe(),
-            pipeline.RemoveRefIdPipe(),
             pipeline.SanitizationPipe()
             )
         for pipe in pipes:
@@ -1469,15 +1481,17 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         text = """<root><a name="_ftnref19" href="#_ftn2" id="_ftnref19"><sup>1</sup></a></root>"""
         expected = b"""<root><a name="_ftnref19" id="_ftnref19"/><a href="#_ftn2"><sup>1</sup></a></root>"""
         xml = etree.fromstring(text)
-        text, xml = self.pl.AddNameAndIdToElementAPipe().transform((text, xml))
+        text, xml = self.pl.CompleteElementAWithNameAndIdPipe().transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
     def test_pipe_asterisk_in_a_href(self):
-        text = '<root><a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>'
-        expected = b'<root><a name="1a" id="1a"/><sup>*</sup></root>'
+        text = """<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>"""
+        expected = b"""<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><sup>*</sup></root>"""
         xml = etree.fromstring(text)
 
-        text, xml = self.pl.RemoveInternalLinksToTextIdentifiedByAsteriskPipe(
+        text, xml = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(
             ).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
@@ -1542,7 +1556,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
         </root>"""
         raw, transformed = text, etree.fromstring(text)
-        raw, transformed = self.pl.RemoveAnchorAndLinksToTextPipe().transform((raw, transformed))
+        raw, transformed = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe().transform((raw, transformed))
         nodes = transformed.findall(".//a[@name='nota']")
         self.assertEqual(len(nodes), 1)
         nodes = transformed.findall(".//a[@href='#nota']")
@@ -1565,7 +1579,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.assertEqual(len(nodes), 1)
         nodes = xml.findall(".//fn")
         self.assertEqual(nodes[0].find("label").text, "1")
-        self.assertEqual(nodes[0].find("p").text, "Nota bla bla")
+        self.assertEqual(nodes[0].find("p").text.strip(), "Nota bla bla")
 
         nodes = xml.findall(".//xref")
         self.assertEqual(len(nodes), 1)
@@ -1710,7 +1724,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
         self._assert(expected, "images", ".//img")
 
 
-class TestAPipe(unittest.TestCase):
+class TestAHrefPipe(unittest.TestCase):
 
     def _transform(self, text, pipe):
         tree = etree.fromstring(text)
@@ -1724,31 +1738,33 @@ class TestAPipe(unittest.TestCase):
         with open(filename, "r") as f:
             self.xml_txt = f.read()
         self.etreeXML = etree.fromstring(self.xml_txt)
-        self.html_pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        self.pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        self.pipe = self.pipeline.AHrefPipe()
 
-    def test_pipe_a__parser_node_external_link_for_uri(self):
+    def test_a_href_pipe_create_ext_link_for_uri(self):
         expected = {
             "{http://www.w3.org/1999/xlink}href": "http://bla.org",
             "ext-link-type": "uri",
         }
-        xml = etree.fromstring('<root><a href="http://bla.org">texto</a></root>')
+        xml = etree.fromstring(
+            '<root><a href="http://bla.org">texto</a></root>')
         node = xml.find(".//a")
 
-        self.pipeline.APipe()._parser_node_external_link(node)
+        self.pipe._create_ext_link(node)
 
         self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
         self.assertEqual(
-            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "http://bla.org"
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"),
+            "http://bla.org"
         )
         self.assertEqual(node.attrib.get("ext-link-type"), "uri")
         self.assertEqual(node.tag, "ext-link")
         self.assertEqual(node.text, "texto")
         self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
 
-    def test_pipe_a__creates_email_element_with_href_attribute(self):
+    def test_a_href_pipe___creates_email_element_with_href_attribute(self):
         expected = """<root>
-        <p><email xlink:href="mailto:a@scielo.org">Enviar e-mail para A</email></p>
+        <p><ext-link ext-link-type="email" xlink:href="mailto:a@scielo.org">Enviar e-mail para A</ext-link></p>
         </root>"""
         text = """<root>
         <p><a href="mailto:a@scielo.org">Enviar e-mail para A</a></p>
@@ -1756,15 +1772,17 @@ class TestAPipe(unittest.TestCase):
         xml = etree.fromstring(text)
 
         node = xml.find(".//a")
-        self.pipeline.APipe()._create_email(node)
+        self.pipe._create_email(node)
 
-        self.assertIn(
-            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "mailto:a@scielo.org"
+        self.assertEqual(
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"),
+            "mailto:a@scielo.org"
         )
-        self.assertEqual(node.tag, "email")
+        self.assertEqual(node.tag, "ext-link")
+        self.assertEqual(node.get("ext-link-type"), "email")
         self.assertEqual(node.text, "Enviar e-mail para A")
 
-    def test_pipe_a__creates_email_(self):
+    def test_a_href_pipe___creates_email_(self):
         expected = """<root>
         <p>Enviar e-mail para <email>a@scielo.org</email>.</p>
         </root>"""
@@ -1774,54 +1792,59 @@ class TestAPipe(unittest.TestCase):
         xml = etree.fromstring(text)
 
         node = xml.find(".//a")
-        self.pipeline.APipe()._create_email(node)
+        self.pipe._create_email(node)
         p = xml.find(".//p")
         self.assertEqual(p.text, "Enviar e-mail para ")
         email = p.find("email")
         self.assertEqual(email.text, "a@scielo.org")
         self.assertEqual(email.tail, ".")
 
-    def test_pipe_a__creates_graphic_email(self):
-        expected = b"""<root><p><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="email.gif"><email>mailto:x@scielo.org</email></graphic></p></root>"""
+    def test_a_href_pipe___creates_ext_link_with_img(self):
+        
+        expected = """<root>
+        <p><ext-link ext-link-type="email" xlink:href="mailto:a@scielo.org"><img src="mail.gif" /></ext-link></p>
+        </root>"""
         text = """<root>
-        <p><a href="mailto:x@scielo.org"><img src="mail.gif" /></a></p>
+        <p><a href="mailto:a@scielo.org"><img src="mail.gif"/></a></p>
         </root>"""
         xml = etree.fromstring(text)
 
         node = xml.find(".//a")
-        self.pipeline.APipe()._create_email(node)
+        self.pipe._create_email(node)
 
         self.assertEqual(
-            xml.find(".//graphic").attrib.get("{http://www.w3.org/1999/xlink}href"),
-            "mail.gif",
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"),
+            "mailto:a@scielo.org"
         )
-        self.assertEqual(xml.findtext(".//graphic/email"), "x@scielo.org")
+        self.assertEqual(node.tag, "ext-link")
+        self.assertEqual(node.get("ext-link-type"), "email")
+        self.assertIsNotNone(node.find("img"))
 
-    def test_pipe_a__creates_email(self):
+    def test_a_href_pipe___creates_email(self):
         text = """<root>
         <p><a href="mailto:a@scielo.org">a@scielo.org</a></p>
         </root>"""
         raw, transformed = self._transform(
-            text, self.pipeline.APipe()
+            text, self.pipe
         )
 
         node = transformed.find(".//email")
         self.assertEqual(node.text, "a@scielo.org")
         self.assertEqual(node.tag, "email")
 
-    def test_pipe_a__create_email_mailto_empty(self):
+    def test_a_href_pipe___create_email_mailto_empty(self):
         text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
         raw, transformed = self._transform(
-            text, self.pipeline.APipe()
+            text, self.pipe
         )
 
         node = transformed.find(".//email")
         self.assertEqual(node.text, "a@scielo.org")
         self.assertEqual(node.tag, "email")
 
-    def test_pipe_a__create_email_mailto_empty(self):
+    def test_a_href_pipe___create_email_mailto_empty(self):
         text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
-        raw, transformed = self._transform(text, self.pipeline.APipe())
+        raw, transformed = self._transform(text, self.pipe)
 
         node = transformed.find(".//email")
         self.assertEqual(node.text, "sfpyip@hku.hk")
@@ -1831,96 +1854,7 @@ class TestAPipe(unittest.TestCase):
         )
 
 
-    def test_pipe_a_anchor__remove_xref_with_graphic(self):
-        text = """<root><a href="#top"><graphic xmlns:ns2="http://www.w3.org/1999/xlink"
-            ns2:href="/img/revistas/gs/v29n2/seta.gif"/></a></root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-
-        node = transformed.find(".//xref")
-        self.assertIsNone(node)
-
-        node = transformed.find(".//graphic")
-        self.assertIsNone(node)
-
-        self.assertEqual(etree.tostring(transformed), b"<root/>")
-
-    def test_pipe_a_anchor__remove_xref(self):
-        text = """<root>Demographic and Health Surveys. Available from: <a href="#fn1">b</a></root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b"<root>Demographic and Health Surveys. Available from: b</root>",
-        )
-
-    def test_pipe_a_anchor__keep_xref(self):
-        text = """<root><table-wrap id="tab1" xref_id="tab1"/><a href="#tab1">Tabela 1</a> Demographic and Health Surveys. Available from: </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><table-wrap id="tab1"/><xref rid="tab1" ref-type="table">Tabela 1</xref> Demographic and Health Surveys. Available from: </root>',
-        )
-
-    def test_pipe_a_anchor__xref_bibr_case1(self):
-        text = """<root><a href="#ref">(9,10)</a>Tabela 1 </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><xref rid="B9" ref-type="bibr">(9,10)</xref>Tabela 1 </root>',
-        )
-
-    def test_pipe_a_anchor__xref_bibr_case2(self):
-        text = """<root><a href="#ref">9</a>Tabela 1 </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><xref rid="B9" ref-type="bibr">9</xref>Tabela 1 </root>',
-        )
-
-    def test_pipe_a_anchor__xref_bibr_case3(self):
-        text = """<root><a href="#ref">(9-10)</a>Tabela 1 </root>"""
-
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><xref rid="B9" ref-type="bibr">(9-10)</xref>Tabela 1 </root>',
-        )
-
-    @unittest.skip("TODO")
-    def test_pipe_a_anchor__xref_figure(self):
-        text = """<root><a href="#tabela1">Tabela 1</a> resultado global do levantamento efetuado <img src="/img/revistas/rsp/v8n3/05t1.gif"/></root>"""
-
-        data = self._transform(text, self.pipeline.ImgPipe())
-        raw, transformed = self.pipeline.APipe().transform(data)
-
-        self.assertEqual(
-            etree.tostring(transformed),
-            b"""<root><xref rid="t1" ref-type="table">Tabela 1</xref> resultado global do levantamento efetuado <table-wrap id="t1"><graphic xmlns:ns0="http://www.w3.org/1999/xlink" ns0:href="/img/revistas/rsp/v8n3/05t1.gif"/></table-wrap></root>""",
-        )
-
-    def test_pipe_a_hiperlink(self):
-
+    def test_a_href_pipe__hiperlink(self):
         text = [
             "<root>",
             '<p><a href="https://new.scielo.br"/></p>',
@@ -1931,11 +1865,11 @@ class TestAPipe(unittest.TestCase):
         ]
         text = "".join(text)
         raw, transformed = self._transform(
-            text, self.pipeline.APipe()
+            text, self.pipe
         )
 
         nodes = transformed.findall(".//ext-link")
-        self.assertEqual(len(nodes), 4)
+        self.assertEqual(len(nodes), 3)
         data = [
             ("https://new.scielo.br", b""),
             ("//www.google.com", b'<img src="mail.gif"/>'),
@@ -1951,23 +1885,6 @@ class TestAPipe(unittest.TestCase):
                 )
                 self.assertEqual("uri", node.attrib["ext-link-type"])
                 self.assertEqual(len(node.attrib), 2)
-
-    def test_pipe_remove_a_without_href(self):
-        text = "<root><a>Teste</a></root>"
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-        self.assertIsNone(transformed.find(".//a"))
-
-    def test_pipe_a_href_error(self):
-        text = '<root><a href="error">Teste</a></root>'
-        raw, transformed = self._transform(
-            text, self.pipeline.APipe()
-        )
-        self.assertEqual(
-            etree.tostring(transformed).strip(),
-            b'<root><a href="error">Teste</a></root>',
-        )
 
 
 class TestImgPipe(unittest.TestCase):
@@ -2265,6 +2182,7 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
           </p>
         </root>"""
         xml = etree.fromstring(text)
+        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe(
             ).transform((text, xml))
@@ -2292,6 +2210,10 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
          <p><b>C.T.L.S. Ghidini<sup>I, </sup>
          <a href="#nt"><sup>*</sup></a>;
          A.R.L. Oliveira<sup>II</sup>; M. Silva<sup>III</sup></b></p>
+
+         <p>Conforme a nota 1<a href="#nt01">1</a></p>
+         <p>Conforme a nota 2<a href="#nt02">2</a></p>
+         <p>Conforme a nota 3<a href="#nt03">3</a></p>
          <p><a name="nt"></a><a href="#tx">*</a>
          Autor correspondente: Carla Ghidini    <br/>
          <a name="nt01"></a>
@@ -2334,6 +2256,7 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         <email>chrisg@vortex.ufrgs.br</email>
         </p></fn></root>"""
         xml = etree.fromstring(text)
+        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe(
             ).transform((text, xml))
         self.assertEqual(xml.find(".//xref/sup").text, "*")

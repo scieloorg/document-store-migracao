@@ -17,12 +17,6 @@ class Inferer:
     def tag_and_reftype_from_name(self, name):
         if not name:
             return
-        for prefix in ["not", "_ftnref"]:
-            if name.startswith(prefix) and name[len(prefix) :].isdigit():
-                return
-        for prefix in ["titulo", "title", "tx", "top", "home"]:
-            if name.startswith(prefix):
-                return
         for prefix, tag in STARTSWITH_RETURNS_TAG_AND_REFTYPE:
             if name.startswith(prefix):
                 if len(prefix) == 1 and not name[len(prefix) :].isdigit():

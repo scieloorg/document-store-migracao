@@ -118,11 +118,11 @@ class HTML2SPSPipeline(object):
             self.ConvertRemote2LocalPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
-            self.RemoveDuplicatedIdPipe(),
             self.RemoveExcedingStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.RemoveCommentPipe(),
+            self.AHrefPipe(),
             self.BRPipe(),
             self.PPipe(),
             self.DivPipe(),
@@ -199,21 +199,6 @@ class HTML2SPSPipeline(object):
                 nodes = xml.findall(".//" + tag)
                 if len(nodes) > 0:
                     etree.strip_tags(xml, tag)
-            return data
-
-    class RemoveDuplicatedIdPipe(plumber.Pipe):
-        def transform(self, data):
-            raw, xml = data
-
-            nodes = xml.findall(".//*[@id]")
-            root = xml.getroottree()
-            for node in nodes:
-                attr = node.attrib
-                d_ids = root.findall(".//*[@id='%s']" % attr["id"])
-                if len(d_ids) > 1:
-                    for index, d_n in enumerate(d_ids[1:]):
-                        d_n.set("id", "%s-duplicate-%s" % (attr["id"], index))
-
             return data
 
     class RemoveExcedingStyleTagsPipe(plumber.Pipe):
@@ -835,6 +820,72 @@ class HTML2SPSPipeline(object):
             logger.info("Total de %s 'comentarios' processadas", len(comments))
             return data
 
+    class AHrefPipe(plumber.Pipe):
+        def _create_ext_link(self, node, extlinktype="uri"):
+            node.tag = "ext-link"
+            href = node.attrib.get("href")
+            node.attrib.clear()
+            node.set("ext-link-type", extlinktype)
+            node.set("{http://www.w3.org/1999/xlink}href", href)
+
+        def _create_email(self, node):
+            href = node.get("href").strip()
+            if "mailto:" in href:
+                href = href.split("mailto:")[1]
+
+            node_text = (node.text or "").strip()
+            node.tag = "email"
+            node.attrib.clear()
+            if not href and node_text and "@" in node_text:
+                texts = node_text.split()
+                for text in texts:
+                    if "@" in text:
+                        href = text
+                        break
+            if not href:
+                # devido ao caso do href estar mal
+                # formado devemos so trocar a tag
+                # e retorna para continuar o Pipe
+                return
+
+            node.set("{http://www.w3.org/1999/xlink}href", href)
+
+            if href == node_text:
+                return
+            if href in node_text:
+                root = node.getroottree()
+                temp = etree.Element("AHREFPIPEREMOVETAG")
+                texts = node_text.split(href)
+                temp.text = texts[0]
+                email = etree.Element("email")
+                email.text = href
+                temp.append(email)
+                temp.tail = texts[1]
+                node.addprevious(temp)
+                etree.strip_tags(root, "AHREFPIPEREMOVETAG")
+            else:
+                # https://jats.nlm.nih.gov/publishing/tag-library/1.2/element/email.html
+                node.tag = "ext-link"
+                node.set("ext-link-type", "email")
+                node.set(
+                    "{http://www.w3.org/1999/xlink}href", "mailto:" + href)
+
+        def parser_node(self, node):
+            href = node.get("href")
+            if href.startswith("#") or node.get("link-type") == "internal":
+                return
+            if "mailto" in href or "@" in href:
+                return self._create_email(node)
+            if ":" in href or node.get("link-type") == "external":
+                return self._create_ext_link(node)
+            if href.startswith("//"):
+                return self._create_ext_link(node)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            return data
+
     class HTMLEscapingPipe(plumber.Pipe):
         def parser_node(self, node):
             text = node.text
@@ -1110,16 +1161,14 @@ class ConvertElementsWhichHaveIdPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.RemoveThumbImgPipe(),
-            self.AddNameAndIdToElementAPipe(),
+            self.CompleteElementAWithNameAndIdPipe(),
+            self.CompleteElementAWithXMLTextPipe(),
+            self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
             self.DeduceAndSuggestConversionPipe(),
-            self.RemoveAnchorAndLinksToTextPipe(),
             self.ApplySuggestedConversionPipe(),
             self.AddAssetInfoToTablePipe(),
-            self.CreateAssetElementsFromExternalLinkElementsPipe(
-                
-            ),
+            self.CreateAssetElementsFromExternalLinkElementsPipe(),
             self.CreateAssetElementsFromImgOrTableElementsPipe(),
-            self.APipe(),
             self.ImgPipe(),
             self.CompleteFnConversionPipe(),
         )
@@ -1319,52 +1368,82 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "img", self.parser_node)
             return data
 
-    class AddNameAndIdToElementAPipe(plumber.Pipe):
-        """Garante que todos os elemento a[@name] e a[@id] tenham @name e @id"""
+    class CompleteElementAWithNameAndIdPipe(plumber.Pipe):
+        """Garante que todos os elemento a[@name] e a[@id] tenham @name e @id.
+        Corrige id e name caso contenha caracteres nao alphanum.
+        """
+        def _fix_a_href(self, xml):
+            for a in xml.findall(".//a[@name]"):
+                name = a.attrib.get("name")
+                for a_href in xml.findall(".//a[@href='{}']".format(name)):
+                    a_href.set("href", "#" + name)
+
         def parser_node(self, node):
             _id = node.attrib.get("id")
             _name = node.attrib.get("name")
-            if _id is None or (_name and _id != _name):
-                node.set("id", _name)
-            if _name is None:
-                node.set("name", _id)
+            node.set("id", _name or _id)
+            node.set("name", _name or _id)
             href = node.attrib.get("href")
-            if href:
-                if href[0] == "#":
-                    a = etree.Element("a")
-                    a.set("name", node.attrib.get("name"))
-                    a.set("id", node.attrib.get("id"))
-                    node.addprevious(a)
-                    node.attrib.pop("id")
-                    node.attrib.pop("name")
+            if href and href[0] == "#":
+                a = etree.Element("a")
+                a.set("name", node.attrib.get("name"))
+                a.set("id", node.attrib.get("id"))
+                node.addprevious(a)
+                node.set("href", "#" + href[1:])
+                node.attrib.pop("id")
+                node.attrib.pop("name")
 
         def transform(self, data):
             raw, xml = data
+            self._fix_a_href(xml)
             _process(xml, "a[@id]", self.parser_node)
             _process(xml, "a[@name]", self.parser_node)
             return data
 
-    class RemoveInternalLinksToTextIdentifiedByAsteriskPipe(plumber.Pipe):
+    class CompleteElementAWithXMLTextPipe(plumber.Pipe):
         """
-        Ao encontrar ```<a href="#tx">*</a>```, remove a tag e atributos,
-        deixando apenas *. Também localiza a referência cruzada correspondente,
-        por exemplo, ```<a name="tx">*</a>``` para remover também.
+        Adiciona o atributo @xml_text ao elemento a, com o valor de seu rótulo.
+        Por exemplo, identificar se <a href="#2">2</a> é nota de rodapé ou
+        é Fig 2.
         """
-        def parser_node(self, node):
-            href = node.attrib.get("href")
-            texts = get_node_text(node)
-            if href.startswith("#") and texts and texts[0] == "*":
-                previous = node.getprevious()
-                if previous is not None and previous.tag == "a":
-                    root = node.getroottree()
-                    related = root.find(".//*[@name='{}']".format(href[1:]))
-                    if related is not None:
-                        _remove_element_or_comment(related)
-                    _remove_element_or_comment(node)
+        def add_xml_text_to_a_href(self, xml):
+            previous = etree.Element("none")
+            for i, node in enumerate(xml.findall(".//a[@href]")):
+                text = get_node_text(node).lower()
+                node.set("xml_text", text)
+                if text[0].isdigit():
+                    xml_text = previous.get("xml_text")
+                    if xml_text and " " in xml_text:
+                        label, number = xml_text.split(" ")
+                        if number[0] <= text[0]:
+                            node.set("xml_text", label + " " + text)
+                            logger.info(
+                                "add_xml_text_to_a_href: %s " % etree.tostring(
+                                    previous)
+                            )
+                            logger.info(
+                                "add_xml_text_to_a_href: %s " % etree.tostring(
+                                    node)
+                            )
+                previous = node
+
+        def add_xml_text_to_other_a(self, xml):
+            for node in xml.findall(".//a[@xml_text]"):
+                href = node.get("href")
+                if href:
+                    xml_text = node.get("xml_text")
+                    for n in xml.findall(".//a[@href='{}']".format(href)):
+                        if not n.get("xml_text"):
+                            n.set("xml_text", xml_text)
+                    for n in xml.findall(".//a[@name='{}']".format(href[1:])):
+                        if not n.get("xml_text"):
+                            n.set("xml_text", xml_text)
 
         def transform(self, data):
             raw, xml = data
-            _process(xml, "a[@href]", self.parser_node)
+            logger.info("CompleteElementAWithXMLTextPipe")
+            self.add_xml_text_to_a_href(xml)
+            self.add_xml_text_to_other_a(xml)
             return data
 
     class DeduceAndSuggestConversionPipe(plumber.Pipe):
@@ -1510,31 +1589,85 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self._add_xml_attribs_to_img(images)
             return data
 
-    class RemoveAnchorAndLinksToTextPipe(plumber.Pipe):
+    class EvaluateElementAToDeleteOrMarkAsFnLabelPipe(plumber.Pipe):
         """
-        No texto há ancoras e referencias cruzada do texto para as notas e
-        também das notas para o texto. Este pipe é para remover as
-        âncoras e referências cruzadas das notas para o texto.
+        No texto há âncoras (a[@name]) e referencias cruzada (a[@href]):
+        TEXTO->NOTAS e NOTAS->TEXTO.
+        Remove as âncoras e referências cruzadas relacionadas com NOTAS->TEXTO.
+        Também remover duplicidade de a[@name]
+        Algumas NOTAS->TEXTO podem ser convertidas a "fn/label"
         """
-        def _identify_order(self, xml):
+
+        def _classify_elem_a_by_id(self, xml):
             items_by_id = {}
-            for a in xml.findall(".//a[@xml_tag]"):
-                if a.attrib.get("xml_tag") == "fn":
-                    _id = a.attrib.get("xml_id")
+            for a in xml.findall(".//a"):
+                _id = a.attrib.get("name")
+                if not _id:
+                    href = a.attrib.get("href")
+                    if href and href.startswith("#"):
+                        _id = href[1:]
+                if _id:
                     items_by_id[_id] = items_by_id.get(_id, [])
                     items_by_id[_id].append(a)
             return items_by_id
 
-        def _exclude(self, items_by_id):
-            for _id, nodes in items_by_id.items():
-                if len(nodes) >= 2 and nodes[0].attrib.get("name"):
-                    for n in nodes:
-                        _remove_element_or_comment(n)
+        def _keep_only_one_a_name(self, items):
+            # remove os a[@name] repetidos, se aplicável
+            a_names = [n for n in items if n.attrib.get("name")]
+            for n in a_names[1:]:
+                items.remove(n)
+                _remove_element_or_comment(n)
+
+        def _exclude_invalid_a_name_and_identify_fn_label(self, items):
+            if items[0].get("name"):
+                if len(items) > 1:
+                    items[0].tag = "_EXCLUDE_REMOVETAG"
+                root = items[0].getroottree()
+                for a_href in items[1:]:
+                    found = None
+                    if self._might_be_fn_label(a_href):
+                        found = self._find_a_name_which_same_xml_text(
+                            root, a_href.get("xml_text")
+                        )
+                    if found is None:
+                        logger.info("remove: %s" % etree.tostring(a_href))
+                        _remove_element_or_comment(a_href)
+                    else:
+                        logger.info("Identifica como fn/label")
+                        logger.info(etree.tostring(a_href))
+                        a_href.tag = "label"
+                        a_href.set("label-of", found.get("name"))
+                        logger.info(etree.tostring(a_href))
+
+        def _exclude_invalid_unique_a_href(self, nodes):
+            if len(nodes) == 1 and nodes[0].attrib.get("href"):
+                _remove_element_or_comment(nodes[0])
+
+        def _might_be_fn_label(self, a_href):
+            xml_text = a_href.get("xml_text")
+            if xml_text and get_node_text(a_href):
+                return any(
+                    [xml_text[0].isdigit(),
+                    not xml_text[0].isalnum(),
+                    xml_text[0].isalpha() and len(xml_text) == 1,
+                    ]
+                )
+
+        def _find_a_name_which_same_xml_text(self, root, xml_text):
+            for item in root.findall(".//a[@xml_text='{}']".format(xml_text)):
+                if item.get("name"):
+                    return item
 
         def transform(self, data):
             raw, xml = data
-            items_by_id = self._identify_order(xml)
-            self._exclude(items_by_id)
+            logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe")
+            items_by_id = self._classify_elem_a_by_id(xml)
+            for _id, items in items_by_id.items():
+                self._keep_only_one_a_name(items)
+                self._exclude_invalid_a_name_and_identify_fn_label(items)
+                self._exclude_invalid_unique_a_href(items)
+            etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
+            logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe - fim")
             return data
 
     class ApplySuggestedConversionPipe(plumber.Pipe):
@@ -1580,119 +1713,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._update_a_href_items(a_hrefs, new_id, reftype)
                 else:
                     self._remove_a(a_name, a_hrefs)
-            return data
-
-    class APipe(plumber.Pipe):
-        def _parser_node_external_link(self, node, extlinktype="uri"):
-            node.tag = "ext-link"
-
-            href = node.attrib.get("href")
-            node.attrib.clear()
-            _attrib = {
-                "ext-link-type": extlinktype,
-                "{http://www.w3.org/1999/xlink}href": href,
-            }
-            node.attrib.update(_attrib)
-
-        def _create_email(self, node):
-            a_node_copy = deepcopy(node)
-            href = a_node_copy.attrib.get("href")
-            if "mailto:" in href:
-                href = href.split("mailto:")[1]
-
-            node.attrib.clear()
-            node.tag = "email"
-
-            if not href:
-                # devido ao caso do href estar mal
-                # formado devemos so trocar a tag
-                # e retorna para continuar o Pipe
-                return
-
-            img = node.find("img")
-            if img is not None:
-                graphic = etree.Element("graphic")
-                graphic.attrib["{http://www.w3.org/1999/xlink}href"] = img.attrib["src"]
-                _remove_element_or_comment(img)
-                parent = node.getprevious() or node.getparent()
-                graphic.append(node)
-                parent.append(graphic)
-
-            if not href:
-                return
-
-            if node.text and node.text.strip():
-                if href == node.text:
-                    pass
-                elif href in node.text:
-                    node.tag = "REMOVE_TAG"
-                    texts = node.text.split(href)
-                    node.text = texts[0]
-                    email = etree.Element("email")
-                    email.text = href
-                    email.tail = texts[1]
-                    node.append(email)
-                    etree.strip_tags(node.getparent(), "REMOVE_TAG")
-                else:
-                    node.attrib["{http://www.w3.org/1999/xlink}href"] = href
-            if not node.text:
-                node.text = href
-
-        def _parser_node_anchor(self, node):
-            root = node.getroottree()
-
-            href = node.attrib.pop("href")
-
-            node.tag = "xref"
-            node.attrib.clear()
-
-            xref_name = href.replace("#", "")
-            if xref_name == "ref":
-                rid = node.text or ""
-                if not rid.isdigit():
-                    rid = (
-                        rid.replace("(", "")
-                        .replace(")", "")
-                        .replace("-", ",")
-                        .split(",")
-                    )
-                    rid = rid[0]
-                node.set("rid", "B%s" % rid)
-                node.set("ref-type", "bibr")
-            else:
-                rid = xref_name
-                ref_node = root.find("//*[@xref_id='%s']" % rid)
-
-                node.set("rid", rid)
-                if ref_node is not None:
-                    ref_type = ref_node.tag
-                    if ref_type == "table-wrap":
-                        ref_type = "table"
-                    node.set("ref-type", ref_type)
-                    ref_node.attrib.pop("xref_id")
-                else:
-                    # nao existe a[@name=rid]
-                    _remove_element_or_comment(node, xref_name == "top")
-
-        def parser_node(self, node):
-            try:
-                href = node.attrib["href"].strip()
-            except KeyError:
-                if "id" not in node.attrib.keys():
-                    logger.debug("\tTag 'a' sem href removendo node do xml")
-                    _remove_element_or_comment(node)
-            else:
-                if href.startswith("#"):
-                    self._parser_node_anchor(node)
-                elif "mailto" in href or "@" in href:
-                    self._create_email(node)
-                elif "/" in href or href.startswith("www") or "http" in href:
-                    self._parser_node_external_link(node)
-
-        def transform(self, data):
-            raw, xml = data
-
-            _process(xml, "a", self.parser_node)
             return data
 
     class ImgPipe(plumber.Pipe):
