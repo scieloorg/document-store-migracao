@@ -386,14 +386,47 @@ class SPS_Package:
             if pubdate is not None:
                 return pubdate
 
+    def _set_pub_date(self, attrs_by_version, value):
+        sps_version = self.xmltree.xpath('/article/@specific-use')
+        if len(sps_version) > 0 and attrs_by_version.get(sps_version[0]) is not None:
+            attrs = attrs_by_version[sps_version[0]]
+        else:
+            attrs = attrs_by_version["other"]
+        pubdate_node = etree.Element("pub-date")
+        for attr in attrs:
+            pubdate_node.set(*attr)
+        for tag, val in zip(["year", "month", "day"], value):
+            if len(val) > 0:
+                new_node = etree.Element(tag)
+                new_node.text = val
+                pubdate_node.append(new_node)
+        existing_pubdate = self.article_meta.find("pub-date")
+        existing_pubdate.addnext(pubdate_node)
+
     @property
     def document_pubdate(self):
         xpaths = (
             'pub-date[@pub-type="epub"]',
             'pub-date[@date-type="pub"]',
-            "pub-date",
+            'pub-date',
         )
-        return parse_date(self._match_pubdate(xpaths))
+        pub_date = self._match_pubdate(xpaths)
+        is_collection_pubdate = (
+            pub_date.get("date-type") == "collection" or \
+            pub_date.get("pub-type") == "collection"
+        )
+        if not is_collection_pubdate:
+            return parse_date(pub_date)
+        return ("", "", "")
+
+    @document_pubdate.setter
+    def document_pubdate(self, value):
+        xpaths_attrs_to_set = {
+            "sps-1.9": (("publication-format", "electronic"), ("date-type", "pub"),),
+            "sps-1.8": (("pub-type", "epub"),),
+            "other": (("pub-type", "epub"),),
+        }
+        self._set_pub_date(xpaths_attrs_to_set, value)
 
     @property
     def documents_bundle_pubdate(self):
@@ -401,9 +434,18 @@ class SPS_Package:
             'pub-date[@pub-type="epub-ppub"]',
             'pub-date[@pub-type="collection"]',
             'pub-date[@date-type="collection"]',
-            "pub-date",
         )
         return parse_date(self._match_pubdate(xpaths))
+
+    @documents_bundle_pubdate.setter
+    def documents_bundle_pubdate(self, value):
+        xpaths_attrs_to_set = {
+            "sps-1.9": (
+                ("publication-format", "electronic"), ("date-type", "collection"),),
+            "sps-1.8": (("pub-type", "collection"),),
+            "other": (("pub-type", "epub-ppub"),),
+        }
+        self._set_pub_date(xpaths_attrs_to_set, value)
 
     @property
     def scielo_id(self):

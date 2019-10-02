@@ -31,7 +31,7 @@ def build_xml(
     if doi:
         doi_elem = '<article-id pub-id-type="doi">{}</article-id>'.format(doi)
     return """
-        <article xmlns:xlink="http://www.w3.org/1999/xlink">
+        <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9">
         <front>
         <journal-meta>
             {journal_meta}
@@ -494,7 +494,7 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -502,7 +502,7 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -544,7 +544,7 @@ class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -552,7 +552,7 @@ class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -594,7 +594,7 @@ class Test_SPS_Package_NumFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -602,7 +602,7 @@ class Test_SPS_Package_NumFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -652,7 +652,7 @@ class Test_SPS_Package_VolNumSpeFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -660,7 +660,7 @@ class Test_SPS_Package_VolNumSpeFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -704,7 +704,7 @@ class Test_SPS_Package_VolSpeNumFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -712,7 +712,7 @@ class Test_SPS_Package_VolSpeNumFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -756,7 +756,7 @@ class Test_SPS_Package_VolSpeFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -764,7 +764,7 @@ class Test_SPS_Package_VolSpeFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -814,7 +814,7 @@ class Test_SPS_Package_VolSuplFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -822,7 +822,7 @@ class Test_SPS_Package_VolSuplFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -872,7 +872,7 @@ class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -880,7 +880,7 @@ class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -930,7 +930,7 @@ class Test_SPS_Package_VolNumSuplFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -938,7 +938,7 @@ class Test_SPS_Package_VolNumSuplFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -987,7 +987,7 @@ class Test_SPS_Package_Vol2SuplAFpageLpage(unittest.TestCase):
                 ("fpage", "fpage"),
                 ("lpage", "lpage"),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -995,7 +995,7 @@ class Test_SPS_Package_Vol2SuplAFpageLpage(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -1036,7 +1036,7 @@ class Test_SPS_Package_Vol5Elocation(unittest.TestCase):
                 ("fpage", ""),
                 ("lpage", ""),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", "elocation"),
             ),
         )
@@ -1044,7 +1044,7 @@ class Test_SPS_Package_Vol5Elocation(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("2010", "", ""), "elocation"),
+            ("00006", "", "", ("2010", "", ""), ("", "", ""), "elocation"),
         )
 
 
@@ -1088,7 +1088,7 @@ class Test_SPS_Package_VolElocation(unittest.TestCase):
                 ("fpage", ""),
                 ("lpage", ""),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", "elocation"),
             ),
         )
@@ -1096,7 +1096,7 @@ class Test_SPS_Package_VolElocation(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("2010", "", ""), "elocation"),
+            ("00006", "", "", ("2010", "", ""), ("", "", ""), "elocation"),
         )
 
 
@@ -1132,7 +1132,7 @@ class Test_SPS_Package_Aop_HTML(unittest.TestCase):
                 ("fpage", ""),
                 ("lpage", ""),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -1140,7 +1140,7 @@ class Test_SPS_Package_Aop_HTML(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -1179,7 +1179,7 @@ class Test_SPS_Package_Aop_XML(unittest.TestCase):
                 ("fpage", ""),
                 ("lpage", ""),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -1187,7 +1187,7 @@ class Test_SPS_Package_Aop_XML(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -1233,7 +1233,7 @@ class Test_SPS_Package_Article_HTML(unittest.TestCase):
                 ("fpage", ""),
                 ("lpage", ""),
                 ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
                 ("elocation-id", ""),
             ),
         )
@@ -1241,7 +1241,7 @@ class Test_SPS_Package_Article_HTML(unittest.TestCase):
     def test_order(self):
         self.assertEqual(
             self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("2010", "", ""), ""),
+            ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
         )
 
 
@@ -1345,3 +1345,129 @@ class Test_ArticleMetaNoAOPPID(unittest.TestCase):
     def test_set_aop_pid(self):
         self.sps_package.aop_pid = "S0074-02761962005000001"
         self.assertEqual(self.sps_package.aop_pid, "S0074-02761962005000001")
+
+
+class Test_DocumentPubdateSPS1_9(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9"><article-meta>
+            <pub-date publication-format="electronic" date-type="collection">
+                <year>2012</year><month>2</month><day>3</day></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_document_pubdate(self):
+        self.assertEqual(self.sps_package.document_pubdate, ("", "", ""))
+
+    def test_set_document_pubdate(self):
+        self.sps_package.document_pubdate = ("2010", "07", "20")
+        self.assertEqual(self.sps_package.document_pubdate, ("2010", "07", "20"))
+
+    def test_set_incomplete_document_pubdate(self):
+        self.sps_package.document_pubdate = ("2010", "", "")
+        self.assertEqual(self.sps_package.document_pubdate, ("2010", "", ""))
+
+
+class Test_DocumentPubdateSPS1_8(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.8"><article-meta>
+            <pub-date pub-type="epub-ppub">
+                <year>2012</year><month>2</month><day>3</day></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_document_pubdate(self):
+        self.assertEqual(self.sps_package.document_pubdate, ("2012", "02", "03"))
+
+    def test_set_document_pubdate(self):
+        self.sps_package.document_pubdate = ("2010", "07", "20")
+        self.assertEqual(self.sps_package.document_pubdate, ("2010", "07", "20"))
+
+    def test_set_incomplete_document_pubdate(self):
+        self.sps_package.document_pubdate = ("2010", "", "")
+        self.assertEqual(self.sps_package.document_pubdate, ("2010", "", ""))
+
+
+class Test_DocumentPubdateSPS1_4(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.4"><article-meta>
+            <pub-date pub-type="epub-ppub">
+                <year>2012</year><month>2</month></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_document_pubdate(self):
+        self.assertEqual(self.sps_package.document_pubdate, ("2012", "02", ""))
+
+    def test_set_document_pubdate(self):
+        self.sps_package.document_pubdate = ("2010", "07", "20")
+        self.assertEqual(self.sps_package.document_pubdate, ("2010", "07", "20"))
+
+    def test_set_incomplete_document_pubdate(self):
+        self.sps_package.document_pubdate = ("2010", "", "")
+        self.assertEqual(self.sps_package.document_pubdate, ("2010", "", ""))
+
+
+class Test_DocumentsBundlePubdateSPS1_9(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9"><article-meta>
+            <pub-date publication-format="electronic" date-type="pub">
+                <year>2010</year><month>5</month><day>13</day></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_documents_bundle_pubdate(self):
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("", "", ""))
+
+    def test_set_documents_bundle_pubdate(self):
+        self.sps_package.documents_bundle_pubdate = ("2012", "10", "21")
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "10", "21"))
+
+    def test_set_incomplete_documents_bundle_pubdate(self):
+        self.sps_package.documents_bundle_pubdate = ("2012", "", "")
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
+
+
+class Test_DocumentsBundlePubdateSPS1_8(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.8"><article-meta>
+            <pub-date pub-type="epub">
+                <year>2010</year><month>5</month><day>13</day></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_documents_bundle_pubdate(self):
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("", "", ""))
+
+    def test_set_documents_bundle_pubdate(self):
+        self.sps_package.documents_bundle_pubdate = ("2012", "10", "21")
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "10", "21"))
+
+    def test_set_incomplete_documents_bundle_pubdate(self):
+        self.sps_package.documents_bundle_pubdate = ("2012", "", "")
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
+
+
+class Test_DocumentsBundlePubdateSPS1_4(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.4"><article-meta>
+            <pub-date pub-type="epub">
+                <year>2010</year><month>5</month><day>13</day></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_documents_bundle_pubdate(self):
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("", "", ""))
+
+    def test_set_documents_bundle_pubdate(self):
+        self.sps_package.documents_bundle_pubdate = ("2012", "10", "21")
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "10", "21"))
+
+    def test_set_incomplete_documents_bundle_pubdate(self):
+        self.sps_package.documents_bundle_pubdate = ("2012", "", "")
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
