@@ -95,18 +95,6 @@ class Inferer:
                     return tag, self.ref_type(tag), clue + "".join(parts[1:])
 
 
-def write_json_file(file_path, data):
-    with open(file_path, "w") as fp:
-        s = json.dumps(data)
-        fp.write(s)
-
-
-def read_json_file(file_path):
-    if os.path.isfile(file_path):
-        with open(file_path, "r") as fp:
-            return json.loads(fp.read())
-
-
 class InfererRules:
 
     def __init__(self, rules_file_path):
@@ -167,11 +155,15 @@ class InfererRules:
         return d
 
     def get_data(self, json_file_path, classification_function):
-        data = read_json_file(json_file_path)
+        data = None
+        if os.path.isfile(json_file_path):
+            with open(json_file_path, "r") as fp:
+                data = json.loads(fp.read())
         if not data:
             data = classification_function()
             if data:
-                write_json_file(json_file_path, data)
+                with open(json_file_path, "w") as fp:
+                    fp.write(json.dumps(data))
         return data
 
     @property

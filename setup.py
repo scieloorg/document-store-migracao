@@ -17,7 +17,7 @@ requires = [
     "articlemetaapi>=1.26.6",
     "picles.plumber",
     "lxml",
-    "scielo-documentstore",
+    "scielo-kernel",
     "packtools",
     "paginate",
     "minio",
@@ -63,7 +63,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     dependency_links=[
-        "git://github.com/scieloorg/document-store.git@96585ce99fb09503605416dceb5207a4ac70c43e#egg=scielo_documentstore",
+        "git://github.com/scieloorg/kernel.git@71eda5b8a0f699cdc88d8251261c5e99c7e9d786#egg=scielo-kernel",
     ],
 
     entry_points="""\
