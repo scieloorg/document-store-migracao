@@ -1265,3 +1265,83 @@ class Test_ArticleMetaCount(unittest.TestCase):
         result = self.sps_package.transform_article_meta_count()
 
         self.assertIsNone(result.find(".//counts"))
+
+
+class Test_ArticleMetaPublisherId(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id">S0074-02761962000200006</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_publisher_id(self):
+        self.assertEqual(self.sps_package.publisher_id, "S0074-02761962000200006")
+
+    def test_change_publisher_id(self):
+        self.sps_package.publisher_id = "S0074-02761962000200123"
+        self.assertEqual(self.sps_package.publisher_id, "S0074-02761962000200123")
+
+
+class Test_ArticleMetaNoPublisherId(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_publisher_id(self):
+        self.assertIsNone(self.sps_package.publisher_id)
+
+    def test_set_publisher_id(self):
+        self.sps_package.publisher_id = "S0074-02761962000200123"
+        self.assertEqual(self.sps_package.publisher_id, "S0074-02761962000200123")
+
+
+class Test_ArticleMetaAOPPID(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id">S0074-02761962000200006</article-id>
+            <article-id pub-id-type="publisher-id" specific-use="previous-pid">S0074-02761962005000001</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_aop_pid(self):
+        self.assertEqual(self.sps_package.aop_pid, "S0074-02761962005000001")
+
+    def test_change_aop_pid(self):
+        self.sps_package.aop_pid = "S0074-02761962005000001"
+        self.assertEqual(self.sps_package.aop_pid, "S0074-02761962005000001")
+
+
+class Test_ArticleMetaNoAOPPID(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id">S0074-02761962000200006</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_aop_pid(self):
+        self.assertIsNone(self.sps_package.aop_pid)
+
+    def test_set_aop_pid(self):
+        self.sps_package.aop_pid = "S0074-02761962005000001"
+        self.assertEqual(self.sps_package.aop_pid, "S0074-02761962005000001")

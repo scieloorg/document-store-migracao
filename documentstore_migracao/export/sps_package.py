@@ -103,6 +103,42 @@ class SPS_Package:
         except IndexError:
             return None
 
+    @publisher_id.setter
+    def publisher_id(self, value):
+        if self.publisher_id is None:
+            pid_node = etree.Element("article-id")
+            pid_node.set("pub-id-type", "publisher-id")
+            pid_node.text = value
+            self.article_meta.append(pid_node)
+        else:
+            pid_node = self.article_meta.xpath(
+                './/article-id[not(@specific-use="scielo") and not(@specific-use="previous-pid") and @pub-id-type="publisher-id"]'
+            )[0]
+            pid_node.text = value
+
+    @property
+    def aop_pid(self):
+        try:
+            return self.xmltree.xpath(
+                './/article-id[@specific-use="previous-pid" and @pub-id-type="publisher-id"]/text()'
+            )[0]
+        except IndexError:
+            return None
+
+    @aop_pid.setter
+    def aop_pid(self, value):
+        if self.aop_pid is None:
+            pid_node = etree.Element("article-id")
+            pid_node.set("pub-id-type", "publisher-id")
+            pid_node.set("specific-use", "previous-pid")
+            pid_node.text = value
+            self.article_meta.append(pid_node)
+        else:
+            pid_node = self.article_meta.xpath(
+                './/article-id[@specific-use="previous-pid" and @pub-id-type="publisher-id"]'
+            )[0]
+            pid_node.text = value
+
     @property
     def journal_meta(self):
         data = []
