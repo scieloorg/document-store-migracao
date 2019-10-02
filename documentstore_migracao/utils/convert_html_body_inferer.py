@@ -1,36 +1,8 @@
+import json
+import os
 
 from documentstore_migracao import config
 from documentstore_migracao.utils import files
-
-
-PREFIX_AND_TAG_ITEMS = (
-    tuple(item.strip().split("|"))
-    for item in open(config.CONVERSION_TAGS).readlines()
-)
-LEN_AND_PREFIX_AND_TAG_ITEMS = sorted(
-    [
-        (len(prefix), prefix, tag)
-        for prefix, tag in PREFIX_AND_TAG_ITEMS
-    ],
-    reverse=True)
-
-
-INFERER_PREFIX_AND_TAG_ITEMS = tuple(
-    (prefix, tag)
-    for _len, prefix, tag in LEN_AND_PREFIX_AND_TAG_ITEMS
-)
-
-INFERER_ITEMS_BY_PREFIX = {}
-INFERER_ITEMS_BY_TAG = {}
-for prefix, tag in INFERER_PREFIX_AND_TAG_ITEMS:
-    k = prefix[0]
-    INFERER_ITEMS_BY_PREFIX[k] = INFERER_ITEMS_BY_PREFIX.get(k, [])
-    INFERER_ITEMS_BY_PREFIX[k].append((prefix, tag))
-    INFERER_ITEMS_BY_TAG[tag] = INFERER_ITEMS_BY_TAG.get(tag, [])
-    INFERER_ITEMS_BY_TAG[tag].append((prefix, tag))
-
-for k, v in INFERER_ITEMS_BY_PREFIX.items():
-    INFERER_ITEMS_BY_PREFIX[k] = sorted(v, reverse=True)
 
 
 class Inferer:
@@ -51,6 +23,9 @@ class Inferer:
         "text",
     )
 
+    def __init__(self):
+        self.rules = InfererRules(config.INFERERER_RULES_FILE_PATH)
+
     def ref_type(self, elem_name):
         return self.REFTYPE.get(elem_name, elem_name)
 
@@ -59,14 +34,14 @@ class Inferer:
             return
         k = name[0]
         if k.isalpha():
-            for prefix, tag in INFERER_ITEMS_BY_PREFIX.get(k, []):
-                if name.startswith(prefix):
-                    if len(prefix) == 1 and not name[len(prefix):].isdigit():
+            for clue, tag in self.rules.sorted_by_clue_first_char.get(k, []):
+                if name.startswith(clue):
+                    if len(clue) == 1 and not name[len(clue):].isdigit():
                         return "fn", "fn"
                     return tag, self.ref_type(tag)
-            for prefix, tag in INFERER_PREFIX_AND_TAG_ITEMS:
-                if len(prefix) > 1:
-                    if prefix in name:
+            for clue, tag in self.rules.sorted_clue_and_tags_items:
+                if len(clue) > 1:
+                    if clue in name:
                         return tag, self.ref_type(tag)
         if not k.isalnum():
             return "symbol", "fn"
@@ -81,8 +56,8 @@ class Inferer:
                 break
         text = a_href_text[i:]
         k = text[0]
-        for prefix, tag in INFERER_ITEMS_BY_PREFIX.get(k, []):
-            if text.startswith(prefix) and len(prefix) > 1:
+        for clue, tag in self.rules.sorted_by_clue_first_char.get(k, []):
+            if text.startswith(clue) and len(clue) > 1:
                 return tag, self.ref_type(tag)
         if a_href_text[0].isalpha():
             if len(a_href_text) == 1:
@@ -101,15 +76,15 @@ class Inferer:
     def tag_and_reftype_and_id_from_filepath(self, file_path, elem_name=None):
         filename, __ = files.extract_filename_ext_by_path(file_path)
         if elem_name:
-            prefix_and_tag_items = INFERER_ITEMS_BY_TAG.get(elem_name, [])
-            prefix_and_tag_items.append((elem_name[0], elem_name))
+            clue_and_tag_items = self.rules.sorted_by_tag.get(elem_name, [])
+            clue_and_tag_items.append((elem_name[0], elem_name))
         else:
-            prefix_and_tag_items = INFERER_PREFIX_AND_TAG_ITEMS
-        for prefix, tag in prefix_and_tag_items:
-            if prefix == filename:
+            clue_and_tag_items = self.rules.sorted_clue_and_tags_items
+        for clue, tag in clue_and_tag_items:
+            if clue == filename:
                 return tag, self.ref_type(tag), filename
-            if prefix in filename:
-                parts = filename.split(prefix)
+            if clue in filename:
+                parts = filename.split(clue)
                 if len(parts) < 2:
                     continue
                 if parts[0] and parts[0][-1].isalpha():
@@ -117,4 +92,100 @@ class Inferer:
                 if parts[1] and parts[1][0].isalpha():
                     continue
                 if parts[1]:
-                    return tag, self.ref_type(tag), prefix + "".join(parts[1:])
+                    return tag, self.ref_type(tag), clue + "".join(parts[1:])
+
+
+def write_json_file(file_path, data):
+    with open(file_path, "w") as fp:
+        s = json.dumps(data)
+        fp.write(s)
+
+
+def read_json_file(file_path):
+    if os.path.isfile(file_path):
+        with open(file_path, "r") as fp:
+            return json.loads(fp.read())
+
+
+class InfererRules:
+
+    def __init__(self, rules_file_path):
+        self.rules_file_path = rules_file_path
+        file_path, ext = os.path.splitext(rules_file_path)
+        dirname = os.path.dirname(rules_file_path)
+        self.json_sorted_by_clue_first_char = os.path.join(dirname, "_inferer_clue.json")
+        self.json_sorted_by_tag = os.path.join(dirname, "_inferer_tags.json")
+        self._unsorted_clue_and_tag_items = None
+        self._sorted_clue_and_tags_items = None
+        self._sorted_by_clue_len_in_reverse_order = None
+        self._sorted_by_tag = None
+        self._sorted_by_clue_first_char = None
+
+    @property
+    def unsorted_clue_and_tag_items(self):
+        if not self._unsorted_clue_and_tag_items:
+            with open(self.rules_file_path, "r") as fp:
+                self._unsorted_clue_and_tag_items = (
+                    tuple(item.strip().split("|"))
+                    for item in fp.readlines()
+                    )
+        return self._unsorted_clue_and_tag_items
+
+    @property
+    def sorted_by_clue_len_in_reverse_order(self):
+        if not self._sorted_by_clue_len_in_reverse_order:
+            self._sorted_by_clue_len_in_reverse_order = sorted(
+                [
+                    (len(text), text, tag)
+                    for text, tag in self.unsorted_clue_and_tag_items
+                ],
+                reverse=True)
+        return self._sorted_by_clue_len_in_reverse_order
+
+    @property
+    def sorted_clue_and_tags_items(self):
+        if not self._sorted_clue_and_tags_items:
+            self._sorted_clue_and_tags_items = [
+                (text, tag)
+                for lent, text, tag in self.sorted_by_clue_len_in_reverse_order
+            ]
+        return self._sorted_clue_and_tags_items
+
+    def classify_items_by_tag(self):
+        d = {}
+        for clue_len, clue, tag in self.sorted_by_clue_len_in_reverse_order:
+            d[tag] = d.get(tag, [])
+            d[tag].append((clue, tag))
+        return d
+
+    def classify_items_by_clue_first_char(self):
+        d = {}
+        for clue_len, clue, tag in self.sorted_by_clue_len_in_reverse_order:
+            first_char = clue[0]
+            d[first_char] = d.get(first_char, [])
+            d[first_char].append((clue, tag))
+        return d
+
+    def get_data(self, json_file_path, classification_function):
+        data = read_json_file(json_file_path)
+        if not data:
+            data = classification_function()
+            if data:
+                write_json_file(json_file_path, data)
+        return data
+
+    @property
+    def sorted_by_tag(self):
+        if not self._sorted_by_tag:
+            self._sorted_by_tag = self.get_data(
+                self.json_sorted_by_tag,
+                self.classify_items_by_tag)
+        return self._sorted_by_tag
+
+    @property
+    def sorted_by_clue_first_char(self):
+        if not self._sorted_by_clue_first_char:
+            self._sorted_by_clue_first_char = self.get_data(
+                self.json_sorted_by_clue_first_char,
+                self.classify_items_by_clue_first_char)
+        return self._sorted_by_clue_first_char

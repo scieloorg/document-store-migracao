@@ -1284,22 +1284,30 @@ class TestConversionToCorresp(unittest.TestCase):
         <a href="#back">*</a>
         <a name="home" id="home"/>
         <a name="back" id="back"/>
-        <a href="#home">*</a> Corresponding author</root>"""
+        <a href="#home">*</a> Corresponding author
+        </root>"""
         expected_1 = b"""<root>
-        <a href="#back">*</a>
-        <a name="back" id="back"/> * Corresponding author</root>"""
+        <a href="#back" xml_text="*">*</a>
+
+        <a name="back" id="back" xml_text="*"/>
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        </root>"""
         expected_2 = b"""<root>
-        <xref ref-type="corresp" rid="back">*</xref>
-        <fn id="back" fn-type="corresp"/> * Corresponding author</root>"""
+        <xref ref-type="fn" rid="back">*</xref>
+
+        <fn id="back"/>
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        </root>"""
 
         xml = etree.fromstring(text)
-        html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = ConvertElementsWhichHaveIdPipeline()
-
         text, xml = pl.CompleteElementAWithNameAndIdPipe(
+            ).transform((text, xml))
+        text, xml = pl.CompleteElementAWithXMLTextPipe(
             ).transform((text, xml))
         text, xml = pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(
             ).transform((text, xml))
+
         self.assertNotIn(b'<a href="#home">*</a>', etree.tostring(xml))
         self.assertEqual(
             [i for i in etree.tostring(xml).split() if i.strip()],
@@ -1308,7 +1316,7 @@ class TestConversionToCorresp(unittest.TestCase):
 
         text, xml = pl.DeduceAndSuggestConversionPipe().transform((text, xml))
         self.assertIn(
-            b'<a name="back" id="back" xml_tag="corresp" xml_reftype="corresp" xml_id="back"/>',
+            b'<a name="back" id="back" xml_text="*" xml_tag="fn" xml_reftype="fn" xml_id="back" xml_label="*"/>',
             etree.tostring(xml),
         )
 
