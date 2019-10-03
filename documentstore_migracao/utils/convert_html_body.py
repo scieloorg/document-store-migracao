@@ -1405,19 +1405,22 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
     class CompleteElementAWithXMLTextPipe(plumber.Pipe):
         """
-        Adiciona o atributo @xml_text ao elemento a, com o valor de seu rótulo.
-        Por exemplo, identificar se <a href="#2">2</a> é nota de rodapé ou
-        é Fig 2.
+        Adiciona o atributo @xml_text ao elemento a, com o valor completo 
+        de seu rótulo. Por exemplo, explicitar se <a href="#2">2</a> é
+        nota de rodapé <a href="#2" xml_text="2">2</a> ou 
+        Fig 2 <a href="#2" xml_text="figure 2">2</a>.
         """
         def add_xml_text_to_a_href(self, xml):
             previous = etree.Element("none")
-            for i, node in enumerate(xml.findall(".//a[@href]")):
-                text = get_node_text(node).lower()
-                node.set("xml_text", text)
-                if text[0].isdigit():
-                    xml_text = previous.get("xml_text")
-                    if xml_text and " " in xml_text:
-                        label, number = xml_text.split(" ")
+            for node in xml.findall(".//a[@href]"):
+                text = get_node_text(node)
+                if text:
+                    text = text.lower()
+                    node.set("xml_text", text)
+                    xml_text = previous.get("xml_text") or ""
+                    splitted = xml_text.split()
+                    if text[0].isdigit() and len(splitted) >= 2:
+                        label, number = splitted[:2]
                         if number[0] <= text[0]:
                             node.set("xml_text", label + " " + text)
                             logger.info(
