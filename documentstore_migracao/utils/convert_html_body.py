@@ -1,7 +1,6 @@
 import logging
 import plumber
 import html
-import re
 import os
 from copy import deepcopy
 
@@ -1816,22 +1815,35 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 label.tail = ""
             node.append(p)
 
+        def _add_new_p_to_node(self, node, p_children):
+            if p_children:
+                new_p = etree.Element("p")
+                for item in p_children:
+                    try:
+                        new_p.append(item)
+                    except TypeError:
+                        new_p.text = item
+                node.append(new_p)
+
         def _create_p_for_complex_content(self, node):
-            parent = node.getparent()
-            node_text = get_node_text(node)
-            children = node.getchildren()
-            for child in children:
+            node_copy = deepcopy(node)
+
+            for child in node.getchildren():
+                node.remove(child)
+
+            p_children = []
+            for child in node_copy.getchildren():
                 if child.tag in ["label", "p"]:
-                    if (child.tail or "").strip():
-                        new_p = etree.Element("p")
-                        new_p.text = child.tail
-                        child.tail = ""
-                        child.addnext(new_p)
+                    self._add_new_p_to_node(node, p_children)
+                    child_copy = deepcopy(child)
+                    if (child_copy.tail or "").strip():
+                        p_children.append(child_copy.tail)
+                        child_copy.tail = ""
+                    child_copy.attrib.clear()
+                    node.append(child_copy)
                 else:
-                    new_p = etree.Element("p")
-                    new_p.append(deepcopy(child))
-                    child.addprevious(new_p)
-                    node.remove(child)
+                    p_children.append(child)
+            self._add_new_p_to_node(node, p_children)
 
         def update(self, node):
             parent = node.getparent()
