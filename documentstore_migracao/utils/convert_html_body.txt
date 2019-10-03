@@ -1,41 +1,53 @@
-corresp corresp
-figure fig
-tab table-wrap
-equ disp-formula
-ecu disp-formula
-form disp-formula
-quadro fig
-quadr fig
-quad fig
-qua fig
-cuadro fig
-fig fig
-annex app
-anex app
-app app
-graf fig
-graph fig
-frma disp-formula
-frm disp-formula
-for disp-formula
-anx app
-ane app
-apx app
-grf fig
-qdo fig
-qdr fig
-car disp-formula
-cdr fig
-fg fig
-cu fig
-gr fig
-eq disp-formula
-ap app
-nt fn
-fn fn
-back fn
-ref ref
-alg fig
-e disp-formula
-t table-wrap
-f fig
+corresp|corresp
+figure|fig
+tab|table-wrap
+equ|disp-formula
+ecu|disp-formula
+form|disp-formula
+esquema|fig
+scheme|fig
+box|fig
+chart|fig
+quadro|fig
+quadr|fig
+quad|fig
+qua|fig
+ilustr|fig
+illustr|fig
+cuadro|fig
+fig|fig
+example|fig
+anexo|app
+annex|app
+anex|app
+app|app
+graf|fig
+graph|fig
+frma|disp-formula
+frm|disp-formula
+for|disp-formula
+anx|app
+ane|app
+apx|app
+mapa|fig
+grf|fig
+qdo|fig
+qdr|fig
+car|disp-formula
+cdr|fig
+fg|fig
+cu|fig
+gr|fig
+eq|disp-formula
+ap|app
+nt|fn
+fn|fn
+back|fn
+ref|ref
+alg|fig
+e|disp-formula
+t|table-wrap
+f|fig
+img|fig
+supplementary|supplementary-material
+material|supplementary-material
