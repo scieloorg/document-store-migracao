@@ -19,26 +19,16 @@ logger = logging.getLogger(__name__)
 TIMEOUT = config.get("TIMEOUT") or 5
 
 
-def _remove_element_or_comment(node, remove_inner=False):
+def _remove_tag(node, remove_content=False):
     parent = node.getparent()
     if parent is None:
         return
-
     removed = node.tag
-    try:
-        node.tag = "REMOVE_NODE"
-    except AttributeError:
-        is_comment = True
-        node_text = ""
-    else:
-        is_comment = False
-        node_text = node.text or ""
-        text = get_node_text(node)
-
-    if is_comment or remove_inner or not text.strip():
-        _preserve_node_tail_before_remove_node(node, node_text)
+    node.tag = "REMOVE_NODE"
+    if remove_content:
+        # isso evita remover node.tail
+        node.addnext(etree.Element("REMOVE_NODE"))
         parent.remove(node)
-        return removed
     etree.strip_tags(parent, "REMOVE_NODE")
     return removed
 
@@ -99,7 +89,20 @@ def find_or_create_asset_node(root, elem_name, elem_id, node=None):
 def get_node_text(node):
     if node is None:
         return ""
-    return join_texts([item.strip() for item in node.itertext() if item.strip()])
+    for comment in node.xpath("//comment()"):
+        parent = comment.getparent()
+        if parent is not None:
+            # isso evita remover comment.tail
+            comment.addnext(etree.Element("REMOVE_COMMENT"))
+            parent.remove(comment)
+    try:
+        etree.strip_tags(node, "REMOVE_COMMENT")
+    except ValueError:
+        # node is _Comment
+        words = []
+    else:
+        words = " ".join(node.itertext()).split()
+    return " ".join((word for word in words if word))
 
 
 class CustomPipe(plumber.Pipe):
@@ -118,12 +121,12 @@ class HTML2SPSPipeline(object):
             self.SetupPipe(),
             self.SaveRawBodyPipe(super_obj=self),
             self.ConvertRemote2LocalPipe(),
+            self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
             self.RemoveExcedingStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
-            self.RemoveCommentPipe(),
             self.AHrefPipe(),
             self.BRPipe(),
             self.PPipe(),
@@ -220,14 +223,14 @@ class HTML2SPSPipeline(object):
         EXCEPTIONS = ["a", "br", "img", "hr"]
 
         def _is_empty_element(self, node):
-            return node.findall("*") == [] and not (node.text or "").strip()
+            return node.findall("*") == [] and not get_node_text(node)
 
         def _remove_empty_tags(self, xml):
             removed_tags = []
             for node in xml.xpath("//*"):
                 if node.tag not in self.EXCEPTIONS:
                     if self._is_empty_element(node):
-                        removed = _remove_element_or_comment(node)
+                        removed = _remove_tag(node)
                         if removed:
                             removed_tags.append(removed)
             return removed_tags
@@ -320,7 +323,7 @@ class HTML2SPSPipeline(object):
                         if br.tail:
                             br.text = br.tail
                             br.tail = ""
-                    _remove_element_or_comment(node)
+                    _remove_tag(node)
 
             etree.strip_tags(xml, "br")
             return data
@@ -579,7 +582,7 @@ class HTML2SPSPipeline(object):
         def parser_node(self, node):
             for c_node in node.getchildren():
                 if c_node.tag not in self.EXPECTED_INNER_TAGS:
-                    _remove_element_or_comment(c_node)
+                    _remove_tag(c_node)
 
             _attrib = {}
             for key in node.attrib.keys():
@@ -815,11 +818,15 @@ class HTML2SPSPipeline(object):
     class RemoveCommentPipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
-
             comments = xml.xpath("//comment()")
             for comment in comments:
-                _remove_element_or_comment(comment)
-            logger.info("Total de %s 'comentarios' processadas", len(comments))
+                parent = comment.getparent()
+                if parent is not None:
+                    # isso evita remover comment.tail
+                    comment.addnext(etree.Element("REMOVE_COMMENT"))
+                    parent.remove(comment)
+            etree.strip_tags(xml, "REMOVE_COMMENT")
+            logger.info("Total de %s 'comentarios' removidos", len(comments))
             return data
 
     class AHrefPipe(plumber.Pipe):
@@ -1010,7 +1017,7 @@ class HTML2SPSPipeline(object):
     class RemoveImgSetaPipe(plumber.Pipe):
         def parser_node(self, node):
             if "/seta." in node.find("img").attrib.get("src"):
-                _remove_element_or_comment(node.find("img"))
+                _remove_tag(node.find("img"))
 
         def transform(self, data):
             raw, xml = data
@@ -1357,10 +1364,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             path = node.attrib.get("src") or ""
             if "thumb" in path:
                 parent = node.getparent()
-                _remove_element_or_comment(node, True)
+                _remove_tag(node, True)
                 if parent.tag == "a" and parent.attrib.get("href"):
                     for child in parent.getchildren():
-                        _remove_element_or_comment(child, True)
+                        _remove_tag(child, True)
                     parent.tag = "img"
                     parent.set("src", parent.attrib.pop("href"))
                     parent.text = ""
@@ -1621,7 +1628,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             a_names = [n for n in items if n.attrib.get("name")]
             for n in a_names[1:]:
                 items.remove(n)
-                _remove_element_or_comment(n)
+                _remove_tag(n)
 
         def _exclude_invalid_a_name_and_identify_fn_label(self, items):
             if items[0].get("name"):
@@ -1636,7 +1643,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         )
                     if found is None:
                         logger.info("remove: %s" % etree.tostring(a_href))
-                        _remove_element_or_comment(a_href)
+                        _remove_tag(a_href)
                     else:
                         logger.info("Identifica como fn/label")
                         logger.info(etree.tostring(a_href))
@@ -1646,7 +1653,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def _exclude_invalid_unique_a_href(self, nodes):
             if len(nodes) == 1 and nodes[0].attrib.get("href"):
-                _remove_element_or_comment(nodes[0])
+                _remove_tag(nodes[0])
 
         def _might_be_fn_label(self, a_href):
             xml_text = a_href.get("xml_text")
@@ -1682,9 +1689,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
         inseridos por DeduceAndSuggestConversionPipe()
         """
         def _remove_a(self, a_name, a_href_items):
-            _remove_element_or_comment(a_name, True)
+            _remove_tag(a_name, True)
             for a_href in a_href_items:
-                _remove_element_or_comment(a_href, True)
+                _remove_tag(a_href, True)
 
         def _update_a_name(self, node, new_id, new_tag):
             _name = node.attrib.get("name")
@@ -1740,9 +1747,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 _id = node.attrib.get("id")
                 if _id.startswith("fn") or _id.startswith("replace_by_reftype"):
                     if _id.endswith("a"):
-                        _remove_element_or_comment(node)
+                        _remove_tag(node)
                     else:
-                        _remove_element_or_comment(_next)
+                        _remove_tag(_next)
                     return True
 
         def _move_fn_tail_into_fn(self, node):
@@ -1866,19 +1873,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
 
 def join_texts(texts):
-    return " ".join([item for item in texts if item])
-
-
-def _preserve_node_tail_before_remove_node(node, node_text):
-    parent = node.getparent()
-    if node.tail:
-        text = join_texts([node_text.rstrip(), node.tail.lstrip()])
-        previous = node.getprevious()
-        if previous is not None:
-            previous.tail = join_texts([(previous.tail or "").rstrip(), text])
-        else:
-            parent.text = join_texts([(parent.text or "").rstrip(), text])
-
+    return " ".join([item.strip() for item in texts if item and item.strip()])
 
 
 def search_asset_node_backwards(node, attr="id"):
