@@ -3,54 +3,12 @@ from unittest import mock
 
 from lxml import etree
 
+from . import utils
 from documentstore_migracao.export.sps_package import (
     parse_value,
     parse_issue,
     SPS_Package
 )
-
-
-def build_xml(
-    article_meta_children_xml, doi, journal_meta="", article_ids="", pub_date=""
-):
-    default_journal_meta = """
-        <journal-id journal-id-type="publisher-id">acron</journal-id>
-                <issn pub-type="epub">1234-5678</issn>
-                <issn pub-type="ppub">0123-4567</issn>
-        """
-    default_article_ids = """
-        <article-id pub-id-type="publisher-id">S0074-02761962000200006</article-id>
-        <article-id pub-id-type="other">00006</article-id>
-    """
-    default_pubdate = """
-        <pub-date date-type="collection">
-                <year>2010</year>
-            </pub-date>
-    """
-    doi_elem = ""
-    if doi:
-        doi_elem = '<article-id pub-id-type="doi">{}</article-id>'.format(doi)
-    return """
-        <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9">
-        <front>
-        <journal-meta>
-            {journal_meta}
-        </journal-meta>
-        <article-meta>
-            {article_meta_doi}
-            {article_ids}
-            {article_meta_children_xml}
-            {pub_date}
-        </article-meta>
-        </front>
-        </article>
-        """.format(
-        article_meta_children_xml=article_meta_children_xml,
-        article_meta_doi=doi_elem,
-        article_ids=article_ids or default_article_ids,
-        journal_meta=journal_meta or default_journal_meta,
-        pub_date=pub_date or default_pubdate,
-    )
 
 
 def pubdate_xml(year, month, day):
@@ -66,7 +24,7 @@ def pubdate_xml(year, month, day):
 
 
 def sps_package(article_meta_xml, doi="10.1590/S0074-02761962000200006"):
-    xml = build_xml(article_meta_xml, doi)
+    xml = utils.build_xml(article_meta_xml, doi)
     xmltree = etree.fromstring(xml)
     return SPS_Package(xmltree, "a01")
 
@@ -505,6 +463,9 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
     def setUp(self):
@@ -555,6 +516,9 @@ class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_NumFpageLpage(unittest.TestCase):
     def setUp(self):
@@ -604,6 +568,9 @@ class Test_SPS_Package_NumFpageLpage(unittest.TestCase):
             self.sps_package.order,
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
+
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
 
 
 class Test_SPS_Package_VolNumSpeFpageLpage(unittest.TestCase):
@@ -663,6 +630,9 @@ class Test_SPS_Package_VolNumSpeFpageLpage(unittest.TestCase):
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_VolSpeNumFpageLpage(unittest.TestCase):
     def setUp(self):
@@ -715,6 +685,9 @@ class Test_SPS_Package_VolSpeNumFpageLpage(unittest.TestCase):
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_VolSpeFpageLpage(unittest.TestCase):
     def setUp(self):
@@ -766,6 +739,9 @@ class Test_SPS_Package_VolSpeFpageLpage(unittest.TestCase):
             self.sps_package.order,
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
+
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
 
 
 class Test_SPS_Package_VolSuplFpageLpage(unittest.TestCase):
@@ -825,6 +801,9 @@ class Test_SPS_Package_VolSuplFpageLpage(unittest.TestCase):
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
     def setUp(self):
@@ -882,6 +861,9 @@ class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
             self.sps_package.order,
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
+
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
 
 
 class Test_SPS_Package_VolNumSuplFpageLpage(unittest.TestCase):
@@ -941,6 +923,9 @@ class Test_SPS_Package_VolNumSuplFpageLpage(unittest.TestCase):
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_Vol2SuplAFpageLpage(unittest.TestCase):
     def setUp(self):
@@ -998,6 +983,9 @@ class Test_SPS_Package_Vol2SuplAFpageLpage(unittest.TestCase):
             ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_Vol5Elocation(unittest.TestCase):
     def setUp(self):
@@ -1046,6 +1034,9 @@ class Test_SPS_Package_Vol5Elocation(unittest.TestCase):
             self.sps_package.order,
             ("00006", "", "", ("2010", "", ""), ("", "", ""), "elocation"),
         )
+
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
 
 
 class Test_SPS_Package_VolElocation(unittest.TestCase):
@@ -1099,6 +1090,9 @@ class Test_SPS_Package_VolElocation(unittest.TestCase):
             ("00006", "", "", ("2010", "", ""), ("", "", ""), "elocation"),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_SPS_Package_Aop_HTML(unittest.TestCase):
     def setUp(self):
@@ -1142,6 +1136,9 @@ class Test_SPS_Package_Aop_HTML(unittest.TestCase):
             self.sps_package.order,
             ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
         )
+
+    def test_is_ahead_of_print_true(self):
+        self.assertTrue(self.sps_package.is_ahead_of_print)
 
 
 class Test_SPS_Package_Aop_XML(unittest.TestCase):
@@ -1189,6 +1186,9 @@ class Test_SPS_Package_Aop_XML(unittest.TestCase):
             self.sps_package.order,
             ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
         )
+
+    def test_is_ahead_of_print_true(self):
+        self.assertTrue(self.sps_package.is_ahead_of_print)
 
 
 class Test_SPS_Package_Article_HTML(unittest.TestCase):
@@ -1244,6 +1244,9 @@ class Test_SPS_Package_Article_HTML(unittest.TestCase):
             ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
         )
 
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
 
 class Test_ArticleMetaCount(unittest.TestCase):
     def setUp(self):
@@ -1275,7 +1278,7 @@ class Test_ArticleMetaPublisherId(unittest.TestCase):
             <article-id pub-id-type="publisher-id">S0074-02761962000200006</article-id>
             <article-id pub-id-type="other">00006</article-id>
         """
-        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree)
 
@@ -1294,7 +1297,7 @@ class Test_ArticleMetaNoPublisherId(unittest.TestCase):
         article_ids = """
             <article-id pub-id-type="other">00006</article-id>
         """
-        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree)
 
@@ -1315,7 +1318,7 @@ class Test_ArticleMetaAOPPID(unittest.TestCase):
             <article-id pub-id-type="publisher-id" specific-use="previous-pid">S0074-02761962005000001</article-id>
             <article-id pub-id-type="other">00006</article-id>
         """
-        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree)
 
@@ -1335,7 +1338,7 @@ class Test_ArticleMetaNoAOPPID(unittest.TestCase):
             <article-id pub-id-type="publisher-id">S0074-02761962000200006</article-id>
             <article-id pub-id-type="other">00006</article-id>
         """
-        xml = build_xml(article_meta_xml, "", article_ids=article_ids)
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
         xmltree = etree.fromstring(xml)
         self.sps_package = SPS_Package(xmltree)
 

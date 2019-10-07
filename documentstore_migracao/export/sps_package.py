@@ -109,7 +109,7 @@ class SPS_Package:
             pid_node = etree.Element("article-id")
             pid_node.set("pub-id-type", "publisher-id")
             pid_node.text = value
-            self.article_meta.append(pid_node)
+            self.article_meta.insert(0, pid_node)
         else:
             pid_node = self.article_meta.xpath(
                 './/article-id[not(@specific-use="scielo") and not(@specific-use="previous-pid") and @pub-id-type="publisher-id"]'
@@ -132,7 +132,7 @@ class SPS_Package:
             pid_node.set("pub-id-type", "publisher-id")
             pid_node.set("specific-use", "previous-pid")
             pid_node.text = value
-            self.article_meta.append(pid_node)
+            self.article_meta.insert(1, pid_node)
         else:
             pid_node = self.article_meta.xpath(
                 './/article-id[@specific-use="previous-pid" and @pub-id-type="publisher-id"]'
@@ -376,6 +376,14 @@ class SPS_Package:
     @property
     def order(self):
         return tuple(item[1] for item in self.order_meta)
+
+    @property
+    def is_ahead_of_print(self):
+        has_no_volume = self.volume is None or self.volume == 0
+        has_no_number = self.number is None or self.number == 0
+        if has_no_volume and has_no_number:
+            return True
+        return False
 
     def _match_pubdate(self, pubdate_xpaths):
         """
