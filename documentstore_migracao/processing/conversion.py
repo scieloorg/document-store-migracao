@@ -48,7 +48,7 @@ def convert_article_ALLxml():
     logger.info("Iniciando Conversão do xmls")
     list_files_xmls = files.xml_files_list(config.get("SOURCE_PATH"))
     for file_xml in tqdm(list_files_xmls):
-
+        logger.info("CONVERTER %s" % file_xml)
         try:
             convert_article_xml(
                 os.path.join(config.get("SOURCE_PATH"), file_xml))

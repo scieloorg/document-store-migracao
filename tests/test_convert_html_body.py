@@ -3,7 +3,6 @@
 import os
 import unittest
 from lxml import etree
-from documentstore_migracao.utils.xml import objXML2file
 
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 from documentstore_migracao.utils.convert_html_body import (
@@ -11,10 +10,48 @@ from documentstore_migracao.utils.convert_html_body import (
     ConvertElementsWhichHaveIdPipeline,
     Document,
     _process,
-    _remove_element_or_comment,
+    _remove_tag,
+    get_node_text,
     search_asset_node_backwards,
 )
 from . import SAMPLES_PATH
+
+
+class TestGetNodeText(unittest.TestCase):
+    def test_get_node_text_does_not_return_comment_text(self):
+        text = """<root>
+        <texto>texto <i>
+        <bold>bold</bold>
+        </i> <p/> <a>element a<!-- comentario a-->
+        <ign/>
+        </a> <!-- comentario n -->
+        <ign/> pos bold</texto> apos</root>"""
+        expected = """texto bold element a pos bold apos"""
+        xml = etree.fromstring(text)
+        result = get_node_text(xml)
+        self.assertEqual(result, expected)
+
+    def test_get_node_text_does_not_return_extra_spaces(self):
+        text = """<root>
+        <texto>texto          com         muitos espaços   
+        </texto> ...</root>"""
+        expected = """texto com muitos espaços ..."""
+
+        xml = etree.fromstring(text)
+        result = get_node_text(xml)
+        self.assertEqual(result, expected)
+
+    def test_get_node_text_for_comment_returns_empty_str(self):
+        text = """<root>
+        <texto>texto <i>
+        <bold>bold</bold>
+        </i> <p/> <a>element a<!-- comentario a-->
+        <ign/>
+        </a> <!-- comentario n -->
+        <ign/> pos bold</texto> apos</root>"""
+        xml = etree.fromstring(text)
+        result = get_node_text(xml.xpath("//comment()")[0])
+        self.assertEqual(result, "")
 
 
 class TestConvertHMTLBodySearchAssetNodeBackwards(unittest.TestCase):
@@ -98,7 +135,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_remove_empty_p(self):
         text = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p> <p/> </root>"
-        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p></root>"
+        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p>  </root>"
         raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
@@ -108,7 +145,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_remove_empty_bold(self):
         text = "<root><p>Colonização micorrízica e concentração de nutrientes <bold> </bold> em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
-        expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
+        expected = "<root><p>Colonização micorrízica e concentração de nutrientes   em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
         raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
 
         resultado = etree.tostring(transformed, encoding="unicode")
@@ -478,13 +515,11 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_remove_exceding_style_tags_4(self):
         text = '<root><p><b>   <img src="x"/></b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
+        expected = b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>'
         raw, transformed = self._transform(
             text, self.pipeline.RemoveExcedingStyleTagsPipe()
         )
-        self.assertEqual(
-            etree.tostring(transformed),
-            b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>',
-        )
+        self.assertEqual(etree.tostring(transformed), expected)
 
     def test_pipe_graphicChildren_sub_remove(self):
         text = """<root><p><sub><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></sub></p></root>"""
@@ -843,69 +878,50 @@ class TestInferer(unittest.TestCase):
         self.assertEqual(result, ("app", "app"))
 
 
-class TestRemoveElementOrComment(unittest.TestCase):
-    def test_etree_remove_removes_element_and_text_after_element(self):
+class TestRemoveNodeOrComment(unittest.TestCase):
+    def test_etree_remove_removes_element_and_tail(self):
         text = "<root><a name='bla'/>texto sera removido tambem</root>"
         xml = etree.fromstring(text)
         node = xml.find(".//a")
         xml.remove(node)
         self.assertEqual(etree.tostring(xml), b"<root/>")
 
-    def test_etree_remove_removes_comment_and_text_after_comment(self):
+    def test_etree_remove_removes_comment_and_tail(self):
         text = "<root><!-- comentario -->texto sera removido tambem</root>"
         xml = etree.fromstring(text)
         comment = xml.xpath("//comment()")
         xml.remove(comment[0])
         self.assertEqual(etree.tostring(xml), b"<root/>")
 
-    def test__remove_element_or_comment_keep_text_after_element(self):
+
+class TestRemoveTag(unittest.TestCase):
+    def test__remove_tag_keeps_text_after_element(self):
         text = "<root><a name='bla'/>texto a manter</root>"
         expected = b"<root>texto a manter</root>"
         xml = etree.fromstring(text)
         node = xml.find(".//a")
-        removed = _remove_element_or_comment(node)
+        removed = _remove_tag(node)
         self.assertEqual(removed, "a")
         self.assertEqual(etree.tostring(xml), expected)
 
-    def test__remove_element_or_comment_removes_keep_text_after_comment(self):
-        text = "<root><!-- comentario -->texto a manter</root>"
-        expected = b"<root>texto a manter</root>"
-        xml = etree.fromstring(text)
-        comment = xml.xpath("//comment()")
-        _remove_element_or_comment(comment[0])
-        self.assertEqual(etree.tostring(xml), expected)
-
-    def test__remove_element_or_comment_keeps_spaces_after_element(self):
+    def test__remove_tag_keeps_spaces_after_element(self):
         text = "<root> <a name='bla'/> texto a manter</root>"
-        expected = b"<root>texto a manter</root>"
+        expected = b"<root>  texto a manter</root>"
         xml = etree.fromstring(text)
         node = xml.find(".//a")
-        removed = _remove_element_or_comment(node)
+        removed = _remove_tag(node)
         self.assertEqual(removed, "a")
         self.assertEqual(etree.tostring(xml), expected)
 
-    def test__remove_element_or_comment_keeps_spaces_after_comment(self):
-        text = "<root> <!-- comentario --> texto a manter</root>"
-        expected = b"<root>texto a manter</root>"
-        xml = etree.fromstring(text)
-        comment = xml.xpath("//comment()")
-        _remove_element_or_comment(comment[0])
-        self.assertEqual(etree.tostring(xml), expected)
-
-    def test__remove_element_or_comment_xref(self):
-        text = """<root><xref href="#corresp"><graphic xmlns:ns2="http://www.w3.org/1999/xlink"
-        ns2:href="/img/revistas/gs/v29n2/seta.gif"/></xref></root>"""
-
+    def test__remove_tag_removes_xref(self):
+        text = """<root><xref href="#corresp"><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></xref></root>"""
+        expected = b"""<root><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></root>"""
         xml = etree.fromstring(text)
         node = xml.find(".//xref")
+        _remove_tag(node)
+        self.assertEqual(etree.tostring(xml), expected)
 
-        _remove_element_or_comment(node)
-        self.assertEqual(
-            etree.tostring(xml),
-            b'<root><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/img/revistas/gs/v29n2/seta.gif"/></root>',
-        )
-
-    def test__remove_element_or_comment_xref(self):
+    def test__remove_tag_removes_a_href_home_and_keeps_asterisk(self):
         text = """<root>
         <a name="back" id="back"/>
         <a href="#home">*</a>
@@ -920,7 +936,7 @@ class TestRemoveElementOrComment(unittest.TestCase):
         """.strip()
         xml = etree.fromstring(text)
         nodes = xml.findall(".//a")
-        _remove_element_or_comment(nodes[1])
+        _remove_tag(nodes[1])
         self.assertEqual(etree.tostring(xml), expected)
 
 
