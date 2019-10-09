@@ -177,8 +177,9 @@ class HTML2SPSPipeline(object):
             root = xml.getroottree()
             root.write(
                 os.path.join(
-                    "/tmp/", "%s.%s.xml" % (
-                        self.super_obj.pid, self.super_obj.index_body)),
+                    "/tmp/",
+                    "%s.%s.xml" % (self.super_obj.pid, self.super_obj.index_body),
+                ),
                 encoding="utf-8",
                 doctype=config.DOC_TYPE_XML,
                 xml_declaration=True,
@@ -876,8 +877,7 @@ class HTML2SPSPipeline(object):
                 # https://jats.nlm.nih.gov/publishing/tag-library/1.2/element/email.html
                 node.tag = "ext-link"
                 node.set("ext-link-type", "email")
-                node.set(
-                    "{http://www.w3.org/1999/xlink}href", "mailto:" + href)
+                node.set("{http://www.w3.org/1999/xlink}href", "mailto:" + href)
 
         def parser_node(self, node):
             href = node.get("href")
@@ -999,7 +999,7 @@ class HTML2SPSPipeline(object):
                 value = "".join([c if c.isalnum() else "_" for c in value])
             if not value[0].isalpha():
                 if tag[0] in value:
-                    value = value[value.find(tag[0]):]
+                    value = value[value.find(tag[0]) :]
                 else:
                     value = tag[:3] + value
             if self.super_obj.index_body > 1:
@@ -1337,8 +1337,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if not xml_new_tag or not xml_id:
                 return
 
-            label_and_caption = self._find_label_and_caption_around_node(
-                img_or_table)
+            label_and_caption = self._find_label_and_caption_around_node(img_or_table)
             asset = self._get_asset_node(img_or_table, xml_new_tag, xml_id)
             if label_and_caption:
                 if label_and_caption[1] is not None:
@@ -1381,6 +1380,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         """Garante que todos os elemento a[@name] e a[@id] tenham @name e @id.
         Corrige id e name caso contenha caracteres nao alphanum.
         """
+
         def _fix_a_href(self, xml):
             for a in xml.findall(".//a[@name]"):
                 name = a.attrib.get("name")
@@ -1416,6 +1416,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         nota de rodapé <a href="#2" xml_text="2">2</a> ou 
         Fig 2 <a href="#2" xml_text="figure 2">2</a>.
         """
+
         def add_xml_text_to_a_href(self, xml):
             previous = etree.Element("none")
             for node in xml.findall(".//a[@href]"):
@@ -1430,12 +1431,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         if number[0] <= text[0]:
                             node.set("xml_text", label + " " + text)
                             logger.info(
-                                "add_xml_text_to_a_href: %s " % etree.tostring(
-                                    previous)
+                                "add_xml_text_to_a_href: %s " % etree.tostring(previous)
                             )
                             logger.info(
-                                "add_xml_text_to_a_href: %s " % etree.tostring(
-                                    node)
+                                "add_xml_text_to_a_href: %s " % etree.tostring(node)
                             )
                 previous = node
 
@@ -1470,6 +1469,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         disp-formula, fn, app etc
         Nota: este pipe não executa a conversão.
         """
+
         inferer = Inferer()
 
         def _update(self, node, elem_name, ref_type, new_id, text=None):
@@ -1569,7 +1569,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     return asset_node
             found = search_asset_node_backwards(img, "xml_tag")
             if found is not None and found.attrib.get("name"):
-                if found.attrib.get("xml_tag") in ["app", "fig", "table-wrap", "disp-formula"]:
+                if found.attrib.get("xml_tag") in [
+                    "app",
+                    "fig",
+                    "table-wrap",
+                    "disp-formula",
+                ]:
                     return found
 
         def _add_xml_attribs_to_img(self, images):
@@ -1659,9 +1664,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             xml_text = a_href.get("xml_text")
             if xml_text and get_node_text(a_href):
                 return any(
-                    [xml_text[0].isdigit(),
-                    not xml_text[0].isalnum(),
-                    xml_text[0].isalpha() and len(xml_text) == 1,
+                    [
+                        xml_text[0].isdigit(),
+                        not xml_text[0].isalnum(),
+                        xml_text[0].isalpha() and len(xml_text) == 1,
                     ]
                 )
 
@@ -1688,6 +1694,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         os valores dos atributos: @xml_tag, @xml_id, @xml_reftype, @xml_label,
         inseridos por DeduceAndSuggestConversionPipe()
         """
+
         def _remove_a(self, a_name, a_href_items):
             _remove_tag(a_name, True)
             for a_href in a_href_items:
@@ -1742,6 +1749,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
     class CompleteFnConversionPipe(plumber.Pipe):
         """
         """
+
         def _remove_invalid_node(self, node, parent, _next):
             if _next is not None and _next.tag == "xref" and get_node_text(node) == "":
                 _id = node.attrib.get("id")
@@ -1757,9 +1765,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             parent = node.getparent()
             items = []
             while _next is not None:
-                if (_next.tag == "fn" or
-                    _next.tag == "p" and _next.attrib.get("content-type") != "break"
-                    ):
+                if (
+                    _next.tag == "fn"
+                    or _next.tag == "p"
+                    and _next.attrib.get("content-type") != "break"
+                ):
                     break
                 else:
                     items.append(_next)
@@ -1801,8 +1811,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         children[0].tag = "label"
                 elif children[0].tag in ["sup", "bold"]:
                     children_text = get_node_text(children[0])
-                    if len(children_text.split()) <= 3 and \
-                            children_text != get_node_text(node):
+                    if len(
+                        children_text.split()
+                    ) <= 3 and children_text != get_node_text(node):
                         label = etree.Element("label")
                         label_content = deepcopy(children[0])
                         label_content.tail = ""
@@ -2017,11 +2028,11 @@ class FileLocation:
         r = requests.get(self.remote, timeout=TIMEOUT)
         if r.status_code == 404:
             logger.error(
-                "FAILURE. REQUIRES MANUAL INTERVENTION. Not found %s. " % self.remote)
+                "FAILURE. REQUIRES MANUAL INTERVENTION. Not found %s. " % self.remote
+            )
             return
         if not r.status_code == 200:
-            logger.error(
-                "%s: %s" % (self.remote, r.status_code))
+            logger.error("%s: %s" % (self.remote, r.status_code))
             return
         return r.content
 
@@ -2029,8 +2040,7 @@ class FileLocation:
         dirname = os.path.dirname(self.local)
         if not dirname.startswith(config.get("SITE_SPS_PKG_PATH")):
             logger.info(
-                "%s: valor inválido de caminho local para ativo digital"
-                % self.local
+                "%s: valor inválido de caminho local para ativo digital" % self.local
             )
             return
         if not os.path.isdir(dirname):
@@ -2114,7 +2124,9 @@ class Remote2LocalConversion:
                     node.set(
                         "src",
                         os.path.join(
-                            self.digital_assets_path, src[src.find("/")+1:]))
+                            self.digital_assets_path, src[src.find("/") + 1 :]
+                        ),
+                    )
                 else:
                     # pode ser URL
                     node.set("link-type", "external")
@@ -2139,7 +2151,12 @@ class Remote2LocalConversion:
                 value = href.split("/")[0]
                 if "." in value:
                     if href.startswith("./") or href.startswith("../"):
-                        a_href.set("href", os.path.join(self.digital_assets_path, href[href.find("/")+1:]))
+                        a_href.set(
+                            "href",
+                            os.path.join(
+                                self.digital_assets_path, href[href.find("/") + 1 :]
+                            ),
+                        )
                     else:
                         # pode ser URL
                         a_href.set("link-type", "external")
@@ -2158,8 +2175,7 @@ class Remote2LocalConversion:
                     a_href.set("link-type", "asset")
                 else:
                     logger.info("link-type=???")
-                logger.info(
-                    "Classificou a[@href]: %s" % etree.tostring(a_href))
+                logger.info("Classificou a[@href]: %s" % etree.tostring(a_href))
 
     def _import_all_html_files_found_in_body(self):
         self._add_link_type_attribute_to_element_a()
@@ -2180,8 +2196,7 @@ class Remote2LocalConversion:
                     new_p_items.append((bodychild, new_p))
         for bodychild, new_p in new_p_items[::-1]:
             logger.info(
-                "Insere novo p com conteudo do HTML: %s"
-                % etree.tostring(new_p)
+                "Insere novo p com conteudo do HTML: %s" % etree.tostring(new_p)
             )
             bodychild.addnext(new_p)
         return len(new_p_items)
@@ -2232,13 +2247,13 @@ class Remote2LocalConversion:
         found_a_name = self.find_a_name(node_a, new_href, delete_tag)
         if not found_a_name:
             if html_body is not None:
-                node_content = self._imported_html_body(
-                    new_href, html_body, delete_tag)
+                node_content = self._imported_html_body(new_href, html_body, delete_tag)
             else:
                 node_content = self._asset_data(node_a, location, new_href)
             if node_content is not None:
                 new_p = self._create_new_p(
-                    new_href, node_content, content_type, delete_tag)
+                    new_href, node_content, content_type, delete_tag
+                )
                 return new_p
 
     def _update_a_href(self, a_href, new_href):
@@ -2280,8 +2295,7 @@ class Remote2LocalConversion:
         body = deepcopy(html_body)
         body.tag = delete_tag
         for a in body.findall(".//a"):
-            logger.info(
-                "Encontrado elem a no body importado: %s" % etree.tostring(a))
+            logger.info("Encontrado elem a no body importado: %s" % etree.tostring(a))
             href = a.get("href")
             if href and href[0] == "#":
                 a.set("href", "#" + new_href + href[1:].replace("#", "X"))
