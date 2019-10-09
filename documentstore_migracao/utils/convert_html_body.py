@@ -1411,38 +1411,59 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
     class CompleteElementAWithXMLTextPipe(plumber.Pipe):
         """
-        Adiciona o atributo @xml_text ao elemento a, com o valor completo 
+        Adiciona o atributo @xml_text ao elemento a, com o valor completo
         de seu rótulo. Por exemplo, explicitar se <a href="#2">2</a> é
-        nota de rodapé <a href="#2" xml_text="2">2</a> ou 
+        nota de rodapé <a href="#2" xml_text="2">2</a> ou
         Fig 2 <a href="#2" xml_text="figure 2">2</a>.
         """
 
+        inferer = Inferer()
+
         def add_xml_text_to_a_href(self, xml):
+            for node in xml.find(".").getchildren():
+                self.add_xml_text_to_a_href_in_p(node)
+
+        def add_xml_text_to_a_href_in_p(self, body_child):
             previous = etree.Element("none")
-            for node in xml.findall(".//a[@href]"):
+            nodes = body_child.findall(".//a[@href]")
+            if body_child.tag == "a" and body_child.get("href"):
+                nodes.insert(0, body_child)
+            for node in nodes:
                 text = get_node_text(node)
                 if text:
-                    text = text.lower()
+                    if len(text) == 1 and text.isalpha() and text == text.upper():
+                        pass
+                    else:
+                        text = text.lower()
                     node.set("xml_text", text)
+                if text and text[0].isdigit():
+                    # it is a note or other element
                     xml_text = previous.get("xml_text") or ""
                     splitted = xml_text.split()
-                    if text[0].isdigit() and len(splitted) >= 2:
+                    if len(splitted) >= 2:
                         label, number = splitted[:2]
-                        if number[0] <= text[0]:
+                        if self._is_a_sequence(number, text):
                             node.set("xml_text", label + " " + text)
-                            logger.info(
-                                "add_xml_text_to_a_href: %s " % etree.tostring(previous)
-                            )
-                            logger.info(
-                                "add_xml_text_to_a_href: %s " % etree.tostring(node)
-                            )
                 previous = node
 
+        def _get_number(self, _string):
+            number = "0"
+            for c in _string:
+                if not c.isdigit():
+                    break
+                number += c
+            return int(number)
+
+        def _is_a_sequence(self, previous, next):
+            previous = self._get_number(previous)
+            next = self._get_number(next)
+            return previous + 1 == next or previous == next
+
         def add_xml_text_to_other_a(self, xml):
-            for node in xml.findall(".//a[@xml_text]"):
+            for node in xml.xpath(".//a[@xml_text and @href]"):
                 href = node.get("href")
-                if href:
-                    xml_text = node.get("xml_text")
+                xml_text = node.get("xml_text")
+                if xml_text:
                     for n in xml.findall(".//a[@href='{}']".format(href)):
                         if not n.get("xml_text"):
                             n.set("xml_text", xml_text)

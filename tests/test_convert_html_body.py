@@ -1613,6 +1613,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
         self.inferer = Inferer()
         self.text = """
         <root>
+        <p>
             <a href="#tab01">Tabela 1</a>
             <a href="#tab01">Tabela 1</a>
             <a name="tab01"/>
@@ -1626,6 +1627,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
 
             <a href="f03.jpg">Figure 3</a>
             <a href="f03.jpg">3</a>
+        </p>
         </root>
         """
         self.xml = etree.fromstring(self.text)
@@ -1636,8 +1638,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
         self.texts, self.files = self.document.a_href_items
 
     def test_identify_data(self):
-
-        nodes = self.xml.findall("./a")
+        nodes = self.xml.findall(".//a")
         img = self.xml.findall(".//img")
         self.assertEqual(
             self.document.a_names, {"tab01": (nodes[2], [nodes[0], nodes[1]])}
@@ -1672,6 +1673,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def test_add_xml_attribs_to_a_href_from_text(self):
         expected = """
         <root>
+        <p>
             <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
             <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
             <a name="tab01" xml_text="tabela 1" />
@@ -1685,6 +1687,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
 
             <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
             <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">3</a>
+        </p>
         </root>
         """
         self.pipe._add_xml_attribs_to_a_href_from_text(self.texts)
@@ -1693,6 +1696,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def test_add_xml_attribs_to_a_name(self):
         expected = """
         <root>
+        <p>
             <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01">Tabela 1</a>
             <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01">Tabela 1</a>
             <a name="tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01"/>
@@ -1706,6 +1710,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
 
             <a href="f03.jpg" xml_text="figure 3">Figure 3</a>
             <a href="f03.jpg" xml_text="figure 3">3</a>
+        </p>
         </root>
         """
         self.pipe._add_xml_attribs_to_a_name(self.document.a_names)
@@ -1714,6 +1719,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def test_add_xml_attribs_to_a_href_from_file_paths(self):
         expected = """
         <root>
+        <p>
             <a href="#tab01" xml_text="tabela 1">Tabela 1</a>
             <a href="#tab01" xml_text="tabela 1">Tabela 1</a>
             <a name="tab01" xml_text="tabela 1"/>
@@ -1727,6 +1733,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
 
             <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03">Figure 3</a>
             <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03">3</a>
+        </p>
         </root>
         """
         self.pipe._add_xml_attribs_to_a_href_from_file_paths(self.files)
@@ -1735,6 +1742,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def test_add_xml_attribs_to_img(self):
         expected = """
         <root>
+        <p>
             <a href="#tab01">Tabela 1</a>
             <a href="#tab01">Tabela 1</a>
             <a name="tab01"/>
@@ -1748,6 +1756,7 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
 
             <a href="f03.jpg">Figure 3</a>
             <a href="f03.jpg">3</a>
+        </p>
         </root>
         """
         self.pipe._add_xml_attribs_to_img(self.document.images)
@@ -2339,3 +2348,42 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         a_href_items = xml.findall(".//a[@href]")
         self.assertEqual(a_href_items[0].get("href"), "#a05tab01")
         self.assertEqual(a_href_items[1].get("href"), "#a05tab01")
+
+
+class TestCompleteElementAWithXMLTextPipe(unittest.TestCase):
+    def test_add_xml_text_to_a_href_in_p_identifies_table_sequence(self):
+        text = """<root>
+        <p><a href="#tab1">Tabelas 1</a> e <a href="#tab2">2</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pipeline.CompleteElementAWithXMLTextPipe().transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(b'<a href="#tab1" xml_text="tabelas 1">Tabelas 1</a>', result)
+        self.assertIn(b'<a href="#tab2" xml_text="tabelas 2">2</a>', result)
+
+    def test_add_xml_text_to_a_href_in_p_identifies_table_and_fn(self):
+        text = """<root>
+        <p><a href="#tab3">Tabela 3</a> e <a href="#f2">2</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pipeline.CompleteElementAWithXMLTextPipe().transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(b'<a href="#tab3" xml_text="tabela 3">Tabela 3</a>', result)
+        self.assertIn(b'<a href="#f2" xml_text="2">2</a>', result)
+
+    def test_add_xml_text_to_other_a_update_a_name(self):
+        text = """<root>
+        <p><a href="#tab1">Tabelas 1</a> e <a href="#tab2">2</a></p>
+        <p><a name="tab1"/>Tabela 1</p>
+        <p><a name="tab2"/>Tabela 2</p>
+        </root>"""
+        xml = etree.fromstring(text)
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pipeline.CompleteElementAWithXMLTextPipe().transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(b'<a href="#tab1" xml_text="tabelas 1">Tabelas 1</a>', result)
+        self.assertIn(b'<a href="#tab2" xml_text="tabelas 2">2</a>', result)
+        self.assertIn(b'<a name="tab1" xml_text="tabelas 1"/>', result)
+        self.assertIn(b'<a name="tab2" xml_text="tabelas 2"/>', result)
