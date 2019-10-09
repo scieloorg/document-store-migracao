@@ -1208,12 +1208,13 @@ class TestConversionToAnnex(unittest.TestCase):
         xml = etree.fromstring(text)
         htmlpl = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pl.CompleteElementAWithXMLTextPipe().transform((text, xml))
         text, xml = pl.DeduceAndSuggestConversionPipe().transform((text, xml))
         self.assertEqual(
             etree.tostring(xml),
             b"""<root>
-        <a href="#anx01" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1">Anexo 1</a>
-        <p><a name="anx01" id="anx01" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
+        <a href="#anx01" xml_text="anexo 1" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1">Anexo 1</a>
+        <p><a name="anx01" id="anx01" xml_text="anexo 1" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
         <p><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
         </root>""",
         )
@@ -1355,14 +1356,15 @@ class TestConversionToFig(unittest.TestCase):
         pl = ConvertElementsWhichHaveIdPipeline()
 
         text, xml = pl.CompleteElementAWithNameAndIdPipe().transform((text, xml))
+        text, xml = pl.CompleteElementAWithXMLTextPipe().transform((text, xml))
         text, xml = pl.DeduceAndSuggestConversionPipe().transform((text, xml))
         _xml = etree.tostring(xml)
         self.assertIn(
-            b'<a href="#fig01en" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1">Figure 1</a>',
+            b'<a href="#fig01en" xml_text="figure 1" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1">Figure 1</a>',
             _xml,
         )
         self.assertIn(
-            b'<a name="fig01en" id="fig01en" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1"/>',
+            b'<a name="fig01en" id="fig01en" xml_text="figure 1" xml_tag="fig" xml_reftype="fig" xml_id="fig01en" xml_label="figure 1"/>',
             _xml,
         )
         self.assertIn(
@@ -1627,6 +1629,9 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
         </root>
         """
         self.xml = etree.fromstring(self.text)
+        self.text, self.xml = pl.CompleteElementAWithXMLTextPipe().transform(
+            (self.text, self.xml)
+        )
         self.document = Document(self.xml)
         self.texts, self.files = self.document.a_href_items
 
@@ -1642,9 +1647,8 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
             {
                 "tabela 1": ([nodes[0], nodes[1]], []),
                 "figure 1": ([], [nodes[3]]),
-                "2": ([], [nodes[4]]),
-                "figure 3": ([], [nodes[5]]),
-                "3": ([], [nodes[6]]),
+                "figure 2": ([], [nodes[4]]),
+                "figure 3": ([], [nodes[5], nodes[6]]),
             },
         )
         self.assertEqual(
@@ -1657,24 +1661,30 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
         expected_node = etree.fromstring(expected).findall(xpath)
         for i, node in enumerate(self.xml.findall(xpath)):
             with self.subTest(step + " " + str(i)):
-                self.assertEqual(etree.tostring(node), etree.tostring(expected_node[i]))
+                result = etree.tostring(node)
+                expected = etree.tostring(expected_node[i])
+                if result != expected:
+                    print("")
+                    print(result)
+                    print(expected)
+                self.assertEqual(result, expected)
 
     def test_add_xml_attribs_to_a_href_from_text(self):
         expected = """
         <root>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
-            <a name="tab01"/>
+            <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01" xml_label="tabela 1">Tabela 1</a>
+            <a name="tab01" xml_text="tabela 1" />
             <img src="tabela.jpg"/>
 
-            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
+            <a href="f01.jpg" xml_text="figure 1" xml_tag="fig" xml_reftype="fig" xml_id="f01" xml_label="figure 1">Figure 1</a>
 
-            <a href="f02.jpg" xml_tag="fn" xml_reftype="fn" xml_id="f02" xml_label="2">2</a>
+            <a href="f02.jpg" xml_text="figure 2" xml_tag="fig" xml_reftype="fig" xml_id="f02" xml_label="figure 2">2</a>
 
             <img src="app.jpg"/>
 
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
-            <a href="f03.jpg" xml_tag="fn" xml_reftype="fn" xml_id="f03" xml_label="3">3</a>
+            <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">Figure 3</a>
+            <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03" xml_label="figure 3">3</a>
         </root>
         """
         self.pipe._add_xml_attribs_to_a_href_from_text(self.texts)
@@ -1683,19 +1693,19 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def test_add_xml_attribs_to_a_name(self):
         expected = """
         <root>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01">Tabela 1</a>
-            <a href="#tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01">Tabela 1</a>
-            <a name="tab01" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01"/>
+            <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01">Tabela 1</a>
+            <a href="#tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01">Tabela 1</a>
+            <a name="tab01" xml_text="tabela 1" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01"/>
             <img src="tabela.jpg"/>
 
-            <a href="f01.jpg">Figure 1</a>
+            <a href="f01.jpg" xml_text="figure 1">Figure 1</a>
 
-            <a href="f02.jpg">2</a>
+            <a href="f02.jpg" xml_text="figure 2">2</a>
 
             <img src="app.jpg"/>
 
-            <a href="f03.jpg">Figure 3</a>
-            <a href="f03.jpg">3</a>
+            <a href="f03.jpg" xml_text="figure 3">Figure 3</a>
+            <a href="f03.jpg" xml_text="figure 3">3</a>
         </root>
         """
         self.pipe._add_xml_attribs_to_a_name(self.document.a_names)
@@ -1704,19 +1714,19 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
     def test_add_xml_attribs_to_a_href_from_file_paths(self):
         expected = """
         <root>
-            <a href="#tab01">Tabela 1</a>
-            <a href="#tab01">Tabela 1</a>
-            <a name="tab01"/>
+            <a href="#tab01" xml_text="tabela 1">Tabela 1</a>
+            <a href="#tab01" xml_text="tabela 1">Tabela 1</a>
+            <a name="tab01" xml_text="tabela 1"/>
             <img src="tabela.jpg" xml_tag="table-wrap" xml_reftype="table" xml_id="tab01"/>
 
-            <a href="f01.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f01">Figure 1</a>
+            <a href="f01.jpg" xml_text="figure 1" xml_tag="fig" xml_reftype="fig" xml_id="f01">Figure 1</a>
 
-            <a href="f02.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f02">2</a>
+            <a href="f02.jpg" xml_text="figure 2" xml_tag="fig" xml_reftype="fig" xml_id="f02">2</a>
 
             <img src="app.jpg" xml_tag="app" xml_reftype="app" xml_id="app"/>
 
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03">Figure 3</a>
-            <a href="f03.jpg" xml_tag="fig" xml_reftype="fig" xml_id="f03">3</a>
+            <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03">Figure 3</a>
+            <a href="f03.jpg" xml_text="figure 3" xml_tag="fig" xml_reftype="fig" xml_id="f03">3</a>
         </root>
         """
         self.pipe._add_xml_attribs_to_a_href_from_file_paths(self.files)

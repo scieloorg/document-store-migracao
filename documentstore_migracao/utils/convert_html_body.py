@@ -1942,7 +1942,7 @@ class Document:
         file_paths = {}
         for a_href in self.xmltree.findall(".//a[@href]"):
             href = a_href.attrib.get("href").strip()
-            text = get_node_text(a_href).lower().strip()
+            text = a_href.get("xml_text")
 
             if text:
                 if text not in texts.keys():
