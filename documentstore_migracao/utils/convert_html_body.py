@@ -1814,7 +1814,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 return
             if n.find(".//img") is not None:
                 return
-            nodes_for_title.append(n)
+            if get_node_text(n):
+                nodes_for_title.append(n)
 
         def _infer_label_and_caption(self, label_parent, clue):
             label_text = None
