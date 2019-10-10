@@ -1280,7 +1280,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if len(splitted) >= 2:
                         label, number = splitted[:2]
                         if self._is_a_sequence(number, text):
-                            node.set("xml_text", label + " " + text)
+                            if previous is node.getprevious() and previous.tail:
+                                words = previous.tail.split()
+                                if len(words) < 2:
+                                    node.set("xml_text", label + " " + text)
                 previous = node
 
         def _get_number(self, _string):

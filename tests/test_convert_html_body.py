@@ -985,15 +985,12 @@ class TestConversionToAnnex(unittest.TestCase):
         </root>"""
         self.assertEqual(etree.tostring(xml), expected)
 
-        text, xml = pl.AssetElementFixPipe().transform((text, xml))
-        self.assertEqual(
-            etree.tostring(xml),
-            b"""<root>
+        expected = b"""<root>
         <xref ref-type="app" rid="anx01">Anexo 1</xref>
-        <p/><app id="anx01"><img src="/img/revistas/trends/v33n3/a05tab01.jpg"/>
-        </app>
-        </root>""",
-        )
+        <p/><app id="anx01"><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1" content-type="img"/></app>
+        </root>"""
+        text, xml = pl.AssetElementFixPipe().transform((text, xml))
+        self.assertEqual(etree.tostring(xml), expected)
         self.assertIsNotNone(xml.find(".//app/img"))
 
 
@@ -1027,8 +1024,6 @@ class TestConversionToTableWrap(unittest.TestCase):
         pl_html = HTML2SPSPipeline(pid="S1234-56782018000100011")
         pl = pl_html.ConvertElementsWhichHaveIdPipe()
         raw, xml = pl.transform((raw, xml))
-        print("")
-        print(etree.tostring(xml))
         self.assertIsNone(xml.find(".//table-wrap[@id]/img"))
         self.assertIsNotNone(xml.find(".//table-wrap[@id]/graphic"))
         self.assertIsNotNone(xml.find(".//table-wrap[@id]/label"))
