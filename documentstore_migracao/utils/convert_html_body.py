@@ -107,6 +107,33 @@ def get_node_text(node):
     return " ".join((word for word in words if word))
 
 
+def alnum(sentence):
+    words = sentence.split()
+    new_words = []
+    for w in words:
+        alnumchars = [c for c in w if c.isalnum()]
+        new_words.append("".join(alnumchars))
+    return new_words
+
+
+def minor(words1, words2):
+    return sorted([len(words1), len(words2)])[0]
+
+
+def matched_first_two_words(text_words, search_expr):
+    if text_words and search_expr:
+        text_words = alnum(text_words.lower())
+        search_expr = alnum(search_expr.lower())
+        if len(text_words) >= 2 and len(search_expr) >= 2:
+            min_0 = minor(text_words[0], search_expr[0])
+            min_1 = minor(text_words[1], search_expr[1])
+            if (
+                text_words[0][:min_0] == search_expr[0][:min_0]
+                and text_words[1][:min_1] == search_expr[1][:min_1]
+            ):
+                return True
+
+
 class CustomPipe(plumber.Pipe):
     def __init__(self, super_obj=None, *args, **kwargs):
 
@@ -1647,132 +1674,118 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     logger.info(etree.tostring(asset_node))
                     asset_node.set("status", "identify-content")
                     if not self._is_complete(asset_node):
-                        self._add_content_to_asset_node(asset_node)
+                        components = self._find_components(asset_node)
+                        for component in components:
+                            p = component.getparent()
+                            asset_node.append(deepcopy(component))
+                            p.remove(component)
             return data
 
         def _is_complete(self, asset_node):
-            label = self._find_label(asset_node, asset_node)
-            img = self._find_img_or_table(asset_node, "img")
-            table = self._find_img_or_table(asset_node, "table")
-            return label is not None and (img is not None or table is not None)
+            img = asset_node.xpath(".//img")
+            table = asset_node.xpath(".//table")
+            label = asset_node.xpath(".//*[@content-type='label']")
+            return label and (img or table)
 
-        def _add_content_to_asset_node(self, asset_node):
-            children, label, img, table = self._find_content_in_next_nodes(asset_node)
-            found = [item for item in [label, img, table] if item is not None]
-            p = asset_node.getparent()
-            if label is not None and (img is not None or table is not None):
-                for child in children:
-                    asset_node.append(deepcopy(child))
-                    p.remove(child)
-            elif img is not None:
-                for child in children:
-                    if asset_node.find(".//img") is not None:
-                        break
-                    asset_node.append(deepcopy(child))
-                    p.remove(child)
-            elif table is not None:
-                for child in children:
-                    if asset_node.find(".//table") is not None:
-                        break
-                    asset_node.append(deepcopy(child))
-                    p.remove(child)
+        def _find_components(self, asset_node):
+            """
+            Procura os componentes do elemento ativo digital
+            que estão como nós irmãos à direita
+            """
+            ASSET_TAGS_XPATH = ".//fig | .//table-wrap | .//app | .//disp-formula"
+            img = asset_node.find(".//img")
+            table = asset_node.find(".//table")
+            label = asset_node.find(".//*[@content-type='label']")
+            if label is None:
+                self._find_label(
+                    asset_node, asset_node.get("id"), asset_node.get("xml_text")
+                )
+                label = asset_node.find(".//*[@content-type='label']")
+            found = (label, img, table)
+            components = []
+            max_times = 3 - len([item for item in found if item is not None])
 
-        def _find_content_in_next_nodes(self, asset_node):
-            children = []
-            label = None
-            img = None
-            table = None
-            max_times = 5
-            for item in [label, img, table]:
-                if item is not None:
-                    max_times -= 1
             i = 0
+
             _next = asset_node
             while True:
+                if i == max_times:
+                    break
                 if label is not None and (img is not None or table is not None):
                     break
-
                 _next = _next.getnext()
                 if _next is None:
                     break
-
-                if _next.tag in ["fig", "table-wrap", "app"]:
+                if _next.tag in ASSET_TAGS:
                     break
-
-                if (
-                    _next.find(".//fig") is not None
-                    or _next.find(".//table-wrap") is not None
-                    or _next.find(".//app") is not None
-                ):
+                if _next.xpath(ASSET_TAGS_XPATH):
                     break
 
                 if label is None:
-                    self._find_label(asset_node, _next)
-                    label = _next.find(".//*[@content-type='label']")
-                    if label is None:
-                        if _next.get("content-type") == "label":
-                            label = _next
+                    label = self._find_label(
+                        _next, asset_node.get("id"), asset_node.get("xml_text")
+                    )
                 if img is None:
-                    self._find_img_or_table(_next, "img")
-                    img = _next.find(".//*[@content-type='img']")
-                    if img is None:
-                        if _next.get("content-type") == "img":
-                            img = _next
+                    img = self._find_img_or_table(_next, "img")
                 if table is None:
-                    self._find_img_or_table(_next, "table")
-                    table = _next.find(".//*[@content-type='table']")
-                    if table is None:
-                        if _next.get("content-type") == "table":
-                            table = _next
+                    table = self._find_img_or_table(_next, "table")
 
                 i += 1
-                children.append(_next)
-            return children, label, img, table
+                if _next.get("content-type"):
+                    components.append(_next)
+            return components
 
-        def _find_label(self, asset_node, node):
+        def _find_label(self, node, asset_id, search_by):
             label = node.find(".//bold[@label-of]")
-            search_by = asset_node.get(
-                "xml_text", asset_node.get("xml_label", asset_node.get("xml_tag"))
-            )
-            if label is None:
-                if node.get("label-of"):
-                    label = node
-            if label is None and search_by:
-                for _node in [node] + node.findall(".//*"):
-                    text = get_node_text(_node)
-                    if text and self._find_expr_in_node(search_by, text):
-                        label = _node
-                    elif (_node.tail or "").strip():
-                        tail = (_node.tail or "").strip()
-                        if self._find_expr_in_node(search_by, tail):
-                            new = etree.Element("p")
-                            new.text = tail
-                            _node.tail = ""
-                            _node.addnext(new)
-                            label = new
             if label is not None:
-                label.set("content-type", "label")
-                label.set("label-of", asset_node.get("xml_id"))
+                parent = label.getparent()
+                if not parent.getchildren()[0] is label:
+                    return
+            if label is None and search_by:
+                text = get_node_text(node)
+                if matched_first_two_words(text, search_by):
+                    self._create_label_in_node_text(node, asset_id, text)
+                else:
+                    self._create_label_in_node_tail(node, asset_id, search_by)
+                label = node.find(".//bold[@label-of]")
+            if label is not None:
+                node.set("content-type", "label")
+                return node
 
-        def _find_expr_in_node(self, search_by, node_text):
-            search_by_parts = search_by.lower().replace(".", "").split()
-            node_text_parts = node_text.lower().split()
-            if len(search_by_parts) > 1 and len(node_text_parts) > 1:
-                name1, number1 = search_by_parts[:2]
-                name2, number2 = node_text_parts[:2]
+        def _create_label_in_node_text(self, node, asset_id, text):
+            startswith = " ".join(text.split()[:2])
+            found = None
+            if node.text and node.text.startswith(text):
+                found = node
+            else:
+                for n in node.findall(".//*"):
+                    if n.text and n.text.startswith(startswith):
+                        found = n
+                        break
+            if found is not None:
+                if found.tag == "bold":
+                    label = found
+                    label.set("label-of", asset_id)
 
-                len_name = len(name1) if len(name1) <= len(name2) else len(name2)
-                len_number = (
-                    len(number1) if len(number1) <= len(number2) else len(number2)
-                )
+                else:
+                    label = etree.Element("bold")
+                    label.text = startswith
+                    label.tail = found.text[len(label.text) :]
+                    label.set("label-of", asset_id)
+                    copy = deepcopy(found)
+                    found.clear()
+                    found.append(label)
+                    for child in copy.getchildren():
+                        found.append(child)
 
-                if (
-                    name1[:len_name] == name2[:len_name]
-                    and number1[:len_number] == number2[:len_number]
-                ):
-                    return True
-            elif node_text.lower().startswith(search_by.lower()):
-                return True
+        def _create_label_in_node_tail(self, node, asset_id, search_by):
+            tail = (node.tail or "").strip()
+            if matched_first_two_words(tail, search_by):
+                label = etree.Element("bold")
+                label.text = " ".join(tail.split()[:2])
+                label.set("label-of", asset_id)
+                node.tail = node.tail[len(label.text) :]
+                node.addnext(label)
 
         def _find_img_or_table(self, node, tag):
             found = None
@@ -1781,7 +1794,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if found is None:
                 found = node.find(".//{}".format(tag))
             if found is not None:
-                found.set("content-type", tag)
+                node.set("content-type", tag)
+                return node
 
     class AssetElementIdentifyLabelAndCaptionPipe(plumber.Pipe):
         def transform(self, data):
@@ -1790,29 +1804,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for asset_node in xml.findall(".//*[@status='identify-content']"):
                 self._mark_label_and_caption(asset_node)
             return data
-
-        def _alnum(self, sentence):
-            words = sentence.split()
-            new_words = []
-            for w in words:
-                alnumchars = [c for c in w if c.isalnum()]
-                new_words.append("".join(alnumchars))
-            return new_words
-
-        def _min(self, words1, words2):
-            return sorted([len(words1), len(words2)])[0]
-
-        def _compare_first_two_words(self, words1, words2):
-            words1 = self._alnum(words1.lower())
-            words2 = self._alnum(words2.lower())
-            if len(words1) >= 2 and len(words2) >= 2:
-                min_0 = self._min(words1[0], words2[0])
-                min_1 = self._min(words1[1], words2[1])
-                if (
-                    words1[0][:min_0] == words2[0][:min_0]
-                    and words1[1][:min_1] == words2[1][:min_1]
-                ):
-                    return words1[0][:min_0], words1[1][:min_1]
 
         def _add_nodes_to_element_title(self, nodes_for_title, n):
             if n is None:
@@ -1837,7 +1828,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     label_text = label_parent_text[: len(clue)]
                     caption_title_text = label_parent_text[len(clue) :]
                 else:
-                    words = self._compare_first_two_words(label_parent_text, clue)
+                    words = matched_first_two_words(label_parent_text, clue)
                     if words:
                         parts = label_parent_text.split()
                         label_text = " ".join(parts[:2])
@@ -1909,7 +1900,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     p.remove(n)
 
     class AssetElementFixPipe(plumber.Pipe):
-        COMPONENT_TAGS = ("label", "caption", "img", "table")
+        COMPONENT_TAGS = ("label", "caption", "img")
 
         def transform(self, data):
             raw, xml = data
@@ -1926,6 +1917,17 @@ class ConvertElementsWhichHaveIdPipeline(object):
                             if component is not None:
                                 new_asset.append(deepcopy(component))
 
+                    new_asset_text = get_node_text(new_asset)
+                    extra_component = False
+                    for child in asset.getchildren():
+                        for node in child.findall(".//*"):
+                            if not node.getchildren():
+                                text = get_node_text(node)
+                                if text not in new_asset_text:
+                                    new_asset.append(child)
+                                    extra_component = True
+                    if extra_component:
+                        logger.info("AssetElementFixPipe: unexpected content?")
                     asset.addprevious(new_asset)
                     p = asset.getparent()
                     p.remove(asset)

@@ -980,14 +980,14 @@ class TestConversionToAnnex(unittest.TestCase):
         text, xml = pl.AssetElementAddContentPipe().transform((text, xml))
         expected = b"""<root>
         <xref ref-type="app" rid="anx01">Anexo 1</xref>
-        <p/><app name="anx01" id="anx01" xml_text="anexo 1" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1" status="identify-content"><p><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1" content-type="img"/></p>
+        <p/><app name="anx01" id="anx01" xml_text="anexo 1" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1" status="identify-content"><p content-type="img"><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></p>
         </app>
         </root>"""
         self.assertEqual(etree.tostring(xml), expected)
 
         expected = b"""<root>
         <xref ref-type="app" rid="anx01">Anexo 1</xref>
-        <p/><app id="anx01"><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1" content-type="img"/></app>
+        <p/><app id="anx01"><img src="/img/revistas/trends/v33n3/a05tab01.jpg" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1"/></app>
         </root>"""
         text, xml = pl.AssetElementFixPipe().transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
