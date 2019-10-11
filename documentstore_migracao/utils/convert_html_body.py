@@ -1179,6 +1179,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AssetElementFixPipe(),
             self.CreateInlineFormulaPipe(),
             self.AppendixPipe(),
+            self.TableWrapPipe(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.CompleteFnConversionPipe(),
@@ -2037,6 +2038,16 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for item in remove_items:
                 parent = item.getparent()
                 parent.remove(item)
+            return data
+
+    class TableWrapPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//table-wrap"):
+                p = node.find("p[table]")
+                if p is not None:
+                    p.tag = "REMOVETAG"
+            etree.strip_tags(xml, "REMOVETAG")
             return data
 
     class RemoveXMLAttributesPipe(plumber.Pipe):
