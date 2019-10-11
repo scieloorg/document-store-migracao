@@ -1177,6 +1177,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AssetElementAddContentPipe(),
             self.AssetElementIdentifyLabelAndCaptionPipe(),
             self.AssetElementFixPipe(),
+            self.CreateInlineFormulaPipe(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.CompleteFnConversionPipe(),
@@ -1648,7 +1649,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                             p = component.getparent()
                             asset_node.append(deepcopy(component))
                             p.remove(component)
-                        print(etree.tostring(asset_node))
             return data
 
         def _is_complete(self, asset_node):
@@ -1910,9 +1910,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             raw, xml = data
             for node in xml.findall(".//img[@xml_tag='disp-formula']"):
                 previous = node.getprevious()
-                print("")
-                print(etree.tostring(node))
-                print("-")
                 id = node.get("xml_id")
                 if previous is None or previous.tag != "disp-formula":
                     disp_formula = etree.Element("disp-formula")
@@ -1922,8 +1919,96 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         if attr.startswith("xml_"):
                             disp_formula.set(attr, value)
                     node.addprevious(disp_formula)
-                    print(etree.tostring(disp_formula))
-                    print("-------")
+            return data
+
+    class CreateInlineFormulaPipe(plumber.Pipe):
+        DISP_FORMULA_PARENTS = (
+            "app",
+            "app-group",
+            "bio",
+            "body",
+            "boxed-text",
+            "disp-formula-group",
+            "disp-quote",
+            "fig",
+            "glossary",
+            "license-p",
+            "named-content",
+            "notes",
+            "p",
+            "ref-list",
+            "sec",
+            "styled-content",
+            "supplementary-material",
+            "td",
+            "term",
+            "th",
+        )
+        INLINE_FORMULA_PARENTS = (
+            "addr-line",
+            "alt-title",
+            "article-title",
+            "attrib",
+            "award-id",
+            "bold",
+            "collab",
+            "comment",
+            "compound-kwd-part",
+            "compound-subject-part",
+            "conf-theme",
+            "def-head",
+            "disp-formula",
+            "element-citation",
+            "fixed-case",
+            "funding-source",
+            "inline-formula",
+            "italic",
+            "label",
+            "license-p",
+            "meta-value",
+            "mixed-citation",
+            "monospace",
+            "named-content",
+            "overline",
+            "p",
+            "product",
+            "roman",
+            "sans-serif",
+            "sc",
+            "strike",
+            "styled-content",
+            "sub",
+            "subject",
+            "subtitle",
+            "sup",
+            "supplement",
+            "td",
+            "term",
+            "term-head",
+            "th",
+            "title",
+            "trans-subtitle",
+            "trans-title",
+            "underline",
+            "verse-line",
+        )
+
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//disp-formula"):
+                parent = node.getparent()
+                inline = False
+                if parent.tag not in self.DISP_FORMULA_PARENTS:
+                    if parent.tag in self.INLINE_FORMULA_PARENTS:
+                        inline = True
+                if not inline:
+                    inline = (
+                        node.getprevious() is not None
+                        or node.getnext() is not None
+                        or node.tail
+                    )
+                if inline:
+                    node.tag = "inline-formula"
             return data
 
     class RemoveXMLAttributesPipe(plumber.Pipe):
