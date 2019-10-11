@@ -1205,6 +1205,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
             self.AssetElementFixPositionPipe(),
+            self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
             self.AssetElementIdentifyLabelAndCaptionPipe(),
             self.AssetElementFixPipe(),
@@ -1679,6 +1680,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                             p = component.getparent()
                             asset_node.append(deepcopy(component))
                             p.remove(component)
+                        print(etree.tostring(asset_node))
             return data
 
         def _is_complete(self, asset_node):
@@ -1933,6 +1935,27 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     p = asset.getparent()
                     p.remove(asset)
                     logger.info(etree.tostring(new_asset))
+            return data
+
+    class CreateDispFormulaPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//img[@xml_tag='disp-formula']"):
+                previous = node.getprevious()
+                print("")
+                print(etree.tostring(node))
+                print("-")
+                id = node.get("xml_id")
+                if previous is None or previous.tag != "disp-formula":
+                    disp_formula = etree.Element("disp-formula")
+                    disp_formula.set("id", id)
+                    disp_formula.set("name", id)
+                    for attr, value in node.attrib.items():
+                        if attr.startswith("xml_"):
+                            disp_formula.set(attr, value)
+                    node.addprevious(disp_formula)
+                    print(etree.tostring(disp_formula))
+                    print("-------")
             return data
 
     class RemoveXMLAttributesPipe(plumber.Pipe):
