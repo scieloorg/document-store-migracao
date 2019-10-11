@@ -129,6 +129,14 @@ def migrate_articlemeta_parser(sargs):
         help="Output path.",
     )
 
+    pack_sps_parser_from_site.add_argument(
+        "-Article-csvfile",
+        "--article-csvfile",
+        dest="articles_csvfile",
+        required=True,
+        help="Article CSV data file from ISIS bases",
+    )
+
     # IMPORTACAO
     import_parser = subparsers.add_parser(
         "import",
@@ -199,6 +207,7 @@ def migrate_articlemeta_parser(sargs):
             args.img_folder,
             args.pdf_folder,
             args.output_folder,
+            args.articles_csvfile,
         )
 
         build_ps.run()
