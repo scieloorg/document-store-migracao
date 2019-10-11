@@ -1178,6 +1178,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AssetElementIdentifyLabelAndCaptionPipe(),
             self.AssetElementFixPipe(),
             self.CreateInlineFormulaPipe(),
+            self.AppendixPipe(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.CompleteFnConversionPipe(),
@@ -2009,6 +2010,33 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     )
                 if inline:
                     node.tag = "inline-formula"
+            return data
+
+    class AppendixPipe(plumber.Pipe):
+
+        def transform(self, data):
+            raw, xml = data
+            remove_items = []
+            for node in xml.xpath(".//app"):
+                previous = node.getprevious()
+                if previous is None or previous.tag != "app":
+                    app_group = etree.Element("app-group")
+                    node.addprevious(app_group)
+                app_group.append(deepcopy(node))
+                remove_items.append(node)
+                if node.find("label") is None:
+                    xref = xml.find(".//xref[@rid='{}']".format(node.get("id")))
+                    if xref is not None:
+                        label = etree.Element("label")
+                        label.text = get_node_text(xref)
+                        node.insert(0, label)
+                caption = node.find("caption")
+                if caption is not None:
+                    caption.tag = "REMOVETAG"
+            etree.strip_tags(xml, "REMOVETAG")
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
             return data
 
     class RemoveXMLAttributesPipe(plumber.Pipe):
