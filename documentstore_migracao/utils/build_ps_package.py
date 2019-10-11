@@ -110,6 +110,91 @@ class BuildPSPackage(object):
         except errors.ResourceNotFound as e:
             logging.info(e)
 
+    def _update_sps_package_object(self, articles_data_reader, sps_package, pack_name):
+        """
+        Atualiza instancia SPS_Package com os dados de artigos do arquivo 
+        articles_data_reader, um CSV com os seguintes campos:
+            - 'PID'
+            - 'PID AOP'
+            - 'FILE'
+            - 'DATA (COLLECTION)'
+            - 'DATA PRIMEIRO PROCESSAMENTO'
+            - 'DATA DO ULTIMO PROCESSAMENTO'
+        """
+        _sps_package = deepcopy(sps_package)
+        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = (
+            articles_data_reader.fieldnames
+        )
+        # Verificar se tem PID
+        article_data = None
+        if _sps_package.publisher_id is None:
+            for row in articles_data_reader:
+                if pack_name in row[f_file]:
+                    article_data = row
+                    logging.debug('Updating document with PID "%s"', article_data[f_pid])
+                    _sps_package.publisher_id = article_data[f_pid]
+                    break
+        else:
+            logging.debug('Reading document PID "%s" data', _sps_package.publisher_id)
+            for row in articles_data_reader:
+                if _sps_package.publisher_id == row[f_pid]:
+                    article_data = row
+                    break
+
+        if article_data is not None:
+
+            def _has_attr_to_set(attr, field, min_attr_len=1):
+                _data_field = article_data[field]
+                _has_data_field = _data_field is not None and len(_data_field) > 0
+                _sps_package_attr = getattr(_sps_package, attr) or ""
+                _has_attr = len("".join(_sps_package_attr)) > min_attr_len
+                if not _has_attr and _has_data_field:
+                    return True
+                return False
+
+            if _has_attr_to_set("aop_pid", f_pid_aop):
+                logging.debug('Updating document with AOP PID "%s"', article_data[f_pid_aop])
+                _sps_package.aop_pid = article_data[f_pid_aop]
+
+            # Verificar data de publicação e da coleção
+            if not _sps_package.is_ahead_of_print:
+
+                def parse_date(str_date):
+                    return (
+                        str_date[:4] if int(str_date[:4]) > 0 else "",
+                        str_date[4:6] if int(str_date[4:6]) > 0 else "",
+                        str_date[6:8] if int(str_date[6:8]) > 0 else "",
+                    )
+
+                if _has_attr_to_set("documents_bundle_pubdate", f_dt_collection, 3):
+                    logging.debug(
+                        'Updating document with collection date "%s"',
+                        article_data[f_dt_collection]
+                    )
+                    _sps_package.documents_bundle_pubdate = parse_date(
+                        article_data[f_dt_collection]
+                    )
+                if _has_attr_to_set("document_pubdate", f_dt_created, 5):
+                    if len(_sps_package.documents_bundle_pubdate[0]) > 0:
+                        logging.debug(
+                            'Updating document with first date "%s"',
+                            article_data[f_dt_created]
+                        )
+                        _sps_package.document_pubdate = parse_date(
+                            article_data[f_dt_created]
+                        )
+                elif _has_attr_to_set("document_pubdate", f_dt_updated, 5):
+                    if len(_sps_package.documents_bundle_pubdate[0]) > 0:
+                        logging.debug(
+                            'Updating document with update date "%s"',
+                            article_data[f_dt_updated]
+                        )
+                        _sps_package.document_pubdate = parse_date(
+                            article_data[f_dt_updated]
+                        )
+
+        return _sps_package
+
     def collect_xml(self, acron, xml):
         issue_folder = path.basename(path.dirname(xml))
 
