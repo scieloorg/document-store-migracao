@@ -187,12 +187,52 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b'<root><p content-type="h3">Titulo 3</p></root>',
         )
 
-    def test_pipe_br(self):
-        text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'
+    def test_pipe_remove_invalid_br_removes_br_which_is_at_the_beginning(self):
+        text = "<root><td><br/> texto 2</td></root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        self.assertEqual(etree.tostring(transformed), b"<root><td> texto 2</td></root>")
+
+    def test_pipe_remove_invalid_br_removes_br_which_is_at_the_end(self):
+        text = "<root><td>texto 2<br/></td></root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        self.assertEqual(etree.tostring(transformed), b"<root><td>texto 2</td></root>")
+
+    def test_pipe_remove_invalid_br_removes_br_which_is_alone_in_a_element(self):
+        text = "<root><td><br/></td></root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        self.assertEqual(etree.tostring(transformed), b"<root><td/></root>")
+
+    def test_pipe_br_creates_break(self):
+        text = "<root><td>texto 1<br/> texto 2</td></root>"
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p content-type="break">bla</p><p content-type="break"> continua outra linha</p><p baljlba="1"/><td><break/></td><sec/></root>',
+            b"<root><td>texto 1<break/> texto 2</td></root>",
+        )
+
+    def test_pipe_br_do_nothing(self):
+        text = "<root><sec>texto 1<br/> texto 2</sec></root>"
+        raw, transformed = self._transform(text, self.pipeline.BRPipe())
+        self.assertEqual(
+            etree.tostring(transformed), b"<root><sec>texto 1<br/> texto 2</sec></root>"
+        )
+
+    def test_pipe_br_to_pipe_creates_p_for_each_item_which_is_separated_by_br(self):
+        text = "<root><sec>texto 1<br/> texto 2</sec></root>"
+        raw, transformed = self._transform(text, self.pipeline.BR2PPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><sec><p content-type="break">texto 1</p><p content-type="break"> texto 2</p></sec></root>',
+        )
+
+    def test_pipe_br_to_pipe_creates_p_for_each_item_which_is_separated_by_br_and_remove_extra_p(
+        self
+    ):
+        text = '<root><p align="x">bla<br/> continua outra linha</p></root>'
+        raw, transformed = self._transform(text, self.pipeline.BR2PPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"<root><p>bla</p><p> continua outra linha</p></root>",
         )
 
     def test_pipe_p(self):
@@ -1984,7 +2024,15 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         text, xml = self.html_pl.AHrefPipe().transform((text, xml))
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
-        p = xml.findall(".//p")
+        text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
+        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
+        text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
+        text, xml = self.html_pl.BRPipe().transform((text, xml))
+        text, xml = self.html_pl.BR2PPipe().transform((text, xml))
+
+        print(etree.tostring(xml))
+
+        p = xml.findall(".//fn/p")
         self.assertEqual(xml.find(".//fn/label/bold").text, "Correspondence to:")
         self.assertEqual(p[0].text.strip(), "Maria Auxiliadora Prolungatti Cesar")
         self.assertEqual(
@@ -1993,7 +2041,7 @@ class TestCompleteFnConversionPipe(unittest.TestCase):
         )
         self.assertEqual(p[2].text.strip(), "Avenida Granadeiro Guimarães, 270")
         self.assertEqual(p[3].text.strip(), "CEP: 12100-000 – Taubaté (SP), Brazil.")
-        self.assertEqual(p[5].find("email").text, "prolungatti@uol.com.br")
+        self.assertEqual(p[4].find("email").text, "prolungatti@uol.com.br")
 
     def test_fn_list(self):
         text = """

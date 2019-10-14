@@ -157,8 +157,6 @@ class HTML2SPSPipeline(object):
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.AHrefPipe(),
-            self.BRPipe(),
-            self.PPipe(),
             self.DivPipe(),
             self.LiPipe(),
             self.OlPipe(),
@@ -170,7 +168,11 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
+            self.RemoveInvalidBRPipe(),
             self.ConvertElementsWhichHaveIdPipe(),
+            self.RemoveInvalidBRPipe(),
+            self.BRPipe(),
+            self.BR2PPipe(),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
             self.BlockquotePipe(),
@@ -180,9 +182,9 @@ class HTML2SPSPipeline(object):
             self.GraphicChildrenPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
+            self.PPipe(),
             self.RemoveRefIdPipe(),
             self.FixIdAndRidPipe(super_obj=self),
-            # self.SanitizationPipe(),
         )
 
     def deploy(self, raw):
@@ -333,29 +335,105 @@ class HTML2SPSPipeline(object):
         ]
 
         def transform(self, data):
+            logger.info("BRPipe.transform - inicio")
             raw, xml = data
-            changed = False
-            nodes = xml.findall("*[br]")
-            for node in nodes:
+            for node in xml.findall(".//*[br]"):
                 if node.tag in self.ALLOWED_IN:
                     for br in node.findall("br"):
                         br.tag = "break"
-                elif node.tag == "p":
-                    if node.text:
-                        p = etree.Element("p")
-                        p.set("content-type", "break")
-                        p.text = node.text
-                        node.insert(0, p)
-                        node.text = ""
-                    for br in node.findall("br"):
-                        br.tag = "p"
-                        br.set("content-type", "break")
-                        if br.tail:
-                            br.text = br.tail
-                            br.tail = ""
-                    _remove_tag(node)
+            logger.info("BRPipe.transform - inicio")
+            return data
 
-            etree.strip_tags(xml, "br")
+    class RemoveInvalidBRPipe(plumber.Pipe):
+        def _remove_first_or_last_br(self, xml):
+            """
+            b'<bold><br/>Luis Huicho</bold>
+            b'<bold>Luis Huicho</bold>
+            """
+            logger.info("RemoveInvalidBRPipe._remove_br - inicio")
+            while True:
+                change = False
+                for node in xml.findall(".//*[br]"):
+                    first = node.getchildren()[0]
+                    last = node.getchildren()[-1]
+                    if (node.text or "").strip() == "" and first.tag == "br":
+                        first.tag = "REMOVEINVALIDBRPIPEREMOVETAG"
+                        change = True
+                    if (last.tail or "").strip() == "" and last.tag == "br":
+                        last.tag = "REMOVEINVALIDBRPIPEREMOVETAG"
+                        change = True
+                if not change:
+                    break
+            etree.strip_tags(xml, "REMOVEINVALIDBRPIPEREMOVETAG")
+            logger.info("RemoveInvalidBRPipe._remove_br - fim")
+
+        def transform(self, data):
+            logger.info("RemoveInvalidBRPipe - inicio")
+            text, xml = data
+            self._remove_first_or_last_br(xml)
+            logger.info("RemoveInvalidBRPipe - fim")
+            return data
+
+    class BR2PPipe(plumber.Pipe):
+        def _create_p(self, node, nodes, text):
+            logger.info("BR2PPipe._create_p - inicio")
+            if nodes or (text or "").strip():
+                logger.info("BR2PPipe._create_p - element p")
+                p = etree.Element("p")
+                if node.tag not in ["REMOVE_P", "p"]:
+                    p.set("content-type", "break")
+                p.text = text
+                logger.info("BR2PPipe._create_p - append nodes")
+                for n in nodes:
+                    p.append(deepcopy(n))
+                logger.info("BR2PPipe._create_p - node.append(p)")
+                node.append(p)
+            logger.info("BR2PPipe._create_p - fim")
+
+        def _create_new_node(self, node):
+            """
+            <root><p>texto <br/> texto 1</p></root>
+            <root><p><p content-type= "break">texto </p><p content-type= "break"> texto 1</p></p></root>
+            """
+            logger.info("BR2PPipe._create_new_node - inicio")
+            new = etree.Element(node.tag)
+            for attr, value in node.attrib.items():
+                new.set(attr, value)
+            text = node.text
+            nodes = []
+            for i, child in enumerate(node.getchildren()):
+                if child.tag == "br":
+                    self._create_p(new, nodes, text)
+                    nodes = []
+                    text = child.tail
+                else:
+                    nodes.append(child)
+            self._create_p(new, nodes, text)
+            logger.info("BR2PPipe._create_new_node - fim")
+            return new
+
+        def _executa(self, xml):
+            logger.info("BR2PPipe._executa - inicio")
+            while True:
+                node = xml.find(".//*[br]")
+                if node is None:
+                    break
+                new = self._create_new_node(node)
+
+                node.addprevious(new)
+                if node.tag == "p":
+                    new.tag = "BRTOPPIPEREMOVETAG"
+                p = node.getparent()
+                if p is not None:
+                    p.remove(node)
+            etree.strip_tags(xml, "BRTOPPIPEREMOVETAG")
+            logger.info("BR2PPipe._executa - fim")
+
+        def transform(self, data):
+            logger.info("BR2PPipe - inicio")
+            text, xml = data
+            self._executa(xml)
+            logger.info("BR2PPipe - fim")
             return data
 
     class PPipe(plumber.Pipe):
@@ -391,17 +469,16 @@ class HTML2SPSPipeline(object):
             "th",
             "trans-abstract",
         ]
+        ATTRIBUTES = ("content-type", "id", "specific-use", "xml:base", "xml:lang")
 
         def parser_node(self, node):
-            _id = node.attrib.pop("id", None)
-            node.attrib.clear()
-            if _id:
-                node.set("id", _id)
-
-            etree.strip_tags(node, "big")
-
+            if "class" in node.attrib.keys() and not node.get("content-type"):
+                node.set("content-type", node.get("class"))
+            for attr in node.attrib.keys():
+                if attr not in self.ATTRIBUTES:
+                    node.attrib.pop(attr)
             parent = node.getparent()
-            if not parent.tag in self.TAGS:
+            if parent.tag not in self.TAGS:
                 logger.warning("Tag `p` in `%s`", parent.tag)
 
         def transform(self, data):
@@ -2014,7 +2091,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
     class AppendixPipe(plumber.Pipe):
-
         def transform(self, data):
             raw, xml = data
             remove_items = []
