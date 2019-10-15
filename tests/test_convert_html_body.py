@@ -1350,8 +1350,8 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.pl = ConvertElementsWhichHaveIdPipeline()
 
     def test_remove_thumb_img_pipe(self):
-        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg"><img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/><br/> Clique para ampliar</a></p></root>"""
-        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><img src="/img/revistas/hoehnea/v37n3/a05img01.jpg"></img></p></root>"""
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg"><img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/><br/> Anexo 1 - Clique para ampliar</a></p></root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg">Anexo 1<br/></a></p></root>"""
         xml = etree.fromstring(text)
         text, xml = self.pl.RemoveThumbImgPipe().transform((text, xml))
         self.assertNotIn(

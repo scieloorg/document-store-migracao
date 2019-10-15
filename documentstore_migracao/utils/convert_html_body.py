@@ -1335,12 +1335,25 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if "thumb" in path:
                 parent = node.getparent()
                 _remove_tag(node, True)
-                if parent.tag == "a" and parent.attrib.get("href"):
+                self._fix_a_hef_text(parent)
+
+        def _fix_a_hef_text(self, parent):
+            if parent is not None and parent.tag == "a" and parent.get("href"):
+                label_text = get_node_text(parent)
+                if label_text:
+                    words = label_text.split()
+                    if len(words) >= 2:
+                        if words[1][0].isdigit():
+                            label_text = " ".join(words[:2])
+                        elif not words[1][0].isalnum():
+                            label_text = words[0]
+                if label_text:
                     for child in parent.getchildren():
-                        _remove_tag(child, True)
-                    parent.tag = "img"
-                    parent.set("src", parent.attrib.pop("href"))
-                    parent.text = ""
+                        if child.text and child.text.strip().startswith(label_text):
+                            child.text = ""
+                        elif child.tail and child.tail.strip().startswith(label_text):
+                            child.tail = ""
+                    parent.text = label_text
 
         def transform(self, data):
             raw, xml = data
@@ -2187,17 +2200,21 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if previous is None or previous.tag != "app":
                     app_group = etree.Element("app-group")
                     node.addprevious(app_group)
-                app_group.append(deepcopy(node))
-                remove_items.append(node)
                 if node.find("label") is None:
-                    xref = xml.find(".//xref[@rid='{}']".format(node.get("id")))
-                    if xref is not None:
+                    text = None
+                    for xref in xml.findall(".//xref[@rid='{}']".format(node.get("id"))):
+                        text = get_node_text(xref)
+                        if text:
+                            break
+                    if text:
                         label = etree.Element("label")
-                        label.text = get_node_text(xref)
+                        label.text = text
                         node.insert(0, label)
                 caption = node.find("caption")
                 if caption is not None:
                     caption.tag = "REMOVETAG"
+                app_group.append(deepcopy(node))
+                remove_items.append(node)
             etree.strip_tags(xml, "REMOVETAG")
             for item in remove_items:
                 parent = item.getparent()
