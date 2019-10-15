@@ -36,7 +36,7 @@ class Inferer:
         if k.isalpha():
             for clue, tag in self.rules.sorted_by_clue_first_char.get(k, []):
                 if name.startswith(clue):
-                    if len(clue) == 1 and not name[len(clue):].isdigit():
+                    if len(clue) == 1 and not name[len(clue) :].isdigit():
                         return "fn", "fn"
                     return tag, self.ref_type(tag)
             for clue, tag in self.rules.sorted_clue_and_tags_items:
@@ -96,12 +96,13 @@ class Inferer:
 
 
 class InfererRules:
-
     def __init__(self, rules_file_path):
         self.rules_file_path = rules_file_path
         file_path, ext = os.path.splitext(rules_file_path)
         dirname = os.path.dirname(rules_file_path)
-        self.json_sorted_by_clue_first_char = os.path.join(dirname, "_inferer_clue.json")
+        self.json_sorted_by_clue_first_char = os.path.join(
+            dirname, "_inferer_clue.json"
+        )
         self.json_sorted_by_tag = os.path.join(dirname, "_inferer_tags.json")
         self._unsorted_clue_and_tag_items = None
         self._sorted_clue_and_tags_items = None
@@ -114,9 +115,8 @@ class InfererRules:
         if not self._unsorted_clue_and_tag_items:
             with open(self.rules_file_path, "r") as fp:
                 self._unsorted_clue_and_tag_items = (
-                    tuple(item.strip().split("|"))
-                    for item in fp.readlines()
-                    )
+                    tuple(item.strip().split("|")) for item in fp.readlines()
+                )
         return self._unsorted_clue_and_tag_items
 
     @property
@@ -127,7 +127,8 @@ class InfererRules:
                     (len(text), text, tag)
                     for text, tag in self.unsorted_clue_and_tag_items
                 ],
-                reverse=True)
+                reverse=True,
+            )
         return self._sorted_by_clue_len_in_reverse_order
 
     @property
@@ -170,8 +171,8 @@ class InfererRules:
     def sorted_by_tag(self):
         if not self._sorted_by_tag:
             self._sorted_by_tag = self.get_data(
-                self.json_sorted_by_tag,
-                self.classify_items_by_tag)
+                self.json_sorted_by_tag, self.classify_items_by_tag
+            )
         return self._sorted_by_tag
 
     @property
@@ -179,5 +180,6 @@ class InfererRules:
         if not self._sorted_by_clue_first_char:
             self._sorted_by_clue_first_char = self.get_data(
                 self.json_sorted_by_clue_first_char,
-                self.classify_items_by_clue_first_char)
+                self.classify_items_by_clue_first_char,
+            )
         return self._sorted_by_clue_first_char

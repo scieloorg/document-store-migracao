@@ -18,6 +18,8 @@ faulthandler.enable()
 logger = logging.getLogger(__name__)
 TIMEOUT = config.get("TIMEOUT") or 5
 
+ASSET_TAGS = ("disp-formula", "fig", "table-wrap", "app")
+
 
 def _remove_tag(node, remove_content=False):
     parent = node.getparent()
@@ -105,6 +107,33 @@ def get_node_text(node):
     return " ".join((word for word in words if word))
 
 
+def alnum(sentence):
+    words = sentence.split()
+    new_words = []
+    for w in words:
+        alnumchars = [c for c in w if c.isalnum()]
+        new_words.append("".join(alnumchars))
+    return new_words
+
+
+def minor(words1, words2):
+    return sorted([len(words1), len(words2)])[0]
+
+
+def matched_first_two_words(text_words, search_expr):
+    if text_words and search_expr:
+        text_words = alnum(text_words.lower())
+        search_expr = alnum(search_expr.lower())
+        if len(text_words) >= 2 and len(search_expr) >= 2:
+            min_0 = minor(text_words[0], search_expr[0])
+            min_1 = minor(text_words[1], search_expr[1])
+            if (
+                text_words[0][:min_0] == search_expr[0][:min_0]
+                and text_words[1][:min_1] == search_expr[1][:min_1]
+            ):
+                return True
+
+
 class CustomPipe(plumber.Pipe):
     def __init__(self, super_obj=None, *args, **kwargs):
 
@@ -153,7 +182,7 @@ class HTML2SPSPipeline(object):
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveRefIdPipe(),
             self.FixIdAndRidPipe(super_obj=self),
-            self.SanitizationPipe(),
+            # self.SanitizationPipe(),
         )
 
     def deploy(self, raw):
@@ -177,8 +206,9 @@ class HTML2SPSPipeline(object):
             root = xml.getroottree()
             root.write(
                 os.path.join(
-                    "/tmp/", "%s.%s.xml" % (
-                        self.super_obj.pid, self.super_obj.index_body)),
+                    "/tmp/",
+                    "%s.%s.xml" % (self.super_obj.pid, self.super_obj.index_body),
+                ),
                 encoding="utf-8",
                 doctype=config.DOC_TYPE_XML,
                 xml_declaration=True,
@@ -741,72 +771,40 @@ class HTML2SPSPipeline(object):
 
     class GraphicChildrenPipe(plumber.Pipe):
         TAGS = (
-            "addr-line",
             "alternatives",
-            "alt-title",
-            "article-title",
-            "attrib",
-            "award-id",
-            "bold",
-            "chapter-title",
-            "code",
-            "collab",
-            "comment",
-            "compound-kwd-part",
-            "compound-subject-part",
-            "conf-theme",
-            "data-title",
-            "def-head",
+            "app",
+            "app-group",
+            "array",
+            "bio",
+            "body",
+            "boxed-text",
+            "chem-struct",
+            "chem-struct-wrap",
             "disp-formula",
-            "element-citation",
-            "fixed-case",
-            "funding-source",
-            "inline-formula",
-            "italic",
-            "label",
+            "disp-quote",
+            "fig",
+            "fig-group",
+            "floats-group",
+            "glossary",
             "license-p",
-            "meta-value",
-            "mixed-citation",
-            "monospace",
             "named-content",
-            "overline",
+            "notes",
             "p",
-            "part-title",
-            "private-char",
-            "product",
-            "roman",
-            "sans-serif",
-            "sc",
-            "see",
-            "see-also",
+            "ref-list",
+            "sec",
             "sig",
             "sig-block",
-            "source",
-            "std",
-            "strike",
             "styled-content",
-            "sub",
-            "subject",
-            "subtitle",
-            "sup",
-            "supplement",
-            "support-source",
+            "supplementary-material",
+            "table-wrap",
             "td",
             "term",
-            "term-head",
-            "textual-form",
             "th",
-            "title",
-            "trans-source",
-            "trans-subtitle",
-            "trans-title",
-            "underline",
-            "verse-line",
         )
 
         def parser_node(self, node):
             parent = node.getparent()
-            if parent.tag in self.TAGS:
+            if parent.tag not in self.TAGS:
                 node.tag = "inline-graphic"
 
         def transform(self, data):
@@ -876,8 +874,7 @@ class HTML2SPSPipeline(object):
                 # https://jats.nlm.nih.gov/publishing/tag-library/1.2/element/email.html
                 node.tag = "ext-link"
                 node.set("ext-link-type", "email")
-                node.set(
-                    "{http://www.w3.org/1999/xlink}href", "mailto:" + href)
+                node.set("{http://www.w3.org/1999/xlink}href", "mailto:" + href)
 
         def parser_node(self, node):
             href = node.get("href")
@@ -999,7 +996,7 @@ class HTML2SPSPipeline(object):
                 value = "".join([c if c.isalnum() else "_" for c in value])
             if not value[0].isalpha():
                 if tag[0] in value:
-                    value = value[value.find(tag[0]):]
+                    value = value[value.find(tag[0]) :]
                 else:
                     value = tag[:3] + value
             if self.super_obj.index_body > 1:
@@ -1175,9 +1172,15 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
-            self.AddAssetInfoToTablePipe(),
-            self.CreateAssetElementsFromExternalLinkElementsPipe(),
-            self.CreateAssetElementsFromImgOrTableElementsPipe(),
+            self.AssetElementFixPositionPipe(),
+            self.CreateDispFormulaPipe(),
+            self.AssetElementAddContentPipe(),
+            self.AssetElementIdentifyLabelAndCaptionPipe(),
+            self.AssetElementFixPipe(),
+            self.CreateInlineFormulaPipe(),
+            self.AppendixPipe(),
+            self.TableWrapPipe(),
+            self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.CompleteFnConversionPipe(),
         )
@@ -1190,174 +1193,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def transform(self, data):
             new_obj = deepcopy(data)
             return data, new_obj
-
-    class AddAssetInfoToTablePipe(plumber.Pipe):
-        def parser_node(self, node):
-            _id = node.attrib.get("id")
-            if _id:
-                new_id = _id
-                node.set("id", new_id)
-                node.set("xml_id", new_id)
-                node.set("xml_tag", "table-wrap")
-                node.set("xml_label", "Tab")
-
-        def transform(self, data):
-            raw, xml = data
-            _process(xml, "table[@id]", self.parser_node)
-            return data
-
-    class CreateAssetElementsFromExternalLinkElementsPipe(plumber.Pipe):
-        def _create_asset_content_as_graphic(self, node_a):
-            href = node_a.attrib.get("href")
-            new_graphic = etree.Element("graphic")
-            new_graphic.set("{http://www.w3.org/1999/xlink}href", href)
-            return new_graphic
-
-        def _create_asset_group(self, a_href):
-            root = a_href.getroottree()
-            new_id = a_href.attrib.get("xml_id")
-            new_tag = a_href.attrib.get("xml_tag")
-            if not new_tag or not new_id:
-                return
-
-            asset = find_or_create_asset_node(root, new_tag, new_id)
-            if asset is not None:
-                href = a_href.attrib.get("href")
-                fname, ext = os.path.splitext(href.lower())
-                asset_content = self._create_asset_content_as_graphic(a_href)
-
-                if asset_content is not None:
-                    asset.append(asset_content)
-                    if asset_content.tag == "REMOVE_TAG":
-                        etree.strip_tags(asset, "REMOVE_TAG")
-
-                if asset.getparent() is None:
-                    create_p_for_asset(a_href, asset)
-
-                self._create_xref(a_href)
-
-        def _create_xref(self, a_href):
-            reftype = a_href.attrib.pop("xml_reftype")
-            new_id = a_href.attrib.pop("xml_id")
-
-            if new_id is None or reftype is None:
-                return
-
-            a_href.tag = "xref"
-            a_href.attrib.clear()
-            a_href.set("rid", new_id)
-            a_href.set("ref-type", reftype)
-
-        def transform(self, data):
-            raw, xml = data
-            document = Document(xml)
-            a_href_texts, file_paths = document.a_href_items
-            for path, nodes in file_paths.items():
-                if nodes[0].attrib.get("xml_tag"):
-                    self._create_asset_group(nodes[0])
-                    for node in nodes[1:]:
-                        self._create_xref(node)
-            return data
-
-    class CreateAssetElementsFromImgOrTableElementsPipe(plumber.Pipe):
-        def _find_label_and_caption_in_node(self, node, previous_or_next):
-            node_text = node.attrib.get("xml_label")
-            if node_text is None:
-                return
-            text = get_node_text(previous_or_next)
-            if text.lower().startswith(node_text.lower()):
-                _node = previous_or_next
-                parts = text.split()
-                if len(parts) > 0:
-                    if len(parts) == 1:
-                        text = parts[0], ""
-                    elif parts[1].isalnum():
-                        text = parts[:2], parts[2:]
-                    elif parts[1][:-1].isalnum():
-                        text = (parts[0], parts[1][:-1]), parts[2:]
-                    else:
-                        text = parts[:1], parts[1:]
-                    if len(text) == 2:
-                        label = etree.Element("label")
-                        label.text = join_texts(text[0])
-                        title_text = join_texts(text[1])
-                        caption = None
-
-                        if title_text:
-                            caption = etree.Element("caption")
-                            title = etree.Element("title")
-                            title.text = join_texts(text[1])
-                            caption.append(title)
-                        return _node, label, caption
-
-        def _find_label_and_caption_around_node(self, node):
-            parent = node.getparent()
-            _node = None
-            label = None
-            caption = None
-            node_label_caption = None
-
-            previous = parent.getprevious()
-            _next = parent.getnext()
-
-            if previous is not None:
-                node_label_caption = self._find_label_and_caption_in_node(
-                    node, previous
-                )
-
-            if node_label_caption is None and _next is not None:
-                node_label_caption = self._find_label_and_caption_in_node(node, _next)
-
-            if node_label_caption is not None:
-                _node, label, caption = node_label_caption
-                parent = _node.getparent()
-                if parent is not None:
-                    parent.remove(_node)
-                return label, caption
-
-        def _get_asset_node(self, img_or_table, xml_new_tag, xml_id):
-            asset = find_or_create_asset_node(
-                img_or_table.getroottree(), xml_new_tag, xml_id, img_or_table
-            )
-            if asset is not None:
-                parent = asset.getparent()
-                if parent is None:
-                    parent = img_or_table.getparent()
-                    if parent.tag != "body":
-                        parent.addprevious(asset)
-                    else:
-                        parent.append(asset)
-            return asset
-
-        def parser_node(self, img_or_table):
-            xml_id = img_or_table.attrib.get("xml_id")
-            xml_reftype = img_or_table.attrib.get("xml_reftype")
-            xml_new_tag = img_or_table.attrib.get("xml_tag")
-            xml_label = img_or_table.attrib.get("xml_label")
-            if not xml_new_tag or not xml_id:
-                return
-
-            label_and_caption = self._find_label_and_caption_around_node(
-                img_or_table)
-            asset = self._get_asset_node(img_or_table, xml_new_tag, xml_id)
-            if label_and_caption:
-                if label_and_caption[1] is not None:
-                    asset.insert(0, label_and_caption[1])
-                asset.insert(0, label_and_caption[0])
-
-            img_or_table_parent = img_or_table.getparent()
-            new_img_or_table = deepcopy(img_or_table)
-            for attr in ["xml_id", "xml_reftype", "xml_label", "xml_tag"]:
-                if attr in new_img_or_table.attrib.keys():
-                    new_img_or_table.attrib.pop(attr)
-            asset.append(new_img_or_table)
-            img_or_table_parent.remove(img_or_table)
-
-        def transform(self, data):
-            raw, xml = data
-            _process(xml, "img[@xml_id]", self.parser_node)
-            _process(xml, "table[@xml_id]", self.parser_node)
-            return data
 
     class RemoveThumbImgPipe(plumber.Pipe):
         def parser_node(self, node):
@@ -1381,6 +1216,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         """Garante que todos os elemento a[@name] e a[@id] tenham @name e @id.
         Corrige id e name caso contenha caracteres nao alphanum.
         """
+
         def _fix_a_href(self, xml):
             for a in xml.findall(".//a[@name]"):
                 name = a.attrib.get("name")
@@ -1411,39 +1247,62 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
     class CompleteElementAWithXMLTextPipe(plumber.Pipe):
         """
-        Adiciona o atributo @xml_text ao elemento a, com o valor completo 
+        Adiciona o atributo @xml_text ao elemento a, com o valor completo
         de seu rótulo. Por exemplo, explicitar se <a href="#2">2</a> é
-        nota de rodapé <a href="#2" xml_text="2">2</a> ou 
+        nota de rodapé <a href="#2" xml_text="2">2</a> ou
         Fig 2 <a href="#2" xml_text="figure 2">2</a>.
         """
+
+        inferer = Inferer()
+
         def add_xml_text_to_a_href(self, xml):
+            for node in xml.find(".").getchildren():
+                self.add_xml_text_to_a_href_in_p(node)
+
+        def add_xml_text_to_a_href_in_p(self, body_child):
             previous = etree.Element("none")
-            for node in xml.findall(".//a[@href]"):
+            nodes = body_child.findall(".//a[@href]")
+            if body_child.tag == "a" and body_child.get("href"):
+                nodes.insert(0, body_child)
+            for node in nodes:
                 text = get_node_text(node)
                 if text:
-                    text = text.lower()
+                    if len(text) == 1 and text.isalpha() and text == text.upper():
+                        pass
+                    else:
+                        text = text.lower()
                     node.set("xml_text", text)
+                if text and text[0].isdigit():
+                    # it is a note or other element
                     xml_text = previous.get("xml_text") or ""
                     splitted = xml_text.split()
-                    if text[0].isdigit() and len(splitted) >= 2:
+                    if len(splitted) >= 2:
                         label, number = splitted[:2]
-                        if number[0] <= text[0]:
-                            node.set("xml_text", label + " " + text)
-                            logger.info(
-                                "add_xml_text_to_a_href: %s " % etree.tostring(
-                                    previous)
-                            )
-                            logger.info(
-                                "add_xml_text_to_a_href: %s " % etree.tostring(
-                                    node)
-                            )
+                        if self._is_a_sequence(number, text):
+                            if previous is node.getprevious() and previous.tail:
+                                words = previous.tail.split()
+                                if len(words) < 2:
+                                    node.set("xml_text", label + " " + text)
                 previous = node
 
+        def _get_number(self, _string):
+            number = "0"
+            for c in _string:
+                if not c.isdigit():
+                    break
+                number += c
+            return int(number)
+
+        def _is_a_sequence(self, previous, next):
+            previous = self._get_number(previous)
+            next = self._get_number(next)
+            return previous + 1 == next or previous == next
+
         def add_xml_text_to_other_a(self, xml):
-            for node in xml.findall(".//a[@xml_text]"):
+            for node in xml.xpath(".//a[@xml_text and @href]"):
                 href = node.get("href")
-                if href:
-                    xml_text = node.get("xml_text")
+                xml_text = node.get("xml_text")
+                if xml_text:
                     for n in xml.findall(".//a[@href='{}']".format(href)):
                         if not n.get("xml_text"):
                             n.set("xml_text", xml_text)
@@ -1470,6 +1329,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         disp-formula, fn, app etc
         Nota: este pipe não executa a conversão.
         """
+
         inferer = Inferer()
 
         def _update(self, node, elem_name, ref_type, new_id, text=None):
@@ -1569,7 +1429,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     return asset_node
             found = search_asset_node_backwards(img, "xml_tag")
             if found is not None and found.attrib.get("name"):
-                if found.attrib.get("xml_tag") in ["app", "fig", "table-wrap", "disp-formula"]:
+                if found.attrib.get("xml_tag") in ASSET_TAGS:
                     return found
 
         def _add_xml_attribs_to_img(self, images):
@@ -1659,9 +1519,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             xml_text = a_href.get("xml_text")
             if xml_text and get_node_text(a_href):
                 return any(
-                    [xml_text[0].isdigit(),
-                    not xml_text[0].isalnum(),
-                    xml_text[0].isalpha() and len(xml_text) == 1,
+                    [
+                        xml_text[0].isdigit(),
+                        not xml_text[0].isalnum(),
+                        xml_text[0].isalpha() and len(xml_text) == 1,
                     ]
                 )
 
@@ -1688,6 +1549,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         os valores dos atributos: @xml_tag, @xml_id, @xml_reftype, @xml_label,
         inseridos por DeduceAndSuggestConversionPipe()
         """
+
         def _remove_a(self, a_name, a_href_items):
             _remove_tag(a_name, True)
             for a_href in a_href_items:
@@ -1695,7 +1557,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def _update_a_name(self, node, new_id, new_tag):
             _name = node.attrib.get("name")
-            node.attrib.clear()
             node.set("id", new_id)
             if new_tag == "symbol":
                 node.set("symbol", _name)
@@ -1727,6 +1588,477 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._remove_a(a_name, a_hrefs)
             return data
 
+    class AssetElementFixPositionPipe(plumber.Pipe):
+        """
+        Move os elementos de ativos digitais, por exemplo:
+        <p><fig/></p>
+        para fora de modo que fique ao lado dos irmãos que serão conteúdo do 
+        ativo digital
+        """
+
+        def _set_move(self, node):
+            node.set("move", "false")
+            parent = node.getparent()
+            if parent is not None:
+                grand_parent = parent.getparent()
+                if grand_parent is not None:
+                    if (
+                        not node.getchildren()
+                        and node.getnext() is None
+                        and not get_node_text(node)
+                    ):
+                        node.set("move", "true")
+
+        def _set_move_for_nodes(self, xml):
+            if xml.find(".//*[@move]") is None:
+                for tag in ASSET_TAGS:
+                    for node in xml.xpath(".//{}".format(tag)):
+                        self._set_move(node)
+                return
+            for node in xml.xpath(".//*[@move='?']"):
+                self._set_move(node)
+
+        def _move_node(self, node):
+            node.set("move", "?")
+            parent = node.getparent()
+            parent.addnext(deepcopy(node))
+            parent.remove(node)
+
+        def transform(self, data):
+            raw, xml = data
+            self._set_move_for_nodes(xml)
+            while True:
+                if not xml.xpath(".//*[@move='true']"):
+                    break
+                for node in xml.xpath(".//*[@move='true']"):
+                    self._move_node(node)
+                self._set_move_for_nodes(xml)
+            for node in xml.xpath(".//*[@move]"):
+                node.attrib.pop("move")
+            return data
+
+    class AssetElementAddContentPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for tag in ASSET_TAGS:
+                logger.info("AssetElementAddContentPipe - {}".format(tag))
+                for asset_node in xml.findall(".//{}".format(tag)):
+                    logger.info(etree.tostring(asset_node))
+                    asset_node.set("status", "identify-content")
+                    if not self._is_complete(asset_node):
+                        components = self._find_components(asset_node)
+                        for component in components:
+                            p = component.getparent()
+                            asset_node.append(deepcopy(component))
+                            p.remove(component)
+            return data
+
+        def _is_complete(self, asset_node):
+            img = asset_node.xpath(".//img")
+            table = asset_node.xpath(".//table")
+            label = asset_node.xpath(".//*[@content-type='label']")
+            return label and (img or table)
+
+        def _find_components(self, asset_node):
+            """
+            Procura os componentes do elemento ativo digital
+            que estão como nós irmãos à direita
+            """
+            ASSET_TAGS_XPATH = ".//fig | .//table-wrap | .//app | .//disp-formula"
+            img = asset_node.find(".//img")
+            table = asset_node.find(".//table")
+            label = asset_node.find(".//*[@content-type='label']")
+            if label is None:
+                self._find_label(
+                    asset_node, asset_node.get("id"), asset_node.get("xml_text")
+                )
+                label = asset_node.find(".//*[@content-type='label']")
+            found = (label, img, table)
+            components = []
+            max_times = 3 - len([item for item in found if item is not None])
+
+            i = 0
+
+            _next = asset_node
+            while True:
+                if i == max_times:
+                    break
+                if label is not None and (img is not None or table is not None):
+                    break
+                _next = _next.getnext()
+                if _next is None:
+                    break
+                if _next.tag in ASSET_TAGS:
+                    break
+                if _next.xpath(ASSET_TAGS_XPATH):
+                    break
+
+                if label is None:
+                    label = self._find_label(
+                        _next, asset_node.get("id"), asset_node.get("xml_text")
+                    )
+                if img is None:
+                    img = self._find_img_or_table(_next, "img")
+                if table is None:
+                    table = self._find_img_or_table(_next, "table")
+
+                i += 1
+                if _next.get("content-type"):
+                    components.append(_next)
+            return components
+
+        def _find_label(self, node, asset_id, search_by):
+            label = node.find(".//bold[@label-of]")
+            if label is not None:
+                parent = label.getparent()
+                if not parent.getchildren()[0] is label:
+                    return
+            if label is None and search_by:
+                text = get_node_text(node)
+                if matched_first_two_words(text, search_by):
+                    self._create_label_in_node_text(node, asset_id, text)
+                else:
+                    self._create_label_in_node_tail(node, asset_id, search_by)
+                label = node.find(".//bold[@label-of]")
+            if label is not None:
+                node.set("content-type", "label")
+                return node
+
+        def _create_label_in_node_text(self, node, asset_id, text):
+            startswith = " ".join(text.split()[:2])
+            found = None
+            if node.text and node.text.startswith(text):
+                found = node
+            else:
+                for n in node.findall(".//*"):
+                    if n.text and n.text.startswith(startswith):
+                        found = n
+                        break
+            if found is not None:
+                if found.tag == "bold":
+                    label = found
+                    label.set("label-of", asset_id)
+
+                else:
+                    label = etree.Element("bold")
+                    label.text = startswith
+                    label.tail = found.text[len(label.text) :]
+                    label.set("label-of", asset_id)
+                    copy = deepcopy(found)
+                    found.clear()
+                    found.append(label)
+                    for child in copy.getchildren():
+                        found.append(child)
+
+        def _create_label_in_node_tail(self, node, asset_id, search_by):
+            tail = (node.tail or "").strip()
+            if matched_first_two_words(tail, search_by):
+                label = etree.Element("bold")
+                label.text = " ".join(tail.split()[:2])
+                label.set("label-of", asset_id)
+                node.tail = node.tail[len(label.text) :]
+                node.addnext(label)
+
+        def _find_img_or_table(self, node, tag):
+            found = None
+            if node.tag == tag:
+                found = node
+            if found is None:
+                found = node.find(".//{}".format(tag))
+            if found is not None:
+                node.set("content-type", tag)
+                return node
+
+    class AssetElementIdentifyLabelAndCaptionPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            logger.info("AssetElementIdentifyLabelAndCaptionPipe")
+            for asset_node in xml.findall(".//*[@status='identify-content']"):
+                self._mark_label_and_caption(asset_node)
+            return data
+
+        def _add_nodes_to_element_title(self, nodes_for_title, n):
+            if n is None:
+                return
+            if n is None or n.tag in ["table", "img"]:
+                return
+            if n.find(".//table") is not None:
+                return
+            if n.find(".//img") is not None:
+                return
+            if get_node_text(n):
+                nodes_for_title.append(n)
+
+        def _infer_label_and_caption(self, label_parent, clue):
+            label_text = None
+            caption_title_text = None
+            nodes_for_title = []
+            start = label_parent
+            label_parent_text = label_parent.text
+            if label_parent_text:
+                label_parent.text = ""
+                if label_parent_text.lower().startswith(clue):
+                    label_text = label_parent_text[: len(clue)]
+                    caption_title_text = label_parent_text[len(clue) :]
+                else:
+                    words = matched_first_two_words(label_parent_text, clue)
+                    if words:
+                        parts = label_parent_text.split()
+                        label_text = " ".join(parts[:2])
+                        caption_title_text = " ".join(parts[2:])
+                nodes_for_title = []
+                for n in start.getchildren():
+                    self._add_nodes_to_element_title(nodes_for_title, n)
+            return label_text, caption_title_text, nodes_for_title
+
+        def _mark_label_and_caption(self, asset_node):
+            label_text = None
+            caption_title_text = None
+            nodes_for_title = []
+            bold = asset_node.find(".//bold[@label-of]")
+            if bold is None:
+                data = self._find_label_and_caption(asset_node)
+            else:
+                data = self._find_caption(bold)
+            if data:
+                label_text, caption_title_text, nodes_for_title = data
+                self._create_label_and_caption(
+                    asset_node, label_text, caption_title_text, nodes_for_title
+                )
+                if bold is not None:
+                    parent = bold.getparent()
+                    if parent is not None:
+                        parent.remove(bold)
+
+        def _find_label_and_caption(self, asset_node):
+            label_pattern = asset_node.get("xml_text")
+            if label_pattern is None or not label_pattern[0].isalpha():
+                return
+            label_parent = asset_node.find(".//*[@content-type='label']")
+            if label_parent is None:
+                label_parent = asset_node
+
+            return self._infer_label_and_caption(label_parent, label_pattern)
+
+        def _find_caption(self, bold):
+            # label já está identificado
+            label_text = bold.text
+            caption_title_text = bold.tail
+            nodes_for_title = []
+            n = bold
+            while True:
+                t = len(nodes_for_title)
+                n = n.getnext()
+                self._add_nodes_to_element_title(nodes_for_title, n)
+                if t == len(nodes_for_title):
+                    break
+            return label_text, caption_title_text, nodes_for_title
+
+        def _create_label_and_caption(
+            self, asset_node, label_text, caption_title_text, nodes_for_title
+        ):
+            if label_text:
+                label = etree.Element("label")
+                label.text = label_text
+                asset_node.append(label)
+            if caption_title_text or nodes_for_title:
+                caption = etree.Element("caption")
+                title = etree.Element("title")
+                title.text = caption_title_text
+                caption.append(title)
+                asset_node.append(caption)
+                for n in nodes_for_title:
+                    title.append(deepcopy(n))
+                    p = n.getparent()
+                    p.remove(n)
+
+    class AssetElementFixPipe(plumber.Pipe):
+        COMPONENT_TAGS = ("label", "caption", "img")
+
+        def transform(self, data):
+            raw, xml = data
+            logger.info("AssetElementFixPipe")
+            for asset_tag in ASSET_TAGS:
+                for asset in xml.findall(".//{}".format(asset_tag)):
+                    logger.info(etree.tostring(asset))
+                    new_asset = etree.Element(asset_tag)
+                    new_asset.set("id", asset.get("id"))
+                    new_asset.tail = asset.tail
+
+                    for tag in self.COMPONENT_TAGS:
+                        for component in asset.findall(".//{}".format(tag)):
+                            if component is not None:
+                                new_asset.append(deepcopy(component))
+
+                    new_asset_text = get_node_text(new_asset)
+                    extra_component = False
+                    for child in asset.getchildren():
+                        for node in child.findall(".//*"):
+                            if not node.getchildren():
+                                text = get_node_text(node)
+                                if text not in new_asset_text:
+                                    new_asset.append(child)
+                                    extra_component = True
+                    if extra_component:
+                        logger.info("AssetElementFixPipe: unexpected content?")
+                    asset.addprevious(new_asset)
+                    p = asset.getparent()
+                    p.remove(asset)
+                    logger.info(etree.tostring(new_asset))
+            return data
+
+    class CreateDispFormulaPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//img[@xml_tag='disp-formula']"):
+                previous = node.getprevious()
+                id = node.get("xml_id")
+                if previous is None or previous.tag != "disp-formula":
+                    disp_formula = etree.Element("disp-formula")
+                    disp_formula.set("id", id)
+                    disp_formula.set("name", id)
+                    for attr, value in node.attrib.items():
+                        if attr.startswith("xml_"):
+                            disp_formula.set(attr, value)
+                    node.addprevious(disp_formula)
+            return data
+
+    class CreateInlineFormulaPipe(plumber.Pipe):
+        DISP_FORMULA_PARENTS = (
+            "app",
+            "app-group",
+            "bio",
+            "body",
+            "boxed-text",
+            "disp-formula-group",
+            "disp-quote",
+            "fig",
+            "glossary",
+            "license-p",
+            "named-content",
+            "notes",
+            "p",
+            "ref-list",
+            "sec",
+            "styled-content",
+            "supplementary-material",
+            "td",
+            "term",
+            "th",
+        )
+        INLINE_FORMULA_PARENTS = (
+            "addr-line",
+            "alt-title",
+            "article-title",
+            "attrib",
+            "award-id",
+            "bold",
+            "collab",
+            "comment",
+            "compound-kwd-part",
+            "compound-subject-part",
+            "conf-theme",
+            "def-head",
+            "disp-formula",
+            "element-citation",
+            "fixed-case",
+            "funding-source",
+            "inline-formula",
+            "italic",
+            "label",
+            "license-p",
+            "meta-value",
+            "mixed-citation",
+            "monospace",
+            "named-content",
+            "overline",
+            "p",
+            "product",
+            "roman",
+            "sans-serif",
+            "sc",
+            "strike",
+            "styled-content",
+            "sub",
+            "subject",
+            "subtitle",
+            "sup",
+            "supplement",
+            "td",
+            "term",
+            "term-head",
+            "th",
+            "title",
+            "trans-subtitle",
+            "trans-title",
+            "underline",
+            "verse-line",
+        )
+
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//disp-formula"):
+                parent = node.getparent()
+                inline = False
+                if parent.tag not in self.DISP_FORMULA_PARENTS:
+                    if parent.tag in self.INLINE_FORMULA_PARENTS:
+                        inline = True
+                if not inline:
+                    inline = (
+                        node.getprevious() is not None
+                        or node.getnext() is not None
+                        or node.tail
+                    )
+                if inline:
+                    node.tag = "inline-formula"
+            return data
+
+    class AppendixPipe(plumber.Pipe):
+
+        def transform(self, data):
+            raw, xml = data
+            remove_items = []
+            for node in xml.xpath(".//app"):
+                previous = node.getprevious()
+                if previous is None or previous.tag != "app":
+                    app_group = etree.Element("app-group")
+                    node.addprevious(app_group)
+                app_group.append(deepcopy(node))
+                remove_items.append(node)
+                if node.find("label") is None:
+                    xref = xml.find(".//xref[@rid='{}']".format(node.get("id")))
+                    if xref is not None:
+                        label = etree.Element("label")
+                        label.text = get_node_text(xref)
+                        node.insert(0, label)
+                caption = node.find("caption")
+                if caption is not None:
+                    caption.tag = "REMOVETAG"
+            etree.strip_tags(xml, "REMOVETAG")
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
+            return data
+
+    class TableWrapPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//table-wrap"):
+                p = node.find("p[table]")
+                if p is not None:
+                    p.tag = "REMOVETAG"
+            etree.strip_tags(xml, "REMOVETAG")
+            return data
+
+    class RemoveXMLAttributesPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//*[@xml_tag]"):
+                for k in node.attrib.keys():
+                    if k.startswith("xml_") or k == "name":
+                        node.attrib.pop(k)
+            return data
+
     class ImgPipe(plumber.Pipe):
         def parser_node(self, node):
             node.tag = "graphic"
@@ -1742,6 +2074,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
     class CompleteFnConversionPipe(plumber.Pipe):
         """
         """
+
         def _remove_invalid_node(self, node, parent, _next):
             if _next is not None and _next.tag == "xref" and get_node_text(node) == "":
                 _id = node.attrib.get("id")
@@ -1757,9 +2090,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             parent = node.getparent()
             items = []
             while _next is not None:
-                if (_next.tag == "fn" or
-                    _next.tag == "p" and _next.attrib.get("content-type") != "break"
-                    ):
+                if (
+                    _next.tag == "fn"
+                    or _next.tag == "p"
+                    and _next.attrib.get("content-type") != "break"
+                ):
                     break
                 else:
                     items.append(_next)
@@ -1801,8 +2136,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         children[0].tag = "label"
                 elif children[0].tag in ["sup", "bold"]:
                     children_text = get_node_text(children[0])
-                    if len(children_text.split()) <= 3 and \
-                            children_text != get_node_text(node):
+                    if len(
+                        children_text.split()
+                    ) <= 3 and children_text != get_node_text(node):
                         label = etree.Element("label")
                         label_content = deepcopy(children[0])
                         label_content.tail = ""
@@ -1931,7 +2267,7 @@ class Document:
         file_paths = {}
         for a_href in self.xmltree.findall(".//a[@href]"):
             href = a_href.attrib.get("href").strip()
-            text = get_node_text(a_href).lower().strip()
+            text = a_href.get("xml_text")
 
             if text:
                 if text not in texts.keys():
@@ -2017,11 +2353,11 @@ class FileLocation:
         r = requests.get(self.remote, timeout=TIMEOUT)
         if r.status_code == 404:
             logger.error(
-                "FAILURE. REQUIRES MANUAL INTERVENTION. Not found %s. " % self.remote)
+                "FAILURE. REQUIRES MANUAL INTERVENTION. Not found %s. " % self.remote
+            )
             return
         if not r.status_code == 200:
-            logger.error(
-                "%s: %s" % (self.remote, r.status_code))
+            logger.error("%s: %s" % (self.remote, r.status_code))
             return
         return r.content
 
@@ -2029,8 +2365,7 @@ class FileLocation:
         dirname = os.path.dirname(self.local)
         if not dirname.startswith(config.get("SITE_SPS_PKG_PATH")):
             logger.info(
-                "%s: valor inválido de caminho local para ativo digital"
-                % self.local
+                "%s: valor inválido de caminho local para ativo digital" % self.local
             )
             return
         if not os.path.isdir(dirname):
@@ -2114,7 +2449,9 @@ class Remote2LocalConversion:
                     node.set(
                         "src",
                         os.path.join(
-                            self.digital_assets_path, src[src.find("/")+1:]))
+                            self.digital_assets_path, src[src.find("/") + 1 :]
+                        ),
+                    )
                 else:
                     # pode ser URL
                     node.set("link-type", "external")
@@ -2139,7 +2476,12 @@ class Remote2LocalConversion:
                 value = href.split("/")[0]
                 if "." in value:
                     if href.startswith("./") or href.startswith("../"):
-                        a_href.set("href", os.path.join(self.digital_assets_path, href[href.find("/")+1:]))
+                        a_href.set(
+                            "href",
+                            os.path.join(
+                                self.digital_assets_path, href[href.find("/") + 1 :]
+                            ),
+                        )
                     else:
                         # pode ser URL
                         a_href.set("link-type", "external")
@@ -2158,8 +2500,7 @@ class Remote2LocalConversion:
                     a_href.set("link-type", "asset")
                 else:
                     logger.info("link-type=???")
-                logger.info(
-                    "Classificou a[@href]: %s" % etree.tostring(a_href))
+                logger.info("Classificou a[@href]: %s" % etree.tostring(a_href))
 
     def _import_all_html_files_found_in_body(self):
         self._add_link_type_attribute_to_element_a()
@@ -2180,8 +2521,7 @@ class Remote2LocalConversion:
                     new_p_items.append((bodychild, new_p))
         for bodychild, new_p in new_p_items[::-1]:
             logger.info(
-                "Insere novo p com conteudo do HTML: %s"
-                % etree.tostring(new_p)
+                "Insere novo p com conteudo do HTML: %s" % etree.tostring(new_p)
             )
             bodychild.addnext(new_p)
         return len(new_p_items)
@@ -2232,13 +2572,13 @@ class Remote2LocalConversion:
         found_a_name = self.find_a_name(node_a, new_href, delete_tag)
         if not found_a_name:
             if html_body is not None:
-                node_content = self._imported_html_body(
-                    new_href, html_body, delete_tag)
+                node_content = self._imported_html_body(new_href, html_body, delete_tag)
             else:
                 node_content = self._asset_data(node_a, location, new_href)
             if node_content is not None:
                 new_p = self._create_new_p(
-                    new_href, node_content, content_type, delete_tag)
+                    new_href, node_content, content_type, delete_tag
+                )
                 return new_p
 
     def _update_a_href(self, a_href, new_href):
@@ -2280,8 +2620,7 @@ class Remote2LocalConversion:
         body = deepcopy(html_body)
         body.tag = delete_tag
         for a in body.findall(".//a"):
-            logger.info(
-                "Encontrado elem a no body importado: %s" % etree.tostring(a))
+            logger.info("Encontrado elem a no body importado: %s" % etree.tostring(a))
             href = a.get("href")
             if href and href[0] == "#":
                 a.set("href", "#" + new_href + href[1:].replace("#", "X"))
