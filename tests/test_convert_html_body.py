@@ -525,41 +525,41 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
         self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
-    def test_remove_exceding_style_tags(self):
+    def test_remove_or_move_style_tags(self):
         text = "<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(
             etree.tostring(transformed), b"<root><p/><p><b>A</b></p><p>Teste</p></root>"
         )
 
-    def test_remove_exceding_style_tags_2(self):
+    def test_remove_or_move_style_tags_2(self):
         text = "<root><p><b><i>dado<u></u></i></b></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(
             etree.tostring(transformed), b"<root><p><b><i>dado</i></b></p></root>"
         )
 
-    def test_remove_exceding_style_tags_3(self):
+    def test_remove_or_move_style_tags_3(self):
         text = "<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(
             etree.tostring(transformed),
             b"<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste</p></root>",
         )
 
-    def test_remove_exceding_style_tags_4(self):
+    def test_remove_or_move_style_tags_4(self):
         text = '<root><p><b>   <img src="x"/></b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
         expected = (
             b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>'
         )
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(etree.tostring(transformed), expected)
 
@@ -1221,7 +1221,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.SaveRawBodyPipe(pipeline),
             pipeline.DeprecatedHTMLTagsPipe(),
             pipeline.RemoveImgSetaPipe(),
-            pipeline.RemoveExcedingStyleTagsPipe(),
+            pipeline.RemoveOrMoveStyleTagsPipe(),
             pipeline.RemoveEmptyPipe(),
             pipeline.RemoveStyleAttributesPipe(),
             pipeline.RemoveCommentPipe(),
