@@ -637,6 +637,12 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 found = tree.findall(".//%s" % expected_tag)
                 self.assertIsNotNone(found)
 
+
+class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe()
+
     def test_pipe_remove_id_duplicated(self):
         text = """<root>
         <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
@@ -644,12 +650,74 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         expected = b"""<root>
         <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
         Texto 3</root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(etree.tostring(xml), expected)
 
-        raw, transformed = self._transform(
-            text,
-            ConvertElementsWhichHaveIdPipeline().EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
+    def test_pipe_asterisk_in_a_href(self):
+        text = """<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>"""
+        expected = b"""<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><sup>*</sup></root>"""
+        xml = etree.fromstring(text)
+
+        text, xml = self.pipe.transform(
+            (text, xml)
         )
-        self.assertEqual(etree.tostring(transformed), expected)
+        self.assertEqual(etree.tostring(xml), expected)
+
+    def test_pipe_remove_anchor_and_links_to_text_removes_some_elements(self):
+        text = """<root>
+        <a href="#nota" xml_tag="xref" xml_id="nota" xml_label="1" xml_reftype="fn">1</a>
+        <a name="texto" xml_tag="fn" xml_id="texto" xml_reftype="fn"/>
+        <a name="nota"  xml_tag="fn" xml_id="nota" xml_reftype="fn"/>
+        <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
+        </root>"""
+        raw, transformed = text, etree.fromstring(text)
+        raw, transformed = self.pipe.transform(
+            (raw, transformed)
+        )
+        nodes = transformed.findall(".//a[@name='nota']")
+        self.assertEqual(len(nodes), 1)
+        nodes = transformed.findall(".//a[@href='#nota']")
+        self.assertEqual(len(nodes), 1)
+
+    def test_pipe_distinguishes_nota1_and_author1(self):
+        """
+        author1 e nota1 tem xml_text="1",
+        no entanto um é nota e outro é referência bibliográfica
+        """
+        text = """<root>
+        <a name="topo" id="topo" xml_text="sobe"/>
+        <p>
+        <bold>Franz R. Novak</bold>
+        <a href="#autor1" link-type="internal" xml_text="1"><sup>1</sup></a>
+        <bold>,João Aprígio Guerra de Almeida</bold>
+        <a href="#autor2" link-type="internal" xml_text="2"><sup>2</sup></a>
+        </p>
+        <p>A relação de causa e efeito no processo de transmissão de doenças relacionadas especificamente com alimentos contaminados com material de origem fecal foi, inicialmente, defendida por Von Fristsch em 1880, quando identificou Klebsiella sp em fezes humanas. Posteriormente, a relação entre os microorganismos provenientes desse material e doenças do trato gastrintestinal foi estabelecida por Escherich, que descreveu o <italic>Bacillus coli</italic>, atualmente <italic>Escherichia coli</italic>, sugerindo que tal microorganismo pudesse ser utilizado como indicador de contaminação de origem fecal(<a href="#nota01" link-type="internal" xml_text="1">1</a>).</p>
+        <p>
+        <a name="nota01" id="nota01" xml_text="1"/>1. Guarraia LJ. Brief literature review of <italic>Klebsiella</italic> as pathogens. In: Seminar on the significance of fecal coliforms in industrial waste. E.P.A.T.R. 3., Denver (CO), USA: National Field Investigations Center; 1972. </p>
+        <p>
+        <a name="autor1" id="autor1" xml_text="1"/>
+        <a href="#topo" link-type="internal" xml_text="1"><bold><sup>1</sup></bold></a><bold>Franz R. Novak</bold> - Doutor em Microbiologia pela Universidade Federal do Rio de Janeiro. Professor nos Cursos de Mestrado e Doutorado em Saúde da Mulher e da Criança do Instituto Fernandes Figueira - IFF / Fundação Oswaldo Cruz. Membro da equipe do Banco de Leite Humano do IFF.
+        </p>
+        <p>
+        <a name="autor2" id="autor2" xml_text="2"/>
+        <a href="#topo" link-type="internal" xml_text="2"><bold><sup>2</sup></bold></a> João Aprígio Guerra de Almeida - Doutor em Saúde Pública pelo Instituto Fernandes Figueira - IFF / Fundação Oswaldo Cruz. Professor nos Cursos de Mestrado e Doutorado em Saúde da Mulher e da Criança do Instituto Fernandes Figueira. Chefe do Banco de Leite Humano do IFF.
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(
+            b"""<label href="#topo" link-type="internal" xml_text="1" label-of="autor1"><bold><sup>1</sup></bold></label>""",
+            result
+        )
+        self.assertIn(
+            b"""<label href="#topo" link-type="internal" xml_text="2" label-of="autor2"><bold><sup>2</sup></bold></label>""",
+            result
+        )
 
 
 class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
@@ -1303,18 +1371,6 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         text, xml = self.pl.CompleteElementAWithNameAndIdPipe().transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
-    def test_pipe_asterisk_in_a_href(self):
-        text = """<root><a href="#1a"><sup>*</sup></a>
-        <a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>"""
-        expected = b"""<root><a href="#1a"><sup>*</sup></a>
-        <a name="1a" id="1a"/><sup>*</sup></root>"""
-        xml = etree.fromstring(text)
-
-        text, xml = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe().transform(
-            (text, xml)
-        )
-        self.assertEqual(etree.tostring(xml), expected)
-
     def test_anchor_and_internal_link_pipe(self):
         text = b"""<root>
         <a href="#anx01" xml_tag="app" xml_reftype="app" xml_id="anx01" xml_label="anexo 1">Anexo 1</a>
@@ -1365,21 +1421,7 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         # self.assertIsNotNone(transformed.find(".//sup"))
         self.assertEqual(etree.tostring(transformed), b"<root/>")
 
-    def test_pipe_remove_anchor_and_links_to_text_removes_some_elements(self):
-        text = """<root>
-        <a href="#nota" xml_tag="xref" xml_id="nota" xml_label="1" xml_reftype="fn">1</a>
-        <a name="texto" xml_tag="fn" xml_id="texto" xml_reftype="fn"/>
-        <a name="nota"  xml_tag="fn" xml_id="nota" xml_reftype="fn"/>
-        <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
-        </root>"""
-        raw, transformed = text, etree.fromstring(text)
-        raw, transformed = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe().transform(
-            (raw, transformed)
-        )
-        nodes = transformed.findall(".//a[@name='nota']")
-        self.assertEqual(len(nodes), 1)
-        nodes = transformed.findall(".//a[@href='#nota']")
-        self.assertEqual(len(nodes), 1)
+
 
     def test_convert_elements_which_have_id_pipeline_removes_some_elements(self):
         text = """<root>

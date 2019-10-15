@@ -1632,8 +1632,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 for a_href in items[1:]:
                     found = None
                     if self._might_be_fn_label(a_href):
-                        found = self._find_a_name_which_same_xml_text(
-                            root, a_href.get("xml_text")
+                        found = self._find_a_name_with_same_xml_text(
+                            root, a_href
                         )
                     if found is None:
                         logger.info("remove: %s" % etree.tostring(a_href))
@@ -1660,10 +1660,19 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     ]
                 )
 
-        def _find_a_name_which_same_xml_text(self, root, xml_text):
-            for item in root.findall(".//a[@xml_text='{}']".format(xml_text)):
-                if item.get("name"):
-                    return item
+        def _find_a_name_with_same_xml_text(self, root, a_href):
+            xml_text = a_href.get("xml_text")
+            if xml_text:
+                a_items = root.findall(".//a[@xml_text='{}']".format(xml_text))
+                a_name = [item for item in a_items if item.get("name")]
+                if len(a_name) == 1:
+                    return a_name[0]
+                for i, a in enumerate(a_items):
+                    if a is a_href:
+                        if i >= 1 and a_items[i-1].get("name"):
+                            return a_items[i-1]
+                        if i + 1 < len(a_items) and a_items[i+1].get("name"):
+                            return a_items[i+1]
 
         def transform(self, data):
             raw, xml = data
@@ -2348,8 +2357,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def _create_label(self, new_fn, node):
             label = node.find(".//label")
             if label is not None:
-                new_fn.append(deepcopy(label))
-                logger.info(etree.tostring(new_fn))
                 return
 
             children = node.getchildren()
