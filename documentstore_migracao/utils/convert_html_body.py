@@ -1299,6 +1299,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
+            self.SwitchElementsAPipe(),
             self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
@@ -1538,6 +1539,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for name, a_name_and_hrefs in a_names.items():
                 new_id = None
                 a_name, a_hrefs = a_name_and_hrefs
+
                 complete, incomplete = self._classify_nodes(a_hrefs)
                 if complete:
                     text, tag, reftype, new_id = complete
@@ -1632,9 +1634,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 for a_href in items[1:]:
                     found = None
                     if self._might_be_fn_label(a_href):
-                        found = self._find_a_name_with_same_xml_text(
-                            root, a_href
-                        )
+                        found = self._find_a_name_with_same_xml_text(root, a_href)
                     if found is None:
                         logger.info("remove: %s" % etree.tostring(a_href))
                         _remove_tag(a_href)
@@ -1669,10 +1669,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     return a_name[0]
                 for i, a in enumerate(a_items):
                     if a is a_href:
-                        if i >= 1 and a_items[i-1].get("name"):
-                            return a_items[i-1]
-                        if i + 1 < len(a_items) and a_items[i+1].get("name"):
-                            return a_items[i+1]
+                        if i >= 1 and a_items[i - 1].get("name"):
+                            return a_items[i - 1]
+                        if i + 1 < len(a_items) and a_items[i + 1].get("name"):
+                            return a_items[i + 1]
 
         def transform(self, data):
             raw, xml = data
@@ -1684,6 +1684,28 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 self._exclude_invalid_unique_a_href(items)
             etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe - fim")
+            return data
+
+    class SwitchElementsAPipe(plumber.Pipe):
+        def parser_node(self, node):
+            if (node.tail or "").strip():
+                return
+            xml_text = node.get("xml_text")
+            if xml_text:
+                if (
+                    not xml_text[0].isalnum()
+                    or xml_text[0].isdigit()
+                    or xml_text[0].lower() == xml_text[0]
+                ):
+                    _next = node.getnext()
+                    if _next is not None and _next.tag == "a" and _next.get("name"):
+                        _next.addnext(deepcopy(node))
+                        parent = node.getparent()
+                        parent.remove(node)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
             return data
 
     class ApplySuggestedConversionPipe(plumber.Pipe):

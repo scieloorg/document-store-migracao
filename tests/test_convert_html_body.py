@@ -661,9 +661,7 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         <a name="1a" id="1a"/><sup>*</sup></root>"""
         xml = etree.fromstring(text)
 
-        text, xml = self.pipe.transform(
-            (text, xml)
-        )
+        text, xml = self.pipe.transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
     def test_pipe_remove_anchor_and_links_to_text_removes_some_elements(self):
@@ -674,9 +672,7 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
         </root>"""
         raw, transformed = text, etree.fromstring(text)
-        raw, transformed = self.pipe.transform(
-            (raw, transformed)
-        )
+        raw, transformed = self.pipe.transform((raw, transformed))
         nodes = transformed.findall(".//a[@name='nota']")
         self.assertEqual(len(nodes), 1)
         nodes = transformed.findall(".//a[@href='#nota']")
@@ -712,11 +708,11 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         result = etree.tostring(xml)
         self.assertIn(
             b"""<label href="#topo" link-type="internal" xml_text="1" label-of="autor1"><bold><sup>1</sup></bold></label>""",
-            result
+            result,
         )
         self.assertIn(
             b"""<label href="#topo" link-type="internal" xml_text="2" label-of="autor2"><bold><sup>2</sup></bold></label>""",
-            result
+            result,
         )
 
 
@@ -1421,8 +1417,6 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         # self.assertIsNotNone(transformed.find(".//sup"))
         self.assertEqual(etree.tostring(transformed), b"<root/>")
 
-
-
     def test_convert_elements_which_have_id_pipeline_removes_some_elements(self):
         text = """<root>
         <a href="#nt1">1</a>
@@ -2103,3 +2097,23 @@ class TestFnPipe(unittest.TestCase):
         self.assertEqual(xml.find(".//fn/label").text, "*")
         self.assertEqual(xml.find(".//fn/p/email").text, "chrisg@vortex.ufrgs.br")
         self.assertIn("Corresponding author", xml.find(".//fn/p").text, "*")
+
+
+class TestSwitchElementsAPipe(unittest.TestCase):
+    def test_switches_elements_a(self):
+        text = """<root>
+        <body>
+            <a href="#top2" xml_text="**">**</a>
+            <a name="back2"/> Amostra depositada na Coleção
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = (
+            ConvertElementsWhichHaveIdPipeline()
+            .SwitchElementsAPipe()
+            .transform((text, xml))
+        )
+        a = xml.findall(".//a")
+        self.assertIn("Amostra depositada na Coleção", a[1].tail)
+        self.assertEqual("#top2", a[1].get("href"))
+        self.assertEqual("back2", a[0].get("name"))
