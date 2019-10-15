@@ -1505,13 +1505,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
             incomplete = []
             complete = None
             for node in nodes:
-                data = [
+                data = (
                     node.attrib.get("xml_label"),
                     node.attrib.get("xml_tag"),
                     node.attrib.get("xml_reftype"),
                     node.attrib.get("xml_id"),
-                ]
-                if all(data):
+                )
+                if all(data) and not complete:
                     complete = data
                 else:
                     incomplete.append(node)
