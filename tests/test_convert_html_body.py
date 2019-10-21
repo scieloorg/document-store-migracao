@@ -1499,10 +1499,6 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
             with self.subTest(step + " " + str(i)):
                 result = etree.tostring(node)
                 expected = etree.tostring(expected_node[i])
-                if result != expected:
-                    print("")
-                    print(result)
-                    print(expected)
                 self.assertEqual(result, expected)
 
     def test_add_xml_attribs_to_a_href_from_text(self):
@@ -1965,7 +1961,6 @@ class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
 
     def test_transform__creates_label_from_style_tag(self):
         text = """<root><fn><sup>**</sup> TEXTO NOTA</fn></root>"""
-        expected = b"""<root><fn><label><sup>**</sup></label> TEXTO NOTA</fn></root>"""
         expected = (
             b"""<root><fn><label><sup>**</sup></label><p> TEXTO NOTA</p></fn></root>"""
         )
@@ -2024,8 +2019,6 @@ class TestFnPipe(unittest.TestCase):
         text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.BR2PPipe().transform((text, xml))
-
-        print(etree.tostring(xml))
 
         p = xml.findall(".//fn/p")
         self.assertEqual(xml.find(".//fn/label/bold").text, "Correspondence to:")
