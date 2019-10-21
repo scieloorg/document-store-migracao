@@ -878,13 +878,14 @@ class HTML2SPSPipeline(object):
 
         def parser_node(self, node):
             href = node.get("href")
-            if href.startswith("#") or node.get("link-type") == "internal":
+            if href[0] in ["#", "."] or href.startswith("/img/revistas/"):
                 return
             if "mailto" in href or "@" in href:
                 return self._create_email(node)
-            if ":" in href or node.get("link-type") == "external":
+            if href.startswith("//") or ":" in href:
                 return self._create_ext_link(node)
-            if href.startswith("//"):
+            href = href.split("/")[0]
+            if href and href.count(".") and href.replace(".", ""):
                 return self._create_ext_link(node)
 
         def transform(self, data):
@@ -2014,7 +2015,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
     class AppendixPipe(plumber.Pipe):
-
         def transform(self, data):
             raw, xml = data
             remove_items = []
@@ -2440,7 +2440,7 @@ class Remote2LocalConversion:
             src = node.get("src")
             if ":" in src:
                 node.set("link-type", "external")
-                logger.info("Classificou: %s" % etree.tostring(node))
+                logger.info("Added @link-type: %s" % etree.tostring(node))
                 continue
 
             value = src.split("/")[0]
@@ -2455,7 +2455,7 @@ class Remote2LocalConversion:
                 else:
                     # pode ser URL
                     node.set("link-type", "external")
-                    logger.info("Classificou: %s" % etree.tostring(node))
+                    logger.info("Added @link-type: %s" % etree.tostring(node))
                     continue
                 fix_img_revistas_path(node)
 
@@ -2465,12 +2465,12 @@ class Remote2LocalConversion:
                 href = a_href.get("href")
                 if ":" in href:
                     a_href.set("link-type", "external")
-                    logger.info("Classificou: %s" % etree.tostring(a_href))
+                    logger.info("Added @link-type: %s" % etree.tostring(a_href))
                     continue
 
                 if href and href[0] == "#":
                     a_href.set("link-type", "internal")
-                    logger.info("Classificou: %s" % etree.tostring(a_href))
+                    logger.info("Added @link-type: %s" % etree.tostring(a_href))
                     continue
 
                 value = href.split("/")[0]
@@ -2485,11 +2485,11 @@ class Remote2LocalConversion:
                     else:
                         # pode ser URL
                         a_href.set("link-type", "external")
-                        logger.info("Classificou a[@href]: %s" % etree.tostring(a_href))
+                        logger.info("Added @link-type: %s" % etree.tostring(a_href))
                         continue
 
                 fix_img_revistas_path(a_href)
-
+                href = a_href.get("href")
                 basename = os.path.basename(href)
                 f, ext = os.path.splitext(basename)
                 if ".htm" in ext:
@@ -2499,8 +2499,8 @@ class Remote2LocalConversion:
                 elif href.startswith("/img/revistas"):
                     a_href.set("link-type", "asset")
                 else:
-                    logger.info("link-type=???")
-                logger.info("Classificou a[@href]: %s" % etree.tostring(a_href))
+                    a_href.set("link-type", "unknown")
+                logger.info("Added @link-type: %s" % etree.tostring(a_href))
 
     def _import_all_html_files_found_in_body(self):
         self._add_link_type_attribute_to_element_a()
