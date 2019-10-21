@@ -62,9 +62,6 @@ setuptools.setup(
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         "Operating System :: OS Independent",
     ],
-    dependency_links=[
-        "git://github.com/scieloorg/kernel.git@71eda5b8a0f699cdc88d8251261c5e99c7e9d786#egg=scielo-kernel",
-    ],
 
     entry_points="""\
         [console_scripts]
