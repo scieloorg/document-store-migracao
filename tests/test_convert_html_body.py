@@ -2110,3 +2110,135 @@ class TestSwitchElementsAPipe(unittest.TestCase):
         self.assertIn("Amostra depositada na Coleção", a[1].tail)
         self.assertEqual("#top2", a[1].get("href"))
         self.assertEqual("back2", a[0].get("name"))
+
+
+class TestCompleteElementAWithXMLTextPipe(unittest.TestCase):
+    def test_add_xml_text_to_a_href_in_p_identifies_table_sequence(self):
+        text = """<root>
+        <p><a href="#tab1">Tabelas 1</a> e <a href="#tab2">2</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pipeline.CompleteElementAWithXMLTextPipe().transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(b'<a href="#tab1" xml_text="tabelas 1">Tabelas 1</a>', result)
+        self.assertIn(b'<a href="#tab2" xml_text="tabelas 2">2</a>', result)
+
+    def test_add_xml_text_to_a_href_in_p_identifies_table_and_fn(self):
+        text = """<root>
+        <p><a href="#tab3">Tabela 3</a> e <a href="#f2">2</a></p>
+        </root>"""
+        xml = etree.fromstring(text)
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pipeline.CompleteElementAWithXMLTextPipe().transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(b'<a href="#tab3" xml_text="tabela 3">Tabela 3</a>', result)
+        self.assertIn(b'<a href="#f2" xml_text="2">2</a>', result)
+
+    def test_add_xml_text_to_other_a_update_a_name(self):
+        text = """<root>
+        <p><a href="#tab1">Tabelas 1</a> e <a href="#tab2">2</a></p>
+        <p><a name="tab1"/>Tabela 1</p>
+        <p><a name="tab2"/>Tabela 2</p>
+        </root>"""
+        xml = etree.fromstring(text)
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pipeline.CompleteElementAWithXMLTextPipe().transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(b'<a href="#tab1" xml_text="tabelas 1">Tabelas 1</a>', result)
+        self.assertIn(b'<a href="#tab2" xml_text="tabelas 2">2</a>', result)
+        self.assertIn(b'<a name="tab1" xml_text="tabelas 1"/>', result)
+        self.assertIn(b'<a name="tab2" xml_text="tabelas 2"/>', result)
+
+
+class TestTablePipe(unittest.TestCase):
+    def setUp(self):
+        self.pipe = ConvertElementsWhichHaveIdPipeline().TablePipe()
+
+    def test_table_must_be_child_of_table_wrap(self):
+        text = """<root>
+        <p>
+            <table-wrap><p>Texto <table/></p></table-wrap>
+        </p>
+        </root>"""
+        expected = """<root>
+        <p>
+            <table-wrap><p>Texto </p><table/></table-wrap>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIn(
+            b"<table-wrap><p>Texto </p><table/></table-wrap>", etree.tostring(xml)
+        )
+
+    def test_table_in_fig_must_be_converted_to_array(self):
+        text = """<root>
+        <p>
+            <fig><p>Texto <table/></p></fig>
+        </p>
+        </root>"""
+        expected = """<root>
+        <p>
+            <fig><p>Texto </p><array/></fig>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIn(
+            b"<fig><p>Texto </p><array><tbody/></array></fig>", etree.tostring(xml)
+        )
+
+    def test_table_which_is_not_table_wrap_child_must_be_converted_to_array_and_create_tbody(
+        self
+    ):
+        text = """<root>
+        <table>
+        <tr valign="bottom">
+        <td align="left">3</td>
+        <td align="char" char="." charoff="35%">14.4411</td>
+        <td align="center">
+        <graphic id="g14"/></td>
+        <td align="char" char="." charoff="35%">14.4411</td>
+        <td align="center">
+        <graphic id="g15"/></td>
+        <td align="char" char="." charoff="35%">14.4414</td>
+        <td align="center">
+        <graphic id="g16"/></td>
+        <td align="char" char="." charoff="35%">14.4414</td>
+        <td align="center">
+        <graphic id="g17"/></td>
+        </tr>
+        </table>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find("array/tbody"))
+        self.assertIsNone(xml.find(".//table"))
+
+    def test_table_which_is_not_table_wrap_child_must_be_converted_to_array(self):
+        text = """<root>
+        <table>
+        <tbody>
+        <tr valign="bottom">
+        <td align="left">3</td>
+        <td align="char" char="." charoff="35%">14.4411</td>
+        <td align="center">
+        <graphic id="g14"/></td>
+        <td align="char" char="." charoff="35%">14.4411</td>
+        <td align="center">
+        <graphic id="g15"/></td>
+        <td align="char" char="." charoff="35%">14.4414</td>
+        <td align="center">
+        <graphic id="g16"/></td>
+        <td align="char" char="." charoff="35%">14.4414</td>
+        <td align="center">
+        <graphic id="g17"/></td>
+        </tr>
+        </tbody>
+        </table>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find("array/tbody"))
+        self.assertIsNone(xml.find(".//table"))
