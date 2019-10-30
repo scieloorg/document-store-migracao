@@ -58,6 +58,10 @@ migrate_isis import /home/user/jsons/title.json --type journal --uri "mongodb://
 
 - Este comando executa a importação do arquivo `/home/user/jsons/title.json`, que contem periódicos (`--type journal`), inserindo em uma base chamada *document-store* (`--db document-store`) com os devidos parâmetros para conexão com o banco (`--uri "mongodb://usuario:senha@localhost/?authSource=admin"`).
 
+## Testes Automatizados
+
+No servidor local:
+`python setup.py test`
 
 #### Informações gerais
 
