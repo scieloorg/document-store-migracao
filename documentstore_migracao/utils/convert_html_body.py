@@ -21,6 +21,24 @@ TIMEOUT = config.get("TIMEOUT") or 5
 ASSET_TAGS = ("disp-formula", "fig", "table-wrap", "app")
 
 
+def move_tail_into_node(node):
+    """
+    Move o conteúdo de node.tail para dentro de node
+    Usa IGN para evitar segment fault
+    Remove IGN no final
+    """
+    if (node.tail or "").strip():
+        children = node.getchildren()
+        if children:
+            e = etree.Element("IGN")
+            e.text = node.tail
+            children[-1].append(e)
+        else:
+            node.text = node.tail
+        node.tail = ""
+        etree.strip_tags(node, "IGN")
+
+
 def _remove_tag(node, remove_content=False):
     parent = node.getparent()
     if parent is None:
@@ -153,12 +171,10 @@ class HTML2SPSPipeline(object):
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
-            self.RemoveExcedingStyleTagsPipe(),
+            self.RemoveOrMoveStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.AHrefPipe(),
-            self.BRPipe(),
-            self.PPipe(),
             self.DivPipe(),
             self.LiPipe(),
             self.OlPipe(),
@@ -170,7 +186,11 @@ class HTML2SPSPipeline(object):
             self.UPipe(),
             self.BPipe(),
             self.StrongPipe(),
+            self.RemoveInvalidBRPipe(),
             self.ConvertElementsWhichHaveIdPipe(),
+            self.RemoveInvalidBRPipe(),
+            self.BRPipe(),
+            self.BR2PPipe(),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
             self.BlockquotePipe(),
@@ -180,9 +200,9 @@ class HTML2SPSPipeline(object):
             self.GraphicChildrenPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
+            self.PPipe(),
             self.RemoveRefIdPipe(),
             self.FixIdAndRidPipe(super_obj=self),
-            # self.SanitizationPipe(),
         )
 
     def deploy(self, raw):
@@ -236,17 +256,52 @@ class HTML2SPSPipeline(object):
                     etree.strip_tags(xml, tag)
             return data
 
-    class RemoveExcedingStyleTagsPipe(plumber.Pipe):
-        TAGS = ("b", "i", "em", "strong", "u")
+    class RemoveOrMoveStyleTagsPipe(plumber.Pipe):
+        STYLE_TAGS = ("i", "b", "em", "strong", "u", "sup", "sub")
+
+        def _move_style_tag_into_children(self, node):
+            for child in node.findall(".//*"):
+                if child.text and not child.getchildren():
+                    e = etree.Element(node.tag)
+                    e.text = child.text
+                    child.text = ""
+                    child.append(e)
+            node.tag = "STRIPTAG"
+
+        def _mark_style_tags_to_move_or_remove(self, xml):
+            for style_tag in self.STYLE_TAGS:
+                for node in xml.findall(".//" + style_tag):
+                    text = get_node_text(node)
+                    children = node.getchildren()
+                    if not text:
+                        node.tag = "STRIPTAG"
+                    elif node.find(".//{}".format(style_tag)) is not None:
+                        node.tag = "STRIPTAG"
+                    else:
+                        move = any(
+                            (
+                                child.tag
+                                for child in children
+                                if child.tag not in self.STYLE_TAGS
+                            )
+                        )
+                        if move:
+                            node.set("move", "true")
+            etree.strip_tags(xml, "STRIPTAG")
+
+        def _remove_or_move_style_tags(self, xml):
+            while True:
+                self._mark_style_tags_to_move_or_remove(xml)
+                if xml.find(".//*[@move]") is None:
+                    break
+                for node in xml.findall(".//*[@move]"):
+                    node.attrib.pop("move")
+                    self._move_style_tag_into_children(node)
+                etree.strip_tags(xml, "STRIPTAG")
 
         def transform(self, data):
             raw, xml = data
-            for tag in self.TAGS:
-                for node in xml.findall(".//" + tag):
-                    text = get_node_text(node)
-                    if not text:
-                        node.tag = "STRIPTAG"
-            etree.strip_tags(xml, "STRIPTAG")
+            self._remove_or_move_style_tags(xml)
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
@@ -333,29 +388,105 @@ class HTML2SPSPipeline(object):
         ]
 
         def transform(self, data):
+            logger.info("BRPipe.transform - inicio")
             raw, xml = data
-            changed = False
-            nodes = xml.findall("*[br]")
-            for node in nodes:
+            for node in xml.findall(".//*[br]"):
                 if node.tag in self.ALLOWED_IN:
                     for br in node.findall("br"):
                         br.tag = "break"
-                elif node.tag == "p":
-                    if node.text:
-                        p = etree.Element("p")
-                        p.set("content-type", "break")
-                        p.text = node.text
-                        node.insert(0, p)
-                        node.text = ""
-                    for br in node.findall("br"):
-                        br.tag = "p"
-                        br.set("content-type", "break")
-                        if br.tail:
-                            br.text = br.tail
-                            br.tail = ""
-                    _remove_tag(node)
+            logger.info("BRPipe.transform - inicio")
+            return data
 
-            etree.strip_tags(xml, "br")
+    class RemoveInvalidBRPipe(plumber.Pipe):
+        def _remove_first_or_last_br(self, xml):
+            """
+            b'<bold><br/>Luis Huicho</bold>
+            b'<bold>Luis Huicho</bold>
+            """
+            logger.info("RemoveInvalidBRPipe._remove_br - inicio")
+            while True:
+                change = False
+                for node in xml.findall(".//*[br]"):
+                    first = node.getchildren()[0]
+                    last = node.getchildren()[-1]
+                    if (node.text or "").strip() == "" and first.tag == "br":
+                        first.tag = "REMOVEINVALIDBRPIPEREMOVETAG"
+                        change = True
+                    if (last.tail or "").strip() == "" and last.tag == "br":
+                        last.tag = "REMOVEINVALIDBRPIPEREMOVETAG"
+                        change = True
+                if not change:
+                    break
+            etree.strip_tags(xml, "REMOVEINVALIDBRPIPEREMOVETAG")
+            logger.info("RemoveInvalidBRPipe._remove_br - fim")
+
+        def transform(self, data):
+            logger.info("RemoveInvalidBRPipe - inicio")
+            text, xml = data
+            self._remove_first_or_last_br(xml)
+            logger.info("RemoveInvalidBRPipe - fim")
+            return data
+
+    class BR2PPipe(plumber.Pipe):
+        def _create_p(self, node, nodes, text):
+            logger.info("BR2PPipe._create_p - inicio")
+            if nodes or (text or "").strip():
+                logger.info("BR2PPipe._create_p - element p")
+                p = etree.Element("p")
+                if node.tag not in ["REMOVE_P", "p"]:
+                    p.set("content-type", "break")
+                p.text = text
+                logger.info("BR2PPipe._create_p - append nodes")
+                for n in nodes:
+                    p.append(deepcopy(n))
+                logger.info("BR2PPipe._create_p - node.append(p)")
+                node.append(p)
+            logger.info("BR2PPipe._create_p - fim")
+
+        def _create_new_node(self, node):
+            """
+            <root><p>texto <br/> texto 1</p></root>
+            <root><p><p content-type= "break">texto </p><p content-type= "break"> texto 1</p></p></root>
+            """
+            logger.info("BR2PPipe._create_new_node - inicio")
+            new = etree.Element(node.tag)
+            for attr, value in node.attrib.items():
+                new.set(attr, value)
+            text = node.text
+            nodes = []
+            for i, child in enumerate(node.getchildren()):
+                if child.tag == "br":
+                    self._create_p(new, nodes, text)
+                    nodes = []
+                    text = child.tail
+                else:
+                    nodes.append(child)
+            self._create_p(new, nodes, text)
+            logger.info("BR2PPipe._create_new_node - fim")
+            return new
+
+        def _executa(self, xml):
+            logger.info("BR2PPipe._executa - inicio")
+            while True:
+                node = xml.find(".//*[br]")
+                if node is None:
+                    break
+                new = self._create_new_node(node)
+
+                node.addprevious(new)
+                if node.tag == "p":
+                    new.tag = "BRTOPPIPEREMOVETAG"
+                p = node.getparent()
+                if p is not None:
+                    p.remove(node)
+            etree.strip_tags(xml, "BRTOPPIPEREMOVETAG")
+            logger.info("BR2PPipe._executa - fim")
+
+        def transform(self, data):
+            logger.info("BR2PPipe - inicio")
+            text, xml = data
+            self._executa(xml)
+            logger.info("BR2PPipe - fim")
             return data
 
     class PPipe(plumber.Pipe):
@@ -391,17 +522,16 @@ class HTML2SPSPipeline(object):
             "th",
             "trans-abstract",
         ]
+        ATTRIBUTES = ("content-type", "id", "specific-use", "xml:base", "xml:lang")
 
         def parser_node(self, node):
-            _id = node.attrib.pop("id", None)
-            node.attrib.clear()
-            if _id:
-                node.set("id", _id)
-
-            etree.strip_tags(node, "big")
-
+            if "class" in node.attrib.keys() and not node.get("content-type"):
+                node.set("content-type", node.get("class"))
+            for attr in node.attrib.keys():
+                if attr not in self.ATTRIBUTES:
+                    node.attrib.pop(attr)
             parent = node.getparent()
-            if not parent.tag in self.TAGS:
+            if parent.tag not in self.TAGS:
                 logger.warning("Tag `p` in `%s`", parent.tag)
 
         def transform(self, data):
@@ -1170,6 +1300,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
+            self.SwitchElementsAPipe(),
             self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
@@ -1183,7 +1314,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.TableWrapPipe(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
-            self.CompleteFnConversionPipe(),
+            self.FnMovePipe(),
+            self.FnLabelOfPipe(),
+            self.FnAddContentPipe(),
+            self.FnIdentifyLabelAndPPipe(),
+            self.FnFixContentPipe(),
         )
 
     def deploy(self, raw):
@@ -1201,12 +1336,25 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if "thumb" in path:
                 parent = node.getparent()
                 _remove_tag(node, True)
-                if parent.tag == "a" and parent.attrib.get("href"):
+                self._fix_a_hef_text(parent)
+
+        def _fix_a_hef_text(self, parent):
+            if parent is not None and parent.tag == "a" and parent.get("href"):
+                label_text = get_node_text(parent)
+                if label_text:
+                    words = label_text.split()
+                    if len(words) >= 2:
+                        if words[1][0].isdigit():
+                            label_text = " ".join(words[:2])
+                        elif not words[1][0].isalnum():
+                            label_text = words[0]
+                if label_text:
                     for child in parent.getchildren():
-                        _remove_tag(child, True)
-                    parent.tag = "img"
-                    parent.set("src", parent.attrib.pop("href"))
-                    parent.text = ""
+                        if child.text and child.text.strip().startswith(label_text):
+                            child.text = ""
+                        elif child.tail and child.tail.strip().startswith(label_text):
+                            child.tail = ""
+                    parent.text = label_text
 
         def transform(self, data):
             raw, xml = data
@@ -1371,13 +1519,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
             incomplete = []
             complete = None
             for node in nodes:
-                data = [
+                data = (
                     node.attrib.get("xml_label"),
                     node.attrib.get("xml_tag"),
                     node.attrib.get("xml_reftype"),
                     node.attrib.get("xml_id"),
-                ]
-                if all(data):
+                )
+                if all(data) and not complete:
                     complete = data
                 else:
                     incomplete.append(node)
@@ -1405,6 +1553,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for name, a_name_and_hrefs in a_names.items():
                 new_id = None
                 a_name, a_hrefs = a_name_and_hrefs
+
                 complete, incomplete = self._classify_nodes(a_hrefs)
                 if complete:
                     text, tag, reftype, new_id = complete
@@ -1499,9 +1648,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 for a_href in items[1:]:
                     found = None
                     if self._might_be_fn_label(a_href):
-                        found = self._find_a_name_which_same_xml_text(
-                            root, a_href.get("xml_text")
-                        )
+                        found = self._find_a_name_with_same_xml_text(root, a_href)
                     if found is None:
                         logger.info("remove: %s" % etree.tostring(a_href))
                         _remove_tag(a_href)
@@ -1527,10 +1674,19 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     ]
                 )
 
-        def _find_a_name_which_same_xml_text(self, root, xml_text):
-            for item in root.findall(".//a[@xml_text='{}']".format(xml_text)):
-                if item.get("name"):
-                    return item
+        def _find_a_name_with_same_xml_text(self, root, a_href):
+            xml_text = a_href.get("xml_text")
+            if xml_text:
+                a_items = root.findall(".//a[@xml_text='{}']".format(xml_text))
+                a_name = [item for item in a_items if item.get("name")]
+                if len(a_name) == 1:
+                    return a_name[0]
+                for i, a in enumerate(a_items):
+                    if a is a_href:
+                        if i >= 1 and a_items[i - 1].get("name"):
+                            return a_items[i - 1]
+                        if i + 1 < len(a_items) and a_items[i + 1].get("name"):
+                            return a_items[i + 1]
 
         def transform(self, data):
             raw, xml = data
@@ -1542,6 +1698,28 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 self._exclude_invalid_unique_a_href(items)
             etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe - fim")
+            return data
+
+    class SwitchElementsAPipe(plumber.Pipe):
+        def parser_node(self, node):
+            if (node.tail or "").strip():
+                return
+            xml_text = node.get("xml_text")
+            if xml_text:
+                if (
+                    not xml_text[0].isalnum()
+                    or xml_text[0].isdigit()
+                    or xml_text[0].lower() == xml_text[0]
+                ):
+                    _next = node.getnext()
+                    if _next is not None and _next.tag == "a" and _next.get("name"):
+                        _next.addnext(deepcopy(node))
+                        parent = node.getparent()
+                        parent.remove(node)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
             return data
 
     class ApplySuggestedConversionPipe(plumber.Pipe):
@@ -2023,17 +2201,21 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if previous is None or previous.tag != "app":
                     app_group = etree.Element("app-group")
                     node.addprevious(app_group)
-                app_group.append(deepcopy(node))
-                remove_items.append(node)
                 if node.find("label") is None:
-                    xref = xml.find(".//xref[@rid='{}']".format(node.get("id")))
-                    if xref is not None:
+                    text = None
+                    for xref in xml.findall(".//xref[@rid='{}']".format(node.get("id"))):
+                        text = get_node_text(xref)
+                        if text:
+                            break
+                    if text:
                         label = etree.Element("label")
-                        label.text = get_node_text(xref)
+                        label.text = text
                         node.insert(0, label)
                 caption = node.find("caption")
                 if caption is not None:
                     caption.tag = "REMOVETAG"
+                app_group.append(deepcopy(node))
+                remove_items.append(node)
             etree.strip_tags(xml, "REMOVETAG")
             for item in remove_items:
                 parent = item.getparent()
@@ -2071,140 +2253,319 @@ class ConvertElementsWhichHaveIdPipeline(object):
             _process(xml, "img", self.parser_node)
             return data
 
-    class CompleteFnConversionPipe(plumber.Pipe):
+    class FnMovePipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            self._move_fn_out_of_style_tags(xml)
+            self._remove_p_if_fn_is_only_child(xml)
+            return data
+
+        def _move_fn_out_of_style_tags(self, xml):
+            changed = True
+            while changed:
+                changed = False
+                for tag in ("sup", "bold", "italic"):
+                    self._identify_fn_to_move_out(xml, tag)
+                    ret = self._move_fn_out(xml)
+                    if ret:
+                        changed = True
+
+        def _remove_p_if_fn_is_only_child(self, xml):
+            for p in xml.findall(".//p[fn]"):
+                if len(p.findall(".//*")) == 1 and not get_node_text(p):
+                    p.tag = "REMOVEPIFFNISONLYCHLDREMOVETAG"
+            etree.strip_tags(xml, "REMOVEPIFFNISONLYCHLDREMOVETAG")
+
+        def _identify_fn_to_move_out(self, xml, style_tag):
+            for node in xml.findall(".//{}[fn]".format(style_tag)):
+                text = (node.text or "").strip()
+                children = node.getchildren()
+                if children[0].tag == "fn" and not text:
+                    node.set("move", "backward")
+                elif children[-1].tag == "fn" and not (children[-1].tail or "").strip():
+                    node.set("move", "forward")
+
+        def _move_fn_out(self, xml):
+            changed = False
+            for node in xml.findall(".//*[@move]"):
+                move = node.attrib.pop("move")
+                if move == "backward":
+                    self._move_fn_out_and_backward(node)
+                elif move == "forward":
+                    self._move_fn_out_and_forward(node)
+                changed = True
+            return changed
+
+        def _move_fn_out_and_backward(self, node):
+            fn = node.find("fn")
+            fn_copy = deepcopy(fn)
+            fn_copy.tail = ""
+            node.addprevious(fn_copy)
+            node.text = fn.tail
+            node.remove(fn)
+
+        def _move_fn_out_and_forward(self, node):
+            fn = node.getchildren()[-1]
+            fn_copy = deepcopy(fn)
+            node.addnext(fn_copy)
+            node.remove(fn)
+
+    class FnLabelOfPipe(plumber.Pipe):
+        """Cria fn a partir de label[@label-of]
+        ou adiciona label em fn
         """
-        """
-
-        def _remove_invalid_node(self, node, parent, _next):
-            if _next is not None and _next.tag == "xref" and get_node_text(node) == "":
-                _id = node.attrib.get("id")
-                if _id.startswith("fn") or _id.startswith("replace_by_reftype"):
-                    if _id.endswith("a"):
-                        _remove_tag(node)
-                    else:
-                        _remove_tag(_next)
-                    return True
-
-        def _move_fn_tail_into_fn(self, node):
-            _next = node.getnext()
-            parent = node.getparent()
-            items = []
-            while _next is not None:
-                if (
-                    _next.tag == "fn"
-                    or _next.tag == "p"
-                    and _next.attrib.get("content-type") != "break"
-                ):
-                    break
-                else:
-                    items.append(_next)
-                    _next = _next.getnext()
-            if len(items) > 0 or node.tail:
-                node.text = node.tail
-                for item in items:
-                    node.append(deepcopy(item))
-                    parent.remove(item)
-                node.tail = ""
-
-        def _identify_label_and_p(self, node):
-            """Para fn que contém text, mas nao contém filhos,
-            identificar label (se houver) e p.
-            """
-            children = node.getchildren()
-            self._create_label(node)
-            if len(children) == 0:
-                self._create_p_for_simple_content(node)
-            else:
-                self._create_p_for_complex_content(node)
-
-        def _create_label(self, node):
-            parent = node.getparent()
-            node_text = get_node_text(node)
-            children = node.getchildren()
-            if (node.text or "").strip():
-                texts = node.text.split()
-                if not texts[0].isalpha():
-                    label = etree.Element("label")
-                    label.text = texts[0]
-                    node.insert(0, label)
-                    label.tail = node.text.replace(texts[0], "")
-                    node.text = ""
-            elif children:
-                if children[0].tag == "p":
-                    elem = children[0].find("*")
-                    if elem is not None and elem.tag in ["sup", "bold"]:
-                        children[0].tag = "label"
-                elif children[0].tag in ["sup", "bold"]:
-                    children_text = get_node_text(children[0])
-                    if len(
-                        children_text.split()
-                    ) <= 3 and children_text != get_node_text(node):
-                        label = etree.Element("label")
-                        label_content = deepcopy(children[0])
-                        label_content.tail = ""
-                        label.append(label_content)
-                        label.tail = children[0].tail
-                        node.insert(0, label)
-                        node.remove(children[0])
-
-        def _create_p_for_simple_content(self, node):
-            p = etree.Element("p")
-            label = node.find("label")
-            if label is None:
-                p.text = node.text
-                node.text = ""
-            else:
-                p.text = label.tail.strip()
-                label.tail = ""
-            node.append(p)
-
-        def _add_new_p_to_node(self, node, p_children):
-            if p_children:
-                new_p = etree.Element("p")
-                for item in p_children:
-                    try:
-                        new_p.append(item)
-                    except TypeError:
-                        new_p.text = item
-                node.append(new_p)
-
-        def _create_p_for_complex_content(self, node):
-            node_copy = deepcopy(node)
-
-            for child in node.getchildren():
-                node.remove(child)
-
-            p_children = []
-            for child in node_copy.getchildren():
-                if child.tag in ["label", "p"]:
-                    self._add_new_p_to_node(node, p_children)
-                    child_copy = deepcopy(child)
-                    if (child_copy.tail or "").strip():
-                        p_children.append(child_copy.tail)
-                        child_copy.tail = ""
-                    child_copy.attrib.clear()
-                    node.append(child_copy)
-                else:
-                    p_children.append(child)
-            self._add_new_p_to_node(node, p_children)
-
-        def update(self, node):
-            parent = node.getparent()
-            _next = node.getnext()
-            fn_text = get_node_text(node)
-            fn_children = node.getchildren()
-            invalid_node = self._remove_invalid_node(node, parent, _next)
-            if not invalid_node:
-                if not fn_text:
-                    self._move_fn_tail_into_fn(node)
-                self._identify_label_and_p(node)
 
         def transform(self, data):
             raw, xml = data
-            items = []
+            logger.info("FnLabelOfPipe")
+            labels = [
+                label.get("label-of") for label in xml.findall(".//label[@label-of]")
+            ]
+            repeated = [label for label in labels if labels.count(label) > 1]
+            for label in set(repeated):
+                labels = xml.findall(".//label[@label-of='{}']".format(label))
+                for item in labels[1:]:
+                    fn = etree.Element("fn")
+                    fn.set("id", label + item.get("xml_text"))
+                    item.addprevious(fn)
+            for label in xml.findall(".//label[@label-of]"):
+                label_of = label.get("label-of")
+                if label_of not in repeated:
+                    fn = xml.find(".//fn[@id='{}']".format(label_of))
+                    if fn is None:
+                        fn = etree.Element("fn")
+                        fn.set("id", label_of)
+                        label.addprevious(fn)
+                    fn.append(deepcopy(label))
+                    parent = label.getparent()
+                    parent.remove(label)
+            return data
+
+    class FnAddContentPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            logger.info("FnAddContentPipe")
             for fn in xml.findall(".//fn"):
-                self.update(fn)
-                items.append(etree.tostring(fn))
+                fn.set("status", "add-content")
+            while True:
+                fn = xml.find(".//fn[@status='add-content']")
+                if fn is None:
+                    break
+                fn.set("status", "identify-content")
+                self._add_fn_tail_into_fn(fn)
+            self._move_fn_out_of_fn_tags(xml)
+            return data
+
+        def _add_fn_tail_into_fn(self, node):
+            logger.info("FnAddContentPipe._add_fn_tail_into_fn")
+            move_tail_into_node(node)
+            while True:
+                _next = node.getnext()
+                if _next is None:
+                    break
+                if node.find("label") is not None and node.find("p") is not None:
+                    break
+                if _next.tag in ["fn"]:
+                    break
+                if _next.tag in ["p"]:
+                    if node.find("p") is not None:
+                        break
+                node.append(deepcopy(_next))
+                parent = _next.getparent()
+                parent.remove(_next)
+
+        def _move_fn_out_of_fn_tags(self, xml):
+            while True:
+                for node in xml.findall(".//fn"):
+                    if "fn-children" in node.attrib.keys():
+                        node.attrib.pop("fn-children")
+                    found = node.findall(".//fn")
+                    if len(found) > 0:
+                        node.set("fn-children", str(len(found)))
+                fn = xml.find(".//fn[@fn-children]")
+                if fn is None:
+                    break
+                items = []
+                for inner_fn in fn.findall(".//fn"):
+                    items.insert(0, inner_fn)
+                for item in items:
+                    parent = item.getparent()
+                    fn.addnext(deepcopy(item))
+                    parent.remove(item)
+
+    class FnIdentifyLabelAndPPipe(plumber.Pipe):
+        def _create_label(self, new_fn, node):
+            label = node.find(".//label")
+            if label is not None:
+                return
+
+            children = node.getchildren()
+            node_text = (node.text or "").strip()
+            if node_text:
+                # print("FnIdentifyLabelAndPPipe - _create_label_from_node_text")
+                logger.info("FnIdentifyLabelAndPPipe - _create_label_from_node_text")
+                label = self._create_label_from_node_text(new_fn, node)
+            elif children:
+                # print("FnIdentifyLabelAndPPipe - _create_label_from_style_tags")
+                logger.info("FnIdentifyLabelAndPPipe - _create_label_from_style_tags")
+                self._create_label_from_style_tags(new_fn, node)
+                if new_fn.find(".//label") is None:
+                    # print("FnIdentifyLabelAndPPipe - _create_label_from_children")
+                    logger.info("FnIdentifyLabelAndPPipe - _create_label_from_children")
+                    self._create_label_from_children(new_fn, node)
+            logger.info(etree.tostring(new_fn))
+
+        def _create_label_from_node_text(self, new_fn, node):
+            # print(etree.tostring(node))
+            label_text = self._get_label_text(node)
+            if label_text:
+                label = etree.Element("label")
+                label.text = label_text
+                new_fn.insert(0, label)
+                node.text = node.text.replace(label_text, "").lstrip()
+            # print(etree.tostring(node))
+
+        def _get_label_text(self, node):
+            node_text = get_node_text(node)
+            if not node_text:
+                return
+            splitted = [item.strip() for item in node_text.split()]
+            logger.info("_get_label_text")
+            logger.info(splitted)
+            label_text = None
+            if splitted[0][0].isalpha():
+                if len(splitted[0]) == 1 and node_text[0].lower() == node_text[0]:
+                    label_text = splitted[0]
+            else:
+                label_text = self._get_not_alpha_characteres(splitted[0])
+            return label_text
+
+        def _get_not_alpha_characteres(self, text):
+            label_text = []
+            for c in text:
+                if not c.isalpha():
+                    label_text.append(c)
+                else:
+                    break
+            return "".join(label_text)
+
+        def _create_label_from_children(self, new_fn, node):
+            """
+            Melhorar
+            b'<fn id="back2"><italic>** Address: Rua Itapeva 366 conj 132 - 01332-000 S&#227;o Paulo SP - Brasil.</italic></fn>'
+            """
+            # print(etree.tostring(node))
+            label_text = self._get_label_text(node)
+            if label_text:
+                label = etree.Element("label")
+                label.text = label_text
+                new_fn.insert(0, label)
+                for n in node.findall(".//*"):
+                    if n.text and n.text.startswith(label_text):
+                        n.text = n.text.replace(label_text, "")
+                        break
+
+        def _create_label_from_style_tags(self, new_fn, node):
+            STYLE_TAGS = ("sup", "bold", "italic")
+            children = node.getchildren()
+            node_style = None
+            if children[0].tag in STYLE_TAGS:
+                node_style = children[0]
+            else:
+                for tag in ["sup", "bold", "italic"]:
+                    n = children[0].find(".//{}".format(tag))
+                    if n is None:
+                        continue
+                    if not n.getchildren():
+                        node_style = n
+                        break
+            if node_style is not None:
+                node_text = get_node_text(node)
+                node_style_text = get_node_text(node_style)
+                if node_style_text == node_text:
+                    node_style = None
+            if node_style is not None:
+                label = etree.Element("label")
+                cp = deepcopy(node_style)
+                cp.tail = ""
+                label.append(cp)
+                new_fn.insert(0, label)
+                node.text = node_style.tail
+                parent = node_style.getparent()
+                parent.remove(node_style)
+
+        def _create_p(self, new_fn, node):
+            new_p = None
+            if (node.text or "").strip():
+                new_p = etree.Element("p")
+                new_p.text = node.text
+            for child in node.getchildren():
+                if child.tag in ["label", "p"]:
+                    new_p = self._create_new_p(new_fn, new_p, child)
+                else:
+                    if new_p is None:
+                        new_p = etree.Element("p")
+                    new_p.append(deepcopy(child))
+            if new_p is not None:
+                new_fn.append(new_p)
+            node.tag = "DELETE"
+            node.addprevious(new_fn)
+
+        def _create_new_p(self, new_fn, new_p, child):
+            if new_p is not None:
+                new_fn.append(new_p)
+
+            p = deepcopy(child)
+            p.tail = ""
+            new_fn.append(p)
+
+            new_p = None
+            if child.tail:
+                new_p = etree.Element("p")
+                new_p.text = child.tail
+            return new_p
+
+        def _identify_label_and_p(self, fn):
+            new_fn = etree.Element("fn")
+            for k, v in fn.attrib.items():
+                if k in ["id", "label", "fn-type"]:
+                    new_fn.set(k, v)
+            self._create_label(new_fn, fn)
+            self._create_p(new_fn, fn)
+            fn.addprevious(new_fn)
+            for delete in fn.getroottree().findall(".//DELETE"):
+                parent = delete.getparent()
+                parent.remove(delete)
+
+        def transform(self, data):
+            raw, xml = data
+            for fn in xml.findall(".//fn"):
+                logger.info("FnIdentifyLabelAndPPipe")
+                self._identify_label_and_p(fn)
+            return data
+
+    class FnFixContentPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            logger.info("FnFixContentPipe")
+            for fn in xml.findall(".//fn"):
+                children = fn.getchildren()
+                label = fn.find(".//label")
+                if label is not None:
+                    label.attrib.clear()
+                    bold = label.find("*[@label-of]")
+                    if bold is not None:
+                        bold.attrib.clear()
+                    if children[0].tag == "p" and children[0].text in ["(", "["]:
+                        label.text = (
+                            children[0].text + label.text + children[2].text[:1]
+                        )
+                        children[2].text = children[2].text[1:]
+                        fn.remove(children[0])
+                    elif children[0] is not label:
+                        logger.info(
+                            "FnFixContentPipe: %s" % etree.tostring(children[0])
+                        )
             return data
 
 

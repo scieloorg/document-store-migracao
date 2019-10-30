@@ -187,12 +187,52 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b'<root><p content-type="h3">Titulo 3</p></root>',
         )
 
-    def test_pipe_br(self):
-        text = '<root><p align="x">bla<br/> continua outra linha</p><p baljlba="1"/><td><br/></td><sec><br/></sec></root>'
+    def test_pipe_remove_invalid_br_removes_br_which_is_at_the_beginning(self):
+        text = "<root><td><br/> texto 2</td></root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        self.assertEqual(etree.tostring(transformed), b"<root><td> texto 2</td></root>")
+
+    def test_pipe_remove_invalid_br_removes_br_which_is_at_the_end(self):
+        text = "<root><td>texto 2<br/></td></root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        self.assertEqual(etree.tostring(transformed), b"<root><td>texto 2</td></root>")
+
+    def test_pipe_remove_invalid_br_removes_br_which_is_alone_in_a_element(self):
+        text = "<root><td><br/></td></root>"
+        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        self.assertEqual(etree.tostring(transformed), b"<root><td/></root>")
+
+    def test_pipe_br_creates_break(self):
+        text = "<root><td>texto 1<br/> texto 2</td></root>"
         raw, transformed = self._transform(text, self.pipeline.BRPipe())
         self.assertEqual(
             etree.tostring(transformed),
-            b'<root><p content-type="break">bla</p><p content-type="break"> continua outra linha</p><p baljlba="1"/><td><break/></td><sec/></root>',
+            b"<root><td>texto 1<break/> texto 2</td></root>",
+        )
+
+    def test_pipe_br_do_nothing(self):
+        text = "<root><sec>texto 1<br/> texto 2</sec></root>"
+        raw, transformed = self._transform(text, self.pipeline.BRPipe())
+        self.assertEqual(
+            etree.tostring(transformed), b"<root><sec>texto 1<br/> texto 2</sec></root>"
+        )
+
+    def test_pipe_br_to_pipe_creates_p_for_each_item_which_is_separated_by_br(self):
+        text = "<root><sec>texto 1<br/> texto 2</sec></root>"
+        raw, transformed = self._transform(text, self.pipeline.BR2PPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b'<root><sec><p content-type="break">texto 1</p><p content-type="break"> texto 2</p></sec></root>',
+        )
+
+    def test_pipe_br_to_pipe_creates_p_for_each_item_which_is_separated_by_br_and_remove_extra_p(
+        self
+    ):
+        text = '<root><p align="x">bla<br/> continua outra linha</p></root>'
+        raw, transformed = self._transform(text, self.pipeline.BR2PPipe())
+        self.assertEqual(
+            etree.tostring(transformed),
+            b"<root><p>bla</p><p> continua outra linha</p></root>",
         )
 
     def test_pipe_p(self):
@@ -485,41 +525,41 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
         self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
-    def test_remove_exceding_style_tags(self):
+    def test_remove_or_move_style_tags(self):
         text = "<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(
             etree.tostring(transformed), b"<root><p/><p><b>A</b></p><p>Teste</p></root>"
         )
 
-    def test_remove_exceding_style_tags_2(self):
+    def test_remove_or_move_style_tags_2(self):
         text = "<root><p><b><i>dado<u></u></i></b></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(
             etree.tostring(transformed), b"<root><p><b><i>dado</i></b></p></root>"
         )
 
-    def test_remove_exceding_style_tags_3(self):
+    def test_remove_or_move_style_tags_3(self):
         text = "<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(
             etree.tostring(transformed),
             b"<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste</p></root>",
         )
 
-    def test_remove_exceding_style_tags_4(self):
+    def test_remove_or_move_style_tags_4(self):
         text = '<root><p><b>   <img src="x"/></b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>'
         expected = (
             b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>'
         )
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveExcedingStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
         )
         self.assertEqual(etree.tostring(transformed), expected)
 
@@ -597,6 +637,12 @@ class TestHTML2SPSPipeline(unittest.TestCase):
                 found = tree.findall(".//%s" % expected_tag)
                 self.assertIsNotNone(found)
 
+
+class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe()
+
     def test_pipe_remove_id_duplicated(self):
         text = """<root>
         <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
@@ -604,12 +650,70 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         expected = b"""<root>
         <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
         Texto 3</root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(etree.tostring(xml), expected)
 
-        raw, transformed = self._transform(
-            text,
-            ConvertElementsWhichHaveIdPipeline().EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
+    def test_pipe_asterisk_in_a_href(self):
+        text = """<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>"""
+        expected = b"""<root><a href="#1a"><sup>*</sup></a>
+        <a name="1a" id="1a"/><sup>*</sup></root>"""
+        xml = etree.fromstring(text)
+
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(etree.tostring(xml), expected)
+
+    def test_pipe_remove_anchor_and_links_to_text_removes_some_elements(self):
+        text = """<root>
+        <a href="#nota" xml_tag="xref" xml_id="nota" xml_label="1" xml_reftype="fn">1</a>
+        <a name="texto" xml_tag="fn" xml_id="texto" xml_reftype="fn"/>
+        <a name="nota"  xml_tag="fn" xml_id="nota" xml_reftype="fn"/>
+        <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
+        </root>"""
+        raw, transformed = text, etree.fromstring(text)
+        raw, transformed = self.pipe.transform((raw, transformed))
+        nodes = transformed.findall(".//a[@name='nota']")
+        self.assertEqual(len(nodes), 1)
+        nodes = transformed.findall(".//a[@href='#nota']")
+        self.assertEqual(len(nodes), 1)
+
+    def test_pipe_distinguishes_nota1_and_author1(self):
+        """
+        author1 e nota1 tem xml_text="1",
+        no entanto um é nota e outro é referência bibliográfica
+        """
+        text = """<root>
+        <a name="topo" id="topo" xml_text="sobe"/>
+        <p>
+        <bold>Franz R. Novak</bold>
+        <a href="#autor1" link-type="internal" xml_text="1"><sup>1</sup></a>
+        <bold>,João Aprígio Guerra de Almeida</bold>
+        <a href="#autor2" link-type="internal" xml_text="2"><sup>2</sup></a>
+        </p>
+        <p>A relação de causa e efeito no processo de transmissão de doenças relacionadas especificamente com alimentos contaminados com material de origem fecal foi, inicialmente, defendida por Von Fristsch em 1880, quando identificou Klebsiella sp em fezes humanas. Posteriormente, a relação entre os microorganismos provenientes desse material e doenças do trato gastrintestinal foi estabelecida por Escherich, que descreveu o <italic>Bacillus coli</italic>, atualmente <italic>Escherichia coli</italic>, sugerindo que tal microorganismo pudesse ser utilizado como indicador de contaminação de origem fecal(<a href="#nota01" link-type="internal" xml_text="1">1</a>).</p>
+        <p>
+        <a name="nota01" id="nota01" xml_text="1"/>1. Guarraia LJ. Brief literature review of <italic>Klebsiella</italic> as pathogens. In: Seminar on the significance of fecal coliforms in industrial waste. E.P.A.T.R. 3., Denver (CO), USA: National Field Investigations Center; 1972. </p>
+        <p>
+        <a name="autor1" id="autor1" xml_text="1"/>
+        <a href="#topo" link-type="internal" xml_text="1"><bold><sup>1</sup></bold></a><bold>Franz R. Novak</bold> - Doutor em Microbiologia pela Universidade Federal do Rio de Janeiro. Professor nos Cursos de Mestrado e Doutorado em Saúde da Mulher e da Criança do Instituto Fernandes Figueira - IFF / Fundação Oswaldo Cruz. Membro da equipe do Banco de Leite Humano do IFF.
+        </p>
+        <p>
+        <a name="autor2" id="autor2" xml_text="2"/>
+        <a href="#topo" link-type="internal" xml_text="2"><bold><sup>2</sup></bold></a> João Aprígio Guerra de Almeida - Doutor em Saúde Pública pelo Instituto Fernandes Figueira - IFF / Fundação Oswaldo Cruz. Professor nos Cursos de Mestrado e Doutorado em Saúde da Mulher e da Criança do Instituto Fernandes Figueira. Chefe do Banco de Leite Humano do IFF.
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        result = etree.tostring(xml)
+        self.assertIn(
+            b"""<label href="#topo" link-type="internal" xml_text="1" label-of="autor1"><bold><sup>1</sup></bold></label>""",
+            result,
         )
-        self.assertEqual(etree.tostring(transformed), expected)
+        self.assertIn(
+            b"""<label href="#topo" link-type="internal" xml_text="2" label-of="autor2"><bold><sup>2</sup></bold></label>""",
+            result,
+        )
 
 
 class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
@@ -1181,7 +1285,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.SaveRawBodyPipe(pipeline),
             pipeline.DeprecatedHTMLTagsPipe(),
             pipeline.RemoveImgSetaPipe(),
-            pipeline.RemoveExcedingStyleTagsPipe(),
+            pipeline.RemoveOrMoveStyleTagsPipe(),
             pipeline.RemoveEmptyPipe(),
             pipeline.RemoveStyleAttributesPipe(),
             pipeline.RemoveCommentPipe(),
@@ -1246,8 +1350,8 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.pl = ConvertElementsWhichHaveIdPipeline()
 
     def test_remove_thumb_img_pipe(self):
-        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg"><img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/><br/> Clique para ampliar</a></p></root>"""
-        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><img src="/img/revistas/hoehnea/v37n3/a05img01.jpg"></img></p></root>"""
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg"><img src="/img/revistas/hoehnea/v37n3/a05img01-thumb.jpg"/><br/> Anexo 1 - Clique para ampliar</a></p></root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink"><p><a href="/img/revistas/hoehnea/v37n3/a05img01.jpg">Anexo 1<br/></a></p></root>"""
         xml = etree.fromstring(text)
         text, xml = self.pl.RemoveThumbImgPipe().transform((text, xml))
         self.assertNotIn(
@@ -1261,18 +1365,6 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         expected = b"""<root><a name="_ftnref19" id="_ftnref19"/><a href="#_ftn2"><sup>1</sup></a></root>"""
         xml = etree.fromstring(text)
         text, xml = self.pl.CompleteElementAWithNameAndIdPipe().transform((text, xml))
-        self.assertEqual(etree.tostring(xml), expected)
-
-    def test_pipe_asterisk_in_a_href(self):
-        text = """<root><a href="#1a"><sup>*</sup></a>
-        <a name="1a" id="1a"/><a href="#1b"><sup>*</sup></a></root>"""
-        expected = b"""<root><a href="#1a"><sup>*</sup></a>
-        <a name="1a" id="1a"/><sup>*</sup></root>"""
-        xml = etree.fromstring(text)
-
-        text, xml = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe().transform(
-            (text, xml)
-        )
         self.assertEqual(etree.tostring(xml), expected)
 
     def test_anchor_and_internal_link_pipe(self):
@@ -1324,22 +1416,6 @@ class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
         self.assertIsNone(node)
         # self.assertIsNotNone(transformed.find(".//sup"))
         self.assertEqual(etree.tostring(transformed), b"<root/>")
-
-    def test_pipe_remove_anchor_and_links_to_text_removes_some_elements(self):
-        text = """<root>
-        <a href="#nota" xml_tag="xref" xml_id="nota" xml_label="1" xml_reftype="fn">1</a>
-        <a name="texto" xml_tag="fn" xml_id="texto" xml_reftype="fn"/>
-        <a name="nota"  xml_tag="fn" xml_id="nota" xml_reftype="fn"/>
-        <a href="#texto" xml_tag="xref" xml_id="texto" xml_reftype="xref">1</a> Nota bla bla
-        </root>"""
-        raw, transformed = text, etree.fromstring(text)
-        raw, transformed = self.pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe().transform(
-            (raw, transformed)
-        )
-        nodes = transformed.findall(".//a[@name='nota']")
-        self.assertEqual(len(nodes), 1)
-        nodes = transformed.findall(".//a[@href='#nota']")
-        self.assertEqual(len(nodes), 1)
 
     def test_convert_elements_which_have_id_pipeline_removes_some_elements(self):
         text = """<root>
@@ -1423,10 +1499,6 @@ class TestDeduceAndSuggestConversionPipe(unittest.TestCase):
             with self.subTest(step + " " + str(i)):
                 result = etree.tostring(node)
                 expected = etree.tostring(expected_node[i])
-                if result != expected:
-                    print("")
-                    print(result)
-                    print(expected)
                 self.assertEqual(result, expected)
 
     def test_add_xml_attribs_to_a_href_from_text(self):
@@ -1704,358 +1776,6 @@ class TestImgPipe(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 1)
 
 
-class TestCompleteFnConversionPipe(unittest.TestCase):
-    def setUp(self):
-        self.html_pl = HTML2SPSPipeline(pid="pid")
-        self.pl = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = self.pl.CompleteFnConversionPipe()
-
-    def test__create_label__does_not_create_label(self):
-        text = """<root><fn>TEXTO NOTA</fn></root>"""
-        expected = b"""<root><fn>TEXTO NOTA</fn></root>"""
-        expected_final = b"""<root><fn><p>TEXTO NOTA</p></fn></root>"""
-
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._create_label(node)
-        self.assertEqual(node.text, "TEXTO NOTA")
-        self.assertEqual(etree.tostring(xml), expected)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(fn.find("p").text, "TEXTO NOTA")
-        self.assertIsNone(fn.find("label"))
-
-    def test__create_label__creates_label(self):
-        text = """<root><fn>** TEXTO NOTA</fn></root>"""
-        expected = b"""<root><fn><label>**</label> TEXTO NOTA</fn></root>"""
-        expected_final = (
-            b"""<root><fn><label>**</label><p> TEXTO NOTA</p></fn></root>"""
-        )
-
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._create_label(node)
-        label = node.find("label")
-        self.assertEqual(label.tail, " TEXTO NOTA")
-        self.assertEqual(label.text, "**")
-        self.assertEqual(etree.tostring(xml), expected)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(fn.find("p").text, " TEXTO NOTA")
-        self.assertEqual(fn.find("label").text, "**")
-
-    def test__create_label__creates_label_from_style_tag(self):
-        text = """<root><fn><sup>**</sup> TEXTO NOTA</fn></root>"""
-        expected = b"""<root><fn><label><sup>**</sup></label> TEXTO NOTA</fn></root>"""
-        expected_final = (
-            b"""<root><fn><label><sup>**</sup></label><p> TEXTO NOTA</p></fn></root>"""
-        )
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._create_label(node)
-        label = node.find("label")
-        self.assertEqual(label.tail, " TEXTO NOTA")
-        self.assertEqual(label.find("sup").text, "**")
-        self.assertEqual(etree.tostring(xml), expected)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(fn.find("p").text, " TEXTO NOTA")
-        self.assertEqual(fn.find("label/sup").text, "**")
-
-    def test__identify_label_and_p__identifies_p(self):
-        text = """<root><fn>TEXTO NOTA</fn></root>"""
-        expected = b"""<root><fn><p>TEXTO NOTA</p></fn></root>"""
-        expected_final = b"""<root><fn><p>TEXTO NOTA</p></fn></root>"""
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._create_label(node)
-        self.assertEqual(node.text, "TEXTO NOTA")
-        self.pipe._identify_label_and_p(node)
-        self.assertEqual(node.text, "")
-        self.assertEqual(etree.tostring(xml), expected)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(fn.find("p").text, "TEXTO NOTA")
-        self.assertIsNone(fn.find("label"))
-
-    def test__identify_label_and_p__identifies_label_and_p(self):
-        text = """<root><fn>** TEXTO NOTA</fn></root>"""
-        expected = b"""<root><fn><label>**</label><p>TEXTO NOTA</p></fn></root>"""
-        expected_final = b"""<root><fn><label>**</label><p>TEXTO NOTA</p></fn></root>"""
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._identify_label_and_p(node)
-        self.assertEqual(node.text, "")
-        self.assertEqual(etree.tostring(xml), expected)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(fn.find("p").text, "TEXTO NOTA")
-        self.assertEqual(fn.find("label").text, "**")
-
-    def test__move_fn_tail_into_fn__moves_italic(self):
-        text = """<root><fn id="nt01"/>
-           <italic>Isso é conhecido pelos pesquisadores como</italic>
-         </root>"""
-        expected = """<root><fn id="nt01">
-            <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
-        </root>"""
-        expected_final = """<root><fn id="nt01">
-            <p><italic>Isso é conhecido pelos pesquisadores como</italic></p></fn>
-        </root>"""
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._move_fn_tail_into_fn(node)
-        self.assertIn("Isso", node.find("italic").text)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
-        )
-        self.assertEqual(fn.find("p/italic").tail.strip(), "")
-        self.assertIsNone(fn.find("label"))
-
-    def test__move_fn_tail_into_fn__moves_text_children(self):
-        text = """<root><fn id="nt01"/>**
-           <italic>Isso é conhecido pelos pesquisadores como</italic>
-         </root>"""
-        expected = """<root><fn id="nt01">**
-            <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
-        </root>"""
-        expected_final = """<root><fn id="nt01"><label>**</label>
-            <p><italic>Isso é conhecido pelos pesquisadores como</italic></p></fn>
-        </root>"""
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._move_fn_tail_into_fn(node)
-        self.assertIn("**", node.text)
-        self.assertIn("Isso", node.find("italic").text)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        fn = xml.find(".//fn")
-        self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
-        )
-        self.assertEqual(fn.find("p/italic").tail.strip(), "")
-        self.assertEqual(fn.find("label").text, "**")
-
-    def test__move_fn_tail_into_fn__moves_text_children_tail(self):
-        text = """<root><fn id="nt01"/>**
-           <italic>Isso é conhecido pelos pesquisadores como</italic> .
-         </root>"""
-        expected = """<root><fn id="nt01">**
-            <italic>Isso é conhecido pelos pesquisadores como</italic> .</fn>
-        </root>"""
-        expected_final = """<root><fn id="nt01"><label>**</label>
-            <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p></fn>
-        </root>"""
-
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._move_fn_tail_into_fn(node)
-        self.assertIn("**", node.text)
-        self.assertIn("Isso", node.find("italic").text)
-        self.assertIn(".", node.find("italic").tail)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
-        )
-        self.assertEqual(fn.find("p/italic").tail.strip(), ".")
-        self.assertEqual(fn.find("label").text, "**")
-
-    def test__move_fn_tail_into_fn__moves_items_until_p_is_found(self):
-        text = """<root><fn id="nt01"/>**
-           <italic>Isso é conhecido pelos pesquisadores como</italic> .
-           <p/> .
-         </root>"""
-        expected = """<root><fn id="nt01">**
-            <italic>Isso é conhecido pelos pesquisadores como</italic> .</fn>
-            <p/> .
-        </root>"""
-        expected_final = """<root><fn id="nt01"><label>**</label>
-            <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p></fn>
-            <p/> .
-        </root>"""
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-        self.pipe._move_fn_tail_into_fn(node)
-        self.assertIn("**", node.text)
-        self.assertIn("Isso", node.find("italic").text)
-        self.assertIn(".", node.find("italic").tail)
-        self.assertIsNone(node.find("p"))
-        self.assertIsNotNone(node.getparent().find("p"))
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
-        )
-        self.assertEqual(fn.find("p/italic").tail.strip(), ".")
-        self.assertEqual(fn.find("label").text, "**")
-
-    def test__move_fn_tail_into_fn__includes_p_break(self):
-        text = """<root><fn id="nt01"/>**
-           <italic>Isso é conhecido pelos pesquisadores como</italic>
-           <p content-type="break">Email: a@x.org</p>
-         </root>"""
-        expected = """<root><fn id="nt01">**
-            <italic>Isso é conhecido pelos pesquisadores como</italic>
-            <p content-type="break">Email: a@x.org</p></fn>
-        </root>"""
-        expected_final = """<root><fn id="nt01"><label>**</label>
-            <p><italic>Isso é conhecido pelos pesquisadores como</italic></p>
-            <p content-type="break">Email: a@x.org</p></fn>
-        </root>"""
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._move_fn_tail_into_fn(node)
-        self.assertIn("**", node.text)
-        self.assertIn("Isso", node.find("italic").text)
-        self.assertIn("Email", node.find("p").text)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
-        )
-        self.assertEqual(fn.find(".//p[2]").text, "Email: a@x.org")
-        self.assertEqual(fn.find("label").text, "**")
-
-    def test__create_p_for_complex_content__creates_p(self):
-        text = """<root><fn id="nt01">
-           <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
-         </root>"""
-        expected = """<root><fn id="nt01"><p>
-            <italic>Isso é conhecido pelos pesquisadores como</italic></p></fn>
-        </root>"""
-        expected_final = """<root><fn id="nt01"><p>
-            <italic>Isso é conhecido pelos pesquisadores como</italic></p></fn>
-        </root>"""
-
-        xml = etree.fromstring(text)
-        node = xml.find(".//fn")
-
-        self.pipe._create_p_for_complex_content(node)
-        self.assertEqual(node.attrib.get("id"), "nt01")
-        self.assertIn("Isso", node.find("p/italic").text)
-
-        text, xml = self.pipe.transform((text, xml))
-        fn = xml.find(".//fn")
-        self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
-        )
-        self.assertIsNone(fn.find("p/italic").tail)
-        self.assertIsNone(fn.find("label"))
-
-    def test__convert_elements_which_have_id_pipe_creates_fn_with_some_paragraphs(self):
-        text = """<root>
-          <p><fn id="nt"></fn>
-          <bold>Correspondence to:</bold>
-          <br/>
-          Maria Auxiliadora Prolungatti Cesar
-          <br/>
-          Serviço de Clínica Cirúrgica do Hospital Universitário de Taubaté
-          <br/>
-          Avenida Granadeiro Guimarães, 270
-          <br/>
-          CEP: 12100-000 – Taubaté (SP), Brazil.
-          <br/>
-          E mail:
-          <a href="mailto:prolungatti@uol.com.br">prolungatti@uol.com.br</a>
-          </p>
-        </root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
-        text, xml = self.html_pl.BRPipe().transform((text, xml))
-        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
-        p = xml.findall(".//p")
-        self.assertEqual(xml.find(".//fn/label/bold").text, "Correspondence to:")
-        self.assertEqual(p[0].text.strip(), "Maria Auxiliadora Prolungatti Cesar")
-        self.assertEqual(
-            p[1].text.strip(),
-            "Serviço de Clínica Cirúrgica do Hospital Universitário de Taubaté",
-        )
-        self.assertEqual(p[2].text.strip(), "Avenida Granadeiro Guimarães, 270")
-        self.assertEqual(p[3].text.strip(), "CEP: 12100-000 – Taubaté (SP), Brazil.")
-        self.assertEqual(p[5].find("email").text, "prolungatti@uol.com.br")
-
-    def test_fn_list(self):
-        text = """
-         <root>
-         <p><b>C.T.L.S. Ghidini<sup>I, </sup>
-         <a href="#nt"><sup>*</sup></a>;
-         A.R.L. Oliveira<sup>II</sup>; M. Silva<sup>III</sup></b></p>
-
-         <p>Conforme a nota 1<a href="#nt01">1</a></p>
-         <p>Conforme a nota 2<a href="#nt02">2</a></p>
-         <p>Conforme a nota 3<a href="#nt03">3</a></p>
-         <p><a name="nt"></a><a href="#tx">*</a>
-         Autor correspondente: Carla Ghidini    <br/>
-         <a name="nt01"></a>
-         <a href="#tx01">1</a> O número de condição de uma matriz <I>M </I>é definido por: &#954;<sub>2</sub>(<i>M</i>) = ||<I>M</I>||<sub>2</sub>||<I>M</I><sup>&#150;1</sup>||<sub>2</sub>.
-         <br/>
-         <a name="nt02"></a><a href="#tx02">2</a> <i>T</i><sub><I>k</I>+1,<I>k </I></sub>= <img src="/img/revistas/tema/v15n3/a05img16.jpg" align="absmiddle"/>, em que &#945;<I><sub>j</sub> = h<sub>ij</sub></I>, &#946;<I><sub>j</sub> = h</I><sub><i>j</i>&#150;1,<I>j</I></sub>.    <br/>
-         <a name="nt03"></a><a href="#tx03">3</a> A norma-A é definida como: ||<i>w</i>||<i><sub>A</sub> </i>= <img src="/img/revistas/tema/v15n3/a05img15.jpg" align="absmiddle"/>.</p></root>"""
-
-        xml = etree.fromstring(text)
-        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
-        fn = xml.findall(".//fn")
-        self.assertEqual(fn[0].find("label").text, "*")
-        self.assertEqual(fn[1].find("label").text, "1")
-        self.assertEqual(fn[2].find("label").text, "2")
-        self.assertEqual(fn[3].find("label").text, "3")
-        self.assertIn("Autor correspondente", fn[0].find("p").text)
-        self.assertIn("O número de condição", fn[1].find("p").text)
-        self.assertIn("T", fn[2].find("p/i").text)
-        self.assertIn("A norma-A", fn[3].find("p").text)
-
-    def test_convert_elements_which_have_id_pipe_for_asterisk_corresponding_author(
-        self
-    ):
-        text = """<root><big>Peter M. Gaylarde; Christine C. Gaylarde
-        <a href="#back"><sup>*</sup></a></big>
-        <a name="back"></a><a href="#home">*</a> Corresponding author.
-        Mailing Address:
-        MIRCEN, Departamento de Solos, UFRGS, Caixa Postal 776, CEP 90001-970,
-        Porto Alegre, RS, Brasil. Fax (+5551) 316-6029.
-        Email
-        <a href="mailto:chrisg@vortex.ufrgs.br">chrisg@vortex.ufrgs.br</a>
-        </root>
-        """
-        expected = b"""<root><big>Peter M. Gaylarde; Christine C. Gaylarde
-        <xref ref-type="fn" rid="back"><sup>*</sup></xref></big>
-        <fn id="back"><label>*</label><p> Corresponding author.
-        Mailing Address:
-        MIRCEN, Departamento de Solos, UFRGS, Caixa Postal 776, CEP 90001-970,
-        Porto Alegre, RS, Brasil. Fax (+5551) 316-6029.
-        Email
-        <email>chrisg@vortex.ufrgs.br</email>
-        </p></fn></root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
-        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
-        self.assertEqual(xml.find(".//xref/sup").text, "*")
-        self.assertEqual(xml.find(".//fn/label").text, "*")
-        self.assertEqual(xml.find(".//fn/p/email").text, "chrisg@vortex.ufrgs.br")
-        self.assertIn("Corresponding author", xml.find(".//fn/p").text, "*")
-
-
 class TestConvertRemote2LocalPipe(unittest.TestCase):
     def test_transform_imports_html_content(self):
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
@@ -2146,3 +1866,247 @@ class TestCompleteElementAWithXMLTextPipe(unittest.TestCase):
         self.assertIn(b'<a href="#tab2" xml_text="tabelas 2">2</a>', result)
         self.assertIn(b'<a name="tab1" xml_text="tabelas 1"/>', result)
         self.assertIn(b'<a name="tab2" xml_text="tabelas 2"/>', result)
+
+
+class TestFnAddContentPipe(unittest.TestCase):
+    def setUp(self):
+        self.html_pl = HTML2SPSPipeline(pid="pid")
+        self.pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = self.pl.FnAddContentPipe()
+
+    def test_transform_moves_italic(self):
+        text = """<root><fn id="nt01"/>
+           <italic>Isso é conhecido pelos pesquisadores como</italic>
+         </root>"""
+        expected = """<root><fn id="nt01">
+            <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.find(".//fn")
+        self.assertIn("Isso", fn.find("italic").text)
+
+    def test_transform_moves_text_children(self):
+        text = """<root><fn id="nt01"/>**
+           <italic>Isso é conhecido pelos pesquisadores como</italic>
+         </root>"""
+        expected = """<root><fn id="nt01">**
+            <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        node = xml.find(".//fn")
+        self.assertIn("**", node.text)
+        self.assertIn("Isso", node.find("italic").text)
+
+    def test_transform_moves_items_until_p_is_found(self):
+        text = """<root><fn id="nt01"/>**
+           <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p>
+           <p/> .
+           <p>Este texto não fará parte de fn</p>
+         </root>"""
+        expected = """<root><fn id="nt01"><label>**</label>
+            <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p></fn>
+            <p/> .
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.find(".//fn")
+        self.assertEqual(
+            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
+        )
+        self.assertEqual(fn.find("p/italic").tail.strip(), ".")
+        self.assertEqual(len(fn.findall("p")), 1)
+
+    def test_transform_includes_break(self):
+        text = """<root><fn id="nt01"/>**
+           <italic>Isso é conhecido pelos pesquisadores como</italic>
+           <br/>Email: a@x.org
+         </root>"""
+        expected = """<root><fn id="nt01">**
+            <italic>Isso é conhecido pelos pesquisadores como</italic>
+            <br/>Email: a@x.org</fn>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        node = xml.find(".//fn")
+        self.assertIn("**", node.text)
+        self.assertIn("Isso", node.find("italic").text)
+        self.assertIn("Email", node.find("br").tail)
+
+
+class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
+    def setUp(self):
+        self.html_pl = HTML2SPSPipeline(pid="pid")
+        self.pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = self.pl.FnIdentifyLabelAndPPipe()
+
+    def test_transform_creates_p(self):
+        text = """<root><fn>TEXTO NOTA</fn></root>"""
+        expected = b"""<root><fn><p>TEXTO NOTA</p></fn></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.find(".//fn")
+        self.assertEqual(fn.find("p").text, "TEXTO NOTA")
+        self.assertIsNone(fn.find("label"))
+
+    def test_transform_creates_label_and_p(self):
+        text = """<root><fn>** TEXTO NOTA</fn></root>"""
+        expected = b"""<root><fn><label>**</label><p>TEXTO NOTA</p></fn></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.find(".//fn")
+        self.assertEqual(fn.find("p").text, "TEXTO NOTA")
+        self.assertEqual(fn.find("label").text, "**")
+
+    def test_transform__creates_label_from_style_tag(self):
+        text = """<root><fn><sup>**</sup> TEXTO NOTA</fn></root>"""
+        expected = (
+            b"""<root><fn><label><sup>**</sup></label><p> TEXTO NOTA</p></fn></root>"""
+        )
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.find(".//fn")
+        self.assertEqual(fn.find("p").text, " TEXTO NOTA")
+        self.assertEqual(fn.find("label/sup").text, "**")
+
+    def test__creates_p(self):
+        text = """<root><fn id="nt01">
+           <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
+         </root>"""
+        expected = """<root><fn id="nt01"><p>
+            <italic>Isso é conhecido pelos pesquisadores como</italic></p></fn>
+        </root>"""
+
+        xml = etree.fromstring(text)
+
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.find(".//fn")
+        self.assertEqual(
+            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
+        )
+        self.assertIsNone(fn.find("p/italic").tail)
+        self.assertIsNone(fn.find("label"))
+
+
+class TestFnPipe(unittest.TestCase):
+    def setUp(self):
+        self.html_pl = HTML2SPSPipeline(pid="pid")
+
+    def test__creates_fn_with_some_paragraphs(self):
+        text = """<root>
+          <p><fn id="nt"></fn>
+          <bold>Correspondence to:</bold>
+          <br/>
+          Maria Auxiliadora Prolungatti Cesar
+          <br/>
+          Serviço de Clínica Cirúrgica do Hospital Universitário de Taubaté
+          <br/>
+          Avenida Granadeiro Guimarães, 270
+          <br/>
+          CEP: 12100-000 – Taubaté (SP), Brazil.
+          <br/>
+          E mail:
+          <a href="mailto:prolungatti@uol.com.br">prolungatti@uol.com.br</a>
+          </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
+        text, xml = self.html_pl.BRPipe().transform((text, xml))
+        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
+        text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
+        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
+        text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
+        text, xml = self.html_pl.BRPipe().transform((text, xml))
+        text, xml = self.html_pl.BR2PPipe().transform((text, xml))
+
+        p = xml.findall(".//fn/p")
+        self.assertEqual(xml.find(".//fn/label/bold").text, "Correspondence to:")
+        self.assertEqual(p[0].text.strip(), "Maria Auxiliadora Prolungatti Cesar")
+        self.assertEqual(
+            p[1].text.strip(),
+            "Serviço de Clínica Cirúrgica do Hospital Universitário de Taubaté",
+        )
+        self.assertEqual(p[2].text.strip(), "Avenida Granadeiro Guimarães, 270")
+        self.assertEqual(p[3].text.strip(), "CEP: 12100-000 – Taubaté (SP), Brazil.")
+        self.assertEqual(p[4].find("email").text, "prolungatti@uol.com.br")
+
+    def test_creates_fn_list(self):
+        text = """
+         <root>
+         <p><b>C.T.L.S. Ghidini<sup>I, </sup>
+         <a href="#nt"><sup>*</sup></a>;
+         A.R.L. Oliveira<sup>II</sup>; M. Silva<sup>III</sup></b></p>
+
+         <p>Conforme a nota 1<a href="#nt01">1</a></p>
+         <p>Conforme a nota 2<a href="#nt02">2</a></p>
+         <p>Conforme a nota 3<a href="#nt03">3</a></p>
+         <p><a name="nt"></a><a href="#tx">*</a>
+         Autor correspondente: Carla Ghidini    <br/>
+         <a name="nt01"></a>
+         <a href="#tx01">1</a> O número de condição de uma matriz <I>M </I>é definido por: &#954;<sub>2</sub>(<i>M</i>) = ||<I>M</I>||<sub>2</sub>||<I>M</I><sup>&#150;1</sup>||<sub>2</sub>.
+         <br/>
+         <a name="nt02"></a><a href="#tx02">2</a> <i>T</i><sub><I>k</I>+1,<I>k </I></sub>= <img src="/img/revistas/tema/v15n3/a05img16.jpg" align="absmiddle"/>, em que &#945;<I><sub>j</sub> = h<sub>ij</sub></I>, &#946;<I><sub>j</sub> = h</I><sub><i>j</i>&#150;1,<I>j</I></sub>.    <br/>
+         <a name="nt03"></a><a href="#tx03">3</a> A norma-A é definida como: ||<i>w</i>||<i><sub>A</sub> </i>= <img src="/img/revistas/tema/v15n3/a05img15.jpg" align="absmiddle"/>.</p></root>"""
+
+        xml = etree.fromstring(text)
+        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
+        fn = xml.findall(".//fn")
+        self.assertEqual(fn[0].find("label").text, "*")
+        self.assertEqual(fn[1].find("label").text, "1")
+        self.assertEqual(fn[2].find("label").text, "2")
+        self.assertEqual(fn[3].find("label").text, "3")
+        self.assertIn("Autor correspondente", fn[0].find("p").text)
+        self.assertIn("O número de condição", fn[1].find("p").text)
+        self.assertIn("T", fn[2].find("p/i").text)
+        self.assertIn("A norma-A", fn[3].find("p").text)
+
+    def test_convert_elements_which_have_id_pipe_for_asterisk_corresponding_author(
+        self
+    ):
+        text = """<root><big>Peter M. Gaylarde; Christine C. Gaylarde
+        <a href="#back"><sup>*</sup></a></big>
+        <a name="back"></a><a href="#home">*</a> Corresponding author.
+        Mailing Address:
+        MIRCEN, Departamento de Solos, UFRGS, Caixa Postal 776, CEP 90001-970,
+        Porto Alegre, RS, Brasil. Fax (+5551) 316-6029.
+        Email
+        <a href="mailto:chrisg@vortex.ufrgs.br">chrisg@vortex.ufrgs.br</a>
+        </root>
+        """
+        expected = b"""<root><big>Peter M. Gaylarde; Christine C. Gaylarde
+        <xref ref-type="fn" rid="back"><sup>*</sup></xref></big>
+        <fn id="back"><label>*</label><p> Corresponding author.
+        Mailing Address:
+        MIRCEN, Departamento de Solos, UFRGS, Caixa Postal 776, CEP 90001-970,
+        Porto Alegre, RS, Brasil. Fax (+5551) 316-6029.
+        Email
+        <email>chrisg@vortex.ufrgs.br</email>
+        </p></fn></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
+        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
+        self.assertEqual(xml.find(".//xref/sup").text, "*")
+        self.assertEqual(xml.find(".//fn/label").text, "*")
+        self.assertEqual(xml.find(".//fn/p/email").text, "chrisg@vortex.ufrgs.br")
+        self.assertIn("Corresponding author", xml.find(".//fn/p").text, "*")
+
+
+class TestSwitchElementsAPipe(unittest.TestCase):
+    def test_switches_elements_a(self):
+        text = """<root>
+        <body>
+            <a href="#top2" xml_text="**">**</a>
+            <a name="back2"/> Amostra depositada na Coleção
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = (
+            ConvertElementsWhichHaveIdPipeline()
+            .SwitchElementsAPipe()
+            .transform((text, xml))
+        )
+        a = xml.findall(".//a")
+        self.assertIn("Amostra depositada na Coleção", a[1].tail)
+        self.assertEqual("#top2", a[1].get("href"))
+        self.assertEqual("back2", a[0].get("name"))
