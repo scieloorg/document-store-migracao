@@ -1311,7 +1311,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AssetElementFixPipe(),
             self.CreateInlineFormulaPipe(),
             self.AppendixPipe(),
-            self.TableWrapPipe(),
+            self.TablePipe(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.FnMovePipe(),
@@ -2222,14 +2222,52 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent.remove(item)
             return data
 
-    class TableWrapPipe(plumber.Pipe):
+    class TablePipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
+            for node in xml.findall(".//fig"):
+                table = node.find(".//table")
+                if table is not None and node.find(".//table-wrap") is None:
+                    table.tag = "array"
+                    table.attrib.clear()
+                    if table.find("tbody") is None:
+                        table.set("fix", "true")
+                    if table is not None and table.getparent().tag != "fig":
+                        for child in node.getchildren():
+                            if table in child.getchildren():
+                                child.addnext(deepcopy(table))
+                                parent = table.getparent()
+                                parent.remove(table)
+
             for node in xml.findall(".//table-wrap"):
-                p = node.find("p[table]")
-                if p is not None:
-                    p.tag = "REMOVETAG"
-            etree.strip_tags(xml, "REMOVETAG")
+                table = node.find(".//table")
+                if table is not None and table.getparent().tag != "table-wrap":
+                    for child in node.getchildren():
+                        if table in child.getchildren():
+                            child.addnext(deepcopy(table))
+                            parent = table.getparent()
+                            parent.remove(table)
+
+            for node in xml.findall(".//table"):
+                if node.getparent().tag != "table-wrap":
+                    node.tag = "array"
+                    node.attrib.clear()
+                    if node.find("tbody") is None:
+                        node.set("fix", "true")
+
+            while True:
+                if xml.find(".//array[@fix]") is None:
+                    break
+                for node in xml.findall(".//array[@fix]"):
+                    node.attrib.clear()
+                    if node.find("tbody") is None:
+                        tbody = deepcopy(node)
+                        tbody.tag = "tbody"
+                        array = etree.Element("array")
+                        array.append(tbody)
+                        node.addnext(array)
+                        parent = node.getparent()
+                        parent.remove(node)
             return data
 
     class RemoveXMLAttributesPipe(plumber.Pipe):
