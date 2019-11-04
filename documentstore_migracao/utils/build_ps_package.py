@@ -126,39 +126,55 @@ class BuildPSPackage(object):
             - 'DATA PRIMEIRO PROCESSAMENTO'
             - 'DATA DO ULTIMO PROCESSAMENTO'
         """
-        _sps_package = deepcopy(sps_package)
-        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = (
-            articles_data_reader.fieldnames
-        )
-        # Verificar se tem PID
-        article_data = None
-        if _sps_package.publisher_id is None:
+        def _get_article_data_by_file_path(articles_data_reader):
+            article_data = None
             for row in articles_data_reader:
                 if pack_name in row[f_file]:
                     article_data = row
                     logging.debug(
                         'Updating document with PID "%s"', article_data[f_pid]
                     )
-                    _sps_package.publisher_id = article_data[f_pid]
                     break
-        else:
+            return article_data
+
+        def _get_article_data_by_publisher_id(articles_data_reader):
+            article_data = None
             logging.debug('Reading document PID "%s" data', _sps_package.publisher_id)
             for row in articles_data_reader:
                 if _sps_package.publisher_id == row[f_pid]:
                     article_data = row
                     break
+            return article_data
+
+        def _has_attr_to_set(attr, field, min_attr_len=1):
+            _sps_package_attr = getattr(_sps_package, attr) or ""
+            _has_attr = len("".join(_sps_package_attr)) > min_attr_len
+            if _has_attr:
+                return False
+            _data_field = article_data[field]
+            if _data_field is not None and len(_data_field) > 0:
+                return True
+            return False
+
+        def _parse_date(str_date):
+            return (
+                str_date[:4] if int(str_date[:4]) > 0 else "",
+                str_date[4:6] if int(str_date[4:6]) > 0 else "",
+                str_date[6:8] if int(str_date[6:8]) > 0 else "",
+            )
+
+        _sps_package = deepcopy(sps_package)
+        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = (
+            articles_data_reader.fieldnames
+        )
+        # Verificar se tem PID
+        if _sps_package.publisher_id is None:
+            article_data = _get_article_data_by_file_path(articles_data_reader)
+            _sps_package.publisher_id = article_data[f_pid]
+        else:
+            article_data = _get_article_data_by_publisher_id(articles_data_reader)
 
         if article_data is not None:
-
-            def _has_attr_to_set(attr, field, min_attr_len=1):
-                _data_field = article_data[field]
-                _has_data_field = _data_field is not None and len(_data_field) > 0
-                _sps_package_attr = getattr(_sps_package, attr) or ""
-                _has_attr = len("".join(_sps_package_attr)) > min_attr_len
-                if not _has_attr and _has_data_field:
-                    return True
-                return False
-
             if _has_attr_to_set("aop_pid", f_pid_aop):
                 logging.debug(
                     'Updating document with AOP PID "%s"', article_data[f_pid_aop]
@@ -167,20 +183,12 @@ class BuildPSPackage(object):
 
             # Verificar data de publicação e da coleção
             if not _sps_package.is_ahead_of_print:
-
-                def parse_date(str_date):
-                    return (
-                        str_date[:4] if int(str_date[:4]) > 0 else "",
-                        str_date[4:6] if int(str_date[4:6]) > 0 else "",
-                        str_date[6:8] if int(str_date[6:8]) > 0 else "",
-                    )
-
                 if _has_attr_to_set("documents_bundle_pubdate", f_dt_collection, 3):
                     logging.debug(
                         'Updating document with collection date "%s"',
                         article_data[f_dt_collection],
                     )
-                    _sps_package.documents_bundle_pubdate = parse_date(
+                    _sps_package.documents_bundle_pubdate = _parse_date(
                         article_data[f_dt_collection]
                     )
                 if _has_attr_to_set("document_pubdate", f_dt_created, 5):
@@ -189,7 +197,7 @@ class BuildPSPackage(object):
                             'Updating document with first date "%s"',
                             article_data[f_dt_created],
                         )
-                        _sps_package.document_pubdate = parse_date(
+                        _sps_package.document_pubdate = _parse_date(
                             article_data[f_dt_created]
                         )
                 elif _has_attr_to_set("document_pubdate", f_dt_updated, 5):
@@ -198,7 +206,7 @@ class BuildPSPackage(object):
                             'Updating document with update date "%s"',
                             article_data[f_dt_updated],
                         )
-                        _sps_package.document_pubdate = parse_date(
+                        _sps_package.document_pubdate = _parse_date(
                             article_data[f_dt_updated]
                         )
 

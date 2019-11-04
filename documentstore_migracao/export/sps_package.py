@@ -379,9 +379,7 @@ class SPS_Package:
 
     @property
     def is_ahead_of_print(self):
-        has_no_volume = self.volume is None or self.volume == 0
-        has_no_number = self.number is None or self.number == 0
-        if has_no_volume and has_no_number:
+        if not bool(self.volume) and not bool(self.number):
             return True
         return False
 
@@ -420,8 +418,7 @@ class SPS_Package:
         )
         pub_date = self._match_pubdate(xpaths)
         is_collection_pubdate = (
-            pub_date.get("date-type") == "collection" or \
-            pub_date.get("pub-type") == "collection"
+            pub_date.get("date-type", pub_date.get("pub-type")) == "collection"
         )
         if not is_collection_pubdate:
             return parse_date(pub_date)
