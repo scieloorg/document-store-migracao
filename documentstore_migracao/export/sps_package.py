@@ -103,6 +103,74 @@ class SPS_Package:
         except IndexError:
             return None
 
+    def _get_scielo_pid(self, specific_use):
+        try:
+            return self.xmltree.xpath(
+                f'.//article-id[@specific-use="{specific_use}"]/text()'
+            )[0]
+        except IndexError:
+            return None
+
+    def _set_scielo_pid(self, attr_value, specific_use, value):
+        if attr_value is None:
+            pid_node = etree.Element("article-id")
+            pid_node.set("pub-id-type", "publisher-id")
+            pid_node.set("specific-use", specific_use)
+            pid_node.text = value
+            self.article_meta.insert(0, pid_node)
+        else:
+            pid_node = self.article_meta.xpath(
+                f'.//article-id[@specific-use="{specific_use}"]'
+            )[0]
+            pid_node.text = value
+
+    @property
+    def scielo_pid_v1(self):
+        return self._get_scielo_pid("scielo-v1")
+
+    @scielo_pid_v1.setter
+    def scielo_pid_v1(self, value):
+        self._set_scielo_pid(self.scielo_pid_v1, "scielo-v1", value)
+
+    @property
+    def scielo_pid_v2(self):
+        return self._get_scielo_pid("scielo-v2")
+
+    @scielo_pid_v2.setter
+    def scielo_pid_v2(self, value):
+        self._set_scielo_pid(self.scielo_pid_v2, "scielo-v2", value)
+
+    @property
+    def scielo_pid_v3(self):
+        return self._get_scielo_pid("scielo-v3")
+
+    @scielo_pid_v3.setter
+    def scielo_pid_v3(self, value):
+        self._set_scielo_pid(self.scielo_pid_v3, "scielo-v3", value)
+
+    @property
+    def aop_pid(self):
+        try:
+            return self.xmltree.xpath(
+                './/article-id[@specific-use="previous-pid" and @pub-id-type="publisher-id"]/text()'
+            )[0]
+        except IndexError:
+            return None
+
+    @aop_pid.setter
+    def aop_pid(self, value):
+        if self.aop_pid is None:
+            pid_node = etree.Element("article-id")
+            pid_node.set("pub-id-type", "publisher-id")
+            pid_node.set("specific-use", "previous-pid")
+            pid_node.text = value
+            self.article_meta.insert(1, pid_node)
+        else:
+            pid_node = self.article_meta.xpath(
+                './/article-id[@specific-use="previous-pid" and @pub-id-type="publisher-id"]'
+            )[0]
+            pid_node.text = value
+
     @property
     def journal_meta(self):
         data = []
@@ -341,6 +409,12 @@ class SPS_Package:
     def order(self):
         return tuple(item[1] for item in self.order_meta)
 
+    @property
+    def is_ahead_of_print(self):
+        if not bool(self.volume) and not bool(self.number):
+            return True
+        return False
+
     def _match_pubdate(self, pubdate_xpaths):
         """
         Retorna o primeiro match da lista de pubdate_xpaths
@@ -350,14 +424,46 @@ class SPS_Package:
             if pubdate is not None:
                 return pubdate
 
+    def _set_pub_date(self, attrs_by_version, value):
+        sps_version = self.xmltree.xpath('/article/@specific-use')
+        if len(sps_version) > 0 and attrs_by_version.get(sps_version[0]) is not None:
+            attrs = attrs_by_version[sps_version[0]]
+        else:
+            attrs = attrs_by_version["other"]
+        pubdate_node = etree.Element("pub-date")
+        for attr in attrs:
+            pubdate_node.set(*attr)
+        for tag, val in zip(["year", "month", "day"], value):
+            if len(val) > 0:
+                new_node = etree.Element(tag)
+                new_node.text = val
+                pubdate_node.append(new_node)
+        existing_pubdate = self.article_meta.find("pub-date")
+        existing_pubdate.addnext(pubdate_node)
+
     @property
     def document_pubdate(self):
         xpaths = (
             'pub-date[@pub-type="epub"]',
             'pub-date[@date-type="pub"]',
-            "pub-date",
+            'pub-date',
         )
-        return parse_date(self._match_pubdate(xpaths))
+        pub_date = self._match_pubdate(xpaths)
+        is_collection_pubdate = (
+            pub_date.get("date-type", pub_date.get("pub-type")) == "collection"
+        )
+        if not is_collection_pubdate:
+            return parse_date(pub_date)
+        return ("", "", "")
+
+    @document_pubdate.setter
+    def document_pubdate(self, value):
+        xpaths_attrs_to_set = {
+            "sps-1.9": (("publication-format", "electronic"), ("date-type", "pub"),),
+            "sps-1.8": (("pub-type", "epub"),),
+            "other": (("pub-type", "epub"),),
+        }
+        self._set_pub_date(xpaths_attrs_to_set, value)
 
     @property
     def documents_bundle_pubdate(self):
@@ -365,9 +471,18 @@ class SPS_Package:
             'pub-date[@pub-type="epub-ppub"]',
             'pub-date[@pub-type="collection"]',
             'pub-date[@date-type="collection"]',
-            "pub-date",
         )
         return parse_date(self._match_pubdate(xpaths))
+
+    @documents_bundle_pubdate.setter
+    def documents_bundle_pubdate(self, value):
+        xpaths_attrs_to_set = {
+            "sps-1.9": (
+                ("publication-format", "electronic"), ("date-type", "collection"),),
+            "sps-1.8": (("pub-type", "collection"),),
+            "other": (("pub-type", "epub-ppub"),),
+        }
+        self._set_pub_date(xpaths_attrs_to_set, value)
 
     @property
     def scielo_id(self):

@@ -5,6 +5,9 @@ import sys
 import argparse
 import textwrap
 import json
+import csv
+import logging
+from copy import deepcopy
 
 import fs
 from fs import path, copy, errors
@@ -13,7 +16,6 @@ from fs.walk import Walker
 from documentstore_migracao.utils import xml
 from documentstore_migracao.export.sps_package import SPS_Package
 
-import logging
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.DEBUG)
 
@@ -30,7 +32,9 @@ class BuildPSPackage(object):
 
     """
 
-    def __init__(self, acrons, xml_folder, img_folder, pdf_folder, out_folder):
+    def __init__(
+        self, acrons, xml_folder, img_folder, pdf_folder, out_folder, articles_csvfile
+    ):
         """
         Param acrons: It list of acronym.
 
@@ -40,6 +44,7 @@ class BuildPSPackage(object):
         self.img_folder = img_folder
         self.pdf_folder = pdf_folder
         self.out_folder = out_folder
+        self.articles_csvfile = articles_csvfile
 
         if acrons:
             self.acrons = acrons
@@ -110,6 +115,121 @@ class BuildPSPackage(object):
         except errors.ResourceNotFound as e:
             logging.info(e)
 
+    def _update_sps_package_object(self, articles_data_reader, sps_package, pack_name):
+        """
+        Atualiza instancia SPS_Package com os dados de artigos do arquivo
+        articles_data_reader, um CSV com os seguintes campos:
+            - 'PID'
+            - 'PID AOP'
+            - 'FILE'
+            - 'DATA (COLLECTION)'
+            - 'DATA PRIMEIRO PROCESSAMENTO'
+            - 'DATA DO ULTIMO PROCESSAMENTO'
+        """
+        def _get_article_data_by_file_path(articles_data_reader):
+            article_data = None
+            for row in articles_data_reader:
+                if pack_name in row[f_file]:
+                    article_data = row
+                    logging.debug(
+                        'Updating document with PID "%s"', article_data[f_pid]
+                    )
+                    break
+            return article_data
+
+        def _get_article_data_by_publisher_id(articles_data_reader):
+            article_data = None
+            logging.debug('Reading document PID "%s" data', _sps_package.publisher_id)
+            for row in articles_data_reader:
+                if _sps_package.publisher_id == row[f_pid]:
+                    article_data = row
+                    break
+            return article_data
+
+        def _has_attr_to_set(attr, field, min_attr_len=1):
+            _sps_package_attr = getattr(_sps_package, attr) or ""
+            _has_attr = len("".join(_sps_package_attr)) > min_attr_len
+            if _has_attr:
+                return False
+            _data_field = article_data[field]
+            if _data_field is not None and len(_data_field) > 0:
+                return True
+            return False
+
+        def _parse_date(str_date):
+            return (
+                str_date[:4] if int(str_date[:4]) > 0 else "",
+                str_date[4:6] if int(str_date[4:6]) > 0 else "",
+                str_date[6:8] if int(str_date[6:8]) > 0 else "",
+            )
+
+        _sps_package = deepcopy(sps_package)
+        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = (
+            articles_data_reader.fieldnames
+        )
+        # Verificar se tem PID
+        if _sps_package.publisher_id is None:
+            article_data = _get_article_data_by_file_path(articles_data_reader)
+            _sps_package.publisher_id = article_data[f_pid]
+        else:
+            article_data = _get_article_data_by_publisher_id(articles_data_reader)
+
+        if article_data is not None:
+            if _has_attr_to_set("aop_pid", f_pid_aop):
+                logging.debug(
+                    'Updating document with AOP PID "%s"', article_data[f_pid_aop]
+                )
+                _sps_package.aop_pid = article_data[f_pid_aop]
+
+            # Verificar data de publicação e da coleção
+            if not _sps_package.is_ahead_of_print:
+                if _has_attr_to_set("documents_bundle_pubdate", f_dt_collection, 3):
+                    logging.debug(
+                        'Updating document with collection date "%s"',
+                        article_data[f_dt_collection],
+                    )
+                    _sps_package.documents_bundle_pubdate = _parse_date(
+                        article_data[f_dt_collection]
+                    )
+                if _has_attr_to_set("document_pubdate", f_dt_created, 5):
+                    if len(_sps_package.documents_bundle_pubdate[0]) > 0:
+                        logging.debug(
+                            'Updating document with first date "%s"',
+                            article_data[f_dt_created],
+                        )
+                        _sps_package.document_pubdate = _parse_date(
+                            article_data[f_dt_created]
+                        )
+                elif _has_attr_to_set("document_pubdate", f_dt_updated, 5):
+                    if len(_sps_package.documents_bundle_pubdate[0]) > 0:
+                        logging.debug(
+                            'Updating document with update date "%s"',
+                            article_data[f_dt_updated],
+                        )
+                        _sps_package.document_pubdate = _parse_date(
+                            article_data[f_dt_updated]
+                        )
+
+        return _sps_package
+
+    def update_xml_file(self, articles_data_reader, acron, issue_folder, pack_name):
+        """
+        Lê e atualiza o XML do pacote informado com os dados de artigos do arquivo
+        articles_data_reader.
+        """
+        target_xml_path = path.join(
+            self.out_fs.root_path, acron, issue_folder, pack_name, pack_name + ".xml"
+        )
+        # Ler target_xml_path
+        obj_xmltree = xml.loadToXML(target_xml_path)
+        obj_xml = obj_xmltree.getroot()
+        sps_package = self._update_sps_package_object(
+            articles_data_reader, SPS_Package(obj_xmltree), pack_name
+        )
+        # Salva XML com alterações
+        xml.objXML2file(target_xml_path, sps_package.xmltree, pretty=True)
+        return sps_package
+
     def collect_xml(self, acron, xml):
         issue_folder = path.basename(path.dirname(xml))
 
@@ -139,15 +259,11 @@ class BuildPSPackage(object):
         else:
             return path.basename(filename)
 
-    def collect_pdf(self, acron, issue_folder, pack_name):
+    def collect_pdf(self, acron, issue_folder, pack_name, languages):
         def get_rendition_info(languages, pdf_filename):
             pdf_uri = path.join("pdf", acron, issue_folder, pdf_filename)
             if pdf_filename.find("_") == 2:
-                return {
-                    lang: pdf_uri
-                    for lang in languages
-                    if lang in pdf_filename
-                }
+                return {lang: pdf_uri for lang in languages if lang in pdf_filename}
             else:
                 pdf_lang = [lang for lang in languages if lang in pdf_filename]
                 if len(pdf_lang) == 0:
@@ -159,7 +275,11 @@ class BuildPSPackage(object):
                     "Saving %s/%s/%s/manifest.json", acron, issue_folder, pack_name
                 )
                 _renditions_manifest_path = path.join(
-                    self.out_fs.root_path, acron, issue_folder, pack_name, "manifest.json"
+                    self.out_fs.root_path,
+                    acron,
+                    issue_folder,
+                    pack_name,
+                    "manifest.json",
                 )
                 with open(_renditions_manifest_path, "w") as jfile:
                     jfile.write(json.dumps(metadata))
@@ -168,10 +288,6 @@ class BuildPSPackage(object):
 
         pdf_path = path.join(self.pdf_fs.root_path, acron, issue_folder)
 
-        xml_dir_path = path.join(self.out_fs.root_path, acron, issue_folder, pack_name)
-        xml_sps = SPS_Package(
-            xml.loadToXML(path.join(xml_dir_path, pack_name + ".xml"))
-        )
         renditions_manifest = {}
         for pdf in walker.files(fs.open_fs(pdf_path)):
 
@@ -183,7 +299,7 @@ class BuildPSPackage(object):
 
             self.copy(pdf_path, target_pdf_path, src_fs=self.pdf_fs)
 
-            rendition_info = get_rendition_info(xml_sps.languages, path.basename(pdf))
+            rendition_info = get_rendition_info(languages, path.basename(pdf))
             if rendition_info is not None:
                 logging.info("Updating renditions manifest with %s", rendition_info)
                 renditions_manifest.update(rendition_info)
@@ -210,7 +326,13 @@ class BuildPSPackage(object):
 
     def run(self):
 
-        if self.check_acrons():
+        if not self.check_acrons():
+            return False
+
+        with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
+            # pid, aoppid, file, pubdate, epubdate, update
+            articles_data_reader = csv.DictReader(csvfile)
+
             for acron in self.acrons:
 
                 logging.info("Process acronym: %s" % acron)
@@ -227,12 +349,16 @@ class BuildPSPackage(object):
 
                         issue_folder, pack_name = self.collect_xml(acron, xml)
 
-                        self.collect_pdf(acron, issue_folder, pack_name)
+                        csvfile.seek(0)
+                        xml_sps = self.update_xml_file(
+                            articles_data_reader, acron, issue_folder, pack_name
+                        )
+
+                        self.collect_pdf(
+                            acron, issue_folder, pack_name, xml_sps.languages
+                        )
 
                         self.collect_img(acron, issue_folder, pack_name)
-
-        else:
-            return False
 
 
 def main():
@@ -290,6 +416,14 @@ def main():
     )
 
     parser.add_argument(
+        "-Article-csvfile",
+        "--article-csvfile",
+        dest="articles_csvfile",
+        required=True,
+        help="Article CSV data file from ISIS bases",
+    )
+
+    parser.add_argument(
         "-v", "--version", action="version", version="version: 0.1.beta"
     )
 
@@ -301,6 +435,7 @@ def main():
         args.img_folder,
         args.pdf_folder,
         args.output_folder,
+        args.articles_csvfile,
     )
 
     return build_ps.run()

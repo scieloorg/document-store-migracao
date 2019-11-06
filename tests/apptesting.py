@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+from bson.objectid import ObjectId
+
 from documentstore import interfaces, exceptions, domain
 
 
@@ -65,22 +67,30 @@ class InMemoryJournalStore(InMemoryDataStore):
 
 class InMemoryChangesDataStore(interfaces.ChangesDataStore):
     def __init__(self):
-        self._data_store = OrderedDict()
+        self._timestamps = OrderedDict()  # timestamps -> mudanças
+        self._ids = {}  # ids -> mudanças
 
     def add(self, change: dict):
-
-        if change["timestamp"] in self._data_store:
+        change["_id"] = str(change.get("_id") or ObjectId())
+        if change["timestamp"] in self._timestamps or change["_id"] in self._ids:
             raise exceptions.AlreadyExists()
         else:
-            self._data_store[change["timestamp"]] = change
+            self._timestamps[change["timestamp"]] = change
+            self._ids[change["_id"]] = change
 
     def filter(self, since: str = "", limit: int = 500):
 
         return [
             change
-            for timestamp, change in self._data_store.items()
-            if timestamp >= since
+            for timestamp, change in self._timestamps.items()
+            if timestamp > since
         ][:limit]
+
+    def fetch(self, id: str) -> dict:
+        try:
+            return self._ids[id]
+        except KeyError:
+            raise exceptions.DoesNotExist()
 
 
 class MongoDBCollectionStub:
