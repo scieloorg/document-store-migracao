@@ -1285,10 +1285,6 @@ class Test_ArticleMetaPublisherId(unittest.TestCase):
     def test_publisher_id(self):
         self.assertEqual(self.sps_package.publisher_id, "S0074-02761962000200006")
 
-    def test_change_publisher_id(self):
-        self.sps_package.publisher_id = "S0074-02761962000200123"
-        self.assertEqual(self.sps_package.publisher_id, "S0074-02761962000200123")
-
 
 class Test_ArticleMetaNoPublisherId(unittest.TestCase):
     def setUp(self):
@@ -1303,10 +1299,6 @@ class Test_ArticleMetaNoPublisherId(unittest.TestCase):
 
     def test_publisher_id(self):
         self.assertIsNone(self.sps_package.publisher_id)
-
-    def test_set_publisher_id(self):
-        self.sps_package.publisher_id = "S0074-02761962000200123"
-        self.assertEqual(self.sps_package.publisher_id, "S0074-02761962000200123")
 
 
 class Test_ArticleMetaAOPPID(unittest.TestCase):
@@ -1348,6 +1340,117 @@ class Test_ArticleMetaNoAOPPID(unittest.TestCase):
     def test_set_aop_pid(self):
         self.sps_package.aop_pid = "S0074-02761962005000001"
         self.assertEqual(self.sps_package.aop_pid, "S0074-02761962005000001")
+
+
+class Test_ArticleMetaScieloPIDV1(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v1">12345(1995)</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_scielo_pid_v1(self):
+        self.assertIsNotNone(self.sps_package.scielo_pid_v1)
+        self.assertEqual(self.sps_package.scielo_pid_v1, "12345(1995)")
+
+    def test_set_scielo_pid_v1(self):
+        self.sps_package.scielo_pid_v1 = "1234-5678(1995)0001"
+        self.assertEqual(self.sps_package.scielo_pid_v1, "1234-5678(1995)0001")
+
+
+class Test_ArticleMetaNoPIDScieloV1(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v2">S0101-02022011009000001</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_scielo_pid_v1(self):
+        self.assertIsNone(self.sps_package.scielo_pid_v1)
+
+
+class Test_ArticleMetaPIDScieloV2(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v2">S0101-02022011009000001</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_scielo_pid_v2(self):
+        self.assertIsNotNone(self.sps_package.scielo_pid_v2)
+        self.assertEqual(self.sps_package.scielo_pid_v2, "S0101-02022011009000001")
+
+    def test_set_scielo_pid_v2(self):
+        self.sps_package.scielo_pid_v2 = "S0101-02022011009000001"
+        self.assertEqual(self.sps_package.scielo_pid_v2, "S0101-02022011009000001")
+
+
+class Test_ArticleMetaNoPIDScieloV2(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v1">12345(1995)</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_scielo_pid_v2(self):
+        self.assertIsNone(self.sps_package.scielo_pid_v2)
+
+
+class Test_ArticleMetaPIDScieloV3(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v3">cdmqrXxyd3DRjr88hpGQPLx</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_scielo_pid_v3(self):
+        self.assertIsNotNone(self.sps_package.scielo_pid_v3)
+        self.assertEqual(self.sps_package.scielo_pid_v3, "cdmqrXxyd3DRjr88hpGQPLx")
+
+    def test_set_scielo_pid_v3(self):
+        self.sps_package.scielo_pid_v3 = "cdmqrXxyd3DRjr88hpGQ123"
+        self.assertEqual(self.sps_package.scielo_pid_v3, "cdmqrXxyd3DRjr88hpGQ123")
+
+
+class Test_ArticleMetaNoPIDScieloV3(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+        </article-meta></article>"""
+        article_ids = """
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v2">S0101-02022011009000001</article-id>
+            <article-id pub-id-type="other">00006</article-id>
+        """
+        xml = utils.build_xml(article_meta_xml, "", article_ids=article_ids)
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree)
+
+    def test_scielo_pid_v3(self):
+        self.assertIsNone(self.sps_package.scielo_pid_v3)
 
 
 class Test_DocumentPubdateSPS1_9(unittest.TestCase):

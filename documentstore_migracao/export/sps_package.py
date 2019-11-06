@@ -103,18 +103,50 @@ class SPS_Package:
         except IndexError:
             return None
 
-    @publisher_id.setter
-    def publisher_id(self, value):
-        if self.publisher_id is None:
+    def _get_scielo_pid(self, specific_use):
+        try:
+            return self.xmltree.xpath(
+                f'.//article-id[@specific-use="{specific_use}"]/text()'
+            )[0]
+        except IndexError:
+            return None
+
+    def _set_scielo_pid(self, attr_value, specific_use, value):
+        if attr_value is None:
             pid_node = etree.Element("article-id")
             pid_node.set("pub-id-type", "publisher-id")
+            pid_node.set("specific-use", specific_use)
             pid_node.text = value
             self.article_meta.insert(0, pid_node)
         else:
             pid_node = self.article_meta.xpath(
-                './/article-id[not(@specific-use="scielo") and not(@specific-use="previous-pid") and @pub-id-type="publisher-id"]'
+                f'.//article-id[@specific-use="{specific_use}"]'
             )[0]
             pid_node.text = value
+
+    @property
+    def scielo_pid_v1(self):
+        return self._get_scielo_pid("scielo-v1")
+
+    @scielo_pid_v1.setter
+    def scielo_pid_v1(self, value):
+        self._set_scielo_pid(self.scielo_pid_v1, "scielo-v1", value)
+
+    @property
+    def scielo_pid_v2(self):
+        return self._get_scielo_pid("scielo-v2")
+
+    @scielo_pid_v2.setter
+    def scielo_pid_v2(self, value):
+        self._set_scielo_pid(self.scielo_pid_v2, "scielo-v2", value)
+
+    @property
+    def scielo_pid_v3(self):
+        return self._get_scielo_pid("scielo-v3")
+
+    @scielo_pid_v3.setter
+    def scielo_pid_v3(self, value):
+        self._set_scielo_pid(self.scielo_pid_v3, "scielo-v3", value)
 
     @property
     def aop_pid(self):
