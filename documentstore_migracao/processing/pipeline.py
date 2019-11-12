@@ -8,7 +8,7 @@ from documentstore_migracao import exceptions, config
 from documentstore_migracao.utils import extract_isis
 from documentstore_migracao.processing import reading, conversion
 from documentstore.interfaces import Session
-from documentstore.domain import utcnow, Journal
+from documentstore.domain import utcnow, Journal, DocumentsBundle
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore_migracao.utils.xylose_converter import (
     issue_to_kernel,
@@ -88,22 +88,24 @@ def import_issues(json_file: str, session: Session):
     issues_as_json = reading.read_json_file(json_file)
     issues_as_xylose = conversion.conversion_issues_to_xylose(issues_as_json)
     issues_as_xylose = filter_issues(issues_as_xylose)
-    issues_as_kernel = conversion.conversion_issues_to_kernel(issues_as_xylose)
+    manifests = conversion.conversion_issues_to_kernel(issues_as_xylose)
 
-    for issue in issues_as_kernel:
-        manifest = ManifestDomainAdapter(manifest=issue)
+    for manifest in manifests:
+        issue = DocumentsBundle(manifest=manifest)
 
         try:
-            session.documents_bundles.add(manifest)
+            session.documents_bundles.add(issue)
             session.changes.add(
                 {
                     "timestamp": utcnow(),
                     "entity": "DocumentsBundle",
-                    "id": manifest.id(),
+                    "id": issue.id(),
+                    "content_gz": gzip.compress(issue.data_bytes()),
+                    "content_type": issue.data_type,
                 }
             )
         except AlreadyExists as exc:
-            logger.info(str(exc))
+            logger.info(exc)
 
 
 def import_documents_bundles_link_with_journal(file_path: str, session: Session):
