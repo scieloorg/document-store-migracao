@@ -2,6 +2,7 @@ import logging
 import sys
 import os
 import json
+
 from documentstore_migracao import exceptions, config
 from documentstore_migracao.utils import extract_isis
 from documentstore_migracao.processing import reading, conversion
