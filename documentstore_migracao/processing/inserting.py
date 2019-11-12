@@ -6,10 +6,11 @@ import json
 from typing import List, Tuple
 from mimetypes import MimeTypes
 from urllib.parse import urlparse
+import gzip
 
 import lxml
 from xylose.scielodocument import Journal
-from documentstore.domain import utcnow, DocumentsBundle, get_static_assets
+from documentstore.domain import utcnow, DocumentsBundle, get_static_assets, Document
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore.interfaces import Session
 
@@ -65,10 +66,7 @@ def get_document_renditions(
         logger.info("Could not read manifest: %s", str(exc))
         _manifest = {}
     else:
-        _manifest = {
-            lang: urlparse(url).path
-            for lang, url in _manifest_json.items()
-        }
+        _manifest = {lang: urlparse(url).path for lang, url in _manifest_json.items()}
         logger.debug("Renditions lang and legacy url: %s", _manifest)
 
     _renditions = []
@@ -201,22 +199,28 @@ def register_document(folder: str, session_db, storage) -> None:
 
     if obj_xml:
         renditions = get_document_renditions(folder, _renditions, prefix, storage)
-        manifest_data = ManifestDomainAdapter(
+        document = Document(
             manifest=manifest.get_document_manifest(
                 obj_xml, url_xml, registered_assets, renditions
             )
         )
 
         try:
-            session_db.documents.add(data=manifest_data)
+            session_db.documents.add(document)
             session_db.changes.add(
-                {"timestamp": utcnow(), "entity": "Document", "id": manifest_data.id()}
+                {
+                    "timestamp": utcnow(),
+                    "entity": "Document",
+                    "id": document.id(),
+                    "content_gz": gzip.compress(document.data_bytes()),
+                    "content_type": document.data_type,
+                }
             )
-            logger.info("Document-store save: %s", manifest_data.id())
+            logger.info("Document-store save: %s", document.id())
         except AlreadyExists as exc:
             logger.exception(exc)
 
-    return obj_xml, manifest_data.id()
+    return obj_xml, document.id()
 
 
 def get_documents_bundle(session_db, bundle_id, is_issue, issn):
@@ -351,7 +355,8 @@ def register_documents_in_documents_bundle(
         issn = ""
         for issn_type in ("eissn", "pissn", "issn"):
             issn = document.get(issn_type)
-            if issn: break
+            if issn:
+                break
 
         if is_issue:
             bundle_id = scielo_ids_generator.issue_id(
@@ -362,18 +367,13 @@ def register_documents_in_documents_bundle(
                 document.get("supplement"),
             )
         else:
-            bundle_id = scielo_ids_generator.aops_bundle_id(
-                data_journal[issn]
-            )
+            bundle_id = scielo_ids_generator.aops_bundle_id(data_journal[issn])
 
         documents_bundles.setdefault(bundle_id, {})
         documents_bundles[bundle_id].setdefault("items", [])
 
         documents_bundles[bundle_id]["items"].append(
-            {
-                "id": scielo_id,
-                "order": document.get("order", ""),
-            }
+            {"id": scielo_id, "order": document.get("order", "")}
         )
         documents_bundles[bundle_id]["data"] = {
             "is_issue": is_issue,
