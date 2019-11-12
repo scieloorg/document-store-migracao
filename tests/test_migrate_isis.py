@@ -2,6 +2,10 @@ import os
 import subprocess
 import unittest
 from unittest import mock
+
+from documentstore.exceptions import AlreadyExists
+from documentstore.domain import Journal
+
 from documentstore_migracao.utils import extract_isis
 from documentstore_migracao.processing import pipeline, conversion
 from documentstore_migracao import exceptions, config
@@ -14,8 +18,6 @@ from . import (
     SAMPLE_ISSUES_KERNEL,
     SAMPLE_JOURNALS_JSON,
 )
-from documentstore.exceptions import AlreadyExists
-from documentstore.domain import Journal
 
 
 class ExtractIsisTests(unittest.TestCase):
