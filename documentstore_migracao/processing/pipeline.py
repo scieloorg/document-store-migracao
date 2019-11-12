@@ -41,9 +41,7 @@ def import_journals(json_file: str, session: Session):
 
     try:
         journals_as_json = reading.read_json_file(json_file)
-        manifests = conversion.conversion_journals_to_kernel(
-            journals=journals_as_json
-        )
+        manifests = conversion.conversion_journals_to_kernel(journals=journals_as_json)
 
         for manifest in manifests:
             journal = Journal(manifest=manifest)
@@ -122,29 +120,35 @@ def import_documents_bundles_link_with_journal(file_path: str, session: Session)
     }
     ```
     """
-
     links = reading.read_json_file(file_path)
-
-    for journal_id, bundles in links.items():
+    for journal_id, bundles_entries in links.items():
         try:
-            _journal = session.journals.fetch(journal_id)
-
-            for bundle_id in bundles:
+            journal = session.journals.fetch(journal_id)
+            for bundle_entry in bundles_entries:
+                # `bundle_entry` é um dict armazenado no Journal que o relaciona
+                # com determinado bundle.
                 try:
-                    _journal.add_issue(bundle_id)
+                    journal.add_issue(bundle_entry)
                 except AlreadyExists:
                     logger.debug(
-                        "Bundle %s already exists in journal %s"
-                        % (bundle_id["id"], journal_id)
+                        'Bundle "%s" already exists in journal "%s"',
+                        bundle_entry["id"],
+                        journal_id,
                     )
 
-            session.journals.update(_journal)
+            session.journals.update(journal)
             session.changes.add(
-                {"timestamp": utcnow(), "entity": "Journal", "id": _journal.id()}
+                {
+                    "timestamp": utcnow(),
+                    "entity": "Journal",
+                    "id": journal.id(),
+                    "content_gz": gzip.compress(journal.data_bytes()),
+                    "content_type": journal.data_type,
+                }
             )
         except DoesNotExist:
             logger.debug(
-                "Journal %s does not exists, cannot link bundles." % journal_id
+                'Journal "%s" does not exists, cannot link bundles.', journal_id
             )
 
 
