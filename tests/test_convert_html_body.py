@@ -1700,14 +1700,6 @@ class TestAHrefPipe(unittest.TestCase):
         raw, transformed = self._transform(text, self.pipe)
 
         node = transformed.find(".//email")
-        self.assertEqual(node.text, "a@scielo.org")
-        self.assertEqual(node.tag, "email")
-
-    def test_a_href_pipe___create_email_mailto_empty(self):
-        text = """<root><a href="mailto:">sfpyip@hku.hk</a>). Correspondence should be addressed to Dr Yip at this address.</root>"""
-        raw, transformed = self._transform(text, self.pipe)
-
-        node = transformed.find(".//email")
         self.assertEqual(node.text, "sfpyip@hku.hk")
         self.assertEqual(
             node.tail,
@@ -1743,6 +1735,43 @@ class TestAHrefPipe(unittest.TestCase):
                 )
                 self.assertEqual("uri", node.attrib["ext-link-type"])
                 self.assertEqual(len(node.attrib), 2)
+
+    def test_a_href_pipe_create_ext_link_for_bad_uri_format(self):
+        expected = {
+            "{http://www.w3.org/1999/xlink}href": "www.bla.org",
+            "ext-link-type": "uri",
+        }
+        text = '<root><body><a href="www.bla.org">texto</a></body></root>'
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        node = xml.find(".//ext-link")
+
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
+        self.assertEqual(
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "www.bla.org"
+        )
+        self.assertEqual(node.attrib.get("ext-link-type"), "uri")
+        self.assertEqual(node.tag, "ext-link")
+        self.assertEqual(node.text, "texto")
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
+
+    def test_a_href_pipe_create_ext_link_for_bad_uri_format_which_starts_with_http(self):
+        expected = {
+            "{http://www.w3.org/1999/xlink}href": "http//www.bla.org",
+            "ext-link-type": "uri",
+        }
+        text = '<root><body><a href="http//www.bla.org">texto</a></body></root>'
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        node = xml.find(".//ext-link")
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
+        self.assertEqual(
+            node.attrib.get("{http://www.w3.org/1999/xlink}href"), "http//www.bla.org"
+        )
+        self.assertEqual(node.attrib.get("ext-link-type"), "uri")
+        self.assertEqual(node.tag, "ext-link")
+        self.assertEqual(node.text, "texto")
+        self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
 
 
 class TestImgPipe(unittest.TestCase):

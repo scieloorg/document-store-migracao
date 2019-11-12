@@ -1014,6 +1014,10 @@ class HTML2SPSPipeline(object):
                 return self._create_email(node)
             if href.startswith("//") or ":" in href:
                 return self._create_ext_link(node)
+            if href.startswith("www"):
+                return self._create_ext_link(node)
+            if href.startswith("http//"):
+                return self._create_ext_link(node)
             href = href.split("/")[0]
             if href and href.count(".") and href.replace(".", ""):
                 return self._create_ext_link(node)
