@@ -2,12 +2,13 @@ import logging
 import sys
 import os
 import json
+import gzip
 
 from documentstore_migracao import exceptions, config
 from documentstore_migracao.utils import extract_isis
 from documentstore_migracao.processing import reading, conversion
 from documentstore.interfaces import Session
-from documentstore.domain import utcnow
+from documentstore.domain import utcnow, Journal
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore_migracao.utils.xylose_converter import (
     issue_to_kernel,
@@ -56,22 +57,28 @@ def import_journals(json_file: str, session: Session):
 
     try:
         journals_as_json = reading.read_json_file(json_file)
-        journals_as_kernel = conversion.conversion_journals_to_kernel(
+        manifests = conversion.conversion_journals_to_kernel(
             journals=journals_as_json
         )
 
-        for journal in journals_as_kernel:
-            manifest = ManifestDomainAdapter(manifest=journal)
+        for manifest in manifests:
+            journal = Journal(manifest=manifest)
 
             try:
-                session.journals.add(data=manifest)
+                session.journals.add(journal)
                 session.changes.add(
-                    {"timestamp": utcnow(), "entity": "Journal", "id": manifest.id()}
+                    {
+                        "timestamp": utcnow(),
+                        "entity": "Journal",
+                        "id": journal.id(),
+                        "content_gz": gzip.compress(journal.data_bytes()),
+                        "content_type": journal.data_type,
+                    }
                 )
             except AlreadyExists as exc:
-                logger.info(str(exc))
+                logger.info(exc)
     except (FileNotFoundError, ValueError) as exc:
-        logger.debug(str(exc))
+        logger.debug(exc)
 
 
 def import_issues(json_file: str, session: Session):
