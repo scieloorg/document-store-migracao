@@ -244,19 +244,33 @@ def get_documents_bundle(session_db, bundle_id, is_issue, issn):
 
 
 def create_aop_bundle(session_db, issn):
-    _journal = session_db.journals.fetch(issn)
+    journal = session_db.journals.fetch(issn)
     bundle_id = scielo_ids_generator.aops_bundle_id(issn)
-    manifest_data = ManifestDomainAdapter(
+    bundle = DocumentsBundle(
         manifest=manifest.get_document_bundle_manifest(bundle_id, utcnow())
     )
-    session_db.documents_bundles.add(data=manifest_data)
+    session_db.documents_bundles.add(bundle)
     session_db.changes.add(
-        {"timestamp": utcnow(), "entity": "DocumentsBundle", "id": bundle_id}
+        {
+            "timestamp": utcnow(),
+            "entity": "DocumentsBundle",
+            "id": bundle.id(),
+            "content_gz": gzip.compress(bundle.data_bytes()),
+            "content_type": bundle.data_type,
+        }
     )
-    _journal.ahead_of_print_bundle = bundle_id
-    session_db.journals.update(_journal)
-    session_db.changes.add({"timestamp": utcnow(), "entity": "Journal", "id": issn})
-    return session_db.documents_bundles.fetch(bundle_id)
+    journal.ahead_of_print_bundle = bundle.id()
+    session_db.journals.update(journal)
+    session_db.changes.add(
+        {
+            "timestamp": utcnow(),
+            "entity": "Journal",
+            "id": issn,
+            "content_gz": gzip.compress(journal.data_bytes()),
+            "content_type": journal.data_type,
+        }
+    )
+    return session_db.documents_bundles.fetch(bundle.id())
 
 
 def import_documents_to_kernel(session_db, storage, folder, output_path) -> None:
@@ -305,7 +319,6 @@ def link_documents_bundles_with_documents(
 ):
     """Função responsável por atualizar o relacionamento entre
     documents bundles e documents no nível de banco de dados"""
-
     for document in documents:
         try:
             documents_bundle.add_document(document)
@@ -322,6 +335,8 @@ def link_documents_bundles_with_documents(
             "timestamp": utcnow(),
             "entity": "DocumentsBundle",
             "id": documents_bundle.id(),
+            "content_gz": gzip.compress(documents_bundle.data_bytes()),
+            "content_type": documents_bundle.data_type,
         }
     )
 
@@ -329,7 +344,6 @@ def link_documents_bundles_with_documents(
 def register_documents_in_documents_bundle(
     session_db, file_documents: str, file_journals: str
 ) -> None:
-
     err_filename = os.path.join(
         config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
     )
