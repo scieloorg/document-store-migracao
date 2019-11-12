@@ -19,22 +19,6 @@ from documentstore_migracao.utils.xylose_converter import (
 logger = logging.getLogger(__name__)
 
 
-class ManifestDomainAdapter:
-    """Complementa o manifesto produzido na fase de transformação
-    para o formato exigido pelos adapters do Kernel para
-    realizar a inserção no MongoDB"""
-
-    def __init__(self, manifest):
-        self._manifest = manifest
-
-    def id(self) -> str:
-        return self.manifest["id"]
-
-    @property
-    def manifest(self) -> dict:
-        return self._manifest
-
-
 def filter_issues(issues: list) -> list:
     """Filtra as issues em formato xylose sempre removendo
     os press releases e possibilitando a aplicação do filtro
