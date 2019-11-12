@@ -1,23 +1,22 @@
 """ module to processing to inserting methods """
-
 import os
 import re
 import logging
 import json
 from typing import List, Tuple
 from mimetypes import MimeTypes
+from urllib.parse import urlparse
+
 import lxml
 from xylose.scielodocument import Journal
-from urllib.parse import urlparse
+from documentstore.domain import utcnow, DocumentsBundle, get_static_assets
+from documentstore.exceptions import AlreadyExists, DoesNotExist
+from documentstore.interfaces import Session
 
 from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
 from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
 from documentstore_migracao.processing import reading
-
-from documentstore.domain import utcnow, DocumentsBundle, get_static_assets
-from documentstore.exceptions import AlreadyExists, DoesNotExist
-from documentstore.interfaces import Session
 from documentstore_migracao.tools import constructor
 
 
