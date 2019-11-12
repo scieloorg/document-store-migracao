@@ -499,7 +499,7 @@ class TestImportDocumentsBundlesLink(unittest.TestCase):
                 "~/json/output.json", self.session
             )
             self.assertIn(
-                "Bundle issue-1 already exists in journal 0001-3714", log[-1][-1]
+                'Bundle "issue-1" already exists in journal "0001-3714"', log[-1][-1]
             )
 
         with self.assertLogs(level="DEBUG") as log:
@@ -507,6 +507,6 @@ class TestImportDocumentsBundlesLink(unittest.TestCase):
                 "~/json/output.json", self.session
             )
             self.assertIn(
-                "Journal missing-journal does not exists, cannot link bundles.",
+                'Journal "missing-journal" does not exists, cannot link bundles.',
                 log[-1][-1],
             )
