@@ -17,7 +17,7 @@ import json
 from documentstore_migracao.processing import inserting
 from documentstore_migracao.utils import manifest
 from documentstore_migracao import config
-from documentstore.domain import DocumentsBundle
+from documentstore.domain import DocumentsBundle, Journal
 from documentstore.exceptions import DoesNotExist
 from documentstore_migracao.processing.inserting import (
     get_document_assets_path,
@@ -186,9 +186,7 @@ class TestProcessingInserting(unittest.TestCase):
         self, mk_aops_bundle_id
     ):
         session_db = MagicMock()
-        session_db.journals.fetch.return_value = inserting.ManifestDomainAdapter(
-            manifest=SAMPLE_KERNEL_JOURNAL
-        )
+        session_db.journals.fetch.return_value = Journal(manifest=SAMPLE_KERNEL_JOURNAL)
         inserting.create_aop_bundle(session_db, "0001-3714")
         mk_aops_bundle_id.assert_called_once_with("0001-3714")
 
@@ -228,12 +226,9 @@ class TestProcessingInserting(unittest.TestCase):
     @patch("documentstore_migracao.processing.inserting.utcnow")
     def test_create_aop_bundle_links_aop_bundle_to_journal(self, mk_utcnow):
         mk_utcnow.return_value = "2019-01-02T05:00:00.000000Z"
-        mocked_journal_data = inserting.ManifestDomainAdapter(
-            manifest=SAMPLE_KERNEL_JOURNAL
-        )
         mk_bundle_manifest = Mock()
         session_db = MagicMock()
-        session_db.journals.fetch.return_value = mocked_journal_data
+        session_db.journals.fetch.return_value = Journal(manifest=SAMPLE_KERNEL_JOURNAL)
         inserting.create_aop_bundle(session_db, SAMPLE_KERNEL_JOURNAL["id"])
         session_db.journals.update.assert_called()
         session_db.changes.add.assert_any_call(
@@ -247,10 +242,7 @@ class TestProcessingInserting(unittest.TestCase):
 
     def test_create_aop_bundle_returns_bundle(self):
         session_db = Session()
-        mocked_journal_data = inserting.ManifestDomainAdapter(
-            manifest=SAMPLE_KERNEL_JOURNAL
-        )
-        session_db.journals.add(mocked_journal_data)
+        session_db.journals.add(Journal(manifest=SAMPLE_KERNEL_JOURNAL))
         result = inserting.create_aop_bundle(session_db, SAMPLE_KERNEL_JOURNAL["id"])
         self.assertIsInstance(result, DocumentsBundle)
         self.assertEqual(result.id(), "0001-3714-aop")
@@ -450,12 +442,14 @@ class TestDocumentManifest(unittest.TestCase):
 
         mock_minio_storage.register.side_effect = self.renditions_urls_mock
         self.json_manifest = os.path.join(self.package_path, "manifest.json")
-        with open(self.json_manifest, 'w') as json_file:
+        with open(self.json_manifest, "w") as json_file:
             json_file.write(
-                json.dumps({
-                    "pt": "rsp/v47n2/0034-8910-rsp-47-02-0231.pdf",
-                    "en": "rsp/v47n2/0034-8910-rsp-47-02-0231-en.pdf",
-                })
+                json.dumps(
+                    {
+                        "pt": "rsp/v47n2/0034-8910-rsp-47-02-0231.pdf",
+                        "en": "rsp/v47n2/0034-8910-rsp-47-02-0231-en.pdf",
+                    }
+                )
             )
 
         self.renditions = inserting.get_document_renditions(
