@@ -15,6 +15,7 @@ from . import (
     SAMPLE_JOURNALS_JSON,
 )
 from documentstore.exceptions import AlreadyExists
+from documentstore.domain import Journal
 
 
 class ExtractIsisTests(unittest.TestCase):
@@ -343,9 +344,7 @@ class TestLinkDocumentsBundlesWithJournals(unittest.TestCase):
 class TestImportDocumentsBundlesLink(unittest.TestCase):
     def setUp(self):
         self.session = Session()
-        self.session.journals.add(
-            pipeline.ManifestDomainAdapter(manifest=SAMPLE_KERNEL_JOURNAL)
-        )
+        self.session.journals.add(Journal(manifest=SAMPLE_KERNEL_JOURNAL))
 
     @mock.patch("documentstore_migracao.processing.pipeline.reading.read_json_file")
     def test_read_journal_bundle_file(self, read_json_file_mock):
