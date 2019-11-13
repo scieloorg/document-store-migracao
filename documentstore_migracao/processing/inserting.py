@@ -34,22 +34,6 @@ from documentstore_migracao.tools import constructor
 logger = logging.getLogger(__name__)
 
 
-class ManifestDomainAdapter:
-    """Complementa o manifesto produzido na fase de transformação
-    para o formato exigido pelos adapters do Kernel para
-    realizar a inserção no MongoDB"""
-
-    def __init__(self, manifest):
-        self._manifest = manifest
-
-    def id(self) -> str:
-        return self.manifest["id"]
-
-    @property
-    def manifest(self) -> dict:
-        return self._manifest
-
-
 def get_document_renditions(
     folder: str, renditions: List[str], file_prefix: str, storage: object
 ) -> List[dict]:
