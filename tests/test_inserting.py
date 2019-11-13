@@ -1,6 +1,21 @@
 import unittest
 from unittest.mock import patch, Mock, MagicMock, ANY, call
 from copy import deepcopy
+import os
+import shutil
+import json
+
+from documentstore.domain import DocumentsBundle, Journal
+from documentstore.exceptions import DoesNotExist
+
+from documentstore_migracao.utils.xml import loadToXML
+from documentstore_migracao.utils import manifest
+from documentstore_migracao.processing import inserting
+from documentstore_migracao import config
+from documentstore_migracao.processing.inserting import (
+    get_document_assets_path,
+    put_static_assets_into_storage,
+)
 from .apptesting import Session
 from . import (
     SAMPLE_ISSUES_KERNEL,
@@ -9,21 +24,6 @@ from . import (
     SAMPLES_PATH,
     SAMPLES_JOURNAL,
 )
-
-import os
-import shutil
-import json
-
-from documentstore_migracao.processing import inserting
-from documentstore_migracao.utils import manifest
-from documentstore_migracao import config
-from documentstore.domain import DocumentsBundle, Journal
-from documentstore.exceptions import DoesNotExist
-from documentstore_migracao.processing.inserting import (
-    get_document_assets_path,
-    put_static_assets_into_storage,
-)
-from documentstore_migracao.utils.xml import loadToXML
 
 
 class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
