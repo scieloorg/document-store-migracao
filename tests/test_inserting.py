@@ -29,9 +29,11 @@ from . import (
 class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
     def setUp(self):
         self.session = Session()
-        manifest = inserting.ManifestDomainAdapter(SAMPLE_ISSUES_KERNEL[0])
-        self.session.documents_bundles.add(manifest)
-        self.documents_bundle = self.session.documents_bundles.fetch(manifest.id())
+        self.documents_bundle = DocumentsBundle(SAMPLE_ISSUES_KERNEL[0])
+        self.session.documents_bundles.add(self.documents_bundle)
+
+    def fetch_documents_bundle(self):
+        return self.session.documents_bundles.fetch(self.documents_bundle.id())
 
     def test_should_link_documents_bundle_with_documents(self):
         inserting.link_documents_bundles_with_documents(
@@ -42,7 +44,7 @@ class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
 
         self.assertEqual(
             [{"id": "doc-1", "order": "0001"}, {"id": "doc-2", "order": "0002"}],
-            self.documents_bundle.documents,
+            self.fetch_documents_bundle().documents,
         )
 
     def test_should_not_insert_duplicated_documents(self):
@@ -53,7 +55,7 @@ class TestLinkDocumentsBundleWithDocuments(unittest.TestCase):
         )
 
         self.assertEqual(
-            [{"id": "doc-1", "order": "0001"}], self.documents_bundle.documents
+            [{"id": "doc-1", "order": "0001"}], self.fetch_documents_bundle().documents
         )
 
     def test_should_register_changes(self):
