@@ -1,5 +1,6 @@
 """ module to methods xml file """
 
+import re
 import logging
 import itertools
 
@@ -8,9 +9,14 @@ from xml.dom.minidom import parseString
 
 from documentstore_migracao import config
 from documentstore_migracao.utils import string, convert_html_body, files
+from xylose.scielodocument import CLEANUP_MIXED_CITATION, REPLACE_TAGS_MIXED_CITATION
 
 
 logger = logging.getLogger(__name__)
+
+CLEANUP_MIXED_CITATION = re.compile(
+    CLEANUP_MIXED_CITATION.pattern + "|< *?font.*?>|< *?br.*?>"
+)
 
 
 def str2objXML(_string):
@@ -54,3 +60,54 @@ def loadToXML(file):
     parser = etree.XMLParser(remove_blank_text=True, no_network=True)
     xml = etree.parse(file, parser)
     return xml
+
+
+def convert_html_tags_to_jats(xml_etree):
+    """
+        This methods receives an etree node and replace all "html tags" to
+        jats compliant tags.
+    """
+
+    tags = (
+        ("b", "bold"),
+        ("strong", "bold"),
+        ("i", "italic"),
+        ("u", "underline"),
+        ("small", "sc"),
+    )
+
+    for from_tag, to_tag in tags:
+        for element in xml_etree.findall(".//" + from_tag):
+            element.tag = to_tag
+
+    return xml_etree
+
+
+def convert_ahref_to_extlink(xml_etree):
+    """
+        This methods receives an etree node and replace all "a href" elements to
+        a valid ext-link jats compliant format.
+    """
+
+    for ahref in xml_etree.findall(".//a"):
+        uri = ahref.get("href", "")
+        ahref.tag = "ext-link"
+        ahref.set("ext-link-type", "uri")
+        ahref.set("{http://www.w3.org/1999/xlink}href", uri)
+        for key in [
+            i
+            for i in ahref.keys()
+            if i not in ["ext-link-type", "{http://www.w3.org/1999/xlink}href"]
+        ]:
+            ahref.attrib.pop(key)
+
+    return xml_etree
+
+
+def cleanup_mixed_citation_text(text):
+    cleaned = CLEANUP_MIXED_CITATION.sub("", text)
+    for pattern, value in REPLACE_TAGS_MIXED_CITATION:
+        cleaned = pattern.sub(value, cleaned)
+
+    cleaned = re.sub(" +", " ", cleaned)
+    return cleaned.strip()
