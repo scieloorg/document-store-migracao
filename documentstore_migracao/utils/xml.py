@@ -3,7 +3,8 @@
 import re
 import logging
 import itertools
-
+import html
+from io import StringIO
 from lxml import etree
 from xml.dom.minidom import parseString
 
@@ -111,3 +112,33 @@ def cleanup_mixed_citation_text(text):
 
     cleaned = re.sub(" +", " ", cleaned)
     return cleaned.strip()
+
+
+def create_mixed_citation_element(citation_text: str) -> etree.Element:
+    """Cria um elemento `mixed-citation` a partir do texto informado.
+
+    Durante a criação do elemento `mixed-citation` são aplicados tratamentos no
+    texto para normatizar os elementos interiores.
+
+    Params:
+        citation_text (str): Texto da citação
+
+    Returns:
+        new_mixed_citation (etree.Element): Nova citação produzida a partir do
+            texto informado.
+    """
+    new_mixed_citation = etree.parse(
+        StringIO(html.unescape(citation_text)), parser=etree.HTMLParser()
+    )
+
+    convert_html_tags_to_jats(new_mixed_citation)
+    convert_ahref_to_extlink(new_mixed_citation)
+
+    if new_mixed_citation.find(".//p") is not None:
+        new_mixed_citation = new_mixed_citation.find(".//p")
+    elif new_mixed_citation.find(".//body") is not None:
+        new_mixed_citation = new_mixed_citation.find(".//body")
+
+    new_mixed_citation.tag = "mixed-citation"
+
+    return new_mixed_citation
