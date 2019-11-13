@@ -99,11 +99,10 @@ class TestProcessingInserting(unittest.TestCase):
 
     def test_get_documents_bundle_success(self):
         session_db = Session()
-        session_db.documents_bundles.add(
-            inserting.ManifestDomainAdapter(SAMPLE_ISSUES_KERNEL[0])
-        )
+        bundle = DocumentsBundle(manifest=SAMPLE_ISSUES_KERNEL[0])
+        session_db.documents_bundles.add(bundle)
         result = inserting.get_documents_bundle(
-            session_db, self.bundle_id, True, self.issn
+            session_db, bundle.id(), True, "0987-0987"
         )
         self.assertIsInstance(result, DocumentsBundle)
         self.assertEqual(result.id(), "0001-3714-1998-v29-n3")
@@ -169,7 +168,9 @@ class TestProcessingInserting(unittest.TestCase):
         )
         self.assertEqual(result, mocked_aop_bundle)
 
-    def test_create_aop_bundle_gets_journal(self):
+    @patch("documentstore_migracao.utils.gzip")
+    def test_create_aop_bundle_gets_journal(self, mock_gzip):
+        mock_gzip.compress.return_value = "bla".encode("ascii")
         issn = "1234-0001"
         session_db = MagicMock()
         inserting.create_aop_bundle(session_db, issn)
@@ -181,66 +182,27 @@ class TestProcessingInserting(unittest.TestCase):
         session_db.journals.fetch.side_effect = DoesNotExist
         self.assertRaises(DoesNotExist, inserting.create_aop_bundle, session_db, issn)
 
+    @patch("documentstore_migracao.utils.gzip")
     @patch(
         "documentstore_migracao.processing.inserting.scielo_ids_generator.aops_bundle_id"
     )
     def test_create_aop_bundle_uses_scielo_ids_generator_aops_bundle_id(
-        self, mk_aops_bundle_id
+        self, mk_aops_bundle_id, mock_gzip
     ):
+        mock_gzip.compress.return_value = "bla".encode("ascii")
+        mk_aops_bundle_id.return_value = "bundle-01"
         session_db = MagicMock()
         session_db.journals.fetch.return_value = Journal(manifest=SAMPLE_KERNEL_JOURNAL)
         inserting.create_aop_bundle(session_db, "0001-3714")
         mk_aops_bundle_id.assert_called_once_with("0001-3714")
 
-    @patch("documentstore_migracao.processing.inserting.utcnow")
-    @patch("documentstore_migracao.processing.inserting.ManifestDomainAdapter")
-    def test_create_aop_bundle_registers_aop_bundle(
-        self, MockManifestDomainAdapter, mk_utcnow
-    ):
-        mk_utcnow.return_value = "2019-01-02T05:00:00.000000Z"
-        expected = {
-            "_id": "0001-3714-aop",
-            "created": "2019-01-02T05:00:00.000000Z",
-            "updated": "2019-01-02T05:00:00.000000Z",
-            "items": [],
-            "metadata": {},
-            "id": "0001-3714-aop",
-        }
-        mk_bundle_manifest = Mock()
-        MockManifestDomainAdapter.return_value = mk_bundle_manifest
-        session_db = MagicMock()
-        session_db.journals.fetch.return_value = inserting.ManifestDomainAdapter(
-            manifest=SAMPLE_KERNEL_JOURNAL
-        )
-        inserting.create_aop_bundle(session_db, SAMPLE_KERNEL_JOURNAL["id"])
-        MockManifestDomainAdapter.assert_any_call(manifest=expected)
-        session_db.documents_bundles.add.assert_called_once_with(
-            data=mk_bundle_manifest
-        )
-        session_db.changes.add.assert_any_call(
-            {
-                "timestamp": "2019-01-02T05:00:00.000000Z",
-                "entity": "DocumentsBundle",
-                "id": "0001-3714-aop",
-            }
-        )
+    def test_create_aop_bundle_links_aop_bundle_to_journal(self):
+        session = Session()
+        journal = Journal(manifest=SAMPLE_KERNEL_JOURNAL)
+        session.journals.add(journal)
 
-    @patch("documentstore_migracao.processing.inserting.utcnow")
-    def test_create_aop_bundle_links_aop_bundle_to_journal(self, mk_utcnow):
-        mk_utcnow.return_value = "2019-01-02T05:00:00.000000Z"
-        mk_bundle_manifest = Mock()
-        session_db = MagicMock()
-        session_db.journals.fetch.return_value = Journal(manifest=SAMPLE_KERNEL_JOURNAL)
-        inserting.create_aop_bundle(session_db, SAMPLE_KERNEL_JOURNAL["id"])
-        session_db.journals.update.assert_called()
-        session_db.changes.add.assert_any_call(
-            {
-                "timestamp": "2019-01-02T05:00:00.000000Z",
-                "entity": "Journal",
-                "id": SAMPLE_KERNEL_JOURNAL["id"],
-            }
-        )
-        self.assertEqual(mocked_journal_data.ahead_of_print_bundle, "0001-3714-aop")
+        inserting.create_aop_bundle(session, journal.id())
+        self.assertEqual(session.journals.fetch(journal.id()).ahead_of_print_bundle, "0001-3714-aop")
 
     def test_create_aop_bundle_returns_bundle(self):
         session_db = Session()
@@ -278,7 +240,7 @@ class TestProcessingInserting(unittest.TestCase):
         )
 
         session_db = Session()
-        manifest = inserting.ManifestDomainAdapter(SAMPLE_ISSUES_KERNEL[0])
+        manifest = DocumentsBundle(SAMPLE_ISSUES_KERNEL[0])
         session_db.documents_bundles.add(manifest)
 
         inserting.register_documents_in_documents_bundle(
@@ -291,11 +253,12 @@ class TestProcessingInserting(unittest.TestCase):
 
             self.assertEqual(content, "0036-3634-2009-v45-n4\n")
 
+    @patch("documentstore_migracao.utils.gzip")
     @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     @patch("documentstore_migracao.processing.inserting.scielo_ids_generator")
     def test_register_documents_in_documents_bundle_scielo_ids_generator(
-        self, mk_scielo_ids_generator, mk_read_json_file, mk_get_documents_bundle
+        self, mk_scielo_ids_generator, mk_read_json_file, mk_get_documents_bundle, mk_gzip
     ):
         documents = {
             "JwqGdMDrdcV3Z7MFHgtKvVk": {
@@ -324,20 +287,22 @@ class TestProcessingInserting(unittest.TestCase):
         journals = [SAMPLES_JOURNAL]
 
         mk_read_json_file.side_effect = [journals, documents]
+        mk_gzip.compress.return_value = "bla".encode("ascii")
 
         session_db = Session()
         inserting.register_documents_in_documents_bundle(
-            session_db, "/tmp/documents.json", "/tmp/journals.json"
+                session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
         mk_scielo_ids_generator.issue_id.assert_any_call(
             "0036-3634", "2009", "45", "04", None
         )
         mk_scielo_ids_generator.aops_bundle_id.assert_any_call("0036-3634")
 
+    @patch("documentstore_migracao.utils.gzip")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
     def test_register_documents_in_documents_bundle_get_documents_bundle(
-        self, mk_get_documents_bundle, mk_read_json_file
+        self, mk_get_documents_bundle, mk_read_json_file, mk_gzip
     ):
         documents = {
             "JwqGdMDrdcV3Z7MFHgtKvVk": {
@@ -365,9 +330,10 @@ class TestProcessingInserting(unittest.TestCase):
         }
         journals = [SAMPLES_JOURNAL]
         mk_read_json_file.side_effect = [journals, documents]
+        mk_gzip.compress.return_value = "bla".encode("ascii")
         session_db = Session()
         inserting.register_documents_in_documents_bundle(
-            session_db, "/tmp/documents.json", "/tmp/journals.json"
+                session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
         mk_get_documents_bundle.assert_any_call(
             session_db, "0036-3634-2009-v45-n4", True, "0036-3634"
