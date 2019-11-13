@@ -4,12 +4,13 @@ import os
 import json
 import gzip
 
-from documentstore_migracao import exceptions, config
-from documentstore_migracao.utils import extract_isis
-from documentstore_migracao.processing import reading, conversion
 from documentstore.interfaces import Session
 from documentstore.domain import utcnow, Journal, DocumentsBundle
 from documentstore.exceptions import AlreadyExists, DoesNotExist
+
+from documentstore_migracao import exceptions, config
+from documentstore_migracao.utils import extract_isis
+from documentstore_migracao.processing import reading, conversion
 from documentstore_migracao.utils.xylose_converter import (
     issue_to_kernel,
     parse_date,
