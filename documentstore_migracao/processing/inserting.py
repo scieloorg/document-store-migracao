@@ -14,7 +14,17 @@ from documentstore.domain import utcnow, DocumentsBundle, get_static_assets, Doc
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore.interfaces import Session
 
-from documentstore_migracao.utils import files, xml, manifest, scielo_ids_generator
+from documentstore_migracao.utils import (
+    files,
+    xml,
+    manifest,
+    scielo_ids_generator,
+    add_document,
+    add_journal,
+    update_journal,
+    add_bundle,
+    update_bundle,
+)
 from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
 from documentstore_migracao.processing import reading
@@ -206,16 +216,7 @@ def register_document(folder: str, session_db, storage) -> None:
         )
 
         try:
-            session_db.documents.add(document)
-            session_db.changes.add(
-                {
-                    "timestamp": utcnow(),
-                    "entity": "Document",
-                    "id": document.id(),
-                    "content_gz": gzip.compress(document.data_bytes()),
-                    "content_type": document.data_type,
-                }
-            )
+            add_document(session, document)
             logger.info("Document-store save: %s", document.id())
         except AlreadyExists as exc:
             logger.exception(exc)
@@ -249,27 +250,9 @@ def create_aop_bundle(session_db, issn):
     bundle = DocumentsBundle(
         manifest=manifest.get_document_bundle_manifest(bundle_id, utcnow())
     )
-    session_db.documents_bundles.add(bundle)
-    session_db.changes.add(
-        {
-            "timestamp": utcnow(),
-            "entity": "DocumentsBundle",
-            "id": bundle.id(),
-            "content_gz": gzip.compress(bundle.data_bytes()),
-            "content_type": bundle.data_type,
-        }
-    )
+    add_bundle(session_db, bundle)
     journal.ahead_of_print_bundle = bundle.id()
-    session_db.journals.update(journal)
-    session_db.changes.add(
-        {
-            "timestamp": utcnow(),
-            "entity": "Journal",
-            "id": issn,
-            "content_gz": gzip.compress(journal.data_bytes()),
-            "content_type": journal.data_type,
-        }
-    )
+    update_journal(session_db, journal)
     return session_db.documents_bundles.fetch(bundle.id())
 
 
@@ -315,7 +298,9 @@ def register_documents(session_db, storage, documents_sorter, folder) -> None:
 
 
 def link_documents_bundles_with_documents(
-    documents_bundle: DocumentsBundle, documents: List[str], session: Session
+    documents_bundle: DocumentsBundle,
+    documents: List[str],
+    session: Session,
 ):
     """Função responsável por atualizar o relacionamento entre
     documents bundles e documents no nível de banco de dados"""
@@ -328,17 +313,7 @@ def link_documents_bundles_with_documents(
                 % (document, documents_bundle)
             )
 
-    session.documents_bundles.update(documents_bundle)
-
-    session.changes.add(
-        {
-            "timestamp": utcnow(),
-            "entity": "DocumentsBundle",
-            "id": documents_bundle.id(),
-            "content_gz": gzip.compress(documents_bundle.data_bytes()),
-            "content_type": documents_bundle.data_type,
-        }
-    )
+    update_bundle(session, documents_bundle)
 
 
 def register_documents_in_documents_bundle(

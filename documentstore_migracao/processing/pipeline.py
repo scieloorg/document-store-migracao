@@ -9,7 +9,14 @@ from documentstore.domain import utcnow, Journal, DocumentsBundle
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 
 from documentstore_migracao import exceptions, config
-from documentstore_migracao.utils import extract_isis
+from documentstore_migracao.utils import (
+    extract_isis,
+    add_document,
+    add_journal,
+    update_journal,
+    add_bundle,
+    update_bundle,
+)
 from documentstore_migracao.processing import reading, conversion
 from documentstore_migracao.utils.xylose_converter import (
     issue_to_kernel,
@@ -43,33 +50,6 @@ def filter_issues(issues: list) -> list:
         issues = list(filter(f, issues))
 
     return issues
-
-
-def add_change(session, instance, entity):
-    session.changes.add(
-        {
-            "timestamp": utcnow(),
-            "entity": entity,
-            "id": instance.id(),
-            "content_gz": gzip.compress(instance.data_bytes()),
-            "content_type": instance.data_type,
-        }
-    )
-
-
-def add_journal(session, journal):
-    session.journals.add(journal)
-    add_change(session, journal, "Journal")
-
-
-def update_journal(session, journal):
-    session.journals.update(journal)
-    add_change(session, journal, "Journal")
-
-
-def add_bundle(session, bundle):
-    session.documents_bundles.add(bundle)
-    add_change(session, bundle, "DocumentsBundle")
 
 
 def import_journals(json_file: str, session: Session):
