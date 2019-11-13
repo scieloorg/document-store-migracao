@@ -7,7 +7,7 @@ from lxml import etree
 
 from documentstore_migracao.export import article
 from documentstore_migracao.utils import files, string
-from documentstore_migracao.utils import scielo_ids_generator
+from documentstore_migracao.utils import scielo_ids_generator, xml
 from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
 from documentstore_migracao import exceptions
 
@@ -592,6 +592,48 @@ class SPS_Package:
             pubdate = self.article_meta.find(xpath)
             if pubdate is not None:
                 pubdate.set("publication-format", "electronic")
+
+    def update_mixed_citations(self, references: dict, override=False) -> list:
+        """Atualiza a tag `mixed-citation` nas referências do artigo. Também cria
+        a tag `label` com a ordem/índice da referência.
+
+        Params:
+            references (dict): Dicionário com as referências de um artigo. O
+                formato esperado é: {"order": "reference-text"}.
+            override (bool): Força a atualização do mixed-citation para
+                referências que já possuam o elemento.
+
+        Returns:
+            None
+        """
+
+        updated = []
+
+        for order, reference in enumerate(
+            self.xmltree.findall(".//back/ref-list/ref"), start=1
+        ):
+            reference_text = references.get(str(order))
+
+            if reference_text is None:
+                continue
+            elif not override and reference.find(".//mixed-citation") is not None:
+                continue
+
+            xml.remove_element(reference, ".//mixed-citation")
+            new_mixed_citation = xml.create_mixed_citation_element(reference_text)
+            reference.insert(0, new_mixed_citation)
+
+            extracted_order = xml.extract_reference_order(text=reference_text)
+
+            if extracted_order == str(order):
+                xml.remove_element(reference, ".//label")
+                reference_label = etree.Element("label")
+                reference_label.text = extracted_order
+                reference.insert(0, reference_label)
+
+            updated.append(references.get(str(order)))
+
+        return updated
 
 
 class DocumentsSorter:

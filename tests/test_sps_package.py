@@ -1800,3 +1800,85 @@ class TestMoveAppendixFromBodyToBackWithSubArticleAndBacks(unittest.TestCase):
         self.assertEqual(len(app_group_tags), 2)
         for app_group_tag in app_group_tags:
             self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids[2:])
+
+
+class TestUpdateMixedCitations(unittest.TestCase):
+    def setUp(self):
+        xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><back>
+                <ref-list>
+                    <ref id="B1">
+                        <element-citation></element-citation>
+                    </ref>
+                    <ref id="B2">
+                        <mixed-citation>Old mixed-citation</mixed-citation>
+                        <element-citation></element-citation>
+                    </ref>
+                </ref-list>
+            </back></article>"""
+        self.package = SPS_Package(etree.fromstring(xml))
+        self.references = {
+            "1": "1. New mixed-citation",
+            "2": "2 Updated mixed-citation",
+        }
+
+    def test_should_add_mixed_when_element_is_missing(self):
+        self.package.update_mixed_citations(self.references)
+
+        self.assertIn(b"<label>1</label>", etree.tostring(self.package.xmltree))
+        self.assertIn(
+            b"<mixed-citation>1. New mixed-citation</mixed-citation>",
+            etree.tostring(self.package.xmltree),
+        )
+
+    def test_should_not_update_an_existing_mixed_citation_if_override_is_false(self):
+        self.package.update_mixed_citations(self.references)
+
+        self.assertNotIn(b"<label>2</label>", etree.tostring(self.package.xmltree))
+        self.assertIn(
+            b"<mixed-citation>Old mixed-citation</mixed-citation>",
+            etree.tostring(self.package.xmltree),
+        )
+
+    def test_should_update_an_existing_mixed_citation_if_override_is_true(self):
+        self.package.update_mixed_citations(self.references, override=True)
+
+        self.assertIn(b"<label>2</label>", etree.tostring(self.package.xmltree))
+        self.assertNotIn(
+            b"<mixed-citation>Old mixed-citation</mixed-citation>",
+            etree.tostring(self.package.xmltree),
+        )
+        self.assertIn(
+            b"<mixed-citation>2 Updated mixed-citation</mixed-citation>",
+            etree.tostring(self.package.xmltree),
+        )
+
+    def test_should_convert_html_tags_to_jats_tags(self):
+        self.references["1"] = "<b>text</b> <i>text</i>"
+        self.package.update_mixed_citations(self.references)
+
+        self.assertIn(
+            b"<mixed-citation><bold>text</bold> <italic>text</italic></mixed-citation>",
+            etree.tostring(self.package.xmltree),
+        )
+
+    def test_should_not_update_the_mixed_citations_if_the_references_dict_have_wrong_indexes(
+        self
+    ):
+        self.package.update_mixed_citations({"10": "New mixed-citation"})
+
+        self.assertNotIn(
+            b"<mixed-citation>New mixed-citation</mixed-citation>",
+            etree.tostring(self.package.xmltree),
+        )
+
+    def test_should_not_update_the_label_tag_when_extracted_number_does_not_match_with_order_number(
+        self
+    ):
+        references = {"1": "Reference without label"}
+        self.package.update_mixed_citations(references)
+
+        self.assertIn(
+            b"<mixed-citation>Reference without label</mixed-citation>",
+            etree.tostring(self.package.xmltree),
+        )
+        self.assertNotIn(b"<label>1</label>", etree.tostring(self.package.xmltree))
