@@ -525,6 +525,24 @@ class SPS_Package:
 
         return self.xmltree
 
+    def _move_appendix_from_body_to_back(self, tbody, tback):
+        app_group_tags = tbody.findall(".//app-group")
+        if len(app_group_tags) > 0:
+            for app_group_tag in app_group_tags:
+                tback.append(app_group_tag)
+
+    def transform_content(self):
+        # CONVERTE PUB-DATE PARA SPS 1.9
+        self.transform_pubdate()
+
+        for body in self.xmltree.iterfind(".//body"):
+            back = body.getparent().find("./back")
+            if back is None:
+                body.getparent().append(etree.Element("back"))
+                back = body.getparent().find("./back")
+            # OUTROS AJUSTES NO XML PARA SPS 1.9
+            self._move_appendix_from_body_to_back(body, back)
+
     def transform_article_meta_count(self):
         count_tree = self.xmltree.find(".//counts")
         if count_tree is not None:

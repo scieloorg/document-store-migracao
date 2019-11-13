@@ -1577,3 +1577,248 @@ class Test_DocumentsBundlePubdateSPS1_4(unittest.TestCase):
     def test_set_incomplete_documents_bundle_pubdate(self):
         self.sps_package.documents_bundle_pubdate = ("2012", "", "")
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
+
+
+class TestMoveAppendixFromBodyToBack(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+            <back></back>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 3)]
+        self.sps_package = SPS_Package(xmltree, None)
+        self.body = self.sps_package.xmltree.find("./body")
+        self.back = self.sps_package.xmltree.find("./back")
+        self.sps_package._move_appendix_from_body_to_back(self.body, self.back)
+
+    def test_body_without_appedix(self):
+        self.assertEqual(len(self.sps_package.xmltree.findall("./body//app-group")), 0)
+
+    def test_back_with_appedix(self):
+        app_group_tags = self.sps_package.xmltree.findall(".//back//app-group")
+        self.assertEqual(len(app_group_tags), 2)
+        for app_group_tag in app_group_tags:
+            self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids)
+
+
+class TestTransformContent(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+            <back></back>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 3)]
+        self.mk_sps_package_move_appedix_patcher = mock.patch(
+            "documentstore_migracao.export.sps_package.SPS_Package._move_appendix_from_body_to_back"
+        )
+        self.mk_sps_package_move_appedix = (
+            self.mk_sps_package_move_appedix_patcher.start()
+        )
+        self.mk_sps_package_transform_pubdate_patcher = mock.patch(
+            "documentstore_migracao.export.sps_package.SPS_Package.transform_pubdate"
+        )
+        self.mk_sps_package_transform_pubdate = (
+            self.mk_sps_package_transform_pubdate_patcher.start()
+        )
+        self.sps_package = SPS_Package(xmltree, None)
+        self.body = self.sps_package.xmltree.find("./body")
+        self.back = self.sps_package.xmltree.find("./back")
+        self.sps_package.transform_content()
+
+    def tearDown(self):
+        self.mk_sps_package_move_appedix_patcher.stop()
+        self.mk_sps_package_transform_pubdate_patcher.stop()
+
+    def test_moves_appendix_from_body_to_back(self):
+        self.mk_sps_package_move_appedix.assert_called_with(self.body, self.back)
+
+
+class TestTransformContentWithSubArticle(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+            <sub-article article-type="translation" id="TRpt" xml:lang="en">
+                <body>
+                    <p>
+                        <app-group>
+                            <app id="anx03"><label>Appendix 1</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx03.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                    <p />
+                    <p>
+                        <app-group>
+                            <app id="anx04"><label>Appendix 2</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx04.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                </body>
+            </sub-article>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 3)]
+        self.mk_sps_package_move_appedix_patcher = mock.patch(
+            "documentstore_migracao.export.sps_package.SPS_Package._move_appendix_from_body_to_back"
+        )
+        self.mk_sps_package_move_appedix = (
+            self.mk_sps_package_move_appedix_patcher.start()
+        )
+        self.mk_sps_package_transform_pubdate_patcher = mock.patch(
+            "documentstore_migracao.export.sps_package.SPS_Package.transform_pubdate"
+        )
+        self.mk_sps_package_transform_pubdate = (
+            self.mk_sps_package_transform_pubdate_patcher.start()
+        )
+        self.sps_package = SPS_Package(xmltree, None)
+        self.sps_package.transform_content()
+
+    def tearDown(self):
+        self.mk_sps_package_move_appedix_patcher.stop()
+        self.mk_sps_package_transform_pubdate_patcher.stop()
+
+    def test_moves_appendix_from_body_to_back_article_data(self):
+        article_body = self.sps_package.xmltree.find("./body")
+        article_back = article_body.getparent().find("./back")
+        self.mk_sps_package_move_appedix.assert_any_call(article_body, article_back)
+
+    def test_moves_appendix_from_body_to_back_sub_article_data(self):
+        subarticle_body = self.sps_package.xmltree.find("./sub-article//body")
+        subarticle_back = self.sps_package.xmltree.find("./sub-article//back")
+        self.mk_sps_package_move_appedix.assert_any_call(
+            subarticle_body, subarticle_back
+        )
+
+
+class TestTransformContentWithSubArticleAndBacks(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+            <back>
+                <ref-list>
+                    <ref id="B1">
+                    <element-citation publication-type="journal">
+                        <article-title>Article Title</article-title>
+                    </element-citation>
+                    </ref>
+                </ref-list>
+            </back>
+            <sub-article article-type="translation" id="TRpt" xml:lang="en">
+                <body>
+                    <p>
+                        <app-group>
+                            <app id="anx03"><label>Appendix 1</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx03.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                    <p />
+                    <p>
+                        <app-group>
+                            <app id="anx04"><label>Appendix 2</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx04.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                </body>
+            </sub-article>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 3)]
+        self.mk_sps_package_move_appedix_patcher = mock.patch(
+            "documentstore_migracao.export.sps_package.SPS_Package._move_appendix_from_body_to_back"
+        )
+        self.mk_sps_package_move_appedix = (
+            self.mk_sps_package_move_appedix_patcher.start()
+        )
+        self.mk_sps_package_transform_pubdate_patcher = mock.patch(
+            "documentstore_migracao.export.sps_package.SPS_Package.transform_pubdate"
+        )
+        self.mk_sps_package_transform_pubdate = (
+            self.mk_sps_package_transform_pubdate_patcher.start()
+        )
+        self.sps_package = SPS_Package(xmltree, None)
+        self.sps_package.transform_content()
+
+    def tearDown(self):
+        self.mk_sps_package_move_appedix_patcher.stop()
+        self.mk_sps_package_transform_pubdate_patcher.stop()
+
+    def test_moves_appendix_from_body_to_back_article_data(self):
+        article_body = self.sps_package.xmltree.find("./body")
+        article_back = article_body.getparent().find("./back")
+        self.mk_sps_package_move_appedix.assert_any_call(article_body, article_back)
+
+    def test_moves_appendix_from_body_to_back_sub_article_data(self):
+        subarticle_body = self.sps_package.xmltree.find("./sub-article//body")
+        subarticle_back = self.sps_package.xmltree.find("./sub-article//back")
+        self.mk_sps_package_move_appedix.assert_any_call(
+            subarticle_body, subarticle_back
+        )
