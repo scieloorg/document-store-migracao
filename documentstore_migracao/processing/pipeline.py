@@ -16,7 +16,16 @@ from documentstore_migracao.utils.xylose_converter import (
     date_to_datetime,
 )
 
+
 logger = logging.getLogger(__name__)
+
+
+__all__ = [
+    "import_journals",
+    "import_issues",
+    "import_documents_bundles_link_with_journal",
+    "link_documents_bundles_with_journals",
+]
 
 
 def filter_issues(issues: list) -> list:
@@ -35,6 +44,33 @@ def filter_issues(issues: list) -> list:
     return issues
 
 
+def add_change(session, instance, entity):
+    session.changes.add(
+        {
+            "timestamp": utcnow(),
+            "entity": entity,
+            "id": instance.id(),
+            "content_gz": gzip.compress(instance.data_bytes()),
+            "content_type": instance.data_type,
+        }
+    )
+
+
+def add_journal(session, journal):
+    session.journals.add(journal)
+    add_change(session, journal, "Journal")
+
+
+def update_journal(session, journal):
+    session.journals.update(journal)
+    add_change(session, journal, "Journal")
+
+
+def add_bundle(session, bundle):
+    session.documents_bundles.add(bundle)
+    add_change(session, bundle, "DocumentsBundle")
+
+
 def import_journals(json_file: str, session: Session):
     """Fachada com passo a passo de processamento e carga de periódicos
     em formato JSON para a base Kernel"""
@@ -45,18 +81,8 @@ def import_journals(json_file: str, session: Session):
 
         for manifest in manifests:
             journal = Journal(manifest=manifest)
-
             try:
-                session.journals.add(journal)
-                session.changes.add(
-                    {
-                        "timestamp": utcnow(),
-                        "entity": "Journal",
-                        "id": journal.id(),
-                        "content_gz": gzip.compress(journal.data_bytes()),
-                        "content_type": journal.data_type,
-                    }
-                )
+                add_journal(session, journal)
             except AlreadyExists as exc:
                 logger.info(exc)
     except (FileNotFoundError, ValueError) as exc:
@@ -74,18 +100,8 @@ def import_issues(json_file: str, session: Session):
 
     for manifest in manifests:
         issue = DocumentsBundle(manifest=manifest)
-
         try:
-            session.documents_bundles.add(issue)
-            session.changes.add(
-                {
-                    "timestamp": utcnow(),
-                    "entity": "DocumentsBundle",
-                    "id": issue.id(),
-                    "content_gz": gzip.compress(issue.data_bytes()),
-                    "content_type": issue.data_type,
-                }
-            )
+            add_bundle(session, issue)
         except AlreadyExists as exc:
             logger.info(exc)
 
@@ -124,6 +140,11 @@ def import_documents_bundles_link_with_journal(file_path: str, session: Session)
     for journal_id, bundles_entries in links.items():
         try:
             journal = session.journals.fetch(journal_id)
+        except DoesNotExist:
+            logger.debug(
+                'Journal "%s" does not exists, cannot link bundles.', journal_id
+            )
+        else:
             for bundle_entry in bundles_entries:
                 # `bundle_entry` é um dict armazenado no Journal que o relaciona
                 # com determinado bundle.
@@ -135,21 +156,7 @@ def import_documents_bundles_link_with_journal(file_path: str, session: Session)
                         bundle_entry["id"],
                         journal_id,
                     )
-
-            session.journals.update(journal)
-            session.changes.add(
-                {
-                    "timestamp": utcnow(),
-                    "entity": "Journal",
-                    "id": journal.id(),
-                    "content_gz": gzip.compress(journal.data_bytes()),
-                    "content_type": journal.data_type,
-                }
-            )
-        except DoesNotExist:
-            logger.debug(
-                'Journal "%s" does not exists, cannot link bundles.', journal_id
-            )
+            update_journal(session, journal)
 
 
 def link_documents_bundles_with_journals(issue_path: str, output_path: str):
