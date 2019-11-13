@@ -1316,6 +1316,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.CreateInlineFormulaPipe(),
             self.AppendixPipe(),
             self.TablePipe(),
+            self.SupplementaryMaterialPipe(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.FnMovePipe(),
@@ -2272,6 +2273,17 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         node.addnext(array)
                         parent = node.getparent()
                         parent.remove(node)
+            return data
+
+    class SupplementaryMaterialPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for node in xml.findall(".//a[@link-type='pdf']"):
+                href = node.get("href")
+                node.tag = "inline-supplementary-material"
+                node.attrib.clear()
+                node.set("{http://www.w3.org/1999/xlink}href", href)
+
             return data
 
     class RemoveXMLAttributesPipe(plumber.Pipe):
