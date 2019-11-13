@@ -165,8 +165,42 @@ def migrate_articlemeta_parser(sargs):
         help="JSON file de documentos importados, e.g: ~/json/collection-issues.json",
     )
     link_documents_issues.add_argument(
-        "journals",
-        help="JSON file de journals result, e.g: ~/json/journal.json",
+        "journals", help="JSON file de journals result, e.g: ~/json/journal.json"
+    )
+
+    # Referências
+    example_text = """example:
+
+    # Use multiple MST files with a fixed directory structure inferred
+    # by articles' PID, e.g /bases/xml.000/bases/article/p/issn/year/order_in_year/order_in_issue.mst
+    ds_migracao mixed-citations xml/conversion /bases/xml.000/bases/article/p/
+
+    # Use a single MST file to update all articles' mixed citations.
+    ds_migracao mixed-citations xml/conversion /bases/extracted_paragraphs_file.mst
+
+    # Output updated XMLs in a different directory.
+    ds_migracao mixed-citations xml/conversion /bases/extracted_paragraphs_file.mst --output=/home/xmls
+
+    # Process a single XML, then save the result in the source file. NOTE: If the
+    # output directory path isn't used, the source file will be modified.
+    ds_migracao mixed-citations xml/conversion/file.xml /bases/extracted_paragraphs_file.mst
+    """
+
+    references = subparsers.add_parser(
+        "mixed-citations",
+        help="Update mixed citations",
+        epilog=example_text,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    references.add_argument("source", help="XML source or directory path")
+    references.add_argument(
+        "mst", help="Directory root or MST file where paragraphs are located"
+    )
+    references.add_argument("--output", metavar="dir", help="Output directory path")
+    references.add_argument(
+        "--override",
+        action="store_true",
+        help="Override old mixed citations in XML file",
     )
 
     ################################################################################################
@@ -233,6 +267,15 @@ def migrate_articlemeta_parser(sargs):
 
         inserting.register_documents_in_documents_bundle(
             session_db=DB_Session(), file_documents=args.documents, file_journals=args.journals
+        )
+    elif args.command == "mixed-citations":
+        from documentstore_migracao.processing import pipeline
+
+        pipeline.update_articles_mixed_citations(
+            source=args.source,
+            mst_source=args.mst,
+            output_folder=args.output,
+            override=args.override,
         )
 
     else:
