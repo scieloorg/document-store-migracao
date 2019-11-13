@@ -21,28 +21,9 @@ from . import (
 
 
 class ExtractIsisTests(unittest.TestCase):
-    @mock.patch("documentstore_migracao.utils.extract_isis.subprocess")
-    def test_should_raise_file_not_found_exception(self, subprocess_mock):
-        subprocess_mock.run.side_effect = FileNotFoundError
 
-        with self.assertRaises(exceptions.ExtractError):
-            extract_isis.run("file.mst", "file.json")
-
-    @mock.patch("documentstore_migracao.utils.extract_isis.subprocess")
-    def test_extract_isis_should_log_steps(self, subprocess_mock):
-        with self.assertLogs(level="DEBUG") as log:
-            extract_isis.run("file.mst", "file.json")
-            self.assertEqual(2, len(log.output))
-            self.assertIn("Extracting database file: file.mst", log.output[0])
-            self.assertIn(
-                "Writing extracted result as JSON file in: file.json", log.output[1]
-            )
-
-    @mock.patch("documentstore_migracao.utils.extract_isis.subprocess")
-    def teste_should_raise_called_process_erro(self, subprocess_mock):
-        subprocess_mock.run.side_effect = subprocess.CalledProcessError(1, 2)
-
-        with self.assertRaises(exceptions.ExtractError):
+    def test_should_raise_file_not_found_exception(self):
+        with self.assertRaises(FileNotFoundError):
             extract_isis.run("file.mst", "file.json")
 
     @mock.patch("documentstore_migracao.utils.extract_isis.os.makedirs")
