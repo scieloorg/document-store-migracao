@@ -34,6 +34,9 @@ from documentstore_migracao.tools import constructor
 logger = logging.getLogger(__name__)
 
 
+__all__ = ["import_documents_to_kernel", "register_documents_in_documents_bundle"]
+
+
 def get_document_renditions(
     folder: str, renditions: List[str], file_prefix: str, storage: object
 ) -> List[dict]:
@@ -282,9 +285,7 @@ def register_documents(session_db, storage, documents_sorter, folder) -> None:
 
 
 def link_documents_bundles_with_documents(
-    documents_bundle: DocumentsBundle,
-    documents: List[str],
-    session: Session,
+    documents_bundle: DocumentsBundle, documents: List[str], session: Session
 ):
     """Função responsável por atualizar o relacionamento entre
     documents bundles e documents no nível de banco de dados"""
