@@ -202,7 +202,9 @@ class TestProcessingInserting(unittest.TestCase):
         session.journals.add(journal)
 
         inserting.create_aop_bundle(session, journal.id())
-        self.assertEqual(session.journals.fetch(journal.id()).ahead_of_print_bundle, "0001-3714-aop")
+        self.assertEqual(
+            session.journals.fetch(journal.id()).ahead_of_print_bundle, "0001-3714-aop"
+        )
 
     def test_create_aop_bundle_returns_bundle(self):
         session_db = Session()
@@ -258,7 +260,11 @@ class TestProcessingInserting(unittest.TestCase):
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     @patch("documentstore_migracao.processing.inserting.scielo_ids_generator")
     def test_register_documents_in_documents_bundle_scielo_ids_generator(
-        self, mk_scielo_ids_generator, mk_read_json_file, mk_get_documents_bundle, mk_gzip
+        self,
+        mk_scielo_ids_generator,
+        mk_read_json_file,
+        mk_get_documents_bundle,
+        mk_gzip,
     ):
         documents = {
             "JwqGdMDrdcV3Z7MFHgtKvVk": {
@@ -291,7 +297,7 @@ class TestProcessingInserting(unittest.TestCase):
 
         session_db = Session()
         inserting.register_documents_in_documents_bundle(
-                session_db, "/tmp/documents.json", "/tmp/journals.json"
+            session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
         mk_scielo_ids_generator.issue_id.assert_any_call(
             "0036-3634", "2009", "45", "04", None
@@ -333,7 +339,7 @@ class TestProcessingInserting(unittest.TestCase):
         mk_gzip.compress.return_value = "bla".encode("ascii")
         session_db = Session()
         inserting.register_documents_in_documents_bundle(
-                session_db, "/tmp/documents.json", "/tmp/journals.json"
+            session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
         mk_get_documents_bundle.assert_any_call(
             session_db, "0036-3634-2009-v45-n4", True, "0036-3634"
