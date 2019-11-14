@@ -2271,3 +2271,51 @@ class TestTablePipe(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         self.assertIsNotNone(xml.find("array/tbody"))
         self.assertIsNone(xml.find(".//table"))
+
+
+
+
+class TestSupplementaryMaterial(unittest.TestCase):
+
+    def setUp(self):
+        self.pipe = ConvertElementsWhichHaveIdPipeline().SupplementaryMaterialPipe()
+
+    def test_a_href_generates_supplementary_material(self):
+        """
+        <supplementary-material id="S1" xmlns:xlink="http://www.w3.org/1999/xlink"
+        xlink:title="local_file" xlink:href="1471-2105-1-1-s1.pdf"
+        mimetype="application/pdf">
+        <label>Additional material</label>
+        <caption>
+        <p>Supplementary PDF file supplied by authors.</p>
+        </caption>
+        </supplementary-material>
+        <p>RNAPs seem to have arisen twice in evolution
+        (see the <inline-supplementary-material
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xlink:title="local_file" xlink:href="timeline">
+        Timeline</inline-supplementary-material>). A large
+        family of multisubunit RNAPs includes bacterial
+        enzymes, archeal enzymes, eukaryotic nuclear RNAPs,
+        plastid-encoded chloroplast RNAPs, and RNAPs from
+        some eukaryotic viruses. ...</p>
+        """
+        text = """<root>
+        <p><bold>Supplementary Information</bold></p>
+        <p></p> 
+        <p>The supplementary material is available in pdf: 
+        [<a href="/pdf/qn/v36n3/a05ms01.pdf" link-type="pdf" 
+        xml_text="supplementary material">Supplementary material</a>]</p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        inline_supplement_material = xml.find(
+            ".//inline-supplementary-material")
+        self.assertEqual(
+            inline_supplement_material.get(
+                "{http://www.w3.org/1999/xlink}href"),
+                "/pdf/qn/v36n3/a05ms01.pdf")
+        self.assertEqual(
+            inline_supplement_material.text,
+            "Supplementary material")
+        self.assertIsNone(inline_supplement_material.find(".//a"))
