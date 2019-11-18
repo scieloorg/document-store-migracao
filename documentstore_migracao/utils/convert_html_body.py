@@ -1007,7 +1007,12 @@ class HTML2SPSPipeline(object):
                 node.set("{http://www.w3.org/1999/xlink}href", "mailto:" + href)
 
         def parser_node(self, node):
+
             href = node.get("href")
+            if href.count('"') == 2:
+                node.set("href", href.replace('"', ""))
+                href = node.get("href")
+
             if href[0] in ["#", "."] or href.startswith("/img/revistas/"):
                 return
             if "mailto" in href or "@" in href:
@@ -2876,8 +2881,12 @@ class Remote2LocalConversion:
 
         for a_href in self.xml.findall(".//*[@href]"):
             if not a_href.get("link-type"):
-
                 href = a_href.get("href")
+
+                if href.count('"') == 2:
+                    node.set("href", href.replace('"', ""))
+                    href = node.get("href")
+
                 if ":" in href:
                     a_href.set("link-type", "external")
                     logger.info("Added @link-type: %s" % etree.tostring(a_href))
