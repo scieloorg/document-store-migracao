@@ -142,3 +142,28 @@ def create_mixed_citation_element(citation_text: str) -> etree.Element:
     new_mixed_citation.tag = "mixed-citation"
 
     return new_mixed_citation
+
+
+NUMBER_REGEXS = [
+    re.compile(r"^(?P<number>\d+)\.?\s?.*"),
+    re.compile(r".*>(?P<number>\d+)<?.*", re.MULTILINE),
+]
+
+
+def extract_reference_order(text: str) -> str:
+    """Retorna o número indicativo de ordem a partir do texto da
+    referência.
+
+    Exemplo:
+
+    >>> text = "2. Referência X"
+    >>> number = extract_reference_order(text)
+    >>> number
+    >>> 2
+    """
+    for regex in NUMBER_REGEXS:
+        match = regex.match(text)
+
+        if match:
+            return match.group(1)
+    return ""

@@ -170,3 +170,22 @@ class TestUtilsDicts(unittest.TestCase):
     def test_grouper(self):
         result = dicts.grouper(3, "abcdefg", "x")
         self.assertEqual(list(result)[0], ("a", "b", "c"))
+
+
+class TestReferencesNumberExtract(unittest.TestCase):
+    def test_extract_2_from_reference_text(self):
+        self.assertEqual("2", xml.extract_reference_order("2. ref"))
+
+    def test_should_extract_2_when_are_spaces_between_number_and_text(self):
+        self.assertEqual("2", xml.extract_reference_order("2   ref"))
+
+    def test_should_extract_2_when_the_number_is_inner_a_html_tag(self):
+        self.assertEqual("2", xml.extract_reference_order("<span>2<span>"))
+
+    def test_should_return_an_empty_string_when_does_not_extract_the_reference_order(
+        self
+    ):
+        self.assertEqual("", xml.extract_reference_order("ref ref ref ref"))
+
+    def test_should_return_an_empty_string_when_the_number_is_an_parameter_value(self):
+        self.assertEqual("", xml.extract_reference_order("<font size='2'>ref</font>"))
