@@ -189,3 +189,15 @@ class TestReferencesNumberExtract(unittest.TestCase):
 
     def test_should_return_an_empty_string_when_the_number_is_an_parameter_value(self):
         self.assertEqual("", xml.extract_reference_order("<font size='2'>ref</font>"))
+
+
+class TestXMLUtilsRemoveElements(unittest.TestCase):
+    def setUp(self):
+        self.xmltree = etree.fromstring(
+            "<article><meta><body><p>text</p><p>second text</p></body></meta></article>"
+        )
+
+    def test_should_remove_only_first_p_element_from_body(self):
+        xml.remove_element(self.xmltree.find(".//body"), ".//p")
+        self.assertNotIn(b"<p>text</p>", etree.tostring(self.xmltree))
+        self.assertIn(b"<p>second text</p>", etree.tostring(self.xmltree))
