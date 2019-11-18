@@ -167,3 +167,17 @@ def extract_reference_order(text: str) -> str:
         if match:
             return match.group(1)
     return ""
+
+
+def remove_element(root: etree.Element, query: str) -> bool:
+    """Encontra um elemento a partir de uma string de consulta (LXML) e o
+    remove. A busca e a remoção são feitas no elemento ``root``."""
+    if root is None or root.find(query) is None:
+        return False
+
+    el = root.find(query)
+
+    if root.remove(el) is None and el.getparent() is None:
+        return True
+
+    return False
