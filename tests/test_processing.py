@@ -80,7 +80,7 @@ class TestProcessingConversion(unittest.TestCase):
 
     @patch("documentstore_migracao.processing.conversion.SPS_Package")
     @patch("documentstore_migracao.processing.conversion.xml")
-    def test_convert_article_xml_calls_sps_package_transform_pubdate(
+    def test_convert_article_xml_calls_sps_package_transform_content(
         self, mk_utils_xml, MockSPS_Package
     ):
         mk_xml_sps = MagicMock()
@@ -88,7 +88,7 @@ class TestProcessingConversion(unittest.TestCase):
         conversion.convert_article_xml(
             os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
         )
-        mk_xml_sps.transform_pubdate.assert_called_once()
+        mk_xml_sps.transform_content.assert_called_once()
 
     def test_convert_article_xml(self):
 
