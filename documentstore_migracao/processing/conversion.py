@@ -23,8 +23,8 @@ def convert_article_xml(file_xml_path):
     xml_sps = SPS_Package(obj_xmltree)
     # CONVERTE O BODY DO AM PARA SPS
     xml_sps.transform_body()
-    # CONVERTE PUB-DATE PARA SPS 1.9
-    xml_sps.transform_pubdate()
+    # Transforma XML em SPS 1.9
+    xml_sps.transform_content()
 
     # CONSTROI O SCIELO-id NO XML CONVERTIDO
     xml_sps.create_scielo_id()

@@ -1577,3 +1577,226 @@ class Test_DocumentsBundlePubdateSPS1_4(unittest.TestCase):
     def test_set_incomplete_documents_bundle_pubdate(self):
         self.sps_package.documents_bundle_pubdate = ("2012", "", "")
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
+
+
+@mock.patch(
+    "documentstore_migracao.export.sps_package.SPS_Package._move_appendix_from_body_to_back"
+)
+@mock.patch(
+    "documentstore_migracao.export.sps_package.SPS_Package.transform_pubdate"
+)
+class TestTransformContent(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+            <back></back>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 3)]
+        self.sps_package = SPS_Package(xmltree, None)
+        self.body = self.sps_package.xmltree.find("./body")
+        self.back = self.sps_package.xmltree.find("./back")
+
+    def test_calls_transform_pubdate(
+        self, mk_transform_pubdate, mk_sps_package_move_appedix
+    ):
+        self.sps_package.transform_content()
+        mk_transform_pubdate.assert_called_once()
+
+    def test_calls_moves_appendix_from_body_to_back(
+        self, mk_transform_pubdate, mk_sps_package_move_appedix
+    ):
+        self.sps_package.transform_content()
+        mk_sps_package_move_appedix.assert_called_once()
+
+
+class TestMoveAppendixFromBodyToBack(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 3)]
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_body_without_appedix(self):
+        self.sps_package._move_appendix_from_body_to_back()
+        self.assertEqual(len(self.sps_package.xmltree.findall("./body//app-group")), 0)
+
+    def test_back_with_appedix(self):
+        self.sps_package._move_appendix_from_body_to_back()
+        app_group_tags = self.sps_package.xmltree.findall(".//back//app-group")
+        self.assertEqual(len(app_group_tags), 2)
+        for app_group_tag in app_group_tags:
+            self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids)
+
+
+class TestMoveAppendixFromBodyToBackWithSubArticle(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+            <sub-article article-type="translation" id="TRpt" xml:lang="en">
+                <body>
+                    <p>
+                        <app-group>
+                            <app id="anx03"><label>Appendix 1</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx03.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                    <p />
+                    <p>
+                        <app-group>
+                            <app id="anx04"><label>Appendix 2</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx04.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                </body>
+            </sub-article>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 5)]
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_from_body_to_back_article_data(self):
+        self.sps_package._move_appendix_from_body_to_back()
+        self.assertEqual(len(self.sps_package.xmltree.findall("./body//app-group")), 0)
+        app_group_tags = self.sps_package.xmltree.findall("./back//app-group")
+        self.assertEqual(len(app_group_tags), 2)
+        for app_group_tag in app_group_tags:
+            self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids[:2])
+
+    def test_from_body_to_back_sub_article_data(self):
+        self.sps_package._move_appendix_from_body_to_back()
+        self.assertEqual(
+            len(self.sps_package.xmltree.findall("./sub-article//body//app-group")), 0
+        )
+        app_group_tags = self.sps_package.xmltree.findall(
+            "./sub-article//back//app-group"
+        )
+        self.assertEqual(len(app_group_tags), 2)
+        for app_group_tag in app_group_tags:
+            self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids[2:])
+
+
+class TestMoveAppendixFromBodyToBackWithSubArticleAndBacks(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p>
+                    <app-group>
+                        <app id="anx01"><label>Anexo 1</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx01.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+                <p />
+                <p>
+                    <app-group>
+                        <app id="anx02"><label>Anexo 2</label>
+                            <graphic xlink:href="/img/revistas/test/v2n3/a01anx02.jpg" />
+                        </app>
+                    </app-group>
+                </p>
+            </body>
+            <back>
+                <ref-list>
+                    <ref id="B1">
+                    <element-citation publication-type="journal">
+                        <article-title>Article Title</article-title>
+                    </element-citation>
+                    </ref>
+                </ref-list>
+            </back>
+            <sub-article article-type="translation" id="TRpt" xml:lang="en">
+                <body>
+                    <p>
+                        <app-group>
+                            <app id="anx03"><label>Appendix 1</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx03.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                    <p />
+                    <p>
+                        <app-group>
+                            <app id="anx04"><label>Appendix 2</label>
+                                <graphic xlink:href="/img/revistas/test/v2n3/a01anx04.jpg" />
+                            </app>
+                        </app-group>
+                    </p>
+                </body>
+            </sub-article>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.app_ids = [f"anx0{num}" for num in range(1, 5)]
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_from_body_to_back_article_data(self):
+        self.sps_package._move_appendix_from_body_to_back()
+        self.assertEqual(len(self.sps_package.xmltree.findall("./body//app-group")), 0)
+        app_group_tags = self.sps_package.xmltree.findall("./back//app-group")
+        self.assertEqual(len(app_group_tags), 2)
+        for app_group_tag in app_group_tags:
+            self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids[:2])
+
+    def test_from_body_to_back_sub_article_data(self):
+        self.sps_package._move_appendix_from_body_to_back()
+        self.assertEqual(
+            len(self.sps_package.xmltree.findall("./sub-article//body//app-group")), 0
+        )
+        app_group_tags = self.sps_package.xmltree.findall(
+            "./sub-article//back//app-group"
+        )
+        self.assertEqual(len(app_group_tags), 2)
+        for app_group_tag in app_group_tags:
+            self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids[2:])

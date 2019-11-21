@@ -2797,19 +2797,22 @@ class FileLocation:
 def fix_img_revistas_path(node):
     attr = "src" if node.get("src") else "href"
     location = node.get(attr)
-    old_location = location
-    if location.startswith("img/"):
-        location = "/" + location
-    if "/img" in location:
-        location = location[location.find("/img") :]
-    if " " in location:
-        location = "".join(location.split())
-    location = location.replace("/img/fbpe", "/img/revistas")
-    if old_location != location:
-        logger.info(
-            "fix_img_revistas_path: de {} para {}".format(old_location, location)
-        )
-        node.set(attr, location)
+    if "fbpe" in location or "revistas" in location or "img" in location:
+        if ":" in location or location[0] == "#":
+            return
+        old_location = location
+        if location.startswith("img"):
+            location = "/" + location
+        if " " in location:
+            location = "".join(location.split())
+        location = location.replace("/img/fbpe", "/img/revistas")
+        location = location[location.find("/img/revistas"):]
+        if old_location != location:
+            logger.info(
+                "fix_img_revistas_path: de {} para {}".format(
+                    old_location, location)
+            )
+            node.set(attr, location)
 
 
 class Remote2LocalConversion:
@@ -2827,10 +2830,12 @@ class Remote2LocalConversion:
     def __init__(self, xml):
         self.xml = xml
         self.body = self.xml.find(".//body")
-        self._digital_assets_path = self.find_digital_assets_path()
+        self._digital_assets_path = None
         self.names = []
 
     def find_digital_assets_path(self):
+        for node in self.xml.xpath(".//*[@src]|.//*[@href]"):
+            fix_img_revistas_path(node)
         for node in self.xml.xpath(".//*[@src]|.//*[@href]"):
             location = node.get("src", node.get("href"))
             if location.startswith("/img/"):
@@ -2839,9 +2844,9 @@ class Remote2LocalConversion:
 
     @property
     def digital_assets_path(self):
-        if self._digital_assets_path:
-            return self._digital_assets_path
-        self._digital_assets_path = self.find_digital_assets_path()
+        if self._digital_assets_path is None:
+            self._digital_assets_path = self.find_digital_assets_path()
+        return self._digital_assets_path
 
     @property
     def body_children(self):
@@ -2857,6 +2862,7 @@ class Remote2LocalConversion:
         if self.digital_assets_path is None:
             return
         for node in self.xml.findall(".//*[@src]"):
+            fix_img_revistas_path(node)
             src = node.get("src")
             if ":" in src:
                 node.set("link-type", "external")
@@ -2881,6 +2887,7 @@ class Remote2LocalConversion:
 
         for a_href in self.xml.findall(".//*[@href]"):
             if not a_href.get("link-type"):
+                fix_img_revistas_path(a_href)
                 href = a_href.get("href")
 
                 if href.count('"') == 2:
