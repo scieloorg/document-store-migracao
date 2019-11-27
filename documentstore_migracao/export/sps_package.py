@@ -485,12 +485,6 @@ class SPS_Package:
         self._set_pub_date(xpaths_attrs_to_set, value)
 
     @property
-    def scielo_id(self):
-        """The scielo id of the main document.
-        """
-        return self.xmltree.findtext(".//article-id[@specific-use='scielo']")
-
-    @property
     def languages(self):
         """The language of the main document plus all translations.
         """
