@@ -311,7 +311,7 @@ class SPS_Package:
     def get_renditions_metadata(self):
         renditions = []
         metadata = {}
-        obj_article = article.get_article(self.publisher_id)
+        obj_article = article.get_article(self.scielo_pid_v2)
         if obj_article:
             metadata = obj_article.fulltexts().get("pdf", {})
             for lang, url in metadata.items():
@@ -506,14 +506,14 @@ class SPS_Package:
             logger.info("Processando body numero: %s" % index)
 
             txt_body = body.findtext("./p") or ""
-            convert = HTML2SPSPipeline(pid=self.publisher_id, index_body=index)
+            convert = HTML2SPSPipeline(pid=self.scielo_pid_v2, index_body=index)
             _, obj_html_body = convert.deploy(txt_body)
 
             # sobrecreve o html escapado anterior pelo novo xml tratado
             if obj_html_body.tag != "body":
                 obj_html_body = obj_html_body.find("body")
             if obj_html_body is None:
-                raise TypeError("XML: %s esta sem Body" % (self.publisher_id))
+                raise TypeError("XML: %s esta sem Body" % (self.scielo_pid_v2))
 
             body.getparent().replace(body, obj_html_body)
 

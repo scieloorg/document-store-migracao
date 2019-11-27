@@ -89,7 +89,7 @@ class TestUtilsFiles(unittest.TestCase):
 
     def test_sha1(self):
         str_hash = files.sha1(os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml"))
-        self.assertEqual("efaa1e0fc26b5b5266be343526434a67c8aca530", str_hash)
+        self.assertEqual("16667b1e875308e3387091fb6203a9da25e03d28", str_hash)
 
 
 class TestString(unittest.TestCase):

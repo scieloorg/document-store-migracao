@@ -12,11 +12,11 @@ def get_document_manifest(
     documento xml"""
 
     obj_sps = SPS_Package(document)
-    _id = obj_sps.scielo_id
+    _id = obj_sps.scielo_pid_v3
     date = obj_sps.document_pubdate
 
     if not _id:
-        raise ValueError("Document requires an scielo-id") from None
+        raise ValueError("Document requires an scielo-pid-v3") from None
 
     if not date:
         raise ValueError("A creation date is required") from None
