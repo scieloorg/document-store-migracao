@@ -501,10 +501,10 @@ class SPS_Package:
     @property
     def media_prefix(self):
 
-        if not self.scielo_id:
-            raise exceptions.XMLError("Não existe Scielo-Id no XML: %s", repr(self))
+        if not self.scielo_pid_v3:
+            raise exceptions.XMLError("Não existe scielo-pid-v3")
 
-        return f"{self.issn}/{self.scielo_id}"
+        return f"{self.issn}/{self.scielo_pid_v3}"
 
     def transform_body(self):
 
