@@ -563,11 +563,11 @@ class SPS_Package:
         iterators = [self.xmltree.iterfind(path) for path in PATHS]
         for article in itertools.chain(*iterators):
 
-            node = article.findall(".//article-id[@specific-use='scielo']")
+            node = article.findall(".//article-id[@specific-use='scielo-v3']")
             if not node:
                 articleId = etree.Element("article-id")
                 articleId.set("pub-id-type", "publisher-id")
-                articleId.set("specific-use", "scielo")
+                articleId.set("specific-use", "scielo-v3")
                 articleId.text = scielo_ids_generator.generate_scielo_pid()
                 _append_node(article, articleId)
 
