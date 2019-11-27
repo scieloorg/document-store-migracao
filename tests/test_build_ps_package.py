@@ -60,28 +60,28 @@ class TestBuildSPSPackageBase(TestCase):
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
     def test__update_sps_package_object_updates_pid_if_it_is_none(self):
-        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, publisher_id=None)
+        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
         pack_name = "1806-0013-test-01-01-0001"
         result = self.builder._update_sps_package_object(
             self.article_data_reader, mk_sps_package, pack_name
         )
-        self.assertEqual(result.publisher_id, "S0101-01012019000100001")
+        self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100001")
 
     def test__update_sps_package_object_does_not_update_pid_if_it_is_not_none(self):
         mk_sps_package = mock.Mock(
-            spec=SPS_Package, publisher_id="S0101-01012019000100999"
+            spec=SPS_Package, scielo_pid_v2="S0101-01012019000100999"
         )
         pack_name = "1806-0013-test-01-01-0001"
         result = self.builder._update_sps_package_object(
             self.article_data_reader, mk_sps_package, pack_name
         )
-        self.assertEqual(result.publisher_id, "S0101-01012019000100999")
+        self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100999")
 
 
 class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
 
     def test__update_sps_package_object_updates_aop_pid_if_pid_is_none(self):
-        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, publisher_id=None)
+        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
         pack_name = "1806-0013-test-01-01-0002"
         result = self.builder._update_sps_package_object(
             self.article_data_reader, mk_sps_package, pack_name
@@ -90,7 +90,7 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
 
     def test__update_sps_package_object_updates_aop_pid_if_pid_is_found(self):
         mk_sps_package = mock.Mock(
-            spec=SPS_Package, aop_pid=None, publisher_id="S0101-01012019000100002"
+            spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
         )
         pack_name = "1806-0013-test-01-01-0002"
         result = self.builder._update_sps_package_object(
@@ -103,10 +103,10 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
             ("S0101-01012019000100001", "1806-0013-test-01-01-0001"),
             (None, "1806-0013-test-01-01-0003"),
         )
-        for publisher_id, pack_name in article_data:
-            with self.subTest(publisher_id=publisher_id, pack_name=pack_name):
+        for scielo_pid_v2, pack_name in article_data:
+            with self.subTest(scielo_pid_v2=scielo_pid_v2, pack_name=pack_name):
                 mk_sps_package = mock.Mock(
-                    spec=SPS_Package, aop_pid=None, publisher_id=publisher_id
+                    spec=SPS_Package, aop_pid=None, scielo_pid_v2=scielo_pid_v2
                 )
                 result = self.builder._update_sps_package_object(
                     self.article_data_reader, mk_sps_package, pack_name
@@ -120,7 +120,7 @@ class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
         mk_sps_package = mock.Mock(
             spec=SPS_Package,
             aop_pid=None,
-            publisher_id="S0101-01012019000100003",
+            scielo_pid_v2="S0101-01012019000100003",
             is_ahead_of_print=True,
         )
         pack_name = "1806-0013-test-01-01-0003"
@@ -139,7 +139,7 @@ class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
         self.mk_sps_package = mock.Mock(
             spec=SPS_Package,
             aop_pid=None,
-            publisher_id="S0101-01012019000100002",
+            scielo_pid_v2="S0101-01012019000100002",
             is_ahead_of_print=False,
             document_pubdate=("2012", "01", "15",)
         )
@@ -167,7 +167,7 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
         self.mk_sps_package = mock.Mock(
             spec=SPS_Package,
             aop_pid=None,
-            publisher_id="S0101-01012019000100002",
+            scielo_pid_v2="S0101-01012019000100002",
             is_ahead_of_print=False,
         )
 

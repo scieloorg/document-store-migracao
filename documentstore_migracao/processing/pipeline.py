@@ -318,11 +318,11 @@ def update_articles_mixed_citations(
 
             if os.path.isdir(mst_source):
                 paragraphs = get_paragraphs_from_mst(
-                    mst_source, pid=package.publisher_id
+                    mst_source, pid=package.scielo_pid_v2
                 )
 
             references = get_references_text_from_paragraphs(
-                paragraphs, pid=package.publisher_id
+                paragraphs, pid=package.scielo_pid_v2
             )
             updated = package.update_mixed_citations(references, override=override)
             output_file = get_output_file_path(xml, output_folder)

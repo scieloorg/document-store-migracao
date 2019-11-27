@@ -137,11 +137,11 @@ class BuildPSPackage(object):
                     break
             return article_data
 
-        def _get_article_data_by_publisher_id(articles_data_reader):
+        def _get_article_data_by_scielo_pid_v2(articles_data_reader):
             article_data = None
-            logging.debug('Reading document PID "%s" data', _sps_package.publisher_id)
+            logging.debug('Reading document PID "%s" data', _sps_package.scielo_pid_v2)
             for row in articles_data_reader:
-                if _sps_package.publisher_id == row[f_pid]:
+                if _sps_package.scielo_pid_v2 == row[f_pid]:
                     article_data = row
                     break
             return article_data
@@ -168,11 +168,11 @@ class BuildPSPackage(object):
             articles_data_reader.fieldnames
         )
         # Verificar se tem PID
-        if _sps_package.publisher_id is None:
+        if _sps_package.scielo_pid_v2 is None:
             article_data = _get_article_data_by_file_path(articles_data_reader)
-            _sps_package.publisher_id = article_data[f_pid]
+            _sps_package.scielo_pid_v2 = article_data[f_pid]
         else:
-            article_data = _get_article_data_by_publisher_id(articles_data_reader)
+            article_data = _get_article_data_by_scielo_pid_v2(articles_data_reader)
 
         if article_data is not None:
             if _has_attr_to_set("aop_pid", f_pid_aop):
