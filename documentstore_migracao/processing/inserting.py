@@ -157,7 +157,7 @@ def put_static_assets_into_storage(
     return _assets
 
 
-def register_document(folder: str, session_db, storage) -> None:
+def register_document(folder: str, session, storage) -> None:
 
     logger.info("Processando a Pasta %s", folder)
     list_files = files.list_files(folder)
