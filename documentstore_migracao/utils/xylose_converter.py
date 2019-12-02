@@ -143,6 +143,15 @@ def journal_to_kernel(journal):
     if journal.editor_address:
         _contact["address"] = journal.editor_address
 
+    if journal.publisher_city:
+        _contact["city"] = journal.publisher_city
+    if journal.publisher_state:
+        _contact["state"] = journal.publisher_state
+    if journal.publisher_country:
+        country_code, country_name = journal.publisher_country
+        _contact["country_code"] = country_code
+        _contact["country"] = country_name
+
     if _contact:
         _metadata["contact"] = set_metadata(_creation_date, _contact)
 
