@@ -145,20 +145,21 @@ def journal_to_kernel(journal):
         _metadata["contact"] = set_metadata(_creation_date, _contact)
 
     if journal.publisher_name:
-        institution_responsible_for = {"name": journal.publisher_name}
-        if journal.publisher_city:
-            institution_responsible_for["city"] = journal.publisher_city
-        if journal.publisher_state:
-            institution_responsible_for["state"] = journal.publisher_state
-        if journal.publisher_country:
-            country_code, country_name = journal.publisher_country
-            institution_responsible_for["country_code"] = country_code
-            institution_responsible_for["country"] = country_name
+        institutions = []
+        for name in journal.publisher_name:
+            item = {"name": name}
+            if journal.publisher_city:
+                item["city"] = journal.publisher_city
+            if journal.publisher_state:
+                item["state"] = journal.publisher_state
+            if journal.publisher_country:
+                country_code, country_name = journal.publisher_country
+                item["country_code"] = country_code
+                item["country"] = country_name
+            institutions.append(item)
 
-        _metadata["institution_responsible_for"] = [
-            institution_responsible_for
-        ]
-
+        _metadata["institution_responsible_for"] = set_metadata(
+            _creation_date, tuple(institutions))
     return _bundle
 
 

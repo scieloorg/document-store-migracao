@@ -64,6 +64,10 @@ class TestXyloseJournalConverter(unittest.TestCase):
             "v610": [{"_": "previous journal"}],
             "v64": [{"_": "editor@email.com"}],
             "v63": [{"_": "Rua de exemplo, 1, São Paulo, SP, Brasil"}],
+            "v480": [{"_": "Sociedade Brasileira de Medicina Tropical - SBMT"}],
+            "v310": [{"_": "BR"}],
+            "v320": [{"_": "MG"}],
+            "v490": [{"_": "Uberaba"}],
         }
 
         self._journal = Journal(self.json_journal)
@@ -175,6 +179,22 @@ class TestXyloseJournalConverter(unittest.TestCase):
             get_metadata_item(journal, "contact")["address"],
         )
 
+    def test_journal_has_institution_responsible_for(self):
+        journal = journal_to_kernel(self._journal)
+        expected = tuple(
+            [
+                {
+                    "name": "Sociedade Brasileira de Medicina Tropical - SBMT",
+                    "country_code": "BR",
+                    "country": "Brazil",
+                    "state": "MG",
+                    "city": "Uberaba",
+                }
+            ]
+        )
+        self.assertEqual(
+            expected,
+            get_metadata_item(journal, "institution_responsible_for"))
 
 class TestXyloseIssueConverter(unittest.TestCase):
     def setUp(self):
