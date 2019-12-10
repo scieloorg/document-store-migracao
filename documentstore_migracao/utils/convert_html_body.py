@@ -2855,10 +2855,19 @@ class Remote2LocalConversion:
         return []
 
     def remote_to_local(self):
-        self._import_all_html_files_found_in_body()
-        self._convert_a_href_into_images_or_media()
+        self._import_html_files()
+        self._import_img_files()
 
-    def _add_link_type_attribute_to_element_a(self):
+    def _classify_element_a_which_has_href_attribute(self):
+        """
+        Classifica o elemento a, de acordo com o conteúdo de seu atributo href.
+        - external: link para site
+        - internal: link para algum elemento interno (href="#?")
+        - html: link para html que contém ativos digitais
+        - pdf: link para pdf que está em /pdf/acron/volnum
+        - asset: link para uma imagem que está em /img/revistas/acron/volnum
+        - unknown: quando não foi identificado
+        """
         if self.digital_assets_path is None:
             return
         for node in self.xml.findall(".//*[@src]"):
@@ -2933,15 +2942,24 @@ class Remote2LocalConversion:
                     a_href.set("link-type", "unknown")
                 logger.info("Added @link-type: %s" % etree.tostring(a_href))
 
-    def _import_all_html_files_found_in_body(self):
-        self._add_link_type_attribute_to_element_a()
+    def _import_html_files(self):
+        """
+        Obtém o conteúdo de HTML mencionados no body e os insere no body.
+        Após inserir o conteúdo do HTML, repete a operação, pois dentro do
+        conteúdo importado, pode haver menção a outros HTML. Então,
+        repete isso até que não exista menções a HTML
+        """
+        self._classify_element_a_which_has_href_attribute()
         while True:
             if self.body.find(".//a[@link-type='html']") is None:
                 break
-            self._import_files_marked_as_link_type_html()
-            self._add_link_type_attribute_to_element_a()
+            self._import_html_files_content()
+            self._classify_element_a_which_has_href_attribute()
 
-    def _import_files_marked_as_link_type_html(self):
+    def _import_html_files_content(self):
+        """
+        Obtém o conteúdo de HTML mencionados no body e os insere no body.
+        """
         new_p_items = []
         for bodychild in self.body_children:
             for a_link_type in bodychild.findall(".//a[@link-type='html']"):
@@ -2958,6 +2976,10 @@ class Remote2LocalConversion:
         return len(new_p_items)
 
     def _import_html_file_content(self, node_a):
+        """
+        Obtém o conteúdo do HTML mencionado em node_a/@href e o retorna
+        como um novo elemento
+        """
         logger.info("Importar HTML de %s" % etree.tostring(node_a))
         href = node_a.get("href")
         if "#" in href:
@@ -2974,7 +2996,13 @@ class Remote2LocalConversion:
                 if html_body is not None:
                     return self._convert_a_href(node_a, new_href, html_body)
 
-    def _convert_a_href_into_images_or_media(self):
+    def _import_img_files(self):
+        """
+        Localiza as menções a imagens (a/@href="/img/revistas/..."),
+        as converte para um link interno que aponta para o novo elemento (img ou media)
+        e cria este novo elemento (img ou media) para ser inserido no parágrafo 
+        seguinte.
+        """
         new_p_items = []
         for child in self.body_children:
             for node_a in child.findall(".//a[@link-type='asset']"):
@@ -2992,6 +3020,10 @@ class Remote2LocalConversion:
         return len(new_p_items)
 
     def _convert_a_href(self, node_a, new_href, html_body=None):
+        """
+        Converte em a/@href em "link interno" para o a/@name
+        Criar o novo elemento a/@name associado ao a/@href
+        """
         location = node_a.get("href")
 
         self._update_a_href(node_a, new_href)
@@ -3003,9 +3035,9 @@ class Remote2LocalConversion:
         found_a_name = self.find_a_name(node_a, new_href, delete_tag)
         if not found_a_name:
             if html_body is not None:
-                node_content = self._imported_html_body(new_href, html_body, delete_tag)
+                node_content = self._create_new_element_for_imported_html_file(new_href, html_body, delete_tag)
             else:
-                node_content = self._asset_data(node_a, location, new_href)
+                node_content = self._create_new_element_for_imported_img_file(node_a, location, new_href)
             if node_content is not None:
                 new_p = self._create_new_p(
                     new_href, node_content, content_type, delete_tag
@@ -3032,6 +3064,10 @@ class Remote2LocalConversion:
                 return True
 
     def _create_new_p(self, new_href, node_content, content_type, delete_tag):
+        """
+        Cria o elemento p para inserir o(s) ativo(s) digital(is) proveniente(s)
+        de arquivo de imagem ou arquivo HTML mencionado.
+        """
         self.names.append(new_href)
         a_name = etree.Element("a")
         a_name.set("id", new_href)
@@ -3046,7 +3082,10 @@ class Remote2LocalConversion:
 
         return new_p
 
-    def _imported_html_body(self, new_href, html_body, delete_tag="REMOVETAG"):
+    def _create_new_element_for_imported_html_file(self, new_href, html_body, delete_tag="REMOVETAG"):
+        """
+        Cria novo elemento para representar os ativos digitais que estão contidos em um arquivo HTML
+        """
         # Criar o a[@name] com o conteúdo do body
         body = deepcopy(html_body)
         body.tag = delete_tag
@@ -3064,7 +3103,10 @@ class Remote2LocalConversion:
             a_name.tag = delete_tag
         return body
 
-    def _asset_data(self, node_a, location, new_href):
+    def _create_new_element_for_imported_img_file(self, node_a, location, new_href):
+        """
+        Cria novo elemento para representar o ativo digital do arquivo de imagem
+        """
         asset = node_a.getroottree().find(".//*[@src='{}']".format(location))
         if asset is None:
             # Criar o a[@name] com o <img src=""/>
