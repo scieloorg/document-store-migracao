@@ -2832,6 +2832,7 @@ class Remote2LocalConversion:
         self.body = self.xml.find(".//body")
         self._digital_assets_path = None
         self.names = []
+        self.imported_files = []
 
     def find_digital_assets_path(self):
         for node in self.xml.xpath(".//*[@src]|.//*[@href]"):
@@ -2985,22 +2986,25 @@ class Remote2LocalConversion:
         if "#" in href:
             href, anchor = href.split("#")
 
+        f, ext = os.path.splitext(href)
+        new_href = os.path.basename(f)
+
+        self._update_a_href(a_link_type, new_href)
+
+        if href in self.imported_files:
+            return
+
+        self.imported_files.append(href)
+
         html_body = self._get_html_body(href)
         if html_body is not None:
-            f, ext = os.path.splitext(href)
-            new_href = os.path.basename(f)
-
-            self._update_a_href(a_link_type, new_href)
-
             content_type = "html"
             delete_tag = "REMOVE_" + content_type
-            exist = self.exist_in_body(a_link_type, new_href, delete_tag)
-            if not exist:
-                node_content = self._create_new_element_for_imported_html_file(
-                    new_href, html_body, delete_tag)
-                return self._create_new_p(
-                    new_href, node_content, content_type, delete_tag
-                )
+            node_content = self._create_new_element_for_imported_html_file(
+                new_href, html_body, delete_tag)
+            return self._create_new_p(
+                new_href, node_content, content_type, delete_tag
+            )
 
     def _get_html_body(self, href):
         """
