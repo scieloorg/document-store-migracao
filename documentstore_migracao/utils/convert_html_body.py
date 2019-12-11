@@ -3057,7 +3057,7 @@ class Remote2LocalConversion:
 
         content_type = "asset"
         node_content = self._create_new_element_for_imported_img_file(
-            node_a, href, new_href)
+            node_a, href)
         if node_content is not None:
             new_p = self._create_new_p(
                 new_href, node_content, content_type
@@ -3078,6 +3078,10 @@ class Remote2LocalConversion:
         a_name.set("id", new_href)
         a_name.set("name", new_href)
 
+        new_p = etree.Element("p")
+        new_p.set("content-type", content_type)
+        new_p.append(a_name)
+
         if content_type == "asset":
             a_name.append(node_content)
         else:
@@ -3086,9 +3090,6 @@ class Remote2LocalConversion:
             else:
                 a_name.addnext(node_content)
 
-        new_p = etree.Element("p")
-        new_p.set("content-type", content_type)
-        new_p.append(a_name)
         logger.info("Cria novo p: %s" % etree.tostring(new_p))
 
         return new_p
