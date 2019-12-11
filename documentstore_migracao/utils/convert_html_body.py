@@ -2836,7 +2836,7 @@ class Remote2LocalConversion:
     @property
     def img_src_in_original_body(self):
         return [
-            item["src"]
+            item.attrib["src"]
             for item in self.body.findall(".//img[@src]")
             if not item.get("imported")
         ]
@@ -3096,10 +3096,7 @@ class Remote2LocalConversion:
         if content_type == "asset":
             a_name.append(node_content)
         else:
-            if len(node_content.findall(".//*[@src]")) == 1:
-                a_name.append(node_content)
-            else:
-                a_name.addnext(node_content)
+            a_name.addnext(node_content)
 
         logger.info("Cria novo p: %s" % etree.tostring(new_p))
 
@@ -3122,6 +3119,14 @@ class Remote2LocalConversion:
             logger.info("Atualiza elem a importado: %s" % etree.tostring(a))
 
         for img in body.findall(".//img"):
+            src = img.get("src")
+            name, ext = os.path.splitext(os.path.basename(src))
+
+            if body.find(".//a[@name='{}']".format(name)) is None:
+                a_name = etree.Element("a")
+                a_name.set("name", name)
+                a_name.set("id", name)
+                img.addprevious(a_name)
             img.set("imported", "true")
 
         a_name = body.find(".//a[@name='{}']".format(new_href))
@@ -3144,15 +3149,23 @@ class Remote2LocalConversion:
 
     def _remove_repeated_imported_images(self):
         """
-        Pode acontecer casos de importar mais de uma vez uma imagem, pois 
-        ela pode ter sido mencionada com a[@href] e também dentro de um HTML
+        Pode acontecer casos de importar mais de uma vez uma imagem, pois
+        ela pode ter sido mencionada com a[@href] e também dentro de um HTML.
+        Manter a primeira ocorrência.
         """
         checked = []
-        for img in self.body.findall(".//img[@imported]"):
-            if img["src"] in checked:
-                parent = img.getparent()
+        for asset in self.body.findall(".//*[@imported]"):
+            if asset.attrib["src"] in checked:
+                parent = asset.getparent()
                 if parent is not None:
-                    parent.remove(img)
+                    parent.remove(asset)
             else:
-                checked.append(img["src"])
+                checked.append(asset.attrib["src"])
 
+        for content_type in ["html", "asset"]:
+            for p in self.body.findall(
+                    ".//p[@content-type='{}']".format(content_type)):
+                if p.find(".//*[@src]") is None:
+                    parent = p.getparent()
+                    if parent is not None:
+                        parent.remove(p)
