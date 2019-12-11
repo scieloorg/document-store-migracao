@@ -2831,7 +2831,6 @@ class Remote2LocalConversion:
         self.xml = xml
         self.body = self.xml.find(".//body")
         self._digital_assets_path = None
-        self.names = []
         self.imported_files = []
 
     def find_digital_assets_path(self):
@@ -3070,29 +3069,11 @@ class Remote2LocalConversion:
         a_href.set("link-type", "internal")
         logger.info("Atualiza a[@href]: %s" % etree.tostring(a_href))
 
-    def exist_in_body(self, a_href, new_href, delete_tag="REMOVETAG"):
-        """
-        Verifica se o elemento já foi importado ou se já existe no body
-        """
-        if new_href in self.names:
-            logger.info("Será criado")
-            return True
-        a_name = a_href.getroottree().find(".//a[@name='{}']".format(new_href))
-        if a_name is not None:
-            if a_name.getchildren():
-                logger.info("Já importado")
-                return True
-            else:
-                # existe um a[@name] mas é inválido porque está sem conteúdo
-                a_name.tag = delete_tag
-                return True
-
     def _create_new_p(self, new_href, node_content, content_type, delete_tag):
         """
         Cria o elemento p para inserir o(s) ativo(s) digital(is) proveniente(s)
         de arquivo de imagem ou arquivo HTML mencionado.
         """
-        self.names.append(new_href)
         a_name = etree.Element("a")
         a_name.set("id", new_href)
         a_name.set("name", new_href)
