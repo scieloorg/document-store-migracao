@@ -2963,7 +2963,18 @@ class Remote2LocalConversion:
         new_p_items = []
         for bodychild in self.body_children:
             for a_link_type in bodychild.findall(".//a[@link-type='html']"):
-                new_p = self._import_html_file_content(a_link_type)
+                logger.info("Importar HTML de %s" % etree.tostring(a_link_type))
+                href = a_link_type.get("href")
+                if "#" in href:
+                    href, anchor = href.split("#")
+                f, ext = os.path.splitext(href)
+                new_href = os.path.basename(f)
+
+                html_body = self._get_html_body(href)
+                new_p = None
+                if html_body is not None:
+                    new_p = self._convert_a_href(a_link_type, new_href, html_body)
+
                 if new_p is None:
                     a_link_type.set("link-type", "external")
                 else:
@@ -2975,26 +2986,18 @@ class Remote2LocalConversion:
             bodychild.addnext(new_p)
         return len(new_p_items)
 
-    def _import_html_file_content(self, node_a):
+    def _get_html_body(self, href):
         """
         Obtém o conteúdo do HTML mencionado em node_a/@href e o retorna
         como um novo elemento
         """
-        logger.info("Importar HTML de %s" % etree.tostring(node_a))
-        href = node_a.get("href")
-        if "#" in href:
-            href, anchor = href.split("#")
-        f, ext = os.path.splitext(href)
-        new_href = os.path.basename(f)
         file_location = FileLocation(href)
         if file_location.content:
             html_tree = etree.fromstring(
                 file_location.content, parser=etree.HTMLParser()
             )
             if html_tree is not None:
-                html_body = html_tree.find(".//body")
-                if html_body is not None:
-                    return self._convert_a_href(node_a, new_href, html_body)
+                return html_tree.find(".//body")
 
     def _import_img_files(self):
         """
