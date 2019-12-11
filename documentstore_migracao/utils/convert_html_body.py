@@ -3043,32 +3043,20 @@ class Remote2LocalConversion:
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
         if ext:
-            return self._convert_a_href(node_a, new_href)
+            self._update_a_href(node_a, new_href)
 
-    def _convert_a_href(self, node_a, new_href, html_body=None):
-        """
-        Converte em a/@href em "link interno" para o a/@name
-        Criar o novo elemento a/@name associado ao a/@href
-        """
-        location = node_a.get("href")
+            content_type = "asset"
+            delete_tag = "REMOVE_" + content_type
 
-        self._update_a_href(node_a, new_href)
-        content_type = "asset"
-        if html_body is not None:
-            content_type = "html"
-        delete_tag = "REMOVE_" + content_type
-
-        found_a_name = self.exist_in_body(node_a, new_href, delete_tag)
-        if not found_a_name:
-            if html_body is not None:
-                node_content = self._create_new_element_for_imported_html_file(new_href, html_body, delete_tag)
-            else:
-                node_content = self._create_new_element_for_imported_img_file(node_a, location, new_href)
-            if node_content is not None:
-                new_p = self._create_new_p(
-                    new_href, node_content, content_type, delete_tag
-                )
-                return new_p
+            found_a_name = self.exist_in_body(node_a, new_href, delete_tag)
+            if not found_a_name:
+                node_content = self._create_new_element_for_imported_img_file(
+                    node_a, href, new_href)
+                if node_content is not None:
+                    new_p = self._create_new_p(
+                        new_href, node_content, content_type, delete_tag
+                    )
+                    return new_p
 
     def _update_a_href(self, a_href, new_href):
         a_href.set("href", "#" + new_href)
