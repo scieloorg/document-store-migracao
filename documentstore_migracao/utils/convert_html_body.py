@@ -2963,27 +2963,7 @@ class Remote2LocalConversion:
         new_p_items = []
         for bodychild in self.body_children:
             for a_link_type in bodychild.findall(".//a[@link-type='html']"):
-                logger.info("Importar HTML de %s" % etree.tostring(a_link_type))
-                href = a_link_type.get("href")
-                if "#" in href:
-                    href, anchor = href.split("#")
-                f, ext = os.path.splitext(href)
-                new_href = os.path.basename(f)
-
-                html_body = self._get_html_body(href)
-                new_p = None
-                if html_body is not None:
-
-                    self._update_a_href(a_link_type, new_href)
-
-                    found_a_name = self.find_a_name(a_link_type, new_href, delete_tag)
-                    if not found_a_name:
-                        content_type = "html"
-                        delete_tag = "REMOVE_" + content_type
-                        node_content = self._create_new_element_for_imported_html_file(new_href, html_body, delete_tag)
-                        new_p = self._create_new_p(
-                            new_href, node_content, content_type, delete_tag
-                        )
+                new_p = self._imported_html_file(a_link_type)
                 if new_p is None:
                     a_link_type.set("link-type", "external")
                 else:
@@ -2994,6 +2974,29 @@ class Remote2LocalConversion:
             )
             bodychild.addnext(new_p)
         return len(new_p_items)
+
+    def _imported_html_file(self, a_link_type):
+        logger.info("Importar HTML de %s" % etree.tostring(a_link_type))
+        href = a_link_type.get("href")
+        if "#" in href:
+            href, anchor = href.split("#")
+
+        html_body = self._get_html_body(href)
+        if html_body is not None:
+            f, ext = os.path.splitext(href)
+            new_href = os.path.basename(f)
+
+            self._update_a_href(a_link_type, new_href)
+
+            content_type = "html"
+            delete_tag = "REMOVE_" + content_type
+            exist = self.exist_in_body(a_link_type, new_href, delete_tag)
+            if not exist:
+                node_content = self._create_new_element_for_imported_html_file(
+                    new_href, html_body, delete_tag)
+                return self._create_new_p(
+                    new_href, node_content, content_type, delete_tag
+                )
 
     def _get_html_body(self, href):
         """
@@ -3044,7 +3047,7 @@ class Remote2LocalConversion:
             content_type = "html"
         delete_tag = "REMOVE_" + content_type
 
-        found_a_name = self.find_a_name(node_a, new_href, delete_tag)
+        found_a_name = self.exist_in_body(node_a, new_href, delete_tag)
         if not found_a_name:
             if html_body is not None:
                 node_content = self._create_new_element_for_imported_html_file(new_href, html_body, delete_tag)
@@ -3061,7 +3064,10 @@ class Remote2LocalConversion:
         a_href.set("link-type", "internal")
         logger.info("Atualiza a[@href]: %s" % etree.tostring(a_href))
 
-    def find_a_name(self, a_href, new_href, delete_tag="REMOVETAG"):
+    def exist_in_body(self, a_href, new_href, delete_tag="REMOVETAG"):
+        """
+        Verifica se o elemento já foi importado ou se já existe no body
+        """
         if new_href in self.names:
             logger.info("Será criado")
             return True
