@@ -3046,21 +3046,24 @@ class Remote2LocalConversion:
         href = node_a.get("href")
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
-        if ext:
-            self._update_a_href(node_a, new_href)
 
-            content_type = "asset"
-            delete_tag = "REMOVE_" + content_type
+        self._update_a_href(node_a, new_href)
 
-            found_a_name = self.exist_in_body(node_a, new_href, delete_tag)
-            if not found_a_name:
-                node_content = self._create_new_element_for_imported_img_file(
-                    node_a, href, new_href)
-                if node_content is not None:
-                    new_p = self._create_new_p(
-                        new_href, node_content, content_type, delete_tag
-                    )
-                    return new_p
+        if href in self.imported_files:
+            return
+
+        self.imported_files.append(href)
+
+        content_type = "asset"
+        delete_tag = "REMOVE_" + content_type
+
+        node_content = self._create_new_element_for_imported_img_file(
+            node_a, href, new_href)
+        if node_content is not None:
+            new_p = self._create_new_p(
+                new_href, node_content, content_type, delete_tag
+            )
+            return new_p
 
     def _update_a_href(self, a_href, new_href):
         a_href.set("href", "#" + new_href)
@@ -3124,26 +3127,23 @@ class Remote2LocalConversion:
             a_name.tag = delete_tag
         return body
 
-    def _create_new_element_for_imported_img_file(self, node_a, location, new_href):
+    def wrap_asset_with_a_name(self, asset, new_href):
+        a = etree.Element("a")
+        a.set("name", new_href)
+        a.set("id", new_href)
+        asset.addprevious(a)
+        a.append(deepcopy(asset))
+        parent = asset.getparent()
+        parent.remove(asset)
+
+    def _create_new_element_for_imported_img_file(self, node_a, location):
         """
         Cria novo elemento para representar o ativo digital do arquivo de imagem
         """
-        asset = node_a.getroottree().find(".//*[@src='{}']".format(location))
-        if asset is None:
-            # Criar o a[@name] com o <img src=""/>
-            tag = "img"
-            ign, ext = os.path.splitext(location)
-            if ext.lower() not in self.IMG_EXTENSIONS:
-                tag = "media"
-            asset = etree.Element(tag)
-            asset.set("src", location)
-            return asset
-        elif asset.getparent().get("name") != new_href:
-            a = etree.Element("a")
-            a.set("name", new_href)
-            a.set("id", new_href)
-            asset.addprevious(a)
-            a.append(deepcopy(asset))
-            parent = asset.getparent()
-            parent.remove(asset)
-            self.names.append(new_href)
+        tag = "img"
+        ign, ext = os.path.splitext(location)
+        if ext.lower() not in self.IMG_EXTENSIONS:
+            tag = "media"
+        asset = etree.Element(tag)
+        asset.set("src", location)
+        return asset
