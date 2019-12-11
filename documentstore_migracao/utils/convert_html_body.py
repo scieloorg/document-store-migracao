@@ -3001,9 +3001,11 @@ class Remote2LocalConversion:
             delete_tag = "REMOVE_" + content_type
             node_content = self._create_new_element_for_imported_html_file(
                 new_href, html_body, delete_tag)
-            return self._create_new_p(
-                new_href, node_content, content_type, delete_tag
+            new_p = self._create_new_p(
+                new_href, node_content, content_type
             )
+            etree.strip_tags(new_p, delete_tag)
+            return new_p
 
     def _get_html_body(self, href):
         """
@@ -3054,13 +3056,11 @@ class Remote2LocalConversion:
         self.imported_files.append(href)
 
         content_type = "asset"
-        delete_tag = "REMOVE_" + content_type
-
         node_content = self._create_new_element_for_imported_img_file(
             node_a, href, new_href)
         if node_content is not None:
             new_p = self._create_new_p(
-                new_href, node_content, content_type, delete_tag
+                new_href, node_content, content_type
             )
             return new_p
 
@@ -3069,7 +3069,7 @@ class Remote2LocalConversion:
         a_href.set("link-type", "internal")
         logger.info("Atualiza a[@href]: %s" % etree.tostring(a_href))
 
-    def _create_new_p(self, new_href, node_content, content_type, delete_tag):
+    def _create_new_p(self, new_href, node_content, content_type):
         """
         Cria o elemento p para inserir o(s) ativo(s) digital(is) proveniente(s)
         de arquivo de imagem ou arquivo HTML mencionado.
@@ -3077,12 +3077,18 @@ class Remote2LocalConversion:
         a_name = etree.Element("a")
         a_name.set("id", new_href)
         a_name.set("name", new_href)
-        a_name.append(node_content)
+
+        if content_type == "asset":
+            a_name.append(node_content)
+        else:
+            if len(node_content.findall(".//*[@src]")) == 1:
+                a_name.append(node_content)
+            else:
+                a_name.addnext(node_content)
 
         new_p = etree.Element("p")
         new_p.set("content-type", content_type)
         new_p.append(a_name)
-        etree.strip_tags(new_p, delete_tag)
         logger.info("Cria novo p: %s" % etree.tostring(new_p))
 
         return new_p
