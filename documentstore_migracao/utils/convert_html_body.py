@@ -2964,9 +2964,7 @@ class Remote2LocalConversion:
         for bodychild in self.body_children:
             for a_link_type in bodychild.findall(".//a[@link-type='html']"):
                 new_p = self._imported_html_file(a_link_type)
-                if new_p is None:
-                    a_link_type.set("link-type", "external")
-                else:
+                if new_p is not None:
                     new_p_items.append((bodychild, new_p))
         for bodychild, new_p in new_p_items[::-1]:
             logger.info(
@@ -3114,15 +3112,6 @@ class Remote2LocalConversion:
         if a_name is not None:
             a_name.tag = delete_tag
         return body
-
-    def wrap_asset_with_a_name(self, asset, new_href):
-        a = etree.Element("a")
-        a.set("name", new_href)
-        a.set("id", new_href)
-        asset.addprevious(a)
-        a.append(deepcopy(asset))
-        parent = asset.getparent()
-        parent.remove(asset)
 
     def _create_new_element_for_imported_img_file(self, node_a, location):
         """
