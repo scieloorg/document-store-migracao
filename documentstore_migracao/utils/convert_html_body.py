@@ -2973,8 +2973,17 @@ class Remote2LocalConversion:
                 html_body = self._get_html_body(href)
                 new_p = None
                 if html_body is not None:
-                    new_p = self._convert_a_href(a_link_type, new_href, html_body)
 
+                    self._update_a_href(a_link_type, new_href)
+
+                    found_a_name = self.find_a_name(a_link_type, new_href, delete_tag)
+                    if not found_a_name:
+                        content_type = "html"
+                        delete_tag = "REMOVE_" + content_type
+                        node_content = self._create_new_element_for_imported_html_file(new_href, html_body, delete_tag)
+                        new_p = self._create_new_p(
+                            new_href, node_content, content_type, delete_tag
+                        )
                 if new_p is None:
                     a_link_type.set("link-type", "external")
                 else:
