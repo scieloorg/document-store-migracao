@@ -2833,6 +2833,14 @@ class Remote2LocalConversion:
         self._digital_assets_path = None
         self.imported_files = []
 
+    @property
+    def img_src_in_original_body(self):
+        return [
+            item["src"]
+            for item in self.body.findall(".//img[@src]")
+            if not item.get("imported")
+        ]
+
     def find_digital_assets_path(self):
         for node in self.xml.xpath(".//*[@src]|.//*[@href]"):
             fix_img_revistas_path(node)
@@ -2857,6 +2865,7 @@ class Remote2LocalConversion:
     def remote_to_local(self):
         self._import_html_files()
         self._import_img_files()
+        self._remove_repeated_imported_images()
 
     def _classify_element_a_which_has_href_attribute(self):
         """
@@ -3041,18 +3050,22 @@ class Remote2LocalConversion:
         Retorna novo elemento que representa a imagem importada,
         se aplicável
         """
-        logger.info("Converter %s" % etree.tostring(node_a))
+        logger.info("Converte %s" % etree.tostring(node_a))
         href = node_a.get("href")
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
 
         self._update_a_href(node_a, new_href)
 
+        if href in self.img_src_in_original_body:
+            # já existe no body
+            return
+
         if href in self.imported_files:
+            # já está importado
             return
 
         self.imported_files.append(href)
-
         content_type = "asset"
         node_content = self._create_new_element_for_imported_img_file(
             node_a, href)
@@ -3108,6 +3121,9 @@ class Remote2LocalConversion:
                 a.set("name", new_href + "X" + a.get("name"))
             logger.info("Atualiza elem a importado: %s" % etree.tostring(a))
 
+        for img in body.findall(".//img"):
+            img.set("imported", "true")
+
         a_name = body.find(".//a[@name='{}']".format(new_href))
         if a_name is not None:
             a_name.tag = delete_tag
@@ -3123,4 +3139,20 @@ class Remote2LocalConversion:
             tag = "media"
         asset = etree.Element(tag)
         asset.set("src", location)
+        asset.set("imported", "true")
         return asset
+
+    def _remove_repeated_imported_images(self):
+        """
+        Pode acontecer casos de importar mais de uma vez uma imagem, pois 
+        ela pode ter sido mencionada com a[@href] e também dentro de um HTML
+        """
+        checked = []
+        for img in self.body.findall(".//img[@imported]"):
+            if img["src"] in checked:
+                parent = img.getparent()
+                if parent is not None:
+                    parent.remove(img)
+            else:
+                checked.append(img["src"])
+
