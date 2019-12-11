@@ -2976,6 +2976,10 @@ class Remote2LocalConversion:
         return len(new_p_items)
 
     def _imported_html_file(self, a_link_type):
+        """
+        Retorna novo elemento que representa o conteúdo do html importado,
+        se aplicável
+        """
         logger.info("Importar HTML de %s" % etree.tostring(a_link_type))
         href = a_link_type.get("href")
         if "#" in href:
@@ -3021,18 +3025,25 @@ class Remote2LocalConversion:
         new_p_items = []
         for child in self.body_children:
             for node_a in child.findall(".//a[@link-type='asset']"):
-                logger.info("Converter %s" % etree.tostring(node_a))
-                href = node_a.get("href")
-                f, ext = os.path.splitext(href)
-                new_href = os.path.basename(f)
-                if ext:
-                    new_p = self._convert_a_href(node_a, new_href)
-                    if new_p is not None:
-                        new_p_items.append((child, new_p))
+                new_p = self._imported_img_file(node_a)
+                if new_p is not None:
+                    new_p_items.append((child, new_p))
         for bodychild, new_p in new_p_items[::-1]:
             logger.info("Insere novo p: %s" % etree.tostring(new_p))
             bodychild.addnext(new_p)
         return len(new_p_items)
+
+    def _imported_img_file(self, node_a):
+        """
+        Retorna novo elemento que representa a imagem importada,
+        se aplicável
+        """
+        logger.info("Converter %s" % etree.tostring(node_a))
+        href = node_a.get("href")
+        f, ext = os.path.splitext(href)
+        new_href = os.path.basename(f)
+        if ext:
+            return self._convert_a_href(node_a, new_href)
 
     def _convert_a_href(self, node_a, new_href, html_body=None):
         """
