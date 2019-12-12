@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from unittest.mock import patch
 from lxml import etree
 
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
@@ -1850,12 +1851,52 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
 
         text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
         self.assertEqual(xml.find(".//a[@name]").get("name"), "a05tab01")
-        self.assertEqual(len(xml.findall(".//a[@name]")), 1)
+        self.assertEqual(len(xml.findall(".//a[@name]")), 5)
         self.assertEqual(len(xml.findall(".//a[@href]")), 2)
 
         a_href_items = xml.findall(".//a[@href]")
         self.assertEqual(a_href_items[0].get("href"), "#a05tab01")
         self.assertEqual(a_href_items[1].get("href"), "#a05tab01")
+
+    def test_transform_removes_repeated_imported_images(self):
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        text = """<root><body>
+        <p>
+        <a href="/img/revistas/eq/v33n3/html/a05tab01.htm">Tables 1-5</a>
+        </p>
+        <p>
+        <a href="/img/revistas/eq/v33n3/html/tab01.jpg">Table 1</a>
+        </p>
+        </body></root>"""
+        xml = etree.fromstring(text)
+
+        def stub_get_html_body(ign, html_file):
+            return etree.fromstring(
+                """<body>
+                    <img src="/img/revistas/eq/v33n3/html/tab01.jpg"/>
+                </body>
+            """)
+
+        with patch(
+                "documentstore_migracao.utils.convert_html_body.Remote2LocalConversion._get_html_body",
+                new=stub_get_html_body):
+            text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+            print(etree.tostring(xml))
+
+            a_name_items = xml.findall(".//a[@name]")
+            self.assertEqual(len(a_name_items), 2)
+            self.assertEqual(a_name_items[0].get("name"), "a05tab01")
+            self.assertEqual(a_name_items[1].get("name"), "tab01")
+
+            a_href_items = xml.findall(".//a[@href]")
+            self.assertEqual(len(a_href_items), 2)
+            self.assertEqual(a_href_items[0].get("href"), "#a05tab01")
+            self.assertEqual(a_href_items[1].get("href"), "#tab01")
+
+            img = xml.findall(".//img[@src]")
+            self.assertEqual(len(img), 1)
+            self.assertEqual(
+                img[0].get("src"), "/img/revistas/eq/v33n3/html/tab01.jpg")
 
 
 class TestCompleteElementAWithXMLTextPipe(unittest.TestCase):
