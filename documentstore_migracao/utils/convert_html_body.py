@@ -948,51 +948,50 @@ class HTML2SPSPipeline(object):
         def transform(self, data):
             raw, xml = data
             if len(self.super_obj.ref_items) > 0:
-                comments = xml.xpath("//comment()")
-                p_references = None
-                for comment in comments:
-                    name = comment.text.strip()
-                    if name == "ref":
-                        if p_references is None:
-                            p_references = comment.getprevious()
-                        mark = etree.Element("REF")
-                        comment.addnext(mark)
+                p_references = self._mark_references(xml)
 
                 self._mark_the_last_reference_end(xml)
 
                 p_items = self._find_reference_paragraphs(xml)
+
                 if len(self.super_obj.ref_items) == len(p_items):
-                    if p_references is not None and p_references.tag == "p":
-                        if get_node_text(p_references).lower().startswith("ref"):
-                            p_items.append(p_references)
-
+                    self._add_p_references_to_delete(p_references, p_items)
                     self._remove_references(xml, p_items)
-                    logger.info(
-                        "RemoveReferencesFromBodyPipe: Removidos %s parágrafos de referências" % len(p_items)
-                    )
                 else:
-                    logger.info(
-                        "RemoveReferencesFromBodyPipe: FIXME. Necessária intervenção manual "
-                        "para remover referências do texto. "
-                        "Quantidade de referências: %s. "
-                        "Quantidade de parágrafos: %s. " % (
-                            len(self.super_obj.ref_items),
-                            len(p_items)
-                        )
-                    )
-
+                    logger.info("RemoveReferencesFromBodyPipe: FALHOU")
             return data
+
+        def _mark_references(self, xml):
+            comments = xml.xpath("//comment()")
+            p_references = None
+            for comment in comments:
+                name = comment.text.strip()
+                if name == "ref":
+                    if p_references is None:
+                        p_references = comment.getprevious()
+                    mark = etree.Element("REF-TO-DELETE")
+                    comment.addnext(mark)
+            return p_references
+
+        def _add_p_references_to_delete(self, p_references, p_items):
+            if p_references is not None and p_references.tag == "p":
+                text = get_node_text(p_references)
+                if text.lower().startswith("ref"):
+                    logger.info(
+                        "RemoveReferencesFromBodyPipe: Primeiro: %s" % text
+                    )
+                    p_items.insert(0, p_references)
 
         def _remove_references(self, xml, p_to_delete):
             for p in p_to_delete:
                 parent = p.getparent()
                 if parent is not None:
                     parent.remove(p)
-            etree.strip_tags(xml, "REF")
+            etree.strip_tags(xml, "REF-TO-DELETE")
             etree.strip_tags(xml, "REF-FIM")
 
         def _mark_the_last_reference_end(self, xml):
-            ref_items = xml.findall(".//REF")
+            ref_items = xml.findall(".//REF-TO-DELETE")
             if len(ref_items) > 0:
                 p = ref_items[-1].getnext()
                 if p is not None:
@@ -1001,14 +1000,15 @@ class HTML2SPSPipeline(object):
 
         def _find_reference_paragraphs(self, xml):
             p_items = []
-            e = xml.find(".//REF")
+            e = xml.find(".//REF-TO-DELETE")
             if e is not None:
                 while True:
                     e = e.getnext()
                     if e is None or e.tag == "REF-FIM":
                         break
                     if e.tag == "p":
-                        p_items.append(e)
+                        if get_node_text(e).strip():
+                            p_items.append(e)
             return p_items
 
     class RemoveCommentPipe(plumber.Pipe):
