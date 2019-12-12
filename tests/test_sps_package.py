@@ -1882,3 +1882,53 @@ class TestUpdateMixedCitations(unittest.TestCase):
             etree.tostring(self.package.xmltree),
         )
         self.assertNotIn(b"<label>1</label>", etree.tostring(self.package.xmltree))
+
+
+class TestGetRefItems(unittest.TestCase):
+    def _get_sps_package(self, text):
+        return SPS_Package(etree.fromstring(text), None)
+
+    def test__get_ref_items_returns_ref_list_three_ref_items(self):
+        text = """
+        <article>
+            <body></body>
+            <back>
+                <ref-list>
+                    <ref>1</ref>
+                    <ref>2</ref>
+                    <ref>3</ref>
+                </ref-list>
+            </back>
+        </article>
+        """
+        xml = etree.fromstring(text)
+        body = xml.find(".//body")
+        _sps_package = self._get_sps_package(text)
+        ref_items = _sps_package._get_ref_items(body)
+        self.assertEqual(ref_items[0].text, "1")
+        self.assertEqual(ref_items[1].text, "2")
+        self.assertEqual(ref_items[2].text, "3")
+
+    def test__get_ref_items_returns_subarticle_ref_list_ref_items(self):
+        text = """
+        <article>
+            <body></body>
+            <back>
+                <ref-list>
+                    <ref>1</ref>
+                    <ref>2</ref>
+                    <ref>3</ref>
+                </ref-list>
+            </back>
+            <sub-article>
+                <body></body>
+                <back>
+                </back>
+            </sub-article>
+        </article>
+        """
+        xml = etree.fromstring(text)
+        body = xml.find(".//sub-article/body")
+        _sps_package = self._get_sps_package(text)
+        ref_items = _sps_package._get_ref_items(body)
+        self.assertEqual(len(ref_items), 0)

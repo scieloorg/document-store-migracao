@@ -160,7 +160,7 @@ class CustomPipe(plumber.Pipe):
 
 
 class HTML2SPSPipeline(object):
-    def __init__(self, pid, index_body=1):
+    def __init__(self, ref_items=[], pid="", index_body=1):
         self.pid = pid
         self.index_body = index_body
         self.document = Document(None)

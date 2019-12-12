@@ -500,13 +500,23 @@ class SPS_Package:
 
         return f"{self.issn}/{self.scielo_pid_v3}"
 
+    def _get_ref_items(self, body):
+        ref_items = []
+        back = body.getnext()
+        if back is not None:
+            ref_items = back.findall(".//ref")
+        return ref_items
+
     def transform_body(self):
 
         for index, body in enumerate(self.xmltree.xpath("//body"), start=1):
             logger.info("Processando body numero: %s" % index)
 
             txt_body = body.findtext("./p") or ""
-            convert = HTML2SPSPipeline(pid=self.scielo_pid_v2, index_body=index)
+            convert = HTML2SPSPipeline(
+                ref_items=self._get_ref_items(body),
+                pid=self.scielo_pid_v2,
+                index_body=index)
             _, obj_html_body = convert.deploy(txt_body)
 
             # sobrecreve o html escapado anterior pelo novo xml tratado
