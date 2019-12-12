@@ -514,8 +514,8 @@ class SPS_Package:
 
             txt_body = body.findtext("./p") or ""
             convert = HTML2SPSPipeline(
-                ref_items=self._get_ref_items(body),
                 pid=self.scielo_pid_v2,
+                ref_items=self._get_ref_items(body),
                 index_body=index)
             _, obj_html_body = convert.deploy(txt_body)
 

@@ -154,20 +154,21 @@ def matched_first_two_words(text_words, search_expr):
 
 class CustomPipe(plumber.Pipe):
     def __init__(self, super_obj=None, *args, **kwargs):
-
         self.super_obj = super_obj
         super(CustomPipe, self).__init__(*args, **kwargs)
 
 
 class HTML2SPSPipeline(object):
-    def __init__(self, ref_items=[], pid="", index_body=1):
+    def __init__(self, pid="", ref_items=[], index_body=1):
         self.pid = pid
         self.index_body = index_body
+        self.ref_items = ref_items
         self.document = Document(None)
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.SaveRawBodyPipe(super_obj=self),
             self.ConvertRemote2LocalPipe(),
+            self.RemoveReferencesFromBodyPipe(super_obj=self),
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
@@ -942,6 +943,73 @@ class HTML2SPSPipeline(object):
 
             _process(xml, "graphic", self.parser_node)
             return data
+
+    class RemoveReferencesFromBodyPipe(CustomPipe):
+        def transform(self, data):
+            raw, xml = data
+            if len(self.super_obj.ref_items) > 0:
+                comments = xml.xpath("//comment()")
+                p_references = None
+                for comment in comments:
+                    name = comment.text.strip()
+                    if name == "ref":
+                        if p_references is None:
+                            p_references = comment.getprevious()
+                        mark = etree.Element("REF")
+                        comment.addnext(mark)
+
+                self._mark_the_last_reference_end(xml)
+
+                p_items = self._find_reference_paragraphs(xml)
+                if len(self.super_obj.ref_items) == len(p_items):
+                    if p_references is not None and p_references.tag == "p":
+                        if get_node_text(p_references).lower().startswith("ref"):
+                            p_items.append(p_references)
+
+                    self._remove_references(xml, p_items)
+                    logger.info(
+                        "RemoveReferencesFromBodyPipe: Removidos %s parágrafos de referências" % len(p_items)
+                    )
+                else:
+                    logger.info(
+                        "RemoveReferencesFromBodyPipe: FIXME. Necessária intervenção manual "
+                        "para remover referências do texto. "
+                        "Quantidade de referências: %s. "
+                        "Quantidade de parágrafos: %s. " % (
+                            len(self.super_obj.ref_items),
+                            len(p_items)
+                        )
+                    )
+
+            return data
+
+        def _remove_references(self, xml, p_to_delete):
+            for p in p_to_delete:
+                parent = p.getparent()
+                if parent is not None:
+                    parent.remove(p)
+            etree.strip_tags(xml, "REF")
+            etree.strip_tags(xml, "REF-FIM")
+
+        def _mark_the_last_reference_end(self, xml):
+            ref_items = xml.findall(".//REF")
+            if len(ref_items) > 0:
+                p = ref_items[-1].getnext()
+                if p is not None:
+                    mark = etree.Element("REF-FIM")
+                    p.addnext(mark)
+
+        def _find_reference_paragraphs(self, xml):
+            p_items = []
+            e = xml.find(".//REF")
+            if e is not None:
+                while True:
+                    e = e.getnext()
+                    if e is None or e.tag == "REF-FIM":
+                        break
+                    if e.tag == "p":
+                        p_items.append(e)
+            return p_items
 
     class RemoveCommentPipe(plumber.Pipe):
         def transform(self, data):

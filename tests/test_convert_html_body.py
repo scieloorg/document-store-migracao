@@ -2319,3 +2319,50 @@ class TestSupplementaryMaterial(unittest.TestCase):
             inline_supplement_material.text,
             "Supplementary material")
         self.assertIsNone(inline_supplement_material.find(".//a"))
+
+
+class TestRemoveReferencesFromBody(unittest.TestCase):
+    def test_remove_references_from_body_removes_references_from_body(self):
+        text = """
+        <body>
+        <p>In conclusion, revascularization of above-knee amputation stump, 
+        based on DFA or hypogastric revascularization, is the best therapeutic 
+        alternative and should be attempted even in frail patients. We believe 
+        that our small series reinforces the idea that stump revascularization is 
+        possible and can save both: stump and life.</p>     <p> </p>     
+        <p><b>REFERENCES</b></p>      
+        <!-- ref --><p>7. Endean ED, Schwarcz TH, Barker DE, Munfakh NA, Wilson-Neely R, Hyde GL. Hip disarticulation: factors affecting outcome. J Vasc Surg.1991:398-404.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004773&amp;pid=S1646-706X201900020000200007&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <!-- ref --><p>8. Remes L, Isoaho R, Vahlberg T, Viitanen M, Rautava P. Predictors for institutionalization and prosthetic ambulation after major lower extremity amputation during an eight-year follow-up. Aging Clin Exp Res.2009:129-135.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004775&amp;pid=S1646-706X201900020000200008&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     <p>9. Fletcher DD, Andrews KL, Butters MA, Jacobsen SJ, Rowland CM, Hallett JW Jr. Rehabilitation of the geriatric vascular amputee patient: a population-based study. Arch Phys Med Rehabil. 2001:776-779.</p>     
+        <!-- ref --><p>10. Moura D, Garruço A. Desarticulação da anca - Análise de uma série e revisão da literatura. Rev Bras Ortop, 2016: 1-5.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004778&amp;pid=S1646-706X201900020000200010&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <!-- ref --><p>11. Dénes Z, Till A. Rehabilitation of patients after hipdisarticulation. Arch Orthop Trauma Surg. 1997:498-499.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004780&amp;pid=S1646-706X201900020000200011&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <!-- ref --><p>12. Fenelon GC, Von Foerster G, Engelbrecht E. Disarticulation ofthe hip as a result of failed arthroplasty. A series of 11 cases. J Bone Joint Surg Br 1980:441-446.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004782&amp;pid=S1646-706X201900020000200012&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <!-- ref --><p>13. Jain R, Grimer RJ, Carter SR, Tillman RM, Abudu AA. Outcome after disarticulation of the hip for sarcomas. Eur J Surg Oncol. 2005:1025-1028.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004784&amp;pid=S1646-706X201900020000200013&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <!-- ref --><p>14. Daigeler A, Lehnhardt M, Khadra A, Hauser J, Steinstraesser L,Langer S, et al. Proximal major limb amputations - a retrospective analysis of 45 oncological cases. World J Surg Oncol. 2009:1-10.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004786&amp;pid=S1646-706X201900020000200014&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <!-- ref --><p>15. Ebrahimzadeh MH, Kachooei AR, Soroush MR, HasankhaniEG, Razi S, Birjandinejad A. Long-term clinical outcomes ofwar-related hip disarticulation and transpelvic amputation. J Bone Joint Surg Am. 2013:1-6.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004788&amp;pid=S1646-706X201900020000200015&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <!-- ref --><p>16. Zalavras CG, Rigopoulos N, Ahlmann E, Patzakis MJ. Hipdisarticulation for severe lower extremity infections. Clin Orthop Relat Res. 2009:1721-1726.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004790&amp;pid=S1646-706X201900020000200016&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        </body>
+        """
+        article_text = """
+        <article>
+            <back>
+                <ref>7</ref>
+                <ref>8</ref>
+                <ref>9</ref>
+                <ref>10</ref>
+                <ref>11</ref>
+                <ref>12</ref>
+                <ref>13</ref>
+                <ref>14</ref>
+                <ref>15</ref>
+                <ref>16</ref>
+            </back>
+        </article>
+        """
+        article = etree.fromstring(article_text)
+        ref_items = article.findall(".//ref")
+
+        xml = etree.fromstring(text)
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011", ref_items=ref_items)
+        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline
+            ).transform((text, xml))
+        self.assertEqual(len(xml.findall(".//p")), 2)
