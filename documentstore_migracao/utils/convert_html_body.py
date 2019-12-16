@@ -21,6 +21,21 @@ TIMEOUT = config.get("TIMEOUT") or 5
 ASSET_TAGS = ("disp-formula", "fig", "table-wrap", "app")
 
 
+def is_footnote_label(text):
+    """
+    Retorna True quando text representa "label" de nota de rodapé. Padrões:
+    Primeiro caracter é dígito
+    Primeiro caracter não é alfanumérico
+    Uma letra, minúscula
+    """
+    if text:
+        return any(
+            text[0].isdigit(),
+            not text[0].isalnum(),
+            text[0].isalpha() and len(text) == 1 and text[0].lower() == text[0]
+        )
+
+
 def move_tail_into_node(node):
     """
     Move o conteúdo de node.tail para dentro de node
@@ -1731,13 +1746,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def _might_be_fn_label(self, a_href):
             xml_text = a_href.get("xml_text")
             if xml_text and get_node_text(a_href):
-                return any(
-                    [
-                        xml_text[0].isdigit(),
-                        not xml_text[0].isalnum(),
-                        xml_text[0].isalpha() and len(xml_text) == 1,
-                    ]
-                )
+                return is_footnote_label(xml_text)
 
         def _find_a_name_with_same_xml_text(self, root, a_href):
             xml_text = a_href.get("xml_text")
@@ -1771,17 +1780,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if (node.tail or "").strip():
                 return
             xml_text = node.get("xml_text")
-            if xml_text:
-                if (
-                    not xml_text[0].isalnum()
-                    or xml_text[0].isdigit()
-                    or xml_text[0].lower() == xml_text[0]
-                ):
-                    _next = node.getnext()
-                    if _next is not None and _next.tag == "a" and _next.get("name"):
-                        _next.addnext(deepcopy(node))
-                        parent = node.getparent()
-                        parent.remove(node)
+            if is_footnote_label(xml_text):
+                _next = node.getnext()
+                if _next is not None and _next.tag == "a" and _next.get("name"):
+                    _next.addnext(deepcopy(node))
+                    parent = node.getparent()
+                    parent.remove(node)
 
         def transform(self, data):
             raw, xml = data
