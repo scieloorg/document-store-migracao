@@ -1689,6 +1689,15 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     groups[_id].append(a)
             return groups
 
+        def _grouped_by_same_xml_text(self, xml):
+            groups = {}
+            for a in xml.findall(".//a[@xml_text]"):
+                xml_text = a.get("xml_text")
+                if xml_text:
+                    groups[xml_text] = groups.get(xml_text, [])
+                    groups[xml_text].append(a)
+            return groups
+
         def _keep_only_one_a_name(self, items):
             # remove os a[@name] repetidos, se aplicável
             a_names = [n for n in items if n.attrib.get("name")]
@@ -1696,7 +1705,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 items.remove(n)
                 _remove_tag(n)
 
-        def _exclude_invalid_a_name_and_identify_fn_label(self, items):
+        def _exclude_invalid_a_name_and_identify_fn_label(self, items, grouped_by_xml_text):
             if items[0].get("name"):
                 if len(items) > 1:
                     items[0].tag = "_EXCLUDE_REMOVETAG"
@@ -1748,9 +1757,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             raw, xml = data
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe")
             grouped_by_id = self._grouped_by_same_name_and_href(xml)
+            grouped_by_xml_text = self._grouped_by_same_xml_text(xml)
             for _id, a_items in grouped_by_id.items():
                 self._keep_only_one_a_name(a_items)
-                self._exclude_invalid_a_name_and_identify_fn_label(a_items)
+                self._exclude_invalid_a_name_and_identify_fn_label(a_items, grouped_by_xml_text)
                 self._exclude_invalid_unique_a_href(a_items)
             etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe - fim")
