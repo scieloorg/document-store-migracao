@@ -1705,12 +1705,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 items.remove(n)
                 _remove_tag(n)
 
-        def _exclude_invalid_a_name_and_identify_fn_label(self, items, grouped_by_xml_text):
-            if items[0].get("name"):
-                if len(items) > 1:
-                    items[0].tag = "_EXCLUDE_REMOVETAG"
-                root = items[0].getroottree()
-                for a_href in items[1:]:
+        def _exclude_invalid_a_name_and_identify_fn_label(self, a_items, grouped_by_xml_text):
+            if a_items[0].get("name"):
+                if len(a_items) > 1:
+                    a_items[0].tag = "_EXCLUDE_REMOVETAG"
+                root = a_items[0].getroottree()
+                for a_href in a_items[1:]:
                     found = None
                     if self._might_be_fn_label(a_href):
                         found = self._find_a_name_with_same_xml_text(root, a_href)
