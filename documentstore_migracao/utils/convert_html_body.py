@@ -1676,8 +1676,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
         Algumas NOTAS->TEXTO podem ser convertidas a "fn/label"
         """
 
-        def _classify_elem_a_by_id(self, xml):
-            items_by_id = {}
+        def _grouped_by_same_name_and_href(self, xml):
+            groups = {}
             for a in xml.findall(".//a"):
                 _id = a.attrib.get("name")
                 if not _id:
@@ -1685,9 +1685,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if href and href.startswith("#"):
                         _id = href[1:]
                 if _id:
-                    items_by_id[_id] = items_by_id.get(_id, [])
-                    items_by_id[_id].append(a)
-            return items_by_id
+                    groups[_id] = groups.get(_id, [])
+                    groups[_id].append(a)
+            return groups
 
         def _keep_only_one_a_name(self, items):
             # remove os a[@name] repetidos, se aplicável
@@ -1747,11 +1747,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def transform(self, data):
             raw, xml = data
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe")
-            items_by_id = self._classify_elem_a_by_id(xml)
-            for _id, items in items_by_id.items():
-                self._keep_only_one_a_name(items)
-                self._exclude_invalid_a_name_and_identify_fn_label(items)
-                self._exclude_invalid_unique_a_href(items)
+            grouped_by_id = self._grouped_by_same_name_and_href(xml)
+            for _id, a_items in grouped_by_id.items():
+                self._keep_only_one_a_name(a_items)
+                self._exclude_invalid_a_name_and_identify_fn_label(a_items)
+                self._exclude_invalid_unique_a_href(a_items)
             etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe - fim")
             return data
