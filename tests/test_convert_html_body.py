@@ -2325,14 +2325,11 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
     def test_remove_references_from_body_removes_references_from_body(self):
         text = """
         <body>
-        <p>In conclusion, revascularization of above-knee amputation stump, 
-        based on DFA or hypogastric revascularization, is the best therapeutic 
-        alternative and should be attempted even in frail patients. We believe 
-        that our small series reinforces the idea that stump revascularization is 
-        possible and can save both: stump and life.</p>     <p> </p>     
+        <p></p>     
+        <p></p>     
         <p><b>REFERENCES</b></p>      
         <!-- ref --><p>7. Endean ED, Schwarcz TH, Barker DE, Munfakh NA, Wilson-Neely R, Hyde GL. Hip disarticulation: factors affecting outcome. J Vasc Surg.1991:398-404.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004773&amp;pid=S1646-706X201900020000200007&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>8. Remes L, Isoaho R, Vahlberg T, Viitanen M, Rautava P. Predictors for institutionalization and prosthetic ambulation after major lower extremity amputation during an eight-year follow-up. Aging Clin Exp Res.2009:129-135.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004775&amp;pid=S1646-706X201900020000200008&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     <p>9. Fletcher DD, Andrews KL, Butters MA, Jacobsen SJ, Rowland CM, Hallett JW Jr. Rehabilitation of the geriatric vascular amputee patient: a population-based study. Arch Phys Med Rehabil. 2001:776-779.</p>     
+        <!-- ref --><p>8. Remes L, Isoaho R, Vahlberg T, Viitanen M, Rautava P. Predictors for institutionalization and prosthetic ambulation after major lower extremity amputation during an eight-year follow-up. Aging Clin Exp Res.2009:129-135.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004775&amp;pid=S1646-706X201900020000200008&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>    
         <!-- ref --><p>10. Moura D, Garruço A. Desarticulação da anca - Análise de uma série e revisão da literatura. Rev Bras Ortop, 2016: 1-5.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004778&amp;pid=S1646-706X201900020000200010&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
         <!-- ref --><p>11. Dénes Z, Till A. Rehabilitation of patients after hipdisarticulation. Arch Orthop Trauma Surg. 1997:498-499.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004780&amp;pid=S1646-706X201900020000200011&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
         <!-- ref --><p>12. Fenelon GC, Von Foerster G, Engelbrecht E. Disarticulation ofthe hip as a result of failed arthroplasty. A series of 11 cases. J Bone Joint Surg Br 1980:441-446.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004782&amp;pid=S1646-706X201900020000200012&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
@@ -2347,7 +2344,6 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
             <back>
                 <ref>7</ref>
                 <ref>8</ref>
-                <ref>9</ref>
                 <ref>10</ref>
                 <ref>11</ref>
                 <ref>12</ref>
@@ -2366,3 +2362,55 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
         text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline
             ).transform((text, xml))
         self.assertEqual(len(xml.findall(".//p")), 2)
+
+    def test_remove_references_from_body_does_not_remove_any_paragraph(self):
+        text = """
+        <body>
+        <p><b>REFERENCES</b></p>      
+        
+        <!-- ref -->
+        <p align="LEFT"><font color="000000">1. Vengrenovitch, R.D. <i>Acta Metall.</i>, v. 30, p. 1079-1086, 1982. </font>         
+        <!-- end-ref -->
+        <!-- ref --></p>
+        <p align="LEFT"><font color="000000">2. Lameiras, F.S. <i>Scripta Metall.</i>, v. 28, p. 1435-1440, 1993. </font>         
+        <!-- end-ref -->
+        <!-- ref --></p>
+        <p align="LEFT"><font color="000000">3. Rivier, N.; Lissowski, A. <i>J. Phys. A: Math. Gen.</i>, n. 15, p. L143-L148, 1982. </font>         
+        <!-- end-ref -->
+        <!-- ref --></p>
+        <p align="LEFT"><font color="000000">4. Rivier, N. <i>Phil. Mag. B</i>, n. 52, p. 795, 1985. </font>         
+        <!-- end-ref -->
+        <!-- ref --></p>
+        <p align="LEFT"><font color="000000">5. Hunderi, O.; Ryum, N. <i>Acta Metall.</i>, v. 29, p. 1737-1745, 1981. </font>         
+        <!-- end-ref -->
+        <!-- ref --></p>
+        <p align="LEFT"><font color="000000">6. Barnsley, M. <i>Fractals Everywhere</i>, Academic Press, Inc., San Diego, Ca-USA, 1988. </font>         
+        <!-- end-ref -->
+        <!-- ref --></p>
+        <p align="LEFT"><font color="000000">7. Rhines, F.N.; K.R. Craig. <i>Metallurgical Trans.</i>, v. 5, p. 413-425, 1974. </font>         
+        <!-- end-ref --> </p></body>
+        """
+        article_text = """
+        <article>
+            <back>
+                <ref>1</ref>
+                <ref>2</ref>
+                <ref>3</ref>
+                <ref>40</ref>
+                <ref>5</ref>
+                <ref>6</ref>
+                <ref>7</ref>
+                <ref>8</ref>
+            </back>
+        </article>
+        """
+        article = etree.fromstring(article_text)
+        ref_items = article.findall(".//ref")
+
+        xml = etree.fromstring(text)
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011", ref_items=ref_items)
+        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline
+            ).transform((text, xml))
+        self.assertEqual(len(xml.findall(".//p")), 8)
+
+

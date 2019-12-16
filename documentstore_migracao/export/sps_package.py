@@ -505,6 +505,8 @@ class SPS_Package:
         back = body.getnext()
         if back is not None:
             ref_items = back.findall(".//ref")
+        if not ref_items:
+            ref_items = body.getroottree().findall(".//ref")
         return ref_items
 
     def transform_body(self):

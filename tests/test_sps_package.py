@@ -1931,4 +1931,4 @@ class TestGetRefItems(unittest.TestCase):
         body = xml.find(".//sub-article/body")
         _sps_package = self._get_sps_package(text)
         ref_items = _sps_package._get_ref_items(body)
-        self.assertEqual(len(ref_items), 0)
+        self.assertEqual(len(ref_items), 3)
