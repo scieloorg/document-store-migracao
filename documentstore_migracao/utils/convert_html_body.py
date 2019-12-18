@@ -30,9 +30,11 @@ def is_footnote_label(text):
     """
     if text:
         return any(
-            text[0].isdigit(),
-            not text[0].isalnum(),
-            text[0].isalpha() and len(text) == 1 and text[0].lower() == text[0]
+            [
+                text[0].isdigit(),
+                not text[0].isalnum(),
+                text[0].isalpha() and len(text) == 1 and text[0].lower() == text[0]
+            ]
         )
 
 
@@ -1720,47 +1722,70 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 items.remove(n)
                 _remove_tag(n)
 
-        def _exclude_invalid_a_name_and_identify_fn_label(self, a_items, grouped_by_xml_text):
-            if a_items[0].get("name"):
-                if len(a_items) > 1:
-                    a_items[0].tag = "_EXCLUDE_REMOVETAG"
-                root = a_items[0].getroottree()
-                for a_href in a_items[1:]:
-                    found = None
-                    if self._might_be_fn_label(a_href):
-                        found = self._find_a_name_with_same_xml_text(root, a_href)
-                    if found is None:
-                        logger.info("remove: %s" % etree.tostring(a_href))
-                        _remove_tag(a_href)
-                    else:
-                        logger.info("Identifica como fn/label")
-                        logger.info(etree.tostring(a_href))
-                        a_href.tag = "label"
-                        a_href.set("label-of", found.get("name"))
-                        logger.info(etree.tostring(a_href))
+        def _find_label_of(self, a_href, a_items):
+            """
+            Em um documento html, pode haver:
+
+            No início do documento, o título com:
+            - uma âncora do topo (tx*)
+            - um link para nota de rodapé (#nt*)
+            <p>
+            <b>
+            O regime de competência no setor público brasileiro:
+            uma pesquisa empírica sobre a utilidade da informação
+            contábil
+            </b>
+            <a id="tx*" name="tx*" xml_text="*"></a>
+            <a href="#nt*" xml_text="*"><sup>*</sup></a></b>
+            </p>
+
+            No fim do documento:
+            - âncora da nota do rodapé (nt*)
+            - link para o topo (#tx*)
+            <p><a id="nt*" name="nt*" xml_text="*"></a>
+            <a href="#tx*" xml_text="*">*</a>
+            Artigo apresentado no 12º Congresso USP de
+            Controladoria e Contabilidade, São Paulo, julho de 2012</p>
+
+            Esta função para a[@href='#tx*'], deve retornar a[@name='nt*']
+            """
+            for a in [item for item in a_items if item.get("name")]:
+                if "#" + a.get("name") != a_href.get("href"):
+                    if a.getnext() is a_href:
+                        return a
+
+        def _convert_to_fn_label(self, a_href_items, grouped_by_xml_text):
+            a_href_items = a_href_items or []
+            for a_href in a_href_items:
+                xml_text = a_href.get("xml_text")
+                if get_node_text(a_href) and is_footnote_label(xml_text):
+                    logger.info(
+                        "Identifica como fn/label: %s" %
+                        etree.tostring(a_href))
+                    a_href.tag = "label"
+                    #a_href.attrib.pop("href")
+                    group = grouped_by_xml_text.get(xml_text)
+
+                    a = self._find_label_of(a_href, group)
+                    if a is not None:
+                        a_href.set("label-of", a.get("name"))
+                    logger.info(etree.tostring(a_href))
+
+        def _is_convertible_to_fn_label(self, a_items):
+            if a_items[0].get("name") is None:
+                return
+            a_name = a_items[0]
+            a_name_xml_text = a_name.get("xml_text", "")
+            if " " in a_name_xml_text or not is_footnote_label(a_name_xml_text):
+                return
+            a_href_items = [a for a in a_items[1:] if a.get("href")]
+            if len(a_href_items) > 0:
+                a_name.tag = "_EXCLUDE_REMOVETAG"
+                return a_href_items
 
         def _exclude_invalid_unique_a_href(self, nodes):
             if len(nodes) == 1 and nodes[0].attrib.get("href"):
                 _remove_tag(nodes[0])
-
-        def _might_be_fn_label(self, a_href):
-            xml_text = a_href.get("xml_text")
-            if xml_text and get_node_text(a_href):
-                return is_footnote_label(xml_text)
-
-        def _find_a_name_with_same_xml_text(self, root, a_href):
-            xml_text = a_href.get("xml_text")
-            if xml_text:
-                a_items = root.findall(".//a[@xml_text='{}']".format(xml_text))
-                a_name = [item for item in a_items if item.get("name")]
-                if len(a_name) == 1:
-                    return a_name[0]
-                for i, a in enumerate(a_items):
-                    if a is a_href:
-                        if i >= 1 and a_items[i - 1].get("name"):
-                            return a_items[i - 1]
-                        if i + 1 < len(a_items) and a_items[i + 1].get("name"):
-                            return a_items[i + 1]
 
         def transform(self, data):
             raw, xml = data
@@ -1769,7 +1794,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
             grouped_by_xml_text = self._grouped_by_same_xml_text(xml)
             for _id, a_items in grouped_by_id.items():
                 self._keep_only_one_a_name(a_items)
-                self._exclude_invalid_a_name_and_identify_fn_label(a_items, grouped_by_xml_text)
+                a_href_items = self._is_convertible_to_fn_label(a_items)
+                self._convert_to_fn_label(a_href_items, grouped_by_xml_text)
                 self._exclude_invalid_unique_a_href(a_items)
             etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe - fim")
