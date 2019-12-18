@@ -3009,6 +3009,7 @@ class Remote2LocalConversion:
         while True:
             if self.body.find(".//a[@link-type='html']") is None:
                 break
+
             self._import_html_files_content()
             self._classify_element_a_which_has_href_attribute()
 
@@ -3018,7 +3019,10 @@ class Remote2LocalConversion:
         """
         new_p_items = []
         for bodychild in self.body_children:
-            for a_link_type in bodychild.findall(".//a[@link-type='html']"):
+            a_items = bodychild.findall(".//a[@link-type='html']")
+            if bodychild.tag == "a" and bodychild.get("link-type") == "html":
+                a_items.insert(0, bodychild)
+            for a_link_type in a_items:
                 new_p = self._imported_html_file(a_link_type)
                 if new_p is not None:
                     new_p_items.append((bodychild, new_p))
