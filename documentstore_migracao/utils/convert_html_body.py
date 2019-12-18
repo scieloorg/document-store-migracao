@@ -154,20 +154,21 @@ def matched_first_two_words(text_words, search_expr):
 
 class CustomPipe(plumber.Pipe):
     def __init__(self, super_obj=None, *args, **kwargs):
-
         self.super_obj = super_obj
         super(CustomPipe, self).__init__(*args, **kwargs)
 
 
 class HTML2SPSPipeline(object):
-    def __init__(self, pid, index_body=1):
+    def __init__(self, pid="", ref_items=[], index_body=1):
         self.pid = pid
         self.index_body = index_body
+        self.ref_items = ref_items
         self.document = Document(None)
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.SaveRawBodyPipe(super_obj=self),
             self.ConvertRemote2LocalPipe(),
+            self.RemoveReferencesFromBodyPipe(super_obj=self),
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
@@ -942,6 +943,51 @@ class HTML2SPSPipeline(object):
 
             _process(xml, "graphic", self.parser_node)
             return data
+
+    class RemoveReferencesFromBodyPipe(CustomPipe):
+        def transform(self, data):
+            raw, xml = data
+            if len(self.super_obj.ref_items) > 0:
+                references_header, p_to_delete = self._mark_references(xml)
+                if len(self.super_obj.ref_items) == len(p_to_delete):
+                    self._delete_references_header(references_header)
+                    for p in p_to_delete:
+                        _remove_tag(p, True)
+                else:
+                    logger.info("RemoveReferencesFromBodyPipe: FALHOU")
+            return data
+
+        def _mark_references(self, xml):
+            """
+            Cria o atributo "content-type" com valor "ref-to-delete" para
+            os parágrafos de referências que contém o comentário
+            `<!-- end-ref -->`
+            """
+            header = None
+            comments = xml.xpath("//comment()")
+            for comment in comments:
+                name = comment.text.strip()
+                if name == "end-ref":
+                    parents = [comment.getparent(), comment.getparent().getparent()]
+                    for parent in parents:
+                        if parent.tag == "p":
+                            parent.set("content-type", "ref-to-delete")
+                            break
+                elif header is None and name == "ref":
+                    header = comment.getprevious()
+            return header, xml.findall(".//p[@content-type='ref-to-delete']")
+
+        def _delete_references_header(self, references_header):
+            if references_header is not None:
+                text = get_node_text(references_header)
+                if text:
+                    text = text.upper()
+                    if text.startswith("REF") or ">REF" in text:
+                        logger.info(
+                            "RemoveReferencesFromBodyPipe: Primeiro: %s" %
+                            etree.tostring(references_header)
+                        )
+                        _remove_tag(references_header, True)
 
     class RemoveCommentPipe(plumber.Pipe):
         def transform(self, data):
