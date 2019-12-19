@@ -227,7 +227,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         )
 
     def test_pipe_br_to_pipe_creates_p_for_each_item_which_is_separated_by_br_and_remove_extra_p(
-        self
+        self,
     ):
         text = '<root><p align="x">bla<br/> continua outra linha</p></root>'
         raw, transformed = self._transform(text, self.pipeline.BR2PPipe())
@@ -1756,7 +1756,9 @@ class TestAHrefPipe(unittest.TestCase):
         self.assertEqual(node.text, "texto")
         self.assertEqual(set(expected.keys()), set(node.attrib.keys()))
 
-    def test_a_href_pipe_create_ext_link_for_bad_uri_format_which_starts_with_http(self):
+    def test_a_href_pipe_create_ext_link_for_bad_uri_format_which_starts_with_http(
+        self,
+    ):
         expected = {
             "{http://www.w3.org/1999/xlink}href": "http//www.bla.org",
             "ext-link-type": "uri",
@@ -1875,11 +1877,13 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
                 """<body>
                     <img src="/img/revistas/eq/v33n3/html/tab01.jpg"/>
                 </body>
-            """)
+            """
+            )
 
         with patch(
-                "documentstore_migracao.utils.convert_html_body.Remote2LocalConversion._get_html_body",
-                new=stub_get_html_body):
+            "documentstore_migracao.utils.convert_html_body.Remote2LocalConversion._get_html_body",
+            new=stub_get_html_body,
+        ):
             text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
             print(etree.tostring(xml))
 
@@ -1895,8 +1899,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
 
             img = xml.findall(".//img[@src]")
             self.assertEqual(len(img), 1)
-            self.assertEqual(
-                img[0].get("src"), "/img/revistas/eq/v33n3/html/tab01.jpg")
+            self.assertEqual(img[0].get("src"), "/img/revistas/eq/v33n3/html/tab01.jpg")
 
 
 class TestCompleteElementAWithXMLTextPipe(unittest.TestCase):
@@ -2132,7 +2135,7 @@ class TestFnPipe(unittest.TestCase):
         self.assertIn("A norma-A", fn[3].find("p").text)
 
     def test_convert_elements_which_have_id_pipe_for_asterisk_corresponding_author(
-        self
+        self,
     ):
         text = """<root><big>Peter M. Gaylarde; Christine C. Gaylarde
         <a href="#back"><sup>*</sup></a></big>
@@ -2260,7 +2263,7 @@ class TestTablePipe(unittest.TestCase):
         )
 
     def test_table_which_is_not_table_wrap_child_must_be_converted_to_array_and_create_tbody(
-        self
+        self,
     ):
         text = """<root>
         <table>
@@ -2314,10 +2317,7 @@ class TestTablePipe(unittest.TestCase):
         self.assertIsNone(xml.find(".//table"))
 
 
-
-
 class TestSupplementaryMaterial(unittest.TestCase):
-
     def setUp(self):
         self.pipe = ConvertElementsWhichHaveIdPipeline().SupplementaryMaterialPipe()
 
@@ -2350,15 +2350,12 @@ class TestSupplementaryMaterial(unittest.TestCase):
         </root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
-        inline_supplement_material = xml.find(
-            ".//inline-supplementary-material")
+        inline_supplement_material = xml.find(".//inline-supplementary-material")
         self.assertEqual(
-            inline_supplement_material.get(
-                "{http://www.w3.org/1999/xlink}href"),
-                "/pdf/qn/v36n3/a05ms01.pdf")
-        self.assertEqual(
-            inline_supplement_material.text,
-            "Supplementary material")
+            inline_supplement_material.get("{http://www.w3.org/1999/xlink}href"),
+            "/pdf/qn/v36n3/a05ms01.pdf",
+        )
+        self.assertEqual(inline_supplement_material.text, "Supplementary material")
         self.assertIsNone(inline_supplement_material.find(".//a"))
 
 
@@ -2400,8 +2397,9 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
 
         xml = etree.fromstring(text)
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011", ref_items=ref_items)
-        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline
-            ).transform((text, xml))
+        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline).transform(
+            (text, xml)
+        )
         self.assertEqual(len(xml.findall(".//p")), 2)
 
     def test_remove_references_from_body_does_not_remove_any_paragraph(self):
@@ -2450,8 +2448,7 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
 
         xml = etree.fromstring(text)
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011", ref_items=ref_items)
-        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline
-            ).transform((text, xml))
+        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline).transform(
+            (text, xml)
+        )
         self.assertEqual(len(xml.findall(".//p")), 8)
-
-

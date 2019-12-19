@@ -984,8 +984,8 @@ class HTML2SPSPipeline(object):
                     text = text.upper()
                     if text.startswith("REF") or ">REF" in text:
                         logger.info(
-                            "RemoveReferencesFromBodyPipe: Primeiro: %s" %
-                            etree.tostring(references_header)
+                            "RemoveReferencesFromBodyPipe: Primeiro: %s"
+                            % etree.tostring(references_header)
                         )
                         _remove_tag(references_header, True)
 
@@ -2259,7 +2259,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     node.addprevious(app_group)
                 if node.find("label") is None:
                     text = None
-                    for xref in xml.findall(".//xref[@rid='{}']".format(node.get("id"))):
+                    for xref in xml.findall(
+                        ".//xref[@rid='{}']".format(node.get("id"))
+                    ):
                         text = get_node_text(xref)
                         if text:
                             break
@@ -2852,11 +2854,10 @@ def fix_img_revistas_path(node):
         if " " in location:
             location = "".join(location.split())
         location = location.replace("/img/fbpe", "/img/revistas")
-        location = location[location.find("/img/revistas"):]
+        location = location[location.find("/img/revistas") :]
         if old_location != location:
             logger.info(
-                "fix_img_revistas_path: de {} para {}".format(
-                    old_location, location)
+                "fix_img_revistas_path: de {} para {}".format(old_location, location)
             )
             node.set(attr, location)
 
@@ -3008,6 +3009,7 @@ class Remote2LocalConversion:
         while True:
             if self.body.find(".//a[@link-type='html']") is None:
                 break
+
             self._import_html_files_content()
             self._classify_element_a_which_has_href_attribute()
 
@@ -3017,7 +3019,10 @@ class Remote2LocalConversion:
         """
         new_p_items = []
         for bodychild in self.body_children:
-            for a_link_type in bodychild.findall(".//a[@link-type='html']"):
+            a_items = bodychild.findall(".//a[@link-type='html']")
+            if bodychild.tag == "a" and bodychild.get("link-type") == "html":
+                a_items.insert(0, bodychild)
+            for a_link_type in a_items:
                 new_p = self._imported_html_file(a_link_type)
                 if new_p is not None:
                     new_p_items.append((bodychild, new_p))
@@ -3053,10 +3058,9 @@ class Remote2LocalConversion:
             content_type = "html"
             delete_tag = "REMOVE_" + content_type
             node_content = self._create_new_element_for_imported_html_file(
-                new_href, html_body, delete_tag)
-            new_p = self._create_new_p(
-                new_href, node_content, content_type
+                new_href, html_body, delete_tag
             )
+            new_p = self._create_new_p(new_href, node_content, content_type)
             etree.strip_tags(new_p, delete_tag)
             return new_p
 
@@ -3113,12 +3117,9 @@ class Remote2LocalConversion:
 
         self.imported_files.append(href)
         content_type = "asset"
-        node_content = self._create_new_element_for_imported_img_file(
-            node_a, href)
+        node_content = self._create_new_element_for_imported_img_file(node_a, href)
         if node_content is not None:
-            new_p = self._create_new_p(
-                new_href, node_content, content_type
-            )
+            new_p = self._create_new_p(new_href, node_content, content_type)
             return new_p
 
     def _update_a_href(self, a_href, new_href):
@@ -3148,7 +3149,9 @@ class Remote2LocalConversion:
 
         return new_p
 
-    def _create_new_element_for_imported_html_file(self, new_href, html_body, delete_tag="REMOVETAG"):
+    def _create_new_element_for_imported_html_file(
+        self, new_href, html_body, delete_tag="REMOVETAG"
+    ):
         """
         Cria novo elemento para representar os ativos digitais que estão contidos em um arquivo HTML
         """
@@ -3209,8 +3212,7 @@ class Remote2LocalConversion:
                 checked.append(asset.attrib["src"])
 
         for content_type in ["html", "asset"]:
-            for p in self.body.findall(
-                    ".//p[@content-type='{}']".format(content_type)):
+            for p in self.body.findall(".//p[@content-type='{}']".format(content_type)):
                 if p.find(".//*[@src]") is None:
                     parent = p.getparent()
                     if parent is not None:
