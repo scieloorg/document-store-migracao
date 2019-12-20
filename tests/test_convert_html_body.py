@@ -644,6 +644,51 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         pl = ConvertElementsWhichHaveIdPipeline()
         self.pipe = pl.EvaluateElementAToDeleteOrMarkAsFnLabelPipe()
 
+    def test_pipe_converts_a_href_item_in_label_and_delete_a_name(self):
+        """
+        Converte
+        <root><a id="tx*" name="tx*" xml_text="*"/><a href="#tx*" link-type="internal" xml_text="*">*</a> Artigo apresentado no 12&#186; Congresso USP de Controladoria e Contabilidade, S&#227;o Paulo, julho de 2012
+        </root>
+        em:
+        <label link-type="internal" xml_text="*" label-of="nt*">*</label> Artigo apresentado no 12&#186; Congresso USP de Controladoria e Contabilidade, S&#227;o Paulo, julho de 2012
+        """
+        text = """
+        <root>
+        <a id="tx*" name="tx*" xml_text="*"/>
+        <a id="nt*" name="nt*" xml_text="*"/>
+        <a href="#tx*" link-type="internal" xml_text="*">*</a> Artigo apresentado no 12&#186; Congresso USP de Controladoria e Contabilidade, S&#227;o Paulo, julho de 2012
+        </root>
+        """
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNone(xml.find(".//a[@name='tx*']"))
+        self.assertIsNotNone(xml.find(".//a[@name='nt*']"))
+        self.assertIsNotNone(xml.find(".//label[@label-of='nt*']"))
+
+    def test_pipe_does_not_convert(self):
+        """
+        Mantém, não converte.
+        <root>
+        <a name="a05tab07" id="a05tab07" xml_text="tabelas 7"/>
+        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e 
+        <a href="#a05tab07" link-type="internal" xml_text="tabela 7">Tabela 7</a>), sendo este resultado consistente com o estudo de Kober et al. (2010).
+        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e '
+        </root>
+        """
+        text = b"""
+        <root>
+        <a name="a05tab07" id="a05tab07" xml_text="tabelas 7"/>
+        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e 
+        <a href="#a05tab07" link-type="internal" xml_text="tabela 7">Tabela 7</a>), sendo este resultado consistente com o estudo de Kober et al. (2010).
+        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e '
+        </root>
+        """.strip()
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(len(xml.findall(".//a[@name]")), 1)
+        self.assertEqual(len(xml.findall(".//a[@href]")), 3)
+        self.assertEqual(etree.tostring(xml), text)
+
     def test_pipe_remove_id_duplicated(self):
         text = """<root>
         <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>
@@ -685,7 +730,7 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         no entanto um é nota e outro é referência bibliográfica
         """
         text = """<root>
-        <a name="topo" id="topo" xml_text="sobe"/>
+        <a name="topo" id="topo" xml_text="1"/>
         <p>
         <bold>Franz R. Novak</bold>
         <a href="#autor1" link-type="internal" xml_text="1"><sup>1</sup></a>
