@@ -2497,3 +2497,74 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
             (text, xml)
         )
         self.assertEqual(len(xml.findall(".//p")), 8)
+
+
+class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.ConvertAssetThumbnailInTableIntoSimplerStructure()
+
+    def test_transform_converts_thumbnail_table_into_simpler_structure(self):
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <table border="0">
+            <tr align="left" valign="top">
+            <td>
+            <a href="#472i01" link-type="internal">
+            <img src="/img/revistas/bjmbr/v43n10/472i01peq.jpg" border="2"/>
+        </a>
+        </td> <td> <p align="left">
+          <a name="Fig1" id="Fig1"/>Figure 1. Concentration of IL-6 (pg/10<sup>6 </sup>cells) produced by the suspension of plasmacytoid dendritic cells (pDC). Concentration (Conc.) 1: 20 IU/mL penicillin, 5 µg/mL vancomycin, 5 µg/mL amoxicillin, 75 ng/mL anti-FcεRI/mL, and 100 nM CpG. Concentration 2: 200 IU/mL penicillin, 50 µg/mL vancomycin, and 50 µg/mL amoxicillin. Concentration 3: 1000 IU/mL penicillin, 250 µg/mL vancomycin, and 250 µg/mL amoxicillin.</p> </td> </tr>
+        </table>
+          <p content-type="html">
+            <a id="472i01" name="472i01"/>&#13;
+         <p align="left">C.M.F. Lima, J.T. Schroeder, C.E.S. Galvão, F.M. Castro, J. Kalil and N.F. Adkinson Jr. Functional changes of dendritic cells in hypersensitivity reactions to amoxicillin. Braz J Med Biol Res 2010; 43: 964-968. &#13;
+         </p>&#13;
+           <p>
+            <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
+            <img src="/img/revistas/bjmbr/v43n10/472i01.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+         </ext-link>
+         </p>&#13;
+           <p>&#13;
+             <p align="left">Figure 1. Concentration of IL-6 (pg/10<sup>6 </sup>cells) produced by the suspension of plasmacytoid dendritic cells (pDC). Concentration (Conc.) 1: 20 IU/mL penicillin, 5 µg/mL vancomycin, 5 µg/mL amoxicillin, 75 ng/mL anti-FcεRI/mL, and 100 nM CpG. Concentration 2: 200 IU/mL penicillin, 50 µg/mL vancomycin, and 50 µg/mL amoxicillin. Concentration 3: 1000 IU/mL penicillin, 250 µg/mL vancomycin, and 250 µg/mL amoxicillin.</p>&#13;
+           </p>&#13;
+         &#13;
+         &#13;
+        </p>
+        <p>[View larger version of this image (90 K JPG file)]</p> <hr align="LEFT" size="2"/>
+        </root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <p><a name="Fig1" id="Fig1"><img src="/img/revistas/bjmbr/v43n10/472i01.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+        <p>Figure 1. Concentration of IL-6 (pg/10<sup>6 </sup>cells) produced by the suspension of plasmacytoid dendritic cells (pDC). Concentration (Conc.) 1: 20 IU/mL penicillin, 5 &#181;g/mL vancomycin, 5 &#181;g/mL amoxicillin, 75 ng/mL anti-Fc&#949;RI/mL, and 100 nM CpG. Concentration 2: 200 IU/mL penicillin, 50 &#181;g/mL vancomycin, and 50 &#181;g/mL amoxicillin. Concentration 3: 1000 IU/mL penicillin, 250 &#181;g/mL vancomycin, and 250 &#181;g/mL amoxicillin.</p></a></p><hr align="LEFT" size="2"/>
+        </root>"""
+
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        self.assertEqual(xml.find(".//a[@name='Fig1']/p").text, 'Figure 1. Concentration of IL-6 (pg/10')
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v43n10/472i01.jpg']"))
+
+
+"""
+<a href="#650i02" link-type="internal">
+  <img src="/img/revistas/bjmbr/v43n10/650i02peq.jpg" border="2"/>
+</a>
+<p content-type="html">
+  <a id="650i02" name="650i02"/>&#13;
+ <p align="left">C. Raineki, A. Pickenhagen, T.L. Roth, D.M. Babstock, J.H. McLean, C.W. Harley, A.B. Lucion and R.M. Sullivan. The neurobiology of infant maternal odor learning. Braz J Med Biol Res 2010; 43: 914-919. &#13;
+ </p>&#13;
+   <p>
+    <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
+    <img src="/img/revistas/bjmbr/v43n10/650i02.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="349" imported="true"/>
+ </ext-link>
+ </p>&#13;
+   <p>&#13;
+     <p align="LEFT">Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure.</p>&#13;
+   </p>&#13;
+ &#13;
+ &#13;
+</p>
+<a name="Fig2" id="Fig2"/>
+Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. <p>[View larger version of this image (340 K JPG file)]</p>  
+<hr align="LEFT" size="2"/>
+"""
