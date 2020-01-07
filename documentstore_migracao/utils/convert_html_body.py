@@ -1370,6 +1370,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.ConvertAssetThumbnailInTableIntoSimplerStructure(),
+            self.ConvertAssetThumbnailInElementAIntoSimplerStructure(),
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
@@ -1459,6 +1460,74 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     table_parent.remove(p_next)
             table_parent.remove(table)
             table_parent.remove(p)
+
+    class ConvertAssetThumbnailInElementAIntoSimplerStructure(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for p in xml.findall(".//p[@content-type='html']"):
+                previous = p.getprevious()
+                if previous.tag != "a" or previous.get("link-type") != "internal":
+                    continue
+                p_next = p.getnext()
+                if p_next.tag != "a":
+                    p_next = p_next.findall(".//a[@name]")
+                    if p_next is not None:
+                        p_next = p_next[-1]
+                if p_next.tag != "a":
+                    continue
+
+                a_name = p_next
+
+                thumbnail_img = previous.find(".//img")
+                if thumbnail_img is None:
+                    continue
+                p_html_img = p.find(".//img")
+                if p_html_img is None:
+                    continue
+
+                thumbnail_img_src = thumbnail_img.get("src")
+                p_html_img_src = p_html_img.get("src")
+
+                name, ext = os.path.splitext(p_html_img_src)
+                if thumbnail_img_src.startswith(name):
+                    self._create_new_a(p, previous, a_name, p_html_img)
+
+            return data
+
+        def _create_new_a(self, p, link, a_name, p_html_img):
+            new_p = etree.Element("p")
+            new_p.text = a_name.tail or ""
+            if a_name.tail:
+                a_name.tail = ""
+            _next = a_name
+            remove_items = []
+            while True:
+                remove_items.append(_next)
+                _next = _next.getnext()
+                if _next is None:
+                    break
+                if _next.tag == "p":
+                    if "View larger" in _next.text:
+                        parent = _next.getparent()
+                        parent.remove(_next)
+                    break
+                new_p.append(deepcopy(_next))
+
+            new_a = deepcopy(a_name)
+            new_a.tail = ""
+
+            new_a.append(new_p)
+            new_a.append(deepcopy(p_html_img))
+
+            p.addnext(new_a)
+
+            # remove os elementos excedentes
+            remove_items.append(p)
+            remove_items.append(link)
+
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
 
     class RemoveThumbImgPipe(plumber.Pipe):
         def parser_node(self, node):

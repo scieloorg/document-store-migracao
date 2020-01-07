@@ -2499,7 +2499,7 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
         self.assertEqual(len(xml.findall(".//p")), 8)
 
 
-class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
+class TestDigitalAssetThumbnailTablePipe(unittest.TestCase):
 
     def setUp(self):
         pipeline = ConvertElementsWhichHaveIdPipeline()
@@ -2545,26 +2545,44 @@ class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
         self.assertIsNotNone(xml.find(".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v43n10/472i01.jpg']"))
 
 
-"""
-<a href="#650i02" link-type="internal">
-  <img src="/img/revistas/bjmbr/v43n10/650i02peq.jpg" border="2"/>
-</a>
-<p content-type="html">
-  <a id="650i02" name="650i02"/>&#13;
- <p align="left">C. Raineki, A. Pickenhagen, T.L. Roth, D.M. Babstock, J.H. McLean, C.W. Harley, A.B. Lucion and R.M. Sullivan. The neurobiology of infant maternal odor learning. Braz J Med Biol Res 2010; 43: 914-919. &#13;
- </p>&#13;
-   <p>
-    <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
-    <img src="/img/revistas/bjmbr/v43n10/650i02.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="349" imported="true"/>
- </ext-link>
- </p>&#13;
-   <p>&#13;
-     <p align="LEFT">Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure.</p>&#13;
-   </p>&#13;
- &#13;
- &#13;
-</p>
-<a name="Fig2" id="Fig2"/>
-Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. <p>[View larger version of this image (340 K JPG file)]</p>  
-<hr align="LEFT" size="2"/>
-"""
+class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.ConvertAssetThumbnailInElementAIntoSimplerStructure()
+
+    def test_transform_converts_thumbnail_into_simpler_structure(self):
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <a href="#650i02" link-type="internal">
+          <img src="/img/revistas/bjmbr/v43n10/650i02peq.jpg" border="2"/>
+        </a>
+        <p content-type="html">
+          <a id="650i02" name="650i02"/>&#13;
+         <p align="left">C. Raineki, A. Pickenhagen, T.L. Roth, D.M. Babstock, J.H. McLean, C.W. Harley, A.B. Lucion and R.M. Sullivan. The neurobiology of infant maternal odor learning. Braz J Med Biol Res 2010; 43: 914-919. &#13;
+         </p>&#13;
+           <p>
+            <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
+            <img src="/img/revistas/bjmbr/v43n10/650i02.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="349" imported="true"/>
+         </ext-link>
+         </p>&#13;
+           <p>&#13;
+             <p align="LEFT">Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure.</p>&#13;
+           </p>&#13;
+         &#13;
+         &#13;
+        </p>
+        <a name="Fig2" id="Fig2"/>
+        Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. <p>[View larger version of this image (340 K JPG file)]</p>  
+        <hr align="LEFT" size="2"/>
+        </root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <p><a name="Fig2" id="Fig2"><img src="/img/revistas/bjmbr/v43n10/650i02.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+        <p>Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. </p></a></p>
+        <hr align="LEFT" size="2"/>
+        </root>"""
+
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig2']"))
+        self.assertEqual(xml.find(".//a[@name='Fig2']/p").text.strip(), 'Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or')
+        self.assertIsNotNone(xml.find(".//a[@name='Fig2']/img[@src='/img/revistas/bjmbr/v43n10/650i02.jpg']"))
