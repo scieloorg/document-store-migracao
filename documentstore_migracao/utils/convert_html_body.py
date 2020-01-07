@@ -1369,8 +1369,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
+            self.ReplaceThumbnailTemplateTableAndMessageByImage(),
             self.ConvertAssetThumbnailInTableIntoSimplerStructure(),
             self.ConvertAssetThumbnailInElementAIntoSimplerStructure(),
+            
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
@@ -1405,9 +1407,62 @@ class ConvertElementsWhichHaveIdPipeline(object):
             new_obj = deepcopy(data)
             return data, new_obj
 
+    class ReplaceThumbnailTemplateTableAndMessageByImage(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            done = False
+            for p in xml.findall(".//p[@content-type='html']"):
+                done = self._replace_table_and_view_larger_message(p)
+                if not done:
+                    pass
+            if done:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
+            return data
+
+        def _replace_table_and_view_larger_message(self, p):
+            previous = p.getprevious()
+            if "View larger" not in get_node_text(previous):
+                return
+
+            table = previous.getprevious()
+            if table.tag != "table":
+                return
+
+            a_name = table.find(".//a[@name]")
+            if a_name is None:
+                return
+
+            img = p.find(".//img")
+            if img is None:
+                return
+
+            p_label = p.findall(".//p")
+            if not p_label:
+                return
+
+            src = img.get("src")
+            src = src.replace("http://www.scielo.br/img/fbpe", "/img/revistas")
+            img.set("src", src)
+
+            new_elem = etree.Element("p")
+            new_a = deepcopy(a_name)
+            new_a.append(deepcopy(img))
+            new_a.append(deepcopy(p_label[-1]))
+            new_elem.append(new_a)
+            p.addnext(new_elem)
+
+            for item in [p, previous, table]:
+                parent = item.getparent()
+                parent.remove(item)
+            return True
+
     class ConvertAssetThumbnailInTableIntoSimplerStructure(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
+            thumbnail = False
             for p in xml.findall(".//p[@content-type='html']"):
                 previous = p.getprevious()
                 if previous.tag != "table":
@@ -1431,7 +1486,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         a_name = previous.find(".//a[@name]")
                         if a_name is not None:
                             self._create_simpler_element(p, a_name, p_html_img)
-
+                            thumbnail = True
+            if thumbnail:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
             return data
 
         def _create_simpler_element(self, p, a_name, p_html_img):
@@ -1464,6 +1524,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
     class ConvertAssetThumbnailInElementAIntoSimplerStructure(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
+            thumbnail = False
             for p in xml.findall(".//p[@content-type='html']"):
                 previous = p.getprevious()
                 if previous.tag != "a" or previous.get("link-type") != "internal":
@@ -1491,7 +1552,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 name, ext = os.path.splitext(p_html_img_src)
                 if thumbnail_img_src.startswith(name):
                     self._create_new_a(p, previous, a_name, p_html_img)
-
+                    thumbnail = True
+            if thumbnail:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
             return data
 
         def _create_new_a(self, p, link, a_name, p_html_img):

@@ -2586,3 +2586,80 @@ class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
         self.assertIsNotNone(xml.find(".//a[@name='Fig2']"))
         self.assertEqual(xml.find(".//a[@name='Fig2']/p").text.strip(), 'Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or')
         self.assertIsNotNone(xml.find(".//a[@name='Fig2']/img[@src='/img/revistas/bjmbr/v43n10/650i02.jpg']"))
+
+
+class TestReplaceThumbnailTemplateTableAndMessageByImage(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.ReplaceThumbnailTemplateTableAndMessageByImage()
+
+    def test_transform(self):
+        text = """<root>
+        <table border="0" cellpadding="2" cellspacing="0" width="100%">
+        <tr>
+        <td>
+            <a name="Fig3" id="Fig3"/>
+            <img src="/img/revistas/bjmbr/v30n6/2677fig1peq.gif"/>
+        </td> 
+        <td>Figure 3 - Gastric retention (%) 15 min after the infusion of test meals containing 2.5% glucose + 2.5% galactose (5% glu + gal), 5% lactose, 5% glucose + 5% galactose (10% glu + gal) or 10% lactose. The rats were fed normal chow (control) or chow with 20% (w/w) lactose (experimental) for four weeks after which time the gastric retention was measured (N = 12 per subgroup). The data are presented as box plots, where the intermediate, lower and upper horizontal lines indicate the median, first and third quartiles of the gastric retention values, respectively, and error bars indicate the maximum and minimum gastric retention values observed. Significant differences between subgroups tested by the Kruskal-Wallis test (P&lt;0.10) followed by the multiple comparisons test (P&lt;0.02) are indicated in the figure.</td> </tr>
+        </table>
+        <p>
+            <a href="#2677fig1" link-type="internal">[View larger version of this image (28 K GIF file)]</a>
+        </p>
+        <p content-type="html">
+            <a id="2677fig1" name="2677fig1"/>
+
+            <p align="center">
+                <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n6/2677fig1.gif" imported="true" link-type="external"/> </p>
+
+            <p>Figure 3 - Gastric retention (%) 15 min after the infusion of
+            test meals containing 2.5% glucose + 2.5% galactose (5% glu +
+            gal), 5% lactose, 5% glucose + 5% galactose (10% glu + gal) or
+            10% lactose. The rats were fed normal chow (control) or chow with
+            20% (w/w) lactose (experimental) for four weeks after which time
+            the gastric retention was measured (N = 12 per subgroup). The
+            data are presented as box plots, where the intermediate, lower
+            and upper horizontal lines indicate the median, first and third
+            quartiles of the gastric retention values, respectively, and
+            error bars indicate the maximum and minimum gastric retention
+            values observed. Significant differences between subgroups tested
+            by the Kruskal-Wallis test (P&lt;0.10) followed by the multiple
+            comparisons test (P&lt;0.02) are indicated in the figure.</p>
+        </p>
+        </root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink">
+            <p>
+            <a name="Fig3" id="Fig3">
+            <img src="/img/revistas/bjmbr/v30n6/2677fig1.gif" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+            <p>Figure 3 - Gastric retention (%) 15 min after the infusion of
+            test meals containing 2.5% glucose + 2.5% galactose (5% glu +
+            gal), 5% lactose, 5% glucose + 5% galactose (10% glu + gal) or
+            10% lactose. The rats were fed normal chow (control) or chow with
+            20% (w/w) lactose (experimental) for four weeks after which time
+            the gastric retention was measured (N = 12 per subgroup). The
+            data are presented as box plots, where the intermediate, lower
+            and upper horizontal lines indicate the median, first and third
+            quartiles of the gastric retention values, respectively, and
+            error bars indicate the maximum and minimum gastric retention
+            values observed. Significant differences between subgroups tested
+            by the Kruskal-Wallis test (P&lt;0.10) followed by the multiple
+            comparisons test (P&lt;0.02) are indicated in the figure.</p>
+            </a>
+            <hr align="LEFT" size="2"/>
+            </root>"""
+
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig3']"))
+        p_text = xml.find(".//a[@name='Fig3']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 3 - Gastric retention (%) 15 min after the infusion"))
+        self.assertTrue(
+            p_text.endswith(
+                "are indicated in the figure."))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig3']/img[@src='/img/revistas/bjmbr/v30n6/2677fig1.gif']"))
+
