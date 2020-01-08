@@ -1408,6 +1408,14 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data, new_obj
 
     class ReplaceThumbnailTemplateTableAndMessageByImage(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de uma tabela com duas
+        colunas e uma linha.
+        Sendo na primeira coluna a imagem em miniatura e na segunda a legenda.
+        Além disso na linha seguinte à tabela há a mensagem "View larger ..."
+        No parágrafo seguinte está o conteúdo que seria mostrado ao clicar em
+        "View larger..."
+        """
         def transform(self, data):
             raw, xml = data
             done = False
@@ -1460,6 +1468,14 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return True
 
     class ConvertAssetThumbnailInTableIntoSimplerStructure(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de uma tabela com duas
+        colunas e uma linha.
+        Sendo na primeira coluna a imagem em miniatura com link para a imagem
+        ampliada e na segunda a legenda.
+        Além disso na linha seguinte à tabela há a mensagem "View larger ..."
+        sem link.
+        """
         def transform(self, data):
             raw, xml = data
             thumbnail = False
@@ -1522,6 +1538,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             table_parent.remove(p)
 
     class ConvertAssetThumbnailInElementAIntoSimplerStructure(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de um link.
+        No parágrafo seguinte, está a imagem ampliada + legenda.
+        No parágrafo seguinte, está a âncora e a legenda.
+        """
         def transform(self, data):
             raw, xml = data
             thumbnail = False
