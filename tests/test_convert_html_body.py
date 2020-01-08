@@ -2544,6 +2544,59 @@ class TestDigitalAssetThumbnailTablePipe(unittest.TestCase):
         self.assertEqual(xml.find(".//a[@name='Fig1']/p").text, 'Figure 1. Concentration of IL-6 (pg/10')
         self.assertIsNotNone(xml.find(".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v43n10/472i01.jpg']"))
 
+    def test_transform_when_thumbnail_image_has_not_same_name_as_normal_image(self):
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <table width="100%" border="0">
+                <tr align="left" valign="top">
+                <td width="16%">
+                <a href="#2406t01" link-type="internal">
+                <img src="/img/revistas/bjmbr/v45n12/table.jpg" width="100" height="65" border="2"/>
+            </a>
+            </td> <td width="84%"> <p align="LEFT">
+                <a name="Tab1" id="Tab1"/>Table 1. Distribution of serum hs-CRP concentration (mg/L) according to gender.</p> </td> </tr>
+            </table>
+            <p content-type="html">
+                <a id="2406t01" name="2406t01"/>&#13;
+            &#13;
+             &#13;
+            &#13;
+               High sensitivity C-reactive protein distribution in the elderly: the Bambuí Cohort Study, Brazil. L.G.S. Assunção, S.M. Eloi-Santos, S.V. Peixoto, M.F. Lima-Costa and P.G. Vidigal. Braz J Med Biol Res 2012; 45: 1284-1286 &#13;
+            &#13;
+               <hr align="LEFT" width="100%" size="2"/>&#13;
+            &#13;
+               <p>
+                <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
+                <img src="/img/revistas/bjmbr/v45n12/2406t01.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="600" height="303" imported="true"/>
+             </ext-link>
+             </p>&#13;
+            &#13;
+               &#13;
+            &#13;
+                 &#13;
+            &#13;
+               &#13;
+            &#13;
+             &#13;
+            &#13;
+             &#13;
+            &#13;
+            </p>
+        <p>[View larger version of this table (57 K JPG file)]</p> <hr align="LEFT" width="100%" size="2"/>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Tab1']"))
+        p_text = xml.find(".//a[@name='Tab1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Table 1. Distribution of serum hs-CRP concentration (mg/L) according to gender."))
+        self.assertTrue(
+            p_text.endswith(
+                "Table 1. Distribution of serum hs-CRP concentration (mg/L) according to gender."))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Tab1']/img[@src='/img/revistas/bjmbr/v45n12/2406t01.jpg']"))
+
 
 class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
 
@@ -2662,4 +2715,5 @@ class TestReplaceThumbnailTemplateTableAndMessageByImage(unittest.TestCase):
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig3']/img[@src='/img/revistas/bjmbr/v30n6/2677fig1.gif']"))
+
 

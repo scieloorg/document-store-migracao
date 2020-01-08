@@ -1372,7 +1372,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.ReplaceThumbnailTemplateTableAndMessageByImage(),
             self.ConvertAssetThumbnailInTableIntoSimplerStructure(),
             self.ConvertAssetThumbnailInElementAIntoSimplerStructure(),
-            
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
@@ -1493,16 +1492,23 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 thumbnail_img = a.find("img")
                 if thumbnail_img is None:
                     continue
+                p_html_img = p.find(".//img")
+                if p_html_img is None:
+                    continue
+
                 thumbnail_img_src = thumbnail_img.get("src")
-                p_html_img = p.findall(".//img")
-                if len(p_html_img) == 1:
-                    p_html_img_src = p_html_img[0].get("src")
-                    name, ext = os.path.splitext(p_html_img_src)
-                    if thumbnail_img_src.startswith(name):
-                        a_name = previous.find(".//a[@name]")
-                        if a_name is not None:
-                            self._create_simpler_element(p, a_name, p_html_img)
-                            thumbnail = True
+                p_html_img_src = p_html_img.get("src")
+
+                thumbnail_name, ext = os.path.splitext(thumbnail_img_src)
+                name, ext = os.path.splitext(p_html_img_src)
+
+                if (thumbnail_img_src.startswith(name) or 
+                    thumbnail_name.endswith("table")):
+                    a_name = previous.find(".//a[@name]")
+                    print("x")
+                    if a_name is not None:
+                        self._create_simpler_element(p, a_name, p_html_img)
+                        thumbnail = True
             if thumbnail:
                 for p in xml.findall(".//p"):
                     if p.text and "View larger" in p.text:
@@ -1524,7 +1530,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if _next is None:
                     break
                 new_p.append(deepcopy(_next))
-            new_a.append(deepcopy(p_html_img[0]))
+            new_a.append(deepcopy(p_html_img))
             new_a.append(deepcopy(new_p))
             new_e = etree.Element("p")
             new_e.append(new_a)
