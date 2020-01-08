@@ -1372,6 +1372,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.ReplaceThumbnailTemplateTableAndMessageByImage(),
             self.ConvertAssetThumbnailInTableIntoSimplerStructure(),
             self.ConvertAssetThumbnailInElementAIntoSimplerStructure(),
+            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(),
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
@@ -1405,6 +1406,30 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def transform(self, data):
             new_obj = deepcopy(data)
             return data, new_obj
+
+    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for table in xml.findall(".//table"):
+                tr = table.findall("tr")
+                if len(tr) == 1:
+                    td = tr[0].findall("td")
+                    if len(td) == 2:
+                        img = td[0].find(".//img")
+                        a = td[0].find(".//a[@name]")
+
+                        if a is not None and img is not None:
+                            new_a = deepcopy(a)
+                            new_a.append(deepcopy(img))
+                            new_p = deepcopy(td[1])
+                            new_p.tag = "p"
+                            new_a.append(new_p)
+                            new_e = etree.Element("p")
+                            new_e.append(new_a)
+                            table.addprevious(new_e)
+                            parent = table.getparent()
+                            parent.remove(table)
+            return data
 
     class ReplaceThumbnailTemplateTableAndMessageByImage(plumber.Pipe):
         """
@@ -1505,7 +1530,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if (thumbnail_img_src.startswith(name) or 
                     thumbnail_name.endswith("table")):
                     a_name = previous.find(".//a[@name]")
-                    print("x")
                     if a_name is not None:
                         self._create_simpler_element(p, a_name, p_html_img)
                         thumbnail = True

@@ -2717,3 +2717,35 @@ class TestReplaceThumbnailTemplateTableAndMessageByImage(unittest.TestCase):
                 ".//a[@name='Fig3']/img[@src='/img/revistas/bjmbr/v30n6/2677fig1.gif']"))
 
 
+class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide()
+
+    def test_transform(self):
+        text = """<root>
+        <table border="0" cellpadding="2" cellspacing="0" width="100%">
+          <tr>
+            <td>
+              <a name="Fig1" id="Fig1"/>
+            <img src="/img/revistas/bjmbr/v30n2/2635fig1.gif"/>
+          </td> 
+          <td>Figure 1 - Effects of peripheral <sub>post-trial</sub> administration of</td>
+          </tr>
+        </table>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 1 - Effects of peripheral"))
+        self.assertTrue(
+            p_text.endswith(
+                "Figure 1 - Effects of peripheral"))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n2/2635fig1.gif']"))
+
