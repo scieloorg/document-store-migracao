@@ -2750,6 +2750,53 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.Te
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n2/2635fig1.gif']"))
 
 
+class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.TestCase):
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines()
+
+    def test_transform(self):
+        text = """<root>
+        <p align="center">
+            <a name="Fig1" id="Fig1"/> <img src="/img/revistas/bjmbr/v30n1/2560fig1peq.gif"/>
+        </p>
+        <p>Figure 1 - Effect of dexamethasone pretreatment on ethanol-induced hypothermia in rats. Rats received dexamethasone (2.0 mg/kg,<italic> ip</italic>) or saline administered 15 min before ethanol 20% w/v (2.0, 3.0 or 4.0 g/kg, <italic>ip</italic>) or saline. Colon temperature was measured 30, 60 and 90 min after ethanol administration. The animals were divided into 4 groups: saline + saline (open circles); dexamethasone + saline (filled circles); saline + ethanol (open squares), and dexamethasone + ethanol (filled squares). Data are reported as the mean ± SEM of the fall in temperature in degrees Celsius obtained for 10 animals compared to basal values. *P&lt;0.05 compared to saline + saline group; <sup>+</sup>P&lt;0.05 compared to saline + ethanol group (ANOVA).</p>
+        <p>
+            <a href="#2560fig1" link-type="internal">[View larger version of this image (14 K GIF file)]</a>
+        </p>
+        <p content-type="html">
+            <a id="2560fig1" name="2560fig1"/>
+
+        <p align="center">
+          <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n1/2560fig1.gif" 
+          imported="true" link-type="external"/> </p>
+
+        <p>Figure 1 - Effect of dexamethasone pretreatment on
+        ethanol-induced hypothermia in rats. Rats received dexamethasone
+        (2.0 mg/kg,<italic> ip</italic>) or saline administered 15 min before
+        ethanol 20% w/v (2.0, 3.0 or 4.0 g/kg, <italic>ip</italic>) or saline.
+        Colon temperature was measured 30, 60 and 90 min after ethanol
+        administration. The animals were divided into 4 groups: saline +
+        saline (open circles); dexamethasone + saline (filled circles);
+        saline + ethanol (open squares), and dexamethasone + ethanol
+        (filled squares). Data are reported as the mean ± SEM of the
+        fall in temperature in degrees Celsius obtained for 10 animals
+        compared to basal values. *P&lt;0.05 compared to saline + saline
+        group; <sup>+</sup>P&lt;0.05 compared to saline + ethanol group
+        (ANOVA).</p></p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        print(etree.tostring(xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 1 - Effect of dexamethasone pretreatment on"))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n1/2560fig1.gif']"))
+
 class TestAssetThumbnailInLayoutImgAndCaptionAndMessage(unittest.TestCase):
 
     def setUp(self):
@@ -2797,3 +2844,33 @@ class TestAssetThumbnailInLayoutImgAndCaptionAndMessage(unittest.TestCase):
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n1/2560fig1.gif']"))
+
+
+class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines()
+
+    def test_transform(self):
+        text = """<root>
+        <table width="100%" cellpadding="2" cellspacing="0" border="0">
+            <tr>
+            <td width="38%" valign="TOP">
+            <p align="center">
+            <a name="Fig1" id="Fig1"/>
+          <img src="/img/revistas/bjmbr/v31n12/3156i01.gif" align="BOTTOM" border="2" vspace="0" hspace="0"/>
+        </p> <p>Figure 1 - Relationship between SHBG levels and 120-min proinsulin after a glucose load test in men.</p>
+        </td> </tr>
+        </table></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        print(etree.tostring(xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 1 - Relationship between SHBG levels"))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v31n12/3156i01.gif']"))

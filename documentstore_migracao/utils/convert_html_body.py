@@ -1393,6 +1393,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AssetThumbnailInLayoutTableAndLinkInMessage(),
             self.AssetThumbnailInLayoutTableAndLinkInThumbnail(),
             self.AssetThumbnailInLinkAndAnchorAndCaption(),
+            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(),
             self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(),
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
@@ -1499,7 +1500,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 img = td[0].find(".//img")
                 if img is None:
                     continue
-
                 new_a = get_anchor(xml, td[0], td[1])
                 new_a.append(deepcopy(img))
                 new_p = deepcopy(td[1])
@@ -1507,6 +1507,40 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 new_a.append(new_p)
                 new_e = etree.Element("p")
                 new_e.set("content-type", "created-from-layout-side-by-side")
+                new_e.append(new_a)
+                table.addprevious(new_e)
+                parent = table.getparent()
+                parent.remove(table)
+            return data
+
+    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for table in xml.findall(".//table"):
+                tr = table.findall("tr")
+                if len(tr) != 1:
+                    continue
+
+                td = tr[0].findall("td")
+                if len(td) != 1:
+                    continue
+
+                p_items = td[0].findall("p")
+                if len(p_items) != 2:
+                    continue
+
+                img = p_items[0].find(".//img")
+                if img is None:
+                    continue
+                new_a = get_anchor(xml, p_items[0], p_items[1])
+                new_a.append(deepcopy(img))
+                new_p = deepcopy(p_items[1])
+                new_p.tag = "p"
+                new_a.append(new_p)
+                new_e = etree.Element("p")
+                new_e.set(
+                    "content-type",
+                    "created-from-layout-img-and-caption-in-two-lines")
                 new_e.append(new_a)
                 table.addprevious(new_e)
                 parent = table.getparent()
