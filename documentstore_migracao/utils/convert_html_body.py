@@ -1389,9 +1389,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
-            self.ReplaceThumbnailTemplateTableAndMessageByImage(),
-            self.ConvertAssetThumbnailInTableIntoSimplerStructure(),
-            self.ConvertAssetThumbnailInElementAIntoSimplerStructure(),
+            self.AssetThumbnailInLayoutTableAndLinkInMessage(),
+            self.AssetThumbnailInLayoutTableAndLinkInThumbnail(),
+            self.AssetThumbnailInLinkAndAnchorAndCaption(),
             self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(),
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
@@ -1455,7 +1455,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent.remove(table)
             return data
 
-    class ReplaceThumbnailTemplateTableAndMessageByImage(plumber.Pipe):
+    class AssetThumbnailInLayoutTableAndLinkInMessage(plumber.Pipe):
         """
         Converte o modelo de miniatura que fica dentro de uma tabela com duas
         colunas e uma linha.
@@ -1512,7 +1512,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent.remove(item)
             return True
 
-    class ConvertAssetThumbnailInTableIntoSimplerStructure(plumber.Pipe):
+    class AssetThumbnailInLayoutTableAndLinkInThumbnail(plumber.Pipe):
         """
         Converte o modelo de miniatura que fica dentro de uma tabela com duas
         colunas e uma linha.
@@ -1588,7 +1588,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             table_parent.remove(table)
             table_parent.remove(p)
 
-    class ConvertAssetThumbnailInElementAIntoSimplerStructure(plumber.Pipe):
+    class AssetThumbnailInLinkAndAnchorAndCaption(plumber.Pipe):
         """
         Converte o modelo de miniatura que fica dentro de um link.
         No parágrafo seguinte, está a imagem ampliada + legenda.
