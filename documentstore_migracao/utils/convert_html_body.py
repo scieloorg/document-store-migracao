@@ -1449,6 +1449,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 new_p.tag = "p"
                 new_a.append(new_p)
                 new_e = etree.Element("p")
+                new_e.set("content-type", "created-from-layout-side-by-side")
                 new_e.append(new_a)
                 table.addprevious(new_e)
                 parent = table.getparent()
@@ -1505,6 +1506,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             new_a.append(deepcopy(img))
             new_a.append(deepcopy(p_label[-1]))
             new_elem.append(new_a)
+            new_elem.set("content-type", "created-from-layout-table-and-link-in-message")
             p.addnext(new_elem)
 
             for item in [p, previous, table]:
@@ -1578,6 +1580,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             new_a.append(deepcopy(p_html_img))
             new_a.append(deepcopy(new_p))
             new_e = etree.Element("p")
+            new_e.set("content-type", "created-from-layout-table-link-in-thumbnail")
             new_e.append(new_a)
             table.addprevious(new_e)
             table_parent = table.getparent()
@@ -1657,7 +1660,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             new_a.append(new_p)
             new_a.append(deepcopy(p_html_img))
 
-            p.addnext(new_a)
+            new_e = etree.Element("p")
+            new_e.set("content-type", "created-from-layout-link-anchor-caption")
+            new_e.append(new_a)
+
+            p.addnext(new_e)
 
             # remove os elementos excedentes
             remove_items.append(p)

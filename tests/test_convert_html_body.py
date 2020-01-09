@@ -2499,11 +2499,11 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
         self.assertEqual(len(xml.findall(".//p")), 8)
 
 
-class TestDigitalAssetThumbnailTablePipe(unittest.TestCase):
+class TestAssetThumbnailInLayoutTableAndLinkInThumbnail(unittest.TestCase):
 
     def setUp(self):
         pipeline = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = pipeline.ConvertAssetThumbnailInTableIntoSimplerStructure()
+        self.pipe = pipeline.AssetThumbnailInLayoutTableAndLinkInThumbnail()
 
     def test_transform_converts_thumbnail_table_into_simpler_structure(self):
         text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -2598,11 +2598,11 @@ class TestDigitalAssetThumbnailTablePipe(unittest.TestCase):
                 ".//a[@name='Tab1']/img[@src='/img/revistas/bjmbr/v45n12/2406t01.jpg']"))
 
 
-class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
+class TestAssetThumbnailInLinkAndAnchorAndCaption(unittest.TestCase):
 
     def setUp(self):
         pipeline = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = pipeline.ConvertAssetThumbnailInElementAIntoSimplerStructure()
+        self.pipe = pipeline.AssetThumbnailInLinkAndAnchorAndCaption()
 
     def test_transform_converts_thumbnail_into_simpler_structure(self):
         text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -2641,11 +2641,11 @@ class TestDigitalAssetThumbnailBlockPipe(unittest.TestCase):
         self.assertIsNotNone(xml.find(".//a[@name='Fig2']/img[@src='/img/revistas/bjmbr/v43n10/650i02.jpg']"))
 
 
-class TestReplaceThumbnailTemplateTableAndMessageByImage(unittest.TestCase):
+class TestAssetThumbnailInLayoutTableAndLinkInMessage(unittest.TestCase):
 
     def setUp(self):
         pipeline = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = pipeline.ReplaceThumbnailTemplateTableAndMessageByImage()
+        self.pipe = pipeline.AssetThumbnailInLayoutTableAndLinkInMessage()
 
     def test_transform(self):
         text = """<root>
@@ -2721,7 +2721,7 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.Te
 
     def setUp(self):
         pipeline = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = pipeline.RemoveTableUsedToDisplayImageAndLabelAndCaptionSideBySide()
+        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide()
 
     def test_transform(self):
         text = """<root>
