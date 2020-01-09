@@ -1389,6 +1389,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
+            self.AssetThumbnailInLayoutImgAndCaptionAndMessage(),
             self.AssetThumbnailInLayoutTableAndLinkInMessage(),
             self.AssetThumbnailInLayoutTableAndLinkInThumbnail(),
             self.AssetThumbnailInLinkAndAnchorAndCaption(),
@@ -1426,6 +1427,62 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def transform(self, data):
             new_obj = deepcopy(data)
             return data, new_obj
+
+    class AssetThumbnailInLayoutImgAndCaptionAndMessage(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de uma tabela com duas
+        colunas e uma linha.
+        Sendo na primeira coluna a imagem em miniatura e na segunda a legenda.
+        Além disso na linha seguinte à tabela há a mensagem "View larger ..."
+        No parágrafo seguinte está o conteúdo que seria mostrado ao clicar em
+        "View larger..."
+        """
+        def transform(self, data):
+            raw, xml = data
+            done = False
+            for p in xml.findall(".//p[@content-type='html']"):
+                done = self._convert(p)
+                if not done:
+                    pass
+            if done:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
+            return data
+
+        def _convert(self, p):
+            previous = p.getprevious()
+            if "View larger" not in get_node_text(previous):
+                return
+
+            p_caption = previous.getprevious()
+            if p_caption is None:
+                return
+
+            img = p.find(".//img")
+            if img is None:
+                return
+
+            p_anchor = p_caption.getprevious()
+            
+            src = img.get("src")
+            src = src.replace("http://www.scielo.br/img/fbpe", "/img/revistas")
+            img.set("src", src)
+
+            new_elem = etree.Element("p")
+            xml = p.getroottree().find(".")
+            new_a = get_anchor(xml, p_anchor, p_caption)
+            new_a.append(deepcopy(img))
+            new_a.append(deepcopy(p_caption))
+            new_elem.append(new_a)
+            new_elem.set("content-type", "created-from-layout-img-and-caption-msg")
+            p.addnext(new_elem)
+
+            for item in [p, previous, p_anchor, p_caption]:
+                parent = item.getparent()
+                parent.remove(item)
+            return True
 
     class RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(plumber.Pipe):
         def transform(self, data):
