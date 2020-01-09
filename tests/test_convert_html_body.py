@@ -2721,7 +2721,7 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.Te
 
     def setUp(self):
         pipeline = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide()
+        self.pipe = pipeline.RemoveTableUsedToDisplayImageAndLabelAndCaptionSideBySide()
 
     def test_transform(self):
         text = """<root>
@@ -2748,4 +2748,3 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.Te
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n2/2635fig1.gif']"))
-

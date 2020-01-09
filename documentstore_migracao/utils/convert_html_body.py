@@ -37,6 +37,26 @@ def is_footnote_label(text):
             ]
         )
 
+def get_anchor(xml, anchor_parent, label_and_caption_element):
+    a = anchor_parent.find(".//a[@name]")
+    if a is None:
+        new_a = etree.Element("a")
+        text = get_node_text(label_and_caption_element)
+        texts = text.split(" ")
+        if len(texts) >= 2 and texts[1].isdigit():
+            name = texts[0][:3]+texts[1]
+            if xml.find(".//a[@href='#{}']".format(name)) is None:
+                name = name.lower()
+
+            if xml.find(".//a[@href='#{}']".format(name)) is None:
+                name = " ".join(texts[:2])
+            new_a.set("name", name)
+            new_a.set("id", name)
+    else:
+        new_a = deepcopy(a)
+        new_a.tail = ""
+    return new_a
+
 
 def move_tail_into_node(node):
     """
@@ -1412,23 +1432,27 @@ class ConvertElementsWhichHaveIdPipeline(object):
             raw, xml = data
             for table in xml.findall(".//table"):
                 tr = table.findall("tr")
-                if len(tr) == 1:
-                    td = tr[0].findall("td")
-                    if len(td) == 2:
-                        img = td[0].find(".//img")
-                        a = td[0].find(".//a[@name]")
+                if len(tr) != 1:
+                    continue
 
-                        if a is not None and img is not None:
-                            new_a = deepcopy(a)
-                            new_a.append(deepcopy(img))
-                            new_p = deepcopy(td[1])
-                            new_p.tag = "p"
-                            new_a.append(new_p)
-                            new_e = etree.Element("p")
-                            new_e.append(new_a)
-                            table.addprevious(new_e)
-                            parent = table.getparent()
-                            parent.remove(table)
+                td = tr[0].findall("td")
+                if len(td) != 2:
+                    continue
+
+                img = td[0].find(".//img")
+                if img is None:
+                    continue
+
+                new_a = get_anchor(xml, td[0], td[1])
+                new_a.append(deepcopy(img))
+                new_p = deepcopy(td[1])
+                new_p.tag = "p"
+                new_a.append(new_p)
+                new_e = etree.Element("p")
+                new_e.append(new_a)
+                table.addprevious(new_e)
+                parent = table.getparent()
+                parent.remove(table)
             return data
 
     class ReplaceThumbnailTemplateTableAndMessageByImage(plumber.Pipe):
@@ -1463,10 +1487,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if table.tag != "table":
                 return
 
-            a_name = table.find(".//a[@name]")
-            if a_name is None:
-                return
-
             img = p.find(".//img")
             if img is None:
                 return
@@ -1480,7 +1500,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
             img.set("src", src)
 
             new_elem = etree.Element("p")
-            new_a = deepcopy(a_name)
+            xml = table.getroottree().find(".")
+            new_a = get_anchor(xml, table, p_label[-1])
             new_a.append(deepcopy(img))
             new_a.append(deepcopy(p_label[-1]))
             new_elem.append(new_a)
