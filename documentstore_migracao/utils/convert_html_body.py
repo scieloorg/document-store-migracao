@@ -226,21 +226,21 @@ class HTML2SPSPipeline(object):
             self.StrongPipe(),
             self.RemoveInvalidBRPipe(),
             self.ConvertElementsWhichHaveIdPipe(),
-            self.RemoveInvalidBRPipe(),
-            self.BRPipe(),
-            self.BR2PPipe(),
-            self.TdCleanPipe(),
-            self.TableCleanPipe(),
-            self.BlockquotePipe(),
-            self.HrPipe(),
-            self.TagsHPipe(),
-            self.DispQuotePipe(),
-            self.GraphicChildrenPipe(),
-            self.FixBodyChildrenPipe(),
-            self.RemovePWhichIsParentOfPPipe(),
-            self.PPipe(),
-            self.RemoveRefIdPipe(),
-            self.FixIdAndRidPipe(super_obj=self),
+            # self.RemoveInvalidBRPipe(),
+            # self.BRPipe(),
+            # self.BR2PPipe(),
+            # self.TdCleanPipe(),
+            # self.TableCleanPipe(),
+            # self.BlockquotePipe(),
+            # self.HrPipe(),
+            # self.TagsHPipe(),
+            # self.DispQuotePipe(),
+            # self.GraphicChildrenPipe(),
+            # self.FixBodyChildrenPipe(),
+            # self.RemovePWhichIsParentOfPPipe(),
+            # self.PPipe(),
+            # self.RemoveRefIdPipe(),
+            # self.FixIdAndRidPipe(super_obj=self),
         )
 
     def deploy(self, raw):
@@ -1406,18 +1406,18 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
             self.AssetElementIdentifyLabelAndCaptionPipe(),
-            self.AssetElementFixPipe(),
-            self.CreateInlineFormulaPipe(),
-            self.AppendixPipe(),
-            self.TablePipe(),
-            self.SupplementaryMaterialPipe(),
-            self.RemoveXMLAttributesPipe(),
-            self.ImgPipe(),
-            self.FnMovePipe(),
-            self.FnLabelOfPipe(),
-            self.FnAddContentPipe(),
-            self.FnIdentifyLabelAndPPipe(),
-            self.FnFixContentPipe(),
+            # self.AssetElementFixPipe(),
+            # self.CreateInlineFormulaPipe(),
+            # self.AppendixPipe(),
+            # self.TablePipe(),
+            # self.SupplementaryMaterialPipe(),
+            # self.RemoveXMLAttributesPipe(),
+            # self.ImgPipe(),
+            # self.FnMovePipe(),
+            # self.FnLabelOfPipe(),
+            # self.FnAddContentPipe(),
+            # self.FnIdentifyLabelAndPPipe(),
+            # self.FnFixContentPipe(),
         )
 
     def deploy(self, raw):
@@ -2423,8 +2423,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 return
             if n.find(".//img") is not None:
                 return
-            if get_node_text(n):
-                nodes_for_title.append(n)
+            nodes_for_title.append(n)
 
         def _infer_label_and_caption(self, label_parent, clue):
             label_text = None
