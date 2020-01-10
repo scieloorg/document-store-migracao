@@ -1930,8 +1930,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
             new=stub_get_html_body,
         ):
             text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
-            print(etree.tostring(xml))
-
+            
             a_name_items = xml.findall(".//a[@name]")
             self.assertEqual(len(a_name_items), 2)
             self.assertEqual(a_name_items[0].get("name"), "a05tab01")
@@ -2542,6 +2541,9 @@ class TestAssetThumbnailInLayoutTableAndLinkInThumbnail(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
         self.assertEqual(xml.find(".//a[@name='Fig1']/p").text, 'Figure 1. Concentration of IL-6 (pg/10')
+        self.assertTrue(
+            xml.find(".//a[@name]/p").getchildren()[-1].tail.endswith(
+                "amoxicillin."))
         self.assertIsNotNone(xml.find(".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v43n10/472i01.jpg']"))
 
     def test_transform_when_thumbnail_image_has_not_same_name_as_normal_image(self):
@@ -2553,7 +2555,7 @@ class TestAssetThumbnailInLayoutTableAndLinkInThumbnail(unittest.TestCase):
                 <img src="/img/revistas/bjmbr/v45n12/table.jpg" width="100" height="65" border="2"/>
             </a>
             </td> <td width="84%"> <p align="LEFT">
-                <a name="Tab1" id="Tab1"/>Table 1. Distribution of serum hs-CRP concentration (mg/L) according to gender.</p> </td> </tr>
+                <a name="Tab1" id="Tab1"/>Table 1. Distribution of serum hs-CRP concentration (<sup>mg/L</sup>) according to gender.</p> </td> </tr>
             </table>
             <p content-type="html">
                 <a id="2406t01" name="2406t01"/>&#13;
@@ -2589,10 +2591,10 @@ class TestAssetThumbnailInLayoutTableAndLinkInThumbnail(unittest.TestCase):
         p_text = xml.find(".//a[@name='Tab1']/p").text.strip()
         self.assertTrue(
             p_text.startswith(
-                "Table 1. Distribution of serum hs-CRP concentration (mg/L) according to gender."))
+                "Table 1. Distribution of serum hs-CRP concentration ("))
         self.assertTrue(
-            p_text.endswith(
-                "Table 1. Distribution of serum hs-CRP concentration (mg/L) according to gender."))
+            xml.find(".//a[@name]/p").getchildren()[-1].tail.endswith(
+                ") according to gender."))
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Tab1']/img[@src='/img/revistas/bjmbr/v45n12/2406t01.jpg']"))
@@ -2638,6 +2640,10 @@ class TestAssetThumbnailInLinkAndAnchorAndCaption(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         self.assertIsNotNone(xml.find(".//a[@name='Fig2']"))
         self.assertEqual(xml.find(".//a[@name='Fig2']/p").text.strip(), 'Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or')
+        
+        self.assertTrue(
+            xml.find(".//a[@name='Fig2']/p").getchildren()[-1].tail.endswith(
+                "appears to be heightened by odor exposure. "))
         self.assertIsNotNone(xml.find(".//a[@name='Fig2']/img[@src='/img/revistas/bjmbr/v43n10/650i02.jpg']"))
 
 
@@ -2743,8 +2749,8 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.Te
             p_text.startswith(
                 "Figure 1 - Effects of peripheral"))
         self.assertTrue(
-            p_text.endswith(
-                "Figure 1 - Effects of peripheral"))
+            xml.find(".//a[@name='Fig1']/p").getchildren()[-1].tail.startswith(
+                " administration of"))
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n2/2635fig1.gif']"))
@@ -2793,6 +2799,9 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.Te
         self.assertTrue(
             p_text.startswith(
                 "Figure 1 - Effect of dexamethasone pretreatment on"))
+        self.assertTrue(
+            xml.find(".//a[@name='Fig1']/p").getchildren()[-1].tail.startswith(
+                "P&lt;0.05 compared to saline + ethanol group"))
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n1/2560fig1.gif']"))
@@ -2835,12 +2844,14 @@ class TestAssetThumbnailInLayoutImgAndCaptionAndMessage(unittest.TestCase):
         </root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
-        print(etree.tostring(xml))
         self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
         p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
         self.assertTrue(
             p_text.startswith(
                 "Figure 1 - Effect of dexamethasone pretreatment on"))
+        self.assertTrue(
+            xml.find(".//a[@name='Fig1']/p").getchildren()[-1].tail.endswith(
+                "(ANOVA)."))
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n1/2560fig1.gif']"))
@@ -2865,12 +2876,15 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.Te
         </table></root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
-        print(etree.tostring(xml))
+        
         self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
         p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
         self.assertTrue(
             p_text.startswith(
                 "Figure 1 - Relationship between SHBG levels"))
+        self.assertTrue(
+            p_text.endswith(
+                "load test in men."))
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v31n12/3156i01.gif']"))
