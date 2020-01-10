@@ -226,21 +226,21 @@ class HTML2SPSPipeline(object):
             self.StrongPipe(),
             self.RemoveInvalidBRPipe(),
             self.ConvertElementsWhichHaveIdPipe(),
-            # self.RemoveInvalidBRPipe(),
-            # self.BRPipe(),
-            # self.BR2PPipe(),
-            # self.TdCleanPipe(),
-            # self.TableCleanPipe(),
-            # self.BlockquotePipe(),
-            # self.HrPipe(),
-            # self.TagsHPipe(),
-            # self.DispQuotePipe(),
-            # self.GraphicChildrenPipe(),
-            # self.FixBodyChildrenPipe(),
-            # self.RemovePWhichIsParentOfPPipe(),
-            # self.PPipe(),
-            # self.RemoveRefIdPipe(),
-            # self.FixIdAndRidPipe(super_obj=self),
+            self.RemoveInvalidBRPipe(),
+            self.BRPipe(),
+            self.BR2PPipe(),
+            self.TdCleanPipe(),
+            self.TableCleanPipe(),
+            self.BlockquotePipe(),
+            self.HrPipe(),
+            self.TagsHPipe(),
+            self.DispQuotePipe(),
+            self.GraphicChildrenPipe(),
+            self.FixBodyChildrenPipe(),
+            self.RemovePWhichIsParentOfPPipe(),
+            self.PPipe(),
+            self.RemoveRefIdPipe(),
+            self.FixIdAndRidPipe(super_obj=self),
         )
 
     def deploy(self, raw):
@@ -1389,12 +1389,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
-            self.AssetThumbnailInLayoutImgAndCaptionAndMessage(),
             self.AssetThumbnailInLayoutTableAndLinkInMessage(),
             self.AssetThumbnailInLayoutTableAndLinkInThumbnail(),
-            self.AssetThumbnailInLinkAndAnchorAndCaption(),
             self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(),
             self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(),
+            self.AssetThumbnailInLinkAndAnchorAndCaption(),
+            self.AssetThumbnailInLayoutImgAndCaptionAndMessage(),
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
@@ -1406,18 +1406,18 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
             self.AssetElementIdentifyLabelAndCaptionPipe(),
-            # self.AssetElementFixPipe(),
-            # self.CreateInlineFormulaPipe(),
-            # self.AppendixPipe(),
-            # self.TablePipe(),
-            # self.SupplementaryMaterialPipe(),
-            # self.RemoveXMLAttributesPipe(),
-            # self.ImgPipe(),
-            # self.FnMovePipe(),
-            # self.FnLabelOfPipe(),
-            # self.FnAddContentPipe(),
-            # self.FnIdentifyLabelAndPPipe(),
-            # self.FnFixContentPipe(),
+            self.AssetElementFixPipe(),
+            self.CreateInlineFormulaPipe(),
+            self.AppendixPipe(),
+            self.TablePipe(),
+            self.SupplementaryMaterialPipe(),
+            self.RemoveXMLAttributesPipe(),
+            self.ImgPipe(),
+            self.FnMovePipe(),
+            self.FnLabelOfPipe(),
+            self.FnAddContentPipe(),
+            self.FnIdentifyLabelAndPPipe(),
+            self.FnFixContentPipe(),
         )
 
     def deploy(self, raw):
@@ -1466,9 +1466,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 return
 
             p_anchor = p_caption.getprevious()
-            
             src = img.get("src")
-            src = src.replace("http://www.scielo.br/img/fbpe", "/img/revistas")
+            for wrong in ["http:/img/fbpe", "http://www.scielo.br/img/fbpe"]:
+                src = src.replace(wrong, "/img/revistas")
             img.set("src", src)
 
             new_elem = etree.Element("p")
@@ -1588,7 +1588,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 return
 
             src = img.get("src")
-            src = src.replace("http://www.scielo.br/img/fbpe", "/img/revistas")
+            for wrong in ["http:/img/fbpe", "http://www.scielo.br/img/fbpe"]:
+                src = src.replace(wrong, "/img/revistas")
             img.set("src", src)
 
             new_elem = etree.Element("p")
