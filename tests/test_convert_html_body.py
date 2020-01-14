@@ -1930,8 +1930,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
             new=stub_get_html_body,
         ):
             text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
-            print(etree.tostring(xml))
-
+            
             a_name_items = xml.findall(".//a[@name]")
             self.assertEqual(len(a_name_items), 2)
             self.assertEqual(a_name_items[0].get("name"), "a05tab01")
@@ -2497,3 +2496,395 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
             (text, xml)
         )
         self.assertEqual(len(xml.findall(".//p")), 8)
+
+
+class TestAssetThumbnailInLayoutTableAndLinkInThumbnail(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.AssetThumbnailInLayoutTableAndLinkInThumbnail()
+
+    def test_transform_converts_thumbnail_table_into_simpler_structure(self):
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <table border="0">
+            <tr align="left" valign="top">
+            <td>
+            <a href="#472i01" link-type="internal">
+            <img src="/img/revistas/bjmbr/v43n10/472i01peq.jpg" border="2"/>
+        </a>
+        </td> <td> <p align="left">
+          <a name="Fig1" id="Fig1"/>Figure 1. Concentration of IL-6 (pg/10<sup>6 </sup>cells) produced by the suspension of plasmacytoid dendritic cells (pDC). Concentration (Conc.) 1: 20 IU/mL penicillin, 5 µg/mL vancomycin, 5 µg/mL amoxicillin, 75 ng/mL anti-FcεRI/mL, and 100 nM CpG. Concentration 2: 200 IU/mL penicillin, 50 µg/mL vancomycin, and 50 µg/mL amoxicillin. Concentration 3: 1000 IU/mL penicillin, 250 µg/mL vancomycin, and 250 µg/mL amoxicillin.</p> </td> </tr>
+        </table>
+          <p content-type="html">
+            <a id="472i01" name="472i01"/>&#13;
+         <p align="left">C.M.F. Lima, J.T. Schroeder, C.E.S. Galvão, F.M. Castro, J. Kalil and N.F. Adkinson Jr. Functional changes of dendritic cells in hypersensitivity reactions to amoxicillin. Braz J Med Biol Res 2010; 43: 964-968. &#13;
+         </p>&#13;
+           <p>
+            <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
+            <img src="/img/revistas/bjmbr/v43n10/472i01.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+         </ext-link>
+         </p>&#13;
+           <p>&#13;
+             <p align="left">Figure 1. Concentration of IL-6 (pg/10<sup>6 </sup>cells) produced by the suspension of plasmacytoid dendritic cells (pDC). Concentration (Conc.) 1: 20 IU/mL penicillin, 5 µg/mL vancomycin, 5 µg/mL amoxicillin, 75 ng/mL anti-FcεRI/mL, and 100 nM CpG. Concentration 2: 200 IU/mL penicillin, 50 µg/mL vancomycin, and 50 µg/mL amoxicillin. Concentration 3: 1000 IU/mL penicillin, 250 µg/mL vancomycin, and 250 µg/mL amoxicillin.</p>&#13;
+           </p>&#13;
+         &#13;
+         &#13;
+        </p>
+        <p>[View larger version of this image (90 K JPG file)]</p> <hr align="LEFT" size="2"/>
+        </root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <p><a name="Fig1" id="Fig1"><img src="/img/revistas/bjmbr/v43n10/472i01.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+        <p>Figure 1. Concentration of IL-6 (pg/10<sup>6 </sup>cells) produced by the suspension of plasmacytoid dendritic cells (pDC). Concentration (Conc.) 1: 20 IU/mL penicillin, 5 &#181;g/mL vancomycin, 5 &#181;g/mL amoxicillin, 75 ng/mL anti-Fc&#949;RI/mL, and 100 nM CpG. Concentration 2: 200 IU/mL penicillin, 50 &#181;g/mL vancomycin, and 50 &#181;g/mL amoxicillin. Concentration 3: 1000 IU/mL penicillin, 250 &#181;g/mL vancomycin, and 250 &#181;g/mL amoxicillin.</p></a></p><hr align="LEFT" size="2"/>
+        </root>"""
+
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        self.assertEqual(xml.find(".//a[@name='Fig1']/p").text, 'Figure 1. Concentration of IL-6 (pg/10')
+        self.assertTrue(
+            xml.find(".//a[@name]/p").getchildren()[-1].tail.endswith(
+                "amoxicillin."))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v43n10/472i01.jpg']"))
+
+    def test_transform_when_thumbnail_image_has_not_same_name_as_normal_image(self):
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <table width="100%" border="0">
+                <tr align="left" valign="top">
+                <td width="16%">
+                <a href="#2406t01" link-type="internal">
+                <img src="/img/revistas/bjmbr/v45n12/table.jpg" width="100" height="65" border="2"/>
+            </a>
+            </td> <td width="84%"> <p align="LEFT">
+                <a name="Tab1" id="Tab1"/>Table 1. Distribution of serum hs-CRP concentration (<sup>mg/L</sup>) according to gender.</p> </td> </tr>
+            </table>
+            <p content-type="html">
+                <a id="2406t01" name="2406t01"/>&#13;
+            &#13;
+             &#13;
+            &#13;
+               High sensitivity C-reactive protein distribution in the elderly: the Bambuí Cohort Study, Brazil. L.G.S. Assunção, S.M. Eloi-Santos, S.V. Peixoto, M.F. Lima-Costa and P.G. Vidigal. Braz J Med Biol Res 2012; 45: 1284-1286 &#13;
+            &#13;
+               <hr align="LEFT" width="100%" size="2"/>&#13;
+            &#13;
+               <p>
+                <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
+                <img src="/img/revistas/bjmbr/v45n12/2406t01.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="600" height="303" imported="true"/>
+             </ext-link>
+             </p>&#13;
+            &#13;
+               &#13;
+            &#13;
+                 &#13;
+            &#13;
+               &#13;
+            &#13;
+             &#13;
+            &#13;
+             &#13;
+            &#13;
+            </p>
+        <p>[View larger version of this table (57 K JPG file)]</p> <hr align="LEFT" width="100%" size="2"/>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Tab1']"))
+        p_text = xml.find(".//a[@name='Tab1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Table 1. Distribution of serum hs-CRP concentration ("))
+        self.assertTrue(
+            xml.find(".//a[@name]/p").getchildren()[-1].tail.endswith(
+                ") according to gender."))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Tab1']/img[@src='/img/revistas/bjmbr/v45n12/2406t01.jpg']"))
+
+
+class TestAssetThumbnailInLinkAndAnchorAndCaption(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.AssetThumbnailInLinkAndAnchorAndCaption()
+
+    def test_transform_converts_thumbnail_into_simpler_structure(self):
+        text = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <a href="#650i02" link-type="internal">
+          <img src="/img/revistas/bjmbr/v43n10/650i02peq.jpg" border="2"/>
+        </a>
+        <p content-type="html">
+          <a id="650i02" name="650i02"/>&#13;
+         <p align="left">C. Raineki, A. Pickenhagen, T.L. Roth, D.M. Babstock, J.H. McLean, C.W. Harley, A.B. Lucion and R.M. Sullivan. The neurobiology of infant maternal odor learning. Braz J Med Biol Res 2010; 43: 914-919. &#13;
+         </p>&#13;
+           <p>
+            <ext-link ext-link-type="uri" xlink:href="javascript:history.back()">
+            <img src="/img/revistas/bjmbr/v43n10/650i02.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="349" imported="true"/>
+         </ext-link>
+         </p>&#13;
+           <p>&#13;
+             <p align="LEFT">Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure.</p>&#13;
+           </p>&#13;
+         &#13;
+         &#13;
+        </p>
+        <a name="Fig2" id="Fig2"/>
+        Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. <p>[View larger version of this image (340 K JPG file)]</p>  
+        <hr align="LEFT" size="2"/>
+        </root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink">
+        <p><a name="Fig2" id="Fig2"><img src="/img/revistas/bjmbr/v43n10/650i02.jpg" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+        <p>Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. </p></a></p>
+        <hr align="LEFT" size="2"/>
+        </root>"""
+
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig2']"))
+        self.assertEqual(xml.find(".//a[@name='Fig2']/p").text.strip(), 'Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or')
+        
+        self.assertTrue(
+            xml.find(".//a[@name='Fig2']/p").getchildren()[-1].tail.endswith(
+                "appears to be heightened by odor exposure. "))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig2']/img[@src='/img/revistas/bjmbr/v43n10/650i02.jpg']"))
+
+
+class TestAssetThumbnailInLayoutTableAndLinkInMessage(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.AssetThumbnailInLayoutTableAndLinkInMessage()
+
+    def test_transform(self):
+        text = """<root>
+        <table border="0" cellpadding="2" cellspacing="0" width="100%">
+        <tr>
+        <td>
+            <a name="Fig3" id="Fig3"/>
+            <img src="/img/revistas/bjmbr/v30n6/2677fig1peq.gif"/>
+        </td> 
+        <td>Figure 3 - Gastric retention (%) 15 min after the infusion of test meals containing 2.5% glucose + 2.5% galactose (5% glu + gal), 5% lactose, 5% glucose + 5% galactose (10% glu + gal) or 10% lactose. The rats were fed normal chow (control) or chow with 20% (w/w) lactose (experimental) for four weeks after which time the gastric retention was measured (N = 12 per subgroup). The data are presented as box plots, where the intermediate, lower and upper horizontal lines indicate the median, first and third quartiles of the gastric retention values, respectively, and error bars indicate the maximum and minimum gastric retention values observed. Significant differences between subgroups tested by the Kruskal-Wallis test (P&lt;0.10) followed by the multiple comparisons test (P&lt;0.02) are indicated in the figure.</td> </tr>
+        </table>
+        <p>
+            <a href="#2677fig1" link-type="internal">[View larger version of this image (28 K GIF file)]</a>
+        </p>
+        <p content-type="html">
+            <a id="2677fig1" name="2677fig1"/>
+
+            <p align="center">
+                <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n6/2677fig1.gif" imported="true" link-type="external"/> </p>
+
+            <p>Figure 3 - Gastric retention (%) 15 min after the infusion of
+            test meals containing 2.5% glucose + 2.5% galactose (5% glu +
+            gal), 5% lactose, 5% glucose + 5% galactose (10% glu + gal) or
+            10% lactose. The rats were fed normal chow (control) or chow with
+            20% (w/w) lactose (experimental) for four weeks after which time
+            the gastric retention was measured (N = 12 per subgroup). The
+            data are presented as box plots, where the intermediate, lower
+            and upper horizontal lines indicate the median, first and third
+            quartiles of the gastric retention values, respectively, and
+            error bars indicate the maximum and minimum gastric retention
+            values observed. Significant differences between subgroups tested
+            by the Kruskal-Wallis test (P&lt;0.10) followed by the multiple
+            comparisons test (P&lt;0.02) are indicated in the figure.</p>
+        </p>
+        </root>"""
+        expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink">
+            <p>
+            <a name="Fig3" id="Fig3">
+            <img src="/img/revistas/bjmbr/v30n6/2677fig1.gif" align="BOTTOM" border="0" vspace="0" hspace="0" width="800" height="403" imported="true"/>
+            <p>Figure 3 - Gastric retention (%) 15 min after the infusion of
+            test meals containing 2.5% glucose + 2.5% galactose (5% glu +
+            gal), 5% lactose, 5% glucose + 5% galactose (10% glu + gal) or
+            10% lactose. The rats were fed normal chow (control) or chow with
+            20% (w/w) lactose (experimental) for four weeks after which time
+            the gastric retention was measured (N = 12 per subgroup). The
+            data are presented as box plots, where the intermediate, lower
+            and upper horizontal lines indicate the median, first and third
+            quartiles of the gastric retention values, respectively, and
+            error bars indicate the maximum and minimum gastric retention
+            values observed. Significant differences between subgroups tested
+            by the Kruskal-Wallis test (P&lt;0.10) followed by the multiple
+            comparisons test (P&lt;0.02) are indicated in the figure.</p>
+            </a>
+            <hr align="LEFT" size="2"/>
+            </root>"""
+
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig3']"))
+        p_text = xml.find(".//a[@name='Fig3']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 3 - Gastric retention (%) 15 min after the infusion"))
+        self.assertTrue(
+            p_text.endswith(
+                "are indicated in the figure."))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig3']/img[@src='/img/revistas/bjmbr/v30n6/2677fig1.gif']"))
+
+
+class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide()
+
+    def test_transform(self):
+        text = """<root>
+        <table border="0" cellpadding="2" cellspacing="0" width="100%">
+          <tr>
+            <td>
+              <a name="Fig1" id="Fig1"/>
+            <img src="/img/revistas/bjmbr/v30n2/2635fig1.gif"/>
+          </td> 
+          <td>Figure 1 - Effects of peripheral <sub>post-trial</sub> administration of</td>
+          </tr>
+        </table>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 1 - Effects of peripheral"))
+        self.assertTrue(
+            xml.find(".//a[@name='Fig1']/p").getchildren()[-1].tail.startswith(
+                " administration of"))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n2/2635fig1.gif']"))
+
+
+class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.TestCase):
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines()
+
+    def test_transform(self):
+        text = """<root>
+        <p align="center">
+            <a name="Fig1" id="Fig1"/> <img src="/img/revistas/bjmbr/v30n1/2560fig1peq.gif"/>
+        </p>
+        <p>Figure 1 - Effect of dexamethasone pretreatment on ethanol-induced hypothermia in rats. Rats received dexamethasone (2.0 mg/kg,<italic> ip</italic>) or saline administered 15 min before ethanol 20% w/v (2.0, 3.0 or 4.0 g/kg, <italic>ip</italic>) or saline. Colon temperature was measured 30, 60 and 90 min after ethanol administration. The animals were divided into 4 groups: saline + saline (open circles); dexamethasone + saline (filled circles); saline + ethanol (open squares), and dexamethasone + ethanol (filled squares). Data are reported as the mean ± SEM of the fall in temperature in degrees Celsius obtained for 10 animals compared to basal values. *P&lt;0.05 compared to saline + saline group; <sup>+</sup>P&lt;0.05 compared to saline + ethanol group (ANOVA).</p>
+        <p>
+            <a href="#2560fig1" link-type="internal">[View larger version of this image (14 K GIF file)]</a>
+        </p>
+        <p content-type="html">
+            <a id="2560fig1" name="2560fig1"/>
+
+        <p align="center">
+          <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n1/2560fig1.gif" 
+          imported="true" link-type="external"/> </p>
+
+        <p>Figure 1 - Effect of dexamethasone pretreatment on
+        ethanol-induced hypothermia in rats. Rats received dexamethasone
+        (2.0 mg/kg,<italic> ip</italic>) or saline administered 15 min before
+        ethanol 20% w/v (2.0, 3.0 or 4.0 g/kg, <italic>ip</italic>) or saline.
+        Colon temperature was measured 30, 60 and 90 min after ethanol
+        administration. The animals were divided into 4 groups: saline +
+        saline (open circles); dexamethasone + saline (filled circles);
+        saline + ethanol (open squares), and dexamethasone + ethanol
+        (filled squares). Data are reported as the mean ± SEM of the
+        fall in temperature in degrees Celsius obtained for 10 animals
+        compared to basal values. *P&lt;0.05 compared to saline + saline
+        group; <sup>+</sup>P&lt;0.05 compared to saline + ethanol group
+        (ANOVA).</p></p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        print(etree.tostring(xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 1 - Effect of dexamethasone pretreatment on"))
+        self.assertTrue(
+            xml.find(".//a[@name='Fig1']/p").getchildren()[-1].tail.startswith(
+                "P&lt;0.05 compared to saline + ethanol group"))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n1/2560fig1.gif']"))
+
+class TestAssetThumbnailInLayoutImgAndCaptionAndMessage(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.AssetThumbnailInLayoutImgAndCaptionAndMessage()
+
+    def test_transform(self):
+        text = """<root>
+        <p align="center">
+            <a name="Fig1" id="Fig1"/> <img src="/img/revistas/bjmbr/v30n1/2560fig1peq.gif"/>
+        </p>
+        <p>Figure 1 - Effect of dexamethasone pretreatment on ethanol-induced hypothermia in rats. Rats received dexamethasone (2.0 mg/kg,<italic> ip</italic>) or saline administered 15 min before ethanol 20% w/v (2.0, 3.0 or 4.0 g/kg, <italic>ip</italic>) or saline. Colon temperature was measured 30, 60 and 90 min after ethanol administration. The animals were divided into 4 groups: saline + saline (open circles); dexamethasone + saline (filled circles); saline + ethanol (open squares), and dexamethasone + ethanol (filled squares). Data are reported as the mean ± SEM of the fall in temperature in degrees Celsius obtained for 10 animals compared to basal values. *P&lt;0.05 compared to saline + saline group; <sup>+</sup>P&lt;0.05 compared to saline + ethanol group (ANOVA).</p>
+        <p>
+            <a href="#2560fig1" link-type="internal">[View larger version of this image (14 K GIF file)]</a>
+        </p>
+        <p content-type="html">
+            <a id="2560fig1" name="2560fig1"/>
+
+        <p align="center">
+          <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n1/2560fig1.gif" 
+          imported="true" link-type="external"/> </p>
+
+        <p>Figure 1 - Effect of dexamethasone pretreatment on
+        ethanol-induced hypothermia in rats. Rats received dexamethasone
+        (2.0 mg/kg,<italic> ip</italic>) or saline administered 15 min before
+        ethanol 20% w/v (2.0, 3.0 or 4.0 g/kg, <italic>ip</italic>) or saline.
+        Colon temperature was measured 30, 60 and 90 min after ethanol
+        administration. The animals were divided into 4 groups: saline +
+        saline (open circles); dexamethasone + saline (filled circles);
+        saline + ethanol (open squares), and dexamethasone + ethanol
+        (filled squares). Data are reported as the mean ± SEM of the
+        fall in temperature in degrees Celsius obtained for 10 animals
+        compared to basal values. *P&lt;0.05 compared to saline + saline
+        group; <sup>+</sup>P&lt;0.05 compared to saline + ethanol group
+        (ANOVA).</p></p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 1 - Effect of dexamethasone pretreatment on"))
+        self.assertTrue(
+            xml.find(".//a[@name='Fig1']/p").getchildren()[-1].tail.endswith(
+                "(ANOVA)."))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v30n1/2560fig1.gif']"))
+
+
+class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.TestCase):
+
+    def setUp(self):
+        pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pipeline.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines()
+
+    def test_transform(self):
+        text = """<root>
+        <table width="100%" cellpadding="2" cellspacing="0" border="0">
+            <tr>
+            <td width="38%" valign="TOP">
+            <p align="center">
+            <a name="Fig1" id="Fig1"/>
+          <img src="/img/revistas/bjmbr/v31n12/3156i01.gif" align="BOTTOM" border="2" vspace="0" hspace="0"/>
+        </p> <p>Figure 1 - Relationship between SHBG levels and 120-min proinsulin after a glucose load test in men.</p>
+        </td> </tr>
+        </table></root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        
+        self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
+        p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
+        self.assertTrue(
+            p_text.startswith(
+                "Figure 1 - Relationship between SHBG levels"))
+        self.assertTrue(
+            p_text.endswith(
+                "load test in men."))
+        self.assertIsNotNone(
+            xml.find(
+                ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v31n12/3156i01.gif']"))

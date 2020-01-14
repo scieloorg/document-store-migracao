@@ -37,6 +37,26 @@ def is_footnote_label(text):
             ]
         )
 
+def get_anchor(xml, anchor_parent, label_and_caption_element):
+    a = anchor_parent.find(".//a[@name]")
+    if a is None:
+        new_a = etree.Element("a")
+        text = get_node_text(label_and_caption_element)
+        texts = text.split(" ")
+        if len(texts) >= 2 and texts[1].isdigit():
+            name = texts[0][:3]+texts[1]
+            if xml.find(".//a[@href='#{}']".format(name)) is None:
+                name = name.lower()
+
+            if xml.find(".//a[@href='#{}']".format(name)) is None:
+                name = " ".join(texts[:2])
+            new_a.set("name", name)
+            new_a.set("id", name)
+    else:
+        new_a = deepcopy(a)
+        new_a.tail = ""
+    return new_a
+
 
 def move_tail_into_node(node):
     """
@@ -1369,6 +1389,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
     def __init__(self):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
+            self.AssetThumbnailInLayoutTableAndLinkInMessage(),
+            self.AssetThumbnailInLayoutTableAndLinkInThumbnail(),
+            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(),
+            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(),
+            self.AssetThumbnailInLinkAndAnchorAndCaption(),
+            self.AssetThumbnailInLayoutImgAndCaptionAndMessage(),
             self.RemoveThumbImgPipe(),
             self.CompleteElementAWithNameAndIdPipe(),
             self.CompleteElementAWithXMLTextPipe(),
@@ -1402,6 +1428,343 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def transform(self, data):
             new_obj = deepcopy(data)
             return data, new_obj
+
+    class AssetThumbnailInLayoutImgAndCaptionAndMessage(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de uma tabela com duas
+        colunas e uma linha.
+        Sendo na primeira coluna a imagem em miniatura e na segunda a legenda.
+        Além disso na linha seguinte à tabela há a mensagem "View larger ..."
+        No parágrafo seguinte está o conteúdo que seria mostrado ao clicar em
+        "View larger..."
+        """
+        def transform(self, data):
+            raw, xml = data
+            done = False
+            for p in xml.findall(".//p[@content-type='html']"):
+                done = self._convert(p)
+                if not done:
+                    pass
+            if done:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
+            return data
+
+        def _convert(self, p):
+            previous = p.getprevious()
+            if "View larger" not in get_node_text(previous):
+                return
+
+            p_caption = previous.getprevious()
+            if p_caption is None:
+                return
+
+            img = p.find(".//img")
+            if img is None:
+                return
+
+            p_anchor = p_caption.getprevious()
+            src = img.get("src")
+            for wrong in ["http:/img/fbpe", "http://www.scielo.br/img/fbpe"]:
+                src = src.replace(wrong, "/img/revistas")
+            img.set("src", src)
+
+            new_elem = etree.Element("p")
+            xml = p.getroottree().find(".")
+            new_a = get_anchor(xml, p_anchor, p_caption)
+            new_a.append(deepcopy(img))
+            new_a.append(deepcopy(p_caption))
+            new_elem.append(new_a)
+            new_elem.set("content-type", "created-from-layout-img-and-caption-msg")
+            p.addnext(new_elem)
+
+            for item in [p, previous, p_anchor, p_caption]:
+                parent = item.getparent()
+                parent.remove(item)
+            return True
+
+    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for table in xml.findall(".//table"):
+                tr = table.findall("tr")
+                if len(tr) != 1:
+                    continue
+
+                td = tr[0].findall("td")
+                if len(td) != 2:
+                    continue
+
+                img = td[0].find(".//img")
+                if img is None:
+                    continue
+                new_a = get_anchor(xml, td[0], td[1])
+                new_a.append(deepcopy(img))
+                new_p = deepcopy(td[1])
+                new_p.tag = "p"
+                new_a.append(new_p)
+                new_e = etree.Element("p")
+                new_e.set("content-type", "created-from-layout-side-by-side")
+                new_e.append(new_a)
+                table.addprevious(new_e)
+                parent = table.getparent()
+                parent.remove(table)
+            return data
+
+    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for table in xml.findall(".//table"):
+                tr = table.findall("tr")
+                if len(tr) != 1:
+                    continue
+
+                td = tr[0].findall("td")
+                if len(td) != 1:
+                    continue
+
+                p_items = td[0].findall("p")
+                if len(p_items) != 2:
+                    continue
+
+                img = p_items[0].find(".//img")
+                if img is None:
+                    continue
+                new_a = get_anchor(xml, p_items[0], p_items[1])
+                new_a.append(deepcopy(img))
+                new_p = deepcopy(p_items[1])
+                new_p.tag = "p"
+                new_a.append(new_p)
+                new_e = etree.Element("p")
+                new_e.set(
+                    "content-type",
+                    "created-from-layout-img-and-caption-in-two-lines")
+                new_e.append(new_a)
+                table.addprevious(new_e)
+                parent = table.getparent()
+                parent.remove(table)
+            return data
+
+    class AssetThumbnailInLayoutTableAndLinkInMessage(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de uma tabela com duas
+        colunas e uma linha.
+        Sendo na primeira coluna a imagem em miniatura e na segunda a legenda.
+        Além disso na linha seguinte à tabela há a mensagem "View larger ..."
+        No parágrafo seguinte está o conteúdo que seria mostrado ao clicar em
+        "View larger..."
+        """
+        def transform(self, data):
+            raw, xml = data
+            done = False
+            for p in xml.findall(".//p[@content-type='html']"):
+                done = self._replace_table_and_view_larger_message(p)
+                if not done:
+                    pass
+            if done:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
+            return data
+
+        def _replace_table_and_view_larger_message(self, p):
+            previous = p.getprevious()
+            if "View larger" not in get_node_text(previous):
+                return
+
+            table = previous.getprevious()
+            if table.tag != "table":
+                return
+
+            img = p.find(".//img")
+            if img is None:
+                return
+
+            p_label = p.findall(".//p")
+            if not p_label:
+                return
+
+            src = img.get("src")
+            for wrong in ["http:/img/fbpe", "http://www.scielo.br/img/fbpe"]:
+                src = src.replace(wrong, "/img/revistas")
+            img.set("src", src)
+
+            new_elem = etree.Element("p")
+            xml = table.getroottree().find(".")
+            new_a = get_anchor(xml, table, p_label[-1])
+            new_a.append(deepcopy(img))
+            new_a.append(deepcopy(p_label[-1]))
+            new_elem.append(new_a)
+            new_elem.set("content-type", "created-from-layout-table-and-link-in-message")
+            p.addnext(new_elem)
+
+            for item in [p, previous, table]:
+                parent = item.getparent()
+                parent.remove(item)
+            return True
+
+    class AssetThumbnailInLayoutTableAndLinkInThumbnail(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de uma tabela com duas
+        colunas e uma linha.
+        Sendo na primeira coluna a imagem em miniatura com link para a imagem
+        ampliada e na segunda a legenda.
+        Além disso na linha seguinte à tabela há a mensagem "View larger ..."
+        sem link.
+        """
+        def transform(self, data):
+            raw, xml = data
+            thumbnail = False
+            for p in xml.findall(".//p[@content-type='html']"):
+                previous = p.getprevious()
+                if previous.tag != "table":
+                    continue
+                a = previous.find(".//a[@link-type='internal']")
+                if a is None:
+                    continue
+                href = a.get("href")
+                if not href or not href.startswith("#"):
+                    continue
+                href = href[1:]
+                thumbnail_img = a.find("img")
+                if thumbnail_img is None:
+                    continue
+                p_html_img = p.find(".//img")
+                if p_html_img is None:
+                    continue
+
+                thumbnail_img_src = thumbnail_img.get("src")
+                p_html_img_src = p_html_img.get("src")
+
+                thumbnail_name, ext = os.path.splitext(thumbnail_img_src)
+                name, ext = os.path.splitext(p_html_img_src)
+
+                if (thumbnail_img_src.startswith(name) or 
+                    thumbnail_name.endswith("table")):
+                    a_name = previous.find(".//a[@name]")
+                    if a_name is not None:
+                        self._create_simpler_element(p, a_name, p_html_img)
+                        thumbnail = True
+            if thumbnail:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
+            return data
+
+        def _create_simpler_element(self, p, a_name, p_html_img):
+            table = p.getprevious()
+            new_a = deepcopy(a_name)
+            new_a.tail = ""
+            new_p = etree.Element("p")
+            if a_name.tail:
+                new_p.text = a_name.tail
+                a_name.tail = ""
+            _next = a_name
+            while True:
+                _next = _next.getnext()
+                if _next is None:
+                    break
+                new_p.append(deepcopy(_next))
+            new_a.append(deepcopy(p_html_img))
+            new_a.append(deepcopy(new_p))
+            new_e = etree.Element("p")
+            new_e.set("content-type", "created-from-layout-table-link-in-thumbnail")
+            new_e.append(new_a)
+            table.addprevious(new_e)
+            table_parent = table.getparent()
+            p_next = p.getnext()
+            if p_next is not None and p_next.text:
+                if "View larger" in p_next.text:
+                    table_parent.remove(p_next)
+            table_parent.remove(table)
+            table_parent.remove(p)
+
+    class AssetThumbnailInLinkAndAnchorAndCaption(plumber.Pipe):
+        """
+        Converte o modelo de miniatura que fica dentro de um link.
+        No parágrafo seguinte, está a imagem ampliada + legenda.
+        No parágrafo seguinte, está a âncora e a legenda.
+        """
+        def transform(self, data):
+            raw, xml = data
+            thumbnail = False
+            for p in xml.findall(".//p[@content-type='html']"):
+                previous = p.getprevious()
+                if previous.tag != "a" or previous.get("link-type") != "internal":
+                    continue
+                p_next = p.getnext()
+                if p_next.tag != "a":
+                    p_next = p_next.findall(".//a[@name]")
+                    if p_next is not None:
+                        p_next = p_next[-1]
+                if p_next.tag != "a":
+                    continue
+
+                a_name = p_next
+
+                thumbnail_img = previous.find(".//img")
+                if thumbnail_img is None:
+                    continue
+                p_html_img = p.find(".//img")
+                if p_html_img is None:
+                    continue
+
+                thumbnail_img_src = thumbnail_img.get("src")
+                p_html_img_src = p_html_img.get("src")
+
+                name, ext = os.path.splitext(p_html_img_src)
+                if thumbnail_img_src.startswith(name):
+                    self._create_new_a(p, previous, a_name, p_html_img)
+                    thumbnail = True
+            if thumbnail:
+                for p in xml.findall(".//p"):
+                    if p.text and "View larger" in p.text:
+                        parent = p.getparent()
+                        parent.remove(p)
+            return data
+
+        def _create_new_a(self, p, link, a_name, p_html_img):
+            new_p = etree.Element("p")
+            new_p.text = a_name.tail or ""
+            if a_name.tail:
+                a_name.tail = ""
+            _next = a_name
+            remove_items = []
+            while True:
+                remove_items.append(_next)
+                _next = _next.getnext()
+                if _next is None:
+                    break
+                if _next.tag == "p":
+                    if "View larger" in _next.text:
+                        parent = _next.getparent()
+                        parent.remove(_next)
+                    break
+                new_p.append(deepcopy(_next))
+
+            new_a = deepcopy(a_name)
+            new_a.tail = ""
+
+            new_a.append(new_p)
+            new_a.append(deepcopy(p_html_img))
+
+            new_e = etree.Element("p")
+            new_e.set("content-type", "created-from-layout-link-anchor-caption")
+            new_e.append(new_a)
+
+            p.addnext(new_e)
+
+            # remove os elementos excedentes
+            remove_items.append(p)
+            remove_items.append(link)
+
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
 
     class RemoveThumbImgPipe(plumber.Pipe):
         def parser_node(self, node):
@@ -1955,6 +2318,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             i = 0
 
             _next = asset_node
+            
             while True:
                 if i == max_times:
                     break
@@ -1967,7 +2331,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     break
                 if _next.xpath(ASSET_TAGS_XPATH):
                     break
-
                 if label is None:
                     label = self._find_label(
                         _next, asset_node.get("id"), asset_node.get("xml_text")
@@ -2061,8 +2424,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 return
             if n.find(".//img") is not None:
                 return
-            if get_node_text(n):
-                nodes_for_title.append(n)
+            nodes_for_title.append(n)
 
         def _infer_label_and_caption(self, label_parent, clue):
             label_text = None
