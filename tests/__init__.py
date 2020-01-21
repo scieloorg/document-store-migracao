@@ -406,11 +406,13 @@ SAMPLE_KERNEL_JOURNAL = {
     "updated": "2019-01-28T00:00:00.000000Z",
     "items": [],
     "metadata": {
-        "title": [["2019-01-28T00:00:00.000000Z", "sample"]],
-        "acronym": [["2019-01-28T00:00:00.000000Z", "spl"]],
-        "status": [["2019-01-28T00:00:00.000000Z", {"status": "current"}]],
-        "scielo_issn": [["2019-01-28T00:00:00.000000Z", "0001-3714"]],
-        "electronic_issn": [["2019-01-28T00:00:00.000000Z", "0001-3714"]],
+        "title": "sample",
+        "acronym": "spl",
+        "status_history": [
+            {"status": "current", "date": "2019-01-28T00:00:00.000000Z"}
+        ],
+        "scielo_issn": "0001-3714",
+        "electronic_issn": "0001-3714",
     },
     "id": "0001-3714",
     "_id": "0001-3714",

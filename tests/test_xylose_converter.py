@@ -13,7 +13,7 @@ from . import SAMPLE_ISSUES_JSON, SAMPLE_KERNEL_JOURNAL, SAMPLE_ISSUES_KERNEL
 
 def get_metadata_item(bundle, field):
     try:
-        return bundle["metadata"][field][0][1]
+        return bundle["metadata"][field]
     except KeyError:
         return None
     except IndexError:
@@ -77,17 +77,6 @@ class TestXyloseJournalConverter(unittest.TestCase):
         self.assertEqual("0001-3714", journal["id"])
         self.assertEqual("0001-3714", journal["_id"])
 
-    def test_bundle_metadata_fields_timestamps_and_created_date_should_be_equals(self):
-        journal = journal_to_kernel(self._journal)
-
-        for field, value in journal.get("metadata").items():
-            if field == "status":
-                continue
-
-            date = value[0][0]
-            with self.subTest(date=date):
-                self.assertEqual(journal.get("created"), date)
-
     def test_raise_exception_if_journal_hasnt_id(self):
         with self.assertRaises(ValueError):
             del self.json_journal["v435"]
@@ -127,18 +116,17 @@ class TestXyloseJournalConverter(unittest.TestCase):
         journal = journal_to_kernel(self._journal)
         self.assertEqual("2448-167X", get_metadata_item(journal, "electronic_issn"))
 
-    def test_journal_has_status(self):
+    def test_journal_has_status_history(self):
         journal = journal_to_kernel(self._journal)
-        _status = journal["metadata"]["status"]
+        _status = journal["metadata"]["status_history"]
 
         self.assertEqual(2, len(_status))
-        self.assertEqual("suspended-by-editor", _status[1][1]["reason"])
+        self.assertEqual("suspended-by-editor", _status[1]["reason"])
 
     def test_journal_status_timestamps_should_be_different_from_created_date(self):
         journal = journal_to_kernel(self._journal)
-        _status = journal["metadata"]["status"]
-
-        self.assertNotEqual(journal["created"], _status[1][0])
+        _status = journal["metadata"]["status_history"][-1]
+        self.assertNotEqual(journal["created"], _status["date"])
 
     def test_journal_has_subject_areas(self):
         journal = journal_to_kernel(self._journal)
@@ -168,15 +156,13 @@ class TestXyloseJournalConverter(unittest.TestCase):
 
     def test_journal_has_contact_email(self):
         journal = journal_to_kernel(self._journal)
-        self.assertEqual(
-            "editor@email.com", get_metadata_item(journal, "contact")["email"]
-        )
+        self.assertEqual("editor@email.com", journal["metadata"]["contact"]["email"])
 
     def test_journal_has_contact_address(self):
         journal = journal_to_kernel(self._journal)
         self.assertEqual(
             "Rua de exemplo, 1, São Paulo, SP, Brasil",
-            get_metadata_item(journal, "contact")["address"],
+            journal["metadata"]["contact"]["address"],
         )
 
     def test_journal_has_institution_responsible_for(self):
@@ -193,8 +179,9 @@ class TestXyloseJournalConverter(unittest.TestCase):
             ]
         )
         self.assertEqual(
-            expected,
-            get_metadata_item(journal, "institution_responsible_for"))
+            expected, get_metadata_item(journal, "institution_responsible_for")
+        )
+
 
 class TestXyloseIssueConverter(unittest.TestCase):
     def setUp(self):
