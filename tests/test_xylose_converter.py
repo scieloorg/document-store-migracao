@@ -208,9 +208,7 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.issue_json["v31"] = [{"_": "21"}]
         self.issue = issue_to_kernel(self._issue)
 
-        self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", "21"]], self.issue["metadata"]["volume"]
-        )
+        self.assertEqual("21", self.issue["metadata"]["volume"])
 
         self.assertIn("v21", self.issue["id"])
         self.assertIn("v21", self.issue["_id"])
@@ -220,27 +218,21 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.issue_json["v32"] = [{"_": "1"}]
         self.issue = issue_to_kernel(self._issue)
 
-        self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", "1"]], self.issue["metadata"]["number"]
-        )
+        self.assertEqual("1", self.issue["metadata"]["number"])
 
         self.assertIn("n1", self.issue["id"])
 
     def test_issue_has_supplement_when_supplement_volume_is_not_none(self):
         self.issue_json["v131"] = [{"_": "3"}]
         self.issue = issue_to_kernel(self._issue)
-        self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", "3"]], self.issue["metadata"]["supplement"]
-        )
+        self.assertEqual("3", self.issue["metadata"]["supplement"])
 
         self.assertIn("s3", self.issue["id"])
 
     def test_issue_has_supplement_when_supplement_number_is_not_none(self):
         self.issue_json["v132"] = [{"_": "2"}]
         self.issue = issue_to_kernel(self._issue)
-        self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", "2"]], self.issue["metadata"]["supplement"]
-        )
+        self.assertEqual("2", self.issue["metadata"]["supplement"])
 
         self.assertIn("s2", self.issue["id"])
         self.assertIn("s2", self.issue["_id"])
@@ -249,35 +241,25 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.issue_json["v33"] = [{"l": "pt", "_": "Algum título"}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual(
-            [
-                [
-                    "2019-01-29T00:00:00.000000Z",
-                    [{"language": "pt", "value": "Algum título"}],
-                ]
-            ],
+            [{"language": "pt", "value": "Algum título"}],
             self.issue["metadata"]["titles"],
         )
 
     def test_issue_has_publication_months(self):
-        self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", {"month": 1}]],
-            self.issue["metadata"]["publication_months"],
-        )
+        self.assertEqual({"month": 1}, self.issue["metadata"]["publication_months"])
 
     def test_publication_months_start_and_end_is_equal(self):
         self.issue_json["v43"] = [{"m": "Feb./Feb."}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", {"range": (2,2)}]],
-            self.issue["metadata"]["publication_months"],
+            {"range": (2, 2)}, self.issue["metadata"]["publication_months"],
         )
 
     def test_publication_months_range_of_six_months(self):
         self.issue_json["v43"] = [{"m": "Jan./Jun."}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual(
-            [["2019-01-29T00:00:00.000000Z", {"range": (1,6)}]],
-            self.issue["metadata"]["publication_months"],
+            {"range": (1, 6)}, self.issue["metadata"]["publication_months"]
         )
 
 

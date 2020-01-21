@@ -175,13 +175,13 @@ def issue_to_kernel(issue):
 
     _year = str(date_to_datetime(_creation_date).year)
     _month = str(date_to_datetime(_creation_date).month)
-    _metadata["publication_year"] = set_metadata(_creation_date, _year)
+    _metadata["publication_year"] = _year
 
     if issue.volume:
-        _metadata["volume"] = set_metadata(_creation_date, issue.volume)
+        _metadata["volume"] = issue.volume
 
     if issue.number:
-        _metadata["number"] = set_metadata(_creation_date, issue.number)
+        _metadata["number"] = issue.number
 
     _supplement = None
     if issue.type is "supplement":
@@ -192,13 +192,13 @@ def issue_to_kernel(issue):
         elif issue.supplement_number:
             _supplement = issue.supplement_number
 
-        _metadata["supplement"] = set_metadata(_creation_date, _supplement)
+        _metadata["supplement"] = _supplement
 
     if issue.titles:
         _titles = [
             {"language": lang, "value": value} for lang, value in issue.titles.items()
         ]
-        _metadata["titles"] = set_metadata(_creation_date, _titles)
+        _metadata["titles"] = _titles
 
     publication_months = {}
     if issue.start_month and issue.end_month:
@@ -206,7 +206,7 @@ def issue_to_kernel(issue):
     elif _month:
         publication_months["month"] = int(_month)
 
-    _metadata["publication_months"] = set_metadata(_creation_date, publication_months)
+    _metadata["publication_months"] = publication_months
 
     _id = scielo_ids_generator.issue_id(
         issn_id, _year, issue.volume, issue.number, _supplement
@@ -245,7 +245,7 @@ def find_documents_bundles(journal: dict, issues: List[Issue]):
 
     for field in journal_issn_fields:
         try:
-            journal_issns.append(_metadata[field][0][-1])
+            journal_issns.append(_metadata[field])
         except (KeyError, IndexError):
             pass
 
