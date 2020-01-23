@@ -71,78 +71,67 @@ def journal_to_kernel(journal):
             {"language": lang, "value": value}
             for lang, value in journal.mission.items()
         ]
-        _metadata["mission"] = set_metadata(_creation_date, _mission)
+        _metadata["mission"] = _mission
 
     if journal.title:
-        _metadata["title"] = set_metadata(_creation_date, journal.title)
+        _metadata["title"] = journal.title
 
     if journal.abbreviated_iso_title:
-        _metadata["title_iso"] = set_metadata(
-            _creation_date, journal.abbreviated_iso_title
-        )
+        _metadata["title_iso"] = journal.abbreviated_iso_title
 
     if journal.abbreviated_title:
-        _metadata["short_title"] = set_metadata(
-            _creation_date, journal.abbreviated_title
-        )
+        _metadata["short_title"] = journal.abbreviated_title
 
-    _metadata["acronym"] = set_metadata(_creation_date, journal.acronym)
+    _metadata["acronym"] = journal.acronym
 
     if journal.scielo_issn:
-        _metadata["scielo_issn"] = set_metadata(_creation_date, journal.scielo_issn)
+        _metadata["scielo_issn"] = journal.scielo_issn
 
     if journal.print_issn:
-        _metadata["print_issn"] = set_metadata(_creation_date, journal.print_issn)
+        _metadata["print_issn"] = journal.print_issn
 
     if journal.electronic_issn:
-        _metadata["electronic_issn"] = set_metadata(
-            _creation_date, journal.electronic_issn
-        )
+        _metadata["electronic_issn"] = journal.electronic_issn
 
     if journal.status_history:
-        _metadata["status"] = []
+        _metadata["status_history"] = []
 
         for status in journal.status_history:
-            _status = {"status": status[1]}
+            _status = {"status": status[1], "date": parse_date(status[0])}
 
             if status[2]:
                 _status["reason"] = status[2]
 
             # TODO: Temos que verificar se as datas são autoritativas
-            _metadata["status"].append([parse_date(status[0]), _status])
+            _metadata["status_history"].append(_status)
 
     if journal.subject_areas:
-        _metadata["subject_areas"] = set_metadata(_creation_date, journal.subject_areas)
+        _metadata["subject_areas"] = journal.subject_areas
 
     if journal.sponsors:
-        _sponsors = [{"name": sponsor} for sponsor in journal.sponsors]
-        _metadata["sponsors"] = set_metadata(_creation_date, _sponsors)
+        _metadata["sponsors"] = [{"name": sponsor} for sponsor in journal.sponsors]
 
     if journal.wos_subject_areas:
-        _metadata["subject_categories"] = set_metadata(
-            _creation_date, journal.wos_subject_areas
-        )
+        _metadata["subject_categories"] = journal.wos_subject_areas
 
     if journal.submission_url:
-        _metadata["online_submission_url"] = set_metadata(
-            _creation_date, journal.submission_url
-        )
+        _metadata["online_submission_url"] = journal.submission_url
 
     if journal.next_title:
-        _next_journal = {"name": journal.next_title}
-        _metadata["next_journal"] = set_metadata(_creation_date, _next_journal)
+        _metadata["next_journal"] = {"name": journal.next_title}
 
     if journal.previous_title:
-        _previous_journal = {"name": journal.previous_title}
-        _metadata["previous_journal"] = set_metadata(_creation_date, _previous_journal)
+        _metadata["previous_journal"] = {"name": journal.previous_title}
 
     _contact = {}
     if journal.editor_email:
         _contact["email"] = journal.editor_email
+
     if journal.editor_address:
         _contact["address"] = journal.editor_address
+
     if _contact:
-        _metadata["contact"] = set_metadata(_creation_date, _contact)
+        _metadata["contact"] = _contact
 
     if journal.publisher_name:
         institutions = []
@@ -158,8 +147,8 @@ def journal_to_kernel(journal):
                 item["country"] = country_name
             institutions.append(item)
 
-        _metadata["institution_responsible_for"] = set_metadata(
-            _creation_date, tuple(institutions))
+        _metadata["institution_responsible_for"] = tuple(institutions)
+
     return _bundle
 
 
@@ -186,13 +175,13 @@ def issue_to_kernel(issue):
 
     _year = str(date_to_datetime(_creation_date).year)
     _month = str(date_to_datetime(_creation_date).month)
-    _metadata["publication_year"] = set_metadata(_creation_date, _year)
+    _metadata["publication_year"] = _year
 
     if issue.volume:
-        _metadata["volume"] = set_metadata(_creation_date, issue.volume)
+        _metadata["volume"] = issue.volume
 
     if issue.number:
-        _metadata["number"] = set_metadata(_creation_date, issue.number)
+        _metadata["number"] = issue.number
 
     _supplement = None
     if issue.type is "supplement":
@@ -203,13 +192,13 @@ def issue_to_kernel(issue):
         elif issue.supplement_number:
             _supplement = issue.supplement_number
 
-        _metadata["supplement"] = set_metadata(_creation_date, _supplement)
+        _metadata["supplement"] = _supplement
 
     if issue.titles:
         _titles = [
             {"language": lang, "value": value} for lang, value in issue.titles.items()
         ]
-        _metadata["titles"] = set_metadata(_creation_date, _titles)
+        _metadata["titles"] = _titles
 
     publication_months = {}
     if issue.start_month and issue.end_month:
@@ -217,7 +206,7 @@ def issue_to_kernel(issue):
     elif _month:
         publication_months["month"] = int(_month)
 
-    _metadata["publication_months"] = set_metadata(_creation_date, publication_months)
+    _metadata["publication_months"] = publication_months
 
     _id = scielo_ids_generator.issue_id(
         issn_id, _year, issue.volume, issue.number, _supplement
@@ -256,7 +245,7 @@ def find_documents_bundles(journal: dict, issues: List[Issue]):
 
     for field in journal_issn_fields:
         try:
-            journal_issns.append(_metadata[field][0][-1])
+            journal_issns.append(_metadata[field])
         except (KeyError, IndexError):
             pass
 
