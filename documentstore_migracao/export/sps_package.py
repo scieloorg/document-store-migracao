@@ -556,6 +556,36 @@ class SPS_Package:
 
         return self.xmltree
 
+    def remove_article_body_when_text_is_available_only_in_pdf(self) -> None:
+        """Remove o corpo do documento quando o texto completo está disponível
+        apenas em pdf."""
+
+        def find_pdf_links(body: etree.Element) -> list:
+            TEXT_LINK_FOR_PDF = [
+                "texto completo disponível apenas em pdf.",
+                "full text available only in pdf format.",
+                "texto completo solamente en formato pdf.",
+            ]
+            renditions = []
+
+            for node in body.findall(".//a"):
+                if not node.get("href", "").endswith(".pdf"):
+                    continue
+
+                if node.text is not None and node.text.lower() in TEXT_LINK_FOR_PDF:
+                    renditions.append(node)
+
+            return renditions
+
+        has_self_uri_tags = len(self.xmltree.findall(".//self-uri")) > 0
+
+        for body in self.xmltree.iterfind(".//body"):
+            full_text_available_in_pdf = len(find_pdf_links(body)) > 0
+
+            if has_self_uri_tags and full_text_available_in_pdf:
+                parent = body.getparent()
+                parent.remove(body)
+
     def create_scielo_id(self):
         PATHS = [".//article-meta"]
 

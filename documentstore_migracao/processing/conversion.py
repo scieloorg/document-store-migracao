@@ -32,6 +32,9 @@ def convert_article_xml(file_xml_path):
     # Remove a TAG <counts> do XML
     xml_sps.transform_article_meta_count()
 
+    # Remove body when text is available only in PDF
+    xml_sps.remove_article_body_when_text_is_available_only_in_pdf()
+
     languages = "-".join(xml_sps.languages)
     _, fname = os.path.split(file_xml_path)
     fname, fext = fname.rsplit(".", 1)
