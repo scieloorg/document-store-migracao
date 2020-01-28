@@ -560,29 +560,25 @@ class SPS_Package:
         """Remove o corpo do documento quando o texto completo está disponível
         apenas em pdf."""
 
-        def find_pdf_links(body: etree.Element) -> list:
+        def body_has_full_text_reference(body: etree.Element) -> bool:
             TEXT_LINK_FOR_PDF = [
-                "texto completo disponível apenas em pdf.",
-                "full text available only in pdf format.",
-                "texto completo solamente en formato pdf.",
+                "texto completo disponível apenas em pdf",
+                "full text available only in pdf format",
+                "texto completo solamente en formato pdf",
             ]
-            renditions = []
 
-            for node in body.findall(".//a"):
-                if not node.get("href", "").endswith(".pdf"):
-                    continue
+            body_str = (etree.tostring(body) or b"").decode().lower()
 
-                if node.text is not None and node.text.lower() in TEXT_LINK_FOR_PDF:
-                    renditions.append(node)
+            for text in TEXT_LINK_FOR_PDF:
+                if text in body_str:
+                    return True
 
-            return renditions
+            return False
 
         has_self_uri_tags = len(self.xmltree.findall(".//self-uri")) > 0
 
         for body in self.xmltree.iterfind(".//body"):
-            full_text_available_in_pdf = len(find_pdf_links(body)) > 0
-
-            if has_self_uri_tags and full_text_available_in_pdf:
+            if has_self_uri_tags and body_has_full_text_reference(body):
                 parent = body.getparent()
                 parent.remove(body)
 

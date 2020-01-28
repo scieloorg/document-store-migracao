@@ -1955,7 +1955,7 @@ class TestRemoveBodyWhenFulltextIsOnlyAvailableInPDF(unittest.TestCase):
         self.sps_package.remove_article_body_when_text_is_available_only_in_pdf()
         self.assertIsNone(self.sps_package.xmltree.find(".//body"))
 
-    def test_do_not_remove_body_wyen_self_uri_tag_is_not_present(self):
+    def test_do_not_remove_body_when_self_uri_tag_is_not_present(self):
         article_meta = self.sps_package.xmltree.find(".//article-meta")
         tags = self.sps_package.xmltree.findall(".//self-uri")
 
