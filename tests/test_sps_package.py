@@ -1932,3 +1932,48 @@ class TestGetRefItems(unittest.TestCase):
         _sps_package = self._get_sps_package(text)
         ref_items = _sps_package._get_ref_items(body)
         self.assertEqual(len(ref_items), 3)
+
+
+class TestRemoveBodyWhenFulltextIsOnlyAvailableInPDF(unittest.TestCase):
+    def setUp(self):
+        xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+            <self-uri xlink:href="url/arquivo.pdf" xml:lang="fr">Full text available only in PDF format (FR)</self-uri>
+            <self-uri xlink:href="ufl/arquivo.pdf" xml:lang="pt">Texto completo somente em PDF (PT)</self-uri>
+            <body>
+             <p content-type="title">Título!</p>
+             <p><a href="/pdf/mioc/v80n1/vol80(f1)_002-010.pdf">Texto completo disponível apenas em PDF.</a></p>
+             <p><a href="/pdf/mioc/v80n1/vol80(f1)_002-010.pdf">Full text available only in PDF format.</a></p>
+             <p></p>
+            </body>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_remove_body_when_self_uri_are_available_and_text_points_to_full_text_in_pdf(
+        self,
+    ):
+        self.sps_package.remove_article_body_when_text_is_available_only_in_pdf()
+        self.assertIsNone(self.sps_package.xmltree.find(".//body"))
+
+    def test_do_not_remove_body_when_self_uri_tag_is_not_present(self):
+        article_meta = self.sps_package.xmltree.find(".//article-meta")
+        tags = self.sps_package.xmltree.findall(".//self-uri")
+
+        for tag in tags:
+            article_meta.remove(tag)
+
+        self.sps_package.remove_article_body_when_text_is_available_only_in_pdf()
+        self.assertIsNotNone(self.sps_package.xmltree.find(".//body"))
+
+    def test_do_not_remove_body_if_it_does_not_point_to_full_text(self):
+        xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><article-meta>
+            <self-uri xlink:href="fr_tomo14(f1)_104-116.pdf" xml:lang="fr">Full text available only in PDF format (FR)</self-uri>
+            <self-uri xlink:href="/tomo14(f1)_104-116.pdf" xml:lang="pt">Texto completo somente em PDF (PT)</self-uri>
+            <body>
+             <p content-type="title">Título!</p>
+            </body>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(xml)
+        sps_package = SPS_Package(xmltree, None)
+        sps_package.remove_article_body_when_text_is_available_only_in_pdf()
+        self.assertIsNotNone(self.sps_package.xmltree.find(".//body"))
