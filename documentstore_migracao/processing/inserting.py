@@ -24,6 +24,7 @@ from documentstore_migracao.utils import (
     update_journal,
     add_bundle,
     update_bundle,
+    add_renditions,
 )
 from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
@@ -204,6 +205,10 @@ def register_document(folder: str, session, storage) -> None:
 
         try:
             add_document(session, document)
+
+            if renditions:
+                add_renditions(session, document)
+
             logger.info("Document-store save: %s", document.id())
         except AlreadyExists as exc:
             logger.exception(exc)
