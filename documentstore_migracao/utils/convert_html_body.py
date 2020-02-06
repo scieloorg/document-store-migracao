@@ -1405,6 +1405,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
+            self.FixOutSideTablePipe(),
             self.AssetElementIdentifyLabelAndCaptionPipe(),
             self.AssetElementFixPipe(),
             self.CreateInlineFormulaPipe(),
@@ -1642,7 +1643,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 thumbnail_name, ext = os.path.splitext(thumbnail_img_src)
                 name, ext = os.path.splitext(p_html_img_src)
 
-                if (thumbnail_img_src.startswith(name) or 
+                if (thumbnail_img_src.startswith(name) or
                     thumbnail_name.endswith("table")):
                     a_name = previous.find(".//a[@name]")
                     if a_name is not None:
@@ -1903,7 +1904,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
     class DeduceAndSuggestConversionPipe(plumber.Pipe):
-        """Este pipe analisa os dados doss elementos a[@href] e a[@name],
+        """Este pipe analisa os dados dos elementos a[@href] e a[@name],
         deduz e sugere tag, id, ref-type para a conversão de elementos,
         adicionando aos elementos a, os atributos: @xml_tag, @xml_id,
         @xml_reftype, @xml_label.
@@ -2230,7 +2231,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         """
         Move os elementos de ativos digitais, por exemplo:
         <p><fig/></p>
-        para fora de modo que fique ao lado dos irmãos que serão conteúdo do 
+        para fora de modo que fique ao lado dos irmãos que serão conteúdo do
         ativo digital
         """
 
@@ -2318,7 +2319,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             i = 0
 
             _next = asset_node
-            
             while True:
                 if i == max_times:
                     break
@@ -2346,6 +2346,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return components
 
         def _find_label(self, node, asset_id, search_by):
+            if node.tag == "bold" and node.get("label-of"):
+                label = node
+                node.set("content-type", "label")
+                return node
             label = node.find(".//bold[@label-of]")
             if label is not None:
                 parent = label.getparent()
@@ -2406,6 +2410,25 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if found is not None:
                 node.set("content-type", tag)
                 return node
+
+    class FixOutSideTablePipe(plumber.Pipe):
+
+        def transform(self, data):
+            raw, xml = data
+
+            for node in xml.xpath(".//table-wrap"):
+
+                parent = node.getparent()
+
+                if parent.getnext() is not None:
+
+                    p = parent.getnext()
+
+                    for p_neighbor in p.getchildren():
+                        if p_neighbor.tag == 'table':
+                            node.append(deepcopy(p))
+                            parent.getparent().remove(p)
+            return data
 
     class AssetElementIdentifyLabelAndCaptionPipe(plumber.Pipe):
         def transform(self, data):
@@ -3483,7 +3506,7 @@ class Remote2LocalConversion:
         """
         Localiza as menções a imagens (a/@href="/img/revistas/..."),
         as converte para um link interno que aponta para o novo elemento (img ou media)
-        e cria este novo elemento (img ou media) para ser inserido no parágrafo 
+        e cria este novo elemento (img ou media) para ser inserido no parágrafo
         seguinte.
         """
         new_p_items = []

@@ -34,7 +34,7 @@ class TestGetNodeText(unittest.TestCase):
 
     def test_get_node_text_does_not_return_extra_spaces(self):
         text = """<root>
-        <texto>texto          com         muitos espaços   
+        <texto>texto          com         muitos espaços
         </texto> ...</root>"""
         expected = """texto com muitos espaços ..."""
 
@@ -670,7 +670,7 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         Mantém, não converte.
         <root>
         <a name="a05tab07" id="a05tab07" xml_text="tabelas 7"/>
-        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e 
+        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e
         <a href="#a05tab07" link-type="internal" xml_text="tabela 7">Tabela 7</a>), sendo este resultado consistente com o estudo de Kober et al. (2010).
         <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e '
         </root>
@@ -678,7 +678,7 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         text = b"""
         <root>
         <a name="a05tab07" id="a05tab07" xml_text="tabelas 7"/>
-        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e 
+        <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e
         <a href="#a05tab07" link-type="internal" xml_text="tabela 7">Tabela 7</a>), sendo este resultado consistente com o estudo de Kober et al. (2010).
         <a href="#a05tab07" link-type="internal" xml_text="tabelas 7">Tabelas 7</a> e '
         </root>
@@ -1930,7 +1930,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
             new=stub_get_html_body,
         ):
             text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
-            
+
             a_name_items = xml.findall(".//a[@name]")
             self.assertEqual(len(a_name_items), 2)
             self.assertEqual(a_name_items[0].get("name"), "a05tab01")
@@ -2387,9 +2387,9 @@ class TestSupplementaryMaterial(unittest.TestCase):
         """
         text = """<root>
         <p><bold>Supplementary Information</bold></p>
-        <p></p> 
-        <p>The supplementary material is available in pdf: 
-        [<a href="/pdf/qn/v36n3/a05ms01.pdf" link-type="pdf" 
+        <p></p>
+        <p>The supplementary material is available in pdf:
+        [<a href="/pdf/qn/v36n3/a05ms01.pdf" link-type="pdf"
         xml_text="supplementary material">Supplementary material</a>]</p>
         </root>"""
         xml = etree.fromstring(text)
@@ -2407,18 +2407,18 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
     def test_remove_references_from_body_removes_references_from_body(self):
         text = """
         <body>
-        <p></p>     
-        <p></p>     
-        <p><b>REFERENCES</b></p>      
-        <!-- ref --><p>7. Endean ED, Schwarcz TH, Barker DE, Munfakh NA, Wilson-Neely R, Hyde GL. Hip disarticulation: factors affecting outcome. J Vasc Surg.1991:398-404.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004773&amp;pid=S1646-706X201900020000200007&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>8. Remes L, Isoaho R, Vahlberg T, Viitanen M, Rautava P. Predictors for institutionalization and prosthetic ambulation after major lower extremity amputation during an eight-year follow-up. Aging Clin Exp Res.2009:129-135.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004775&amp;pid=S1646-706X201900020000200008&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>    
-        <!-- ref --><p>10. Moura D, Garruço A. Desarticulação da anca - Análise de uma série e revisão da literatura. Rev Bras Ortop, 2016: 1-5.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004778&amp;pid=S1646-706X201900020000200010&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>11. Dénes Z, Till A. Rehabilitation of patients after hipdisarticulation. Arch Orthop Trauma Surg. 1997:498-499.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004780&amp;pid=S1646-706X201900020000200011&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>12. Fenelon GC, Von Foerster G, Engelbrecht E. Disarticulation ofthe hip as a result of failed arthroplasty. A series of 11 cases. J Bone Joint Surg Br 1980:441-446.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004782&amp;pid=S1646-706X201900020000200012&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>13. Jain R, Grimer RJ, Carter SR, Tillman RM, Abudu AA. Outcome after disarticulation of the hip for sarcomas. Eur J Surg Oncol. 2005:1025-1028.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004784&amp;pid=S1646-706X201900020000200013&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>14. Daigeler A, Lehnhardt M, Khadra A, Hauser J, Steinstraesser L,Langer S, et al. Proximal major limb amputations - a retrospective analysis of 45 oncological cases. World J Surg Oncol. 2009:1-10.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004786&amp;pid=S1646-706X201900020000200014&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>15. Ebrahimzadeh MH, Kachooei AR, Soroush MR, HasankhaniEG, Razi S, Birjandinejad A. Long-term clinical outcomes ofwar-related hip disarticulation and transpelvic amputation. J Bone Joint Surg Am. 2013:1-6.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004788&amp;pid=S1646-706X201900020000200015&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
-        <!-- ref --><p>16. Zalavras CG, Rigopoulos N, Ahlmann E, Patzakis MJ. Hipdisarticulation for severe lower extremity infections. Clin Orthop Relat Res. 2009:1721-1726.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004790&amp;pid=S1646-706X201900020000200016&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>     
+        <p></p>
+        <p></p>
+        <p><b>REFERENCES</b></p>
+        <!-- ref --><p>7. Endean ED, Schwarcz TH, Barker DE, Munfakh NA, Wilson-Neely R, Hyde GL. Hip disarticulation: factors affecting outcome. J Vasc Surg.1991:398-404.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004773&amp;pid=S1646-706X201900020000200007&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>8. Remes L, Isoaho R, Vahlberg T, Viitanen M, Rautava P. Predictors for institutionalization and prosthetic ambulation after major lower extremity amputation during an eight-year follow-up. Aging Clin Exp Res.2009:129-135.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004775&amp;pid=S1646-706X201900020000200008&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>10. Moura D, Garruço A. Desarticulação da anca - Análise de uma série e revisão da literatura. Rev Bras Ortop, 2016: 1-5.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004778&amp;pid=S1646-706X201900020000200010&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>11. Dénes Z, Till A. Rehabilitation of patients after hipdisarticulation. Arch Orthop Trauma Surg. 1997:498-499.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004780&amp;pid=S1646-706X201900020000200011&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>12. Fenelon GC, Von Foerster G, Engelbrecht E. Disarticulation ofthe hip as a result of failed arthroplasty. A series of 11 cases. J Bone Joint Surg Br 1980:441-446.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004782&amp;pid=S1646-706X201900020000200012&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>13. Jain R, Grimer RJ, Carter SR, Tillman RM, Abudu AA. Outcome after disarticulation of the hip for sarcomas. Eur J Surg Oncol. 2005:1025-1028.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004784&amp;pid=S1646-706X201900020000200013&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>14. Daigeler A, Lehnhardt M, Khadra A, Hauser J, Steinstraesser L,Langer S, et al. Proximal major limb amputations - a retrospective analysis of 45 oncological cases. World J Surg Oncol. 2009:1-10.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004786&amp;pid=S1646-706X201900020000200014&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>15. Ebrahimzadeh MH, Kachooei AR, Soroush MR, HasankhaniEG, Razi S, Birjandinejad A. Long-term clinical outcomes ofwar-related hip disarticulation and transpelvic amputation. J Bone Joint Surg Am. 2013:1-6.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004788&amp;pid=S1646-706X201900020000200015&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
+        <!-- ref --><p>16. Zalavras CG, Rigopoulos N, Ahlmann E, Patzakis MJ. Hipdisarticulation for severe lower extremity infections. Clin Orthop Relat Res. 2009:1721-1726.            [&#160;<a href="javascript:void(0);" onclick="javascript: window.open('/scielo.php?script=sci_nlinks&amp;ref=004790&amp;pid=S1646-706X201900020000200016&amp;lng=en','','width=640,height=500,resizable=yes,scrollbars=1,menubar=yes,');">Links</a>&#160;]<!-- end-ref --></p>
         </body>
         """
         article_text = """
@@ -2449,28 +2449,28 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
     def test_remove_references_from_body_does_not_remove_any_paragraph(self):
         text = """
         <body>
-        <p><b>REFERENCES</b></p>      
-        
+        <p><b>REFERENCES</b></p>
+
         <!-- ref -->
-        <p align="LEFT"><font color="000000">1. Vengrenovitch, R.D. <i>Acta Metall.</i>, v. 30, p. 1079-1086, 1982. </font>         
+        <p align="LEFT"><font color="000000">1. Vengrenovitch, R.D. <i>Acta Metall.</i>, v. 30, p. 1079-1086, 1982. </font>
         <!-- end-ref -->
         <!-- ref --></p>
-        <p align="LEFT"><font color="000000">2. Lameiras, F.S. <i>Scripta Metall.</i>, v. 28, p. 1435-1440, 1993. </font>         
+        <p align="LEFT"><font color="000000">2. Lameiras, F.S. <i>Scripta Metall.</i>, v. 28, p. 1435-1440, 1993. </font>
         <!-- end-ref -->
         <!-- ref --></p>
-        <p align="LEFT"><font color="000000">3. Rivier, N.; Lissowski, A. <i>J. Phys. A: Math. Gen.</i>, n. 15, p. L143-L148, 1982. </font>         
+        <p align="LEFT"><font color="000000">3. Rivier, N.; Lissowski, A. <i>J. Phys. A: Math. Gen.</i>, n. 15, p. L143-L148, 1982. </font>
         <!-- end-ref -->
         <!-- ref --></p>
-        <p align="LEFT"><font color="000000">4. Rivier, N. <i>Phil. Mag. B</i>, n. 52, p. 795, 1985. </font>         
+        <p align="LEFT"><font color="000000">4. Rivier, N. <i>Phil. Mag. B</i>, n. 52, p. 795, 1985. </font>
         <!-- end-ref -->
         <!-- ref --></p>
-        <p align="LEFT"><font color="000000">5. Hunderi, O.; Ryum, N. <i>Acta Metall.</i>, v. 29, p. 1737-1745, 1981. </font>         
+        <p align="LEFT"><font color="000000">5. Hunderi, O.; Ryum, N. <i>Acta Metall.</i>, v. 29, p. 1737-1745, 1981. </font>
         <!-- end-ref -->
         <!-- ref --></p>
-        <p align="LEFT"><font color="000000">6. Barnsley, M. <i>Fractals Everywhere</i>, Academic Press, Inc., San Diego, Ca-USA, 1988. </font>         
+        <p align="LEFT"><font color="000000">6. Barnsley, M. <i>Fractals Everywhere</i>, Academic Press, Inc., San Diego, Ca-USA, 1988. </font>
         <!-- end-ref -->
         <!-- ref --></p>
-        <p align="LEFT"><font color="000000">7. Rhines, F.N.; K.R. Craig. <i>Metallurgical Trans.</i>, v. 5, p. 413-425, 1974. </font>         
+        <p align="LEFT"><font color="000000">7. Rhines, F.N.; K.R. Craig. <i>Metallurgical Trans.</i>, v. 5, p. 413-425, 1974. </font>
         <!-- end-ref --> </p></body>
         """
         article_text = """
@@ -2627,7 +2627,7 @@ class TestAssetThumbnailInLinkAndAnchorAndCaption(unittest.TestCase):
          &#13;
         </p>
         <a name="Fig2" id="Fig2"/>
-        Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. <p>[View larger version of this image (340 K JPG file)]</p>  
+        Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or <italic>2</italic>-<italic>deoxy-d-glucose</italic> (2-DG) uptake (bottom) in the lateral (LA) and basolateral (BLA) amygdala. The expression of phosphorylated cAMP response element binding protein (pCREB) in the cortical amygdala (CoA), a component of the olfactory cortex, appears to be heightened by odor exposure. <p>[View larger version of this image (340 K JPG file)]</p>
         <hr align="LEFT" size="2"/>
         </root>"""
         expected = b"""<root xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -2640,7 +2640,7 @@ class TestAssetThumbnailInLinkAndAnchorAndCaption(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         self.assertIsNotNone(xml.find(".//a[@name='Fig2']"))
         self.assertEqual(xml.find(".//a[@name='Fig2']/p").text.strip(), 'Figure 2. During early life (postnatal day 8), pairing an odor with a 0.5-mA shock does not produce a change in pCREB expression (top) or')
-        
+
         self.assertTrue(
             xml.find(".//a[@name='Fig2']/p").getchildren()[-1].tail.endswith(
                 "appears to be heightened by odor exposure. "))
@@ -2660,7 +2660,7 @@ class TestAssetThumbnailInLayoutTableAndLinkInMessage(unittest.TestCase):
         <td>
             <a name="Fig3" id="Fig3"/>
             <img src="/img/revistas/bjmbr/v30n6/2677fig1peq.gif"/>
-        </td> 
+        </td>
         <td>Figure 3 - Gastric retention (%) 15 min after the infusion of test meals containing 2.5% glucose + 2.5% galactose (5% glu + gal), 5% lactose, 5% glucose + 5% galactose (10% glu + gal) or 10% lactose. The rats were fed normal chow (control) or chow with 20% (w/w) lactose (experimental) for four weeks after which time the gastric retention was measured (N = 12 per subgroup). The data are presented as box plots, where the intermediate, lower and upper horizontal lines indicate the median, first and third quartiles of the gastric retention values, respectively, and error bars indicate the maximum and minimum gastric retention values observed. Significant differences between subgroups tested by the Kruskal-Wallis test (P&lt;0.10) followed by the multiple comparisons test (P&lt;0.02) are indicated in the figure.</td> </tr>
         </table>
         <p>
@@ -2736,7 +2736,7 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(unittest.Te
             <td>
               <a name="Fig1" id="Fig1"/>
             <img src="/img/revistas/bjmbr/v30n2/2635fig1.gif"/>
-          </td> 
+          </td>
           <td>Figure 1 - Effects of peripheral <sub>post-trial</sub> administration of</td>
           </tr>
         </table>
@@ -2774,7 +2774,7 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.Te
             <a id="2560fig1" name="2560fig1"/>
 
         <p align="center">
-          <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n1/2560fig1.gif" 
+          <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n1/2560fig1.gif"
           imported="true" link-type="external"/> </p>
 
         <p>Figure 1 - Effect of dexamethasone pretreatment on
@@ -2825,7 +2825,7 @@ class TestAssetThumbnailInLayoutImgAndCaptionAndMessage(unittest.TestCase):
             <a id="2560fig1" name="2560fig1"/>
 
         <p align="center">
-          <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n1/2560fig1.gif" 
+          <img src="http://www.scielo.br/img/fbpe/bjmbr/v30n1/2560fig1.gif"
           imported="true" link-type="external"/> </p>
 
         <p>Figure 1 - Effect of dexamethasone pretreatment on
@@ -2876,7 +2876,7 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.Te
         </table></root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
-        
+
         self.assertIsNotNone(xml.find(".//a[@name='Fig1']"))
         p_text = xml.find(".//a[@name='Fig1']/p").text.strip()
         self.assertTrue(
@@ -2888,3 +2888,31 @@ class TestRemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(unittest.Te
         self.assertIsNotNone(
             xml.find(
                 ".//a[@name='Fig1']/img[@src='/img/revistas/bjmbr/v31n12/3156i01.gif']"))
+
+
+class TestFixOutSitetablePiep(unittest.TestCase):
+
+    def test_move_table_when_not_aligned_table_wrap(self):
+        text = """<root>
+            <p align="center">
+                <table-wrap name="Tab1" id="Tab1" xml_text="table 1" xml_tag="table-wrap" xml_reftype="table" xml_id="Tab1" xml_label="table 1" status="identify-content">
+                    <bold label-of="Tab1" content-type="label">Table 1</bold> - Protein-related sites.
+                </table-wrap><br/>
+            </p>
+            <p>
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>
+                            <p align="center">
+                                <bold>URL</bold>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </p></root>"""
+
+        xml = etree.fromstring(text)
+        pl = ConvertElementsWhichHaveIdPipeline()
+        text, xml = pl.FixOutSideTablePipe().transform((text, xml))
+        self.assertIn('table',
+                      [tag.tag for tag in xml.find(".//table-wrap/p").getchildren()])
