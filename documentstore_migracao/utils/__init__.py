@@ -1,14 +1,15 @@
 import gzip
 
 from documentstore.domain import utcnow
+from documentstore.services import DocumentRenditions
 
 
-def _add_change(session, instance, entity):
+def _add_change(session, instance, entity, id=None):
     session.changes.add(
         {
             "timestamp": utcnow(),
             "entity": entity,
-            "id": instance.id(),
+            "id": id or instance.id(),
             "content_gz": gzip.compress(instance.data_bytes()),
             "content_type": instance.data_type,
         }
@@ -40,10 +41,17 @@ def update_bundle(session, bundle):
     _add_change(session, bundle, "DocumentsBundle")
 
 
+def add_renditions(session, document):
+    _add_change(
+        session, DocumentRenditions(document), "DocumentRendition", document.id()
+    )
+
+
 __all__ = [
     "add_document",
     "add_journal",
     "update_journal",
     "add_bundle",
     "update_bundle",
+    "add_renditions",
 ]
