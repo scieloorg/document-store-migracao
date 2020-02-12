@@ -43,9 +43,9 @@ def ext_article(code, **ext_params):
 
 
 def ext_article_json(code, **ext_params):
-    article = ext_article(code, **ext_params)
+    article = ext_article(code, format="json", **ext_params)
     if article:
-        return article.json()
+        return article.text
 
 
 def ext_article_txt(code, **ext_params):

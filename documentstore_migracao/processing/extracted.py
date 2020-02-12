@@ -20,6 +20,12 @@ class PoisonPill:
 
 
 def get_and_write(pid, stage_path, poison_pill):
+
+    def save_file(stage_path, file_path, documents_pid, article_content):
+        logger.debug("\t Salvando arquivo '%s'", file_path)
+        files.write_file(file_path, article_content)
+        files.register_latest_stage(stage_path, documents_pid)
+
     if poison_pill.poisoned:
         return
 
@@ -27,12 +33,22 @@ def get_and_write(pid, stage_path, poison_pill):
 
     logger.debug("\t coletando dados do Documento '%s'", documents_pid)
     xml_article = article.ext_article_txt(documents_pid)
-
     if xml_article:
-        file_path = os.path.join(config.get("SOURCE_PATH"), "%s.xml" % documents_pid)
-        logger.debug("\t Salvando arquivo '%s'", file_path)
-        files.write_file(file_path, xml_article)
-        files.register_latest_stage(stage_path, documents_pid)
+        save_file(
+            stage_path,
+            os.path.join(config.get("SOURCE_PATH"), "%s.xml" % documents_pid),
+            documents_pid,
+            xml_article,
+        )
+
+    json_article = article.ext_article_json(documents_pid)
+    if json_article:
+        save_file(
+            stage_path,
+            os.path.join(config.get("SOURCE_PATH"), "%s.json" % documents_pid),
+            documents_pid,
+            json_article,
+        )
 
 
 def extract_all_data(list_documents_pids: List[str]):
