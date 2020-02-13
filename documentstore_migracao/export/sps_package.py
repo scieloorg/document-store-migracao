@@ -476,13 +476,22 @@ class SPS_Package:
 
     @documents_bundle_pubdate.setter
     def documents_bundle_pubdate(self, value):
-        xpaths_attrs_to_set = {
-            "sps-1.9": (
-                ("publication-format", "electronic"), ("date-type", "collection"),),
-            "sps-1.8": (("pub-type", "collection"),),
-            "other": (("pub-type", "epub-ppub"),),
-        }
-        self._set_pub_date(xpaths_attrs_to_set, value)
+        if value is None:
+            xpaths = (
+                'pub-date[@pub-type="epub-ppub"]',
+                'pub-date[@pub-type="collection"]',
+                'pub-date[@date-type="collection"]',
+            )
+            pubdate_node = self._match_pubdate(xpaths)
+            self.article_meta.remove(pubdate_node)
+        else:
+            xpaths_attrs_to_set = {
+                "sps-1.9": (
+                    ("publication-format", "electronic"), ("date-type", "collection"),),
+                "sps-1.8": (("pub-type", "collection"),),
+                "other": (("pub-type", "epub-ppub"),),
+            }
+            self._set_pub_date(xpaths_attrs_to_set, value)
 
     @property
     def languages(self):
