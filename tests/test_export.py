@@ -97,7 +97,7 @@ class TestExportArticle(unittest.TestCase):
     def test_ext_article_json(self, mk_ext_article):
 
         result = article.ext_article_json("S0036-36341997000100001")
-        mk_ext_article.assert_called_once_with("S0036-36341997000100001")
+        mk_ext_article.assert_called_once_with("S0036-36341997000100001", format="json")
 
     @patch("documentstore_migracao.export.article.ext_article")
     def test_ext_article_json_returns_none_if_no_ext_article(self, mk_ext_article):

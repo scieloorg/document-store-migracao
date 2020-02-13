@@ -1536,6 +1536,16 @@ class Test_DocumentsBundlePubdateSPS1_9(unittest.TestCase):
         self.sps_package.documents_bundle_pubdate = ("2012", "", "")
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
 
+    def test_set_documents_bundle_pubdate_to_none(self):
+        self.xml = """<article specific-use="sps-1.9"><article-meta>
+            <pub-date publication-format="electronic" date-type="collection">
+                <year>2010</year><month>5</month></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+        self.sps_package.documents_bundle_pubdate = None
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("", "", ""))
+
 
 class Test_DocumentsBundlePubdateSPS1_8(unittest.TestCase):
     def setUp(self):
@@ -1557,6 +1567,16 @@ class Test_DocumentsBundlePubdateSPS1_8(unittest.TestCase):
         self.sps_package.documents_bundle_pubdate = ("2012", "", "")
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
 
+    def test_set_documents_bundle_pubdate_to_none(self):
+        self.xml = """<article specific-use="sps-1.8"><article-meta>
+            <pub-date pub-type="collection">
+                <year>2010</year><month>5</month></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+        self.sps_package.documents_bundle_pubdate = None
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("", "", ""))
+
 
 class Test_DocumentsBundlePubdateSPS1_4(unittest.TestCase):
     def setUp(self):
@@ -1577,6 +1597,16 @@ class Test_DocumentsBundlePubdateSPS1_4(unittest.TestCase):
     def test_set_incomplete_documents_bundle_pubdate(self):
         self.sps_package.documents_bundle_pubdate = ("2012", "", "")
         self.assertEqual(self.sps_package.documents_bundle_pubdate, ("2012", "", ""))
+
+    def test_set_documents_bundle_pubdate_to_none(self):
+        self.xml = """<article specific-use="sps-1.4"><article-meta>
+            <pub-date pub-type="epub-ppub">
+                <year>2010</year><month>5</month></pub-date>
+        </article-meta></article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+        self.sps_package.documents_bundle_pubdate = None
+        self.assertEqual(self.sps_package.documents_bundle_pubdate, ("", "", ""))
 
 
 @mock.patch(
