@@ -1,0 +1,847 @@
+{
+    "article": {
+        "v709": [
+            {
+                "_": "text"
+            }
+        ],
+        "v882": [
+            {
+                "_": "",
+                "n": "1",
+                "v": "39"
+            }
+        ],
+        "v1": [
+            {
+                "_": "br1.1"
+            }
+        ],
+        "v992": [
+            {
+                "_": "spa"
+            }
+        ],
+        "v121": [
+            {
+                "_": "01"
+            }
+        ],
+        "v10": [
+            {
+                "s": "Sep\u00falveda",
+                "1": "A01",
+                "_": "",
+                "n": "Jaime",
+                "r": "ND"
+            }
+        ],
+        "v705": [
+            {
+                "_": "S"
+            }
+        ],
+        "v91": [
+            {
+                "_": "20010808"
+            }
+        ],
+        "v30": [
+            {
+                "_": "Salud p\u00fablica M\u00e9x"
+            }
+        ],
+        "v936": [
+            {
+                "i": "0036-3634",
+                "o": "1",
+                "y": "1997",
+                "_": ""
+            }
+        ],
+        "v120": [
+            {
+                "_": "3.0"
+            }
+        ],
+        "v14": [
+            {
+                "l": "1",
+                "_": "",
+                "f": "1"
+            }
+        ],
+        "v31": [
+            {
+                "_": "39"
+            }
+        ],
+        "v4": [
+            {
+                "_": "v39n1"
+            }
+        ],
+        "v700": [
+            {
+                "_": "2"
+            }
+        ],
+        "v702": [
+            {
+                "_": "C:\\SciELO\\Serial\\spm\\v39n1\\markup\\edit.htm"
+            }
+        ],
+        "v706": [
+            {
+                "_": "h"
+            }
+        ],
+        "v35": [
+            {
+                "_": "0036-3634"
+            }
+        ],
+        "v65": [
+            {
+                "_": "19970100"
+            }
+        ],
+        "v12": [
+            {
+                "l": "es",
+                "_": "EDITORIAL"
+            }
+        ],
+        "v49": [
+            {
+                "_": "SPM070"
+            }
+        ],
+        "v70": [
+            {
+                "i": "A01",
+                "p": "Mexico",
+                "_": "Instituto Nacional de Salud P\u00fablica"
+            }
+        ],
+        "v32": [
+            {
+                "_": "1"
+            }
+        ],
+        "v2": [
+            {
+                "_": "S0036-3634(97)03900101"
+            }
+        ],
+        "v40": [
+            {
+                "_": "es"
+            }
+        ],
+        "v977": [
+            {
+                "l": "es",
+                "_": "EDITORIAL"
+            }
+        ],
+        "v708": [
+            {
+                "_": "1"
+            }
+        ],
+        "v123": [
+            {
+                "_": "2"
+            }
+        ],
+        "v158": [
+            {
+                "_": "nd"
+            }
+        ],
+        "v38": [
+            {
+                "_": "ND"
+            }
+        ],
+        "v880": [
+            {
+                "_": "S0036-36341997000100001"
+            }
+        ],
+        "v701": [
+            {
+                "_": "1"
+            }
+        ],
+        "v71": [
+            {
+                "_": "ed"
+            }
+        ],
+        "v42": [
+            {
+                "_": "1"
+            }
+        ]
+    },
+    "title": {
+        "v950": [
+            {
+                "_": "sonia.reis"
+            }
+        ],
+        "v943": [
+            {
+                "_": "20170620"
+            }
+        ],
+        "v951": [
+            {
+                "_": "sonia.reis"
+            }
+        ],
+        "v540": [
+            {
+                "l": "en",
+                "_": "",
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-sa/4.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png\" /></a><br />This work is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>."
+            },
+            {
+                "l": "es",
+                "_": "",
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-sa/4.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png\" /></a><br />This work is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>."
+            },
+            {
+                "l": "pt",
+                "_": "",
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-sa/4.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png\" /></a><br />This work is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>."
+            }
+        ],
+        "v10": [
+            {
+                "_": "br1.1"
+            }
+        ],
+        "v930": [
+            {
+                "_": "spm"
+            }
+        ],
+        "v69": [
+            {
+                "_": "http://saludpublica.mx/insp/index.php/spm"
+            }
+        ],
+        "v940": [
+            {
+                "_": "19990608"
+            }
+        ],
+        "v330": [
+            {
+                "_": "CT"
+            }
+        ],
+        "v441": [
+            {
+                "_": "Health Sciences"
+            }
+        ],
+        "v480": [
+            {
+                "_": "Instituto Nacional de Salud P\u00fablica"
+            }
+        ],
+        "collection": "spa",
+        "v435": [
+            {
+                "_": "0036-3634",
+                "t": "PRINT"
+            }
+        ],
+        "v117": [
+            {
+                "_": "vancouv"
+            }
+        ],
+        "scimago_id": "19317",
+        "v901": [
+            {
+                "l": "en",
+                "_": "To publish articles both in English and Spanish related to public health topics, in the form of full-length original research papers, brief communications, review articles, essays, updates, classics, indicators, health news, book reviews and letters to the editor. Bi-monthly publication."
+            },
+            {
+                "l": "pt",
+                "_": "Publicar textos, em espanhol e em ingl\u00eas, sobre temas relacionados com a sa\u00fade p\u00fablica, na forma de editoriais, artigos originais, comunica\u00e7\u00f5es breves, artigos de revis\u00e3o, ensaios, atualiza\u00e7\u00f5es, cl\u00e1ssicos, indicadores, not\u00edcias, resenhas bibliogr\u00e1ficas e cartas ao editor. Publica\u00e7\u00e3o bimestral."
+            },
+            {
+                "l": "es",
+                "_": "Publicar textos, en espa\u00f1ol y en ingl\u00e9s, sobre temas relacionados con la salud p\u00fablica, en forma de editoriales, art\u00edculos originales, breves, y de revisi\u00f3n, ensayos, actualizaciones, cl\u00e1sicos, indicadores, noticias, rese\u00f1as bibliogr\u00e1ficas y cartas al editor. Publicaci\u00f3n bimestral."
+            }
+        ],
+        "processing_date": "2017-02-20",
+        "v240": [
+            {
+                "_": "Salud p\u00fablica M\u00e9x"
+            },
+            {
+                "_": "SPM. Salud Publica de Mexico"
+            }
+        ],
+        "v380": [
+            {
+                "_": "B"
+            }
+        ],
+        "v854": [
+            {
+                "_": "Health Policy & Services"
+            }
+        ],
+        "v490": [
+            {
+                "_": "Cuernavaca"
+            }
+        ],
+        "v51": [
+            {
+                "c": "20010701",
+                "d": "C",
+                "a": "20010101",
+                "b": "C",
+                "_": ""
+            }
+        ],
+        "v941": [
+            {
+                "_": "20170220"
+            }
+        ],
+        "v302": [
+            {
+                "_": "1"
+            }
+        ],
+        "v880": [
+            {
+                "_": "0036-3634"
+            }
+        ],
+        "created_at": "1999-06-08",
+        "v150": [
+            {
+                "_": "Salud p\u00fablica M\u00e9x"
+            }
+        ],
+        "v66": [
+            {
+                "_": "art"
+            }
+        ],
+        "v50": [
+            {
+                "_": "C"
+            }
+        ],
+        "v100": [
+            {
+                "_": "Salud P\u00fablica de M\u00e9xico"
+            }
+        ],
+        "v992": [
+            {
+                "_": "spa"
+            }
+        ],
+        "v400": [
+            {
+                "_": "0036-3634"
+            }
+        ],
+        "v301": [
+            {
+                "_": "1959"
+            }
+        ],
+        "v421": [
+            {
+                "_": "Salud Publica Mex."
+            }
+        ],
+        "v303": [
+            {
+                "_": "1"
+            }
+        ],
+        "v6": [
+            {
+                "_": "c"
+            }
+        ],
+        "v310": [
+            {
+                "_": "MX"
+            }
+        ],
+        "v942": [
+            {
+                "_": "19990608"
+            }
+        ],
+        "v541": [
+            {
+                "_": "BY-NC-SA/4.0"
+            }
+        ],
+        "v35": [
+            {
+                "_": "PRINT"
+            }
+        ],
+        "code": "0036-3634",
+        "updated_date": "2016-05-24",
+        "v5": [
+            {
+                "_": "S"
+            }
+        ],
+        "v440": [
+            {
+                "_": "SAUDE PUBLICA"
+            }
+        ],
+        "v935": [
+            {
+                "_": "0036-3634"
+            }
+        ],
+        "v230": [
+            {
+                "_": "Public Health of Mexico"
+            }
+        ],
+        "v151": [
+            {
+                "_": "Salud p\u00fablica M\u00e9x"
+            }
+        ],
+        "v85": [
+            {
+                "_": "nd"
+            }
+        ],
+        "v350": [
+            {
+                "_": "en"
+            },
+            {
+                "_": "es"
+            }
+        ],
+        "v320": [
+            {
+                "_": "Morelos"
+            }
+        ],
+        "v64": [
+            {
+                "_": "spm@insp3.insp.mx"
+            }
+        ],
+        "v67": [
+            {
+                "_": "na"
+            }
+        ],
+        "v62": [
+            {
+                "_": "Instituto Nacional de Salud P\u00fablica"
+            }
+        ],
+        "v63": [
+            {
+                "_": "Av. Universidad 655, Edificio de Gobierno, Planta Baja, Col. Santa Mar\u00eda Ahuacatitl\u00e1n, Cuernavaca, Morelos, MX, 62508, (52 73) 17-5745"
+            }
+        ],
+        "updated_at": "2017-08-10",
+        "v450": [
+            {
+                "_": "CURRENT CONTENTS/SOCIAL AND BEHAVIORAL SCIENCES"
+            },
+            {
+                "_": "SOCIAL SCIENCES CITATION INDEX"
+            },
+            {
+                "_": "RESEARH ALERT"
+            },
+            {
+                "_": "INDEX MEDICUS"
+            },
+            {
+                "_": "INDEX MEDICUS LATINOAMERICANO"
+            },
+            {
+                "_": "EMBASE/EXCERPTA MEDICA"
+            },
+            {
+                "_": "CAB HEALTH/CAB ABSTRACT"
+            },
+            {
+                "_": "EUROPEAN CLEARING HOUSE ON HEALTH SYSTEMS REFORMS"
+            },
+            {
+                "_": "INDICE DE REVISTAS MEXICANAS DE INVESTIGACI\u00d3N CIENT\u00cdFICA Y TECNOL\u00d3GICA DEL CONACYT"
+            },
+            {
+                "_": "BIBLIOMEX-SALUD"
+            },
+            {
+                "_": "PERI\u00d3DICA"
+            },
+            {
+                "_": "INDICE DE REVISTAS DE EDUCACI\u00d3N SUPERIOR E INVESTIGACI\u00d3N EDUCATIVA (IRESIE)"
+            },
+            {
+                "_": "MEDLINE"
+            },
+            {
+                "_": "LILACS"
+            },
+            {
+                "_": "ARTEMISA"
+            }
+        ],
+        "v68": [
+            {
+                "_": "spm"
+            }
+        ],
+        "v140": [
+            {
+                "_": "Instituto Nacional de Salud Publica (INSP)"
+            }
+        ],
+        "issns": [
+            "0036-3634"
+        ]
+    },
+    "version": "html",
+    "validated_scielo": "False",
+    "created_at": "2001-08-08",
+    "processing_date": "2001-08-08",
+    "fulltexts": {
+        "html": {
+            "es": "http://www.scielosp.org/scielo.php?script=sci_arttext&pid=S0036-36341997000100001&tlng=es"
+        }
+    },
+    "issue": {
+        "issue": {
+            "v48": [
+                {
+                    "l": "es",
+                    "h": "Sumario",
+                    "_": ""
+                },
+                {
+                    "l": "pt",
+                    "h": "Sum\u00e1rio",
+                    "_": ""
+                },
+                {
+                    "l": "en",
+                    "h": "Table of Contents",
+                    "_": ""
+                }
+            ],
+            "v480": [
+                {
+                    "_": "Instituto Nacional de Salud P\u00fablica"
+                }
+            ],
+            "v992": [
+                {
+                    "_": "spa"
+                }
+            ],
+            "v930": [
+                {
+                    "_": "SPM"
+                }
+            ],
+            "v36": [
+                {
+                    "_": "19971"
+                }
+            ],
+            "v421": [
+                {
+                    "_": "Salud p\u00fablica M\u00e9x"
+                }
+            ],
+            "v30": [
+                {
+                    "_": "Salud p\u00fablica M\u00e9x"
+                }
+            ],
+            "v6": [
+                {
+                    "_": "001"
+                }
+            ],
+            "v991": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "39"
+                }
+            ],
+            "v4": [
+                {
+                    "_": "v39n1"
+                }
+            ],
+            "v700": [
+                {
+                    "_": "0"
+                }
+            ],
+            "v117": [
+                {
+                    "_": "other"
+                }
+            ],
+            "v706": [
+                {
+                    "_": "i"
+                }
+            ],
+            "v35": [
+                {
+                    "_": "0036-3634"
+                }
+            ],
+            "v200": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v91": [
+                {
+                    "_": "20010808"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "19970100"
+                }
+            ],
+            "v49": [
+                {
+                    "l": "es",
+                    "c": "SPM010",
+                    "_": "",
+                    "t": "Art\u00edculos originales"
+                },
+                {
+                    "l": "es",
+                    "c": "SPM030",
+                    "_": "",
+                    "t": "Ensayos"
+                },
+                {
+                    "l": "es",
+                    "c": "SPM040",
+                    "_": "",
+                    "t": "Actualizaciones"
+                },
+                {
+                    "l": "es",
+                    "c": "SPM050",
+                    "_": "",
+                    "t": "Art\u00edculos especiales"
+                },
+                {
+                    "l": "es",
+                    "c": "SPM060",
+                    "_": "",
+                    "t": "Indicadores"
+                },
+                {
+                    "l": "es",
+                    "c": "SPM070",
+                    "_": "",
+                    "t": "Editorial"
+                },
+                {
+                    "l": "es",
+                    "c": "SPM150",
+                    "_": "",
+                    "t": "Art\u00edculos breves"
+                },
+                {
+                    "l": "en",
+                    "c": "SPM010",
+                    "_": "",
+                    "t": "Original articles"
+                },
+                {
+                    "l": "en",
+                    "c": "SPM030",
+                    "_": "",
+                    "t": "Essays"
+                },
+                {
+                    "l": "en",
+                    "c": "SPM040",
+                    "_": "",
+                    "t": "Updates"
+                },
+                {
+                    "l": "en",
+                    "c": "SPM050",
+                    "_": "",
+                    "t": "Special articles"
+                },
+                {
+                    "l": "en",
+                    "c": "SPM060",
+                    "_": "",
+                    "t": "Indicators"
+                },
+                {
+                    "l": "en",
+                    "c": "SPM070",
+                    "_": "",
+                    "t": "Editorial"
+                },
+                {
+                    "l": "en",
+                    "c": "SPM150",
+                    "_": "",
+                    "t": "Short papers"
+                }
+            ],
+            "v43": [
+                {
+                    "m": "ene./feb.",
+                    "a": "1997",
+                    "n": "n.1",
+                    "t": "Salud p\u00fablica M\u00e9x",
+                    "l": "es",
+                    "c": "Cuernavaca",
+                    "_": "",
+                    "v": "v.39"
+                },
+                {
+                    "m": "jan./fev.",
+                    "a": "1997",
+                    "n": "n.1",
+                    "t": "Salud p\u00fablica M\u00e9x",
+                    "l": "pt",
+                    "c": "Cuernavaca",
+                    "_": "",
+                    "v": "v.39"
+                },
+                {
+                    "m": "Jan./Feb.",
+                    "a": "1997",
+                    "n": "n.1",
+                    "t": "Salud p\u00fablica M\u00e9x",
+                    "l": "en",
+                    "c": "Cuernavaca",
+                    "_": "",
+                    "v": "vol.39"
+                }
+            ],
+            "v230": [
+                {
+                    "_": "Public Health of Mexico"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v85": [
+                {
+                    "_": "nd"
+                }
+            ],
+            "v122": [
+                {
+                    "_": "15"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "0036-363419970001"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v151": [
+                {
+                    "_": "Salud p\u00fablica M\u00e9x"
+                }
+            ],
+            "v130": [
+                {
+                    "_": "Salud P\u00fablica de M\u00e9xico"
+                }
+            ],
+            "v42": [
+                {
+                    "_": "1"
+                }
+            ]
+        },
+        "created_at": "2001-08-08",
+        "processing_date": "2001-08-08",
+        "publication_year": "1997",
+        "publication_date": "1997-01",
+        "collection": "spa",
+        "code_title": [
+            "0036-3634"
+        ],
+        "code": "0036-363419970001",
+        "issue_type": "regular",
+        "_shard_id": "d8d458a8197b42daab954c529654a786"
+    },
+    "code_title": [
+        "0036-3634"
+    ],
+    "doi": "10.1590/S0036-36341997000100001",
+    "license": "by/3.0",
+    "applicable": "True",
+    "validated_wos": "False",
+    "citations": [],
+    "updated_at": "2017-08-29",
+    "sent_wos": "False",
+    "normalized": {
+        "article": {
+            "v70": {
+                "p": [
+                    true
+                ]
+            }
+        }
+    },
+    "code_issue": "0036-363419970001",
+    "publication_year": "1997",
+    "collection": "spa",
+    "code": "S0036-36341997000100001",
+    "section": {
+        "es": "Editorial",
+        "en": "Editorial"
+    },
+    "document_type": "editorial"
+}
