@@ -58,8 +58,19 @@ class TestProcessingConversion(unittest.TestCase):
         )
         self.assertTrue(os.path.exists(new_file_xml_path))
 
+    def test_convert_article_xml_completes_pubdate(self):
+        file_xml_path = os.path.join(SAMPLES_PATH, "S0036-36341997000100001.xml")
+        with utils.environ(
+            SOURCE_PATH=SAMPLES_PATH, CONVERSION_PATH=self.conversion_path
+        ):
+            conversion.convert_article_xml(file_xml_path)
 
+        new_file_xml_path = os.path.join(
+            self.conversion_path, "S0036-36341997000100001.es.xml"
         )
+        xmltree = etree.parse(new_file_xml_path, etree.XMLParser())
+        self.assertIsNotNone(xmltree.find('.//pub-date[@date-type="pub"]'))
+        self.assertIsNotNone(xmltree.find('.//pub-date[@date-type="collection"]'))
 
     @patch("documentstore_migracao.processing.conversion.convert_article_xml")
     def test_convert_article_ALLxml(self, mk_convert_article_xml):

@@ -60,7 +60,7 @@ venusian==1.2.0
 waitress==1.2.1
 WebOb==1.8.5
 WebTest==2.0.33
-xylose==1.35.1
+-e git+https://github.com/scieloorg/xylose.git@1.35.8#egg=xylose
 zope.deprecation==4.4.0
 zope.interface==4.6.0
 fs==2.4.5
