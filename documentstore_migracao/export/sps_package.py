@@ -433,7 +433,7 @@ class SPS_Package:
         pubdate_node = etree.Element("pub-date")
         for attr in attrs:
             pubdate_node.set(*attr)
-        for tag, val in zip(["year", "month", "day"], value):
+        for tag, val in zip(["day", "month", "year"], value[::-1]):
             if len(val) > 0:
                 new_node = etree.Element(tag)
                 new_node.text = val
