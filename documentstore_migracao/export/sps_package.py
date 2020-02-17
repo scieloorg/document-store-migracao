@@ -493,6 +493,28 @@ class SPS_Package:
             }
             self._set_pub_date(xpaths_attrs_to_set, value)
 
+    def complete_pub_date(self, document_pubdate, issue_pubdate):
+        # Verificar data de publicação e da coleção
+        if len("".join(self.document_pubdate)) == 0 and document_pubdate is not None:
+            logger.debug(
+                'Updating document with document pub date "%s"', document_pubdate,
+            )
+            self.document_pubdate = document_pubdate
+
+        if self.is_ahead_of_print:
+            if len("".join(self.documents_bundle_pubdate)) > 0:
+                logger.debug("Removing collection date from ahead of print document")
+                self.documents_bundle_pubdate = None
+        else:
+            if (
+                len("".join(self.documents_bundle_pubdate)) == 0
+                and issue_pubdate is not None
+            ):
+                logger.debug(
+                    'Updating document with collection date "%s"', issue_pubdate
+                )
+                self.documents_bundle_pubdate = issue_pubdate
+
     @property
     def languages(self):
         """The language of the main document plus all translations.

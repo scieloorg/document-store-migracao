@@ -1656,6 +1656,87 @@ class TestTransformContent(unittest.TestCase):
         mk_sps_package_move_appedix.assert_called_once()
 
 
+class TestCompletePubDate(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9"><article-meta>
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v2">S0074-02761962000200006</article-id>
+            {volume}
+            {issue}
+            {pub_date_collection}
+            {pub_date_pub}
+        </article-meta></article>"""
+
+    def test_adds_document_pubdate_if_date_not_in_xml(self):
+        volume = "<volume>50</volume>"
+        issue = "<issue>1</issue>"
+        pub_date_collection = """<pub-date date-type="collection" publication-format="electronic">
+            <year>2010</year>
+        </pub-date>"""
+        xml_txt = self.xml.format(
+            volume=volume,
+            issue=issue,
+            pub_date_collection=pub_date_collection,
+            pub_date_pub="",
+        )
+        xmltree = etree.fromstring(xml_txt)
+        xml_sps = SPS_Package(xmltree, None)
+        xml_sps.complete_pub_date(("2020", "01", "24"), None)
+        self.assertEqual(xml_sps.document_pubdate, ("2020", "01", "24"))
+        self.assertEqual(xml_sps.documents_bundle_pubdate, ("2010", "", ""))
+
+    def test_does_not_change_document_pubdate_if_document_pubdate_is_none(self):
+        volume = "<volume>50</volume>"
+        issue = "<issue>1</issue>"
+        pub_date_collection = """<pub-date date-type="collection" publication-format="electronic">
+            <year>2010</year>
+        </pub-date>"""
+        xml_txt = self.xml.format(
+            volume=volume,
+            issue=issue,
+            pub_date_collection=pub_date_collection,
+            pub_date_pub="",
+        )
+        xmltree = etree.fromstring(xml_txt)
+        xml_sps = SPS_Package(xmltree, None)
+        xml_sps.complete_pub_date(None, None)
+        self.assertEqual(xml_sps.document_pubdate, ("", "", ""))
+        self.assertEqual(xml_sps.documents_bundle_pubdate, ("2010", "", ""))
+
+    def test_fixes_bundle_pubdate_if_it_is_aop(self):
+        pub_date_collection = """<pub-date date-type="collection" publication-format="electronic">
+            <year>2010</year><month>5</month><day>13</day>
+        </pub-date>"""
+        xml_txt = self.xml.format(
+            volume="",
+            issue="",
+            pub_date_collection=pub_date_collection,
+            pub_date_pub="",
+        )
+        xmltree = etree.fromstring(xml_txt)
+        xml_sps = SPS_Package(xmltree, None)
+        xml_sps.complete_pub_date(("2020", "01", "24"), ("1997", "03", ""))
+        self.assertEqual(xml_sps.document_pubdate, ("2020", "01", "24"))
+        self.assertEqual(xml_sps.documents_bundle_pubdate, ("", "", ""))
+
+    def test_adds_bundle_pubdate_if_date_not_in_xml(self):
+        volume = "<volume>50</volume>"
+        issue = "<issue>1</issue>"
+        pub_date_pub = """<pub-date date-type="pub" publication-format="electronic">
+            <year>2010</year><month>5</month><day>13</day>
+        </pub-date>"""
+        xml_txt = self.xml.format(
+            volume=volume,
+            issue=issue,
+            pub_date_collection="",
+            pub_date_pub=pub_date_pub,
+        )
+        xmltree = etree.fromstring(xml_txt)
+        xml_sps = SPS_Package(xmltree, None)
+        xml_sps.complete_pub_date(("2010", "05", "13"), ("1997", "03", ""))
+        self.assertEqual(xml_sps.document_pubdate, ("2010", "05", "13"))
+        self.assertEqual(xml_sps.documents_bundle_pubdate, ("1997", "03", ""))
+
+
 class TestMoveAppendixFromBodyToBack(unittest.TestCase):
     def setUp(self):
         self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
