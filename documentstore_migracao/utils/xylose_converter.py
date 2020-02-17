@@ -1,8 +1,9 @@
 import logging
+import json
 from typing import List
 from datetime import datetime
 from documentstore_migracao.utils import scielo_ids_generator
-from xylose.scielodocument import Journal, Issue
+from xylose.scielodocument import Journal, Issue, Article
 
 logger = logging.getLogger(__name__)
 
@@ -261,3 +262,8 @@ def find_documents_bundles(journal: dict, issues: List[Issue]):
             issues_ids.append(issue_to_kernel(issue).get("id"))
 
     return issues_ids
+
+
+def json_file_to_xylose_article(json_file_path):
+    with open(json_file_path) as json_file:
+        return Article(json.load(json_file))

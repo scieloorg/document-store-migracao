@@ -1,11 +1,15 @@
 from copy import deepcopy
 import unittest
+import json
+from pathlib import Path
+
 from documentstore_migracao.utils.xylose_converter import (
     journal_to_kernel,
     issue_to_kernel,
     parse_date,
     get_journal_issns_from_issue,
     find_documents_bundles,
+    json_file_to_xylose_article,
 )
 from xylose.scielodocument import Journal, Issue
 from . import SAMPLE_ISSUES_JSON, SAMPLE_KERNEL_JOURNAL, SAMPLE_ISSUES_KERNEL
@@ -290,3 +294,14 @@ class TestFindDocumentBundles(unittest.TestCase):
         issues = [Issue({"issue": self.issue_json})]
         journal_issues = find_documents_bundles(SAMPLE_KERNEL_JOURNAL, issues)
         self.assertListEqual([], journal_issues)
+
+
+class TestJsonFileToXyloseArticle(unittest.TestCase):
+    def setUp(self):
+        self.json_file_path = Path("./tests/samples/S0036-36341997000100001.json")
+
+    def test_should_return_xylose_article(self):
+        article = json_file_to_xylose_article(self.json_file_path)
+        with self.json_file_path.open() as json_file:
+            article_data = json.load(json_file)
+            self.assertEqual(article.data, article_data)
