@@ -15,7 +15,7 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def complete_pub_date(xml_sps):
+def get_article_dates(article):
     def _parse_date(str_date):
         _str_date = "".join(str_date.split("-"))
         return (
@@ -26,39 +26,14 @@ def complete_pub_date(xml_sps):
             else "",
         )
 
-    json_file_path = Path(config.get("SOURCE_PATH")).joinpath(
-        Path(xml_sps.scielo_pid_v2 + ".json")
+    document_pubdate = (
+        article.document_publication_date
+        or article.creation_date
+        or article.update_date
     )
-    with json_file_path.open() as json_file:
-        article = Article(json.load(json_file))
-
-    # Verificar data de publicação e da coleção
-    if len("".join(xml_sps.document_pubdate)) == 0:
-        document_pubdate = (
-            article.document_publication_date
-            or article.creation_date
-            or article.update_date
-        )
-        if document_pubdate is not None:
-            logger.debug(
-                'Updating document with document pub date "%s"', document_pubdate,
-            )
-            xml_sps.document_pubdate = _parse_date(document_pubdate)
-
-    if xml_sps.is_ahead_of_print:
-        if len("".join(xml_sps.documents_bundle_pubdate)) > 0:
-            logger.debug("Removing collection date from ahead of print document")
-            xml_sps.documents_bundle_pubdate = None
-    else:
-        if len("".join(xml_sps.documents_bundle_pubdate)) == 0:
-            if article.issue_publication_date is not None:
-                logger.debug(
-                    'Updating document with collection date "%s"',
-                    article.issue_publication_date,
-                )
-                xml_sps.documents_bundle_pubdate = _parse_date(
-                    article.issue_publication_date
-                )
+    document_pubdate = _parse_date(document_pubdate) if document_pubdate else None
+    issue_pubdate = _parse_date(article.issue_publication_date)
+    return document_pubdate, issue_pubdate
 
 
 def convert_article_xml(file_xml_path):
@@ -75,7 +50,12 @@ def convert_article_xml(file_xml_path):
     # Transforma XML em SPS 1.9
     xml_sps.transform_content()
     # Completa datas presentes na base artigo e ausente no XML
-    complete_pub_date(xml_sps)
+    json_file_path = Path(config.get("SOURCE_PATH")).joinpath(
+        Path(xml_sps.scielo_pid_v2 + ".json")
+    )
+    article = xylose_converter.json_file_to_xylose_article(json_file_path)
+    document_pubdate, issue_pubdate = get_article_dates(article)
+    xml_sps.complete_pub_date(document_pubdate, issue_pubdate)
 
     # CONSTROI O SCIELO-id NO XML CONVERTIDO
     xml_sps.create_scielo_id()
