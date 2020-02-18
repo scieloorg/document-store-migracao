@@ -1905,6 +1905,22 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         self.assertEqual(a_href_items[0].get("href"), "#a05tab01")
         self.assertEqual(a_href_items[1].get("href"), "#a05tab01")
 
+    def test_transform_preserve_original_a_href_if_html_not_found(self):
+        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        text = """<root><body>
+        <p>
+        <a href="/img/revistas/az/v99nspe/html/a10tab02.htm">Table 2</a>
+        </p>
+        </body></root>"""
+        xml = etree.fromstring(text)
+
+        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        a_href_items = xml.findall(".//a[@href]")
+        self.assertEqual(
+            a_href_items[0].get("href"), "/img/revistas/az/v99nspe/html/a10tab02.htm"
+        )
+        self.assertEqual(a_href_items[0].get("link-type"), "asset-not-found")
+
     def test_transform_removes_repeated_imported_images(self):
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
         text = """<root><body>

@@ -3471,23 +3471,24 @@ class Remote2LocalConversion:
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
 
-        self._update_a_href(a_link_type, new_href)
-
         if href in self.imported_files:
-            return
-
-        self.imported_files.append(href)
-
-        html_body = self._get_html_body(href)
-        if html_body is not None:
-            content_type = "html"
-            delete_tag = "REMOVE_" + content_type
-            node_content = self._create_new_element_for_imported_html_file(
-                new_href, html_body, delete_tag
-            )
-            new_p = self._create_new_p(new_href, node_content, content_type)
-            etree.strip_tags(new_p, delete_tag)
-            return new_p
+            self._update_a_href(a_link_type, new_href)
+        else:
+            self.imported_files.append(href)
+            html_body = self._get_html_body(href)
+            if html_body is None:
+                logger.info("Alterando para link para externo")
+                a_link_type.set("link-type", "asset-not-found")
+            else:
+                self._update_a_href(a_link_type, new_href)
+                content_type = "html"
+                delete_tag = "REMOVE_" + content_type
+                node_content = self._create_new_element_for_imported_html_file(
+                    new_href, html_body, delete_tag
+                )
+                new_p = self._create_new_p(new_href, node_content, content_type)
+                etree.strip_tags(new_p, delete_tag)
+                return new_p
 
     def _get_html_body(self, href):
         """
