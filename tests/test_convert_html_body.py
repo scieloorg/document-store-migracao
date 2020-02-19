@@ -1905,7 +1905,13 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         self.assertEqual(a_href_items[0].get("href"), "#a05tab01")
         self.assertEqual(a_href_items[1].get("href"), "#a05tab01")
 
-    def test_transform_preserve_original_a_href_if_html_not_found(self):
+    @patch(
+        "documentstore_migracao.utils.convert_html_body.Remote2LocalConversion._get_html_body"
+    )
+    def test_transform_preserve_original_a_href_if_html_not_found(
+        self, mk_get_html_body
+    ):
+        mk_get_html_body.return_value = None
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
         text = """<root><body>
         <p>
