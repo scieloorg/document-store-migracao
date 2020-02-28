@@ -132,38 +132,8 @@ class TestProcessingPacking(unittest.TestCase):
 
         with utils.environ(VALID_XML_PATH=SAMPLES_PATH):
             packing.pack_article_ALLxml()
-            mk_pack_article_xml.assert_called_with(ANY)
+            mk_pack_article_xml.assert_called_with(file_xml_path=ANY, poison_pill=ANY)
             self.assertEqual(len(mk_pack_article_xml.mock_calls), COUNT_SAMPLES_FILES)
-
-    @patch("documentstore_migracao.processing.packing.pack_article_xml")
-    def test_pack_article_ALLxml_with_errors(self, mk_pack_article_xml):
-
-        mk_pack_article_xml.side_effect = [
-            PermissionError("Permission error message"),
-            OSError("OSError message"),
-            etree.Error(ANY),
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            OSError("OSError message"),
-            None,
-            None,
-        ]
-
-        with utils.environ(VALID_XML_PATH=SAMPLES_PATH):
-            with self.assertLogs("documentstore_migracao.processing.packing") as log:
-                packing.pack_article_ALLxml()
-
-            msg = []
-            for log_message in log.output:
-                if "Falha no empacotamento" in log_message:
-                    msg.append(log_message)
-            self.assertEqual(len(msg), 4)
 
 
 class TestProcessingPackingDownloadAsset(unittest.TestCase):
