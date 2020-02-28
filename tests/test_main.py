@@ -5,6 +5,7 @@ from documentstore_migracao.main import (
     main_migrate_articlemeta,
     main_migrate_isis,
     tools,
+    main_migrate_logos,
 )
 
 
@@ -28,4 +29,10 @@ class TestMain(unittest.TestCase):
 
         mk_process.return_value = 0
         self.assertRaises(SystemExit, tools)
+        mk_process.assert_called_once_with(["test"])
+
+    @patch("documentstore_migracao.main.migrate_logos_parser")
+    def test_main_migrate_logos(self, mk_process):
+        mk_process.return_value = 0
+        self.assertRaises(SystemExit, main_migrate_logos)
         mk_process.assert_called_once_with(["test"])
