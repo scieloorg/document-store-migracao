@@ -23,6 +23,8 @@ requires = [
     "minio",
     "tqdm",
     "fs",
+    "opac_schema",
+    "sqlalchemy",
 ]
 
 tests_require = [
@@ -48,6 +50,9 @@ setuptools.setup(
     include_package_data=True,
     extras_require={"testing": tests_require},
     install_requires=requires,
+    dependency_links=[
+        "git+https://github.com/scieloorg/opac_schema.git@v2.54#egg=opac_schema",
+    ],
     python_requires=">=3.6",
     test_suite="tests",
     classifiers=[
