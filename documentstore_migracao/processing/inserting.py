@@ -3,13 +3,15 @@ import os
 import re
 import logging
 import json
+import concurrent.futures
 from typing import List, Tuple
 from mimetypes import MimeTypes
 from urllib.parse import urlparse
-import gzip
 
 import lxml
+from tqdm import tqdm
 from xylose.scielodocument import Journal
+
 from documentstore.domain import utcnow, DocumentsBundle, get_static_assets, Document
 from documentstore.exceptions import AlreadyExists, DoesNotExist
 from documentstore.interfaces import Session
@@ -25,6 +27,8 @@ from documentstore_migracao.utils import (
     add_bundle,
     update_bundle,
     add_renditions,
+    DoJobsConcurrently,
+    PoisonPill,
 )
 from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
@@ -201,9 +205,12 @@ def get_article_result_dict(sps: SPS_Package) -> dict:
     return dict(article_metadata)
 
 
-def register_document(folder: str, session, storage) -> None:
+def register_document(folder: str, session, storage, poison_pill=PoisonPill()) -> None:
     """Registra registra pacotes SPS em uma instância do Kernel e seus
     ativos digitais em um object storage."""
+
+    if poison_pill.poisoned:
+        return
 
     logger.debug("Starting the import step for '%s' package.", folder)
 
@@ -292,42 +299,42 @@ def create_aop_bundle(session_db, issn):
 def import_documents_to_kernel(session_db, storage, folder, output_path) -> None:
     """Armazena os arquivos do pacote SPS em um object storage, registra o documento
     no banco de dados do Kernel e por fim associa-o ao seu `document bundle`"""
-    documents_sorter = DocumentsSorter()
 
-    register_documents(session_db, storage, documents_sorter, folder)
-    with open(output_path, "w") as output:
-        output.write(
-            json.dumps(documents_sorter.documents_bundles, indent=4, sort_keys=True)
+    jobs = [
+        {
+            "folder": os.path.join(folder, package),
+            "session": session_db,
+            "storage": storage,
+        }
+        for package in os.listdir(folder)
+    ]
+
+    with tqdm(total=len(jobs)) as pbar:
+
+        def update_bar(pbar=pbar):
+            pbar.update(1)
+
+        def write_result_to_file(result, path=output_path):
+            with open(path, "a") as f:
+                f.write(json.dumps(result) + "\n")
+
+        def exception_callback(exception, job, logger=logger):
+            logger.error(
+                "Could not import package '%s'. The following exception "
+                "was raised: '%s'.",
+                job["folder"],
+                exception,
+            )
+
+        DoJobsConcurrently(
+            register_document,
+            jobs=jobs,
+            executor=concurrent.futures.ProcessPoolExecutor,
+            max_workers=int(config.get("PROCESSPOOL_MAX_WORKERS")),
+            success_callback=write_result_to_file,
+            exception_callback=exception_callback,
+            update_bar=update_bar,
         )
-
-
-def register_documents(session_db, storage, documents_sorter, folder) -> None:
-    """Realiza o processo de importação de pacotes SPS no diretório indicado. O
-    processo de importação segue as fases: registro de assets/renditions no
-    object storage informado, registro do manifesto na base de dados do Kernel
-    informada e ordenação dos documentos em um `documents_sorter` para posterior
-    associação aos seus respectivos fascículos"""
-
-    err_filename = os.path.join(config.get("ERRORS_PATH"), "insert_documents.err")
-
-    for path, _, sps_files in os.walk(folder):
-        if not sps_files:
-            continue
-
-        try:
-            xml = list(filter(lambda f: f.endswith(".xml"), sps_files))[0]
-            xml_path = os.path.join(path, xml)
-            constructor.article_xml_constructor(xml_path, path, False)
-            registration_result = register_document(path, session_db, storage)
-
-            if registration_result:
-                document_xml, document_id = registration_result
-                documents_sorter.insert_document(document_id, document_xml)
-
-        except (IndexError, ValueError, TypeError, exceptions.XMLError) as ex:
-            msg = "Falha ao registrar documento %s: %s" % (path, ex)
-            logger.error(msg)
-            files.write_file(err_filename, msg, "a")
 
 
 def link_documents_bundles_with_documents(
