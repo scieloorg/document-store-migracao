@@ -13,6 +13,7 @@ from documentstore_migracao.processing import (
     reading,
     inserting,
 )
+from documentstore_migracao.utils import PoisonPill
 
 from . import (
     utils,
@@ -42,6 +43,7 @@ class TestProcessingExtracted(unittest.TestCase):
 class TestProcessingConversion(unittest.TestCase):
     def setUp(self):
         self.conversion_path = tempfile.mkdtemp()
+        self.poison_pill = PoisonPill()
 
     def tearDown(self):
         shutil.rmtree(self.conversion_path)
@@ -51,7 +53,7 @@ class TestProcessingConversion(unittest.TestCase):
         with utils.environ(
             SOURCE_PATH=SAMPLES_PATH, CONVERSION_PATH=self.conversion_path
         ):
-            conversion.convert_article_xml(file_xml_path)
+            conversion.convert_article_xml(file_xml_path, self.poison_pill)
 
         new_file_xml_path = os.path.join(
             self.conversion_path, "S0036-36341997000100001.es.xml"
@@ -63,7 +65,7 @@ class TestProcessingConversion(unittest.TestCase):
         with utils.environ(
             SOURCE_PATH=SAMPLES_PATH, CONVERSION_PATH=self.conversion_path
         ):
-            conversion.convert_article_xml(file_xml_path)
+            conversion.convert_article_xml(file_xml_path, self.poison_pill)
 
         new_file_xml_path = os.path.join(
             self.conversion_path, "S0036-36341997000100001.es.xml"
@@ -71,25 +73,6 @@ class TestProcessingConversion(unittest.TestCase):
         xmltree = etree.parse(new_file_xml_path, etree.XMLParser())
         self.assertIsNotNone(xmltree.find('.//pub-date[@date-type="pub"]'))
         self.assertIsNotNone(xmltree.find('.//pub-date[@date-type="collection"]'))
-
-    @patch("documentstore_migracao.processing.conversion.convert_article_xml")
-    def test_convert_article_ALLxml(self, mk_convert_article_xml):
-
-        with utils.environ(SOURCE_PATH=SAMPLES_PATH):
-            conversion.convert_article_ALLxml()
-            mk_convert_article_xml.assert_called_with(ANY)
-
-            self.assertEqual(
-                len(mk_convert_article_xml.mock_calls), COUNT_SAMPLES_FILES
-            )
-
-    @patch("documentstore_migracao.processing.conversion.convert_article_xml")
-    def test_convert_article_ALLxml_with_exception(self, mk_convert_article_xml):
-
-        mk_convert_article_xml.side_effect = KeyError("Test Error - CONVERSION")
-        with utils.environ(SOURCE_PATH=SAMPLES_PATH):
-
-            conversion.convert_article_ALLxml()
 
 
 class TestReadingJournals(unittest.TestCase):
