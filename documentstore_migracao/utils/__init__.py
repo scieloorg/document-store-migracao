@@ -1,4 +1,6 @@
 import gzip
+import logging
+import concurrent.futures
 
 from documentstore.domain import utcnow
 from documentstore.services import DocumentRenditions
@@ -47,6 +49,66 @@ def add_renditions(session, document):
     )
 
 
+class PoisonPill:
+    """Sinaliza para as threads que devem abortar a execução da rotina e 
+    retornar imediatamente.
+    """
+
+    def __init__(self):
+        self.poisoned = False
+
+
+def DoJobsConcurrently(
+    func: callable,
+    jobs: list = [],
+    executor: concurrent.futures.Executor = concurrent.futures.ThreadPoolExecutor,
+    max_workers: int = 1,
+    success_callback: callable = (lambda *k: k),
+    exception_callback: callable = (lambda *k: k),
+    update_bar: callable = (lambda: _),
+):
+    """Executa uma lista de tarefas concorrentemente.
+
+    Params:
+    func (callable): função a ser executada concorrentemente.
+    jobs (list[Dict]): Lista com argumentos utilizados pela função a ser executada.
+    executor (concurrent.futures.Executor): Classe responsável por executar a
+        lista de jobs concorrentemente.
+    max_workers (integer)
+    success_callback (callable): Função executada ao finalizar a execução de cada job.
+    exception_callback (callable): Função executada durante o tratamento de exceções.
+    update_bar (callable): Função responsável por atualizar a posição da barra de status.
+
+    Returns:
+        None
+    """
+    poison_pill = PoisonPill()
+
+    with executor(max_workers=max_workers) as _executor:
+        futures = {
+            _executor.submit(func, **job, poison_pill=poison_pill): job for job in jobs
+        }
+
+        try:
+            for future in concurrent.futures.as_completed(futures):
+                job = futures[future]
+                try:
+                    result = future.result()
+                except Exception as exc:
+                    exception_callback(exc, job)
+                else:
+                    success_callback(result)
+                finally:
+                    update_bar()
+        except KeyboardInterrupt:
+            logging.info(
+                "Finalizando as tarefas pendentes antes de encerrar."
+                " Isso poderá levar alguns segundos."
+            )
+            poison_pill.poisoned = True
+            raise
+
+
 __all__ = [
     "add_document",
     "add_journal",
@@ -54,4 +116,6 @@ __all__ = [
     "add_bundle",
     "update_bundle",
     "add_renditions",
+    "PoisonPill",
+    "DoJobsConcurrently",
 ]
