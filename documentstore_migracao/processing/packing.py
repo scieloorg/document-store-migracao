@@ -9,12 +9,17 @@ from lxml import etree
 from documentstore_migracao.utils import files, request, xml
 from documentstore_migracao import config
 from documentstore_migracao.export.sps_package import SPS_Package
+from documentstore_migracao.processing.extracted import PoisonPill, DoJobsConcurrently
 
 
 logger = logging.getLogger(__name__)
 
 
-def pack_article_xml(file_xml_path):
+def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
+
+    if poison_pill.poisoned:
+        return
+
     original_filename, ign = files.extract_filename_ext_by_path(file_xml_path)
 
     obj_xml = xml.file2objXML(file_xml_path)
@@ -51,17 +56,26 @@ def pack_article_xml(file_xml_path):
 
 
 def pack_article_ALLxml():
+    """Cria pacotes SPS a partir de uma lista de XML."""
 
-    logger.info("Empacotando os documentos XML")
-    list_files_xmls = files.xml_files_list(config.get("VALID_XML_PATH"))
-    for file_xml in tqdm(list_files_xmls):
+    xmls = [
+        os.path.join(config.get("VALID_XML_PATH"), xml)
+        for xml in files.xml_files_list(config.get("VALID_XML_PATH"))
+    ]
 
-        try:
-            pack_article_xml(os.path.join(config.get("VALID_XML_PATH"), file_xml))
+    jobs = [{"file_xml_path": xml} for xml in xmls]
 
-        except (PermissionError, OSError, etree.Error) as ex:
-            logger.error("Falha no empacotamento de %s" % file_xml)
-            logger.exception(ex)
+    with tqdm(total=len(xmls), initial=0) as pbar:
+
+        def update_bar(pbar=pbar):
+            pbar.update(1)
+
+        DoJobsConcurrently(
+            pack_article_xml,
+            jobs=jobs,
+            max_workers=int(config.get("THREADPOOL_MAX_WORKERS")),
+            update_bar=update_bar,
+        )
 
 
 def download_asset(old_path, new_fname, dest_path):
