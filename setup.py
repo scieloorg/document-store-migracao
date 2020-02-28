@@ -73,6 +73,7 @@ setuptools.setup(
             ds_migracao=documentstore_migracao.main:main_migrate_articlemeta
             ds_tools=documentstore_migracao.main:tools
             migrate_isis=documentstore_migracao.main:main_migrate_isis
+            migrate_logos=documentstore_migracao.main:main_migrate_logos
         [paste.app_factory]
             main=documentstore_migracao.webserver:main
     """,

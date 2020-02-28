@@ -6,6 +6,7 @@ import logging
 from .migrate_isis import migrate_isis_parser
 from .migrate_articlemeta import migrate_articlemeta_parser
 from .tools import tools_parser
+from .migrate_logos import migrate_logos_parser
 
 
 logger = logging.getLogger(__name__)
@@ -34,6 +35,10 @@ def main_migrate_isis():
 
 def tools():
     sys.exit(tools_parser(sys.argv[1:]))
+
+
+def main_migrate_logos():
+    sys.exit(migrate_logos_parser(sys.argv[1:]))
 
 
 if __name__ == "__main__":
