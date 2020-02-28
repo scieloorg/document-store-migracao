@@ -13,3 +13,9 @@ class XMLError(Exception):
     """ Represents errors that would block HTMLGenerator instance from
     being created.
     """
+
+
+class NoJournalInWebsiteError(Exception):
+    """Não há periódicos no site para migração dos logos. É necessário que a migração
+    dos periódicos seja feita antes da migração dos logos.
+    """
