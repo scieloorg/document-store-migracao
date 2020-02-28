@@ -3,14 +3,21 @@ import logging
 import json
 from typing import List
 from pathlib import Path
+import concurrent.futures
 
 from tqdm import tqdm
 from lxml import etree
 from xylose.scielodocument import Journal, Issue, Article
 
-from documentstore_migracao.utils import files, xml, string, xylose_converter
+from documentstore_migracao.utils import (
+    files,
+    xml,
+    string,
+    xylose_converter,
+)
 from documentstore_migracao.export.sps_package import SPS_Package
 from documentstore_migracao import config
+from documentstore_migracao.utils import DoJobsConcurrently, PoisonPill
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +43,10 @@ def get_article_dates(article):
     return document_pubdate, issue_pubdate
 
 
-def convert_article_xml(file_xml_path):
+def convert_article_xml(file_xml_path: str, poison_pill=PoisonPill()):
+
+    if poison_pill.poisoned:
+        return
 
     obj_xmltree = xml.loadToXML(file_xml_path)
     obj_xml = obj_xmltree.getroot()
@@ -78,18 +88,38 @@ def convert_article_xml(file_xml_path):
 
 
 def convert_article_ALLxml():
+    """Converte todos os arquivos HTML/XML que estão na pasta fonte."""
 
-    logger.info("Iniciando Conversão do xmls")
-    list_files_xmls = files.xml_files_list(config.get("SOURCE_PATH"))
-    for file_xml in tqdm(list_files_xmls):
-        logger.info("CONVERTER %s" % file_xml)
-        try:
-            convert_article_xml(
-                os.path.join(config.get("SOURCE_PATH"), file_xml))
-        except Exception as ex:
-            logger.error(file_xml)
-            logger.exception(ex)
-            # raise
+    logger.debug("Starting XML conversion, it may take sometime.")
+    logger.warning(
+        "If you are facing problems with Python crashing during "
+        "conversion try to export this environment "
+        "variable: `OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES`"
+    )
+
+    xmls = [
+        os.path.join(config.get("SOURCE_PATH"), xml)
+        for xml in files.xml_files_list(config.get("SOURCE_PATH"))
+    ]
+
+    jobs = [{"file_xml_path": xml} for xml in xmls]
+
+    with tqdm(total=len(xmls)) as pbar:
+
+        def update_bar(pbar=pbar):
+            pbar.update(1)
+
+        def log_exceptions(exception, job, logger=logger):
+            logger.error("Could not convert file '%s'.", job["file_xml_path"])
+
+        DoJobsConcurrently(
+            convert_article_xml,
+            jobs=jobs,
+            executor=concurrent.futures.ProcessPoolExecutor,
+            max_workers=int(config.get("PROCESSPOOL_MAX_WORKERS")),
+            exception_callback=log_exceptions,
+            update_bar=update_bar,
+        )
 
 
 def conversion_journal_to_bundle(journal: dict) -> None:
