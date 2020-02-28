@@ -6,17 +6,10 @@ from tqdm import tqdm
 from documentstore_migracao.export import article
 from documentstore_migracao.utils import files
 from documentstore_migracao import config
+from documentstore_migracao.utils import DoJobsConcurrently, PoisonPill
 
 
 logger = logging.getLogger(__name__)
-
-
-class PoisonPill:
-    """Sinaliza para as threads que devem abortar a execução da rotina e 
-    retornar imediatamente.
-    """
-    def __init__(self):
-        self.poisoned = False
 
 
 def get_and_write(pid, stage_path, poison_pill):
@@ -59,36 +52,16 @@ def extract_all_data(list_documents_pids: List[str]):
         list_documents_pids, __name__
     )
 
-    logger.info("Iniciando extração dos Documentos")
-    count = 0
-    poison_pill = PoisonPill()
+    jobs = [{"pid": pid, "stage_path": stage_path} for pid in pids_to_extract]
 
-    with concurrent.futures.ThreadPoolExecutor(
-        max_workers=config.get("THREADPOOL_MAX_WORKERS")
-    ) as executor:
-        futures = {
-            executor.submit(get_and_write, pid, stage_path, poison_pill): pid
-            for pid in pids_to_extract
-        }
+    with tqdm(total=len(list_documents_pids)) as pbar:
 
-        with tqdm(total=len(list_documents_pids), initial=len(pids_extracteds)) as pbar:
-            try:
-                for future in concurrent.futures.as_completed(futures):
-                    pid = futures[future]
-                    pbar.update(1)
-                    try:
-                        result = future.result()
-                    except Exception as exc:
-                        logger.info("%r gerou uma exceção: %s" % (pid, exc))
-                    else:
-                        count += 1
+        def update_bar(pbar=pbar):
+            pbar.update(1)
 
-            except KeyboardInterrupt:
-                logger.info(
-                    "Finalizando as tarefas pendentes antes de encerrar."
-                    " Isso poderá levar alguns segundos."
-                )
-                poison_pill.poisoned = True
-                raise
-
-    logger.info("\t Total de %s artigos", count)
+        DoJobsConcurrently(
+            get_and_write,
+            jobs=jobs,
+            max_workers=config.get("THREADPOOL_MAX_WORKERS"),
+            update_bar=update_bar,
+        )
