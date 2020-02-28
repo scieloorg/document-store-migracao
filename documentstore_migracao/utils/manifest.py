@@ -6,12 +6,11 @@ from documentstore_migracao.export.sps_package import SPS_Package
 
 
 def get_document_manifest(
-    document: etree.ElementTree, document_url: str, assets: list, renditions: List[dict]
+    obj_sps: SPS_Package, document_url: str, assets: list, renditions: List[dict]
 ) -> dict:
     """Cria um manifesto no formato do Kernel a partir de um
     documento xml"""
 
-    obj_sps = SPS_Package(document)
     _id = obj_sps.scielo_pid_v3
     date = obj_sps.document_pubdate
 

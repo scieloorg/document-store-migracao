@@ -30,6 +30,7 @@ from documentstore_migracao import config, exceptions
 from documentstore_migracao.export.sps_package import DocumentsSorter, SPS_Package
 from documentstore_migracao.processing import reading
 from documentstore_migracao.tools import constructor
+from documentstore_migracao.utils.files import xml_files_list
 
 
 logger = logging.getLogger(__name__)
@@ -158,62 +159,102 @@ def put_static_assets_into_storage(
     return _assets
 
 
-def register_document(folder: str, session, storage) -> None:
+def get_article_result_dict(sps: SPS_Package) -> dict:
+    """Produz um dictionário contento informações sobre o artigo.
 
-    logger.info("Processando a Pasta %s", folder)
-    list_files = files.list_files(folder)
+    O dicionário produzido com informações relevantes para recuperação
+    do fascículo ao qual o documento está relacionado e a sua posição de registro ou
+    posição na lista de artigos do site (order)."""
 
-    obj_xml = None
-    prefix = ""
-    xml_files = files.xml_files_list(folder)
-    _renditions = list(
-        filter(lambda file: ".pdf" in file or ".html" in file, list_files)
+    def _format_str(value):
+        if value and value.isdigit():
+            return value.zfill(5)
+        return value or ""
+
+    article_metadata = {}
+    article_meta = dict(sps.parse_article_meta)
+    journal_meta = dict(sps.journal_meta)
+    attributes = (
+        ("pid_v3", sps.scielo_pid_v3),
+        ("eissn", journal_meta.get("eissn")),
+        ("pissn", journal_meta.get("pissn")),
+        ("issn", journal_meta.get("issn")),
+        ("acron", journal_meta.get("acron")),
+        ("pid", sps.scielo_pid_v2),
+        ("year", sps.year),
+        ("volume", sps.volume),
+        ("number", sps.number),
+        ("supplement", sps.supplement),
+        (
+            "order",
+            str(
+                _format_str(article_meta.get("other"))
+                or _format_str(article_meta.get("fpage"))
+            ),
+        ),
     )
 
-    if len(xml_files) > 1:
-        raise exceptions.XMLError("Existe %s xmls no pacote SPS", len(xml_files))
-    else:
-        try:
-            x_file = xml_files[0]
-        except IndexError as ex:
-            raise exceptions.XMLError("Não existe XML no pacote SPS: %s", ex)
+    for key, value in attributes:
+        if value is not None:
+            article_metadata[key] = "%s" % value
 
-    xml_path = os.path.join(folder, x_file)
-    obj_xml = xml.loadToXML(xml_path)
+    return dict(article_metadata)
+
+
+def register_document(folder: str, session, storage) -> None:
+    """Registra registra pacotes SPS em uma instância do Kernel e seus
+    ativos digitais em um object storage."""
+
+    logger.debug("Starting the import step for '%s' package.", folder)
+
+    package_files = files.list_files(folder)
+    xmls = files.xml_files_list(folder)
+
+    if xmls is None or len(xmls) == 0:
+        raise exceptions.XMLError(
+            "There is no XML file into package '%s'. Please verify and try later."
+            % folder
+        ) from None
+
+    xml_path = os.path.join(folder, xmls[0])
+
+    try:
+        obj_xml = xml.loadToXML(xml_path)
+    except lxml.etree.ParseError as exc:
+        raise exceptions.XMLError(
+            "Could not parse the '%s' file, please validate"
+            " this file before then try to import again." % xml_path,
+        ) from None
 
     xml_sps = SPS_Package(obj_xml)
-
-    # TODO: é possível que alguns artigos não possuam o self.acron
-    prefix = xml_sps.media_prefix
+    prefix = xml_sps.media_prefix or ""
     url_xml = storage.register(xml_path, prefix)
-
     static_assets, static_additionals = get_document_assets_path(
-        obj_xml, list_files, folder
+        obj_xml, package_files, folder
     )
     registered_assets = put_static_assets_into_storage(static_assets, prefix, storage)
+    renditions_file_names = [file for file in package_files if ".pdf" in file]
 
     for additional_path in static_additionals.values():
         storage.register(os.path.join(additional_path), prefix)
 
-    if obj_xml:
-        renditions = get_document_renditions(folder, _renditions, prefix, storage)
-        document = Document(
-            manifest=manifest.get_document_manifest(
-                obj_xml, url_xml, registered_assets, renditions
-            )
+    renditions = get_document_renditions(folder, renditions_file_names, prefix, storage)
+    document = Document(
+        manifest=manifest.get_document_manifest(
+            xml_sps, url_xml, registered_assets, renditions
         )
+    )
 
-        try:
-            add_document(session, document)
+    try:
+        add_document(session, document)
+        if renditions:
+            add_renditions(session, document)
+    except AlreadyExists as exc:
+        logger.error(exc)
+    else:
+        logger.debug("Document with id '%s' was imported.", document.id())
 
-            if renditions:
-                add_renditions(session, document)
-
-            logger.info("Document-store save: %s", document.id())
-        except AlreadyExists as exc:
-            logger.exception(exc)
-
-    return obj_xml, document.id()
+    return get_article_result_dict(xml_sps)
 
 
 def get_documents_bundle(session_db, bundle_id, is_issue, issn):
