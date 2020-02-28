@@ -46,6 +46,7 @@ _default = dict(
     CACHE_PATH=os.path.join(BASE_PATH, ".cache"),
     VALIDATE_ALL="FALSE",
     THREADPOOL_MAX_WORKERS=os.cpu_count() * 5,
+    PROCESSPOOL_MAX_WORKERS=os.cpu_count(),
 )
 
 
