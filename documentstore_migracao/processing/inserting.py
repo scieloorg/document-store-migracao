@@ -224,6 +224,7 @@ def register_document(folder: str, session, storage, poison_pill=PoisonPill()) -
         ) from None
 
     xml_path = os.path.join(folder, xmls[0])
+    constructor.article_xml_constructor(xml_path, folder, False)
 
     try:
         obj_xml = xml.loadToXML(xml_path)
@@ -301,12 +302,9 @@ def import_documents_to_kernel(session_db, storage, folder, output_path) -> None
     no banco de dados do Kernel e por fim associa-o ao seu `document bundle`"""
 
     jobs = [
-        {
-            "folder": os.path.join(folder, package),
-            "session": session_db,
-            "storage": storage,
-        }
-        for package in os.listdir(folder)
+        {"folder": package_folder, "session": session_db, "storage": storage,}
+        for package_folder, _, files in os.walk(folder)
+        if files is not None and len(files) > 0
     ]
 
     with tqdm(total=len(jobs)) as pbar:
