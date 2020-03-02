@@ -65,7 +65,7 @@ def DoJobsConcurrently(
     max_workers: int = 1,
     success_callback: callable = (lambda *k: k),
     exception_callback: callable = (lambda *k: k),
-    update_bar: callable = (lambda: _),
+    update_bar: callable = (lambda *k: k),
 ):
     """Executa uma lista de tarefas concorrentemente.
 
