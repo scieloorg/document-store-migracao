@@ -16,23 +16,43 @@ logger = logging.getLogger(__name__)
 
 
 def get_article_dates(article):
+    """
+    Obtém a data de publicação do artigo e do fascículo
+
+    Tenta obter as data (publicação ou criação ou atualização) do artigo, utiliza respectivamente:
+        ``article.document_publication_date, article.creation_date, article.update_date``
+
+    Repare que temos uma precedência maior para ``document_publication_date``
+
+    Para obter a data do fascículo utiliza: issue_publication_date.
+
+    IMPORTANTE: Na definição da data de publicação é definido que o ano de publicação para o artigo deve conter: dia + mês + ano, porém isso não é verdade para a data de publicação do fascículo associado ao artigo, no caso do fascículo podemos conter somente o ano ou mês e ano ou season + ano (ano OU; mês + ano OU; season + ano.)
+
+    Link para a documentação (pub-date): https://scielo.readthedocs.io/projects/scielo-publishing-schema/pt_BR/latest/tagset/elemento-pub-date.html
+
+    @params:
+
+        str_date: um texto representando YYYY-MM-DD ou YYYY.
+
+    """
     def _parse_date(str_date):
         _str_date = "".join(str_date.split("-"))
         return (
-            _str_date[:4] if int(_str_date[:4]) > 0 else "",
-            _str_date[4:6] if int(_str_date[4:6]) > 0 else "",
+            _str_date[:4] if len(_str_date[:4]) > 0 and int(_str_date[:4]) > 0 else "",
+            _str_date[4:6] if len(_str_date[4:6]) > 0 and int(_str_date[4:6]) > 0 else "",
             _str_date[6:8]
             if len(_str_date[6:8]) > 0 and int(_str_date[6:8]) > 0
             else "",
         )
 
     document_pubdate = (
-        article.document_publication_date
-        or article.creation_date
-        or article.update_date
+        article.document_publication_date or article.creation_date or article.update_date
     )
+
     document_pubdate = _parse_date(document_pubdate) if document_pubdate else None
+
     issue_pubdate = _parse_date(article.issue_publication_date)
+
     return document_pubdate, issue_pubdate
 
 
@@ -90,7 +110,6 @@ def convert_article_ALLxml():
             logger.error(file_xml)
             logger.exception(ex)
             # raise
-
 
 def conversion_journal_to_bundle(journal: dict) -> None:
     """Transforma um objeto Journal (xylose) para o formato
