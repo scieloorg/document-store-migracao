@@ -689,6 +689,30 @@ class TestEvaluateElementAToDeleteOrMarkAsFnLabelPipe(unittest.TestCase):
         self.assertEqual(len(xml.findall(".//a[@href]")), 3)
         self.assertEqual(etree.tostring(xml), text)
 
+    def test_pipe_remove_a_name_and_a_href(self):
+        """
+        Remove
+        <a name="top" id="top"/>
+        <a href="#top"/>
+
+        de
+        <root>
+        <a name="top" id="top"/>
+        <a href="#top"/>
+        </root>
+        """
+        text = b"""
+        <root>
+        <a name="top" id="top"/>
+        <a href="#top"/>
+        </root>
+        """.strip()
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(len(xml.findall(".//a[@name]")), 0)
+        self.assertEqual(len(xml.findall(".//a[@href]")), 0)
+        self.assertEqual(etree.tostring(xml), b'<root>\n        \n        \n        </root>')
+
     def test_pipe_remove_id_duplicated(self):
         text = """<root>
         <a id="B1" name="B1">Texto 1</a><p>Texto 2</p>

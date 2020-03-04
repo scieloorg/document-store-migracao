@@ -2135,17 +2135,34 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         a_href.set("label-of", a.get("name"))
                     logger.info(etree.tostring(a_href))
 
-        def _is_convertible_to_fn_label(self, a_items):
+        def _evaluate_a_items(self, a_items):
+            """
+            a_items é uma lista de elementos a
+            Se o primeiro elemento é um a[@name] e os demais a[@href],
+            então a[@name] deve ser apagado, pois é uma âncora para o topo, e
+            possivelmente os a[@href] podem ser label de nota de rodapé
+            """
             if a_items[0].get("name") is None:
                 return
+
+            a_href_items = [a for a in a_items[1:] if a.get("href")]
+            if len(a_href_items) == 0:
+                return
+
             a_name = a_items[0]
             a_name_xml_text = a_name.get("xml_text", "")
-            if " " in a_name_xml_text or not is_footnote_label(a_name_xml_text):
+
+            if " " in a_name_xml_text:
                 return
-            a_href_items = [a for a in a_items[1:] if a.get("href")]
-            if len(a_href_items) > 0:
+
+            if is_footnote_label(a_name_xml_text):
                 a_name.tag = "_EXCLUDE_REMOVETAG"
                 return a_href_items
+
+            if not a_name_xml_text:
+                a_name.tag = "_EXCLUDE_REMOVETAG"
+                for a_href_item in a_href_items:
+                    _remove_tag(a_href_item)
 
         def _exclude_invalid_unique_a_href(self, nodes):
             if len(nodes) == 1 and nodes[0].attrib.get("href"):
@@ -2158,8 +2175,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
             grouped_by_xml_text = self._grouped_by_same_xml_text(xml)
             for _id, a_items in grouped_by_id.items():
                 self._keep_only_one_a_name(a_items)
-                a_href_items = self._is_convertible_to_fn_label(a_items)
-                self._convert_to_fn_label(a_href_items, grouped_by_xml_text)
+                fn_labels = self._evaluate_a_items(a_items)
+                if fn_labels:
+                    self._convert_to_fn_label(fn_labels, grouped_by_xml_text)
                 self._exclude_invalid_unique_a_href(a_items)
             etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
             logger.info("EvaluateElementAToDeleteOrCreateFnLabelPipe - fim")
