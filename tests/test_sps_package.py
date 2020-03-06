@@ -1913,6 +1913,191 @@ class TestMoveAppendixFromBodyToBackWithSubArticleAndBacks(unittest.TestCase):
             self.assertIn(app_group_tag.find("app").attrib["id"], self.app_ids[2:])
 
 
+class TestMoveAcknowledgementsFromBodyToBack(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="pt">
+            <body>
+                <p><bold>Agradecimentos</bold></p>
+                <p>À Prof. Maria Santos, coordenadora do grupo de pesquisa X</p>
+                <p> </p>
+                <p><bold>Referencias</bold></p>
+                <p></p>
+            </body>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_body_without_acknowledgements(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        body_tag = self.sps_package.xmltree.find("./body")
+        body_txt = etree.tostring(body_tag).decode("utf-8")
+        self.assertNotIn("Agradecimentos", body_txt)
+        self.assertNotIn(
+            "À Prof. Maria Santos, coordenadora do grupo de pesquisa X", body_txt
+        )
+        self.assertIn("Referencias", body_txt)
+        self.assertEqual(len(body_tag.getchildren()), 3)
+
+    def test_back_with_acknowledgements(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        ack_tag = self.sps_package.xmltree.find("./back/ack")
+        self.assertIsNotNone(ack_tag)
+        ack_children = ack_tag.getchildren()
+        self.assertEqual(
+            ack_children[0].text,
+            "À Prof. Maria Santos, coordenadora do grupo de pesquisa X",
+        )
+
+
+class TestDoNotMoveAcknowledgementWordFromBodyText(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="pt">
+            <body>
+                <p><bold>Subtítulo do Texto</bold></p>
+                <p></p>
+                <p>O agradecimento é uma expressão de reconhecimento de uma ação.</p>
+                <p>Texto de teste.</p>
+            </body>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_body_with_acknowledgement_in_body_content(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        body_tag = self.sps_package.xmltree.find("./body")
+        body_txt = etree.tostring(body_tag).decode("utf-8")
+        self.assertIn("agradecimento", body_txt)
+
+    def test_back_without_acknowledgement(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        self.assertIsNone(self.sps_package.xmltree.find("./back/ack"))
+
+
+class TestMoveAcknowledgementsFromBodyToExistingBack(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="pt">
+            <body>
+                <p>AGRADECIMENTO</p>
+                <p></p>
+                <p>Ao Fundo de Amparo à Pesquisa</p>
+            </body>
+            <back>
+                <notes></notes>
+            </back>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_body_without_acknowledgements(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        body_tag = self.sps_package.xmltree.find("./body")
+        body_txt = etree.tostring(body_tag).decode("utf-8")
+        self.assertNotIn("AGRADECIMENTO", body_txt)
+        self.assertNotIn("Ao Fundo de Amparo à Pesquisa", body_txt)
+        self.assertEqual(len(body_tag.getchildren()), 0)
+
+    def test_existing_back_with_acknowledgements(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        back_result = self.sps_package.xmltree.findall("./back")
+        self.assertTrue(len(back_result) == 1)
+        self.assertIsNotNone(back_result[0].find("./notes"))
+        ack_tag = back_result[0].find("./ack")
+        self.assertIsNotNone(ack_tag)
+        ack_children = ack_tag.getchildren()
+        self.assertEqual(ack_children[0].text, "Ao Fundo de Amparo à Pesquisa")
+
+
+class TestMoveAcknowledgementsFromBodyToBackWithSubArticle(unittest.TestCase):
+    def setUp(self):
+        self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <body>
+                <p><bold>Agradecimentos </bold></p>
+                <p></p>
+                <p>À Prof. Maria Santos, coordenadora do grupo de pesquisa X</p>
+            </body>
+            <sub-article article-type="translation" id="TRpt" xml:lang="en">
+                <body>
+                    <p><bold> Acknowledgements</bold></p>
+                    <p>We want to thank to Prof. Maria Santos, coordinator of X research group</p>
+                </body>
+            </sub-article>
+            <sub-article article-type="translation" id="TRpt" xml:lang="es">
+                <body>
+                    <p><bold> Agradecimientos </bold></p>
+                    <p></p>
+                    <p>Prof. Maria Santos, coordinadora del grupo de pesquisa X</p>
+                </body>
+            </sub-article>
+        </article>"""
+        xmltree = etree.fromstring(self.xml)
+        self.sps_package = SPS_Package(xmltree, None)
+
+    def test_article_body_without_acknowledgements(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        body_tag = self.sps_package.xmltree.find("./body")
+        body_txt = etree.tostring(body_tag).decode("utf-8")
+        self.assertNotIn("Agradecimentos", body_txt)
+        self.assertNotIn(
+            "À Prof. Maria Santos, coordenadora do grupo de pesquisa X", body_txt
+        )
+        self.assertEqual(len(body_tag.getchildren()), 0)
+
+    def test_en_sub_article_body_without_acknowledgements(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        body_tag = self.sps_package.xmltree.xpath('./sub-article[@xml:lang="en"]/body')[
+            0
+        ]
+        body_txt = etree.tostring(body_tag).decode("utf-8")
+        self.assertNotIn("Acknowledgements", body_txt)
+        self.assertNotIn(
+            "We want to thank to Prof. Maria Santos, coordinator of X research group",
+            body_txt,
+        )
+        self.assertEqual(len(body_tag.getchildren()), 0)
+
+    def test_es_sub_article_body_without_acknowledgements(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        body_tag = self.sps_package.xmltree.xpath('./sub-article[@xml:lang="es"]/body')[
+            0
+        ]
+        body_txt = etree.tostring(body_tag).decode("utf-8")
+        self.assertNotIn("Agradecimientos", body_txt)
+        self.assertNotIn(
+            "Prof. Maria Santos, coordinadora del grupo de pesquisa X", body_txt
+        )
+        self.assertEqual(len(body_tag.getchildren()), 0)
+
+    def test_article_back_data(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        ack_tag = self.sps_package.xmltree.find("./back/ack")
+        self.assertIsNotNone(ack_tag)
+        ack_children = ack_tag.getchildren()
+        self.assertEqual(
+            ack_children[0].text,
+            "À Prof. Maria Santos, coordenadora do grupo de pesquisa X",
+        )
+
+    def test_en_subarticle_back_data(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        ack_children = self.sps_package.xmltree.xpath(
+            './sub-article[@xml:lang="en"]/back/ack'
+        )[0].getchildren()
+        self.assertEqual(
+            ack_children[0].text,
+            "We want to thank to Prof. Maria Santos, coordinator of X research group",
+        )
+
+    def test_es_subarticle_back_data(self):
+        self.sps_package._move_acknowledgements_from_body_to_back()
+        ack_children = self.sps_package.xmltree.xpath(
+            './sub-article[@xml:lang="es"]/back/ack'
+        )[0].getchildren()
+        self.assertEqual(
+            ack_children[0].text,
+            "Prof. Maria Santos, coordinadora del grupo de pesquisa X",
+        )
+
+
 class TestUpdateMixedCitations(unittest.TestCase):
     def setUp(self):
         xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><back>

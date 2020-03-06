@@ -573,12 +573,57 @@ class SPS_Package:
                 for app_group_tag in app_group_tags:
                     back.append(app_group_tag)
 
+    def _move_acknowledgements_from_body_to_back(self):
+        """Move os agradecimentos do body para o respectivo back.
+        Essa identificação é feita pelo cabeçalho de agradecimentos, nos idiomas
+        oficiais do SciELO. Caso encontre o cabeçalho no body, retira o cabeçalho e move
+        o primeiro parágrafo seguinte contendo algum texto.
+        """
+
+        def _get_acknowledgements(header, body):
+            lc = header.lower()
+            ack_tags_title = body.xpath(
+                f'*[contains(translate(., "{lc}", "{header}"), "{header}")]'
+            )
+            if len(ack_tags_title) > 0:
+                text = " ".join([tag_text for tag_text in ack_tags_title[0].itertext()])
+                if len(text.strip().split()) == 1:
+                    return ack_tags_title[0]
+
+        def _find_and_move_acknowledgements(body, back, ack_tag_title):
+            new_ack_tag = etree.Element("ack")
+            ack_tags_to_remove = [ack_tag_title]
+            ack_tag = ack_tag_title.getnext()
+            while ack_tag is not None:
+                if ack_tag.text is not None and len(ack_tag.text) > 0:
+                    new_ack_tag.append(deepcopy(ack_tag))
+                    ack_tags_to_remove.append(ack_tag)
+                    break
+                ack_tags_to_remove.append(ack_tag)
+                ack_tag = ack_tag.getnext()
+            for ack_tag_to_remove in ack_tags_to_remove:
+                body.remove(ack_tag_to_remove)
+            if len(new_ack_tag.getchildren()) > 0:
+                back.append(new_ack_tag)
+
+        headers = ["AGRADECIMENTO", "ACKNOWLEDGEMENT", "AGRADECIMIENTO"]
+        for body in self.xmltree.iterfind(".//body"):
+            for header in headers:
+                ack_tag_title = _get_acknowledgements(header, body)
+                if ack_tag_title is not None:
+                    back = body.getparent().find("./back")
+                    if back is None:
+                        back = etree.Element("back")
+                        body.getparent().append(back)
+                    _find_and_move_acknowledgements(body, back, ack_tag_title)
+
     def transform_content(self):
         # CONVERTE PUB-DATE PARA SPS 1.9
         self.transform_pubdate()
 
         # OUTROS AJUSTES NO XML PARA SPS 1.9
         self._move_appendix_from_body_to_back()
+        self._move_acknowledgements_from_body_to_back()
 
     def transform_article_meta_count(self):
         count_tree = self.xmltree.find(".//counts")
