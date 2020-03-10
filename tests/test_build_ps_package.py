@@ -57,6 +57,21 @@ class TestBuildSPSPackageBase(TestCase):
         self.article_data_reader = csv.DictReader(fake_csv(), fieldnames=CSV_FIELDNAMES)
 
 
+class TestBuildSPSPackage(TestBuildSPSPackageBase):
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.os.path.isdir")
+    @mock.patch("documentstore_migracao.utils.build_ps_package.os.makedirs", return_value=None)
+    def test_get_target_path_returns_target_path(self, mock_makedirs, mock_isdir):
+        mock_isdir.return_value = False
+        result = self.builder.get_target_path("abc/v1n1/bla.xml")
+        mock_isdir.assert_called_once_with("/data/output/abc/v1n1/bla")
+        mock_makedirs.assert_called_once_with("/data/output/abc/v1n1/bla")
+        self.assertEqual(
+            result,
+            "/data/output/abc/v1n1/bla"
+        )
+
+
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
     def test__update_sps_package_object_updates_pid_if_it_is_none(self):

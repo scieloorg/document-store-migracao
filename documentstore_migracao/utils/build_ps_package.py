@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # coding: utf-8
-
+import os
 import sys
 import argparse
 import textwrap
@@ -229,6 +229,14 @@ class BuildPSPackage(object):
         # Salva XML com alterações
         xml.objXML2file(target_xml_path, sps_package.xmltree, pretty=True)
         return sps_package
+
+    def get_target_path(self, xml_relative_path):
+        target_folder, ext = os.path.splitext(xml_relative_path)
+        logging.info("Make dir package: %s" % target_folder)
+        target_path = os.path.join(self.out_folder, target_folder)
+        if not os.path.isdir(target_path):
+            os.makedirs(target_path)
+        return target_path
 
     def collect_xml(self, acron, xml):
         issue_folder = path.basename(path.dirname(xml))
