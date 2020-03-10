@@ -77,8 +77,6 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
         result = self.builder.collect_xml("abc/v1n1/bla.xml", "/data/output/abc/v1n1/bla")
         mock_copy.assert_called_once_with(
             "/data/xmls/abc/v1n1/bla.xml", "/data/output/abc/v1n1/bla")
-        mock_isfile.assert_called_once_with(
-            "/data/output/abc/v1n1/bla/bla.xml")
 
     def test_get_acron_issuefolder_packname_path_returns_acron_issuefolder_packname(self):
         acron, issue_folder, pack_name = self.builder.get_acron_issuefolder_packname("abc/v1n1/bla.xml")
@@ -104,6 +102,30 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
         pack_name = "1806-0013-test-01-01-0001"
         result = self.builder._update_sps_package_object(
             self.article_data_reader, mk_sps_package, pack_name
+        )
+        self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100999")
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
+    def test__update_sps_package_obj_updates_pid_if_it_is_none(self, mock_getattr):
+        mk_sps_package = mock.Mock(spec=SPS_Package)
+        mock_getattr.side_effect = [None, None]
+        pack_name = "1806-0013-test-01-01-0001"
+        row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,".split(",")
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, row
+        )
+        self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100001")
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
+    def test__update_sps_package_obj_does_not_update_pid_if_it_is_not_none(self, mock_getattr):
+        mk_sps_package = mock.Mock(
+            spec=SPS_Package, scielo_pid_v2="S0101-01012019000100999")
+        mock_getattr.side_effect = ["S0101-01012019000100999", None]
+
+        row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,".split(",")
+        pack_name = "1806-0013-test-01-01-0001"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, row
         )
         self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100999")
 

@@ -213,6 +213,74 @@ class BuildPSPackage(object):
 
         return _sps_package
 
+    def _update_sps_package_obj(self, sps_package, pack_name, row):
+        """
+        Atualiza instancia SPS_Package com os dados de artigos do arquivo
+        articles_data_reader, um CSV com os seguintes campos:
+            - 'PID'
+            - 'PID AOP'
+            - 'FILE'
+            - 'DATA (COLLECTION)'
+            - 'DATA PRIMEIRO PROCESSAMENTO'
+            - 'DATA DO ULTIMO PROCESSAMENTO'
+        """
+        def _has_attr_to_set(attr, min_attr_len=1):
+            _sps_package_attr = getattr(_sps_package, attr) or ""
+            _has_attr = len("".join(_sps_package_attr)) >= min_attr_len
+            if _has_attr:
+                return False
+            return True
+
+        def _parse_date(str_date):
+            return (
+                str_date[:4] if int(str_date[:4]) > 0 else "",
+                str_date[4:6] if int(str_date[4:6]) > 0 else "",
+                str_date[6:8] if int(str_date[6:8]) > 0 else "",
+            )
+
+        def _get_date_value(date_label, date_value):
+            if date_value:
+                logging.debug(
+                    'Updating document with %s "%s"',
+                    date_label,
+                    date_value,
+                )
+                return _parse_date(date_value)
+            else:
+                logging.exception('Missing "%s"', date_label)
+
+        _sps_package = deepcopy(sps_package)
+        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row
+        # Verificar se tem PID
+        if _has_attr_to_set("scielo_pid_v2"):
+            if not f_pid:
+                logging.exception("Missing PID")
+            _sps_package.scielo_pid_v2 = f_pid
+
+        if _has_attr_to_set("aop_pid"):
+            if not f_pid_aop:
+                logging.info("It has no AOP PID")
+            _sps_package.aop_pid = f_pid_aop
+
+        # Verificar data de publicação e da coleção
+        if not _sps_package.is_ahead_of_print:
+            if _has_attr_to_set("documents_bundle_pubdate", 4):
+                dt_collection = _get_date_value("collection date", f_dt_collection)
+                if dt_collection:
+                    _sps_package.documents_bundle_pubdate = dt_collection
+
+            if _has_attr_to_set("document_pubdate", 8):
+                if len(_sps_package.documents_bundle_pubdate[0]) > 0:
+
+                    date_value = _get_date_value("first date", f_dt_created)
+                    if not date_value:
+                        date_value = _get_date_value(
+                            "update date", f_dt_updated)
+                    if date_value:
+                        _sps_package.document_pubdate = date_value
+
+        return _sps_package
+
     def update_xml_file(self, articles_data_reader, acron, issue_folder, pack_name):
         """
         Lê e atualiza o XML do pacote informado com os dados de artigos do arquivo
@@ -223,7 +291,7 @@ class BuildPSPackage(object):
         )
         # Ler target_xml_path
         obj_xmltree = xml.loadToXML(target_xml_path)
-        obj_xml = obj_xmltree.getroot()
+
         sps_package = self._update_sps_package_object(
             articles_data_reader, SPS_Package(obj_xmltree), pack_name
         )
@@ -244,8 +312,7 @@ class BuildPSPackage(object):
         shutil.copy(source_xml_path, target_path)
         xml_target_path = os.path.join(
             target_path, os.path.basename(xml_relative_path))
-        if os.path.isfile(xml_target_path):
-            return xml_target_path
+        return xml_target_path
 
     def rename_pdf_trans_filename(self, filename):
 
@@ -347,24 +414,28 @@ class BuildPSPackage(object):
             """
             for row in articles_data_reader:
                 splitted = row.split(",")
-                if len(splitted) == 6:
-                    f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = splitted
+                if len(splitted) != 6:
+                    continue
 
-                    xml_relative_path = f_file
-                    logging.info("Process XML: %s" % xml_relative_path)
+                f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = splitted
 
-                    target_path = self.get_target_path(xml_relative_path)
+                xml_relative_path = f_file
+                logging.info("Process ID: %s" % f_pid)
+                logging.info("Process XML: %s" % xml_relative_path)
+                target_path = self.get_target_path(xml_relative_path)
+                try:
                     xml_target_path = self.collect_xml(xml_relative_path, target_path)
+                except FileNotFoundError as e:
+                    logging.exception(e)
+                else:
                     acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(xml_relative_path)
 
                     xml_sps = self.update_xml_file(
                         articles_data_reader, acron, issue_folder, pack_name
                     )
-
                     self.collect_pdf(
                         acron, issue_folder, pack_name, xml_sps.languages
                     )
-
                     self.collect_img(acron, issue_folder, pack_name)
 
 
