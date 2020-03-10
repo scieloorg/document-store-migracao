@@ -71,6 +71,21 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
             "/data/output/abc/v1n1/bla"
         )
 
+    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
+    @mock.patch("documentstore_migracao.utils.build_ps_package.os.path.isfile", return_value=True)
+    def test_collection_xml_path_returns_xml_target_path(self, mock_isfile, mock_copy):
+        result = self.builder.collect_xml("abc/v1n1/bla.xml", "/data/output/abc/v1n1/bla")
+        mock_copy.assert_called_once_with(
+            "/data/xmls/abc/v1n1/bla.xml", "/data/output/abc/v1n1/bla")
+        mock_isfile.assert_called_once_with(
+            "/data/output/abc/v1n1/bla/bla.xml")
+
+    def test_get_acron_issuefolder_packname_path_returns_acron_issuefolder_packname(self):
+        acron, issue_folder, pack_name = self.builder.get_acron_issuefolder_packname("abc/v1n1/bla.xml")
+        self.assertEqual(acron, "abc")
+        self.assertEqual(issue_folder, "v1n1")
+        self.assertEqual(pack_name, "bla")
+
 
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 

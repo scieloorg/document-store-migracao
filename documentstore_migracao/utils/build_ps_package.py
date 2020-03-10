@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 import os
+import shutil
 import sys
 import argparse
 import textwrap
@@ -238,25 +239,13 @@ class BuildPSPackage(object):
             os.makedirs(target_path)
         return target_path
 
-    def collect_xml(self, acron, xml):
-        issue_folder = path.basename(path.dirname(xml))
-
-        file_name_ext = path.basename(xml)
-
-        file_name, _ = path.splitext(file_name_ext)
-
-        target_folder = path.join(acron, issue_folder, file_name)
-
-        logging.info("Make dir package: %s" % target_folder)
-
-        self.out_fs.makedirs(target_folder, recreate=True)
-
-        xml_path = path.combine(acron, xml)
-
-        target_xml_path = path.join(acron, issue_folder, file_name, file_name_ext)
-
-        self.copy(xml_path, target_xml_path)
-        return issue_folder, file_name
+    def collect_xml(self, xml_relative_path, target_path):
+        source_xml_path = os.path.join(self.xml_folder, xml_relative_path)
+        shutil.copy(source_xml_path, target_path)
+        xml_target_path = os.path.join(
+            target_path, os.path.basename(xml_relative_path))
+        if os.path.isfile(xml_target_path):
+            return xml_target_path
 
     def rename_pdf_trans_filename(self, filename):
 
@@ -332,6 +321,14 @@ class BuildPSPackage(object):
 
             self.copy(img_path, target_img_path, src_fs=self.img_fs)
 
+    def get_acron_issuefolder_packname(self, xml_relative_path):
+        dirname = os.path.dirname(xml_relative_path)
+        basename = os.path.basename(xml_relative_path)
+        pack_name, ext = os.path.splitext(basename)
+        acron = os.path.dirname(dirname)
+        issue_folder = os.path.basename(dirname)
+        return acron, issue_folder, pack_name
+
     def run(self):
 
         if not self.check_acrons():
@@ -340,33 +337,35 @@ class BuildPSPackage(object):
         with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
             # pid, aoppid, file, pubdate, epubdate, update
             articles_data_reader = csv.DictReader(csvfile)
+            """
+            - 'PID'
+            - 'PID AOP'
+            - 'FILE'
+            - 'DATA (COLLECTION)'
+            - 'DATA PRIMEIRO PROCESSAMENTO'
+            - 'DATA DO ULTIMO PROCESSAMENTO'
+            """
+            for row in articles_data_reader:
+                splitted = row.split(",")
+                if len(splitted) == 6:
+                    f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = splitted
 
-            for acron in self.acrons:
+                    xml_relative_path = f_file
+                    logging.info("Process XML: %s" % xml_relative_path)
 
-                logging.info("Process acronym: %s" % acron)
+                    target_path = self.get_target_path(xml_relative_path)
+                    xml_target_path = self.collect_xml(xml_relative_path, target_path)
+                    acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(xml_relative_path)
 
-                walker = Walker(filter=["*.xml"], exclude=["*.*.xml"])
+                    xml_sps = self.update_xml_file(
+                        articles_data_reader, acron, issue_folder, pack_name
+                    )
 
-                acron_folder = path.join(self.xml_fs.root_path, acron)
+                    self.collect_pdf(
+                        acron, issue_folder, pack_name, xml_sps.languages
+                    )
 
-                for xml in walker.files(fs.open_fs(acron_folder)):
-
-                    if len(path.iteratepath(xml)) == 2:
-
-                        logging.info("Process XML: %s" % xml)
-
-                        issue_folder, pack_name = self.collect_xml(acron, xml)
-
-                        csvfile.seek(0)
-                        xml_sps = self.update_xml_file(
-                            articles_data_reader, acron, issue_folder, pack_name
-                        )
-
-                        self.collect_pdf(
-                            acron, issue_folder, pack_name, xml_sps.languages
-                        )
-
-                        self.collect_img(acron, issue_folder, pack_name)
+                    self.collect_img(acron, issue_folder, pack_name)
 
 
 def main():
