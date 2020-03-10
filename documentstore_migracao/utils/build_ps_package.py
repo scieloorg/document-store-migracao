@@ -258,9 +258,10 @@ class BuildPSPackage(object):
             _sps_package.scielo_pid_v2 = f_pid
 
         if _has_attr_to_set("aop_pid"):
-            if not f_pid_aop:
+            if f_pid_aop:
+                _sps_package.aop_pid = f_pid_aop
+            else:
                 logging.info("It has no AOP PID")
-            _sps_package.aop_pid = f_pid_aop
 
         # Verificar data de publicação e da coleção
         if not _sps_package.is_ahead_of_print:

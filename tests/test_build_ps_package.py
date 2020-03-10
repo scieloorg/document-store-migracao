@@ -55,6 +55,26 @@ class TestBuildSPSPackageBase(TestCase):
             "/data/article_data_file.csv",
         )
         self.article_data_reader = csv.DictReader(fake_csv(), fieldnames=CSV_FIELDNAMES)
+        self.rows = [
+            ['S0101-01012019000100001',
+             '',
+             'test/v1n1/1806-0013-test-01-01-0001.xml',
+             '',
+             '',
+             ''],
+            ['S0101-01012019000100002',
+             'S0101-01012019005000001',
+             'test/v1n1/1806-0013-test-01-01-0002.xml',
+             '20190200',
+             '20190115',
+             '20190507'],
+            ['S0101-01012019000100003',
+             '',
+             'test/v1n1/1806-0013-test-01-01-0003.xml',
+             '',
+             '',
+             '']
+        ]
 
 
 class TestBuildSPSPackage(TestBuildSPSPackageBase):
@@ -140,6 +160,16 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
         )
         self.assertEqual(result.aop_pid, "S0101-01012019005000001")
 
+    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
+    def test__update_sps_package_obj_updates_aop_pid_if_pid_is_none(self, mock_getattr):
+        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
+        pack_name = "1806-0013-test-01-01-0002"
+        mock_getattr.side_effect = [None, None]
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[1]
+        )
+        self.assertEqual(result.aop_pid, "S0101-01012019005000001")
+
     def test__update_sps_package_object_updates_aop_pid_if_pid_is_found(self):
         mk_sps_package = mock.Mock(
             spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
@@ -147,6 +177,18 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
         pack_name = "1806-0013-test-01-01-0002"
         result = self.builder._update_sps_package_object(
             self.article_data_reader, mk_sps_package, pack_name
+        )
+        self.assertEqual(result.aop_pid, "S0101-01012019005000001")
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
+    def test__update_sps_package_obj_updates_aop_pid_if_pid_is_found(self, mock_getattr):
+        mock_getattr.side_effect = ["S0101-01012019000100002", None]
+        mk_sps_package = mock.Mock(
+            spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
+        )
+        pack_name = "1806-0013-test-01-01-0002"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[1]
         )
         self.assertEqual(result.aop_pid, "S0101-01012019005000001")
 
@@ -164,6 +206,18 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
                     self.article_data_reader, mk_sps_package, pack_name
                 )
                 self.assertIsNone(result.aop_pid)
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
+    def test__update_sps_package_obj_does_not_update_aop_pid_if_it_is_not_aop(self, mock_getattr):
+        mock_getattr.side_effect = ["S0101-01012019000100002", None]
+        mk_sps_package = mock.Mock(
+            spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
+        )
+        pack_name = "1806-0013-test-01-01-0001"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[0]
+        )
+        self.assertIsNone(result.aop_pid)
 
 
 class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
