@@ -107,24 +107,6 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
 
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
-    def test__update_sps_package_object_updates_pid_if_it_is_none(self):
-        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
-        pack_name = "1806-0013-test-01-01-0001"
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, mk_sps_package, pack_name
-        )
-        self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100001")
-
-    def test__update_sps_package_object_does_not_update_pid_if_it_is_not_none(self):
-        mk_sps_package = mock.Mock(
-            spec=SPS_Package, scielo_pid_v2="S0101-01012019000100999"
-        )
-        pack_name = "1806-0013-test-01-01-0001"
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, mk_sps_package, pack_name
-        )
-        self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100999")
-
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_updates_pid_if_it_is_none(self, mock_getattr):
         mk_sps_package = mock.Mock(spec=SPS_Package)
@@ -152,14 +134,6 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
 class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
 
-    def test__update_sps_package_object_updates_aop_pid_if_pid_is_none(self):
-        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
-        pack_name = "1806-0013-test-01-01-0002"
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, mk_sps_package, pack_name
-        )
-        self.assertEqual(result.aop_pid, "S0101-01012019005000001")
-
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_updates_aop_pid_if_pid_is_none(self, mock_getattr):
         mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
@@ -167,16 +141,6 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
         mock_getattr.side_effect = [None, None]
         result = self.builder._update_sps_package_obj(
             mk_sps_package, pack_name, self.rows[1]
-        )
-        self.assertEqual(result.aop_pid, "S0101-01012019005000001")
-
-    def test__update_sps_package_object_updates_aop_pid_if_pid_is_found(self):
-        mk_sps_package = mock.Mock(
-            spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
-        )
-        pack_name = "1806-0013-test-01-01-0002"
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, mk_sps_package, pack_name
         )
         self.assertEqual(result.aop_pid, "S0101-01012019005000001")
 
@@ -192,21 +156,6 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
         )
         self.assertEqual(result.aop_pid, "S0101-01012019005000001")
 
-    def test__update_sps_package_object_does_not_update_aop_pid_if_it_is_not_aop(self):
-        article_data = (
-            ("S0101-01012019000100001", "1806-0013-test-01-01-0001"),
-            (None, "1806-0013-test-01-01-0003"),
-        )
-        for scielo_pid_v2, pack_name in article_data:
-            with self.subTest(scielo_pid_v2=scielo_pid_v2, pack_name=pack_name):
-                mk_sps_package = mock.Mock(
-                    spec=SPS_Package, aop_pid=None, scielo_pid_v2=scielo_pid_v2
-                )
-                result = self.builder._update_sps_package_object(
-                    self.article_data_reader, mk_sps_package, pack_name
-                )
-                self.assertIsNone(result.aop_pid)
-
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_does_not_update_aop_pid_if_it_is_not_aop(self, mock_getattr):
         mock_getattr.side_effect = ["S0101-01012019000100002", None]
@@ -221,20 +170,6 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
 
 
 class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
-
-    def test__update_sps_package_object_does_not_update_pubdate_if_it_is_aop(self):
-        mk_sps_package = mock.Mock(
-            spec=SPS_Package,
-            aop_pid=None,
-            scielo_pid_v2="S0101-01012019000100003",
-            is_ahead_of_print=True,
-        )
-        pack_name = "1806-0013-test-01-01-0003"
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, mk_sps_package, pack_name
-        )
-        mk_sps_package.document_pubdate.assert_not_called()
-        mk_sps_package.documents_bundle_pubdate.assert_not_called()
 
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_does_not_update_pubdate_if_it_is_aop(self, mock_getattr):
@@ -266,26 +201,12 @@ class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
             document_pubdate=("2012", "01", "15",)
         )
 
-    def test__update_sps_package_object_completes_documents_bundle_pubdate(self):
-        self.mk_sps_package.documents_bundle_pubdate = ("", "", "",)
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, self.mk_sps_package, self.pack_name
-        )
-        self.assertEqual(result.documents_bundle_pubdate, ("2019", "02", "",))
-
     def test__update_sps_package_obj_completes_documents_bundle_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("", "", "",)
         result = self.builder._update_sps_package_obj(
             self.mk_sps_package, self.pack_name, self.rows[1]
         )
         self.assertEqual(result.documents_bundle_pubdate, ("2019", "02", "",))
-
-    def test__update_sps_package_object_does_not_change_documents_bundle_pubdate(self):
-        self.mk_sps_package.documents_bundle_pubdate = ("2012", "", "",)
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, self.mk_sps_package, self.pack_name
-        )
-        self.assertEqual(result.documents_bundle_pubdate, ("2012", "", "",))
 
     def test__update_sps_package_obj_does_not_change_documents_bundle_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "", "",)
@@ -307,14 +228,6 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
             is_ahead_of_print=False,
         )
 
-    def test__update_sps_package_object_completes_document_pubdate(self):
-        self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "03",)
-        self.mk_sps_package.document_pubdate = ("", "", "",)
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, self.mk_sps_package, self.pack_name
-        )
-        self.assertEqual(result.document_pubdate, ("2019", "01", "15",))
-
     def test__update_sps_package_obj_completes_document_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "03",)
         self.mk_sps_package.document_pubdate = ("", "", "",)
@@ -322,14 +235,6 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
             self.mk_sps_package, self.pack_name, self.rows[1]
         )
         self.assertEqual(result.document_pubdate, ("2019", "01", "15",))
-
-    def test__update_sps_package_object_does_not_change_document_pubdate(self):
-        self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "",)
-        self.mk_sps_package.document_pubdate = ("2012", "01", "15",)
-        result = self.builder._update_sps_package_object(
-            self.article_data_reader, self.mk_sps_package, self.pack_name
-        )
-        self.assertEqual(result.document_pubdate, ("2012", "01", "15",))
 
     def test__update_sps_package_obj_does_not_change_document_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "",)
