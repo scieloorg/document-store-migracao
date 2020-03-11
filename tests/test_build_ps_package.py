@@ -236,6 +236,22 @@ class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
         mk_sps_package.document_pubdate.assert_not_called()
         mk_sps_package.documents_bundle_pubdate.assert_not_called()
 
+    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
+    def test__update_sps_package_obj_does_not_update_pubdate_if_it_is_aop(self, mock_getattr):
+        mock_getattr.side_effect = ["S0101-01012019000100003", None]
+        mk_sps_package = mock.Mock(
+            spec=SPS_Package,
+            aop_pid=None,
+            scielo_pid_v2="S0101-01012019000100003",
+            is_ahead_of_print=True,
+        )
+        pack_name = "1806-0013-test-01-01-0003"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[2]
+        )
+        mk_sps_package.document_pubdate.assert_not_called()
+        mk_sps_package.documents_bundle_pubdate.assert_not_called()
+
 
 class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
 
@@ -257,10 +273,24 @@ class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
         )
         self.assertEqual(result.documents_bundle_pubdate, ("2019", "02", "",))
 
+    def test__update_sps_package_obj_completes_documents_bundle_pubdate(self):
+        self.mk_sps_package.documents_bundle_pubdate = ("", "", "",)
+        result = self.builder._update_sps_package_obj(
+            self.mk_sps_package, self.pack_name, self.rows[1]
+        )
+        self.assertEqual(result.documents_bundle_pubdate, ("2019", "02", "",))
+
     def test__update_sps_package_object_does_not_change_documents_bundle_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "", "",)
         result = self.builder._update_sps_package_object(
             self.article_data_reader, self.mk_sps_package, self.pack_name
+        )
+        self.assertEqual(result.documents_bundle_pubdate, ("2012", "", "",))
+
+    def test__update_sps_package_obj_does_not_change_documents_bundle_pubdate(self):
+        self.mk_sps_package.documents_bundle_pubdate = ("2012", "", "",)
+        result = self.builder._update_sps_package_obj(
+            self.mk_sps_package, self.pack_name, self.rows[1]
         )
         self.assertEqual(result.documents_bundle_pubdate, ("2012", "", "",))
 
@@ -285,10 +315,26 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
         )
         self.assertEqual(result.document_pubdate, ("2019", "01", "15",))
 
+    def test__update_sps_package_obj_completes_document_pubdate(self):
+        self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "03",)
+        self.mk_sps_package.document_pubdate = ("", "", "",)
+        result = self.builder._update_sps_package_obj(
+            self.mk_sps_package, self.pack_name, self.rows[1]
+        )
+        self.assertEqual(result.document_pubdate, ("2019", "01", "15",))
+
     def test__update_sps_package_object_does_not_change_document_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "",)
         self.mk_sps_package.document_pubdate = ("2012", "01", "15",)
         result = self.builder._update_sps_package_object(
             self.article_data_reader, self.mk_sps_package, self.pack_name
+        )
+        self.assertEqual(result.document_pubdate, ("2012", "01", "15",))
+
+    def test__update_sps_package_obj_does_not_change_document_pubdate(self):
+        self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "",)
+        self.mk_sps_package.document_pubdate = ("2012", "01", "15",)
+        result = self.builder._update_sps_package_obj(
+            self.mk_sps_package, self.pack_name, self.rows[1]
         )
         self.assertEqual(result.document_pubdate, ("2012", "01", "15",))
