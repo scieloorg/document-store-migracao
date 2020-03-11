@@ -313,16 +313,15 @@ class BuildPSPackage(object):
             - 'DATA DO ULTIMO PROCESSAMENTO'
             """
             for row in articles_data_reader:
-                splitted = row.split(",")
-                if len(splitted) != 6:
+                if len(row) != 6:
                     continue
-
-                f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = splitted
+                f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row.values()
 
                 xml_relative_path = f_file
                 logging.info("Process ID: %s" % f_pid)
                 logging.info("Process XML: %s" % xml_relative_path)
                 target_path = self.get_target_path(xml_relative_path)
+                logging.info("Package: %s" % target_path)
                 try:
                     xml_target_path = self.collect_xml(xml_relative_path, target_path)
                 except FileNotFoundError as e:
@@ -331,7 +330,7 @@ class BuildPSPackage(object):
                     acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(xml_relative_path)
 
                     xml_sps = self.update_xml_file(
-                        xml_target_path, row, pack_name
+                        xml_target_path, row.values(), pack_name
                     )
                     self.collect_pdf(
                         acron, issue_folder, pack_name, xml_sps.languages
