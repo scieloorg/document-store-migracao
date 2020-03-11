@@ -282,22 +282,18 @@ class BuildPSPackage(object):
 
         return _sps_package
 
-    def update_xml_file(self, articles_data_reader, acron, issue_folder, pack_name):
+    def update_xml_file(self, xml_target_path, row, pack_name):
         """
         Lê e atualiza o XML do pacote informado com os dados de artigos do arquivo
         articles_data_reader.
         """
-        target_xml_path = path.join(
-            self.out_fs.root_path, acron, issue_folder, pack_name, pack_name + ".xml"
-        )
-        # Ler target_xml_path
-        obj_xmltree = xml.loadToXML(target_xml_path)
+        obj_xmltree = xml.loadToXML(xml_target_path)
 
-        sps_package = self._update_sps_package_object(
-            articles_data_reader, SPS_Package(obj_xmltree), pack_name
+        sps_package = self._update_sps_package_obj(
+            SPS_Package(obj_xmltree), pack_name, row
         )
         # Salva XML com alterações
-        xml.objXML2file(target_xml_path, sps_package.xmltree, pretty=True)
+        xml.objXML2file(xml_target_path, sps_package.xmltree, pretty=True)
         return sps_package
 
     def get_target_path(self, xml_relative_path):
@@ -432,7 +428,7 @@ class BuildPSPackage(object):
                     acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(xml_relative_path)
 
                     xml_sps = self.update_xml_file(
-                        articles_data_reader, acron, issue_folder, pack_name
+                        xml_target_path, row, pack_name
                     )
                     self.collect_pdf(
                         acron, issue_folder, pack_name, xml_sps.languages
