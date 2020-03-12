@@ -2,6 +2,10 @@
 
 It is a tool specifically built to migrate your SciELO collection to a new platform named SciELO Publishing Framework. Those next topics must contain more information about the way to operate this engine.
 
+## Topics
+
+- [Quality assurance](quality-assurance.md)
+
 ### FAQ
 
 - **Q**: During the conversion step the Python process crash.
