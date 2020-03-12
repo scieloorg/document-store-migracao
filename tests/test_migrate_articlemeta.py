@@ -95,8 +95,3 @@ class TestMigrateProcess(unittest.TestCase):
             session_db=ANY, file_documents=ANY, file_journals=ANY
         )
 
-    def test_not_arg(self):
-
-        with self.assertRaises(SystemExit) as cm:
-            migrate_articlemeta_parser([])
-            self.assertEqual("Vc deve escolher algum parametro", str(cm.exception))
