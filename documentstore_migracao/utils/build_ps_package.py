@@ -243,62 +243,6 @@ class BuildPSPackage(object):
             with open(_renditions_manifest_path, "w") as jfile:
                 jfile.write(json.dumps(metadata))
 
-    def rename_pdf_trans_filename(self, filename):
-
-        if filename.find("_") == 3:
-            name, ext = path.splitext(path.basename(filename))
-
-            return "%s%s%s%s" % (name[3:], "-", name[0:2], ext)
-        else:
-            return path.basename(filename)
-
-    def collect_pdf(self, acron, issue_folder, pack_name, languages):
-        def get_rendition_info(languages, pdf_filename):
-            pdf_uri = path.join("pdf", acron, issue_folder, pdf_filename)
-            if pdf_filename.find("_") == 2:
-                return {lang: pdf_uri for lang in languages if lang in pdf_filename}
-            else:
-                pdf_lang = [lang for lang in languages if lang in pdf_filename]
-                if len(pdf_lang) == 0:
-                    return {languages[0]: pdf_uri}
-
-        def save_renditions_manifest(metadata):
-            if len(metadata) > 0:
-                logging.info(
-                    "Saving %s/%s/%s/manifest.json", acron, issue_folder, pack_name
-                )
-                _renditions_manifest_path = path.join(
-                    self.out_fs.root_path,
-                    acron,
-                    issue_folder,
-                    pack_name,
-                    "manifest.json",
-                )
-                with open(_renditions_manifest_path, "w") as jfile:
-                    jfile.write(json.dumps(metadata))
-
-        walker = Walker(filter=["*" + pack_name + "*.pdf"], max_depth=2)
-
-        pdf_path = path.join(self.pdf_fs.root_path, acron, issue_folder)
-
-        renditions_manifest = {}
-        for pdf in walker.files(fs.open_fs(pdf_path)):
-
-            pdf_path = path.join(acron, issue_folder, path.basename(pdf))
-
-            target_pdf_path = path.join(
-                acron, issue_folder, pack_name, self.rename_pdf_trans_filename(pdf)
-            )
-
-            self.copy(pdf_path, target_pdf_path, src_fs=self.pdf_fs)
-
-            rendition_info = get_rendition_info(languages, path.basename(pdf))
-            if rendition_info is not None:
-                logging.info("Updating renditions manifest with %s", rendition_info)
-                renditions_manifest.update(rendition_info)
-
-        save_renditions_manifest(renditions_manifest)
-
     def collect_img(self, acron, issue_folder, pack_name):
 
         walker = Walker(
@@ -361,9 +305,11 @@ class BuildPSPackage(object):
                     xml_sps = self.update_xml_file(
                         xml_target_path, row.values(), pack_name
                     )
-                    self.collect_pdf(
-                        acron, issue_folder, pack_name, xml_sps.languages
-                    )
+                    renditions = self.collect_renditions(
+                        target_path, acron, issue_folder, pack_name,
+                        xml_sps.languages)
+                    self.save_renditions_manifest(
+                        target_path, dict(renditions))
                     self.collect_img(acron, issue_folder, pack_name)
 
 
