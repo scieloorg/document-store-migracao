@@ -214,6 +214,43 @@ class BuildPSPackage(object):
             target_path, os.path.basename(xml_relative_path))
         return xml_target_path
 
+    def collect_renditions(self, target_path, acron, issue_folder, pack_name, langs):
+        source_path = os.path.join(self.pdf_folder, acron, issue_folder)
+        renditions = []
+        files = [(pack_name+".pdf", pack_name+".pdf")]
+        for lang in langs[1:]:
+            files.append(
+                (lang + "_" + pack_name + ".pdf",
+                    pack_name + "-" + lang + ".pdf"))
+        for source, dest in files:
+            try:
+                shutil.copy(os.path.join(source_path, source), target_path)
+            except FileNotFoundError:
+                logging.exception("Not found %s" % source)
+            else:
+                renditions.append(dest)
+        return list(zip(langs, renditions))
+
+    def manifest_renditions(self, langs, renditions):
+        manifest = {
+            lang: rendition
+            for lang, rendition in zip(langs, renditions)
+        }
+        return manifest
+
+    def save_renditions_manifest(self, target_path, metadata):
+        if len(metadata) > 0:
+            logging.info(
+                "Saving %s/manifest.json", target_path
+            )
+            _renditions_manifest_path = path.join(
+                self.out_fs.root_path,
+                target_path,
+                "manifest.json",
+            )
+            with open(_renditions_manifest_path, "w") as jfile:
+                jfile.write(json.dumps(metadata))
+
     def rename_pdf_trans_filename(self, filename):
 
         if filename.find("_") == 3:

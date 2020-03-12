@@ -104,6 +104,40 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
         self.assertEqual(issue_folder, "v1n1")
         self.assertEqual(pack_name, "bla")
 
+    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
+    def test_collect_renditions_for_document_without_translations(self, mock_copy):
+        result = self.builder.collect_renditions(
+            "/data/output/abc/v1n1/bla", "abc", "v1n1", "bla", ["pt"])
+        mock_copy.assert_called_once_with(
+            "/data/pdfs/abc/v1n1/bla.pdf", "/data/output/abc/v1n1/bla"
+        )
+        self.assertEqual(result, [("pt", "bla.pdf")])
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
+    def test_collect_renditions_for_document_with_translations_in_en_and_es(self, mock_copy):
+        result = self.builder.collect_renditions(
+            "/data/output/abc/v1n1/bla", "abc", "v1n1", "bla",
+            ["pt", "en", "es"])
+        assert mock_copy.call_args_list == [
+            mock.call(
+                "/data/pdfs/abc/v1n1/bla.pdf", "/data/output/abc/v1n1/bla"
+            ),
+            mock.call(
+                "/data/pdfs/abc/v1n1/en_bla.pdf", "/data/output/abc/v1n1/bla"
+            ),
+            mock.call(
+                "/data/pdfs/abc/v1n1/es_bla.pdf", "/data/output/abc/v1n1/bla"
+            ),
+        ]
+        self.assertEqual(
+            result,
+            [
+                ("pt", "bla.pdf"),
+                ("en", "bla-en.pdf"),
+                ("es", "bla-es.pdf"),
+            ]
+        )
+
 
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
