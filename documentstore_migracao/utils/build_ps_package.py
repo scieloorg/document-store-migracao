@@ -231,20 +231,12 @@ class BuildPSPackage(object):
                 renditions.append(dest)
         return list(zip(langs, renditions))
 
-    def manifest_renditions(self, langs, renditions):
-        manifest = {
-            lang: rendition
-            for lang, rendition in zip(langs, renditions)
-        }
-        return manifest
-
     def save_renditions_manifest(self, target_path, metadata):
         if len(metadata) > 0:
             logging.info(
                 "Saving %s/manifest.json", target_path
             )
             _renditions_manifest_path = path.join(
-                self.out_fs.root_path,
                 target_path,
                 "manifest.json",
             )

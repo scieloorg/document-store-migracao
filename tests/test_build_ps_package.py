@@ -138,6 +138,12 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
             ]
         )
 
+    @mock.patch("documentstore_migracao.utils.build_ps_package.open")
+    def test_save_renditions_manifest_creates_manifest_in_target_path(self, mock_open):
+        self.builder.save_renditions_manifest(
+            "/data/output/abc/v1n1/bla", "{'pt': 'bla'}")
+        mock_open.assert_called_once_with("/data/output/abc/v1n1/bla/manifest.json", "w")
+
 
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
