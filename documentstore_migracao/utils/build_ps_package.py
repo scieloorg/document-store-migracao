@@ -12,7 +12,6 @@ from copy import deepcopy
 
 import fs
 from fs import path, copy, errors
-from fs.walk import Walker
 
 from documentstore_migracao.utils import xml
 from documentstore_migracao.export.sps_package import SPS_Package
@@ -251,24 +250,6 @@ class BuildPSPackage(object):
             except FileNotFoundError:
                 logging.exception("Not found %s" % img)
 
-    def collect_img(self, acron, issue_folder, pack_name):
-
-        walker = Walker(
-            filter=["*" + pack_name + "*"], max_depth=2, exclude_dirs=["html"]
-        )
-
-        img_path = path.join(self.img_fs.root_path, acron, issue_folder)
-
-        for img in walker.files(fs.open_fs(img_path)):
-
-            img_path = path.join(acron, issue_folder, path.basename(img))
-
-            target_img_path = path.join(
-                acron, issue_folder, pack_name, path.basename(img)
-            )
-
-            self.copy(img_path, target_img_path, src_fs=self.img_fs)
-
     def get_acron_issuefolder_packname(self, xml_relative_path):
         dirname = os.path.dirname(xml_relative_path)
         basename = os.path.basename(xml_relative_path)
@@ -318,7 +299,9 @@ class BuildPSPackage(object):
                         xml_sps.languages)
                     self.save_renditions_manifest(
                         target_path, dict(renditions))
-                    self.collect_img(acron, issue_folder, pack_name)
+                    self.collect_assets(
+                        target_path, acron, issue_folder, pack_name,
+                        xml_sps.assets)
 
 
 def main():

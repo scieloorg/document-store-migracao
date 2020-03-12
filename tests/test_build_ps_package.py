@@ -1,14 +1,12 @@
 import io
-import shutil
 import csv
-import tempfile
 import pathlib
 from unittest import TestCase, mock
 
 from lxml import etree
 
 from . import utils
-from documentstore_migracao.utils import build_ps_package, xml
+from documentstore_migracao.utils import build_ps_package
 from documentstore_migracao.export.sps_package import SPS_Package
 
 
