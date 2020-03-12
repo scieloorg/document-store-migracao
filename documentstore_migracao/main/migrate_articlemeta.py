@@ -6,6 +6,7 @@ from .base import base_parser, minio_parser, mongodb_parser
 
 from documentstore_migracao import config
 from documentstore_migracao.utils.build_ps_package import BuildPSPackage
+from documentstore_migracao.utils import quality_checker
 
 from documentstore_migracao.processing import (
     extracted,
@@ -203,6 +204,27 @@ def migrate_articlemeta_parser(sargs):
         help="Override old mixed citations in XML file",
     )
 
+    quality_parser = subparsers.add_parser(
+        "quality", help="Help to check the quality of the migration process.",
+    )
+
+    quality_parser.add_argument(
+        "pids",
+        help="File containg a list of pids to check.",
+        type=argparse.FileType("r"),
+    )
+
+    quality_parser.add_argument(
+        "--output",
+        help="Path to the output file that will contain URLs unavailable.",
+        type=argparse.FileType("a"),
+    )
+
+    quality_parser.add_argument(
+        "target",
+        help='Define an URL template for target Website (e.g "http://www.scielo.br/article/\$id"',
+    )
+
     ################################################################################################
     args = parser.parse_args(sargs)
 
@@ -278,9 +300,11 @@ def migrate_articlemeta_parser(sargs):
             override=args.override,
         )
 
-    else:
-        raise SystemExit(
-            "Vc deve escolher algum parametro, ou '--help' ou '-h' para ajuda"
+    elif args.command == "quality":
+        quality_checker.check_documents_availability_in_website(
+            args.pids.readlines(), args.target, args.output
         )
+    else:
+        parser.print_help()
 
     return 0
