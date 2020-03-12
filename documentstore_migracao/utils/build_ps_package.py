@@ -243,6 +243,14 @@ class BuildPSPackage(object):
             with open(_renditions_manifest_path, "w") as jfile:
                 jfile.write(json.dumps(metadata))
 
+    def collect_assets(self, target_path, acron, issue_folder, pack_name, images):
+        source_path = os.path.join(self.img_folder, acron, issue_folder)
+        for img in set(images):
+            try:
+                shutil.copy(os.path.join(source_path, img), target_path)
+            except FileNotFoundError:
+                logging.exception("Not found %s" % img)
+
     def collect_img(self, acron, issue_folder, pack_name):
 
         walker = Walker(

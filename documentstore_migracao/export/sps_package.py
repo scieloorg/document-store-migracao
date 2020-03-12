@@ -279,6 +279,15 @@ class SPS_Package:
         return "-g".join([self.package_name, suffix])
 
     @property
+    def assets(self):
+        return [
+            node.get("{http://www.w3.org/1999/xlink}href")
+            for node in xmltree.findall("*[@xlink:href]")
+            if (not "/" in node.get("{http://www.w3.org/1999/xlink}href") and
+                not ":" in node.get("{http://www.w3.org/1999/xlink}href"))
+        ]
+
+    @property
     def elements_which_has_xlink_href(self):
         paths = [
             ".//ext-link[@xlink:href]",

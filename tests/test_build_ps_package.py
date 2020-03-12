@@ -144,6 +144,33 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
             "/data/output/abc/v1n1/bla", "{'pt': 'bla'}")
         mock_open.assert_called_once_with("/data/output/abc/v1n1/bla/manifest.json", "w")
 
+    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
+    def test_collect_assets_creates_files_in_target_path(self, mock_copy):
+        images = ["bla1.jpg", "bla2.jpg", "bla3.jpg"]
+        self.builder.collect_assets(
+            "/data/output/abc/v1n1/bla", "abc", "v1n1", "bla", images)
+        calls = [
+            mock.call(
+                "/data/imgs/abc/v1n1/bla1.jpg", "/data/output/abc/v1n1/bla"
+            ),
+            mock.call(
+                "/data/imgs/abc/v1n1/bla2.jpg", "/data/output/abc/v1n1/bla"
+            ),
+            mock.call(
+                "/data/imgs/abc/v1n1/bla3.jpg", "/data/output/abc/v1n1/bla"
+            ),
+        ]
+        mock_copy.assert_has_calls(calls, any_order=True)
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
+    def test_collect_assets_creates_one_file_in_target_path(self, mock_copy):
+        images = ["bla.jpg", "bla.jpg", "bla.jpg"]
+        self.builder.collect_assets(
+            "/data/output/abc/v1n1/bla", "abc", "v1n1", "bla", images)
+        mock_copy.assert_called_once_with(
+            "/data/imgs/abc/v1n1/bla.jpg", "/data/output/abc/v1n1/bla"
+        )
+
 
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
