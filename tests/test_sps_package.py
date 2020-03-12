@@ -1924,7 +1924,9 @@ class TestMoveAcknowledgementsFromBodyToBack(unittest.TestCase):
                 <p></p>
             </body>
         </article>"""
-        xmltree = etree.fromstring(self.xml)
+        xmltree = etree.fromstring(
+            self.xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+        )
         self.sps_package = SPS_Package(xmltree, None)
 
     def test_body_without_acknowledgements(self):
@@ -1959,7 +1961,9 @@ class TestDoNotMoveAcknowledgementWordFromBodyText(unittest.TestCase):
                 <p>Texto de teste.</p>
             </body>
         </article>"""
-        xmltree = etree.fromstring(self.xml)
+        xmltree = etree.fromstring(
+            self.xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+        )
         self.sps_package = SPS_Package(xmltree, None)
 
     def test_body_with_acknowledgement_in_body_content(self):
@@ -1977,15 +1981,24 @@ class TestMoveAcknowledgementsFromBodyToExistingBack(unittest.TestCase):
     def setUp(self):
         self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="pt">
             <body>
-                <p>AGRADECIMENTO</p>
+                <p><bold>Subtítulo do Texto</bold></p>
                 <p></p>
-                <p>Ao Fundo de Amparo à Pesquisa</p>
+                <p>O agradecimento é uma expressão de reconhecimento de uma ação.</p>
+                <p>Texto de teste.</p>
+                <p>
+                    <font face="Verdana, Arial, Helvetica, sans-serif" size="3">AGRADECIMENTO</font>
+                </p>
+                <p></p>
+                <p>
+                    <font face="Verdana, Arial, Helvetica, sans-serif" size="2">Ao Fundo de Amparo à Pesquisa</font></p>
             </body>
             <back>
                 <notes></notes>
             </back>
         </article>"""
-        xmltree = etree.fromstring(self.xml)
+        xmltree = etree.fromstring(
+            self.xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+        )
         self.sps_package = SPS_Package(xmltree, None)
 
     def test_body_without_acknowledgements(self):
@@ -1994,7 +2007,7 @@ class TestMoveAcknowledgementsFromBodyToExistingBack(unittest.TestCase):
         body_txt = etree.tostring(body_tag).decode("utf-8")
         self.assertNotIn("AGRADECIMENTO", body_txt)
         self.assertNotIn("Ao Fundo de Amparo à Pesquisa", body_txt)
-        self.assertEqual(len(body_tag.getchildren()), 0)
+        self.assertEqual(len(body_tag.getchildren()), 4)
 
     def test_existing_back_with_acknowledgements(self):
         self.sps_package._move_acknowledgements_from_body_to_back()
@@ -2029,7 +2042,9 @@ class TestMoveAcknowledgementsFromBodyToBackWithSubArticle(unittest.TestCase):
                 </body>
             </sub-article>
         </article>"""
-        xmltree = etree.fromstring(self.xml)
+        xmltree = etree.fromstring(
+            self.xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+        )
         self.sps_package = SPS_Package(xmltree, None)
 
     def test_article_body_without_acknowledgements(self):

@@ -580,23 +580,37 @@ class SPS_Package:
         o primeiro parágrafo seguinte contendo algum texto.
         """
 
-        def _get_acknowledgements(header, body):
+        def _get_acknowledgements(header, body, font_sizes):
             lc = header.lower()
             ack_tags_title = body.xpath(
                 f'*[contains(translate(., "{lc}", "{header}"), "{header}")]'
             )
-            if len(ack_tags_title) > 0:
-                text = " ".join([tag_text for tag_text in ack_tags_title[0].itertext()])
-                if len(text.strip().split()) == 1:
-                    return ack_tags_title[0]
+            for ack_tag_title in ack_tags_title:
+                text_words = (
+                    " ".join([tag_text for tag_text in ack_tag_title.itertext()])
+                    .strip()
+                    .split()
+                )
+                is_uppercase = all([c.isupper() for c in "".join(text_words)])
+                is_header_fontsize = (
+                    len(font_sizes) > 0
+                    and ack_tag_title.attrib.get("size") == font_sizes[-1]
+                )
+                if len(text_words) <= 3 or is_uppercase or is_header_fontsize:
+                    return ack_tag_title
 
         def _find_and_move_acknowledgements(body, back, ack_tag_title):
             new_ack_tag = etree.Element("ack")
             ack_tags_to_remove = [ack_tag_title]
             ack_tag = ack_tag_title.getnext()
             while ack_tag is not None:
-                if ack_tag.text is not None and len(ack_tag.text) > 0:
-                    new_ack_tag.append(deepcopy(ack_tag))
+                ack_tag_text = " ".join(
+                    [tag_text for tag_text in ack_tag.itertext()]
+                ).strip()
+                if len(ack_tag_text) > 0:
+                    new_p_tag = etree.Element("p")
+                    new_p_tag.text = ack_tag_text
+                    new_ack_tag.append(new_p_tag)
                     ack_tags_to_remove.append(ack_tag)
                     break
                 ack_tags_to_remove.append(ack_tag)
@@ -608,8 +622,12 @@ class SPS_Package:
 
         headers = ["AGRADECIMENTO", "ACKNOWLEDGEMENT", "AGRADECIMIENTO"]
         for body in self.xmltree.iterfind(".//body"):
+            font_sizes = [
+                int(font_tag.attrib.get("size", "0"))
+                for font_tag in body.findall(".//font")
+            ]
             for header in headers:
-                ack_tag_title = _get_acknowledgements(header, body)
+                ack_tag_title = _get_acknowledgements(header, body, sorted(font_sizes))
                 if ack_tag_title is not None:
                     back = body.getparent().find("./back")
                     if back is None:
