@@ -282,7 +282,7 @@ class SPS_Package:
     def assets(self):
         return [
             node.get("{http://www.w3.org/1999/xlink}href")
-            for node in xmltree.findall("*[@xlink:href]")
+            for node in self.xmltree.findall(".//*[@xlink:href]", namespaces={"xlink": "http://www.w3.org/1999/xlink"})
             if (not "/" in node.get("{http://www.w3.org/1999/xlink}href") and
                 not ":" in node.get("{http://www.w3.org/1999/xlink}href"))
         ]

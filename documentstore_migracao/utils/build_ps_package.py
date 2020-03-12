@@ -202,8 +202,15 @@ class BuildPSPackage(object):
         target_folder, ext = os.path.splitext(xml_relative_path)
         logging.info("Make dir package: %s" % target_folder)
         target_path = os.path.join(self.out_folder, target_folder)
-        if not os.path.isdir(target_path):
+        if os.path.isdir(target_path):
+            for f in os.listdir(target_path):
+                try:
+                    os.unlink(os.path.join(target_path, f))
+                except OSError as e:
+                    logging.exception(e)
+        else:
             os.makedirs(target_path)
+
         return target_path
 
     def collect_xml(self, xml_relative_path, target_path):
