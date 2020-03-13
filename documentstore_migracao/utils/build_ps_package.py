@@ -155,9 +155,10 @@ class BuildPSPackage(object):
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row
         # Verificar se tem PID
         if _has_attr_to_set("scielo_pid_v2"):
-            if not f_pid:
+            if f_pid:
+                _sps_package.scielo_pid_v2 = f_pid
+            else:
                 logging.exception("Missing PID")
-            _sps_package.scielo_pid_v2 = f_pid
 
         if _has_attr_to_set("aop_pid"):
             if f_pid_aop:
@@ -200,7 +201,7 @@ class BuildPSPackage(object):
 
     def get_target_path(self, xml_relative_path):
         target_folder, ext = os.path.splitext(xml_relative_path)
-        logging.info("Make dir package: %s" % target_folder)
+        logging.info("Make dir package: %s", target_folder)
         target_path = os.path.join(self.out_folder, target_folder)
         if os.path.isdir(target_path):
             for f in os.listdir(target_path):

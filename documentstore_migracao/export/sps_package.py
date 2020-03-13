@@ -280,12 +280,22 @@ class SPS_Package:
 
     @property
     def assets(self):
-        return [
-            node.get("{http://www.w3.org/1999/xlink}href")
-            for node in self.xmltree.findall(".//*[@xlink:href]", namespaces={"xlink": "http://www.w3.org/1999/xlink"})
-            if (not "/" in node.get("{http://www.w3.org/1999/xlink}href") and
-                not ":" in node.get("{http://www.w3.org/1999/xlink}href"))
-        ]
+        xpaths = (
+            '//graphic[@xlink:href]',
+            '//media[@xlink:href]',
+            '//inline-graphic[@xlink:href]',
+            '//supplementary-material[@xlink:href]',
+            '//inline-supplementary-material[@xlink:href]',
+        )
+        items = []
+        for xpath in xpaths:
+            for node in self.xmltree.findall(
+                    xpath,
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"}):
+                href = node.get("{http://www.w3.org/1999/xlink}href")
+                if ":" not in href and "/" not in href:
+                    items.append(href)
+        return items
 
     @property
     def elements_which_has_xlink_href(self):
