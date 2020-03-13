@@ -294,6 +294,9 @@ class SPS_Package:
                     namespaces={"xlink": "http://www.w3.org/1999/xlink"}):
                 href = node.get("{http://www.w3.org/1999/xlink}href")
                 if ":" not in href and "/" not in href:
+                    name, ext = os.path.splitext(href)
+                    if not ext:
+                        href += '.jpg'
                     items.append(href)
         return items
 
