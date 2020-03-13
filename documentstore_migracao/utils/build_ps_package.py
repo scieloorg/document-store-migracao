@@ -270,9 +270,11 @@ class BuildPSPackage(object):
         if not self.check_acrons():
             return False
 
+        fieldnames = "pid,aop_pid,file_path,date_collection,date_created,date_updated".split(",")
         with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
             # pid, aoppid, file, pubdate, epubdate, update
-            articles_data_reader = csv.DictReader(csvfile)
+            articles_data_reader = csv.DictReader(
+                csvfile, fieldnames=fieldnames)
             """
             - 'PID'
             - 'PID AOP'
@@ -282,7 +284,7 @@ class BuildPSPackage(object):
             - 'DATA DO ULTIMO PROCESSAMENTO'
             """
             for row in articles_data_reader:
-                if len(row) != 6:
+                if len(row) == 0:
                     continue
                 f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row.values()
 
