@@ -45,7 +45,6 @@ def fake_csv():
 class TestBuildSPSPackageBase(TestCase):
     def setUp(self):
         self.builder = build_ps_package.BuildPSPackage(
-            "test",
             "/data/xmls",
             "/data/imgs",
             "/data/pdfs",

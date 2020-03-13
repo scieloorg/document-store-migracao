@@ -33,50 +33,13 @@ class BuildPSPackage(object):
     """
 
     def __init__(
-        self, acrons, xml_folder, img_folder, pdf_folder, out_folder, articles_csvfile
+        self, xml_folder, img_folder, pdf_folder, out_folder, articles_csvfile
     ):
-        """
-        Param acrons: It list of acronym.
-
-        Example: ['mana', 'aa']
-        """
         self.xml_folder = xml_folder
         self.img_folder = img_folder
         self.pdf_folder = pdf_folder
         self.out_folder = out_folder
         self.articles_csvfile = articles_csvfile
-
-        if acrons:
-            self.acrons = acrons
-        else:
-            self.acrons = [
-                acron for acron in self.xml_fs.listdir(".") if self.xml_fs.isdir(acron)
-            ]
-
-    def check_acrons(self):
-        """
-        The struture of the xml_folder:
-
-            xml
-             |---aa
-             |---mana
-             |---ars
-             |---ct
-
-        The sub-folder of this structure are acronyms.
-
-        This method must check if exists file system directory acronym.
-
-        Return True or False, if all directory exists or not.
-        """
-
-        with self.xml_fs as cwd:
-            for acron in self.acrons:
-                if not cwd.exists(acron) or not cwd.isdir(acron):
-                    logging.info("There ins`t folder with acronym: %s" % acron)
-                    return False
-
-        return True
 
     @property
     def xml_fs(self):
@@ -268,9 +231,6 @@ class BuildPSPackage(object):
 
     def run(self):
 
-        if not self.check_acrons():
-            return False
-
         fieldnames = "pid,aop_pid,file_path,date_collection,date_created,date_updated".split(",")
         with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
             # pid, aoppid, file, pubdate, epubdate, update
@@ -333,10 +293,6 @@ def main():
     parser = argparse.ArgumentParser(textwrap.dedent(usage))
 
     parser.add_argument(
-        "-a", "--acrons", dest="acrons", nargs="+", help="journal acronyms."
-    )
-
-    parser.add_argument(
         "-Xfolder",
         "--Xfolder",
         dest="xml_folder",
@@ -383,7 +339,6 @@ def main():
     args = parser.parse_args()
 
     build_ps = BuildPSPackage(
-        args.acrons,
         args.xml_folder,
         args.img_folder,
         args.pdf_folder,
