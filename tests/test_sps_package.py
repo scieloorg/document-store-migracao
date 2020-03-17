@@ -411,7 +411,7 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
         self.assertEqual(self.sps_package.supplement, None)
 
     def test_number(self):
-        self.assertEqual(self.sps_package.number, "05")
+        self.assertEqual(self.sps_package.number, "5")
 
     def test_package_name_vol_num_fpage(self):
         self.assertEqual(
@@ -601,7 +601,7 @@ class Test_SPS_Package_VolNumSpeFpageLpage(unittest.TestCase):
         self.assertEqual(self.sps_package.supplement, None)
 
     def test_number(self):
-        self.assertEqual(self.sps_package.number, "05-spe")
+        self.assertEqual(self.sps_package.number, "5spe")
 
     def test_package_name_vol_num_spe_fpage(self):
         self.assertEqual(
@@ -662,6 +662,9 @@ class Test_SPS_Package_VolSpeNumFpageLpage(unittest.TestCase):
         self.assertEqual(
             self.sps_package.package_name, "1234-5678-acron-volume-spenum-fpage-lpage"
         )
+
+    def test_number(self):
+        self.assertEqual(self.sps_package.number, "spenum")
 
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
@@ -894,7 +897,7 @@ class Test_SPS_Package_VolNumSuplFpageLpage(unittest.TestCase):
         self.assertEqual(self.sps_package.supplement, "0")
 
     def test_number(self):
-        self.assertEqual(self.sps_package.number, "02")
+        self.assertEqual(self.sps_package.number, "2")
 
     def test_package_name_vol_num_suppl_fpage(self):
         self.assertEqual(
