@@ -213,33 +213,34 @@ class TestProcessingInserting(unittest.TestCase):
         self.assertIsInstance(result, DocumentsBundle)
         self.assertEqual(result.id(), "0001-3714-aop")
 
+    @patch("documentstore_migracao.processing.inserting.open")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
-    @patch(
-        "documentstore_migracao.processing.inserting.link_documents_bundles_with_documents"
-    )
-    def test_register_documents_in_documents_bundle(
-        self, mk_link_documents_bundle_with_documents, mk_read_json_file
+    def test_register_documents_in_documents_bundle_no_bundle_found(
+        self, mk_read_json_file, mk_open
     ):
-        documents = {
-            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+        documents = [
+            {
+                "pid_v3": "JwqGdMDrdcV3Z7MFHgtKvVk",
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
-                "number": "04",
+                "number": "4",
                 "order": "00349",
                 "pid": "S0021-25712009000400001",
                 "pissn": "0036-3634",
                 "supplement": None,
                 "volume": "45",
                 "year": "2009",
-            }
-        }
+            },
+        ]
         journals = [SAMPLES_JOURNAL]
-        mk_read_json_file.side_effect = [journals, documents]
-
-        err_filename = os.path.join(
-            config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
-        )
+        mk_read_json_file.return_value = journals
+        mock_file = MagicMock()
+        mock_file.readlines.return_value = [
+            json.dumps(document) for document in documents
+        ]
+        mk_open.return_value.__enter__.return_value = mock_file
+        mk_open.return_value.__exit__.return_value = Mock(return_value=False)
 
         session_db = Session()
         manifest = DocumentsBundle(SAMPLE_ISSUES_KERNEL[0])
@@ -249,69 +250,70 @@ class TestProcessingInserting(unittest.TestCase):
             session_db, "/tmp/documents.json", "/tmp/journals.json"
         )
 
+        err_filename = os.path.join(
+            config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
+        )
         self.assertEqual(os.path.isfile(err_filename), True)
         with open(err_filename) as fp:
             content = fp.read()
-
             self.assertEqual(content, "0036-3634-2009-v45-n4\n")
 
-    @patch("documentstore_migracao.utils.gzip")
-    @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
+    @patch("documentstore_migracao.processing.inserting.open")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
-    @patch("documentstore_migracao.processing.inserting.scielo_ids_generator")
-    def test_register_documents_in_documents_bundle_scielo_ids_generator(
-        self,
-        mk_scielo_ids_generator,
-        mk_read_json_file,
-        mk_get_documents_bundle,
-        mk_gzip,
+    def test_register_documents_in_documents_bundle_no_issn_in_document(
+        self, mk_read_json_file, mk_open
     ):
-        documents = {
-            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+        documents = [
+            {
+                "pid_v3": "JwqGdMDrdcV3Z7MFHgtKvVk",
                 "acron": "aiss",
                 "eissn": None,
-                "issn": "0036-3634",
-                "number": "04",
+                "issn": None,
+                "number": "4",
                 "order": "00349",
                 "pid": "S0021-25712009000400001",
-                "pissn": "0036-3634",
                 "supplement": None,
                 "volume": "45",
                 "year": "2009",
             },
-            "WCDX9F8pMhHDzy3fDYvth9x": {
-                "acron": "aiss",
-                "eissn": None,
-                "issn": "0036-3634",
-                "order": "00349",
-                "pid": "S0021-25712009000400007",
-                "pissn": "0036-3634",
-                "supplement": None,
-                "year": "2009",
-            },
-        }
+        ]
         journals = [SAMPLES_JOURNAL]
+        mk_read_json_file.return_value = journals
+        mock_file = MagicMock()
+        mock_file.readlines.return_value = [
+            json.dumps(document) for document in documents
+        ]
+        mk_open.return_value.__enter__.return_value = mock_file
+        mk_open.return_value.__exit__.return_value = Mock(return_value=False)
 
-        mk_read_json_file.side_effect = [journals, documents]
-        mk_gzip.compress.return_value = "bla".encode("ascii")
-
-        session_db = Session()
         inserting.register_documents_in_documents_bundle(
-            session_db, "/tmp/documents.json", "/tmp/journals.json"
+            Session(), "/tmp/documents.json", "/tmp/journals.json"
         )
-        mk_scielo_ids_generator.issue_id.assert_any_call(
-            "0036-3634", "2009", "45", "04", None
-        )
-        mk_scielo_ids_generator.aops_bundle_id.assert_any_call("0036-3634")
 
-    @patch("documentstore_migracao.utils.gzip")
+        err_filename = os.path.join(
+            config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
+        )
+        self.assertEqual(os.path.isfile(err_filename), True)
+        with open(err_filename) as fp:
+            content = fp.read()
+            self.assertEqual(content, "JwqGdMDrdcV3Z7MFHgtKvVk\n")
+
+    @patch(
+        "documentstore_migracao.processing.inserting.link_documents_bundles_with_documents"
+    )
+    @patch("documentstore_migracao.processing.inserting.open")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
     def test_register_documents_in_documents_bundle_get_documents_bundle(
-        self, mk_get_documents_bundle, mk_read_json_file, mk_gzip
+        self,
+        mk_get_documents_bundle,
+        mk_read_json_file,
+        mk_open,
+        mk_link_documents_bundles_with_documents,
     ):
-        documents = {
-            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+        documents = [
+            {
+                "pid_v3": "JwqGdMDrdcV3Z7MFHgtKvVk",
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
@@ -323,7 +325,8 @@ class TestProcessingInserting(unittest.TestCase):
                 "volume": "45",
                 "year": "2009",
             },
-            "WCDX9F8pMhHDzy3fDYvth9x": {
+            {
+                "pid_v3": "WCDX9F8pMhHDzy3fDYvth9x",
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
@@ -333,10 +336,15 @@ class TestProcessingInserting(unittest.TestCase):
                 "supplement": None,
                 "year": "2009",
             },
-        }
+        ]
         journals = [SAMPLES_JOURNAL]
-        mk_read_json_file.side_effect = [journals, documents]
-        mk_gzip.compress.return_value = "bla".encode("ascii")
+        mk_read_json_file.return_value = journals
+        mock_file = MagicMock()
+        mock_file.readlines.return_value = [
+            json.dumps(document) for document in documents
+        ]
+        mk_open.return_value.__enter__.return_value = mock_file
+        mk_open.return_value.__exit__.return_value = Mock(return_value=False)
         session_db = Session()
         inserting.register_documents_in_documents_bundle(
             session_db, "/tmp/documents.json", "/tmp/journals.json"
@@ -351,16 +359,19 @@ class TestProcessingInserting(unittest.TestCase):
     @patch(
         "documentstore_migracao.processing.inserting.link_documents_bundles_with_documents"
     )
+    @patch("documentstore_migracao.processing.inserting.open")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     @patch("documentstore_migracao.processing.inserting.get_documents_bundle")
     def test_register_documents_in_documents_bundle_link_documents_bundles_with_documents(
         self,
         mk_get_documents_bundle,
         mk_read_json_file,
+        mk_open,
         mk_link_documents_bundles_with_documents,
     ):
-        documents = {
-            "JwqGdMDrdcV3Z7MFHgtKvVk": {
+        documents = [
+            {
+                "pid_v3": "JwqGdMDrdcV3Z7MFHgtKvVk",
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
@@ -371,9 +382,9 @@ class TestProcessingInserting(unittest.TestCase):
                 "supplement": None,
                 "volume": "45",
                 "year": "2009",
-                "scielo_id": "JwqGdMDrdcV3Z7MFHgtKvVk",
             },
-            "WCDX9F8pMhHDzy3fDYvth9x": {
+            {
+                "pid_v3": "WCDX9F8pMhHDzy3fDYvth9x",
                 "acron": "aiss",
                 "eissn": None,
                 "issn": "0036-3634",
@@ -382,11 +393,16 @@ class TestProcessingInserting(unittest.TestCase):
                 "pissn": "0036-3634",
                 "supplement": None,
                 "year": "2009",
-                "scielo_id": "WCDX9F8pMhHDzy3fDYvth9x",
             },
-        }
+        ]
         journals = [SAMPLES_JOURNAL]
-        mk_read_json_file.side_effect = [journals, documents]
+        mk_read_json_file.return_value = journals
+        mock_file = MagicMock()
+        mock_file.readlines.return_value = [
+            json.dumps(document) for document in documents
+        ]
+        mk_open.return_value.__enter__.return_value = mock_file
+        mk_open.return_value.__exit__.return_value = Mock(return_value=False)
         documents_bundle = Mock()
         mk_get_documents_bundle.return_value = documents_bundle
         session_db = Session()
