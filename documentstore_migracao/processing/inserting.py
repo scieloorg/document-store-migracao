@@ -355,55 +355,66 @@ def link_documents_bundles_with_documents(
 def register_documents_in_documents_bundle(
     session_db, file_documents: str, file_journals: str
 ) -> None:
-    err_filename = os.path.join(
-        config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
-    )
+    def get_issn(document):
+        """Recupera o ISSN ID do Periódico ao qual documento pertence"""
+        journals = reading.read_json_file(file_journals)
+        data_journal = {}
+        for journal in journals:
+            o_journal = Journal(journal)
+            if o_journal.print_issn:
+                data_journal[o_journal.print_issn] = o_journal.scielo_issn
+            if o_journal.electronic_issn:
+                data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
+            if o_journal.scielo_issn:
+                data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
 
-    not_registered = []
-    journals = reading.read_json_file(file_journals)
-    documents = reading.read_json_file(file_documents)
-
-    data_journal = {}
-    for journal in journals:
-        o_journal = Journal(journal)
-        if o_journal.print_issn:
-            data_journal[o_journal.print_issn] = o_journal.scielo_issn
-        if o_journal.electronic_issn:
-            data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
-        if o_journal.scielo_issn:
-            data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
-
-    documents_bundles = {}
-    for scielo_id, document in documents.items():
-        is_issue = bool(document.get("volume") or document.get("number"))
-
-        issn = ""
         for issn_type in ("eissn", "pissn", "issn"):
-            issn = document.get(issn_type)
-            if issn:
-                break
+            if document.get(issn_type) is not None:
+                return data_journal[document[issn_type]]
+
+    def get_bundle_id(issn, document, is_issue):
+        """Gera o id do bundle onde o documento será adicionado. Se for um fascículo
+        regular, retorna ID do fascículo gerado. Caso contrário, retorna o ID de Ahead
+        of Print."""
 
         if is_issue:
             bundle_id = scielo_ids_generator.issue_id(
-                data_journal[issn],
+                issn,
                 document.get("year"),
                 document.get("volume"),
                 document.get("number"),
                 document.get("supplement"),
             )
         else:
-            bundle_id = scielo_ids_generator.aops_bundle_id(data_journal[issn])
+            bundle_id = scielo_ids_generator.aops_bundle_id(issn)
+        return bundle_id
 
+    err_filename = os.path.join(
+        config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
+    )
+
+    with open(file_documents) as f:
+        documents = f.readlines()
+
+    documents_bundles = {}
+    for document in documents:
+        document = json.loads(document)
+        issn_id = get_issn(document)
+        if issn_id is None:
+            logger.error("No ISSN in document '%s'", document["pid_v3"])
+            files.write_file(err_filename, document["pid_v3"] + "\n", "a")
+            continue
+        is_issue = bool(document.get("volume") or document.get("number"))
+        bundle_id = get_bundle_id(issn_id, document, is_issue=is_issue)
         documents_bundles.setdefault(bundle_id, {})
         documents_bundles[bundle_id].setdefault("items", [])
-
         documents_bundles[bundle_id]["items"].append(
-            {"id": scielo_id, "order": document.get("order", "")}
+            {"id": document.pop("pid_v3"), "order": document.get("order", "")}
         )
         documents_bundles[bundle_id]["data"] = {
             "is_issue": is_issue,
             "bundle_id": bundle_id,
-            "issn": data_journal[document.get("issn")],
+            "issn": issn_id,
         }
 
     for documents_bundle in documents_bundles.values():
@@ -414,8 +425,13 @@ def register_documents_in_documents_bundle(
             documents_bundle = get_documents_bundle(
                 session_db, data["bundle_id"], data["is_issue"], data["issn"]
             )
-        except ValueError as error:
+        except ValueError as exc:
+            logger.error(
+                "The bundle '%s' was not updated. During executions "
+                "this following exception was raised '%s'.",
+                data["bundle_id"],
+                exc,
+            )
             files.write_file(err_filename, data["bundle_id"] + "\n", "a")
-            not_registered.append(data["bundle_id"])
         else:
             link_documents_bundles_with_documents(documents_bundle, items, session_db)
