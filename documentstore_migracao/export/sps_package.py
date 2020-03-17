@@ -339,13 +339,16 @@ class SPS_Package:
 
     @property
     def supplement(self):
-        issue = dict(self.parse_article_meta).get("issue")
-        if issue:
-            if "s" in issue and "spe" not in issue:
-                if "-s" in issue:
-                    return issue[issue.find("-s") + 2 :]
-                if issue.startswith("s"):
-                    return issue[1:]
+        if self.article_meta is not None:
+            issue_tag = self.article_meta.find("./issue")
+            if issue_tag is not None:
+                issue_tag_text = issue_tag.text.strip()
+                lower_value = issue_tag_text.lower()
+                if "sup" in lower_value:
+                    issue_words = lower_value.split()
+                    if "sup" in issue_words[-1]:    # suppl "0"
+                        return "0"
+                    return issue_tag_text.split()[-1]
 
     @property
     def year(self):

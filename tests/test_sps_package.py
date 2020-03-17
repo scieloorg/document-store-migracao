@@ -833,7 +833,7 @@ class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
         )
 
     def test_supplement(self):
-        self.assertEqual(self.sps_package.supplement, "a")
+        self.assertEqual(self.sps_package.supplement, "A")
 
     def test_number(self):
         self.assertIsNone(self.sps_package.number)
@@ -841,6 +841,67 @@ class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
     def test_package_name_vol_suppl_a_fpage(self):
         self.assertEqual(
             self.sps_package.package_name, "1234-5678-acron-volume-sa-fpage-lpage"
+        )
+
+    def test_is_only_online_publication(self):
+        self.assertEqual(self.sps_package.is_only_online_publication, False)
+
+    def test_order_meta(self):
+        self.assertEqual(
+            self.sps_package.order_meta,
+            (
+                ("other", "00006"),
+                ("fpage", "fpage"),
+                ("lpage", "lpage"),
+                ("documents_bundle_pubdate", ("2010", "", "")),
+                ("document_pubdate", ("", "", "")),
+                ("elocation-id", ""),
+            ),
+        )
+
+    def test_order(self):
+        self.assertEqual(
+            self.sps_package.order,
+            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
+        )
+
+    def test_is_ahead_of_print_false(self):
+        self.assertFalse(self.sps_package.is_ahead_of_print)
+
+
+class Test_SPS_Package_VolSuplSpeFpageLpage(unittest.TestCase):
+    def setUp(self):
+        article_meta_xml = """<volume>volume</volume>
+            <issue>Suplemento spe</issue>
+            <fpage>fpage</fpage>
+            <lpage>lpage</lpage>
+            """
+        self.sps_package = sps_package(article_meta_xml)
+
+    def test_parse_article_meta_vol_suppl_a_fpage(self):
+        self.assertEqual(
+            self.sps_package.parse_article_meta,
+            [
+                ("volume", "volume"),
+                ("issue", "sspe"),
+                ("fpage", "fpage"),
+                ("lpage", "lpage"),
+                ("year", "2010"),
+                ("doi", "S0074-02761962000200006"),
+                ("publisher-id", "S0074-02761962000200006"),
+                ("other", "00006"),
+            ],
+        )
+
+    def test_supplement(self):
+        self.assertEqual(self.sps_package.supplement, "spe")
+
+    def test_number(self):
+        self.assertIsNone(self.sps_package.number)
+
+    def test_package_name_vol_suppl_a_fpage(self):
+        self.assertEqual(
+            self.sps_package.package_name, "1234-5678-acron-volume-sspe-fpage-lpage"
         )
 
     def test_is_only_online_publication(self):
