@@ -3028,6 +3028,12 @@ class TestInsertSectionChildrenPipe(unittest.TestCase):
             <p>paragrafo 1 de Material and Methods</p>
             <p>paragrafo 2 de Material and Methods</p>
             <p>paragrafo 3 de Material and Methods</p>
+            <sec id="acknowledgments">
+                <title>Acknowledgments</title>
+            </sec>
+            <p>paragrafo 1 de Acknowledgments</p>
+            <p>paragrafo qq</p>
+            <p>paragrafo qq</p>
         </body>
         </root>"""
         xml = etree.fromstring(text)
@@ -3042,3 +3048,20 @@ class TestInsertSectionChildrenPipe(unittest.TestCase):
             4
         )
 
+    def test_transform_inserts_only_one_element_in_sec_if_it_is_last_sec(self):
+        text = """<root>
+        <body>
+            <sec id="acknowledgments">
+                <title>Acknowledgments</title>
+            </sec>
+            <p>paragrafo 1 de Acknowledgments</p>
+            <p>paragrafo qq</p>
+            <p>paragrafo qq</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            len(xml.find(".//sec[@id='acknowledgments']").getchildren()),
+            2
+        )

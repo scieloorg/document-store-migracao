@@ -2281,17 +2281,18 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
     class InsertSectionChildrenPipe(plumber.Pipe):
 
-        def _create_children(self, node):
+        def _create_children(self, node, last):
             remove_items = []
             next = node
             while True:
                 next = next.getnext()
-                print(next)
                 if next is None:
                     break
-                print(next.tag)
                 if next.tag == "sec":
                     break
+                if node is last:
+                    if len(node.getchildren()) > 1:
+                        break
                 node.append(deepcopy(next))
                 remove_items.append(next)
             for item in remove_items:
@@ -2300,8 +2301,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def transform(self, data):
             raw, xml = data
-            for sec in xml.findall(".//sec"):
-                self._create_children(sec)
+            sections = xml.findall(".//sec")
+            for sec in sections:
+                self._create_children(sec, sections[-1])
             return data
 
     class AssetElementFixPositionPipe(plumber.Pipe):
