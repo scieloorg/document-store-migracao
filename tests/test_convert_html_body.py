@@ -2986,7 +2986,7 @@ class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
             "Introduction"
         )
         sec = xml.find(".//sec")
-        self.assertEqual(sec.get("sec-type"), "introduction")
+        self.assertEqual(sec.get("sec-type"), "intro")
 
     def test_transform_creates_sec_elem_with_title_from_ordinary_sec(self):
         text = """<root>
@@ -3002,9 +3002,43 @@ class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
         </root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
-        print(etree.tostring(xml))
         self.assertEqual(
             xml.findtext(".//sec[@id='abstract']/title"),
             "Abstract"
         )
         self.assertIsNone(xml.findtext(".//sec[@sec-type]"))
+
+
+class TestInsertSectionChildrenPipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.InsertSectionChildrenPipe()
+
+    def test_transform_inserts_elements_in_sec_until_find_other_sec(self):
+        text = """<root>
+        <body>
+            <sec id="abstract">
+                <title>Abstract</title>
+            </sec>
+            <p>paragrafo 1 de Abstract</p>
+            <sec id="material">
+                <title>Material and Methods</title>
+            </sec>
+            <p>paragrafo 1 de Material and Methods</p>
+            <p>paragrafo 2 de Material and Methods</p>
+            <p>paragrafo 3 de Material and Methods</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        print(etree.tostring(xml))
+        self.assertEqual(
+            len(xml.find(".//sec[@id='abstract']").getchildren()),
+            2
+        )
+        self.assertEqual(
+            len(xml.find(".//sec[@id='material']").getchildren()),
+            4
+        )
+

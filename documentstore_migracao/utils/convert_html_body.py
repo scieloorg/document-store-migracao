@@ -1403,6 +1403,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
             self.CreateSectionElemetWithSectionTitlePipe(),
+            self.InsertSectionChildrenPipe(),
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
@@ -2276,6 +2277,31 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 self._create_sec(sec)
             for sec in xml.findall(".//ordinary-sec"):
                 self._create_sec(sec)
+            return data
+
+    class InsertSectionChildrenPipe(plumber.Pipe):
+
+        def _create_children(self, node):
+            remove_items = []
+            next = node
+            while True:
+                next = next.getnext()
+                print(next)
+                if next is None:
+                    break
+                print(next.tag)
+                if next.tag == "sec":
+                    break
+                node.append(deepcopy(next))
+                remove_items.append(next)
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
+
+        def transform(self, data):
+            raw, xml = data
+            for sec in xml.findall(".//sec"):
+                self._create_children(sec)
             return data
 
     class AssetElementFixPositionPipe(plumber.Pipe):
