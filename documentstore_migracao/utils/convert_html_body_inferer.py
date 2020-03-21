@@ -8,16 +8,10 @@ from documentstore_migracao.utils import files
 class Inferer:
 
     REFTYPE = {"table-wrap": "table", "ref": "bibr"}
-    BODY_SECS = (
-        "intr",
-        "subj",
-        "meto",
-        "méto",
-        "disc",
+    OTHER_SECTIONS = (
         "bibr",
         "resu",
         "abst",
-        "mate",
         "refe",
         "ackn",
         "text",
@@ -62,7 +56,7 @@ class Inferer:
         if a_href_text[0].isalpha():
             if len(a_href_text) == 1:
                 return "fn", "fn"
-            if a_href_text[:4] in self.BODY_SECS:
+            if a_href_text[:4] in self.OTHER_SECTIONS:
                 return "target", "other"
             if "corresp" in text or "address" in text or "endereço" in text:
                 return "corresp", "corresp"
