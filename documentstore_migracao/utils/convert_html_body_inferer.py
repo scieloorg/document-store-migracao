@@ -33,7 +33,7 @@ class Inferer:
                     if len(clue) == 1 and not name[len(clue) :].isdigit():
                         return "fn", "fn"
                     return tag, self.ref_type(tag)
-            for clue, tag in self.rules.sorted_clue_and_tags_items:
+            for clue, tag in self.rules.sorted_rules:
                 if len(clue) > 1:
                     if clue in name:
                         return tag, self.ref_type(tag)
@@ -73,7 +73,7 @@ class Inferer:
             clue_and_tag_items = self.rules.sorted_by_tag.get(elem_name, [])
             clue_and_tag_items.append((elem_name[0], elem_name))
         else:
-            clue_and_tag_items = self.rules.sorted_clue_and_tags_items
+            clue_and_tag_items = self.rules.sorted_rules
         for clue, tag in clue_and_tag_items:
             if clue == filename:
                 return tag, self.ref_type(tag), filename
@@ -94,24 +94,29 @@ class InfererRules:
         self.rules_file_path = rules_file_path
         file_path, ext = os.path.splitext(rules_file_path)
         dirname = os.path.dirname(rules_file_path)
-        self.json_sorted_by_clue_first_char = os.path.join(
-            dirname, "_inferer_clue.json"
-        )
-        self.json_sorted_by_tag = os.path.join(dirname, "_inferer_tags.json")
-        self._unsorted_clue_and_tag_items = None
-        self._sorted_clue_and_tags_items = None
+        self.inferer_clue_json_file_path = os.path.join(
+            dirname, "_inferer_clue.json")
+        self._inferer_tags_json_file_path = os.path.join(
+            dirname, "_inferer_tags.json")
+        self._rules = None
+        self._sorted_rules = None
         self._sorted_by_clue_len_in_reverse_order = None
         self._sorted_by_tag = None
         self._sorted_by_clue_first_char = None
 
+    def _is_out_of_date(self, file_path):
+        if not os.path.isfile(file_path):
+            return True
+        return os.stat(file_path).st_mtime < os.stat(self.rules_file_path).st_mtime
+
     @property
-    def unsorted_clue_and_tag_items(self):
-        if not self._unsorted_clue_and_tag_items:
+    def rules(self):
+        if not self._rules:
             with open(self.rules_file_path, "r") as fp:
-                self._unsorted_clue_and_tag_items = (
+                self._rules = (
                     tuple(item.strip().split("|")) for item in fp.readlines()
                 )
-        return self._unsorted_clue_and_tag_items
+        return self._rules
 
     @property
     def sorted_by_clue_len_in_reverse_order(self):
@@ -119,20 +124,20 @@ class InfererRules:
             self._sorted_by_clue_len_in_reverse_order = sorted(
                 [
                     (len(text), text, tag)
-                    for text, tag in self.unsorted_clue_and_tag_items
+                    for text, tag in self.rules
                 ],
                 reverse=True,
             )
         return self._sorted_by_clue_len_in_reverse_order
 
     @property
-    def sorted_clue_and_tags_items(self):
-        if not self._sorted_clue_and_tags_items:
-            self._sorted_clue_and_tags_items = [
+    def sorted_rules(self):
+        if not self._sorted_rules:
+            self._sorted_rules = [
                 (text, tag)
                 for lent, text, tag in self.sorted_by_clue_len_in_reverse_order
             ]
-        return self._sorted_clue_and_tags_items
+        return self._sorted_rules
 
     def classify_items_by_tag(self):
         d = {}
@@ -150,22 +155,20 @@ class InfererRules:
         return d
 
     def get_data(self, json_file_path, classification_function):
-        data = None
-        if os.path.isfile(json_file_path):
+        if self._is_out_of_date(json_file_path):
+            data = classification_function()
+            with open(json_file_path, "w") as fp:
+                fp.write(json.dumps(data))
+        else:
             with open(json_file_path, "r") as fp:
                 data = json.loads(fp.read())
-        if not data:
-            data = classification_function()
-            if data:
-                with open(json_file_path, "w") as fp:
-                    fp.write(json.dumps(data))
         return data
 
     @property
     def sorted_by_tag(self):
         if not self._sorted_by_tag:
             self._sorted_by_tag = self.get_data(
-                self.json_sorted_by_tag, self.classify_items_by_tag
+                self._inferer_tags_json_file_path, self.classify_items_by_tag
             )
         return self._sorted_by_tag
 
@@ -173,7 +176,7 @@ class InfererRules:
     def sorted_by_clue_first_char(self):
         if not self._sorted_by_clue_first_char:
             self._sorted_by_clue_first_char = self.get_data(
-                self.json_sorted_by_clue_first_char,
+                self.inferer_clue_json_file_path,
                 self.classify_items_by_clue_first_char,
             )
         return self._sorted_by_clue_first_char
