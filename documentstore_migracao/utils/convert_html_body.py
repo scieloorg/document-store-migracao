@@ -236,6 +236,7 @@ class HTML2SPSPipeline(object):
             self.TagsHPipe(),
             self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
+            self.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.PPipe(),
@@ -2304,6 +2305,26 @@ class ConvertElementsWhichHaveIdPipeline(object):
             sections = xml.findall(".//sec")
             for sec in sections:
                 self._create_children(sec, sections[-1])
+            return data
+
+    class AfterOneSectionAllTheOtherElementsMustBeSectionPipe(plumber.Pipe):
+
+        def transform(self, data):
+            raw, xml = data
+            found_sec = False
+            remove_items = []
+            children = xml.find(".//body").getchildren()
+            for child in children:
+                if found_sec and child.tag != "sec":
+                    new_elem = etree.Element("sec")
+                    new_elem.append(deepcopy(child))
+                    child.addprevious(new_elem)
+                    remove_items.append(child)
+                if child.tag == "sec":
+                    found_sec = True
+            for item in remove_items:
+                p = item.getparent()
+                p.remove(item)
             return data
 
     class AssetElementFixPositionPipe(plumber.Pipe):

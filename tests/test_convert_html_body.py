@@ -3065,3 +3065,35 @@ class TestInsertSectionChildrenPipe(unittest.TestCase):
             len(xml.find(".//sec[@id='acknowledgments']").getchildren()),
             2
         )
+
+
+class TestAfterOneSectionAllTheOtherElementsMustBeSectionPipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.AfterOneSectionAllTheOtherElementsMustBeSectionPipe()
+
+    def test_transform_(self):
+        text = """<root>
+        <body>
+            <p>paragrafo qq 1</p>
+            <p>paragrafo qq 2</p>
+            <p>paragrafo qq 3</p>
+            <sec id="abstract">
+                <title>Abstract</title>
+                <p>paragrafo 1 de Abstract</p>
+            </sec>
+            <p>paragrafo qq 4</p>
+            <p>paragrafo qq 5</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        body_chidren = xml.find(".//body").getchildren()
+        self.assertEqual(
+            [node.tag for node in body_chidren],
+            ["p", "p", "p", "sec", "sec", "sec"]
+        )
+        self.assertEqual(body_chidren[-1].findtext("p"), "paragrafo qq 5")
+        self.assertEqual(body_chidren[-2].findtext("p"), "paragrafo qq 4")
+
