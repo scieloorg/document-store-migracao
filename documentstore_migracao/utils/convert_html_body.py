@@ -1402,6 +1402,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
+            self.CreateSectionElemetWithSectionTitlePipe(),
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
@@ -2243,6 +2244,38 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._update_a_href_items(a_hrefs, new_id, reftype)
                 else:
                     self._remove_a(a_name, a_hrefs)
+            return data
+
+    class CreateSectionElemetWithSectionTitlePipe(plumber.Pipe):
+
+        def _create_title(self, node):
+            title = node.getnext()
+            if title is not None:
+                title.tag = "title"
+                node.append(deepcopy(title))
+                parent = node.getparent()
+                parent.remove(title)
+
+        def _sectype(self, node):
+            if node.get("id") == "introduction":
+                return "intro"
+            return node.get("id")
+
+        def _create_sec(self, node):
+            self._create_title(node)
+            if node.tag == "sec":
+                node.set("sec-type", self._sectype(node))
+            node.tag = "sec"
+            parent = node.getparent()
+            parent.addprevious(deepcopy(node))
+            parent.remove(node)
+
+        def transform(self, data):
+            raw, xml = data
+            for sec in xml.findall(".//sec"):
+                self._create_sec(sec)
+            for sec in xml.findall(".//ordinary-sec"):
+                self._create_sec(sec)
             return data
 
     class AssetElementFixPositionPipe(plumber.Pipe):

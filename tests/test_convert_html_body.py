@@ -2962,3 +2962,49 @@ class TestFixOutSitetablePiep(unittest.TestCase):
         text, xml = pl.FixOutSideTablePipe().transform((text, xml))
         self.assertIn('table',
                       [tag.tag for tag in xml.find(".//table-wrap/p").getchildren()])
+
+
+class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.CreateSectionElemetWithSectionTitlePipe()
+
+    def test_transform_creates_sec_elem_with_title_from_sec(self):
+        text = """<root>
+        <body>
+            <p>
+                <sec id="introduction"/>
+                <bold>Introduction</bold>
+            </p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            xml.findtext(".//sec[@id='introduction']/title"),
+            "Introduction"
+        )
+        sec = xml.find(".//sec")
+        self.assertEqual(sec.get("sec-type"), "introduction")
+
+    def test_transform_creates_sec_elem_with_title_from_ordinary_sec(self):
+        text = """<root>
+        <body>
+            <p>
+                <ordinary-sec id="abstract"/>
+                <bold>Abstract</bold>
+            </p>
+            <p>paragrafo 1 de Material and Methods</p>
+            <p>paragrafo 2 de Material and Methods</p>
+            <p>paragrafo 3 de Material and Methods</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        print(etree.tostring(xml))
+        self.assertEqual(
+            xml.findtext(".//sec[@id='abstract']/title"),
+            "Abstract"
+        )
+        self.assertIsNone(xml.findtext(".//sec[@sec-type]"))
