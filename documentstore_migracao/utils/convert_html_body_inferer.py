@@ -8,14 +8,10 @@ from documentstore_migracao.utils import files
 class Inferer:
 
     REFTYPE = {"table-wrap": "table", "ref": "bibr"}
-    OTHER_SECTIONS = (
-        "bibr",
-        "resu",
-        "abst",
-        "refe",
-        "ackn",
+
+    OTHER_SECTIONS = [
         "text",
-    )
+    ]
 
     def __init__(self):
         self.rules = InfererRules(config.INFERERER_RULES_FILE_PATH)

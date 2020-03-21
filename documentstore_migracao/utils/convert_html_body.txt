@@ -60,3 +60,8 @@ alg|fig
 e|disp-formula
 t|table-wrap
 f|fig
+bibr|ordinary-sec
+resu|ordinary-sec
+abst|ordinary-sec
+refe|ordinary-sec
+ackn|ordinary-sec
