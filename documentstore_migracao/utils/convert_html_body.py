@@ -1468,8 +1468,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.FnMovePipe(),
+            self.FnBoldPipe(),
             self.FnLabelOfPipe(),
             self.FnAddContentPipe(),
+            self.GetFnContentFromNextElementPipe(),
             self.FnIdentifyLabelAndPPipe(),
             self.FnFixContentPipe(),
         )
@@ -2992,6 +2994,20 @@ class ConvertElementsWhichHaveIdPipeline(object):
             node.addnext(fn_copy)
             node.remove(fn)
 
+    class FnBoldPipe(plumber.Pipe):
+        """Cria fn a partir de label[@label-of]
+        ou adiciona label em fn
+        """
+
+        def transform(self, data):
+            raw, xml = data
+            logger.debug("FnBoldPipe")
+            for node in xml.findall(".//fn"):
+                next = node.getnext()
+                if next is not None and next.tag == "bold":
+                    next.tag = "label"
+            return data
+
     class FnLabelOfPipe(plumber.Pipe):
         """Cria fn a partir de label[@label-of]
         ou adiciona label em fn
@@ -3248,6 +3264,20 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         logger.info(
                             "FnFixContentPipe: %s" % etree.tostring(children[0])
                         )
+            return data
+
+    class GetFnContentFromNextElementPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            logger.debug("GetFnContentFromNextParagraphPipe")
+            for fn in xml.findall(".//fn[label]"):
+                children = fn.getchildren()
+                if len(children) == 1:
+                    parent = fn.getparent()
+                    parent_next = parent.getnext()
+                    fn.append(deepcopy(parent_next))
+                    parent = parent.getparent()
+                    parent.remove(parent_next)
             return data
 
 
