@@ -237,9 +237,10 @@ class HTML2SPSPipeline(object):
             self.TagsHPipe(),
             self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
-            self.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
+            self.RemoveEmptyPAndEmptySectionPipe(),
+            self.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(),
             self.PPipe(),
             self.RemoveRefIdPipe(),
             self.FixIdAndRidPipe(super_obj=self),
@@ -1253,12 +1254,23 @@ class HTML2SPSPipeline(object):
             if node.find(".//img") is None:
                 return
             if not get_node_text(node):
-                parent = node.getparent()
                 _remove_tag(node, True)
-                
+
         def transform(self, data):
             raw, xml = data
             _process(xml, "a[@href]", self.parser_node)
+            return data
+
+    class RemoveEmptyPAndEmptySectionPipe(plumber.Pipe):
+
+        def parser_node(self, node):
+            if not get_node_text(node) and not node.getchildren():
+                _remove_tag(node, True)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "p", self.parser_node)
+            _process(xml, "sec", self.parser_node)
             return data
 
     class ConvertElementsWhichHaveIdPipe(plumber.Pipe):
@@ -1332,7 +1344,7 @@ class HTML2SPSPipeline(object):
                         new_child.append(deepcopy(child))
                         child.addprevious(new_child)
                         body.remove(child)
-                    elif child.tail:
+                    elif (child.tail or "").strip():
                         new_child = etree.Element("p")
                         new_child.text = child.tail.strip()
                         child.tail = child.tail.replace(new_child.text, "")
@@ -1440,6 +1452,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
             self.CreateSectionElemetWithSectionTitlePipe(),
+            self.RemoveEmptyPAndEmptySectionPipe(),
             self.InsertSectionChildrenPipe(),
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
@@ -1463,6 +1476,17 @@ class ConvertElementsWhichHaveIdPipeline(object):
     def deploy(self, raw):
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
+
+    class RemoveEmptyPAndEmptySectionPipe(plumber.Pipe):
+
+        def parser_node(self, node):
+            if not get_node_text(node) and not node.getchildren():
+                _remove_tag(node, True)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "p", self.parser_node)
+            return data
 
     class SetupPipe(plumber.Pipe):
         def transform(self, data):

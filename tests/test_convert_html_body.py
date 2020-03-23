@@ -3114,3 +3114,24 @@ class TestRemoveAhrefWhichContentIsOnlyImgPipe(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         self.assertEqual(xml.find(".//p").text, "texto antes  texto depois")
 
+
+class TestRemoveEmptyPAndEmptySectionPipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = HTML2SPSPipeline()
+        self.pipe = pl.RemoveEmptyPAndEmptySectionPipe()
+
+    def test_transform_remove_element(self):
+        text = """<root>
+        <body>
+            <p>texto antes <a href="#ancora"><img/></a> texto depois</p>
+            <p>parágrafo 1</p>
+            <p></p>
+            <p> </p>
+            <p> <img/> </p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(len(xml.findall(".//p")), 3)
+
