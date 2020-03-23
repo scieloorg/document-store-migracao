@@ -209,6 +209,7 @@ class HTML2SPSPipeline(object):
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
+            self.RemoveAhrefWhichContentIsOnlyImgPipe(),
             self.RemoveOrMoveStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
@@ -1245,6 +1246,21 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[img]", self.parser_node)
             return data
 
+    class RemoveAhrefWhichContentIsOnlyImgPipe(plumber.Pipe):
+        def parser_node(self, node):
+            if not node.get("href").startswith("#"):
+                return
+            if node.find(".//img") is None:
+                return
+            if not get_node_text(node):
+                parent = node.getparent()
+                _remove_tag(node, True)
+                
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            return data
+
     class ConvertElementsWhichHaveIdPipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
@@ -1252,6 +1268,26 @@ class HTML2SPSPipeline(object):
             convert = ConvertElementsWhichHaveIdPipeline()
             _, obj = convert.deploy(xml)
             return raw, obj
+
+    class AfterOneSectionAllTheOtherElementsMustBeSectionPipe(plumber.Pipe):
+
+        def transform(self, data):
+            raw, xml = data
+            found_sec = False
+            remove_items = []
+            children = xml.find(".//body").getchildren()
+            for child in children:
+                if found_sec and child.tag != "sec":
+                    new_elem = etree.Element("sec")
+                    new_elem.append(deepcopy(child))
+                    child.addprevious(new_elem)
+                    remove_items.append(child)
+                if child.tag == "sec":
+                    found_sec = True
+            for item in remove_items:
+                p = item.getparent()
+                p.remove(item)
+            return data
 
     class FixBodyChildrenPipe(plumber.Pipe):
         ALLOWED_CHILDREN = [
@@ -2305,26 +2341,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             sections = xml.findall(".//sec")
             for sec in sections:
                 self._create_children(sec, sections[-1])
-            return data
-
-    class AfterOneSectionAllTheOtherElementsMustBeSectionPipe(plumber.Pipe):
-
-        def transform(self, data):
-            raw, xml = data
-            found_sec = False
-            remove_items = []
-            children = xml.find(".//body").getchildren()
-            for child in children:
-                if found_sec and child.tag != "sec":
-                    new_elem = etree.Element("sec")
-                    new_elem.append(deepcopy(child))
-                    child.addprevious(new_elem)
-                    remove_items.append(child)
-                if child.tag == "sec":
-                    found_sec = True
-            for item in remove_items:
-                p = item.getparent()
-                p.remove(item)
             return data
 
     class AssetElementFixPositionPipe(plumber.Pipe):
