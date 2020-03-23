@@ -3186,3 +3186,23 @@ class TestRemoveXrefWhichRefTypeIsSecOrOrdinarySec(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         self.assertEqual(len(xml.findall(".//xref")), 0)
 
+
+class TestRemoveFnWhichHasOnlyXref(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.RemoveFnWhichHasOnlyXref()
+
+    def test_transform(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <p id="p2">
+                    <xref ref-type="ordinary-sec" rid="abstract">Abstract</xref>
+                </p>
+            </fn>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find("./p[@id='p1']/xref"))
+

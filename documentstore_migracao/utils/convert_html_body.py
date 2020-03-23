@@ -1481,6 +1481,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.GetFnContentFromNextElementPipe(),
             self.FnIdentifyLabelAndPPipe(),
             self.FnFixContentPipe(),
+            self.RemoveFnWhichHasOnlyXref(),
         )
 
     def deploy(self, raw):
@@ -3289,6 +3290,23 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         fn.append(deepcopy(parent_next))
                         parent = parent.getparent()
                         parent.remove(parent_next)
+            return data
+
+    class RemoveFnWhichHasOnlyXref(plumber.Pipe):
+        """
+        As âncoras que não identificadas como ativos digitais, seções etc,
+        por exclusão são consideradas notas de rodapé (fn). No entanto, há
+        padrões que podem desconsiderá-las notas de rodapé.
+        Um fn que contém apenas xref, não é nota de rodapé
+        """
+        def transform(self, data):
+            raw, xml = data
+            logger.debug("RemoveFnWhichHasOnlyXref")
+            for p in xml.findall(".//fn/p[xref]"):
+                fn = p.getparent()
+                if get_node_text(fn) == get_node_text(p.find("xref")):
+                    _remove_tag(p)
+                    _remove_tag(fn)
             return data
 
 
