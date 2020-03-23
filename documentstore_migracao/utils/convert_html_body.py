@@ -3,6 +3,7 @@ import plumber
 import html
 import os
 from copy import deepcopy
+import difflib
 
 import requests
 from lxml import etree
@@ -19,6 +20,41 @@ logger = logging.getLogger(__name__)
 TIMEOUT = config.get("TIMEOUT") or 5
 
 ASSET_TAGS = ("disp-formula", "fig", "table-wrap", "app")
+
+
+SECTIONS_CODE_AND_TITLES = dict([
+    ('Cases', 'cases'),
+    ('Case Reports', 'cases'),
+    ('Conclusions', 'conclusions'),
+    ('Comment', 'conclusions'),
+    ('Discussion', 'discussion'),
+    ('Interpretation', 'discussion'),
+    ('Introduction', 'intro'),
+    ('Synopsis', 'intro'),
+    ('Materials', 'materials'),
+    ('Methods', 'methods'),
+    ('Methodology', 'methods'),
+    ('Procedures', 'methods'),
+    ('Results', 'results'),
+    ('Statement of Findings', 'results'),
+    ('Subjects', 'subjects'),
+    ('Participants', 'subjects'),
+    ('Patients', 'subjects'),
+    ('Supplementary materials', 'supplementary-material')
+ ])
+
+
+def get_sectype(titles):
+    possibilities = SECTIONS_CODE_AND_TITLES.keys()
+    items = titles.split(" and ")
+    results = []
+    for item in items:
+        resp = difflib.get_close_matches(item, possibilities, n=1, cutoff=0.6)
+        if resp:
+            results.append(SECTIONS_CODE_AND_TITLES.get(resp[0]))
+    print(titles, results)
+
+    return "|".join([r for r in results if r])
 
 
 def is_footnote_label(text):
@@ -2339,9 +2375,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent.remove(title)
 
         def _sectype(self, node):
-            if node.get("id") == "introduction":
-                return "intro"
-            return node.get("id")
+            sectype = get_sectype(node.findtext("title") or node.get("id"))
+            return sectype or node.get("id")
 
         def _create_sec(self, node):
             self._create_title(node)
