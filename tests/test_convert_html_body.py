@@ -3152,3 +3152,37 @@ class TestRemoveEmptyPAndEmptySectionPipe(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         self.assertEqual(len(xml.findall(".//p")), 3)
 
+
+class TestRemoveXrefWhichRefTypeIsSecOrOrdinarySec(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe()
+
+    def test_transform_removes_all_xref(self):
+        text = """<root>
+        <p>
+        <xref ref-type="ordinary-sec" rid="abstract">Abstract</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="introduction">Introduction</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="material">Material and Methods</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="results">Results</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="discussion">Discussion</xref>
+        </p>
+        <p>
+        <xref ref-type="ordinary-sec" rid="references">References</xref>
+        </p>
+        <p>
+        <xref ref-type="ordinary-sec" rid="acknowledgments">Acknowledgments</xref>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(len(xml.findall(".//xref")), 0)
+

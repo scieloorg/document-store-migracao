@@ -1451,6 +1451,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
+            self.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(),
             self.CreateSectionElemetWithSectionTitlePipe(),
             self.RemoveEmptyPAndEmptySectionPipe(),
             self.InsertSectionChildrenPipe(),
@@ -2306,6 +2307,15 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._update_a_href_items(a_hrefs, new_id, reftype)
                 else:
                     self._remove_a(a_name, a_hrefs)
+            return data
+
+    class RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for xref in xml.findall(".//xref[@ref-type='sec']"):
+                _remove_tag(xref, True)
+            for xref in xml.findall(".//xref[@ref-type='ordinary-sec']"):
+                _remove_tag(xref, True)
             return data
 
     class CreateSectionElemetWithSectionTitlePipe(plumber.Pipe):
