@@ -2312,7 +2312,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def _create_title(self, node):
             title = node.getnext()
-            if title is not None:
+            if title is not None and title.tag == "bold":
                 title.tag = "title"
                 node.append(deepcopy(title))
                 parent = node.getparent()

@@ -2988,6 +2988,24 @@ class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
         sec = xml.find(".//sec")
         self.assertEqual(sec.get("sec-type"), "intro")
 
+    def test_transform_does_not_create_sec_elem_with_title_from_sec(self):
+        text = """<root>
+        <body>
+            <p>
+                <sec id="introduction"/>
+                <xref>Introduction</xref>
+            </p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            xml.findtext(".//sec[@id='introduction']/title"),
+            None
+        )
+        sec = xml.find(".//sec")
+        self.assertEqual(sec.get("sec-type"), "intro")
+
     def test_transform_creates_sec_elem_with_title_from_ordinary_sec(self):
         text = """<root>
         <body>
@@ -3038,7 +3056,6 @@ class TestInsertSectionChildrenPipe(unittest.TestCase):
         </root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
-        print(etree.tostring(xml))
         self.assertEqual(
             len(xml.find(".//sec[@id='abstract']").getchildren()),
             2
