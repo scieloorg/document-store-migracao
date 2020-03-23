@@ -1255,6 +1255,11 @@ class HTML2SPSPipeline(object):
                 return
             if not get_node_text(node):
                 _remove_tag(node, True)
+                name = node.get("href")[1:]
+                node_name = node.getroottree(
+                    ).find(".//a[@name='{}']".format(name))
+                if node_name is not None:
+                    _remove_tag(node_name, True)
 
         def transform(self, data):
             raw, xml = data
