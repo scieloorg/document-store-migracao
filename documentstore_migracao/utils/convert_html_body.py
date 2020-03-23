@@ -1255,11 +1255,13 @@ class HTML2SPSPipeline(object):
                 return
             if not get_node_text(node):
                 _remove_tag(node, True)
-                name = node.get("href")[1:]
-                node_name = node.getroottree(
-                    ).find(".//a[@name='{}']".format(name))
-                if node_name is not None:
-                    _remove_tag(node_name, True)
+                # name = node.get("href")[1:]
+                # node_name = node.getroottree(
+                #     ).find(".//a[@name='{}']".format(name))
+                # print(name, etree.tostring(node))
+                # print(name, etree.tostring(node_name))
+                # if node_name is not None:
+                #     _remove_tag(node_name, True)
 
         def transform(self, data):
             raw, xml = data
@@ -3010,7 +3012,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for node in xml.findall(".//fn"):
                 next = node.getnext()
                 if next is not None and next.tag == "bold":
-                    next.tag = "label"
+                    label = etree.Element("label")
+                    label.append(deepcopy(next))
+                    node.addnext(label)
+                    _remove_tag(next, True)
             return data
 
     class FnLabelOfPipe(plumber.Pipe):
@@ -3280,9 +3285,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if len(children) == 1:
                     parent = fn.getparent()
                     parent_next = parent.getnext()
-                    fn.append(deepcopy(parent_next))
-                    parent = parent.getparent()
-                    parent.remove(parent_next)
+                    if parent_next is not None:
+                        fn.append(deepcopy(parent_next))
+                        parent = parent.getparent()
+                        parent.remove(parent_next)
             return data
 
 
