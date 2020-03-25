@@ -1,17 +1,11 @@
 import os
 import logging
-import shlex
-import subprocess
 import json
+from typing import Union, Dict, List
 
-from documentstore_migracao import config, exceptions
+from documentstore_migracao.utils.isis2json import isis2json
 
 logger = logging.getLogger(__name__)
-
-
-ISIS2JSON_PATH = "%s/documentstore_migracao/utils/isis2json/isis2json.py" % (
-    config.BASE_PATH
-)
 
 
 class OutputContainer:
@@ -45,34 +39,47 @@ def create_output_dir(path):
         os.makedirs(output_dir)
 
 
-def run(path: str, output_file: str = "") -> dict:
-    """Roda um subprocesso com o isis2json de target para extrair dados
-    de uma base ISIS em formato MST. O resultado da extração
-    é armazenado em formato JSON em arquivo determinado pelo
-    parâmetro ``output_file``.
+def run(path: str, output_file: str = "", mongo=False) -> Union[None, List[dict]]:
+    """Invoca o utilitário `isis2json` com os parâmetros adaptados para a
+    leitura de arquivos MST de acordo com as definições padrões utilizadas
+    pelo __main__ da ferramenta `isis2json`.
 
-    Se o parâmetro ``output_file`` não for utilizado o resultado da extração
-    não será gravado em disco.
+    O resultado de saída pode ser escrito diretamente para um arquivo em disco
+    ou retornará uma lista contento as linhas passíveis de conversão para
+    JSON.
+
+    Exemplo:
+    >>> run("file.mst")
+    >>> [{"mfn": 1}, {"mfn": 2}]
+
+    >>> run("file.mst", output_file="/tmp/output.json")
+    >>> None
     """
 
     if not os.path.exists(path):
         raise FileNotFoundError("File '%s' does not exist.")
 
-    if output_file:
-        output_command = "-o %s" % output_file
+    if len(output_file) > 0:
+        output_file = open(output_file, "wb")
     else:
-        output_command = ""
+        output_file = OutputContainer()
 
-    command = "java -cp %s org.python.util.jython %s -t 3 -p 'v' %s %s" % (
-        config.get("CLASSPATH"),
-        ISIS2JSON_PATH,
-        output_command,
-        path,
+    isis2json.writeJsonArray(
+        iterRecords=isis2json.iterMstRecords,
+        file_name=path,
+        output=output_file,
+        qty=isis2json.DEFAULT_QTY,
+        skip=0,
+        id_tag=0,
+        gen_uuid=False,
+        mongo=mongo,
+        mfn=True,
+        isis_json_type=3,
+        prefix="v",
+        constant="",
     )
 
-    return subprocess.run(
-        shlex.split(command),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=True,
-    )
+    output_file.close()
+
+    if isinstance(output_file, OutputContainer):
+        return output_file.lines
