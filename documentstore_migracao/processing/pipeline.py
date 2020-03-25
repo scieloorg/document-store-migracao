@@ -4,10 +4,11 @@ import os
 import json
 import gzip
 import re
-from typing import List, Generator
+from typing import List, Generator, Union
 
 from lxml import etree
 from tqdm import tqdm
+from ioisis.java import jvm
 
 from documentstore_migracao.export.sps_package import SPS_Package
 from documentstore_migracao.utils.extract_isis import run as run_isis2json
@@ -300,3 +301,77 @@ def update_articles_mixed_citations(
                 )
             pbar.update(1)
 
+
+def set_mixed_citations_cache(mst_source: str, override: bool = False) -> None:
+    """Extrai os parágrafos de bases `mst` salvando-os em arquivos JSON.
+
+    É possível extrair parágrafos de uma ou mais bases durante a mesma execução,
+    bastantando o path `mst_source` apontar para um diretório com uma ou mais bases.
+    """
+
+    if not os.path.exists(mst_source):
+        raise FileNotFoundError("MST path '%s' does not exists" % mst_source)
+
+    CACHE_DIR = config.get("PARAGRAPH_CACHE_PATH")
+
+    def create_paragraphs_cache(mst_source: str, cache_dir: str) -> None:
+        """Extrai referências de arquivos MST e salva o resultado em um arquivo
+        JSON.
+
+        O path para o arquivo de cache é formado por dirietório-de-cache/pid.json"""
+
+        if not os.path.isfile(mst_source):
+            raise FileNotFoundError("File '%s' does not exist." % mst_source)
+
+        for paragraph in run_isis2json(mst_source, mongo=True):
+            pid = get_nested(paragraph, "v880", 0, "_", default=None)
+
+            if pid is None:
+                continue
+
+            output_file_path = f"{os.path.join(cache_dir, pid)}.json"
+
+            if not os.path.exists(cache_dir):
+                os.makedirs(cache_dir)
+
+            with open(output_file_path, "a") as f:
+                f.write(json.dumps(paragraph) + "\n")
+
+    def format_path_to_pid(file_path: str) -> Union[None, str]:
+        """Tenta recuperar um `pid v2` a partir de um caminho para um arquivo
+        MST.
+
+        O pid inferido a partir do caminho deve seguir a estrutura adotada
+        pela coleção SciELO BR para segmentar a base artigo e seus parágrafos
+        (issn/year/order/order_in_issue).
+
+        Exemplo:
+        >>> format_path_to_pid("~/artigo/p/1808-8694/2011/0002/00018.mst")
+        >>> "S1808-86942011000200018"
+        >>> format_path_to_pid("~/artigo/p/1808-8694/2011/0002")
+        >>> None
+        """
+        match = re.match(r".*([\w-]{9})\/(.{4})\/(.{4})\/(.{5})\.mst", file_path)
+
+        if not match:
+            return None
+
+        return "S" + "".join(match.groups())
+
+    bases = get_files_in_path(mst_source, extension=".mst")
+
+    with jvm(domains=["bruma", "jyson"], classpath=os.environ["CLASSPATH"]):
+        with tqdm(total=len(bases)) as pbar:
+            for base in bases:
+                try:
+                    pid = format_path_to_pid(base)
+
+                    if pid is None or (
+                        not os.path.exists(os.path.join(CACHE_DIR, pid + ".json"))
+                        or override
+                    ):
+                        create_paragraphs_cache(base, cache_dir=CACHE_DIR)
+                except Exception as exc:
+                    logger.error(exc)
+
+                pbar.update(1)
