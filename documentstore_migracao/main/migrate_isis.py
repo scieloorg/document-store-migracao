@@ -1,4 +1,7 @@
 import argparse
+import os
+
+from ioisis.java import jvm
 
 from .base import mongodb_parser
 from documentstore import adapters as ds_adapters
@@ -47,7 +50,10 @@ def migrate_isis_parser(sargs):
 
     if args.command == "extract":
         extract_isis.create_output_dir(args.output)
-        extract_isis.run(args.mst_file_path, args.output)
+
+        with jvm(domains=["bruma", "jyson"], classpath=os.environ["CLASSPATH"]):
+            extract_isis.run(args.mst_file_path, args.output)
+
     elif args.command == "import":
         mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
         Session = ds_adapters.Session.partial(mongo)

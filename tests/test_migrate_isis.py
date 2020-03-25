@@ -113,21 +113,23 @@ class IsisCommandLineTests(unittest.TestCase):
     def setUp(self):
         self.session = Session
 
+    @mock.patch("documentstore_migracao.main.migrate_isis.jvm")
     @mock.patch("documentstore_migracao.main.migrate_isis.extract_isis")
     @mock.patch(
         "documentstore_migracao.main.migrate_isis.argparse.ArgumentParser.error"
     )
     def test_extract_subparser_requires_mst_file_path_and_output_file(
-        self, error_mock, extract_isis_mock
+        self, error_mock, extract_isis_mock, jvm_mock
     ):
         migrate_isis_parser("extract".split())
         error_mock.assert_called_with(
             "the following arguments are required: file, --output"
         )
 
+    @mock.patch("documentstore_migracao.main.migrate_isis.jvm")
     @mock.patch("documentstore_migracao.main.migrate_isis.extract_isis")
     def test_extract_subparser_should_call_extract_isis_command(
-        self, extract_isis_mock
+        self, extract_isis_mock, jvm_mock
     ):
         migrate_isis_parser(
             "extract /path/to/file.mst --output /jsons/file.json".split()
