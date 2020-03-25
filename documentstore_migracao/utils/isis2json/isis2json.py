@@ -138,7 +138,7 @@ def writeJsonArray(
     start = skip
     end = start + qty
     if not mongo:
-        output.write("[")
+        output.write(b"[")
     if id_tag:
         id_tag = str(id_tag)
         ids = set()
@@ -148,8 +148,8 @@ def writeJsonArray(
         if i >= end:
             break
         if i > start and not mongo:
-            output.write(",")
-        output.write("\n")
+            output.write(b",")
+        output.write(b"\n")
         if start <= i < end:
             if id_tag:
                 occurrences = record.get(id_tag, None)
@@ -192,8 +192,8 @@ def writeJsonArray(
                 record[constant_key] = constant_value
             output.write(json.dumps(record).encode("utf-8"))
     if not mongo:
-        output.write("\n]")
-    output.write("\n")
+        output.write(b"\n]")
+    output.write(b"\n")
 
 
 if __name__ == "__main__":
