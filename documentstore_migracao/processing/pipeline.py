@@ -7,6 +7,7 @@ import re
 from typing import List, Generator
 
 from lxml import etree
+from tqdm import tqdm
 
 from documentstore_migracao.export.sps_package import SPS_Package
 from documentstore_migracao.utils.extract_isis import run as run_isis2json
@@ -199,56 +200,27 @@ def link_documents_bundles_with_journals(issue_path: str, output_path: str):
 
 
 def update_articles_mixed_citations(
-    source: str, mst_source: str, output_folder: str = None, override: bool = False
+    source: str,
+    output_folder: str = None,
+    override: bool = False,
+    disable_bar: bool = False,
 ):
     """Atualiza os elementos de ``mixed-citations`` em um ou mais XMLs.
 
-    É possível atualizar um ou mais XML a partir de um path `source`. A fonte
-    de parágrafos pode ser um arquivo MST ou um diretório no padrão SciELO Brasil.
-
-    Se a fonte MST for um diretório no padrão SciELO os arquivos MST serão
-    localizados a partir do PID do XML processado
-    (PID: S0301-80591999000100002 -> 0301-8059/1999/0001/00002.mst).
-
     O resultado da atualização pode ser salvo no próprio arquivo XML ou em
     outro arquivo XML em um diretório diferente utilizando o parâmetro
-    ``output_folder``."""
+    ``output_folder``.
+    
+    Marque o `override` como `True` para sobrescrever todas as mixed citations
+    das referências, caso contrário, apenas as referências sem mixed citations
+    serão atualizadas (padrão)."""
+
+    CACHE_DIR = config.get("PARAGRAPH_CACHE_PATH")
+
     if not os.path.exists(source):
-        raise FileNotFoundError("Source path '%s' does not exists" % source)
-    elif not os.path.exists(mst_source):
-        raise FileNotFoundError("MST path '%s' does not exists" % mst_source)
+        raise FileNotFoundError("Source path '%s' does not exist" % source)
     elif output_folder is not None and not os.path.exists(output_folder):
-        raise FileNotFoundError("Output folder '%s' does not exists" % output_folder)
-
-    def translate_pid_to_mst_path(pid: str) -> str:
-        """Converte o PID de um artigo na estrutura de diretório de parágrafos
-        utilizada pela SciELO BR.
-
-        Exemplo:
-        PID: S0301-80591999000100002 -> 0301-8059/1999/0001/00002.mst"""
-        result = re.split(r"S?([\w-]{9})(.{4})(.{4})(.{5})", pid)
-        result = "/".join(result[1:-1]) + ".mst"
-        return result
-
-    def get_paragraphs_from_mst(mst_source: str, pid: str = None) -> dict:
-        """Ler um arquivo MST e retorna seu conteúdo em formato JSON.
-
-        Se o parâmetro `mst_source` for um arquivo MST, o seu conteúdo será lido
-        e transformado em JSON. O parâmetro `pid` será utilizado para inferir
-        o path da base MST se o `mst_source` for um diretório.
-
-        O caminho inferido a partir do `pid` segue a regra utilizada pela SciELO
-        para segmentar a base Artigo e seus parágrafos (issn/year/order/order_in_issue).
-        """
-        if os.path.isdir(mst_source) and pid is None:
-            raise ValueError("PID param is required if mst source is a directory")
-        elif os.path.isdir(mst_source):
-            mst_source = os.path.join(mst_source, translate_pid_to_mst_path(pid))
-
-        if not os.path.exists(mst_source):
-            raise FileNotFoundError("File '%s' does not exists" % mst_source)
-
-        return json.loads(run_isis2json(mst_source).stdout.decode())
+        raise FileNotFoundError("Output folder '%s' does not exist" % output_folder)
 
     def get_references_text_from_paragraphs(paragraphs: list, pid: str) -> dict:
         """Filtra as referências a partir dos paragráfos.
@@ -283,34 +255,48 @@ def update_articles_mixed_citations(
         if output_folder is None:
             return original_file
 
-        return os.path.join(output_folder, os.path.basename(xml))
+        return os.path.join(output_folder, os.path.basename(original_file))
 
-    if os.path.isfile(mst_source):
-        paragraphs = get_paragraphs_from_mst(mst_source)
+    def get_paragraphs_from_cache(file) -> list:
+        """Retorna uma lista de paragráfos a partir de um arquivo JSON"""
+        paragraphs = []
 
-    for xml in get_files_in_path(source, extension=".xml"):
-        try:
-            package = SPS_Package(etree.parse(xml))
+        with open(file, "r") as f:
+            for line in f.readlines():
+                paragraphs.append(json.loads(line))
 
-            if os.path.isdir(mst_source):
-                paragraphs = get_paragraphs_from_mst(
-                    mst_source, pid=package.scielo_pid_v2
+        return paragraphs
+
+    xmls = get_files_in_path(source, extension=".xml")
+
+    with tqdm(total=len(xmls), disable=disable_bar) as pbar:
+        for xml in xmls:
+            try:
+                package = SPS_Package(etree.parse(xml))
+
+                if package.scielo_pid_v2 is None:
+                    logger.error("Could not update file '%s' because its PID is unknown.", xml)
+                    continue
+
+                paragraph_file = f"{CACHE_DIR}/{package.scielo_pid_v2}.json"
+                paragraphs = get_paragraphs_from_cache(paragraph_file)
+                references = get_references_text_from_paragraphs(
+                    paragraphs, pid=package.scielo_pid_v2
                 )
+                updated = package.update_mixed_citations(references, override=override)
+                output_file = get_output_file_path(xml, output_folder)
+                XMLUtils.objXML2file(output_file, package.xmltree, pretty=True)
 
-            references = get_references_text_from_paragraphs(
-                paragraphs, pid=package.scielo_pid_v2
-            )
-            updated = package.update_mixed_citations(references, override=override)
-            output_file = get_output_file_path(xml, output_folder)
-            XMLUtils.objXML2file(output_file, package.xmltree, pretty=True)
+                if len(updated) > 0:
+                    logger.debug(
+                        "Updated %0.3d references from '%s' file.", len(updated), xml
+                    )
 
-            if len(updated) > 0:
-                logger.debug(
-                    "Updated %0.3d references from '%s' file.", len(updated), xml
+            except etree.XMLSyntaxError as e:
+                logger.error(e)
+            except FileNotFoundError as e:
+                logger.error(
+                    "Could not update file '%s' " "the exception '%s' occurred.", xml, e
                 )
-        except etree.XMLSyntaxError as e:
-            logger.error(e)
-        except FileNotFoundError as e:
-            logger.error(
-                "Could not update file '%s' " "the exception '%s' occurred.", xml, e
-            )
+            pbar.update(1)
+

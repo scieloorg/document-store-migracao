@@ -44,6 +44,7 @@ _default = dict(
     CONSTRUCTOR_PATH=os.path.join(BASE_PATH, "xml/constructor"),
     ERRORS_PATH=os.path.join(BASE_PATH, "xml/errors"),
     CACHE_PATH=os.path.join(BASE_PATH, ".cache"),
+    PARAGRAPH_CACHE_PATH=os.path.join(BASE_PATH, "xml/paragraphs"),
     VALIDATE_ALL="FALSE",
     THREADPOOL_MAX_WORKERS=os.cpu_count() * 5,
     PROCESSPOOL_MAX_WORKERS=os.cpu_count(),
