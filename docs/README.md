@@ -4,6 +4,7 @@ It is a tool specifically built to migrate your SciELO collection to a new platf
 
 ## Topics
 
+- [Usage](usage.md)
 - [Quality assurance](quality-assurance.md)
 
 ### FAQ
