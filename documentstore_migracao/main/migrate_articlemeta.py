@@ -288,7 +288,6 @@ def migrate_articlemeta_parser(sargs):
 
     elif args.command == "pack_from_site":
         build_ps = BuildPSPackage(
-            args.acrons,
             args.xml_folder,
             args.img_folder,
             args.pdf_folder,

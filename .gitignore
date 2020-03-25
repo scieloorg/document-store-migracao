@@ -113,3 +113,6 @@ json/*
 
 tests/samples/S0044-59672003000300002_sps_*
 tests/samples/any
+
+_inferer_clue.json
+_inferer_tags.json
