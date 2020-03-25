@@ -684,8 +684,12 @@ class SPS_Package:
             elif not override and reference.find(".//mixed-citation") is not None:
                 continue
 
+            try:
+                new_mixed_citation = xml.create_mixed_citation_element(reference_text)
+            except AssertionError:
+                continue
+
             xml.remove_element(reference, ".//mixed-citation")
-            new_mixed_citation = xml.create_mixed_citation_element(reference_text)
             reference.insert(0, new_mixed_citation)
 
             extracted_order = xml.extract_reference_order(text=reference_text)
