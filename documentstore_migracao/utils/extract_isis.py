@@ -2,6 +2,8 @@ import os
 import logging
 import shlex
 import subprocess
+import json
+
 from documentstore_migracao import config, exceptions
 
 logger = logging.getLogger(__name__)
@@ -10,6 +12,29 @@ logger = logging.getLogger(__name__)
 ISIS2JSON_PATH = "%s/documentstore_migracao/utils/isis2json/isis2json.py" % (
     config.BASE_PATH
 )
+
+
+class OutputContainer:
+    """Classe que mimetiza a escrita de arquivos para a escrita em uma estrutura
+    de lista. Cada linha em um arquivo representa uma entrada na lista."""
+
+    def __init__(self):
+        self._lines = []
+
+    def write(self, string: str) -> None:
+        try:
+            _string = json.loads(string)
+        except Exception:
+            pass
+        else:
+            self._lines.append(_string)
+
+    def close(self):
+        pass
+
+    @property
+    def lines(self):
+        return self._lines
 
 
 def create_output_dir(path):
