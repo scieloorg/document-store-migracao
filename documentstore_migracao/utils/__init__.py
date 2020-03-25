@@ -109,6 +109,15 @@ def DoJobsConcurrently(
             raise
 
 
+def get_nested(node, *path, default=""):
+    try:
+        for p in path:
+            node = node[p]
+    except (IndexError, KeyError):
+        return default
+    return node
+
+
 __all__ = [
     "add_document",
     "add_journal",
@@ -118,4 +127,5 @@ __all__ = [
     "add_renditions",
     "PoisonPill",
     "DoJobsConcurrently",
+    "get_nested",
 ]
