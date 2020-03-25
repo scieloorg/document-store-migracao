@@ -170,21 +170,23 @@ def migrate_articlemeta_parser(sargs):
     )
 
     # Referências
-    example_text = """example:
+    example_text = """Usage:
 
-    # Use multiple MST files with a fixed directory structure inferred
-    # by articles' PID, e.g /bases/xml.000/bases/article/p/issn/year/order_in_year/order_in_issue.mst
-    ds_migracao mixed-citations xml/conversion /bases/xml.000/bases/article/p/
+    Before you update XMLs' mixed citations is necessary to create intermediary
+    cache files using mst database(s). The first option is to use a fixed
+    directory structure, for example:
 
-    # Use a single MST file to update all articles' mixed citations.
-    ds_migracao mixed-citations xml/conversion /bases/extracted_paragraphs_file.mst
+    $ ds_migracao mixed-citations set-cache /bases/scl.000/bases/artigo/p
 
-    # Output updated XMLs in a different directory.
-    ds_migracao mixed-citations xml/conversion /bases/extracted_paragraphs_file.mst --output=/home/xmls
+    The second option uses a single database which contains all articles'
+    paragraphs (it may take some time), look:
 
-    # Process a single XML, then save the result in the source file. NOTE: If the
-    # output directory path isn't used, the source file will be modified.
-    ds_migracao mixed-citations xml/conversion/file.xml /bases/extracted_paragraphs_file.mst
+    $ ds_migracao mixed-citations set-cache /bases/scl.000/bases/artigo/artigo.mst
+
+    After the command is finished you can start to update XML with their mixed
+    citations texts:
+
+    $ ds_migracao mixed-citations update xml/source
     """
 
     references = subparsers.add_parser(
@@ -193,12 +195,40 @@ def migrate_articlemeta_parser(sargs):
         epilog=example_text,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    references.add_argument("source", help="XML source or directory path")
-    references.add_argument(
+
+    references_subparser = references.add_subparsers(
+        title="Commands", metavar="", dest="refcommand"
+    )
+
+    # Subparser mixed citations set cache
+    references_cache = references_subparser.add_parser(
+        "set-cache", help="Create cache files for selected articles"
+    )
+
+    references_cache.add_argument(
         "mst", help="Directory root or MST file where paragraphs are located"
     )
-    references.add_argument("--output", metavar="dir", help="Output directory path")
-    references.add_argument(
+
+    references_cache.add_argument(
+        "--override",
+        action="store_true",
+        help="Override previous cached files",
+    )
+
+    # Subparser mixed citations update
+    references_update = references_subparser.add_parser(
+        "update", help="Update XML mixed citations"
+    )
+
+    references_update.add_argument(
+        "source", help="XML file or directory containing XMLs"
+    )
+
+    references_update.add_argument(
+        "--output", metavar="dir", help="Output directory path"
+    )
+
+    references_update.add_argument(
         "--override",
         action="store_true",
         help="Override old mixed citations in XML file",
@@ -293,13 +323,12 @@ def migrate_articlemeta_parser(sargs):
     elif args.command == "mixed-citations":
         from documentstore_migracao.processing import pipeline
 
-        pipeline.update_articles_mixed_citations(
-            source=args.source,
-            mst_source=args.mst,
-            output_folder=args.output,
-            override=args.override,
-        )
-
+        if args.refcommand == "set-cache":
+            pipeline.set_mixed_citations_cache(args.mst, override=args.override)
+        elif args.refcommand == "update":
+            pipeline.update_articles_mixed_citations(
+                source=args.source, output_folder=args.output, override=args.override,
+            )
     elif args.command == "quality":
         quality_checker.check_documents_availability_in_website(
             args.pids.readlines(), args.target, args.output
