@@ -24,6 +24,7 @@ from documentstore_migracao.utils import (
     update_journal,
     add_bundle,
     update_bundle,
+    get_nested,
 )
 from documentstore_migracao.processing import reading, conversion
 from documentstore_migracao.utils.xylose_converter import (
@@ -31,7 +32,7 @@ from documentstore_migracao.utils.xylose_converter import (
     parse_date,
     date_to_datetime,
 )
-
+from documentstore_migracao.utils.files import get_files_in_path
 
 logger = logging.getLogger(__name__)
 
@@ -219,31 +220,6 @@ def update_articles_mixed_citations(
     elif output_folder is not None and not os.path.exists(output_folder):
         raise FileNotFoundError("Output folder '%s' does not exists" % output_folder)
 
-    def get_nested(node, *path, default=""):
-        try:
-            for p in path:
-                node = node[p]
-        except (IndexError, KeyError):
-            return default
-        return node
-
-    def get_xml_files_path(path: str) -> List[str]:
-        """Retorna uma lista com os XMLs encontrados em um determinado path"""
-        if os.path.isfile(path):
-            return [path]
-
-        xmls = []
-        for root, _, files in os.walk(path):
-            xmls.extend(
-                [
-                    os.path.realpath(os.path.join(root, file))
-                    for file in files
-                    if ".xml" in file
-                ]
-            )
-
-        return xmls
-
     def translate_pid_to_mst_path(pid: str) -> str:
         """Converte o PID de um artigo na estrutura de diretório de parágrafos
         utilizada pela SciELO BR.
@@ -312,7 +288,7 @@ def update_articles_mixed_citations(
     if os.path.isfile(mst_source):
         paragraphs = get_paragraphs_from_mst(mst_source)
 
-    for xml in get_xml_files_path(source):
+    for xml in get_files_in_path(source, extension=".xml"):
         try:
             package = SPS_Package(etree.parse(xml))
 

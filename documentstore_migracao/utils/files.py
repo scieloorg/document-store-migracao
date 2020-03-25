@@ -158,3 +158,21 @@ def fetch_stages_info(content: List[str], func_name: str) -> Tuple[Set[str], Set
     create_stage_file(stage_file_path=stages_file_path)
 
     return fetch_stages_to_do(path=stages_file_path, all_stages=content)
+
+
+def get_files_in_path(path: str, extension) -> List[str]:
+    """Retorna uma lista com os arquivos encontrados em um determinado path"""
+    if os.path.isfile(path):
+        return [path]
+
+    files = []
+    for root, _, folder_files in os.walk(path):
+        files.extend(
+            [
+                os.path.realpath(os.path.join(root, file))
+                for file in folder_files
+                if file.endswith(extension)
+            ]
+        )
+
+    return files
