@@ -2962,3 +2962,247 @@ class TestFixOutSitetablePiep(unittest.TestCase):
         text, xml = pl.FixOutSideTablePipe().transform((text, xml))
         self.assertIn('table',
                       [tag.tag for tag in xml.find(".//table-wrap/p").getchildren()])
+
+
+class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.CreateSectionElemetWithSectionTitlePipe()
+
+    def test_transform_creates_sec_elem_with_title_from_sec(self):
+        text = """<root>
+        <body>
+            <p>
+                <sec id="introduction"/>
+                <bold>Introduction</bold>
+            </p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            xml.findtext(".//sec[@id='introduction']/title"),
+            "Introduction"
+        )
+        sec = xml.find(".//sec")
+        self.assertEqual(sec.get("sec-type"), "intro")
+
+    def test_transform_does_not_create_sec_elem_with_title_from_sec(self):
+        text = """<root>
+        <body>
+            <p>
+                <sec id="introduction"/>
+                <xref>Introduction</xref>
+            </p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            xml.findtext(".//sec[@id='introduction']/title"),
+            None
+        )
+        sec = xml.find(".//sec")
+        self.assertEqual(sec.get("sec-type"), "intro")
+
+    def test_transform_creates_sec_elem_with_title_from_ordinary_sec(self):
+        text = """<root>
+        <body>
+            <p>
+                <ordinary-sec id="abstract"/>
+                <bold>Abstract</bold>
+            </p>
+            <p>paragrafo 1 de Material and Methods</p>
+            <p>paragrafo 2 de Material and Methods</p>
+            <p>paragrafo 3 de Material and Methods</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            xml.findtext(".//sec[@id='abstract']/title"),
+            "Abstract"
+        )
+        self.assertIsNone(xml.findtext(".//sec[@sec-type]"))
+
+
+class TestInsertSectionChildrenPipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.InsertSectionChildrenPipe()
+
+    def test_transform_inserts_elements_in_sec_until_find_other_sec(self):
+        text = """<root>
+        <body>
+            <sec id="abstract">
+                <title>Abstract</title>
+            </sec>
+            <p>paragrafo 1 de Abstract</p>
+            <sec id="material">
+                <title>Material and Methods</title>
+            </sec>
+            <p>paragrafo 1 de Material and Methods</p>
+            <p>paragrafo 2 de Material and Methods</p>
+            <p>paragrafo 3 de Material and Methods</p>
+            <sec id="acknowledgments">
+                <title>Acknowledgments</title>
+            </sec>
+            <p>paragrafo 1 de Acknowledgments</p>
+            <p>paragrafo qq</p>
+            <p>paragrafo qq</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            len(xml.find(".//sec[@id='abstract']").getchildren()),
+            2
+        )
+        self.assertEqual(
+            len(xml.find(".//sec[@id='material']").getchildren()),
+            4
+        )
+
+    def test_transform_inserts_only_one_element_in_sec_if_it_is_last_sec(self):
+        text = """<root>
+        <body>
+            <sec id="acknowledgments">
+                <title>Acknowledgments</title>
+            </sec>
+            <p>paragrafo 1 de Acknowledgments</p>
+            <p>paragrafo qq</p>
+            <p>paragrafo qq</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(
+            len(xml.find(".//sec[@id='acknowledgments']").getchildren()),
+            2
+        )
+
+
+class TestAfterOneSectionAllTheOtherElementsMustBeSectionPipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = HTML2SPSPipeline()
+        self.pipe = pl.AfterOneSectionAllTheOtherElementsMustBeSectionPipe()
+
+    def test_transform_(self):
+        text = """<root>
+        <body>
+            <p>paragrafo qq 1</p>
+            <p>paragrafo qq 2</p>
+            <p>paragrafo qq 3</p>
+            <sec id="abstract">
+                <title>Abstract</title>
+                <p>paragrafo 1 de Abstract</p>
+            </sec>
+            <p>paragrafo qq 4</p>
+            <p>paragrafo qq 5</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        body_chidren = xml.find(".//body").getchildren()
+        self.assertEqual(
+            [node.tag for node in body_chidren],
+            ["p", "p", "p", "sec", "sec", "sec"]
+        )
+        self.assertEqual(body_chidren[-1].findtext("p"), "paragrafo qq 5")
+        self.assertEqual(body_chidren[-2].findtext("p"), "paragrafo qq 4")
+
+
+class TestRemoveAhrefWhichContentIsOnlyImgPipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = HTML2SPSPipeline()
+        self.pipe = pl.RemoveAhrefWhichContentIsOnlyImgPipe()
+
+    def test_transform_remove_element(self):
+        text = """<root>
+        <body>
+            <p>texto antes <a href="#ancora"><img/></a> texto depois</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(xml.find(".//p").text, "texto antes  texto depois")
+
+
+class TestRemoveEmptyPAndEmptySectionPipe(unittest.TestCase):
+
+    def setUp(self):
+        pl = HTML2SPSPipeline()
+        self.pipe = pl.RemoveEmptyPAndEmptySectionPipe()
+
+    def test_transform_remove_element(self):
+        text = """<root>
+        <body>
+            <p>texto antes <a href="#ancora"><img/></a> texto depois</p>
+            <p>parágrafo 1</p>
+            <p></p>
+            <p> </p>
+            <p> <img/> </p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(len(xml.findall(".//p")), 3)
+
+
+class TestRemoveXrefWhichRefTypeIsSecOrOrdinarySec(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe()
+
+    def test_transform_removes_all_xref(self):
+        text = """<root>
+        <p>
+        <xref ref-type="ordinary-sec" rid="abstract">Abstract</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="introduction">Introduction</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="material">Material and Methods</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="results">Results</xref>
+        </p>
+        <p>
+        <xref ref-type="sec" rid="discussion">Discussion</xref>
+        </p>
+        <p>
+        <xref ref-type="ordinary-sec" rid="references">References</xref>
+        </p>
+        <p>
+        <xref ref-type="ordinary-sec" rid="acknowledgments">Acknowledgments</xref>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(len(xml.findall(".//xref")), 0)
+
+
+class TestRemoveFnWhichHasOnlyXref(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.RemoveFnWhichHasOnlyXref()
+
+    def test_transform(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <p id="p2">
+                    <xref ref-type="ordinary-sec" rid="abstract">Abstract</xref>
+                </p>
+            </fn>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNotNone(xml.find("./p[@id='p1']/xref"))
+

@@ -1,3 +1,15 @@
+img|fig
+supplementary|sec
+material|sec
+cases|sec
+cases reports|sec
+conclusions|sec
+discussion|sec
+introduction|sec
+methods|sec
+methodology|sec
+results|sec
+subjects|sec
 corresp|corresp
 figure|fig
 tab|table-wrap
@@ -48,6 +60,8 @@ alg|fig
 e|disp-formula
 t|table-wrap
 f|fig
-img|fig
-supplementary|supplementary-material
-material|supplementary-material
+bibr|ordinary-sec
+resu|ordinary-sec
+abst|ordinary-sec
+refe|ordinary-sec
+ackn|ordinary-sec

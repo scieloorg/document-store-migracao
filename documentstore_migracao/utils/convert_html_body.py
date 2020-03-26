@@ -3,6 +3,7 @@ import plumber
 import html
 import os
 from copy import deepcopy
+import difflib
 
 import requests
 from lxml import etree
@@ -19,6 +20,40 @@ logger = logging.getLogger(__name__)
 TIMEOUT = config.get("TIMEOUT") or 5
 
 ASSET_TAGS = ("disp-formula", "fig", "table-wrap", "app")
+
+
+SECTIONS_CODE_AND_TITLES = dict([
+    ('Cases', 'cases'),
+    ('Case Reports', 'cases'),
+    ('Conclusions', 'conclusions'),
+    ('Comment', 'conclusions'),
+    ('Discussion', 'discussion'),
+    ('Interpretation', 'discussion'),
+    ('Introduction', 'intro'),
+    ('Synopsis', 'intro'),
+    ('Materials', 'materials'),
+    ('Methods', 'methods'),
+    ('Methodology', 'methods'),
+    ('Procedures', 'methods'),
+    ('Results', 'results'),
+    ('Statement of Findings', 'results'),
+    ('Subjects', 'subjects'),
+    ('Participants', 'subjects'),
+    ('Patients', 'subjects'),
+    ('Supplementary materials', 'supplementary-material')
+ ])
+
+
+def get_sectype(titles):
+    possibilities = SECTIONS_CODE_AND_TITLES.keys()
+    items = titles.split(" and ")
+    results = []
+    for item in items:
+        resp = difflib.get_close_matches(item, possibilities, n=1, cutoff=0.6)
+        if resp:
+            results.append(SECTIONS_CODE_AND_TITLES.get(resp[0]))
+
+    return "|".join([r for r in results if r])
 
 
 def is_footnote_label(text):
@@ -209,6 +244,7 @@ class HTML2SPSPipeline(object):
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
+            self.RemoveAhrefWhichContentIsOnlyImgPipe(),
             self.RemoveOrMoveStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
@@ -238,6 +274,8 @@ class HTML2SPSPipeline(object):
             self.GraphicChildrenPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
+            self.RemoveEmptyPAndEmptySectionPipe(),
+            self.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(),
             self.PPipe(),
             self.RemoveRefIdPipe(),
             self.FixIdAndRidPipe(super_obj=self),
@@ -1244,6 +1282,32 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[img]", self.parser_node)
             return data
 
+    class RemoveAhrefWhichContentIsOnlyImgPipe(plumber.Pipe):
+        def parser_node(self, node):
+            if not node.get("href").startswith("#"):
+                return
+            if node.find(".//img") is None:
+                return
+            if not get_node_text(node):
+                _remove_tag(node, True)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "a[@href]", self.parser_node)
+            return data
+
+    class RemoveEmptyPAndEmptySectionPipe(plumber.Pipe):
+
+        def parser_node(self, node):
+            if not get_node_text(node) and not node.getchildren():
+                _remove_tag(node, True)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "p", self.parser_node)
+            _process(xml, "sec", self.parser_node)
+            return data
+
     class ConvertElementsWhichHaveIdPipe(plumber.Pipe):
         def transform(self, data):
             raw, xml = data
@@ -1251,6 +1315,26 @@ class HTML2SPSPipeline(object):
             convert = ConvertElementsWhichHaveIdPipeline()
             _, obj = convert.deploy(xml)
             return raw, obj
+
+    class AfterOneSectionAllTheOtherElementsMustBeSectionPipe(plumber.Pipe):
+
+        def transform(self, data):
+            raw, xml = data
+            found_sec = False
+            remove_items = []
+            children = xml.find(".//body").getchildren()
+            for child in children:
+                if found_sec and child.tag != "sec":
+                    new_elem = etree.Element("sec")
+                    new_elem.append(deepcopy(child))
+                    child.addprevious(new_elem)
+                    remove_items.append(child)
+                if child.tag == "sec":
+                    found_sec = True
+            for item in remove_items:
+                p = item.getparent()
+                p.remove(item)
+            return data
 
     class FixBodyChildrenPipe(plumber.Pipe):
         ALLOWED_CHILDREN = [
@@ -1295,7 +1379,7 @@ class HTML2SPSPipeline(object):
                         new_child.append(deepcopy(child))
                         child.addprevious(new_child)
                         body.remove(child)
-                    elif child.tail:
+                    elif (child.tail or "").strip():
                         new_child = etree.Element("p")
                         new_child.text = child.tail.strip()
                         child.tail = child.tail.replace(new_child.text, "")
@@ -1402,6 +1486,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
             self.DeduceAndSuggestConversionPipe(),
             self.ApplySuggestedConversionPipe(),
+            self.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(),
+            self.CreateSectionElemetWithSectionTitlePipe(),
+            self.RemoveEmptyPAndEmptySectionPipe(),
+            self.InsertSectionChildrenPipe(),
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
@@ -1415,15 +1503,29 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
             self.FnMovePipe(),
+            self.FnBoldPipe(),
             self.FnLabelOfPipe(),
             self.FnAddContentPipe(),
+            self.GetFnContentFromNextElementPipe(),
             self.FnIdentifyLabelAndPPipe(),
             self.FnFixContentPipe(),
+            self.RemoveFnWhichHasOnlyXref(),
         )
 
     def deploy(self, raw):
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
+
+    class RemoveEmptyPAndEmptySectionPipe(plumber.Pipe):
+
+        def parser_node(self, node):
+            if not get_node_text(node) and not node.getchildren():
+                _remove_tag(node, True)
+
+        def transform(self, data):
+            raw, xml = data
+            _process(xml, "p", self.parser_node)
+            return data
 
     class SetupPipe(plumber.Pipe):
         def transform(self, data):
@@ -2245,6 +2347,73 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._remove_a(a_name, a_hrefs)
             return data
 
+    class RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            for xref in xml.findall(".//xref[@ref-type='sec']"):
+                _remove_tag(xref, True)
+            for xref in xml.findall(".//xref[@ref-type='ordinary-sec']"):
+                _remove_tag(xref, True)
+            return data
+
+    class CreateSectionElemetWithSectionTitlePipe(plumber.Pipe):
+
+        def _create_title(self, node):
+            title = node.getnext()
+            if title is not None and title.tag == "bold":
+                title.tag = "title"
+                node.append(deepcopy(title))
+                parent = node.getparent()
+                parent.remove(title)
+
+        def _sectype(self, node):
+            sectype = get_sectype(node.findtext("title") or node.get("id"))
+            return sectype or node.get("id")
+
+        def _create_sec(self, node):
+            self._create_title(node)
+            if node.tag == "sec":
+                node.set("sec-type", self._sectype(node))
+            node.tag = "sec"
+            parent = node.getparent()
+            parent.addprevious(deepcopy(node))
+            parent.remove(node)
+
+        def transform(self, data):
+            raw, xml = data
+            for sec in xml.findall(".//sec"):
+                self._create_sec(sec)
+            for sec in xml.findall(".//ordinary-sec"):
+                self._create_sec(sec)
+            return data
+
+    class InsertSectionChildrenPipe(plumber.Pipe):
+
+        def _create_children(self, node, last):
+            remove_items = []
+            next = node
+            while True:
+                next = next.getnext()
+                if next is None:
+                    break
+                if next.tag == "sec":
+                    break
+                if node is last:
+                    if len(node.getchildren()) > 1:
+                        break
+                node.append(deepcopy(next))
+                remove_items.append(next)
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
+
+        def transform(self, data):
+            raw, xml = data
+            sections = xml.findall(".//sec")
+            for sec in sections:
+                self._create_children(sec, sections[-1])
+            return data
+
     class AssetElementFixPositionPipe(plumber.Pipe):
         """
         Move os elementos de ativos digitais, por exemplo:
@@ -2860,6 +3029,23 @@ class ConvertElementsWhichHaveIdPipeline(object):
             node.addnext(fn_copy)
             node.remove(fn)
 
+    class FnBoldPipe(plumber.Pipe):
+        """Cria fn a partir de label[@label-of]
+        ou adiciona label em fn
+        """
+
+        def transform(self, data):
+            raw, xml = data
+            logger.debug("FnBoldPipe")
+            for node in xml.findall(".//fn"):
+                next = node.getnext()
+                if next is not None and next.tag == "bold":
+                    label = etree.Element("label")
+                    label.append(deepcopy(next))
+                    node.addnext(label)
+                    _remove_tag(next, True)
+            return data
+
     class FnLabelOfPipe(plumber.Pipe):
         """Cria fn a partir de label[@label-of]
         ou adiciona label em fn
@@ -3116,6 +3302,38 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         logger.info(
                             "FnFixContentPipe: %s" % etree.tostring(children[0])
                         )
+            return data
+
+    class GetFnContentFromNextElementPipe(plumber.Pipe):
+        def transform(self, data):
+            raw, xml = data
+            logger.debug("GetFnContentFromNextParagraphPipe")
+            for fn in xml.findall(".//fn[label]"):
+                children = fn.getchildren()
+                if len(children) == 1:
+                    parent = fn.getparent()
+                    parent_next = parent.getnext()
+                    if parent_next is not None:
+                        fn.append(deepcopy(parent_next))
+                        parent = parent.getparent()
+                        parent.remove(parent_next)
+            return data
+
+    class RemoveFnWhichHasOnlyXref(plumber.Pipe):
+        """
+        As âncoras que não identificadas como ativos digitais, seções etc,
+        por exclusão são consideradas notas de rodapé (fn). No entanto, há
+        padrões que podem desconsiderá-las notas de rodapé.
+        Um fn que contém apenas xref, não é nota de rodapé
+        """
+        def transform(self, data):
+            raw, xml = data
+            logger.debug("RemoveFnWhichHasOnlyXref")
+            for p in xml.findall(".//fn/p[xref]"):
+                fn = p.getparent()
+                if get_node_text(fn) == get_node_text(p.find("xref")):
+                    _remove_tag(p)
+                    _remove_tag(fn)
             return data
 
 
