@@ -52,7 +52,6 @@ def get_sectype(titles):
         resp = difflib.get_close_matches(item, possibilities, n=1, cutoff=0.6)
         if resp:
             results.append(SECTIONS_CODE_AND_TITLES.get(resp[0]))
-    print(titles, results)
 
     return "|".join([r for r in results if r])
 
@@ -1291,13 +1290,6 @@ class HTML2SPSPipeline(object):
                 return
             if not get_node_text(node):
                 _remove_tag(node, True)
-                # name = node.get("href")[1:]
-                # node_name = node.getroottree(
-                #     ).find(".//a[@name='{}']".format(name))
-                # print(name, etree.tostring(node))
-                # print(name, etree.tostring(node_name))
-                # if node_name is not None:
-                #     _remove_tag(node_name, True)
 
         def transform(self, data):
             raw, xml = data
