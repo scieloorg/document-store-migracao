@@ -127,7 +127,11 @@ def convert_article_ALLxml():
             pbar.update(1)
 
         def log_exceptions(exception, job, logger=logger):
-            logger.error("Could not convert file '%s'.", job["file_xml_path"])
+            logger.error(
+                "Could not convert file '%s'. The exception '%s' was raised.",
+                job["file_xml_path"],
+                exception,
+            )
 
         DoJobsConcurrently(
             convert_article_xml,
