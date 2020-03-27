@@ -57,10 +57,17 @@ def loadToXML(file):
 
     The XML can be retrieved given its filesystem path,
     an URL or a file-object.
-    """
+
+    The etree.XMLSyntaxError will be converted in a generic Exception to
+    guarantee a serializable exception in the multi-process scenario."""
+
     parser = etree.XMLParser(remove_blank_text=True, no_network=True)
-    xml = etree.parse(file, parser)
-    return xml
+    try:
+        xml = etree.parse(file, parser)
+    except etree.XMLSyntaxError as exc:
+        raise Exception(str(exc)) from None
+    else:
+        return xml
 
 
 def convert_html_tags_to_jats(xml_etree):
