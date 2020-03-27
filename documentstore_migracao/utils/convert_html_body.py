@@ -245,7 +245,6 @@ class HTML2SPSPipeline(object):
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
-            self.RemoveAhrefWhichContentIsOnlyImgPipe(),
             self.RemoveOrMoveStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
@@ -1332,22 +1331,6 @@ class HTML2SPSPipeline(object):
             logger.info("INICIO: %s" % type(self).__name__)
             raw, xml = data
             _process(xml, "a[img]", self.parser_node)
-            logger.info("FIM: %s" % type(self).__name__)
-            return data
-
-    class RemoveAhrefWhichContentIsOnlyImgPipe(plumber.Pipe):
-        def parser_node(self, node):
-            if not node.get("href").startswith("#"):
-                return
-            if node.find(".//img") is None:
-                return
-            if not get_node_text(node):
-                _remove_tag(node, True)
-
-        def transform(self, data):
-            logger.info("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-            _process(xml, "a[@href]", self.parser_node)
             logger.info("FIM: %s" % type(self).__name__)
             return data
 
