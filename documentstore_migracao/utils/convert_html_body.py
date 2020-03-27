@@ -2446,9 +2446,14 @@ class ConvertElementsWhichHaveIdPipeline(object):
             title = node.getnext()
             if title is not None and title.tag == "bold":
                 title.tag = "title"
-                node.append(deepcopy(title))
                 parent = node.getparent()
-                parent.remove(title)
+
+                next = title.getnext()
+                if next is not None and next.tag == "img":
+                    # remove seta para cima que fica ao lado do título da seção
+                    parent.remove(next)
+
+                node.append(deepcopy(title))
 
         def _sectype(self, node):
             sectype = get_sectype(node.findtext("title") or node.get("id"))
