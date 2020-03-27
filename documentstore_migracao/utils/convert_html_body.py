@@ -1556,8 +1556,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.AppendixPipe(),
             self.TablePipe(),
             self.SupplementaryMaterialPipe(),
-            self.RemoveXMLAttributesPipe(),
-            self.ImgPipe(),
             self.FnMovePipe(),
             self.FnBoldPipe(),
             self.FnLabelOfPipe(),
@@ -1566,6 +1564,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.FnIdentifyLabelAndPPipe(),
             self.FnFixContentPipe(),
             self.RemoveFnWhichHasOnlyXref(),
+            self.RemoveXMLAttributesPipe(),
+            self.ImgPipe(),
         )
 
     def deploy(self, raw):
