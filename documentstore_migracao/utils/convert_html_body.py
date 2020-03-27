@@ -3073,8 +3073,107 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
     class ImgPipe(plumber.Pipe):
+        common = {
+                'alternatives',
+                'disp-formula',
+                'license-p',
+                'named-content',
+                'p',
+                'see-also',
+                'see',
+                'sig-block',
+                'sig',
+                'styled-content',
+                'td',
+                'term',
+                'th'
+                }
+        only_inline = {
+            'addr-line',
+            'alt-title',
+            'article-title',
+            'attrib',
+            'award-id',
+            'bold',
+            'chapter-title',
+            'code',
+            'collab',
+            'comment',
+            'compound-kwd-part',
+            'compound-subject-part',
+            'conf-theme',
+            'data-title',
+            'def-head',
+            'element-citation',
+            'fixed-case',
+            'funding-source',
+            'inline-formula',
+            'italic',
+            'label',
+            'meta-value',
+            'mixed-citation',
+            'monospace',
+            'overline',
+            'part-title',
+            'private-char',
+            'product',
+            'roman',
+            'sans-serif',
+            'sc',
+            'source',
+            'std',
+            'strike',
+            'sub',
+            'subject',
+            'subtitle',
+            'sup',
+            'supplement',
+            'support-source',
+            'term-head',
+            'textual-form',
+            'title',
+            'trans-source',
+            'trans-subtitle',
+            'trans-title',
+            'underline',
+            'verse-line'}
+
+        only_graphic = {
+            'answer',
+            'app-group',
+            'app',
+            'array',
+            'bio',
+            'body',
+            'boxed-text',
+            'chem-struct-wrap',
+            'chem-struct',
+            'disp-quote',
+            'explanation',
+            'fig-group',
+            'fig',
+            'floats-group',
+            'glossary',
+            'notes',
+            'option',
+            'question-preamble',
+            'question',
+            'ref-list',
+            'sec',
+            'supplementary-material',
+            'table-wrap'}
+
         def parser_node(self, node):
-            node.tag = "graphic"
+            parent = node.getparent()
+            tag = "graphic"
+            if parent.tag in self.only_inline:
+                tag = "inline-graphic"
+            elif parent.tag in self.common:
+                if (node.tail or "").strip():
+                    tag = "inline-graphic"
+                elif node.getprevious() is not None and node.getprevious().tail:
+                    tag = "inline-graphic"
+            node.tag = tag
             src = node.attrib.pop("src")
             node.attrib.clear()
             node.set("{http://www.w3.org/1999/xlink}href", src)
