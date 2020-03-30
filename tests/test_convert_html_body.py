@@ -3115,23 +3115,6 @@ class TestAfterOneSectionAllTheOtherElementsMustBeSectionPipe(unittest.TestCase)
         self.assertEqual(body_chidren[-2].findtext("p"), "paragrafo qq 4")
 
 
-class TestRemoveAhrefWhichContentIsOnlyImgPipe(unittest.TestCase):
-
-    def setUp(self):
-        pl = HTML2SPSPipeline()
-        self.pipe = pl.RemoveAhrefWhichContentIsOnlyImgPipe()
-
-    def test_transform_remove_element(self):
-        text = """<root>
-        <body>
-            <p>texto antes <a href="#ancora"><img/></a> texto depois</p>
-        </body>
-        </root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.pipe.transform((text, xml))
-        self.assertEqual(xml.find(".//p").text, "texto antes  texto depois")
-
-
 class TestRemoveEmptyPAndEmptySectionPipe(unittest.TestCase):
 
     def setUp(self):
