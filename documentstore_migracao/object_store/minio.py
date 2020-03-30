@@ -115,7 +115,7 @@ class MinioStorage:
             )
 
         except NoSuchBucket as err:
-            logger.info(err)
+            logger.error(err)
             self._create_bucket()
             return self.register(file_path, prefix)
 
