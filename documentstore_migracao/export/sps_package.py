@@ -571,7 +571,7 @@ class SPS_Package:
     def transform_body(self):
 
         for index, body in enumerate(self.xmltree.xpath("//body"), start=1):
-            logger.info("Processando body numero: %s" % index)
+            logger.debug("Processando body numero: %s" % index)
 
             txt_body = body.findtext("./p") or ""
             convert = HTML2SPSPipeline(

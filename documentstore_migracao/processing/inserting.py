@@ -66,7 +66,7 @@ def get_document_renditions(
             files.read_file(os.path.join(folder, "manifest.json"))
         )
     except Exception as exc:
-        logger.info("Could not read manifest: %s", str(exc))
+        logger.error("Could not read manifest: %s", str(exc))
         _manifest = {}
     else:
         _manifest = {lang: urlparse(url).path for lang, url in _manifest_json.items()}
@@ -82,7 +82,7 @@ def get_document_renditions(
         if _lang is None:
             for lang, legacy_url in _manifest.items():
                 if os.path.basename(legacy_url) == rendition:
-                    logger.info(
+                    logger.debug(
                         'Language "%s" detected to rendition "%s"', lang, rendition
                     )
                     _lang = lang

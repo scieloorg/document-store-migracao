@@ -131,7 +131,7 @@ def _process(xml, tag, func):
     nodes = xml.findall(".//%s" % tag)
     for node in nodes:
         func(node)
-    logger.info("Total de %s tags '%s' processadas", len(nodes), tag)
+    logger.debug("Total de %s tags '%s' processadas", len(nodes), tag)
 
 
 def wrap_node(node, elem_wrap="p"):
@@ -233,7 +233,7 @@ class CustomPipe(plumber.Pipe):
 
 class HTML2SPSPipeline(object):
     def __init__(self, pid="", ref_items=[], index_body=1):
-        logger.info(f"CONVERT: {pid}")
+        logger.debug(f"CONVERT: {pid}")
         self.pid = pid
         self.index_body = index_body
         self.ref_items = ref_items
@@ -413,10 +413,10 @@ class HTML2SPSPipeline(object):
                 total_removed_tags.extend(removed_tags)
                 remove = len(removed_tags) > 0
             if len(total_removed_tags) > 0:
-                logger.info(
+                logger.debug(
                     "Total de %s tags vazias removidas", len(total_removed_tags)
                 )
-                logger.info(
+                logger.debug(
                     "Tags removidas:%s ",
                     ", ".join(sorted(list(set(total_removed_tags)))),
                 )
@@ -452,7 +452,7 @@ class HTML2SPSPipeline(object):
                     logger.debug("removendo style da tag '%s'", node.tag)
                 node.attrib.clear()
                 node.attrib.update(_attrib)
-            logger.info("Total de %s tags com style", count)
+            logger.debug("Total de %s tags com style", count)
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
@@ -606,7 +606,7 @@ class HTML2SPSPipeline(object):
                     node.attrib.pop(attr)
             parent = node.getparent()
             if parent.tag not in self.TAGS:
-                logger.warning("Tag `p` in `%s`", parent.tag)
+                logger.debug("Tag `p` in `%s`", parent.tag)
 
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
@@ -1096,7 +1096,7 @@ class HTML2SPSPipeline(object):
                 if text:
                     text = text.upper()
                     if text.startswith("REF") or ">REF" in text:
-                        logger.info(
+                        logger.debug(
                             "RemoveReferencesFromBodyPipe: Primeiro: %s"
                             % etree.tostring(references_header)
                         )
@@ -1114,7 +1114,7 @@ class HTML2SPSPipeline(object):
                     comment.addnext(etree.Element("REMOVE_COMMENT"))
                     parent.remove(comment)
             etree.strip_tags(xml, "REMOVE_COMMENT")
-            logger.info("Total de %s 'comentarios' removidos", len(comments))
+            logger.debug("Total de %s 'comentarios' removidos", len(comments))
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
@@ -3680,19 +3680,19 @@ class FileLocation:
             _content = self.download()
             if _content:
                 self.save(_content)
-        logger.info("%s %s" % (len(_content or ""), self.local))
+        logger.debug("%s %s" % (len(_content or ""), self.local))
         return _content
 
     @property
     def local_content(self):
-        logger.info("Get local content from: %s" % self.local)
+        logger.debug("Get local content from: %s" % self.local)
         if self.local and os.path.isfile(self.local):
-            logger.info("Found")
+            logger.debug("Found")
             with open(self.local, "rb") as fp:
                 return fp.read()
 
     def download(self):
-        logger.info("Download %s" % self.remote)
+        logger.debug("Download %s" % self.remote)
         r = requests.get(self.remote, timeout=TIMEOUT)
         if r.status_code == 404:
             logger.error(
@@ -3707,7 +3707,7 @@ class FileLocation:
     def save(self, content):
         dirname = os.path.dirname(self.local)
         if not dirname.startswith(config.get("SITE_SPS_PKG_PATH")):
-            logger.info(
+            logger.debug(
                 "%s: valor inválido de caminho local para ativo digital" % self.local
             )
             return
@@ -3731,7 +3731,7 @@ def fix_img_revistas_path(node):
         location = location.replace("/img/fbpe", "/img/revistas")
         location = location[location.find("/img/revistas") :]
         if old_location != location:
-            logger.info(
+            logger.debug(
                 "fix_img_revistas_path: de {} para {}".format(old_location, location)
             )
             node.set(attr, location)
@@ -3902,7 +3902,7 @@ class Remote2LocalConversion:
                 if new_p is not None:
                     new_p_items.append((bodychild, new_p))
         for bodychild, new_p in new_p_items[::-1]:
-            logger.info(
+            logger.debug(
                 "Insere novo p com conteudo do HTML: %s" % etree.tostring(new_p)
             )
             bodychild.addnext(new_p)
@@ -3913,7 +3913,7 @@ class Remote2LocalConversion:
         Retorna novo elemento que representa o conteúdo do html importado,
         se aplicável
         """
-        logger.info("Importar HTML de %s" % etree.tostring(a_link_type))
+        logger.debug("Importar HTML de %s" % etree.tostring(a_link_type))
         href = a_link_type.get("href")
         if "#" in href:
             href, anchor = href.split("#")
@@ -3927,7 +3927,7 @@ class Remote2LocalConversion:
             self.imported_files.append(href)
             html_body = self._get_html_body(href)
             if html_body is None:
-                logger.info("Alterando para link para asset-not-found")
+                logger.debug("Alterando para link para asset-not-found")
                 a_link_type.set("link-type", "asset-not-found")
             else:
                 self._update_a_href(a_link_type, new_href)
@@ -3967,7 +3967,7 @@ class Remote2LocalConversion:
                 if new_p is not None:
                     new_p_items.append((child, new_p))
         for bodychild, new_p in new_p_items[::-1]:
-            logger.info("Insere novo p: %s" % etree.tostring(new_p))
+            logger.debug("Insere novo p: %s" % etree.tostring(new_p))
             bodychild.addnext(new_p)
         return len(new_p_items)
 
@@ -3976,7 +3976,7 @@ class Remote2LocalConversion:
         Retorna novo elemento que representa a imagem importada,
         se aplicável
         """
-        logger.info("Converte %s" % etree.tostring(node_a))
+        logger.debug("Converte %s" % etree.tostring(node_a))
         href = node_a.get("href")
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
@@ -4001,7 +4001,7 @@ class Remote2LocalConversion:
     def _update_a_href(self, a_href, new_href):
         a_href.set("href", "#" + new_href)
         a_href.set("link-type", "internal")
-        logger.info("Atualiza a[@href]: %s" % etree.tostring(a_href))
+        logger.debug("Atualiza a[@href]: %s" % etree.tostring(a_href))
 
     def _create_new_p(self, new_href, node_content, content_type):
         """
@@ -4021,7 +4021,7 @@ class Remote2LocalConversion:
         else:
             a_name.addnext(node_content)
 
-        logger.info("Cria novo p: %s" % etree.tostring(new_p))
+        logger.debug("Cria novo p: %s" % etree.tostring(new_p))
 
         return new_p
 
@@ -4035,13 +4035,13 @@ class Remote2LocalConversion:
         body = deepcopy(html_body)
         body.tag = delete_tag
         for a in body.findall(".//a"):
-            logger.info("Encontrado elem a no body importado: %s" % etree.tostring(a))
+            logger.debug("Encontrado elem a no body importado: %s" % etree.tostring(a))
             href = a.get("href")
             if href and href[0] == "#":
                 a.set("href", "#" + new_href + href[1:].replace("#", "X"))
             elif a.get("name"):
                 a.set("name", new_href + "X" + a.get("name"))
-            logger.info("Atualiza elem a importado: %s" % etree.tostring(a))
+            logger.debug("Atualiza elem a importado: %s" % etree.tostring(a))
 
         for img in body.findall(".//img"):
             src = img.get("src")

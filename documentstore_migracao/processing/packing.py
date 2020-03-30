@@ -33,10 +33,10 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     bad_pkg_path = os.path.join(INCOMPLETE_SPS_PKG_PATH, original_filename)
 
     asset_replacements = list(set(sps_package.replace_assets_names()))
-    logger.info("%s possui %s ativos digitais", file_xml_path, len(asset_replacements))
+    logger.debug("%s possui %s ativos digitais", file_xml_path, len(asset_replacements))
 
     renditions, renditions_metadata = sps_package.get_renditions_metadata()
-    logger.info("%s possui %s renditions", file_xml_path, len(renditions))
+    logger.debug("%s possui %s renditions", file_xml_path, len(renditions))
 
     package_path = packing_assets(
         asset_replacements + renditions,
@@ -96,7 +96,7 @@ def download_asset(old_path, new_fname, dest_path):
     filename_m, ext_m = files.extract_filename_ext_by_path(old_path)
     dest_path_file = os.path.join(dest_path, "%s%s" % (new_fname.strip(), ext_m))
     if os.path.exists(dest_path_file):
-        logger.info("Arquivo ja baixado: %s", dest_path_file)
+        logger.debug("Arquivo ja baixado: %s", dest_path_file)
         return
 
     try:

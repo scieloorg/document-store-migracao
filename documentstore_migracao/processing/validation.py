@@ -48,7 +48,7 @@ def validate_article_xml(file_xml_path, print_error=True):
 
 
 def validate_article_ALLxml(move_to_processed_source=False, move_to_valid_xml=False):
-    logger.info("Iniciando Validação dos xmls")
+    logger.debug("Iniciando Validação dos xmls")
     list_files_xmls = files.xml_files_list(config.get("CONVERSION_PATH"))
 
     success_path = config.get("VALID_XML_PATH")
