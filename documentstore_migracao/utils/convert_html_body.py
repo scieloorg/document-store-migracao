@@ -3070,7 +3070,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
     class ImgPipe(plumber.Pipe):
-        common = {
+        common = (
                 'alternatives',
                 'disp-formula',
                 'license-p',
@@ -3084,8 +3084,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 'td',
                 'term',
                 'th'
-                }
-        only_inline = {
+                )
+        only_inline = (
             'addr-line',
             'alt-title',
             'article-title',
@@ -3133,9 +3133,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
             'trans-subtitle',
             'trans-title',
             'underline',
-            'verse-line'}
+            'verse-line')
 
-        only_graphic = {
+        only_graphic = (
             'answer',
             'app-group',
             'app',
@@ -3158,7 +3158,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             'ref-list',
             'sec',
             'supplementary-material',
-            'table-wrap'}
+            'table-wrap')
 
         def parser_node(self, node):
             parent = node.getparent()
