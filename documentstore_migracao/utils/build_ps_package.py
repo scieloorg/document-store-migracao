@@ -18,6 +18,7 @@ from documentstore_migracao.export.sps_package import SPS_Package
 
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 class BuildPSPackage(object):
@@ -67,7 +68,7 @@ class BuildPSPackage(object):
         try:
             copy.copy_file(src_fs, src_path, dst_fs, dst_path)
 
-            logging.info(
+            logger.info(
                 "Copy asset: %s to: %s"
                 % (
                     path.join(src_fs.root_path, src_path),
@@ -76,7 +77,7 @@ class BuildPSPackage(object):
             )
 
         except errors.ResourceNotFound as e:
-            logging.info(e)
+            logger.info(e)
 
     def _update_sps_package_obj(self, sps_package, pack_name, row):
         """
@@ -105,14 +106,14 @@ class BuildPSPackage(object):
 
         def _get_date_value(date_label, date_value):
             if date_value:
-                logging.debug(
+                logger.debug(
                     'Updating document with %s "%s"',
                     date_label,
                     date_value,
                 )
                 return _parse_date(date_value)
             else:
-                logging.exception('Missing "%s"', date_label)
+                logger.exception('Missing "%s"', date_label)
 
         _sps_package = deepcopy(sps_package)
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row
@@ -121,13 +122,13 @@ class BuildPSPackage(object):
             if f_pid:
                 _sps_package.scielo_pid_v2 = f_pid
             else:
-                logging.exception("Missing PID")
+                logger.exception("Missing PID")
 
         if _has_attr_to_set("aop_pid"):
             if f_pid_aop:
                 _sps_package.aop_pid = f_pid_aop
             else:
-                logging.info("It has no AOP PID")
+                logger.info("It has no AOP PID")
 
         # Verificar data de publicação e da coleção
         if not _sps_package.is_ahead_of_print:
@@ -158,20 +159,21 @@ class BuildPSPackage(object):
         sps_package = self._update_sps_package_obj(
             SPS_Package(obj_xmltree), pack_name, row
         )
+
         # Salva XML com alterações
         xml.objXML2file(xml_target_path, sps_package.xmltree, pretty=True)
         return sps_package
 
     def get_target_path(self, xml_relative_path):
         target_folder, ext = os.path.splitext(xml_relative_path)
-        logging.info("Make dir package: %s", target_folder)
+        logger.info("Make dir package: %s", target_folder)
         target_path = os.path.join(self.out_folder, target_folder)
         if os.path.isdir(target_path):
             for f in os.listdir(target_path):
                 try:
                     os.unlink(os.path.join(target_path, f))
                 except OSError as e:
-                    logging.exception(e)
+                    logger.exception(e)
         else:
             os.makedirs(target_path)
 
@@ -196,14 +198,14 @@ class BuildPSPackage(object):
             try:
                 shutil.copy(os.path.join(source_path, source), target_path)
             except FileNotFoundError:
-                logging.exception("Not found %s" % source)
+                logger.exception("Not found %s" % source)
             else:
                 renditions.append(dest)
         return list(zip(langs, renditions))
 
     def save_renditions_manifest(self, target_path, metadata):
         if len(metadata) > 0:
-            logging.info(
+            logger.info(
                 "Saving %s/manifest.json", target_path
             )
             _renditions_manifest_path = path.join(
@@ -219,7 +221,7 @@ class BuildPSPackage(object):
             try:
                 shutil.copy(os.path.join(source_path, img), target_path)
             except FileNotFoundError:
-                logging.exception("Not found %s" % img)
+                logger.exception("Not found %s" % img)
 
     def get_acron_issuefolder_packname(self, xml_relative_path):
         dirname = os.path.dirname(xml_relative_path)
@@ -250,14 +252,14 @@ class BuildPSPackage(object):
                 f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row.values()
 
                 xml_relative_path = f_file
-                logging.info("Process ID: %s" % f_pid)
-                logging.info("Process XML: %s" % xml_relative_path)
+                logger.info("Process ID: %s" % f_pid)
+                logger.info("Process XML: %s" % xml_relative_path)
                 target_path = self.get_target_path(xml_relative_path)
-                logging.info("Package: %s" % target_path)
+                logger.info("Package: %s" % target_path)
                 try:
                     xml_target_path = self.collect_xml(xml_relative_path, target_path)
                 except FileNotFoundError as e:
-                    logging.exception(e)
+                    logger.exception(e)
                 else:
                     acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(xml_relative_path)
 
