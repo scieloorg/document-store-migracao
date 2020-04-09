@@ -355,18 +355,20 @@ def link_documents_bundles_with_documents(
 def register_documents_in_documents_bundle(
     session_db, file_documents: str, file_journals: str
 ) -> None:
-    def get_issn(document):
+
+    journals = reading.read_json_file(file_journals)
+    data_journal = {}
+    for journal in journals:
+        o_journal = Journal(journal)
+        if o_journal.print_issn:
+            data_journal[o_journal.print_issn] = o_journal.scielo_issn
+        if o_journal.electronic_issn:
+            data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
+        if o_journal.scielo_issn:
+            data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
+
+    def get_issn(document, data_journal=data_journal):
         """Recupera o ISSN ID do Periódico ao qual documento pertence"""
-        journals = reading.read_json_file(file_journals)
-        data_journal = {}
-        for journal in journals:
-            o_journal = Journal(journal)
-            if o_journal.print_issn:
-                data_journal[o_journal.print_issn] = o_journal.scielo_issn
-            if o_journal.electronic_issn:
-                data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
-            if o_journal.scielo_issn:
-                data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
 
         for issn_type in ("eissn", "pissn", "issn"):
             if document.get(issn_type) is not None:
