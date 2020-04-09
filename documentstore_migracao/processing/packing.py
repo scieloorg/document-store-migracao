@@ -20,7 +20,7 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     if poison_pill.poisoned:
         return
 
-    original_filename, ign = files.extract_filename_ext_by_path(file_xml_path)
+    original_filename, _ = files.extract_filename_ext_by_path(file_xml_path)
 
     obj_xml = xml.file2objXML(file_xml_path)
 
@@ -42,7 +42,8 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
         asset_replacements + renditions,
         pkg_path,
         bad_pkg_path,
-        sps_package.package_name
+        sps_package.package_name,
+        xml="%s" % file_xml_path
     )
 
     files.write_file(
@@ -78,7 +79,7 @@ def pack_article_ALLxml():
         )
 
 
-def download_asset(old_path, new_fname, dest_path):
+def download_asset(old_path, new_fname, dest_path, xml=None):
     """Returns msg, if error"""
     if old_path.startswith("http"):
         location = old_path
@@ -93,7 +94,7 @@ def download_asset(old_path, new_fname, dest_path):
             )
 
     # Verifica se o arquivo ja foi baixado anteriormente
-    filename_m, ext_m = files.extract_filename_ext_by_path(old_path)
+    _, ext_m = files.extract_filename_ext_by_path(old_path)
     dest_path_file = os.path.join(dest_path, "%s%s" % (new_fname.strip(), ext_m))
     if os.path.exists(dest_path_file):
         logger.debug("Arquivo ja baixado: %s", dest_path_file)
@@ -106,13 +107,13 @@ def download_asset(old_path, new_fname, dest_path):
             msg = str(e)
         except TypeError:
             msg = "Unknown error"
-        logger.error(e)
+        logger.error("Downloading assets from '%s' raised the exception '%s'.", xml, msg)
         return msg
     else:
         files.write_file_binary(dest_path_file, request_file.content)
 
 
-def packing_assets(asset_replacements, pkg_path, bad_pkg_path, pkg_name):
+def packing_assets(asset_replacements, pkg_path, bad_pkg_path, pkg_name, xml):
     """
     Retorna o caminho do pacote (pkg_path ou bad_pkg_path)
     """
@@ -121,7 +122,7 @@ def packing_assets(asset_replacements, pkg_path, bad_pkg_path, pkg_name):
         files.make_empty_dir(pkg_path)
 
     for old_path, new_fname in asset_replacements:
-        error = download_asset(old_path, new_fname, pkg_path)
+        error = download_asset(old_path, new_fname, pkg_path, xml)
         if error:
             errors.append((old_path, new_fname, error))
 
