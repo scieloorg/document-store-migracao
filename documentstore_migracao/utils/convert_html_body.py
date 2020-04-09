@@ -3497,21 +3497,22 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for fn in xml.findall(".//fn"):
                 children = fn.getchildren()
                 label = fn.find(".//label")
-                if label is not None:
-                    label.attrib.clear()
-                    bold = label.find("*[@label-of]")
-                    if bold is not None:
-                        bold.attrib.clear()
-                    if children[0].tag == "p" and children[0].text in ["(", "["]:
-                        label.text = (
-                            children[0].text + label.text + children[2].text[:1]
-                        )
-                        children[2].text = children[2].text[1:]
-                        fn.remove(children[0])
-                    elif children[0] is not label:
-                        logger.debug(
-                            "FnFixContentPipe: %s" % etree.tostring(children[0])
-                        )
+                if label is None:
+                    continue
+                label.attrib.clear()
+                bold = label.find("*[@label-of]")
+                if bold is not None:
+                    bold.attrib.clear()
+                if children[0].tag == "p" and children[0].text in ["(", "["]:
+                    label.text = (
+                        children[0].text + label.text + children[2].text[:1]
+                    )
+                    children[2].text = children[2].text[1:]
+                    fn.remove(children[0])
+                elif children[0] is not label:
+                    logger.debug(
+                        "FnFixContentPipe: %s" % etree.tostring(children[0])
+                    )
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
