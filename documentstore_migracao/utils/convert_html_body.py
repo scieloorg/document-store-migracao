@@ -3495,7 +3495,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
             for fn in xml.findall(".//fn"):
-                children = fn.getchildren()
                 label = fn.find(".//label")
                 if label is None:
                     continue
@@ -3503,18 +3502,59 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 bold = label.find("*[@label-of]")
                 if bold is not None:
                     bold.attrib.clear()
-                if children[0].tag == "p" and children[0].text in ["(", "["]:
-                    label.text = (
-                        children[0].text + label.text + children[2].text[:1]
-                    )
-                    children[2].text = children[2].text[1:]
-                    fn.remove(children[0])
-                elif children[0] is not label:
-                    logger.debug(
-                        "FnFixContentPipe: %s" % etree.tostring(children[0])
-                    )
+                self._move_label_prefix_into_label_element(label, bold)
+                self._move_label_suffix_into_label_element(label, bold)
+
+                children = fn.getchildren()
+                if children and children[0] is not label:
+                    fn.insert(0, deepcopy(label))
+                    _remove_tag(label, True)
+
             logger.debug("FIM: %s" % type(self).__name__)
             return data
+
+        def _move_label_prefix_into_label_element(self, label, bold):
+            prefix = ""
+            previous = label.getprevious()
+            if previous is None:
+                previous = label.getparent()
+                prev_text = (previous.text or "").strip()
+                if prev_text in ("(", "["):
+                    prefix = prev_text
+                    previous.text = ""
+            else:
+                prev_text = (previous.text or "").strip()
+                prev_tail = (previous.tail or "").strip()
+                if prev_tail in ("(", "["):
+                    prefix = prev_tail
+                    previous.tail = ""
+                elif prev_text in ("(", "["):
+                    prefix = prev_text
+                    previous.text = ""
+            if prefix:
+                if bold is None:
+                    label.text = prefix + label.text
+                else:
+                    bold.text = prefix + bold.text
+
+        def _move_label_suffix_into_label_element(self, label, bold):
+            suffix = ""
+            next_text = (label.tail or "").strip()
+            if next_text and next_text[0] in (")", "]"):
+                suffix = next_text[0]
+                label.tail = label.tail[label.tail.find(suffix)+1:]
+            else:
+                next = label.getnext()
+                if next is not None:
+                    next_text = (next.text or "").strip()
+                    if next_text and next_text[0] in (")", "]"):
+                        suffix = next_text[0]
+                        next.text = next.text[next.text.find(suffix)+1:]
+            if suffix:
+                if bold is None:
+                    label.text += suffix
+                else:
+                    bold.text += suffix
 
     class GetFnContentFromNextElementPipe(plumber.Pipe):
         def transform(self, data):
