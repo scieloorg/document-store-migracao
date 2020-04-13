@@ -11,7 +11,9 @@ import logging
 from copy import deepcopy
 
 import fs
+import packtools
 from fs import path, copy, errors
+from lxml import etree
 
 from documentstore_migracao.utils import xml, files
 from documentstore_migracao.export.sps_package import SPS_Package
@@ -223,6 +225,62 @@ class BuildPSPackage(object):
             except FileNotFoundError:
                 logger.exception("Not found %s" % img)
 
+    def optimise_xml_to_web(self, target_path, xml_target_path):
+        xml_filename = os.path.basename(xml_target_path)
+
+        def read_file(filename):
+            file_source_path = os.path.join(target_path, filename)
+            try:
+                with open(file_source_path, "rb") as file_obj:
+                    file_bytes = file_obj.read()
+            except OSError as exc:
+                raise packtools.exceptions.SPPackageError(
+                    "Error reading file {} during {} optimization: {}".format(
+                        filename, xml_filename, str(exc)
+                    )
+                )
+            else:
+                logger.debug(
+                    'File "%s" reading %s bytes', file_source_path, len(file_bytes)
+                )
+                return file_bytes
+
+        logger.debug("Optimizing XML file %s", xml_filename)
+        try:
+            xml_web_optimiser = packtools.XMLWebOptimiser(
+                xml_filename, os.listdir(target_path), read_file, target_path
+            )
+        except (etree.XMLSyntaxError, etree.SerialisationError) as exc:
+            logger.info('Error creating XMLWebOptimiser for "%s": %s', str(exc))
+        else:
+            optimised_xml = xml_web_optimiser.get_xml_file()
+            logger.debug("Saving optimised XML file %s", xml_filename)
+            xml.objXML2file(xml_target_path, etree.fromstring(optimised_xml), pretty=True)
+
+            # Salva ativos digitais otimizados
+            for asset_filename, asset_bytes in xml_web_optimiser.get_optimised_assets():
+                if asset_bytes is None:
+                    logger.error(
+                        'Error saving image file "%s" referenced in "%s": no file bytes',
+                        asset_filename,
+                        xml_filename,
+                    )
+                else:
+                    image_target_path = os.path.join(target_path, asset_filename)
+                    logger.debug('Saving image file "%s"', image_target_path)
+                    files.write_file_binary(image_target_path, asset_bytes)
+            for asset_filename, asset_bytes in xml_web_optimiser.get_assets_thumbnails():
+                if asset_bytes is None:
+                    logger.error(
+                        'Error saving image file "%s" referenced in "%s": no file bytes',
+                        asset_filename,
+                        xml_filename,
+                    )
+                else:
+                    image_target_path = os.path.join(target_path, asset_filename)
+                    logger.debug('Saving image file "%s"', image_target_path)
+                    files.write_file_binary(image_target_path, asset_bytes)
+
     def get_acron_issuefolder_packname(self, xml_relative_path):
         dirname = os.path.dirname(xml_relative_path)
         basename = os.path.basename(xml_relative_path)
@@ -274,6 +332,7 @@ class BuildPSPackage(object):
                     self.collect_assets(
                         target_path, acron, issue_folder, pack_name,
                         xml_sps.assets)
+                    self.optimise_xml_to_web(target_path, xml_target_path)
 
 
 def main():
