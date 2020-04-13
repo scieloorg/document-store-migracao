@@ -13,7 +13,7 @@ from copy import deepcopy
 import fs
 from fs import path, copy, errors
 
-from documentstore_migracao.utils import xml
+from documentstore_migracao.utils import xml, files
 from documentstore_migracao.export.sps_package import SPS_Package
 
 
@@ -189,12 +189,12 @@ class BuildPSPackage(object):
     def collect_renditions(self, target_path, acron, issue_folder, pack_name, langs):
         source_path = os.path.join(self.pdf_folder, acron, issue_folder)
         renditions = []
-        files = [(pack_name+".pdf", pack_name+".pdf")]
+        renditions_files = [(pack_name+".pdf", pack_name+".pdf")]
         for lang in langs[1:]:
-            files.append(
+            renditions_files.append(
                 (lang + "_" + pack_name + ".pdf",
                     pack_name + "-" + lang + ".pdf"))
-        for source, dest in files:
+        for source, dest in renditions_files:
             try:
                 shutil.copy(os.path.join(source_path, source), target_path)
             except FileNotFoundError:
