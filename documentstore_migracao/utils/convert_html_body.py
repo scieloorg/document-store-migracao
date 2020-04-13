@@ -3493,18 +3493,21 @@ class ConvertElementsWhichHaveIdPipeline(object):
     class FnFixLabel(plumber.Pipe):
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
+
             raw, xml = data
             for fn in xml.findall(".//fn"):
                 label = fn.find(".//label")
                 if label is None:
                     continue
                 label.attrib.clear()
-                bold = label.find("*[@label-of]")
-                if bold is not None:
-                    bold.attrib.clear()
+                label_child = label.find(".//*[@label-of]")
+                if label_child is None:
+                    label_child = label.find(".//*")
+                if label_child is not None:
+                    label_child.attrib.clear()
                 self._wrap_label_tail_with_p_element(label)
-                self._move_label_prefix_into_label_element(label, bold)
-                self._move_label_suffix_into_label_element(label, bold)
+                self._move_label_prefix_into_label_element(label, label_child)
+                self._move_label_suffix_into_label_element(label, label_child)
                 self._make_label_as_fn_first_child(fn, label)
 
             logger.debug("FIM: %s" % type(self).__name__)
