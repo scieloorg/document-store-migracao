@@ -1,9 +1,12 @@
 import io
 import csv
 import pathlib
+import tempfile
+import shutil
 from unittest import TestCase, mock
 
 from lxml import etree
+from PIL import Image
 
 from . import utils
 from documentstore_migracao.utils import build_ps_package
@@ -307,3 +310,158 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
             self.mk_sps_package, self.pack_name, self.rows[1]
         )
         self.assertEqual(result.document_pubdate, ("2012", "01", "15",))
+
+
+class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
+
+    def create_image_file(self, filename, format):
+        new_image = Image.new("RGB", (50, 50))
+        new_image.save(filename, format)
+
+    def setUp(self):
+        super().setUp()
+        self.target_path = tempfile.mkdtemp()
+        self.xml_target_path = pathlib.Path(self.target_path, "xml_file_name.xml")
+        self.xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><body>
+        <sec>
+          <p>The Eh measurements... <xref ref-type="disp-formula" rid="e01">equation 1</xref>(in mV):</p>
+          <disp-formula id="e01">
+            {graphic_01}
+          </disp-formula>
+          <p>We also used an... {graphic_02}.</p>
+        </sec>
+        <fig id="f03">
+            <label>Fig. 3</label>
+            <caption>
+                <title>titulo da imagem</title>
+            </caption>
+            <alternatives>
+                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.tiff"/>
+                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.png" specific-use="scielo-web"/>
+                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.thumbnail.jpg" specific-use="scielo-web" content-type="scielo-267x140"/>
+            </alternatives>
+        </fig>
+        <p>We also used an ... based on the equation:<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e04.tif"/>.</p>
+        </body></article>"""
+        image_files = (
+            ("1234-5678-rctb-45-05-0110-gf03.tiff", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-gf03.png", "PNG"),
+            ("1234-5678-rctb-45-05-0110-gf03.thumbnail.jpg", "JPEG"),
+        )
+        for image_filename, format in image_files:
+            image_file_path = pathlib.Path(self.target_path, image_filename)
+            self.create_image_file(image_file_path, format)
+
+    def tearDown(self):
+        shutil.rmtree(self.target_path)
+
+    def test_preserve_graphic_in_xml_if_image_file_does_not_exist(self):
+        image_files = (
+            ("1234-5678-rctb-45-05-0110-e01.tif", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-e04.tif", "TIFF"),
+        )
+        for image_filename, format in image_files:
+            image_file_path = pathlib.Path(self.target_path, image_filename)
+            self.create_image_file(image_file_path, format)
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-e01.tif"/>'
+        graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02.tiff"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
+        sps_package = SPS_Package(
+            etree.fromstring(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        with self.xml_target_path.open("w") as xml_file:
+            xml_file.write(xml)
+
+        self.builder.optimise_xml_to_web(self.target_path, str(self.xml_target_path))
+
+        target_path_files = [
+            filename.name for filename in pathlib.Path(self.target_path).iterdir()
+        ]
+        self.assertNotIn("1234-5678-rctb-45-05-0110-e02.png", target_path_files)
+        with open(self.xml_target_path) as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            img_filenames = [
+                elem.attrib.get("{http://www.w3.org/1999/xlink}href")
+                for elem in xml_result.xpath('//inline-graphic')
+            ]
+            self.assertIn("1234-5678-rctb-45-05-0110-e02.tiff", img_filenames)
+            self.assertNotIn("1234-5678-rctb-45-05-0110-e02.png", img_filenames)
+
+    def test_creates_optimised_files(self):
+        image_files = (
+            ("1234-5678-rctb-45-05-0110-e01.tif", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-e02.tiff", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-e04.tif", "TIFF"),
+        )
+        for image_filename, format in image_files:
+            image_file_path = pathlib.Path(self.target_path, image_filename)
+            self.create_image_file(image_file_path, format)
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-e01.tif"/>'
+        graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02.tiff"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
+        sps_package = SPS_Package(
+            etree.fromstring(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        with self.xml_target_path.open("w") as xml_file:
+            xml_file.write(xml)
+
+        self.builder.optimise_xml_to_web(self.target_path, str(self.xml_target_path))
+
+        target_path_files = [
+            filename.name for filename in pathlib.Path(self.target_path).iterdir()
+        ]
+        self.assertIn("1234-5678-rctb-45-05-0110-e01.png", target_path_files)
+        self.assertIn("1234-5678-rctb-45-05-0110-e01.thumbnail.jpg", target_path_files)
+        self.assertIn("1234-5678-rctb-45-05-0110-e02.png", target_path_files)
+        self.assertIn("1234-5678-rctb-45-05-0110-e04.png", target_path_files)
+
+    def test_optimises_xml_with_new_images(self):
+        image_files = (
+            ("1234-5678-rctb-45-05-0110-e01.tif", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-e02.tiff", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-e04.tif", "TIFF"),
+        )
+        for image_filename, format in image_files:
+            image_file_path = pathlib.Path(self.target_path, image_filename)
+            self.create_image_file(image_file_path, format)
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-e01.tif"/>'
+        graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02.tiff"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
+        sps_package = SPS_Package(
+            etree.fromstring(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        with self.xml_target_path.open("w") as xml_file:
+            xml_file.write(xml)
+
+        self.builder.optimise_xml_to_web(self.target_path, str(self.xml_target_path))
+
+        target_path_files = [
+            filename for filename in pathlib.Path(self.target_path).iterdir()
+        ]
+        with open(self.xml_target_path) as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            img_filenames = [
+                elem.attrib.get("{http://www.w3.org/1999/xlink}href")
+                for elem in xml_result.xpath('//alternatives/graphic')
+            ]
+            self.assertIn("1234-5678-rctb-45-05-0110-e01.tif", img_filenames)
+            self.assertIn("1234-5678-rctb-45-05-0110-e01.png", img_filenames)
+            self.assertIn("1234-5678-rctb-45-05-0110-e01.thumbnail.jpg", img_filenames)
+            img_filenames = [
+                elem.attrib.get("{http://www.w3.org/1999/xlink}href")
+                for elem in xml_result.xpath('//alternatives/inline-graphic')
+            ]
+            self.assertIn("1234-5678-rctb-45-05-0110-e02.tiff", img_filenames)
+            self.assertIn("1234-5678-rctb-45-05-0110-e02.png", img_filenames)
+            self.assertIn("1234-5678-rctb-45-05-0110-e04.tif", img_filenames)
+            self.assertIn("1234-5678-rctb-45-05-0110-e04.png", img_filenames)
