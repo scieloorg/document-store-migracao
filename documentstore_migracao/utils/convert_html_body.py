@@ -3511,6 +3511,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
         def _wrap_label_tail_with_p_element(self, label):
+            """
+            Se há label.tail, então o identifica como `fn/p`
+            """
             if (label.tail or "").strip():
                 p = etree.Element("p")
                 p.text = label.tail
@@ -3518,6 +3521,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 label.addnext(p)
 
         def _move_label_prefix_into_label_element(self, label, bold):
+            """
+            Se há ( ou [ antes de `<label>`, então move para dentro de `<label/>`
+            """
             prefix = ""
             previous = label.getprevious()
             if previous is None:
@@ -3542,6 +3548,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     bold.text = prefix + bold.text
 
         def _move_label_suffix_into_label_element(self, label, bold):
+            """
+            Se há ) ou ] após `</label>`, então move para dentro de `<label/>`
+            """
             suffix = ""
             next = label.getnext()
             if next is not None:
@@ -3556,6 +3565,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     bold.text += suffix
 
         def _make_label_as_fn_first_child(self, fn, label):
+            """
+            Se `label` não é o primeiro filho de `fn` então move `label` como 
+            primeiro filho.
+            """
             children = fn.getchildren()
             if children and children[0] is not label:
                 fn.insert(0, deepcopy(label))
