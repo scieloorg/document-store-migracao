@@ -3502,16 +3502,20 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 bold = label.find("*[@label-of]")
                 if bold is not None:
                     bold.attrib.clear()
+                self._wrap_label_tail_with_p_element(label)
                 self._move_label_prefix_into_label_element(label, bold)
                 self._move_label_suffix_into_label_element(label, bold)
-
-                children = fn.getchildren()
-                if children and children[0] is not label:
-                    fn.insert(0, deepcopy(label))
-                    _remove_tag(label, True)
+                self._make_label_as_fn_first_child(fn, label)
 
             logger.debug("FIM: %s" % type(self).__name__)
             return data
+
+        def _wrap_label_tail_with_p_element(self, label):
+            if (label.tail or "").strip():
+                p = etree.Element("p")
+                p.text = label.tail
+                label.tail = ""
+                label.addnext(p)
 
         def _move_label_prefix_into_label_element(self, label, bold):
             prefix = ""
@@ -3539,22 +3543,23 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def _move_label_suffix_into_label_element(self, label, bold):
             suffix = ""
-            next_text = (label.tail or "").strip()
-            if next_text and next_text[0] in (")", "]"):
-                suffix = next_text[0]
-                label.tail = label.tail[label.tail.find(suffix)+1:]
-            else:
-                next = label.getnext()
-                if next is not None:
-                    next_text = (next.text or "").strip()
-                    if next_text and next_text[0] in (")", "]"):
-                        suffix = next_text[0]
-                        next.text = next.text[next.text.find(suffix)+1:]
+            next = label.getnext()
+            if next is not None:
+                next_text = (next.text or "").strip()
+                if next_text and next_text[0] in (")", "]"):
+                    suffix = next_text[0]
+                    next.text = next.text[next.text.find(suffix)+1:]
             if suffix:
                 if bold is None:
                     label.text += suffix
                 else:
                     bold.text += suffix
+
+        def _make_label_as_fn_first_child(self, fn, label):
+            children = fn.getchildren()
+            if children and children[0] is not label:
+                fn.insert(0, deepcopy(label))
+                _remove_tag(label, True)
 
     class GetFnContentFromNextElementPipe(plumber.Pipe):
         def transform(self, data):
