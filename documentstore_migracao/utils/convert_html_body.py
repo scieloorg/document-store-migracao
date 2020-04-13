@@ -1563,7 +1563,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.FnAddContentPipe(),
             self.GetFnContentFromNextElementPipe(),
             self.FnIdentifyLabelAndPPipe(),
-            self.FnFixContentPipe(),
+            self.FnFixLabel(),
             self.RemoveFnWhichHasOnlyXref(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
@@ -3490,7 +3490,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FnFixContentPipe(plumber.Pipe):
+    class FnFixLabel(plumber.Pipe):
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
