@@ -18,7 +18,7 @@ requires = [
     "picles.plumber",
     "lxml",
     "scielo-kernel",
-    "packtools",
+    "packtools>=2.6.2",
     "paginate",
     "minio",
     "tqdm",
