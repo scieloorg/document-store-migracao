@@ -3190,6 +3190,7 @@ class TestRemoveFnWhichHasOnlyXref(unittest.TestCase):
         self.assertIsNotNone(xml.find("./p[@id='p1']/xref"))
 
 
+
 class TestFnFixLabel(unittest.TestCase):
     def setUp(self):
         pl = ConvertElementsWhichHaveIdPipeline()
@@ -3220,3 +3221,22 @@ class TestFnFixLabel(unittest.TestCase):
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
         self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
+
+
+class TestFnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(unittest.TestCase):
+    def test_transform(self):
+        text = """<root>
+        <body><fn/><bold>título</bold>texto fora do bold</body>
+        </root>"""
+        expected = (
+            """<root>
+        <body><fn/><label><bold>título</bold></label>texto fora do bold</body>
+        </root>"""
+        )
+        xml = etree.fromstring(text)
+        pl = ConvertElementsWhichHaveIdPipeline()
+        pipe = pl.FnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel()
+        text, xml = pipe.transform((text, xml))
+        self.assertEqual(xml.findtext(".//label/bold"), "título")
+        self.assertEqual(xml.find(".//label/bold").tail, "")
+        self.assertEqual(xml.find(".//label").tail, "texto fora do bold")
