@@ -1560,7 +1560,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.FnMovePipe(),
             self.FnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(),
             self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(),
-            self.FnAddContentPipe(),
+            self.FnPipe_AddContentToEmptyFn(),
             self.GetFnContentFromNextElementPipe(),
             self.FnIdentifyLabelAndPPipe(),
             self.FnFixLabel(),
@@ -3300,57 +3300,45 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FnAddContentPipe(plumber.Pipe):
+    class FnPipe_AddContentToEmptyFn(plumber.Pipe):
+        """
+        Para os `<fn/>` vazios:
+        Inserir fn.tail como fn.text.
+        Inserir seus fn.getnext() dentro de `<fn/>` enquanto ausente label e p
+        ou até que o próximo seja ou tenha `<fn/>` ou None
+        """
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
             for fn in xml.findall(".//fn"):
-                fn.set("status", "add-content")
+                if not fn.getchildren():
+                    fn.set("status", "add-content")
             while True:
                 fn = xml.find(".//fn[@status='add-content']")
                 if fn is None:
                     break
                 fn.set("status", "identify-content")
-                self._add_fn_tail_into_fn(fn)
-            self._move_fn_out_of_fn_tags(xml)
+                move_tail_into_node(fn)
+                self._add_next_into_fn(fn)
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-        def _add_fn_tail_into_fn(self, node):
-            move_tail_into_node(node)
+        def _add_next_into_fn(self, node):
             while True:
                 _next = node.getnext()
                 if _next is None:
                     break
-                if node.find("label") is not None and node.find("p") is not None:
+                if node.find(".//label") is not None and node.find(".//p") is not None:
                     break
                 if _next.tag in ["fn"]:
                     break
-                if _next.tag in ["p"]:
-                    if node.find("p") is not None:
-                        break
+                if _next.find(".//fn") is not None:
+                    break
+                if node.find(".//p") is not None:
+                    break
                 node.append(deepcopy(_next))
                 parent = _next.getparent()
                 parent.remove(_next)
-
-        def _move_fn_out_of_fn_tags(self, xml):
-            while True:
-                for node in xml.findall(".//fn"):
-                    if "fn-children" in node.attrib.keys():
-                        node.attrib.pop("fn-children")
-                    found = node.findall(".//fn")
-                    if len(found) > 0:
-                        node.set("fn-children", str(len(found)))
-                fn = xml.find(".//fn[@fn-children]")
-                if fn is None:
-                    break
-                items = []
-                for inner_fn in fn.findall(".//fn"):
-                    items.insert(0, inner_fn)
-                for item in items:
-                    parent = item.getparent()
-                    fn.addnext(deepcopy(item))
-                    parent.remove(item)
 
     class FnIdentifyLabelAndPPipe(plumber.Pipe):
         def _create_label(self, new_fn, node):

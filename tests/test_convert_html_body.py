@@ -2031,11 +2031,11 @@ class TestCompleteElementAWithXMLTextPipe(unittest.TestCase):
         self.assertIn(b'<a name="tab2" xml_text="tabelas 2"/>', result)
 
 
-class TestFnAddContentPipe(unittest.TestCase):
+class TestFnPipe_AddContentToEmptyFn(unittest.TestCase):
     def setUp(self):
         self.html_pl = HTML2SPSPipeline(pid="pid")
         self.pl = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = self.pl.FnAddContentPipe()
+        self.pipe = self.pl.FnPipe_AddContentToEmptyFn()
 
     def test_transform_moves_italic(self):
         text = """<root><fn id="nt01"/>
@@ -2068,7 +2068,7 @@ class TestFnAddContentPipe(unittest.TestCase):
            <p/> .
            <p>Este texto não fará parte de fn</p>
          </root>"""
-        expected = """<root><fn id="nt01"><label>**</label>
+        expected = """<root><fn id="nt01">**
             <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p></fn>
             <p/> .
         </root>"""
@@ -2096,6 +2096,36 @@ class TestFnAddContentPipe(unittest.TestCase):
         self.assertIn("**", node.text)
         self.assertIn("Isso", node.find("italic").text)
         self.assertIn("Email", node.find("br").tail)
+
+    def test_transform_moves_items_until_another_fn_is_found(self):
+        text = """<root><fn id="nt01"/>**
+           <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p><fn id="nt02"/><label>***</label>
+            <p>Isso é outra nota de rodapé.</p>
+            <p/> .
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.findall(".//fn")
+        self.assertEqual(
+            fn[0].find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
+        )
+        self.assertEqual(fn[0].find("p/italic").tail.strip(), ".")
+        self.assertIsNotNone(len(fn[0].getchildren()), 1)
+        self.assertEqual(fn[1].find("label").text, "***")
+        self.assertEqual(fn[1].find("p").text, "Isso é outra nota de rodapé.")
+
+    def test_transform_do_not_move_items_inside_because_fn_is_found(self):
+        text = """<root><fn id="nt01"/>**
+           <p><italic>Isso é conhecido pelos pesquisadores como</italic> .<fn id="nt02"/><label>***</label>
+            <p>Isso é outra nota de rodapé.</p>
+            <p/></p> .
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.findall(".//fn")
+        self.assertIsNotNone(len(fn[0].getchildren()), 0)
+        self.assertEqual(fn[1].find("label").text, "***")
+        self.assertEqual(fn[1].find("p").text, "Isso é outra nota de rodapé.")
 
 
 class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
