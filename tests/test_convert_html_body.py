@@ -2165,10 +2165,10 @@ class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
 
     def test__creates_p(self):
         text = """<root><fn id="nt01">
-           <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
+           <li>Isso é conhecido pelos pesquisadores como</li></fn>
          </root>"""
         expected = """<root><fn id="nt01"><p>
-            <italic>Isso é conhecido pelos pesquisadores como</italic></p></fn>
+            <li>Isso é conhecido pelos pesquisadores como</li></p></fn>
         </root>"""
 
         xml = etree.fromstring(text)
@@ -2176,9 +2176,9 @@ class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         fn = xml.find(".//fn")
         self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
+            fn.find("p/li").text, "Isso é conhecido pelos pesquisadores como"
         )
-        self.assertIsNone(fn.find("p/italic").tail)
+        self.assertIsNone(fn.find("p/li").tail)
         self.assertIsNone(fn.find("label"))
 
 
@@ -2208,8 +2208,6 @@ class TestFnPipe(unittest.TestCase):
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
         text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
-        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
-        text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.BR2PPipe().transform((text, xml))
 
@@ -2222,7 +2220,7 @@ class TestFnPipe(unittest.TestCase):
         )
         self.assertEqual(p[2].text.strip(), "Avenida Granadeiro Guimarães, 270")
         self.assertEqual(p[3].text.strip(), "CEP: 12100-000 – Taubaté (SP), Brazil.")
-        self.assertEqual(p[4].find("email").text, "prolungatti@uol.com.br")
+        self.assertEqual(p[5].find("email").text, "prolungatti@uol.com.br")
 
     def test_creates_fn_list(self):
         text = """
