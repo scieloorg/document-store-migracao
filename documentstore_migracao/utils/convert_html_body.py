@@ -1559,6 +1559,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.SupplementaryMaterialPipe(),
             self.FnMovePipe(),
             self.FnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(),
+            self.MoveSuffixAndPrefixIntoLabelPipe(),
             self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(),
             self.FnPipe_AddContentToEmptyFn(),
             self.GetFnContentFromNextElementPipe(),
@@ -3260,6 +3261,65 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     _remove_tag(next, True)
             logger.debug("FIM: %s" % type(self).__name__)
             return data
+
+    class MoveSuffixAndPrefixIntoLabelPipe(plumber.Pipe):
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+
+            raw, xml = data
+            for label in xml.findall(".//label"):
+                label_child = label.find(".//*")
+                if label_child is not None:
+                    label_child.attrib.clear()
+                self._move_label_prefix_into_label_element(label, label_child)
+                self._move_label_suffix_into_label_element(label, label_child)
+
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
+        def _move_label_prefix_into_label_element(self, label, bold):
+            """
+            Se há ( ou [ antes de `<label>`, então move para dentro de `<label/>`
+            """
+            prefix = ""
+            previous = label.getprevious()
+            if previous is None:
+                previous = label.getparent()
+                prev_text = (previous.text or "").strip()
+                if prev_text in ("(", "["):
+                    prefix = prev_text
+                    previous.text = ""
+            else:
+                prev_text = (previous.text or "").strip()
+                prev_tail = (previous.tail or "").strip()
+                if prev_tail in ("(", "["):
+                    prefix = prev_tail
+                    previous.tail = ""
+                elif prev_text in ("(", "["):
+                    prefix = prev_text
+                    previous.text = ""
+            if prefix:
+                if bold is None:
+                    label.text = prefix + label.text
+                else:
+                    bold.text = prefix + bold.text
+
+        def _move_label_suffix_into_label_element(self, label, bold):
+            """
+            Se há ) ou ] após `</label>`, então move para dentro de `<label/>`
+            """
+            suffix = ""
+            next = label.getnext()
+            if next is not None:
+                next_text = (next.text or "").strip()
+                if next_text and next_text[0] in (")", "]"):
+                    suffix = next_text[0]
+                    next.text = next.text[next.text.find(suffix)+1:]
+            if suffix:
+                if bold is None:
+                    label.text += suffix
+                else:
+                    bold.text += suffix
 
     class FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(plumber.Pipe):
         """Cria fn vazio como vizinho anterior de label[@label-of]
