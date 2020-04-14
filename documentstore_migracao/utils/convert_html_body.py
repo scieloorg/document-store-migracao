@@ -1558,7 +1558,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.TablePipe(),
             self.SupplementaryMaterialPipe(),
             self.FnMovePipe(),
-            self.FnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(),
+            self.FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(),
             self.MoveSuffixAndPrefixIntoLabelPipe(),
             self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(),
             self.FnPipe_AddContentToEmptyFn(),
@@ -3242,21 +3242,22 @@ class ConvertElementsWhichHaveIdPipeline(object):
             node.addnext(fn_copy)
             node.remove(fn)
 
-    class FnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(plumber.Pipe):
+    class FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(plumber.Pipe):
         """Encontra bold que é vizinho posterior de fn e 
         inclui dentro do elemento novo label, desconsidera o bold.tail
         """
         def transform(self, data):
+            STYLE_TAGS = ("bold", "sup")
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
             for node in xml.findall(".//fn"):
                 next = node.getnext()
-                if next is not None and next.tag == "bold":
+                if next is not None and next.tag in STYLE_TAGS:
                     label = etree.Element("label")
-                    bold = deepcopy(next)
-                    if bold.tail:
-                        bold.tail = ""
-                    label.append(bold)
+                    style_elem = deepcopy(next)
+                    if style_elem.tail:
+                        style_elem.tail = ""
+                    label.append(style_elem)
                     node.addnext(label)
                     _remove_tag(next, True)
             logger.debug("FIM: %s" % type(self).__name__)

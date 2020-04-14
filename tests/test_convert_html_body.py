@@ -3253,7 +3253,7 @@ class TestFnFixLabel(unittest.TestCase):
         self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
 
 
-class TestFnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(unittest.TestCase):
+class TestFnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(unittest.TestCase):
     def test_transform(self):
         text = """<root>
         <body><fn/><bold>título</bold>texto fora do bold</body>
@@ -3265,7 +3265,7 @@ class TestFnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(unittest.TestCase):
         )
         xml = etree.fromstring(text)
         pl = ConvertElementsWhichHaveIdPipeline()
-        pipe = pl.FnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel()
+        pipe = pl.FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel()
         text, xml = pipe.transform((text, xml))
         self.assertEqual(xml.findtext(".//label/bold"), "título")
         self.assertEqual(xml.find(".//label/bold").tail, "")
