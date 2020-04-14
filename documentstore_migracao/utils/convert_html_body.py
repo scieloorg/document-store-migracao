@@ -3718,8 +3718,11 @@ class FileLocation:
 
 
 def fix_img_revistas_path(node):
-    attr = "src" if node.get("src") else "href"
-    location = node.get(attr)
+    location = node.get("src") or node.get("href")
+    if not location:
+        _remove_tag(node, True)
+        return
+
     if "fbpe" in location or "revistas" in location or "img" in location:
         if ":" in location or location[0] == "#":
             return
