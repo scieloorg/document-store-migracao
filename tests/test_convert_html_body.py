@@ -3240,3 +3240,29 @@ class TestFnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(unittest.TestCase):
         self.assertEqual(xml.findtext(".//label/bold"), "título")
         self.assertEqual(xml.find(".//label/bold").tail, "")
         self.assertEqual(xml.find(".//label").tail, "texto fora do bold")
+
+
+class TestFnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(unittest.TestCase):
+    def test_transform_creates_fn_to_second_label(self):
+        text = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        </root>"""
+        xml = etree.fromstring(text)
+        pl = ConvertElementsWhichHaveIdPipeline()
+        pipe = pl.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel()
+        text, xml = pipe.transform((text, xml))
+        labels = xml.findall(".//label")
+        self.assertIsNone(labels[0].getprevious())
+        self.assertEqual(labels[1].getprevious().tag, "fn")
+
+    def test_transform_creates_fn_as_previous_elem_of_label(self):
+        text = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        </root>"""
+        xml = etree.fromstring(text)
+        pl = ConvertElementsWhichHaveIdPipeline()
+        pipe = pl.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel()
+        text, xml = pipe.transform((text, xml))
+        labels = xml.findall(".//label")
+        self.assertEqual(labels[0].getprevious().tag, "fn")

@@ -1559,7 +1559,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.SupplementaryMaterialPipe(),
             self.FnMovePipe(),
             self.FnPipe_FindBoldWhichIsNextFromFnAndWrapItInLabel(),
-            self.FnLabelOfPipe(),
+            self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(),
             self.FnAddContentPipe(),
             self.GetFnContentFromNextElementPipe(),
             self.FnIdentifyLabelAndPPipe(),
@@ -3261,35 +3261,42 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FnLabelOfPipe(plumber.Pipe):
-        """Cria fn a partir de label[@label-of]
-        ou adiciona label em fn
+    class FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(plumber.Pipe):
+        """Cria fn vazio como vizinho anterior de label[@label-of]
+           Se há mais de um label[@label-of] com mesmo valor de @label-of,
+           a primeira ocorrência é considerada que é o link para as notas de
+           rodapé
         """
-
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
-            labels = [
-                label.get("label-of") for label in xml.findall(".//label[@label-of]")
+            label_of_values = [
+                label.get("label-of")
+                for label in xml.findall(".//label[@label-of]")
             ]
-            repeated = [label for label in labels if labels.count(label) > 1]
-            for label in set(repeated):
-                labels = xml.findall(".//label[@label-of='{}']".format(label))
-                for item in labels[1:]:
-                    fn = etree.Element("fn")
-                    fn.set("id", label + item.get("xml_text"))
-                    item.addprevious(fn)
+            repeated_values = [label_of
+                               for label_of in label_of_values
+                               if label_of_values.count(label_of) > 1]
+            for label_of in set(repeated_values):
+                labels = xml.findall(
+                    ".//label[@label-of='{}']".format(label_of))
+                for label in labels[1:]:
+                    id = label_of + label.get("xml_text")
+                    fn = xml.find(".//fn[@id='{}']".format(id))
+                    if fn is None:
+                        prev = label.getprevious()
+                        if prev is not None and prev.tag != "fn":
+                            fn = etree.Element("fn")
+                            fn.set("id", id)
+                            label.addprevious(fn)
             for label in xml.findall(".//label[@label-of]"):
                 label_of = label.get("label-of")
-                if label_of not in repeated:
+                if label_of not in repeated_values:
                     fn = xml.find(".//fn[@id='{}']".format(label_of))
                     if fn is None:
                         fn = etree.Element("fn")
                         fn.set("id", label_of)
                         label.addprevious(fn)
-                    fn.append(deepcopy(label))
-                    parent = label.getparent()
-                    parent.remove(label)
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
