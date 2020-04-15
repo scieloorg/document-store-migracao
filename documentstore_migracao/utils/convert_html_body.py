@@ -1748,7 +1748,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 return
 
             table = previous.getprevious()
-            if table.tag != "table":
+            if table is None or table.tag != "table":
                 return
 
             img = p.find(".//img")
@@ -3550,6 +3550,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             return data
 
     class FnFixLabel(plumber.Pipe):
+        """
+        Remove os atributos de fn//label e
+        garante que seja o primeiro filho de fn
+        """
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
 
@@ -3559,83 +3563,20 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 if label is None:
                     continue
                 label.attrib.clear()
+
                 label_child = label.find(".//*[@label-of]")
                 if label_child is None:
                     label_child = label.find(".//*")
                 if label_child is not None:
                     label_child.attrib.clear()
-                self._wrap_label_tail_with_p_element(label)
-                self._move_label_prefix_into_label_element(label, label_child)
-                self._move_label_suffix_into_label_element(label, label_child)
-                self._make_label_as_fn_first_child(fn, label)
+
+                children = fn.getchildren()
+                if children and children[0] is not label:
+                    fn.insert(0, deepcopy(label))
+                    _remove_tag(label, True)
 
             logger.debug("FIM: %s" % type(self).__name__)
             return data
-
-        def _wrap_label_tail_with_p_element(self, label):
-            """
-            Se há label.tail, então o identifica como `fn/p`
-            """
-            if (label.tail or "").strip():
-                p = etree.Element("p")
-                p.text = label.tail
-                label.tail = ""
-                label.addnext(p)
-
-        def _move_label_prefix_into_label_element(self, label, bold):
-            """
-            Se há ( ou [ antes de `<label>`, então move para dentro de `<label/>`
-            """
-            prefix = ""
-            previous = label.getprevious()
-            if previous is None:
-                previous = label.getparent()
-                prev_text = (previous.text or "").strip()
-                if prev_text in ("(", "["):
-                    prefix = prev_text
-                    previous.text = ""
-            else:
-                prev_text = (previous.text or "").strip()
-                prev_tail = (previous.tail or "").strip()
-                if prev_tail in ("(", "["):
-                    prefix = prev_tail
-                    previous.tail = ""
-                elif prev_text in ("(", "["):
-                    prefix = prev_text
-                    previous.text = ""
-            if prefix:
-                if bold is None:
-                    label.text = prefix + label.text
-                else:
-                    bold.text = prefix + bold.text
-
-        def _move_label_suffix_into_label_element(self, label, bold):
-            """
-            Se há ) ou ] após `</label>`, então move para dentro de `<label/>`
-            """
-            suffix = ""
-            next = label.getnext()
-            if next is not None:
-                next_text = (next.text or "").strip()
-                if next_text and next_text[0] in (")", "]"):
-                    suffix = next_text[0]
-                    next.text = next.text[next.text.find(suffix)+1:]
-            if suffix:
-                if bold is None:
-                    label.text += suffix
-                else:
-                    bold.text += suffix
-
-        def _make_label_as_fn_first_child(self, fn, label):
-            """
-            Se `label` não é o primeiro filho de `fn` então move `label` como 
-            primeiro filho.
-            """
-            children = fn.getchildren()
-            if children and children[0] is not label:
-                fn.insert(0, deepcopy(label))
-                _remove_tag(label, True)
-
 
     class GetPFromFnParentNextPipe(plumber.Pipe):
         """
