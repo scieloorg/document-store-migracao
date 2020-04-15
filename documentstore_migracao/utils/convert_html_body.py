@@ -277,6 +277,7 @@ class HTML2SPSPipeline(object):
             self.TagsHPipe(),
             self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
+            self.BodySectionsPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveEmptyPAndEmptySectionPipe(),
@@ -1436,6 +1437,38 @@ class HTML2SPSPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
+    class BodySectionsPipe(plumber.Pipe):
+        """
+        Move os elementos `<sec/>` para o topo, para serem filhos de `<body>`.
+        """
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+
+            if xml.find(".//sec") is None:
+                return data
+
+            for child in xml.find(".//body").getchildren():
+                if child.tag == "sec":
+                    continue
+                sections = child.findall(".//sec")
+                if len(sections) == 0:
+                    continue
+
+                new_elements = []
+                for sec in sections:
+                    sec_parent = sec.getparent()
+                    if sec_parent.tag == "sec":
+                        continue
+                    new_elements.insert(0, deepcopy(sec))
+                    sec_parent.remove(sec)
+
+                for new_e in new_elements:
+                    child.addprevious(new_e)
+
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
 
 class DataSanitizationPipeline(object):
     def __init__(self):
@@ -2473,9 +2506,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if node.tag == "sec":
                 node.set("sec-type", self._sectype(node))
             node.tag = "sec"
-            parent = node.getparent()
-            parent.addprevious(deepcopy(node))
-            parent.remove(node)
 
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
