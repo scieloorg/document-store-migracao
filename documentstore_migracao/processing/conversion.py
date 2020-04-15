@@ -67,7 +67,8 @@ def convert_article_xml(file_xml_path: str, poison_pill=PoisonPill()):
 
     if poison_pill.poisoned:
         return
-
+    logger.info(file_xml_path)
+    print(file_xml_path)
     obj_xmltree = xml.loadToXML(file_xml_path)
     obj_xml = obj_xmltree.getroot()
 

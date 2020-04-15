@@ -3218,6 +3218,73 @@ class TestRemoveFnWhichHasOnlyXref(unittest.TestCase):
         self.assertIsNotNone(xml.find("./p[@id='p1']/xref"))
 
 
+class TestGetPFromFnParentNextPipe(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.GetPFromFnParentNextPipe()
+
+    def test_transform_get_p_from_fn_parent_next(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <label>LABEL</label>
+            </fn>
+        </p>
+        <p id="p1">
+            TEXTO
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(xml.find(".//fn/p").text.strip(), "TEXTO")
+        self.assertEqual(len(xml.find(".").getchildren()), 1)
+
+    def test_transform_do_not_get_p_from_fn_parent_next_because_it_has_fn(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <label>LABEL</label>
+            </fn>
+        </p>
+        <p id="p1">
+            <fn>TEXTO</fn>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNone(xml.find(".//fn/p"))
+        self.assertEqual(len(xml.find(".").getchildren()), 2)
+
+    def test_transform_do_not_get_p_from_fn_parent_next_because_it_is_body(self):
+        text = """<root>
+        <body>
+            <fn>
+                <label>LABEL</label>
+            </fn>
+            <p>TEXTO</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNone(xml.find(".//fn/p"))
+        self.assertEqual(len(xml.find(".").getchildren()), 1)
+
+    def test_transform_do_not_get_p_from_fn_parent_next_because_it_is_not_p(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <label>LABEL</label>
+            </fn>
+        </p>
+        <x id="p1">
+            TEXTO
+        </x>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNone(xml.find(".//fn/p"))
+        self.assertEqual(len(xml.find(".").getchildren()), 2)
+
 
 class TestFnFixLabel(unittest.TestCase):
     def setUp(self):

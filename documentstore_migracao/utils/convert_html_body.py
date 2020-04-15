@@ -1563,8 +1563,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(),
             self.FnPipe_AddContentToEmptyFn(),
             self.FnIdentifyLabelAndPPipe(),
-            self.GetFnContentFromNextElementPipe(),
             self.FnFixLabel(),
+            self.GetPFromFnParentNextPipe(),
             self.RemoveFnWhichHasOnlyXref(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
@@ -3468,7 +3468,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 label = etree.Element("label")
                 label.text = label_text
                 first_child.addprevious(label)
-                nodes = [first_child] + node.findall("{}//*".format(first_child.tag))
+                nodes = [first_child] + first_child.findall(".//*")
                 for n in nodes:
                     if n.text and n.text.startswith(label_text):
                         n.text = n.text.replace(label_text, "")
@@ -3484,7 +3484,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     node_style = first_child.getchildren()[0]
             if node_style is None:
                 return
-            label_text = self._get_label_text(node_style)
+            label_text = self._get_label_text(get_node_text(node_style))
             if not label_text or label_text == get_node_text(node_style):
                 label = etree.Element("label")
                 cp = deepcopy(node_style)
@@ -3636,19 +3636,27 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 fn.insert(0, deepcopy(label))
                 _remove_tag(label, True)
 
-    class GetFnContentFromNextElementPipe(plumber.Pipe):
+
+    class GetPFromFnParentNextPipe(plumber.Pipe):
+        """
+        Se fn não tem p, obter p de fn.getparent().next()
+        """
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
             for fn in xml.findall(".//fn[label]"):
                 children = fn.getchildren()
                 if len(children) == 1:
-                    parent = fn.getparent()
-                    parent_next = parent.getnext()
-                    if parent_next is not None:
-                        fn.append(deepcopy(parent_next))
-                        parent = parent.getparent()
-                        parent.remove(parent_next)
+                    fn_parent = fn.getparent()
+                    if fn_parent.tag == "body":
+                        continue
+                    fn_parent_next = fn_parent.getnext()
+                    if (fn_parent_next is not None and
+                            fn_parent_next.tag == "p" and
+                            fn_parent_next.find(".//fn") is None):
+                        fn.append(deepcopy(fn_parent_next))
+                        parent = fn_parent_next.getparent()
+                        parent.remove(fn_parent_next)
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
@@ -3839,6 +3847,7 @@ class FileLocation:
 
 
 def fix_img_revistas_path(node):
+    attr = "src" if node.get("src") else "href"
     location = node.get("src") or node.get("href")
     if not location:
         _remove_tag(node, True)
