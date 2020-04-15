@@ -1092,14 +1092,23 @@ class HTML2SPSPipeline(object):
             for comment in comments:
                 name = comment.text.strip()
                 if name == "end-ref":
-                    parents = [comment.getparent(), comment.getparent().getparent()]
+                    parents = [
+                        comment.getparent(), comment.getparent().getparent()]
                     for parent in parents:
-                        if parent.tag == "p":
+                        if parent.tag in ["p", "li"]:
                             parent.set("content-type", "ref-to-delete")
                             break
+                    if parent.get("content-type") is None:
+                        try:
+                            previous = comment.getprevious()
+                            if previous is not None and previous.tag == "li":
+                                previous.set("content-type", "ref-to-delete")
+                        except AttributeError:
+                            pass
+
                 elif header is None and name == "ref":
                     header = comment.getprevious()
-            return header, xml.findall(".//p[@content-type='ref-to-delete']")
+            return header, xml.findall(".//*[@content-type='ref-to-delete']")
 
         def _delete_references_header(self, references_header):
             if references_header is not None:
