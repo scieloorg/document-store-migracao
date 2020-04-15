@@ -230,6 +230,39 @@ class BuildPSPackage(object):
                     filenames_to_update.append(entry.name)
         return filenames_to_update
 
+    def update_xml_with_alternatives(
+        self, assets_alternatives, sps_package, xml_target_path
+    ):
+        def add_alternative_to_alternatives_tag(image_element, image_filename):
+            image_parent = image_element.getparent()
+            new_alternative = etree.Element(image_element.tag)
+            new_alternative.set("{http://www.w3.org/1999/xlink}href", image_filename)
+            if image_parent.tag == "alternatives":
+                image_parent.append(new_alternative)
+            else:
+                alternative_node = etree.Element("alternatives")
+                alternative_node.tail = image_element.tail
+                image_element.tail = None
+                alternative_node.append(image_element)
+                alternative_node.append(new_alternative)
+                image_parent.append(alternative_node)
+
+        _xmltree = deepcopy(sps_package.xmltree)
+        for asset_filename, alternatives in assets_alternatives.items():
+            for new_name in alternatives:
+                logger.debug(
+                    'New alternative name for asset "%s": "%s"', asset_filename, new_name
+                )
+                asset_elems = _xmltree.findall(
+                    f'.//*[@xlink:href="{asset_filename}"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+                for elem in asset_elems:
+                    add_alternative_to_alternatives_tag(elem, new_name)
+
+        # Salva XML com alterações
+        xml.objXML2file(xml_target_path, _xmltree, pretty=True)
+
     def collect_assets(self, target_path, acron, issue_folder, pack_name, images):
         source_path = os.path.join(self.img_folder, acron, issue_folder)
         for img in set(images):

@@ -75,6 +75,27 @@ class TestBuildSPSPackageBase(TestCase):
              '',
              '']
         ]
+        self.xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><body>
+        <sec>
+          <p>The Eh measurements... <xref ref-type="disp-formula" rid="e01">equation 1</xref>(in mV):</p>
+          <disp-formula id="e01">
+            {graphic_01}
+          </disp-formula>
+          <p>We also used an... {graphic_02}.</p>
+        </sec>
+        <fig id="f03">
+            <label>Fig. 3</label>
+            <caption>
+                <title>titulo da imagem</title>
+            </caption>
+            <alternatives>
+                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.tiff"/>
+                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.png" specific-use="scielo-web"/>
+                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.thumbnail.jpg" specific-use="scielo-web" content-type="scielo-267x140"/>
+            </alternatives>
+        </fig>
+        <p>We also used an ... based on the equation:<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e04.tif"/>.</p>
+        </body></article>"""
 
 
 class TestBuildSPSPackage(TestBuildSPSPackageBase):
@@ -312,6 +333,216 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
         self.assertEqual(result.document_pubdate, ("2012", "01", "15",))
 
 
+class TestBuildSPSPackageUpdateXMLWithAlternatives_WithExtension(TestBuildSPSPackageBase):
+    def setUp(self):
+        super().setUp()
+        self.target_path = tempfile.mkdtemp()
+        self.xml_target_path = pathlib.Path(self.target_path, "xml_file_name.xml")
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-gf01.tiff"/>'
+        graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02.tif"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
+        self.sps_package = SPS_Package(
+            etree.fromstring(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+
+    def tearDown(self):
+        shutil.rmtree(self.target_path)
+
+    def test_no_alternative_for_asset(self):
+        self.assets_alternatives = {
+            "1234-5678-rctb-45-05-0110-gf01.tiff": [
+                "1234-5678-rctb-45-05-0110-gf01.jpg",
+            ],
+            "1234-5678-rctb-45-05-0110-e02.tif": [],
+        }
+
+        self.builder.update_xml_with_alternatives(
+            self.assets_alternatives, self.sps_package, self.xml_target_path
+        )
+        with self.xml_target_path.open() as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            graphic_01_node = xml_result.find(
+                '//alternatives/graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.tiff"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_01_node)
+            self.assertIsNotNone(
+                graphic_01_node.getparent().find(
+                    'graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.jpg"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+            self.assertIsNotNone(
+                xml_result.find(
+                    '//inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02.tif"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+
+    def test_one_alternative_each_asset(self):
+        self.assets_alternatives = {
+            "1234-5678-rctb-45-05-0110-gf01.tiff": [
+                "1234-5678-rctb-45-05-0110-gf01.jpg",
+            ],
+            "1234-5678-rctb-45-05-0110-e02.tif": [
+                "1234-5678-rctb-45-05-0110-e02.gif"
+            ],
+        }
+
+        self.builder.update_xml_with_alternatives(
+            self.assets_alternatives, self.sps_package, self.xml_target_path
+        )
+        with self.xml_target_path.open() as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            graphic_01_node = xml_result.find(
+                '//alternatives/graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.tiff"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_01_node)
+            self.assertIsNotNone(
+                graphic_01_node.getparent().find(
+                    'graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.jpg"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+            graphic_02_node = xml_result.find(
+                '//alternatives/inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02.tif"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_02_node)
+            self.assertIsNotNone(
+                graphic_02_node.getparent().find(
+                    'inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02.gif"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+
+    def test_alternatives_each_asset(self):
+        self.assets_alternatives = {
+            "1234-5678-rctb-45-05-0110-gf01.tiff": [
+                "1234-5678-rctb-45-05-0110-gf01.gif",
+                "1234-5678-rctb-45-05-0110-gf01.png",
+                "1234-5678-rctb-45-05-0110-gf01.jpg",
+            ],
+            "1234-5678-rctb-45-05-0110-e02.tif": [
+                "1234-5678-rctb-45-05-0110-e02.png",
+                "1234-5678-rctb-45-05-0110-e02.gif",
+            ],
+        }
+
+        self.builder.update_xml_with_alternatives(
+            self.assets_alternatives, self.sps_package, self.xml_target_path
+        )
+        with self.xml_target_path.open() as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            graphic_01_node = xml_result.find(
+                '//alternatives/graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.tiff"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_01_node)
+            self.assertIsNotNone(
+                graphic_01_node.getparent().find(
+                    'graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.gif"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+            self.assertIsNotNone(
+                graphic_01_node.getparent().find(
+                    'graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.png"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+            self.assertIsNotNone(
+                graphic_01_node.getparent().find(
+                    'graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.jpg"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+            graphic_02_node = xml_result.find(
+                '//alternatives/inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02.tif"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_02_node)
+            self.assertIsNotNone(
+                graphic_02_node.getparent().find(
+                    'inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02.png"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+            self.assertIsNotNone(
+                graphic_02_node.getparent().find(
+                    'inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02.gif"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+
+
+class TestBuildSPSPackageUpdateXMLWithAlternatives_NoExtension(TestBuildSPSPackageBase):
+    def setUp(self):
+        super().setUp()
+        self.target_path = tempfile.mkdtemp()
+        self.xml_target_path = pathlib.Path(self.target_path, "xml_file_name.xml")
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-gf01"/>'
+        graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
+        self.sps_package = SPS_Package(
+            etree.fromstring(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+
+    def tearDown(self):
+        shutil.rmtree(self.target_path)
+
+    def test_one_alternative_each_asset(self):
+        self.assets_alternatives = {
+            "1234-5678-rctb-45-05-0110-gf01": [
+                "1234-5678-rctb-45-05-0110-gf01.png",
+            ],
+            "1234-5678-rctb-45-05-0110-e02": [
+                "1234-5678-rctb-45-05-0110-e02.tif"
+            ],
+        }
+
+        self.builder.update_xml_with_alternatives(
+            self.assets_alternatives, self.sps_package, self.xml_target_path
+        )
+        with self.xml_target_path.open() as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            graphic_01_node = xml_result.find(
+                '//alternatives/graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_01_node)
+            self.assertIsNotNone(
+                graphic_01_node.getparent().find(
+                    'graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.png"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+            graphic_02_node = xml_result.find(
+                '//alternatives/inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_02_node)
+            self.assertIsNotNone(
+                graphic_02_node.getparent().find(
+                    'inline-graphic[@xlink:href="1234-5678-rctb-45-05-0110-e02.tif"]',
+                    namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                )
+            )
+
+
 def create_image_file(filename, format):
     new_image = Image.new("RGB", (50, 50))
     new_image.save(filename, format)
@@ -363,27 +594,6 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         super().setUp()
         self.target_path = tempfile.mkdtemp()
         self.xml_target_path = pathlib.Path(self.target_path, "xml_file_name.xml")
-        self.xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><body>
-        <sec>
-          <p>The Eh measurements... <xref ref-type="disp-formula" rid="e01">equation 1</xref>(in mV):</p>
-          <disp-formula id="e01">
-            {graphic_01}
-          </disp-formula>
-          <p>We also used an... {graphic_02}.</p>
-        </sec>
-        <fig id="f03">
-            <label>Fig. 3</label>
-            <caption>
-                <title>titulo da imagem</title>
-            </caption>
-            <alternatives>
-                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.tiff"/>
-                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.png" specific-use="scielo-web"/>
-                <graphic xlink:href="1234-5678-rctb-45-05-0110-gf03.thumbnail.jpg" specific-use="scielo-web" content-type="scielo-267x140"/>
-            </alternatives>
-        </fig>
-        <p>We also used an ... based on the equation:<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e04.tif"/>.</p>
-        </body></article>"""
         image_files = (
             ("1234-5678-rctb-45-05-0110-gf03.tiff", "TIFF"),
             ("1234-5678-rctb-45-05-0110-gf03.png", "PNG"),
