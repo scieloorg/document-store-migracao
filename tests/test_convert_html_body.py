@@ -3291,31 +3291,14 @@ class TestFnFixLabel(unittest.TestCase):
         pl = ConvertElementsWhichHaveIdPipeline()
         self.pipe = pl.FnFixLabel()
 
-    def test_fix_label_get_characters_from_previous_text_and_from_tail(self):
-        text = """<root>
-            <fn><p>(<label>1</label>) Texto</p></fn>
-        </root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.pipe.transform((text, xml))
-        self.assertEqual(xml.findtext("./fn/label"), "(1)")
-        self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
-
-    def test_fix_label_get_characteres_from_previous_and_next(self):
-        text = """<root>
-            <fn><p>(</p><label>1</label><p>) Texto</p></fn>
-        </root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.pipe.transform((text, xml))
-        self.assertEqual(xml.findtext("./fn/label"), "(1)")
-        self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
-
     def test_fix_label_make_label_first_child_of_fn(self):
         text = """<root>
-            <fn><p></p><p><label>1</label> Texto</p></fn>
+            <fn><p><label>1</label> Texto</p></fn>
         </root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
         self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
+        self.assertEqual(xml.find("./fn").getchildren()[1].text.strip(), "Texto")
 
 
 class TestFnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(unittest.TestCase):
