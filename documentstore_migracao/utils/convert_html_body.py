@@ -388,7 +388,7 @@ class HTML2SPSPipeline(object):
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
-        EXCEPTIONS = ["a", "br", "img", "hr", "td"]
+        EXCEPTIONS = ["a", "br", "img", "hr", "td", "body"]
 
         def _is_empty_element(self, node):
             return node.findall("*") == [] and not get_node_text(node)
