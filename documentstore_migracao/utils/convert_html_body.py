@@ -1583,7 +1583,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(),
             self.CreateSectionElemetWithSectionTitlePipe(),
             self.RemoveEmptyPAndEmptySectionPipe(),
-            self.InsertSectionChildrenPipe(),
+            self.AddParagraphsToSectionPipe(),
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
@@ -2518,7 +2518,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class InsertSectionChildrenPipe(plumber.Pipe):
+    class AddParagraphsToSectionPipe(plumber.Pipe):
 
         def _create_children(self, node, last):
             remove_items = []
