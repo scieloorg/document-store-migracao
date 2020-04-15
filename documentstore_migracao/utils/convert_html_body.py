@@ -1072,7 +1072,12 @@ class HTML2SPSPipeline(object):
                     for p in p_to_delete:
                         _remove_tag(p, True)
                 else:
-                    logger.error("Não removeu referências do body")
+                    logger.error(
+                        "Não removeu referências do body: "
+                        "quantidades de parágrafos (%i) e referências (%i) "
+                        "divergem.",
+                        len(p_to_delete), len(self.super_obj.ref_items)
+                    )
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
