@@ -217,6 +217,19 @@ class BuildPSPackage(object):
             with open(_renditions_manifest_path, "w") as jfile:
                 jfile.write(json.dumps(metadata))
 
+    def collect_asset_alternatives(self, img_filename, source_path, target_path):
+        # Try to find other files with the same filename root
+        filenames_to_update = []
+        filename_root, __ = os.path.splitext(img_filename)
+        with os.scandir(source_path) as it:
+            for entry in it:
+                entry_name_root, __ = os.path.splitext(os.path.basename(entry.name))
+                if entry.is_file() and entry_name_root == filename_root:
+                    logger.debug("File found: %s", entry.name)
+                    shutil.copy(os.path.join(source_path, entry.name), target_path)
+                    filenames_to_update.append(entry.name)
+        return filenames_to_update
+
     def collect_assets(self, target_path, acron, issue_folder, pack_name, images):
         source_path = os.path.join(self.img_folder, acron, issue_folder)
         for img in set(images):
