@@ -312,11 +312,52 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
         self.assertEqual(result.document_pubdate, ("2012", "01", "15",))
 
 
-class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
+def create_image_file(filename, format):
+    new_image = Image.new("RGB", (50, 50))
+    new_image.save(filename, format)
 
-    def create_image_file(self, filename, format):
-        new_image = Image.new("RGB", (50, 50))
-        new_image.save(filename, format)
+
+class TestBuildSPSPackageCollectAssetAlternatives(TestBuildSPSPackageBase):
+    def setUp(self):
+        super().setUp()
+        self.source_path = tempfile.mkdtemp()
+        self.target_path = tempfile.mkdtemp()
+        self.image_files = (
+            ("1234-5678-rctb-45-05-0110-gf01.tiff", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-gf01.png", "PNG"),
+            ("1234-5678-rctb-45-05-0110-gf01.jpg", "JPEG"),
+        )
+        for image_filename, format in self.image_files:
+            image_file_path = pathlib.Path(self.source_path, image_filename)
+            create_image_file(image_file_path, format)
+
+    def tearDown(self):
+        shutil.rmtree(self.source_path)
+        shutil.rmtree(self.target_path)
+
+    def test_no_alternatives(self):
+        result = self.builder.collect_asset_alternatives(
+            "1234-5678-rctb-45-05-0110-gf02.tiff", self.source_path, self.target_path
+        )
+        self.assertEqual(type(result), list)
+        self.assertEqual(len(result), 0)
+
+    def test_saves_alternatives_into_target_path(self):
+        self.builder.collect_asset_alternatives(
+            "1234-5678-rctb-45-05-0110-gf01.gif", self.source_path, self.target_path
+        )
+        for image_file, __ in self.image_files:
+            with self.subTest(image_file=image_file):
+                self.assertTrue(pathlib.Path(self.target_path, image_file).exists())
+
+    def test_returns_dict_with_alternatives(self):
+        result = self.builder.collect_asset_alternatives(
+            "1234-5678-rctb-45-05-0110-gf01.gif", self.source_path, self.target_path
+        )
+        self.assertEqual(result, [image_file for image_file, __ in self.image_files])
+
+
+class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
 
     def setUp(self):
         super().setUp()
@@ -350,7 +391,7 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         )
         for image_filename, format in image_files:
             image_file_path = pathlib.Path(self.target_path, image_filename)
-            self.create_image_file(image_file_path, format)
+            create_image_file(image_file_path, format)
 
     def tearDown(self):
         shutil.rmtree(self.target_path)
@@ -362,7 +403,7 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         )
         for image_filename, format in image_files:
             image_file_path = pathlib.Path(self.target_path, image_filename)
-            self.create_image_file(image_file_path, format)
+            create_image_file(image_file_path, format)
         graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-e01.tif"/>'
         graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02.tiff"/>'
         xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
@@ -399,7 +440,7 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         )
         for image_filename, format in image_files:
             image_file_path = pathlib.Path(self.target_path, image_filename)
-            self.create_image_file(image_file_path, format)
+            create_image_file(image_file_path, format)
         graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-e01.tif"/>'
         graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02.tiff"/>'
         xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
@@ -429,7 +470,7 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         )
         for image_filename, format in image_files:
             image_file_path = pathlib.Path(self.target_path, image_filename)
-            self.create_image_file(image_file_path, format)
+            create_image_file(image_file_path, format)
         graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-e01.tif"/>'
         graphic_02 = '<inline-graphic xlink:href="1234-5678-rctb-45-05-0110-e02.tiff"/>'
         xml = self.xml.format(graphic_01=graphic_01, graphic_02=graphic_02)
