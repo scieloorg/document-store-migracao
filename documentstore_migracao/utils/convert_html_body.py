@@ -1460,7 +1460,7 @@ class HTML2SPSPipeline(object):
                     sec_parent = sec.getparent()
                     if sec_parent.tag == "sec":
                         continue
-                    new_elements.insert(0, deepcopy(sec))
+                    new_elements.append(deepcopy(sec))
                     sec_parent.remove(sec)
 
                 for new_e in new_elements:
@@ -2496,6 +2496,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     parent.remove(next)
 
                 node.append(deepcopy(title))
+                parent.remove(title)
 
         def _sectype(self, node):
             sectype = get_sectype(node.findtext("title") or node.get("id"))

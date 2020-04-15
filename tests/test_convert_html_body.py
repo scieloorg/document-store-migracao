@@ -156,6 +156,24 @@ class TestBodySectionsPipe(unittest.TestCase):
         self.assertEqual(len(xml.findall(".//body/sec/sec")), 6)
 
 
+class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = self.pipeline.CreateSectionElemetWithSectionTitlePipe()
+
+    def test_transform(self):
+        raw = """<root>
+            <body>
+                <sec id="s01"/><bold>Título</bold>
+            </body>
+        </root>
+        """
+        xml = etree.fromstring(raw)
+        raw, xml = self.pipe.transform((raw, xml))
+        self.assertEqual(xml.findtext(".//sec/title"), "Título")
+        self.assertIsNone(xml.findtext(".//bold"))
+
+
 class TestHTML2SPSPipeline(unittest.TestCase):
     def _transform(self, text, pipe):
         tree = etree.fromstring(text)
