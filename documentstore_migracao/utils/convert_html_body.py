@@ -45,6 +45,10 @@ SECTIONS_CODE_AND_TITLES = dict([
  ])
 
 
+def fix_predicate(predicate):
+    return predicate.replace('"', '').replace("'", '')
+
+
 def get_sectype(titles):
     possibilities = SECTIONS_CODE_AND_TITLES.keys()
     items = titles.split(" and ")
@@ -1981,7 +1985,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def _fix_a_href(self, xml):
             for a in xml.findall(".//a[@name]"):
-                name = a.attrib.get("name")
+                name = fix_predicate(a.attrib.get("name"))
                 for a_href in xml.findall(".//a[@href='{}']".format(name)):
                     a_href.set("href", "#" + name)
 
@@ -2064,7 +2068,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
 
         def add_xml_text_to_other_a(self, xml):
             for node in xml.xpath(".//a[@xml_text and @href]"):
-                href = node.get("href")
+                href = fix_predicate(node.get("href"))
+                if href[0] != "#":
+                    continue
                 xml_text = node.get("xml_text")
                 if xml_text:
                     for n in xml.findall(".//a[@href='{}']".format(href)):
@@ -2189,7 +2195,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         self._update(node, tag, reftype, new_id, text)
 
         def _search_asset_node_related_to_img(self, new_id, img):
+
             if new_id:
+                new_id = fix_predicate(new_id)
                 asset_node = img.getroottree().find(".//*[@xml_id='{}']".format(new_id))
                 if asset_node is not None:
                     return asset_node
@@ -3780,6 +3788,7 @@ class FileLocation:
 
 
 def fix_img_revistas_path(node):
+    attr = "src" if node.get("src") else "href"
     location = node.get("src") or node.get("href")
     if not location:
         _remove_tag(node, True)
@@ -4111,7 +4120,7 @@ class Remote2LocalConversion:
         for img in body.findall(".//img"):
             src = img.get("src")
             name, ext = os.path.splitext(os.path.basename(src))
-
+            name = fix_predicate(name)
             if body.find(".//a[@name='{}']".format(name)) is None:
                 a_name = etree.Element("a")
                 a_name.set("name", name)
