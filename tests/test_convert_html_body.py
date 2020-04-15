@@ -3156,11 +3156,11 @@ class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
         self.assertIsNone(xml.findtext(".//sec[@sec-type]"))
 
 
-class TestInsertSectionChildrenPipe(unittest.TestCase):
+class TestAddParagraphsToSectionPipe(unittest.TestCase):
 
     def setUp(self):
-        pl = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = pl.InsertSectionChildrenPipe()
+        pl = HTML2SPSPipeline(pid="pid")
+        self.pipe = pl.AddParagraphsToSectionPipe()
 
     def test_transform_inserts_elements_in_sec_until_find_other_sec(self):
         text = """<root>
