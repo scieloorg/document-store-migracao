@@ -278,6 +278,7 @@ class HTML2SPSPipeline(object):
             self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
             self.BodySectionsPipe(),
+            self.AddParagraphsToSectionPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveEmptyPAndEmptySectionPipe(),
@@ -1469,6 +1470,35 @@ class HTML2SPSPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
+    class AddParagraphsToSectionPipe(plumber.Pipe):
+
+        def _create_children(self, node, last):
+            remove_items = []
+            next = node
+            while True:
+                next = next.getnext()
+                if next is None:
+                    break
+                if next.tag == "sec":
+                    break
+                if node is last:
+                    if len(node.getchildren()) > 1:
+                        break
+                node.append(deepcopy(next))
+                remove_items.append(next)
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
+
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+            sections = xml.findall(".//body/sec")
+            for sec in sections:
+                self._create_children(sec, sections[-1])
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
 
 class DataSanitizationPipeline(object):
     def __init__(self):
@@ -1583,7 +1613,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(),
             self.CreateSectionElemetWithSectionTitlePipe(),
             self.RemoveEmptyPAndEmptySectionPipe(),
-            self.AddParagraphsToSectionPipe(),
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
@@ -2515,35 +2544,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 self._create_sec(sec)
             for sec in xml.findall(".//ordinary-sec"):
                 self._create_sec(sec)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class AddParagraphsToSectionPipe(plumber.Pipe):
-
-        def _create_children(self, node, last):
-            remove_items = []
-            next = node
-            while True:
-                next = next.getnext()
-                if next is None:
-                    break
-                if next.tag == "sec":
-                    break
-                if node is last:
-                    if len(node.getchildren()) > 1:
-                        break
-                node.append(deepcopy(next))
-                remove_items.append(next)
-            for item in remove_items:
-                parent = item.getparent()
-                parent.remove(item)
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-            sections = xml.findall(".//sec")
-            for sec in sections:
-                self._create_children(sec, sections[-1])
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
