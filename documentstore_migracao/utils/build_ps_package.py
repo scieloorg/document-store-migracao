@@ -263,13 +263,32 @@ class BuildPSPackage(object):
         # Salva XML com alterações
         xml.objXML2file(xml_target_path, _xmltree, pretty=True)
 
-    def collect_assets(self, target_path, acron, issue_folder, pack_name, images):
+    def collect_assets(
+        self, target_path, acron, issue_folder, pack_name, sps_package, xml_target_path
+    ):
+        assets_alternatives = {}
         source_path = os.path.join(self.img_folder, acron, issue_folder)
-        for img in set(images):
+        for img in set(sps_package.assets):
+            logger.debug(
+                'Collection asset "%s" from %s into %s', img, source_path, target_path
+            )
             try:
                 shutil.copy(os.path.join(source_path, img), target_path)
             except FileNotFoundError:
-                logger.exception("Not found %s" % img)
+                alternatives = self.collect_asset_alternatives(
+                    img, source_path, target_path
+                )
+                if len(alternatives) > 0:
+                    assets_alternatives[img] = alternatives
+                else:
+                    logger.error(
+                        'Asset "%s" not found in %s to pack "%s"',
+                        img,
+                        source_path,
+                        target_path,
+                    )
+        if len(assets_alternatives) > 0:
+            self.update_xml_with_alternatives(assets_alternatives, sps_package, xml_target_path)
 
     def optimise_xml_to_web(self, target_path, xml_target_path):
         xml_filename = os.path.basename(xml_target_path)
@@ -376,8 +395,13 @@ class BuildPSPackage(object):
                     self.save_renditions_manifest(
                         target_path, dict(renditions))
                     self.collect_assets(
-                        target_path, acron, issue_folder, pack_name,
-                        xml_sps.assets)
+                        target_path,
+                        acron,
+                        issue_folder,
+                        pack_name,
+                        xml_sps,
+                        xml_target_path,
+                    )
                     self.optimise_xml_to_web(target_path, xml_target_path)
 
 
