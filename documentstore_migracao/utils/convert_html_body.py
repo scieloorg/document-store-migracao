@@ -392,7 +392,7 @@ class HTML2SPSPipeline(object):
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
-        EXCEPTIONS = ["a", "br", "img", "hr", "td"]
+        EXCEPTIONS = ["a", "br", "img", "hr", "td", "body"]
 
         def _is_empty_element(self, node):
             return node.findall("*") == [] and not get_node_text(node)
@@ -1562,12 +1562,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.TablePipe(),
             self.SupplementaryMaterialPipe(),
             self.FnMovePipe(),
-            self.FnBoldPipe(),
-            self.FnLabelOfPipe(),
-            self.FnAddContentPipe(),
-            self.GetFnContentFromNextElementPipe(),
+            self.FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(),
+            self.MoveSuffixAndPrefixIntoLabelPipe(),
+            self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(),
+            self.FnPipe_AddContentToEmptyFn(),
             self.FnIdentifyLabelAndPPipe(),
             self.FnFixLabel(),
+            self.GetPFromFnParentNextPipe(),
             self.RemoveFnWhichHasOnlyXref(),
             self.RemoveXMLAttributesPipe(),
             self.ImgPipe(),
@@ -1751,7 +1752,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 return
 
             table = previous.getprevious()
-            if table.tag != "table":
+            if table is None or table.tag != "table":
                 return
 
             img = p.find(".//img")
@@ -3249,287 +3250,43 @@ class ConvertElementsWhichHaveIdPipeline(object):
             node.addnext(fn_copy)
             node.remove(fn)
 
-    class FnBoldPipe(plumber.Pipe):
-        """Cria fn a partir de label[@label-of]
-        ou adiciona label em fn
+    class FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(plumber.Pipe):
+        """Encontra bold que é vizinho posterior de fn e 
+        inclui dentro do elemento novo label, desconsidera o bold.tail
         """
-
         def transform(self, data):
+            STYLE_TAGS = ("bold", "sup", "italic")
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
-            logger.debug("FnBoldPipe")
             for node in xml.findall(".//fn"):
                 next = node.getnext()
-                if next is not None and next.tag == "bold":
+                if next is not None and next.tag in STYLE_TAGS:
                     label = etree.Element("label")
-                    label.append(deepcopy(next))
+                    style_elem = deepcopy(next)
+                    if style_elem.tail:
+                        style_elem.tail = ""
+                    label.append(style_elem)
                     node.addnext(label)
                     _remove_tag(next, True)
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FnLabelOfPipe(plumber.Pipe):
-        """Cria fn a partir de label[@label-of]
-        ou adiciona label em fn
-        """
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-            labels = [
-                label.get("label-of") for label in xml.findall(".//label[@label-of]")
-            ]
-            repeated = [label for label in labels if labels.count(label) > 1]
-            for label in set(repeated):
-                labels = xml.findall(".//label[@label-of='{}']".format(label))
-                for item in labels[1:]:
-                    fn = etree.Element("fn")
-                    fn.set("id", label + item.get("xml_text"))
-                    item.addprevious(fn)
-            for label in xml.findall(".//label[@label-of]"):
-                label_of = label.get("label-of")
-                if label_of not in repeated:
-                    fn = xml.find(".//fn[@id='{}']".format(label_of))
-                    if fn is None:
-                        fn = etree.Element("fn")
-                        fn.set("id", label_of)
-                        label.addprevious(fn)
-                    fn.append(deepcopy(label))
-                    parent = label.getparent()
-                    parent.remove(label)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class FnAddContentPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-            for fn in xml.findall(".//fn"):
-                fn.set("status", "add-content")
-            while True:
-                fn = xml.find(".//fn[@status='add-content']")
-                if fn is None:
-                    break
-                fn.set("status", "identify-content")
-                self._add_fn_tail_into_fn(fn)
-            self._move_fn_out_of_fn_tags(xml)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-        def _add_fn_tail_into_fn(self, node):
-            move_tail_into_node(node)
-            while True:
-                _next = node.getnext()
-                if _next is None:
-                    break
-                if node.find("label") is not None and node.find("p") is not None:
-                    break
-                if _next.tag in ["fn"]:
-                    break
-                if _next.tag in ["p"]:
-                    if node.find("p") is not None:
-                        break
-                node.append(deepcopy(_next))
-                parent = _next.getparent()
-                parent.remove(_next)
-
-        def _move_fn_out_of_fn_tags(self, xml):
-            while True:
-                for node in xml.findall(".//fn"):
-                    if "fn-children" in node.attrib.keys():
-                        node.attrib.pop("fn-children")
-                    found = node.findall(".//fn")
-                    if len(found) > 0:
-                        node.set("fn-children", str(len(found)))
-                fn = xml.find(".//fn[@fn-children]")
-                if fn is None:
-                    break
-                items = []
-                for inner_fn in fn.findall(".//fn"):
-                    items.insert(0, inner_fn)
-                for item in items:
-                    parent = item.getparent()
-                    fn.addnext(deepcopy(item))
-                    parent.remove(item)
-
-    class FnIdentifyLabelAndPPipe(plumber.Pipe):
-        def _create_label(self, new_fn, node):
-            label = node.find(".//label")
-            if label is not None:
-                return
-
-            children = node.getchildren()
-            node_text = (node.text or "").strip()
-            if node_text:
-                # print("FnIdentifyLabelAndPPipe - _create_label_from_node_text")
-                label = self._create_label_from_node_text(new_fn, node)
-            elif children:
-                # print("FnIdentifyLabelAndPPipe - _create_label_from_style_tags")
-                self._create_label_from_style_tags(new_fn, node)
-                if new_fn.find(".//label") is None:
-                    # print("FnIdentifyLabelAndPPipe - _create_label_from_children")
-                    self._create_label_from_children(new_fn, node)
-
-        def _create_label_from_node_text(self, new_fn, node):
-            # print(etree.tostring(node))
-            label_text = self._get_label_text(node)
-            if label_text:
-                label = etree.Element("label")
-                label.text = label_text
-                new_fn.insert(0, label)
-                node.text = node.text.replace(label_text, "").lstrip()
-            # print(etree.tostring(node))
-
-        def _get_label_text(self, node):
-            node_text = get_node_text(node)
-            if not node_text:
-                return
-            splitted = [item.strip() for item in node_text.split()]
-            label_text = None
-            if splitted[0][0].isalpha():
-                if len(splitted[0]) == 1 and node_text[0].lower() == node_text[0]:
-                    label_text = splitted[0]
-            else:
-                label_text = self._get_not_alpha_characteres(splitted[0])
-            return label_text
-
-        def _get_not_alpha_characteres(self, text):
-            label_text = []
-            for c in text:
-                if not c.isalpha():
-                    label_text.append(c)
-                else:
-                    break
-            return "".join(label_text)
-
-        def _create_label_from_children(self, new_fn, node):
-            """
-            Melhorar
-            b'<fn id="back2"><italic>** Address: Rua Itapeva 366 conj 132 - 01332-000 S&#227;o Paulo SP - Brasil.</italic></fn>'
-            """
-            # print(etree.tostring(node))
-            label_text = self._get_label_text(node)
-            if label_text:
-                label = etree.Element("label")
-                label.text = label_text
-                new_fn.insert(0, label)
-                for n in node.findall(".//*"):
-                    if n.text and n.text.startswith(label_text):
-                        n.text = n.text.replace(label_text, "")
-                        break
-
-        def _create_label_from_style_tags(self, new_fn, node):
-            STYLE_TAGS = ("sup", "bold", "italic")
-            children = node.getchildren()
-            node_style = None
-            if children[0].tag in STYLE_TAGS:
-                node_style = children[0]
-            else:
-                for tag in ["sup", "bold", "italic"]:
-                    n = children[0].find(".//{}".format(tag))
-                    if n is None:
-                        continue
-                    if not n.getchildren():
-                        node_style = n
-                        break
-            if node_style is not None:
-                node_text = get_node_text(node)
-                node_style_text = get_node_text(node_style)
-                if node_style_text == node_text:
-                    node_style = None
-            if node_style is not None:
-                label = etree.Element("label")
-                cp = deepcopy(node_style)
-                cp.tail = ""
-                label.append(cp)
-                new_fn.insert(0, label)
-                node.text = node_style.tail
-                parent = node_style.getparent()
-                parent.remove(node_style)
-
-        def _create_p(self, new_fn, node):
-            new_p = None
-            if (node.text or "").strip():
-                new_p = etree.Element("p")
-                new_p.text = node.text
-            for child in node.getchildren():
-                if child.tag in ["label", "p"]:
-                    new_p = self._create_new_p(new_fn, new_p, child)
-                else:
-                    if new_p is None:
-                        new_p = etree.Element("p")
-                    new_p.append(deepcopy(child))
-            if new_p is not None:
-                new_fn.append(new_p)
-            node.tag = "DELETE"
-            node.addprevious(new_fn)
-
-        def _create_new_p(self, new_fn, new_p, child):
-            if new_p is not None:
-                new_fn.append(new_p)
-
-            p = deepcopy(child)
-            p.tail = ""
-            new_fn.append(p)
-
-            new_p = None
-            if child.tail:
-                new_p = etree.Element("p")
-                new_p.text = child.tail
-            return new_p
-
-        def _identify_label_and_p(self, fn):
-            new_fn = etree.Element("fn")
-            for k, v in fn.attrib.items():
-                if k in ["id", "label", "fn-type"]:
-                    new_fn.set(k, v)
-            self._create_label(new_fn, fn)
-            self._create_p(new_fn, fn)
-            fn.addprevious(new_fn)
-            for delete in fn.getroottree().findall(".//DELETE"):
-                parent = delete.getparent()
-                parent.remove(delete)
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-            for fn in xml.findall(".//fn"):
-                self._identify_label_and_p(fn)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class FnFixLabel(plumber.Pipe):
+    class MoveSuffixAndPrefixIntoLabelPipe(plumber.Pipe):
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
 
             raw, xml = data
-            for fn in xml.findall(".//fn"):
-                label = fn.find(".//label")
-                if label is None:
-                    continue
-                label.attrib.clear()
-                label_child = label.find(".//*[@label-of]")
-                if label_child is None:
-                    label_child = label.find(".//*")
-                if label_child is not None:
-                    label_child.attrib.clear()
-                self._wrap_label_tail_with_p_element(label)
+            for label in xml.findall(".//label"):
+                label_child = None
+                for child in label.findall(".//*"):
+                    child.attrib.clear()
+                    if (child.text or "").strip():
+                        label_child = child
                 self._move_label_prefix_into_label_element(label, label_child)
                 self._move_label_suffix_into_label_element(label, label_child)
-                self._make_label_as_fn_first_child(fn, label)
 
             logger.debug("FIM: %s" % type(self).__name__)
             return data
-
-        def _wrap_label_tail_with_p_element(self, label):
-            """
-            Se há label.tail, então o identifica como `fn/p`
-            """
-            if (label.tail or "").strip():
-                p = etree.Element("p")
-                p.text = label.tail
-                label.tail = ""
-                label.addnext(p)
 
         def _move_label_prefix_into_label_element(self, label, bold):
             """
@@ -3575,29 +3332,280 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 else:
                     bold.text += suffix
 
-        def _make_label_as_fn_first_child(self, fn, label):
-            """
-            Se `label` não é o primeiro filho de `fn` então move `label` como 
-            primeiro filho.
-            """
-            children = fn.getchildren()
-            if children and children[0] is not label:
-                fn.insert(0, deepcopy(label))
-                _remove_tag(label, True)
+    class FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(plumber.Pipe):
+        """Cria fn vazio como vizinho anterior de label[@label-of]
+           Se há mais de um label[@label-of] com mesmo valor de @label-of,
+           a primeira ocorrência é considerada que é o link para as notas de
+           rodapé
+        """
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+            label_of_values = [
+                label.get("label-of")
+                for label in xml.findall(".//label[@label-of]")
+            ]
+            repeated_values = [label_of
+                               for label_of in label_of_values
+                               if label_of_values.count(label_of) > 1]
+            for label_of in set(repeated_values):
+                labels = xml.findall(
+                    ".//label[@label-of='{}']".format(label_of))
+                for label in labels[1:]:
+                    id = label_of + label.get("xml_text")
+                    fn = xml.find(".//fn[@id='{}']".format(id))
+                    if fn is None:
+                        prev = label.getprevious()
+                        if prev is not None and prev.tag != "fn":
+                            fn = etree.Element("fn")
+                            fn.set("id", id)
+                            label.addprevious(fn)
+            for label in xml.findall(".//label[@label-of]"):
+                label_of = label.get("label-of")
+                if label_of not in repeated_values:
+                    fn = xml.find(".//fn[@id='{}']".format(label_of))
+                    if fn is None:
+                        fn = etree.Element("fn")
+                        fn.set("id", label_of)
+                        label.addprevious(fn)
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
 
-    class GetFnContentFromNextElementPipe(plumber.Pipe):
+    class FnPipe_AddContentToEmptyFn(plumber.Pipe):
+        """
+        Para os `<fn/>` vazios:
+        Inserir fn.tail como fn.text.
+        Inserir seus fn.getnext() dentro de `<fn/>` enquanto ausente label e p
+        ou até que o próximo seja ou tenha `<fn/>` ou None
+        """
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+            for fn in xml.findall(".//fn"):
+                if not fn.getchildren():
+                    fn.set("status", "add-content")
+            while True:
+                fn = xml.find(".//fn[@status='add-content']")
+                if fn is None:
+                    break
+                fn.set("status", "identify-content")
+                move_tail_into_node(fn)
+                self._add_next_into_fn(fn)
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
+        def _add_next_into_fn(self, node):
+            while True:
+                _next = node.getnext()
+                if _next is None:
+                    break
+                if node.find(".//label") is not None and node.find(".//p") is not None:
+                    break
+                if _next.tag in ["fn"]:
+                    break
+                if _next.find(".//fn") is not None:
+                    break
+                if node.find(".//p") is not None:
+                    break
+                node.append(deepcopy(_next))
+                parent = _next.getparent()
+                parent.remove(_next)
+
+    class FnIdentifyLabelAndPPipe(plumber.Pipe):
+        """
+        O elemento fn tem conteúdo, mas pode não ter identificado label nem p.
+        Este pipe é para identificar label e p no conteúdo
+        """
+        def _create_label(self, node):
+            node_text = (node.text or "").strip()
+            if node_text:
+                self._create_label_from_node_text(node)
+                return
+            children = node.getchildren()
+            if children:
+                self._create_label_from_style_tags(children[0])
+                if node.find(".//label") is None:
+                    self._create_label_from_children(children[0])
+
+        def _create_label_from_node_text(self, node):
+            label_text = self._get_label_text((node.text or "").strip())
+            if label_text:
+                label = etree.Element("label")
+                label.text = label_text
+                node.text = node.text.replace(label_text, "").lstrip()
+                node.insert(0, label)
+
+        def _get_label_text(self, text):
+            if not text:
+                return
+            words = [item.strip() for item in text.split()]
+            label_text = None
+            # primeiro caracter da primeira palavra é letra minúscula
+            if words[0][0].isalpha() and words[0].lower() == words[0]:
+                # se a primeira palavra tem 1 caracter ou
+                # se o segundo caracter da palavra é em maiúscula
+                if len(words[0]) == 1 or words[0][1].upper() == words[0][1]:
+                    label_text = words[0]
+            else:
+                label_text = self._get_not_alpha_characteres(words[0])
+            return label_text
+
+        def _get_not_alpha_characteres(self, text):
+            """
+            Retorna os primeiros caracteres que não são letras.
+            Os caracteres que correspondem ao label podem estar grudados com o
+            texto, por exemplo:
+            *Isso é a nota de rodapé
+            1Isso também é uma nota de rodapé
+            """
+            label_text = []
+            for c in text:
+                if not c.isalpha():
+                    label_text.append(c)
+                else:
+                    break
+            return "".join(label_text)
+
+        def _create_label_from_children(self, first_child):
+            """
+            Melhorar
+            b'<fn id="back2"><italic>** Address: Rua Itapeva 366 conj 132 - 01332-000 S&#227;o Paulo SP - Brasil.</italic></fn>'
+            """
+            label_text = self._get_label_text(get_node_text(first_child))
+            if label_text:
+                label = etree.Element("label")
+                label.text = label_text
+                first_child.addprevious(label)
+                nodes = [first_child] + first_child.findall(".//*")
+                for n in nodes:
+                    if n.text and n.text.startswith(label_text):
+                        n.text = n.text.replace(label_text, "")
+                        break
+
+        def _create_label_from_style_tags(self, first_child):
+            STYLE_TAGS = ("sup", "bold", "italic")
+            node_style = None
+            if first_child.tag in STYLE_TAGS:
+                node_style = first_child
+            elif not get_node_text(first_child) and first_child.getchildren():
+                if first_child.getchildren()[0].tag in STYLE_TAGS:
+                    node_style = first_child.getchildren()[0]
+            if node_style is None:
+                return
+            label_text = self._get_label_text(get_node_text(node_style))
+            if not label_text or label_text == get_node_text(node_style):
+                label = etree.Element("label")
+                cp = deepcopy(node_style)
+                cp.tail = ""
+                label.append(cp)
+                first_child.addprevious(label)
+                _remove_tag(node_style, True)
+
+        def _create_p(self, node):
+            new_fn = etree.Element("fn")
+            for k, v in node.attrib.items():
+                new_fn.set(k, v)
+
+            node_text = (node.text or "").strip()
+            if node_text:
+                e = etree.Element("p")
+                e.text = node_text
+                new_fn.append(e)
+
+            for child in node.getchildren():
+                if child.tag in ("label", "p"):
+                    cp = deepcopy(child)
+                    if (cp.tail or "").strip():
+                        p = etree.Element("p")
+                        p.text = cp.tail
+                        cp.tail = ""
+                        new_fn.append(cp)
+                        new_fn.append(p)
+                    else:
+                        new_fn.append(cp)
+                else:
+                    e = etree.Element("p")
+                    e.append(deepcopy(child))
+                    new_fn.append(e)
+            node.addnext(new_fn)
+            parent = node.getparent()
+            parent.remove(node)
+
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+            for fn in xml.findall(".//fn"):
+                if fn.find(".//label") is None:
+                    fn.set("fix_label", "true")
+                if fn.find(".//p") is None:
+                    fn.set("fix_p", "true")
+
+            for fn in xml.findall(".//fn[@fix_label='true']"):
+                self._create_label(fn)
+                fn.attrib.pop("fix_label")
+
+            nodes = xml.findall(".//fn[@fix_p='true']")
+            for fn in nodes:
+                fn.attrib.pop("fix_p")
+                self._create_p(fn)
+
+            for fn in xml.findall(".//fn"):
+                for k, v in fn.attrib.items():
+                    if k not in ["id", "label", "fn-type"]:
+                        fn.attrib.pop(k)
+
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
+    class FnFixLabel(plumber.Pipe):
+        """
+        Remove os atributos de fn//label e
+        garante que seja o primeiro filho de fn
+        """
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+
+            raw, xml = data
+            for fn in xml.findall(".//fn"):
+                label = fn.find(".//label")
+                if label is None:
+                    continue
+                label.attrib.clear()
+
+                label_child = label.find(".//*[@label-of]")
+                if label_child is None:
+                    label_child = label.find(".//*")
+                if label_child is not None:
+                    label_child.attrib.clear()
+
+                children = fn.getchildren()
+                if children and children[0] is not label:
+                    fn.insert(0, deepcopy(label))
+                    _remove_tag(label, True)
+
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
+    class GetPFromFnParentNextPipe(plumber.Pipe):
+        """
+        Se fn não tem p, obter p de fn.getparent().next()
+        """
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
             for fn in xml.findall(".//fn[label]"):
                 children = fn.getchildren()
                 if len(children) == 1:
-                    parent = fn.getparent()
-                    parent_next = parent.getnext()
-                    if parent_next is not None:
-                        fn.append(deepcopy(parent_next))
-                        parent = parent.getparent()
-                        parent.remove(parent_next)
+                    fn_parent = fn.getparent()
+                    if fn_parent.tag == "body":
+                        continue
+                    fn_parent_next = fn_parent.getnext()
+                    if (fn_parent_next is not None and
+                            fn_parent_next.tag == "p" and
+                            fn_parent_next.find(".//fn") is None):
+                        fn.append(deepcopy(fn_parent_next))
+                        parent = fn_parent_next.getparent()
+                        parent.remove(fn_parent_next)
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 

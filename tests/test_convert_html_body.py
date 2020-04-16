@@ -2031,11 +2031,11 @@ class TestCompleteElementAWithXMLTextPipe(unittest.TestCase):
         self.assertIn(b'<a name="tab2" xml_text="tabelas 2"/>', result)
 
 
-class TestFnAddContentPipe(unittest.TestCase):
+class TestFnPipe_AddContentToEmptyFn(unittest.TestCase):
     def setUp(self):
         self.html_pl = HTML2SPSPipeline(pid="pid")
         self.pl = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = self.pl.FnAddContentPipe()
+        self.pipe = self.pl.FnPipe_AddContentToEmptyFn()
 
     def test_transform_moves_italic(self):
         text = """<root><fn id="nt01"/>
@@ -2068,7 +2068,7 @@ class TestFnAddContentPipe(unittest.TestCase):
            <p/> .
            <p>Este texto não fará parte de fn</p>
          </root>"""
-        expected = """<root><fn id="nt01"><label>**</label>
+        expected = """<root><fn id="nt01">**
             <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p></fn>
             <p/> .
         </root>"""
@@ -2096,6 +2096,36 @@ class TestFnAddContentPipe(unittest.TestCase):
         self.assertIn("**", node.text)
         self.assertIn("Isso", node.find("italic").text)
         self.assertIn("Email", node.find("br").tail)
+
+    def test_transform_moves_items_until_another_fn_is_found(self):
+        text = """<root><fn id="nt01"/>**
+           <p><italic>Isso é conhecido pelos pesquisadores como</italic> .</p><fn id="nt02"/><label>***</label>
+            <p>Isso é outra nota de rodapé.</p>
+            <p/> .
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.findall(".//fn")
+        self.assertEqual(
+            fn[0].find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
+        )
+        self.assertEqual(fn[0].find("p/italic").tail.strip(), ".")
+        self.assertIsNotNone(len(fn[0].getchildren()), 1)
+        self.assertEqual(fn[1].find("label").text, "***")
+        self.assertEqual(fn[1].find("p").text, "Isso é outra nota de rodapé.")
+
+    def test_transform_do_not_move_items_inside_because_fn_is_found(self):
+        text = """<root><fn id="nt01"/>**
+           <p><italic>Isso é conhecido pelos pesquisadores como</italic> .<fn id="nt02"/><label>***</label>
+            <p>Isso é outra nota de rodapé.</p>
+            <p/></p> .
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        fn = xml.findall(".//fn")
+        self.assertIsNotNone(len(fn[0].getchildren()), 0)
+        self.assertEqual(fn[1].find("label").text, "***")
+        self.assertEqual(fn[1].find("p").text, "Isso é outra nota de rodapé.")
 
 
 class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
@@ -2135,10 +2165,10 @@ class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
 
     def test__creates_p(self):
         text = """<root><fn id="nt01">
-           <italic>Isso é conhecido pelos pesquisadores como</italic></fn>
+           <li>Isso é conhecido pelos pesquisadores como</li></fn>
          </root>"""
         expected = """<root><fn id="nt01"><p>
-            <italic>Isso é conhecido pelos pesquisadores como</italic></p></fn>
+            <li>Isso é conhecido pelos pesquisadores como</li></p></fn>
         </root>"""
 
         xml = etree.fromstring(text)
@@ -2146,9 +2176,9 @@ class TestFnIdentifyLabelAndPPipe(unittest.TestCase):
         text, xml = self.pipe.transform((text, xml))
         fn = xml.find(".//fn")
         self.assertEqual(
-            fn.find("p/italic").text, "Isso é conhecido pelos pesquisadores como"
+            fn.find("p/li").text, "Isso é conhecido pelos pesquisadores como"
         )
-        self.assertIsNone(fn.find("p/italic").tail)
+        self.assertIsNone(fn.find("p/li").tail)
         self.assertIsNone(fn.find("label"))
 
 
@@ -2178,8 +2208,6 @@ class TestFnPipe(unittest.TestCase):
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
         text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
-        text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
-        text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.BR2PPipe().transform((text, xml))
 
@@ -2192,7 +2220,7 @@ class TestFnPipe(unittest.TestCase):
         )
         self.assertEqual(p[2].text.strip(), "Avenida Granadeiro Guimarães, 270")
         self.assertEqual(p[3].text.strip(), "CEP: 12100-000 – Taubaté (SP), Brazil.")
-        self.assertEqual(p[4].find("email").text, "prolungatti@uol.com.br")
+        self.assertEqual(p[5].find("email").text, "prolungatti@uol.com.br")
 
     def test_creates_fn_list(self):
         text = """
@@ -3190,33 +3218,129 @@ class TestRemoveFnWhichHasOnlyXref(unittest.TestCase):
         self.assertIsNotNone(xml.find("./p[@id='p1']/xref"))
 
 
+class TestGetPFromFnParentNextPipe(unittest.TestCase):
+    def setUp(self):
+        pl = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = pl.GetPFromFnParentNextPipe()
+
+    def test_transform_get_p_from_fn_parent_next(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <label>LABEL</label>
+            </fn>
+        </p>
+        <p id="p1">
+            TEXTO
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertEqual(xml.find(".//fn/p").text.strip(), "TEXTO")
+        self.assertEqual(len(xml.find(".").getchildren()), 1)
+
+    def test_transform_do_not_get_p_from_fn_parent_next_because_it_has_fn(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <label>LABEL</label>
+            </fn>
+        </p>
+        <p id="p1">
+            <fn>TEXTO</fn>
+        </p>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNone(xml.find(".//fn/p"))
+        self.assertEqual(len(xml.find(".").getchildren()), 2)
+
+    def test_transform_do_not_get_p_from_fn_parent_next_because_it_is_body(self):
+        text = """<root>
+        <body>
+            <fn>
+                <label>LABEL</label>
+            </fn>
+            <p>TEXTO</p>
+        </body>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNone(xml.find(".//fn/p"))
+        self.assertEqual(len(xml.find(".").getchildren()), 1)
+
+    def test_transform_do_not_get_p_from_fn_parent_next_because_it_is_not_p(self):
+        text = """<root>
+        <p id="p1">
+            <fn>
+                <label>LABEL</label>
+            </fn>
+        </p>
+        <x id="p1">
+            TEXTO
+        </x>
+        </root>"""
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+        self.assertIsNone(xml.find(".//fn/p"))
+        self.assertEqual(len(xml.find(".").getchildren()), 2)
+
+
 class TestFnFixLabel(unittest.TestCase):
     def setUp(self):
         pl = ConvertElementsWhichHaveIdPipeline()
         self.pipe = pl.FnFixLabel()
 
-    def test_fix_label_get_characters_from_previous_text_and_from_tail(self):
-        text = """<root>
-            <fn><p>(<label>1</label>) Texto</p></fn>
-        </root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.pipe.transform((text, xml))
-        self.assertEqual(xml.findtext("./fn/label"), "(1)")
-        self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
-
-    def test_fix_label_get_characteres_from_previous_and_next(self):
-        text = """<root>
-            <fn><p>(</p><label>1</label><p>) Texto</p></fn>
-        </root>"""
-        xml = etree.fromstring(text)
-        text, xml = self.pipe.transform((text, xml))
-        self.assertEqual(xml.findtext("./fn/label"), "(1)")
-        self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
-
     def test_fix_label_make_label_first_child_of_fn(self):
         text = """<root>
-            <fn><p></p><p><label>1</label> Texto</p></fn>
+            <fn><p><label>1</label> Texto</p></fn>
         </root>"""
         xml = etree.fromstring(text)
         text, xml = self.pipe.transform((text, xml))
         self.assertEqual(xml.find("./fn").getchildren()[0].tag, "label")
+        self.assertEqual(xml.find("./fn").getchildren()[1].text.strip(), "Texto")
+
+
+class TestFnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(unittest.TestCase):
+    def test_transform(self):
+        text = """<root>
+        <body><fn/><bold>título</bold>texto fora do bold</body>
+        </root>"""
+        expected = (
+            """<root>
+        <body><fn/><label><bold>título</bold></label>texto fora do bold</body>
+        </root>"""
+        )
+        xml = etree.fromstring(text)
+        pl = ConvertElementsWhichHaveIdPipeline()
+        pipe = pl.FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel()
+        text, xml = pipe.transform((text, xml))
+        self.assertEqual(xml.findtext(".//label/bold"), "título")
+        self.assertEqual(xml.find(".//label/bold").tail, "")
+        self.assertEqual(xml.find(".//label").tail, "texto fora do bold")
+
+
+class TestFnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(unittest.TestCase):
+    def test_transform_creates_fn_to_second_label(self):
+        text = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        </root>"""
+        xml = etree.fromstring(text)
+        pl = ConvertElementsWhichHaveIdPipeline()
+        pipe = pl.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel()
+        text, xml = pipe.transform((text, xml))
+        labels = xml.findall(".//label")
+        self.assertIsNone(labels[0].getprevious())
+        self.assertEqual(labels[1].getprevious().tag, "fn")
+
+    def test_transform_creates_fn_as_previous_elem_of_label(self):
+        text = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label> Corresponding author
+        </root>"""
+        xml = etree.fromstring(text)
+        pl = ConvertElementsWhichHaveIdPipeline()
+        pipe = pl.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel()
+        text, xml = pipe.transform((text, xml))
+        labels = xml.findall(".//label")
+        self.assertEqual(labels[0].getprevious().tag, "fn")
