@@ -165,33 +165,6 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
             "/data/output/abc/v1n1/bla", "{'pt': 'bla'}")
         mock_open.assert_called_once_with("/data/output/abc/v1n1/bla/manifest.json", "w")
 
-    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
-    def test_collect_assets_creates_files_in_target_path(self, mock_copy):
-        images = ["bla1.jpg", "bla2.jpg", "bla3.jpg"]
-        self.builder.collect_assets(
-            "/data/output/abc/v1n1/bla", "abc", "v1n1", "bla", images)
-        calls = [
-            mock.call(
-                "/data/imgs/abc/v1n1/bla1.jpg", "/data/output/abc/v1n1/bla"
-            ),
-            mock.call(
-                "/data/imgs/abc/v1n1/bla2.jpg", "/data/output/abc/v1n1/bla"
-            ),
-            mock.call(
-                "/data/imgs/abc/v1n1/bla3.jpg", "/data/output/abc/v1n1/bla"
-            ),
-        ]
-        mock_copy.assert_has_calls(calls, any_order=True)
-
-    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
-    def test_collect_assets_creates_one_file_in_target_path(self, mock_copy):
-        images = ["bla.jpg", "bla.jpg", "bla.jpg"]
-        self.builder.collect_assets(
-            "/data/output/abc/v1n1/bla", "abc", "v1n1", "bla", images)
-        mock_copy.assert_called_once_with(
-            "/data/imgs/abc/v1n1/bla.jpg", "/data/output/abc/v1n1/bla"
-        )
-
 
 class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
@@ -586,6 +559,160 @@ class TestBuildSPSPackageCollectAssetAlternatives(TestBuildSPSPackageBase):
             "1234-5678-rctb-45-05-0110-gf01.gif", self.source_path, self.target_path
         )
         self.assertEqual(result, [image_file for image_file, __ in self.image_files])
+
+
+class TestBuildSPSPackageCollectAsset(TestBuildSPSPackageBase):
+    def setUp(self):
+        super().setUp()
+        self.source_path = tempfile.mkdtemp()
+        self.target_path = tempfile.mkdtemp()
+        self.builder.img_folder = self.source_path
+        self.acron = "abc"
+        self.issue_folder = "v1n1"
+        self.pack_name = "bla"
+        self.pack_path = pathlib.Path(self.source_path, self.acron, self.issue_folder)
+        self.pack_path.mkdir(parents=True)
+        self.image_files = (
+            ("1234-5678-rctb-45-05-0110-gf01.tiff", "TIFF"),
+            ("1234-5678-rctb-45-05-0110-gf01.png", "PNG"),
+            ("1234-5678-rctb-45-05-0110-gf01.jpg", "JPEG"),
+        )
+        for image_filename, format in self.image_files:
+            image_file_path = self.pack_path / image_filename
+            create_image_file(image_file_path, format)
+        self.xml_target_path = pathlib.Path(self.target_path, "xml_file_name.xml")
+
+    def tearDown(self):
+        shutil.rmtree(self.source_path)
+        shutil.rmtree(self.target_path)
+
+    def test_copies_files_in_target_path(self):
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-gf01.tiff"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02="")
+        self.sps_package = SPS_Package(
+            etree.XML(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        self.builder.collect_assets(
+            self.target_path,
+            self.acron,
+            self.issue_folder,
+            self.pack_name,
+            self.sps_package,
+            self.xml_target_path,
+        )
+        self.assertTrue(
+            pathlib.Path(self.target_path, "1234-5678-rctb-45-05-0110-gf01.tiff").exists()
+        )
+
+    def test_copies_alternatives_if_not_found(self):
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-gf01.gif"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02="")
+        self.sps_package = SPS_Package(
+            etree.XML(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        self.builder.collect_assets(
+            self.target_path,
+            self.acron,
+            self.issue_folder,
+            self.pack_name,
+            self.sps_package,
+            self.xml_target_path,
+        )
+        for image_file, __ in self.image_files:
+            with self.subTest(image_file=image_file):
+                self.assertTrue(pathlib.Path(self.target_path, image_file).exists())
+
+    def test_adds_alternatives_to_xml_if_not_found(self):
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-gf01.gif"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02="")
+        self.sps_package = SPS_Package(
+            etree.XML(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        self.builder.collect_assets(
+            self.target_path,
+            self.acron,
+            self.issue_folder,
+            self.pack_name,
+            self.sps_package,
+            self.xml_target_path,
+        )
+        with self.xml_target_path.open() as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            graphic_01_node = xml_result.find(
+                '//alternatives/graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01.gif"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_01_node)
+            for image_file, __ in self.image_files:
+                with self.subTest(image_file=image_file):
+                    self.assertIsNotNone(
+                        graphic_01_node.getparent().find(
+                            f'graphic[@xlink:href="{image_file}"]',
+                            namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                        )
+                    )
+
+    def test_copies_alternatives_if_not_found_and_no_extension_file(self):
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-gf01"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02="")
+        self.sps_package = SPS_Package(
+            etree.XML(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        self.builder.collect_assets(
+            self.target_path,
+            self.acron,
+            self.issue_folder,
+            self.pack_name,
+            self.sps_package,
+            self.xml_target_path,
+        )
+        for image_file, __ in self.image_files:
+            with self.subTest(image_file=image_file):
+                self.assertTrue(pathlib.Path(self.target_path, image_file).exists())
+
+    def test_copies_alternatives_if_not_found_and_no_extension_file(self):
+        graphic_01 = '<graphic xlink:href="1234-5678-rctb-45-05-0110-gf01"/>'
+        xml = self.xml.format(graphic_01=graphic_01, graphic_02="")
+        self.sps_package = SPS_Package(
+            etree.XML(
+                xml, parser=etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+        )
+        self.builder.collect_assets(
+            self.target_path,
+            self.acron,
+            self.issue_folder,
+            self.pack_name,
+            self.sps_package,
+            self.xml_target_path,
+        )
+        with self.xml_target_path.open() as xmlfile:
+            xml_result = etree.parse(
+                xmlfile, etree.XMLParser(remove_blank_text=True, no_network=True)
+            )
+            graphic_01_node = xml_result.find(
+                '//alternatives/graphic[@xlink:href="1234-5678-rctb-45-05-0110-gf01"]',
+                namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+            )
+            self.assertIsNotNone(graphic_01_node)
+            for image_file, __ in self.image_files:
+                with self.subTest(image_file=image_file):
+                    self.assertIsNotNone(
+                        graphic_01_node.getparent().find(
+                            f'graphic[@xlink:href="{image_file}"]',
+                            namespaces={"xlink": "http://www.w3.org/1999/xlink"},
+                        )
+                    )
 
 
 class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
