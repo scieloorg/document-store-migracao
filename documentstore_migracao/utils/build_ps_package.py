@@ -108,29 +108,27 @@ class BuildPSPackage(object):
 
         def _get_date_value(date_label, date_value):
             if date_value:
-                logger.debug(
-                    'Updating document with %s "%s"',
-                    date_label,
-                    date_value,
-                )
+                logger.debug('Updating document with %s "%s"', date_label, date_value)
                 return _parse_date(date_value)
             else:
-                logger.exception('Missing "%s"', date_label)
+                logger.debug('Missing date_label "%s"', date_label)
 
         _sps_package = deepcopy(sps_package)
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row
         # Verificar se tem PID
         if _has_attr_to_set("scielo_pid_v2"):
             if f_pid:
+                logger.debug('Updating document with PID "%s"', f_pid)
                 _sps_package.scielo_pid_v2 = f_pid
             else:
-                logger.exception("Missing PID")
+                logger.error('Missing PID V2')
 
         if _has_attr_to_set("aop_pid"):
             if f_pid_aop:
+                logger.debug('Updating document "%s" with AOP PID "%s"', f_pid, f_pid_aop)
                 _sps_package.aop_pid = f_pid_aop
             else:
-                logger.info("It has no AOP PID")
+                logger.debug('No AOP PID for document PID "%s"', f_pid)
 
         # Verificar data de publicação e da coleção
         if not _sps_package.is_ahead_of_print:
@@ -158,6 +156,7 @@ class BuildPSPackage(object):
         """
         obj_xmltree = xml.loadToXML(xml_target_path)
 
+        logger.debug('Updating XML "%s" with CSV info', xml_target_path)
         sps_package = self._update_sps_package_obj(
             SPS_Package(obj_xmltree), pack_name, row
         )
@@ -168,7 +167,6 @@ class BuildPSPackage(object):
 
     def get_target_path(self, xml_relative_path):
         target_folder, ext = os.path.splitext(xml_relative_path)
-        logger.info("Make dir package: %s", target_folder)
         target_path = os.path.join(self.out_folder, target_folder)
         if os.path.isdir(target_path):
             for f in os.listdir(target_path):
@@ -197,19 +195,22 @@ class BuildPSPackage(object):
                 (lang + "_" + pack_name + ".pdf",
                     pack_name + "-" + lang + ".pdf"))
         for source, dest in renditions_files:
+            logger.debug('Collecting PDF "%s" for XML "%s.xml"', source, pack_name)
             try:
                 shutil.copy(os.path.join(source_path, source), target_path)
             except FileNotFoundError:
-                logger.exception("Not found %s" % source)
+                logger.error(
+                    'Error collecting rendition "%s" for XML "%s.xml"',
+                    source,
+                    pack_name,
+                )
             else:
                 renditions.append(dest)
         return list(zip(langs, renditions))
 
     def save_renditions_manifest(self, target_path, metadata):
         if len(metadata) > 0:
-            logger.info(
-                "Saving %s/manifest.json", target_path
-            )
+            logger.debug("Saving %s/manifest.json", target_path)
             _renditions_manifest_path = path.join(
                 target_path,
                 "manifest.json",
@@ -225,7 +226,9 @@ class BuildPSPackage(object):
             for entry in it:
                 entry_name_root, __ = os.path.splitext(os.path.basename(entry.name))
                 if entry.is_file() and entry_name_root == filename_root:
-                    logger.debug("File found: %s", entry.name)
+                    logger.debug(
+                        'Found alternative "%s" for asset "%s"', entry.name, img_filename
+                    )
                     shutil.copy(os.path.join(source_path, entry.name), target_path)
                     filenames_to_update.append(entry.name)
         return filenames_to_update
@@ -316,7 +319,7 @@ class BuildPSPackage(object):
                 xml_filename, os.listdir(target_path), read_file, target_path
             )
         except (etree.XMLSyntaxError, etree.SerialisationError) as exc:
-            logger.info('Error creating XMLWebOptimiser for "%s": %s', str(exc))
+            logger.error('Error creating XMLWebOptimiser for "%s": %s', str(exc))
         else:
             optimised_xml = xml_web_optimiser.get_xml_file()
             logger.debug("Saving optimised XML file %s", xml_filename)
@@ -375,14 +378,12 @@ class BuildPSPackage(object):
                 f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row.values()
 
                 xml_relative_path = f_file
-                logger.info("Process ID: %s" % f_pid)
-                logger.info("Process XML: %s" % xml_relative_path)
                 target_path = self.get_target_path(xml_relative_path)
-                logger.info("Package: %s" % target_path)
+                logger.info("Processing ID: %s, XML: %s, Package: %s", f_pid, xml_relative_path, target_path)
                 try:
                     xml_target_path = self.collect_xml(xml_relative_path, target_path)
                 except FileNotFoundError as e:
-                    logger.exception(e)
+                    logger.error('Error collecting XML "%s": %s', xml_relative_path, e)
                 else:
                     acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(xml_relative_path)
 
