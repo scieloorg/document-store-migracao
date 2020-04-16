@@ -1878,10 +1878,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 p_next = p.getnext()
                 if p_next.tag != "a":
                     p_next = p_next.findall(".//a[@name]")
-                    if p_next is not None:
-                        p_next = p_next[-1]
-                if p_next.tag != "a":
-                    continue
+                    if len(p_next) == 0:
+                        continue
+                    p_next = p_next[-1]
+                    if p_next.tag != "a":
+                        continue
 
                 a_name = p_next
 
