@@ -14,8 +14,10 @@ import fs
 import packtools
 from fs import path, copy, errors
 from lxml import etree
+from tqdm import tqdm
 
-from documentstore_migracao.utils import xml, files
+from documentstore_migracao import config
+from documentstore_migracao.utils import xml, files, DoJobsConcurrently
 from documentstore_migracao.export.sps_package import SPS_Package
 
 
@@ -443,36 +445,28 @@ class BuildPSPackage(object):
         )
         with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
             # pid, aoppid, file, pubdate, epubdate, update
-            articles_data_reader = csv.DictReader(
-                csvfile, fieldnames=fieldnames)
-            """
-            - 'PID'
-            - 'PID AOP'
-            - 'FILE'
-            - 'DATA (COLLECTION)'
-            - 'DATA PRIMEIRO PROCESSAMENTO'
-            - 'DATA DO ULTIMO PROCESSAMENTO'
-            """
-            for row in articles_data_reader:
-                if len(row) == 0:
-                    continue
-                f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row.values()
+            articles_data_reader = csv.DictReader(csvfile, fieldnames=fieldnames)
+            jobs = [{"row": row} for row in articles_data_reader]
+            with tqdm(total=len(jobs)) as pbar:
 
-                xml_relative_path = f_file
-                target_path = self.get_target_path(xml_relative_path)
-                logger.info("Processing ID: %s, XML: %s, Package: %s", f_pid, xml_relative_path, target_path)
-                try:
-                    xml_target_path = self.collect_xml(xml_relative_path, target_path)
-                except FileNotFoundError as e:
-                    logger.error('Error collecting XML "%s": %s', xml_relative_path, e)
-                else:
-                    acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(xml_relative_path)
+                def update_bar(pbar=pbar):
+                    pbar.update(1)
 
-                    xml_sps = self.update_xml_file(
-                        xml_target_path, row.values(), pack_name
-                    )
-                    self.save_renditions_manifest(
-                        target_path, dict(renditions))
+                def exception_callback(exception, job, logger=logger):
+                    logger.error(
+                        "Could not import package '%s'. The following exception "
+                        "was raised: '%s'.",
+                        job["row"],
+                        exception,
+                     )
+
+                DoJobsConcurrently(
+                    self.start_collect,
+                    jobs=jobs,
+                    max_workers=int(config.get("THREADPOOL_MAX_WORKERS")),
+                    exception_callback=exception_callback,
+                    update_bar=update_bar,
+                )
 
 
 def main():
