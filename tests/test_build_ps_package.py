@@ -768,7 +768,9 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         with self.xml_target_path.open("w") as xml_file:
             xml_file.write(xml)
 
-        self.builder.optimise_xml_to_web(self.target_path, str(self.xml_target_path))
+        self.builder.optimise_xml_to_web(
+            self.target_path, str(self.xml_target_path), "S0101-01012019000100001"
+        )
 
         target_path_files = [
             filename.name for filename in pathlib.Path(self.target_path).iterdir()
@@ -805,7 +807,9 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         with self.xml_target_path.open("w") as xml_file:
             xml_file.write(xml)
 
-        self.builder.optimise_xml_to_web(self.target_path, str(self.xml_target_path))
+        self.builder.optimise_xml_to_web(
+            self.target_path, str(self.xml_target_path), "S0101-01012019000100001"
+        )
 
         target_path_files = [
             filename.name for filename in pathlib.Path(self.target_path).iterdir()
@@ -835,7 +839,9 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
         with self.xml_target_path.open("w") as xml_file:
             xml_file.write(xml)
 
-        self.builder.optimise_xml_to_web(self.target_path, str(self.xml_target_path))
+        self.builder.optimise_xml_to_web(
+            self.target_path, str(self.xml_target_path), "S0101-01012019000100001"
+        )
 
         target_path_files = [
             filename for filename in pathlib.Path(self.target_path).iterdir()

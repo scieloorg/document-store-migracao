@@ -309,7 +309,7 @@ class BuildPSPackage(object):
         if len(assets_alternatives) > 0:
             self.update_xml_with_alternatives(assets_alternatives, sps_package, xml_target_path)
 
-    def optimise_xml_to_web(self, target_path, xml_target_path):
+    def optimise_xml_to_web(self, target_path, xml_target_path, pid):
         xml_filename = os.path.basename(xml_target_path)
 
         def read_file(filename):
@@ -319,8 +319,8 @@ class BuildPSPackage(object):
                     file_bytes = file_obj.read()
             except OSError as exc:
                 raise packtools.exceptions.SPPackageError(
-                    "Error reading file {} during {} optimization: {}".format(
-                        filename, xml_filename, str(exc)
+                    "[%s] -  Error reading file {} during {} optimization: {}".format(
+                        pid, filename, xml_filename, str(exc)
                     )
                 )
             else:
@@ -335,7 +335,12 @@ class BuildPSPackage(object):
                 xml_filename, os.listdir(target_path), read_file, target_path
             )
         except (etree.XMLSyntaxError, etree.SerialisationError) as exc:
-            logger.error('Error creating XMLWebOptimiser for "%s": %s', str(exc))
+            logger.error(
+                '[%s] - Error creating XMLWebOptimiser for "%s": %s',
+                pid,
+                xml_target_path,
+                str(exc),
+            )
         else:
             optimised_xml = xml_web_optimiser.get_xml_file()
             logger.debug("Saving optimised XML file %s", xml_filename)
@@ -345,7 +350,9 @@ class BuildPSPackage(object):
             for asset_filename, asset_bytes in xml_web_optimiser.get_optimised_assets():
                 if asset_bytes is None:
                     logger.error(
-                        'Error saving image file "%s" referenced in "%s": no file bytes',
+                        '[%s] - Error saving image file "%s" referenced in "%s": '
+                        "no file bytes",
+                        pid,
                         asset_filename,
                         xml_filename,
                     )
@@ -356,7 +363,9 @@ class BuildPSPackage(object):
             for asset_filename, asset_bytes in xml_web_optimiser.get_assets_thumbnails():
                 if asset_bytes is None:
                     logger.error(
-                        'Error saving image file "%s" referenced in "%s": no file bytes',
+                        '[%s] - Error saving image file "%s" referenced in "%s": '
+                        "no file bytes",
+                        pid,
                         asset_filename,
                         xml_filename,
                     )
@@ -464,7 +473,6 @@ class BuildPSPackage(object):
                     )
                     self.save_renditions_manifest(
                         target_path, dict(renditions))
-                    self.optimise_xml_to_web(target_path, xml_target_path)
 
 
 def main():
