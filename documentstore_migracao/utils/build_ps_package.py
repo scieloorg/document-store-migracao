@@ -277,16 +277,22 @@ class BuildPSPackage(object):
         xml.objXML2file(xml_target_path, _xmltree, pretty=True)
 
     def collect_assets(
-        self, target_path, acron, issue_folder, pack_name, sps_package, xml_target_path
+        self,
+        target_path,
+        acron,
+        issue_folder,
+        pack_name,
+        sps_package,
+        xml_target_path,
+        pid,
     ):
         assets_alternatives = {}
         source_path = os.path.join(self.img_folder, acron, issue_folder)
         for img in set(sps_package.assets):
-            logger.debug(
-                'Collection asset "%s" from %s into %s', img, source_path, target_path
-            )
+            img_source_path = os.path.join(source_path, img)
+            logger.debug('Collection asset "%s" to %s', img_source_path, target_path)
             try:
-                shutil.copy(os.path.join(source_path, img), target_path)
+                shutil.copy(img_source_path, target_path)
             except FileNotFoundError:
                 alternatives = self.collect_asset_alternatives(
                     img, source_path, target_path
@@ -295,10 +301,10 @@ class BuildPSPackage(object):
                     assets_alternatives[img] = alternatives
                 else:
                     logger.error(
-                        'Asset "%s" not found in %s to pack "%s"',
-                        img,
-                        source_path,
-                        target_path,
+                        "[%s] - Could not find asset '%s' during packing XML '%s'.",
+                        pid,
+                        img_source_path,
+                        xml_target_path,
                     )
         if len(assets_alternatives) > 0:
             self.update_xml_with_alternatives(assets_alternatives, sps_package, xml_target_path)
@@ -458,14 +464,6 @@ class BuildPSPackage(object):
                     )
                     self.save_renditions_manifest(
                         target_path, dict(renditions))
-                    self.collect_assets(
-                        target_path,
-                        acron,
-                        issue_folder,
-                        pack_name,
-                        xml_sps,
-                        xml_target_path,
-                    )
                     self.optimise_xml_to_web(target_path, xml_target_path)
 
 
