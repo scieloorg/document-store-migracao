@@ -186,7 +186,15 @@ class BuildPSPackage(object):
             target_path, os.path.basename(xml_relative_path))
         return xml_target_path
 
-    def collect_renditions(self, target_path, acron, issue_folder, pack_name, langs):
+    def collect_renditions(
+        self,
+        target_path,
+        acron,
+        issue_folder,
+        pack_name,
+        langs,
+        pid,
+    ):
         source_path = os.path.join(self.pdf_folder, acron, issue_folder)
         renditions = []
         renditions_files = [(pack_name+".pdf", pack_name+".pdf")]
@@ -196,12 +204,14 @@ class BuildPSPackage(object):
                     pack_name + "-" + lang + ".pdf"))
         for source, dest in renditions_files:
             logger.debug('Collecting PDF "%s" for XML "%s.xml"', source, pack_name)
+            file_path = os.path.join(source_path, source)
             try:
-                shutil.copy(os.path.join(source_path, source), target_path)
+                shutil.copy(file_path, target_path)
             except FileNotFoundError:
                 logger.error(
-                    'Error collecting rendition "%s" for XML "%s.xml"',
-                    source,
+                    "[%s] - Could not find rendition '%s' during packing XML '%s.xml'.",
+                    pid,
+                    file_path,
                     pack_name,
                 )
             else:
@@ -446,9 +456,6 @@ class BuildPSPackage(object):
                     xml_sps = self.update_xml_file(
                         xml_target_path, row.values(), pack_name
                     )
-                    renditions = self.collect_renditions(
-                        target_path, acron, issue_folder, pack_name,
-                        xml_sps.languages)
                     self.save_renditions_manifest(
                         target_path, dict(renditions))
                     self.collect_assets(
