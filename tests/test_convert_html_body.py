@@ -73,6 +73,107 @@ class TestConvertHMTLBodySearchAssetNodeBackwards(unittest.TestCase):
         self.assertIsNone(result)
 
 
+class TestBodySectionsPipe(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        self.pipe = self.pipeline.BodySectionsPipe()
+
+    def test_transform_moves_3_sections(self):
+        raw = """<root>
+            <body>
+                <p>
+                    <sec id="s01"/>
+                    <sec id="s02"/>
+                    <sec id="s03"/>
+                </p>
+            </body>
+        </root>
+        """
+        xml = etree.fromstring(raw)
+        raw, xml = self.pipe.transform((raw, xml))
+        self.assertEqual(
+            ["s01", "s02", "s03"],
+            [node.get("id") for node in xml.findall(".//body/sec")]
+        )
+        self.assertEqual(len(xml.findall(".//body/sec")), 3)
+        self.assertEqual(len(xml.find(".//body/p").getchildren()), 0)
+
+    def test_transform_moves_sections_with_subsections(self):
+        raw = """<root>
+            <body>
+                <p>
+                    <sec id="s01">
+                        <sec/>
+                        <sec/>
+                    </sec>
+                    <sec id="s02">
+                        <sec/>
+                    </sec>
+                    <sec id="s03">
+                        <sec/>
+                        <sec/>
+                        <sec/>
+                    </sec>
+                </p>
+            </body>
+        </root>
+        """
+        xml = etree.fromstring(raw)
+        raw, xml = self.pipe.transform((raw, xml))
+        self.assertEqual(
+            ["s01", "s02", "s03"],
+            [node.get("id") for node in xml.findall(".//body/sec")]
+        )
+        self.assertEqual(len(xml.findall(".//body/sec")), 3)
+        self.assertEqual(len(xml.find(".//body/p").getchildren()), 0)
+        self.assertEqual(len(xml.findall(".//body/sec/sec")), 6)
+
+    def test_transform_do_not_move(self):
+        raw = """<root>
+            <body>
+                <sec id="s01">
+                    <sec/>
+                    <sec/>
+                </sec>
+                <sec id="s02">
+                    <sec/>
+                </sec>
+                <sec id="s03">
+                    <sec/>
+                    <sec/>
+                    <sec/>
+                </sec>
+            </body>
+        </root>
+        """
+        xml = etree.fromstring(raw)
+        raw, xml = self.pipe.transform((raw, xml))
+        self.assertEqual(
+            ["s01", "s02", "s03"],
+            [node.get("id") for node in xml.findall(".//body/sec")]
+        )
+        self.assertEqual(len(xml.findall(".//body/sec")), 3)
+        self.assertEqual(len(xml.findall(".//body/sec/sec")), 6)
+
+
+class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = ConvertElementsWhichHaveIdPipeline()
+        self.pipe = self.pipeline.CreateSectionElemetWithSectionTitlePipe()
+
+    def test_transform(self):
+        raw = """<root>
+            <body>
+                <sec id="s01"/><bold>Título</bold>
+            </body>
+        </root>
+        """
+        xml = etree.fromstring(raw)
+        raw, xml = self.pipe.transform((raw, xml))
+        self.assertEqual(xml.findtext(".//sec/title"), "Título")
+        self.assertIsNone(xml.findtext(".//bold"))
+
+
 class TestHTML2SPSPipeline(unittest.TestCase):
     def _transform(self, text, pipe):
         tree = etree.fromstring(text)
@@ -3055,11 +3156,11 @@ class TestCreateSectionElemetWithSectionTitlePipe(unittest.TestCase):
         self.assertIsNone(xml.findtext(".//sec[@sec-type]"))
 
 
-class TestInsertSectionChildrenPipe(unittest.TestCase):
+class TestAddParagraphsToSectionPipe(unittest.TestCase):
 
     def setUp(self):
-        pl = ConvertElementsWhichHaveIdPipeline()
-        self.pipe = pl.InsertSectionChildrenPipe()
+        pl = HTML2SPSPipeline(pid="pid")
+        self.pipe = pl.AddParagraphsToSectionPipe()
 
     def test_transform_inserts_elements_in_sec_until_find_other_sec(self):
         text = """<root>

@@ -277,6 +277,8 @@ class HTML2SPSPipeline(object):
             self.TagsHPipe(),
             self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
+            self.BodySectionsPipe(),
+            self.AddParagraphsToSectionPipe(),
             self.FixBodyChildrenPipe(),
             self.RemovePWhichIsParentOfPPipe(),
             self.RemoveEmptyPAndEmptySectionPipe(),
@@ -1070,7 +1072,12 @@ class HTML2SPSPipeline(object):
                     for p in p_to_delete:
                         _remove_tag(p, True)
                 else:
-                    logger.error("Não removeu referências do body")
+                    logger.error(
+                        "Não removeu referências do body: "
+                        "quantidades de parágrafos (%i) e referências (%i) "
+                        "divergem.",
+                        len(p_to_delete), len(self.super_obj.ref_items)
+                    )
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
@@ -1085,14 +1092,23 @@ class HTML2SPSPipeline(object):
             for comment in comments:
                 name = comment.text.strip()
                 if name == "end-ref":
-                    parents = [comment.getparent(), comment.getparent().getparent()]
+                    parents = [
+                        comment.getparent(), comment.getparent().getparent()]
                     for parent in parents:
-                        if parent.tag == "p":
+                        if parent.tag in ["p", "li"]:
                             parent.set("content-type", "ref-to-delete")
                             break
+                    if parent.get("content-type") is None:
+                        try:
+                            previous = comment.getprevious()
+                            if previous is not None and previous.tag == "li":
+                                previous.set("content-type", "ref-to-delete")
+                        except AttributeError:
+                            pass
+
                 elif header is None and name == "ref":
                     header = comment.getprevious()
-            return header, xml.findall(".//p[@content-type='ref-to-delete']")
+            return header, xml.findall(".//*[@content-type='ref-to-delete']")
 
         def _delete_references_header(self, references_header):
             if references_header is not None:
@@ -1436,6 +1452,67 @@ class HTML2SPSPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
+    class BodySectionsPipe(plumber.Pipe):
+        """
+        Move os elementos `<sec/>` para o topo, para serem filhos de `<body>`.
+        """
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+
+            if xml.find(".//sec") is None:
+                return data
+
+            for child in xml.find(".//body").getchildren():
+                if child.tag == "sec":
+                    continue
+                sections = child.findall(".//sec")
+                if len(sections) == 0:
+                    continue
+
+                new_elements = []
+                for sec in sections:
+                    sec_parent = sec.getparent()
+                    if sec_parent.tag == "sec":
+                        continue
+                    new_elements.append(deepcopy(sec))
+                    sec_parent.remove(sec)
+
+                for new_e in new_elements:
+                    child.addprevious(new_e)
+
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
+    class AddParagraphsToSectionPipe(plumber.Pipe):
+
+        def _create_children(self, node, last):
+            remove_items = []
+            next = node
+            while True:
+                next = next.getnext()
+                if next is None:
+                    break
+                if next.tag == "sec":
+                    break
+                if node is last:
+                    if len(node.getchildren()) > 1:
+                        break
+                node.append(deepcopy(next))
+                remove_items.append(next)
+            for item in remove_items:
+                parent = item.getparent()
+                parent.remove(item)
+
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+            sections = xml.findall(".//body/sec")
+            for sec in sections:
+                self._create_children(sec, sections[-1])
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
+
 
 class DataSanitizationPipeline(object):
     def __init__(self):
@@ -1550,7 +1627,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(),
             self.CreateSectionElemetWithSectionTitlePipe(),
             self.RemoveEmptyPAndEmptySectionPipe(),
-            self.InsertSectionChildrenPipe(),
             self.AssetElementFixPositionPipe(),
             self.CreateDispFormulaPipe(),
             self.AssetElementAddContentPipe(),
@@ -2464,6 +2540,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     parent.remove(next)
 
                 node.append(deepcopy(title))
+                parent.remove(title)
 
         def _sectype(self, node):
             sectype = get_sectype(node.findtext("title") or node.get("id"))
@@ -2474,9 +2551,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if node.tag == "sec":
                 node.set("sec-type", self._sectype(node))
             node.tag = "sec"
-            parent = node.getparent()
-            parent.addprevious(deepcopy(node))
-            parent.remove(node)
 
         def transform(self, data):
             logger.debug("INICIO: %s" % type(self).__name__)
@@ -2485,35 +2559,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 self._create_sec(sec)
             for sec in xml.findall(".//ordinary-sec"):
                 self._create_sec(sec)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class InsertSectionChildrenPipe(plumber.Pipe):
-
-        def _create_children(self, node, last):
-            remove_items = []
-            next = node
-            while True:
-                next = next.getnext()
-                if next is None:
-                    break
-                if next.tag == "sec":
-                    break
-                if node is last:
-                    if len(node.getchildren()) > 1:
-                        break
-                node.append(deepcopy(next))
-                remove_items.append(next)
-            for item in remove_items:
-                parent = item.getparent()
-                parent.remove(item)
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-            sections = xml.findall(".//sec")
-            for sec in sections:
-                self._create_children(sec, sections[-1])
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
