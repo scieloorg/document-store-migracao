@@ -70,7 +70,7 @@ class BuildPSPackage(object):
         try:
             copy.copy_file(src_fs, src_path, dst_fs, dst_path)
 
-            logger.info(
+            logger.debug(
                 "Copy asset: %s to: %s"
                 % (
                     path.join(src_fs.root_path, src_path),
@@ -79,9 +79,9 @@ class BuildPSPackage(object):
             )
 
         except errors.ResourceNotFound as e:
-            logger.info(e)
+            logger.error(e)
 
-    def _update_sps_package_obj(self, sps_package, pack_name, row):
+    def _update_sps_package_obj(self, sps_package, pack_name, row, xml_target_path):
         """
         Atualiza instancia SPS_Package com os dados de artigos do arquivo
         articles_data_reader, um CSV com os seguintes campos:
@@ -111,7 +111,7 @@ class BuildPSPackage(object):
                 logger.debug('Updating document with %s "%s"', date_label, date_value)
                 return _parse_date(date_value)
             else:
-                logger.debug('Missing date_label "%s"', date_label)
+                logger.debug('Missing "%s" into XML file "%s".', date_label, xml_target_path)
 
         _sps_package = deepcopy(sps_package)
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row
@@ -158,7 +158,7 @@ class BuildPSPackage(object):
 
         logger.debug('Updating XML "%s" with CSV info', xml_target_path)
         sps_package = self._update_sps_package_obj(
-            SPS_Package(obj_xmltree), pack_name, row
+            SPS_Package(obj_xmltree), pack_name, row, xml_target_path
         )
 
         # Salva XML com alterações

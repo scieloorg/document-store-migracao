@@ -175,7 +175,7 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
         pack_name = "1806-0013-test-01-01-0001"
         row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,".split(",")
         result = self.builder._update_sps_package_obj(
-            mk_sps_package, pack_name, row
+            mk_sps_package, pack_name, row, pack_name + ".xml"
         )
         self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100001")
 
@@ -188,7 +188,7 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
         row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,".split(",")
         pack_name = "1806-0013-test-01-01-0001"
         result = self.builder._update_sps_package_obj(
-            mk_sps_package, pack_name, row
+            mk_sps_package, pack_name, row, pack_name + ".xml"
         )
         self.assertEqual(result.scielo_pid_v2, "S0101-01012019000100999")
 
@@ -201,7 +201,7 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
         pack_name = "1806-0013-test-01-01-0002"
         mock_getattr.side_effect = [None, None]
         result = self.builder._update_sps_package_obj(
-            mk_sps_package, pack_name, self.rows[1]
+            mk_sps_package, pack_name, self.rows[1], pack_name + ".xml"
         )
         self.assertEqual(result.aop_pid, "S0101-01012019005000001")
 
@@ -213,7 +213,7 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
         )
         pack_name = "1806-0013-test-01-01-0002"
         result = self.builder._update_sps_package_obj(
-            mk_sps_package, pack_name, self.rows[1]
+            mk_sps_package, pack_name, self.rows[1], pack_name + ".xml"
         )
         self.assertEqual(result.aop_pid, "S0101-01012019005000001")
 
@@ -225,7 +225,7 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
         )
         pack_name = "1806-0013-test-01-01-0001"
         result = self.builder._update_sps_package_obj(
-            mk_sps_package, pack_name, self.rows[0]
+            mk_sps_package, pack_name, self.rows[0], pack_name + ".xml"
         )
         self.assertIsNone(result.aop_pid)
 
@@ -243,7 +243,7 @@ class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
         )
         pack_name = "1806-0013-test-01-01-0003"
         result = self.builder._update_sps_package_obj(
-            mk_sps_package, pack_name, self.rows[2]
+            mk_sps_package, pack_name, self.rows[2], pack_name + ".xml"
         )
         mk_sps_package.document_pubdate.assert_not_called()
         mk_sps_package.documents_bundle_pubdate.assert_not_called()
@@ -265,14 +265,14 @@ class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
     def test__update_sps_package_obj_completes_documents_bundle_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("", "", "",)
         result = self.builder._update_sps_package_obj(
-            self.mk_sps_package, self.pack_name, self.rows[1]
+            self.mk_sps_package, self.pack_name, self.rows[1], self.pack_name + ".xml"
         )
         self.assertEqual(result.documents_bundle_pubdate, ("2019", "02", "",))
 
     def test__update_sps_package_obj_does_not_change_documents_bundle_pubdate(self):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "", "",)
         result = self.builder._update_sps_package_obj(
-            self.mk_sps_package, self.pack_name, self.rows[1]
+            self.mk_sps_package, self.pack_name, self.rows[1], self.pack_name + ".xml"
         )
         self.assertEqual(result.documents_bundle_pubdate, ("2012", "", "",))
 
@@ -293,7 +293,7 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "03",)
         self.mk_sps_package.document_pubdate = ("", "", "",)
         result = self.builder._update_sps_package_obj(
-            self.mk_sps_package, self.pack_name, self.rows[1]
+            self.mk_sps_package, self.pack_name, self.rows[1], self.pack_name + ".xml"
         )
         self.assertEqual(result.document_pubdate, ("2019", "01", "15",))
 
@@ -301,7 +301,7 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
         self.mk_sps_package.documents_bundle_pubdate = ("2012", "02", "",)
         self.mk_sps_package.document_pubdate = ("2012", "01", "15",)
         result = self.builder._update_sps_package_obj(
-            self.mk_sps_package, self.pack_name, self.rows[1]
+            self.mk_sps_package, self.pack_name, self.rows[1], self.pack_name + ".xml"
         )
         self.assertEqual(result.document_pubdate, ("2012", "01", "15",))
 
