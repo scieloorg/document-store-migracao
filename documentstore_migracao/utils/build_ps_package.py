@@ -357,9 +357,65 @@ class BuildPSPackage(object):
         issue_folder = os.path.basename(dirname)
         return acron, issue_folder, pack_name
 
-    def run(self):
+    def start_collect(self, row, poison_pill=None):
+        if len(row) == 0:
+            return
 
-        fieldnames = "pid,aop_pid,file_path,date_collection,date_created,date_updated".split(",")
+        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row.values()
+
+        xml_relative_path = f_file
+        target_path = self.get_target_path(xml_relative_path)
+        logger.debug(
+            "Processing ID: %s, XML: %s, Package: %s",
+            f_pid,
+            xml_relative_path,
+            target_path,
+        )
+        try:
+            xml_target_path = self.collect_xml(xml_relative_path, target_path)
+        except FileNotFoundError as e:
+            logger.error(
+                "[%s] Could not find the XML file '%s'.", f_pid, xml_relative_path
+            )
+        else:
+            acron, issue_folder, pack_name = self.get_acron_issuefolder_packname(
+                xml_relative_path
+            )
+
+            try:
+                xml_sps = self.update_xml_file(xml_target_path, row.values(), pack_name)
+            except Exception as exc:
+                logger.error(
+                    "[%s] Could not update xml '%s'. The exception '%s' was raised.",
+                    f_pid,
+                    xml_relative_path,
+                    exc,
+                )
+            else:
+                renditions = self.collect_renditions(
+                    target_path,
+                    acron,
+                    issue_folder,
+                    pack_name,
+                    xml_sps.languages,
+                    f_pid,
+                )
+                self.save_renditions_manifest(target_path, dict(renditions))
+                self.collect_assets(
+                    target_path,
+                    acron,
+                    issue_folder,
+                    pack_name,
+                    xml_sps,
+                    xml_target_path,
+                    f_pid,
+                )
+                self.optimise_xml_to_web(target_path, xml_target_path, f_pid)
+
+    def run(self):
+        fieldnames = (
+            "pid","aop_pid","file_path","date_collection","date_created","date_updated"
+        )
         with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
             # pid, aoppid, file, pubdate, epubdate, update
             articles_data_reader = csv.DictReader(
