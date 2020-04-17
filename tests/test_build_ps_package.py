@@ -612,6 +612,7 @@ class TestBuildSPSPackageCollectAsset(TestBuildSPSPackageBase):
             self.pack_name,
             self.sps_package,
             self.xml_target_path,
+            "S0101-01012019000100001",
         )
         self.assertTrue(
             pathlib.Path(self.target_path, "1234-5678-rctb-45-05-0110-gf01.tiff").exists()
@@ -632,6 +633,7 @@ class TestBuildSPSPackageCollectAsset(TestBuildSPSPackageBase):
             self.pack_name,
             self.sps_package,
             self.xml_target_path,
+            "S0101-01012019000100001",
         )
         for image_file, __ in self.image_files:
             with self.subTest(image_file=image_file):
@@ -652,6 +654,7 @@ class TestBuildSPSPackageCollectAsset(TestBuildSPSPackageBase):
             self.pack_name,
             self.sps_package,
             self.xml_target_path,
+            "S0101-01012019000100001",
         )
         with self.xml_target_path.open() as xmlfile:
             xml_result = etree.parse(
@@ -686,6 +689,7 @@ class TestBuildSPSPackageCollectAsset(TestBuildSPSPackageBase):
             self.pack_name,
             self.sps_package,
             self.xml_target_path,
+            "S0101-01012019000100001",
         )
         for image_file, __ in self.image_files:
             with self.subTest(image_file=image_file):
@@ -706,6 +710,7 @@ class TestBuildSPSPackageCollectAsset(TestBuildSPSPackageBase):
             self.pack_name,
             self.sps_package,
             self.xml_target_path,
+            "S0101-01012019000100001",
         )
         with self.xml_target_path.open() as xmlfile:
             xml_result = etree.parse(
