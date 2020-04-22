@@ -1209,6 +1209,8 @@ class HTML2SPSPipeline(object):
                 node.set("href", href.replace('"', ""))
                 href = node.get("href")
 
+            if not href:
+                return
             if href[0] in ["#", "."] or href.startswith("/img/revistas/"):
                 return
             if "mailto" in href or "@" in href:
