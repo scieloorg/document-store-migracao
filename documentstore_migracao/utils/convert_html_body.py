@@ -245,6 +245,7 @@ class HTML2SPSPipeline(object):
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.SaveRawBodyPipe(super_obj=self),
+            self.FixATagPipe(),
             self.ConvertRemote2LocalPipe(),
             self.RemoveReferencesFromBodyPipe(super_obj=self),
             self.RemoveCommentPipe(),
@@ -320,6 +321,20 @@ class HTML2SPSPipeline(object):
             )
             logger.debug("FIM: %s" % type(self).__name__)
             return data, xml
+
+    class FixATagPipe(plumber.Pipe):
+        def _change_src_to_href(self, node):
+            href = node.attrib.get("href")
+            src = node.attrib.get("src")
+            if not href and src:
+                node.attrib["href"] = node.attrib.pop("src")
+
+        def transform(self, data):
+            logger.debug("INICIO: %s" % type(self).__name__)
+            raw, xml = data
+            _process(xml, "a[@src]", self._change_src_to_href)
+            logger.debug("FIM: %s" % type(self).__name__)
+            return data
 
     class ConvertRemote2LocalPipe(plumber.Pipe):
         def transform(self, data):
