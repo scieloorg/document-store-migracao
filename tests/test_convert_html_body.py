@@ -1978,6 +1978,41 @@ class TestImgPipe(unittest.TestCase):
                 self.assertEqual(len(node.attrib), 1)
 
 
+class TestFixATagPipe(unittest.TestCase):
+    def setUp(self):
+        self.pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
+        self.pipe = self.pipeline.FixATagPipe()
+
+    def test_changes_existing_src_attrib_to_href(self):
+        text = """
+            <root><body>
+                <a href="" src="/img/revista/test/a01tb1.gif">texto 1</a>
+                <a href="/img/revista/test/a01tb2.gif">texto 2</a>
+            </body></root>
+        """
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+
+        nodes = xml.findall(".//a")
+        self.assertEqual(nodes[0].attrib.get("href"), "/img/revista/test/a01tb1.gif")
+        self.assertIsNone(nodes[0].attrib.get("src"))
+        self.assertEqual(nodes[1].attrib.get("href"), "/img/revista/test/a01tb2.gif")
+
+    def test_does_nothing_if_a_href_is_correct(self):
+        text = """
+            <root><body>
+                <a href="/img/revista/test/a01tb1.gif">texto 1</a>
+                <a href="/img/revista/test/a01tb2.gif">texto 2</a>
+            </body></root>
+        """
+        xml = etree.fromstring(text)
+        text, xml = self.pipe.transform((text, xml))
+
+        nodes = xml.findall(".//a")
+        self.assertEqual(nodes[0].attrib.get("href"), "/img/revista/test/a01tb1.gif")
+        self.assertEqual(nodes[1].attrib.get("href"), "/img/revista/test/a01tb2.gif")
+
+
 class TestConvertRemote2LocalPipe(unittest.TestCase):
     def test_transform_imports_html_content(self):
         pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
