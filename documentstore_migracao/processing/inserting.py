@@ -370,7 +370,9 @@ def register_documents_in_documents_bundle(
 
         for issn_type in ("eissn", "pissn", "issn"):
             if document.get(issn_type) is not None:
-                return data_journal[document[issn_type]]
+                issn_value = document[issn_type].strip()
+                if data_journal.get(issn_value) is not None:
+                    return data_journal[issn_value]
 
     def get_bundle_id(issn, document, is_issue):
         """Gera o id do bundle onde o documento será adicionado. Se for um fascículo

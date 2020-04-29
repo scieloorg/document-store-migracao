@@ -260,6 +260,51 @@ class TestProcessingInserting(unittest.TestCase):
 
     @patch("documentstore_migracao.processing.inserting.open")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
+    def test_register_documents_in_documents_bundle_issn_with_spaces(
+        self, mk_read_json_file, mk_open
+    ):
+        documents = [
+            {
+                "pid_v3": "JwqGdMDrdcV3Z7MFHgtKvVk",
+                "acron": "aiss",
+                "eissn": None,
+                "issn": "0036-3634  ",
+                "number": "4",
+                "order": "00349",
+                "pid": "S0021-25712009000400001",
+                "pissn": "0036-3634",
+                "supplement": None,
+                "volume": "45",
+                "year": "2009",
+            },
+        ]
+        journals = [SAMPLES_JOURNAL]
+        mk_read_json_file.return_value = journals
+        mock_file = MagicMock()
+        mock_file.readlines.return_value = [
+            json.dumps(document) for document in documents
+        ]
+        mk_open.return_value.__enter__.return_value = mock_file
+        mk_open.return_value.__exit__.return_value = Mock(return_value=False)
+
+        session_db = Session()
+        manifest = DocumentsBundle(SAMPLE_ISSUES_KERNEL[0])
+        session_db.documents_bundles.add(manifest)
+
+        inserting.register_documents_in_documents_bundle(
+            session_db, "/tmp/documents.json", "/tmp/journals.json"
+        )
+
+        err_filename = os.path.join(
+            config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
+        )
+        self.assertEqual(os.path.isfile(err_filename), True)
+        with open(err_filename) as fp:
+            content = fp.read()
+            self.assertEqual(content, "0036-3634-2009-v45-n4\n")
+
+    @patch("documentstore_migracao.processing.inserting.open")
+    @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
     def test_register_documents_in_documents_bundle_no_issn_in_document(
         self, mk_read_json_file, mk_open
     ):
