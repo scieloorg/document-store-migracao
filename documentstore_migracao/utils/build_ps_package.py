@@ -8,6 +8,7 @@ import textwrap
 import json
 import csv
 import logging
+import pathlib
 from copy import deepcopy
 
 import fs
@@ -166,6 +167,16 @@ class BuildPSPackage(object):
         # Salva XML com alterações
         xml.objXML2file(xml_target_path, sps_package.xmltree, pretty=True)
         return sps_package
+
+    def get_existing_xml_path(self, file_path, f_acron, f_volnum):
+        if file_path.find("\\") >= 0:
+            # It is a Windows Path
+            xml_basename = pathlib.PureWindowsPath(file_path).name
+        else:
+            # It is a Posix Path
+            xml_basename = pathlib.PurePosixPath(file_path).name
+        xml_relative_path = pathlib.Path(f_acron.lower()) / f_volnum / xml_basename
+        return str(xml_relative_path)
 
     def get_target_path(self, xml_relative_path):
         target_folder, ext = os.path.splitext(xml_relative_path)
@@ -388,9 +399,18 @@ class BuildPSPackage(object):
         if len(row) == 0:
             return
 
-        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row.values()
+        (
+            f_pid,
+            f_pid_aop,
+            f_file,
+            f_dt_collection,
+            f_dt_created,
+            f_dt_updated,
+            f_acron,
+            f_volnum
+        ) = row.values()
 
-        xml_relative_path = f_file
+        xml_relative_path = self.get_existing_xml_path(f_file, f_acron, f_volnum)
         target_path = self.get_target_path(xml_relative_path)
         logger.debug(
             "Processing ID: %s, XML: %s, Package: %s",
@@ -441,10 +461,17 @@ class BuildPSPackage(object):
 
     def run(self):
         fieldnames = (
-            "pid","aop_pid","file_path","date_collection","date_created","date_updated"
+            "pid",
+            "aop_pid",
+            "file_path",
+            "date_collection",
+            "date_created",
+            "date_updated",
+            "acron",
+            "volnum",
         )
         with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
-            # pid, aoppid, file, pubdate, epubdate, update
+            # pid, aoppid, file, pubdate, epubdate, update, acron, volnum
             articles_data_reader = csv.DictReader(csvfile, fieldnames=fieldnames)
             jobs = [{"row": row} for row in articles_data_reader]
             with tqdm(total=len(jobs)) as pbar:

@@ -572,6 +572,31 @@ class TestBuildSPSPackageCollectAssetAlternatives(TestBuildSPSPackageBase):
         self.assertEqual(result, [image_file for image_file, __ in self.image_files])
 
 
+class TestBuildSPSPackageGetExistingXMLPath(TestBuildSPSPackageBase):
+    def setUp(self):
+        super().setUp()
+
+    def test_file_path_ok(self):
+        result = self.builder.get_existing_xml_path(
+            "acron/v1n1/document.xml", "ACRON", "v1n1"
+        )
+        self.assertEqual(result, "acron/v1n1/document.xml")
+
+    def test_absolute_posix_file_path(self):
+        result = self.builder.get_existing_xml_path(
+            "/spf/data/xml/acron/v1n1/document.xml", "ACRON", "v1n1",
+        )
+        self.assertEqual(result, "acron/v1n1/document.xml")
+
+    def test_win_file_path(self):
+        result = self.builder.get_existing_xml_path(
+            "\\\\dir1\\dir2\\dir3\\SciELO\\serial\\acron\\2009nahead\\xml\\document.xml",
+            "ACRON",
+            "v1n1",
+        )
+        self.assertEqual(result, "acron/v1n1/document.xml")
+
+
 class TestBuildSPSPackageCollectAsset(TestBuildSPSPackageBase):
     def setUp(self):
         super().setUp()
