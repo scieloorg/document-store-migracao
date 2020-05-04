@@ -280,32 +280,72 @@ class BuildPSPackage(object):
 
     def collect_assets(
         self,
-        target_path,
-        acron,
-        issue_folder,
-        pack_name,
-        sps_package,
-        xml_target_path,
-        pid,
-    ):
+        target_path: str,
+        acron: str,
+        issue_folder: str,
+        pack_name: str,
+        sps_package: SPS_Package,
+        xml_target_path: str,
+        pid: str,
+    ) -> None:
+        """Obtém os ativos digitais que estão vinculados ao XML.
+
+        Os ativos digitais capturados incluem também os matériais
+        suplementares. Alguns destes materiais estão no formato pdf e portanto
+        serão buscados no ponto de montagem específico para tal.
+
+        Por medida de resiliência os arquivos suplementares são buscados nos
+        diretórios de imagens e pdfs.
+
+        Params:
+            target_path (str): Pasta destino para onde o asset será copiado
+            acron (str): Acrônimo do periódico
+            issue_folder (str): Nome do diretório relacionado com a issue
+            pack_name (str): Nome do pacote
+            sps_package (SPS_Package): Instância de SPS_Package iniciada com
+                artigo processado
+            xml_target_path (str): Caminho final do XML processado
+            pid (str): PID do XML processado
+        Returns:
+            None
+        """
+
+        def get_source_directory(asset_name: str) -> str:
+            """Retorna o caminho para o diretório onde o aquivo foi procurado.
+
+            Por causa de detalhes no contexto de uso desta função, o retorno
+            sempre será um caminho válido por mais que o arquivo não seja localizado,
+            tal comportamento é necessário por causa dos arquivos chamados de
+            alternativos."""
+            if asset_name.endswith(".pdf"):
+                for path in [
+                    os.path.join(self.pdf_folder, acron, issue_folder),
+                    os.path.join(self.img_folder, acron, issue_folder),
+                ]:
+                    if os.path.exists(os.path.join(path, asset_name)):
+                        return path
+            return os.path.join(self.img_folder, acron, issue_folder)
+
         assets_alternatives = {}
-        source_path = os.path.join(self.img_folder, acron, issue_folder)
-        for img in set(sps_package.assets):
-            img_source_path = os.path.join(source_path, img)
-            logger.debug('Collection asset "%s" to %s', img_source_path, target_path)
+
+        for asset_name in set(sps_package.assets):
+            source_path = get_source_directory(asset_name)
+            asset_source_path = os.path.join(source_path, asset_name)
+            logger.debug('Collection asset "%s" to %s', asset_source_path, target_path)
+
             try:
-                shutil.copy(img_source_path, target_path)
+                shutil.copy(asset_source_path, target_path)
             except FileNotFoundError:
                 alternatives = self.collect_asset_alternatives(
-                    img, source_path, target_path
+                    asset_name, source_path, target_path
                 )
                 if len(alternatives) > 0:
-                    assets_alternatives[img] = alternatives
+                    assets_alternatives[asset_name] = alternatives
                 else:
                     logger.error(
                         "[%s] - Could not find asset '%s' during packing XML '%s'.",
                         pid,
-                        img_source_path,
+                        asset_source_path,
                         xml_target_path,
                     )
         if len(assets_alternatives) > 0:
