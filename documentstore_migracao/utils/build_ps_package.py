@@ -117,7 +117,7 @@ class BuildPSPackage(object):
                 logger.debug('Missing "%s" into XML file "%s".', date_label, xml_target_path)
 
         _sps_package = deepcopy(sps_package)
-        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated = row
+        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated, __, __ = row
         # Verificar se tem PID
         if _has_attr_to_set("scielo_pid_v2"):
             if f_pid:
