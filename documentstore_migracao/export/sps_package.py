@@ -1,6 +1,7 @@
 import os
 import itertools
 import logging
+from typing import Tuple
 
 from copy import deepcopy
 from lxml import etree
@@ -468,22 +469,26 @@ class SPS_Package:
                 new_node.text = val
                 pubdate_node.append(new_node)
         existing_pubdate = self.article_meta.find("pub-date")
-        existing_pubdate.addnext(pubdate_node)
+
+        if existing_pubdate is not None:
+            existing_pubdate.addnext(pubdate_node)
 
     @property
-    def document_pubdate(self):
+    def document_pubdate(self) -> Tuple[str, str, str]:
         xpaths = (
             'pub-date[@pub-type="epub"]',
             'pub-date[@date-type="pub"]',
             'pub-date',
         )
         pub_date = self._match_pubdate(xpaths)
-        is_collection_pubdate = (
+        pub_date_or_empty = ("", "", "")
+
+        if pub_date is not None and not (
             pub_date.get("date-type", pub_date.get("pub-type")) == "collection"
-        )
-        if not is_collection_pubdate:
-            return parse_date(pub_date)
-        return ("", "", "")
+        ):
+            pub_date_or_empty = parse_date(pub_date)
+
+        return pub_date_or_empty
 
     @document_pubdate.setter
     def document_pubdate(self, value):
