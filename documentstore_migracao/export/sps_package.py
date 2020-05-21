@@ -76,8 +76,8 @@ class SPS_Package:
     @xmltree.setter
     def xmltree(self, value):
         try:
-            etree.tostring(value)
-        except TypeError:
+            etree.tostring(value, encoding="utf-8")
+        except (TypeError, etree.SerialisationError):
             raise
         else:
             self._xmltree = value
