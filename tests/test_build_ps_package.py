@@ -194,7 +194,7 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_updates_pid_if_it_is_none(self, mock_getattr):
         mk_sps_package = mock.Mock(spec=SPS_Package)
-        mock_getattr.side_effect = [None, None]
+        mock_getattr.side_effect = [None, None, None]
         pack_name = "1806-0013-test-01-01-0001"
         row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,en,".split(",")
         result = self.builder._update_sps_package_obj(
@@ -206,7 +206,7 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
     def test__update_sps_package_obj_does_not_update_pid_if_it_is_not_none(self, mock_getattr):
         mk_sps_package = mock.Mock(
             spec=SPS_Package, scielo_pid_v2="S0101-01012019000100999")
-        mock_getattr.side_effect = ["S0101-01012019000100999", None]
+        mock_getattr.side_effect = ["S0101-01012019000100999", None, None]
 
         row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,pt,".split(",")
         pack_name = "1806-0013-test-01-01-0001"
@@ -222,7 +222,7 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
     def test__update_sps_package_obj_updates_aop_pid_if_pid_is_none(self, mock_getattr):
         mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
         pack_name = "1806-0013-test-01-01-0002"
-        mock_getattr.side_effect = [None, None]
+        mock_getattr.side_effect = [None, None, None]
         result = self.builder._update_sps_package_obj(
             mk_sps_package, pack_name, self.rows[1], pack_name + ".xml"
         )
@@ -230,7 +230,7 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
 
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_updates_aop_pid_if_pid_is_found(self, mock_getattr):
-        mock_getattr.side_effect = ["S0101-01012019000100002", None]
+        mock_getattr.side_effect = ["S0101-01012019000100002", None, None]
         mk_sps_package = mock.Mock(
             spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
         )
@@ -242,7 +242,7 @@ class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
 
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_does_not_update_aop_pid_if_it_is_not_aop(self, mock_getattr):
-        mock_getattr.side_effect = ["S0101-01012019000100002", None]
+        mock_getattr.side_effect = ["S0101-01012019000100002", None, None]
         mk_sps_package = mock.Mock(
             spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
         )
@@ -257,7 +257,7 @@ class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
 
     @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
     def test__update_sps_package_obj_does_not_update_pubdate_if_it_is_aop(self, mock_getattr):
-        mock_getattr.side_effect = ["S0101-01012019000100003", None]
+        mock_getattr.side_effect = ["S0101-01012019000100003", None, None]
         mk_sps_package = mock.Mock(
             spec=SPS_Package,
             aop_pid=None,
@@ -317,7 +317,8 @@ class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
             aop_pid=None,
             scielo_pid_v2="S0101-01012019000100002",
             is_ahead_of_print=False,
-            document_pubdate=("2012", "01", "15",)
+            document_pubdate=("2012", "01", "15",),
+            original_language="es",
         )
 
     def test__update_sps_package_obj_completes_documents_bundle_pubdate(self):
@@ -345,6 +346,7 @@ class TestBuildSPSPackageDocumentInRegularIssuePubDate(TestBuildSPSPackageBase):
             aop_pid=None,
             scielo_pid_v2="S0101-01012019000100002",
             is_ahead_of_print=False,
+            original_language="es",
         )
 
     def test__update_sps_package_obj_completes_document_pubdate(self):
