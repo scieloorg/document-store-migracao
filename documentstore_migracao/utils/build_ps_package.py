@@ -94,6 +94,9 @@ class BuildPSPackage(object):
             - 'DATA (COLLECTION)'
             - 'DATA PRIMEIRO PROCESSAMENTO'
             - 'DATA DO ULTIMO PROCESSAMENTO'
+            - 'ACRON'
+            - 'VOLNUM'
+            - 'LANG'
         """
         def _has_attr_to_set(attr, min_attr_len=1):
             _sps_package_attr = getattr(_sps_package, attr) or ""
@@ -117,7 +120,7 @@ class BuildPSPackage(object):
                 logger.debug('Missing "%s" into XML file "%s".', date_label, xml_target_path)
 
         _sps_package = deepcopy(sps_package)
-        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated, __, __ = row
+        f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated, __, __, f_lang = row
         # Verificar se tem PID
         if _has_attr_to_set("scielo_pid_v2"):
             if f_pid:
@@ -447,7 +450,8 @@ class BuildPSPackage(object):
             f_dt_created,
             f_dt_updated,
             f_acron,
-            f_volnum
+            f_volnum,
+            f_lang,
         ) = row.values()
 
         xml_relative_path = self.get_existing_xml_path(f_file, f_acron, f_volnum)
@@ -509,6 +513,7 @@ class BuildPSPackage(object):
             "date_updated",
             "acron",
             "volnum",
+            "lang",
         )
         with open(self.articles_csvfile, encoding="utf-8", errors="replace") as csvfile:
             # pid, aoppid, file, pubdate, epubdate, update, acron, volnum

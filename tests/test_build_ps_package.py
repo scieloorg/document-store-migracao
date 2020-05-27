@@ -20,6 +20,9 @@ CSV_FIELDNAMES = (
     "DATA (COLLECTION)",
     "DATA PRIMEIRO PROCESSAMENTO",
     "DATA DO ULTIMO PROCESSAMENTO",
+    "ACRON",
+    "VOLNUM",
+    "LANG",
 )
 
 
@@ -39,9 +42,9 @@ def create_xml(xml_file_path, article_meta_xml, sps_version="sps-1.9"):
 
 def fake_csv():
     return io.StringIO(
-        "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,\n"
-        "S0101-01012019000100002,S0101-01012019005000001,test/v1n1/1806-0013-test-01-01-0002.xml,20190200,20190115,20190507\n"
-        "S0101-01012019000100003,,test/v1n1/1806-0013-test-01-01-0003.xml,,,\n"
+        "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,pt\n"
+        "S0101-01012019000100002,S0101-01012019005000001,test/v1n1/1806-0013-test-01-01-0002.xml,20190200,20190115,20190507,test,v1n1,es\n"
+        "S0101-01012019000100003,,test/v1n1/1806-0013-test-01-01-0003.xml,,,test,v1n1,en\n"
     )
 
 
@@ -63,7 +66,8 @@ class TestBuildSPSPackageBase(TestCase):
              '',
              '',
              'test',
-             'v1n1'],
+             'v1n1',
+             'pt'],
             ['S0101-01012019000100002',
              'S0101-01012019005000001',
              'test/v1n1/1806-0013-test-01-01-0002.xml',
@@ -71,7 +75,8 @@ class TestBuildSPSPackageBase(TestCase):
              '20190115',
              '20190507',
              'test',
-             'v1n1'],
+             'v1n1',
+             'es'],
             ['S0101-01012019000100003',
              '',
              'test/v1n1/1806-0013-test-01-01-0003.xml',
@@ -79,7 +84,8 @@ class TestBuildSPSPackageBase(TestCase):
              '',
              '',
              'test',
-             'v1n1'],
+             'v1n1',
+             'en'],
         ]
         self.xml = """<article xmlns:xlink="http://www.w3.org/1999/xlink"><body>
         <sec>
@@ -190,7 +196,7 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
         mk_sps_package = mock.Mock(spec=SPS_Package)
         mock_getattr.side_effect = [None, None]
         pack_name = "1806-0013-test-01-01-0001"
-        row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,".split(",")
+        row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,en,".split(",")
         result = self.builder._update_sps_package_obj(
             mk_sps_package, pack_name, row, pack_name + ".xml"
         )
@@ -202,7 +208,7 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
             spec=SPS_Package, scielo_pid_v2="S0101-01012019000100999")
         mock_getattr.side_effect = ["S0101-01012019000100999", None]
 
-        row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,".split(",")
+        row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,pt,".split(",")
         pack_name = "1806-0013-test-01-01-0001"
         result = self.builder._update_sps_package_obj(
             mk_sps_package, pack_name, row, pack_name + ".xml"
