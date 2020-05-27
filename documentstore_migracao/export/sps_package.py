@@ -558,6 +558,20 @@ class SPS_Package:
         )
 
     @property
+    def original_language(self):
+        """The language of the main document."""
+        article_tag = self.xmltree.xpath('/article[@xml:lang]')
+        if article_tag:
+            return article_tag[0].attrib["{http://www.w3.org/XML/1998/namespace}lang"]
+
+    @original_language.setter
+    def original_language(self, value):
+        """Set language of the main document."""
+        article_tag = self.xmltree.xpath('/article')
+        if article_tag:
+            article_tag[0].set("{http://www.w3.org/XML/1998/namespace}lang", value)
+
+    @property
     def media_prefix(self):
 
         if not self.scielo_pid_v3:

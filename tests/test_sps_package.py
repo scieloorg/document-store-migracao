@@ -1801,6 +1801,35 @@ class TestCompletePubDate(unittest.TestCase):
         self.assertEqual(xml_sps.documents_bundle_pubdate, ("1997", "03", ""))
 
 
+class TestOriginalLanguage(unittest.TestCase):
+    def setUp(self):
+        self.xml = """{article_tag}<article-meta>
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v2">S0074-02761962000200006</article-id>
+        </article-meta></article>"""
+
+    def test_returns_none_if_lang_attr_not_set(self):
+        article_tag = '<article specific-use="sps-1.9">'
+        xml_txt = self.xml.format(article_tag=article_tag)
+        xmltree = etree.fromstring(xml_txt)
+        xml_sps = SPS_Package(xmltree)
+        self.assertIsNone(xml_sps.original_language)
+
+    def test_returns_lang_if_it_is_set(self):
+        article_tag = '<article specific-use="sps-1.9" xml:lang="pt">'
+        xml_txt = self.xml.format(article_tag=article_tag)
+        xmltree = etree.fromstring(xml_txt)
+        xml_sps = SPS_Package(xmltree)
+        self.assertEqual(xml_sps.original_language, "pt")
+
+    def test_sets_value(self):
+        article_tag = '<article specific-use="sps-1.9">'
+        xml_txt = self.xml.format(article_tag=article_tag)
+        xmltree = etree.fromstring(xml_txt)
+        xml_sps = SPS_Package(xmltree)
+        xml_sps.original_language = "en"
+        self.assertEqual(xml_sps.original_language, "en")
+
+
 class TestMoveAppendixFromBodyToBack(unittest.TestCase):
     def setUp(self):
         self.xml = """<article specific-use="sps-1.9" xmlns:xlink="http://www.w3.org/1999/xlink">
