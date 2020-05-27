@@ -272,6 +272,41 @@ class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
         mk_sps_package.documents_bundle_pubdate.assert_not_called()
 
 
+class TestBuildSPSPackageLang(TestBuildSPSPackageBase):
+
+    def test__update_sps_package_obj_does_not_update_lang_if_it_is_set(self):
+        mk_sps_package = mock.Mock(
+            spec=SPS_Package,
+            aop_pid=None,
+            scielo_pid_v2="S0101-01012019000100003",
+            is_ahead_of_print=False,
+            original_language="pt",
+            documents_bundle_pubdate=("2012", "01", "15",),
+            document_pubdate=("", "", "",),
+        )
+        pack_name = "1806-0013-test-01-01-0003"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[2], pack_name + ".xml"
+        )
+        self.assertEqual(result.original_language, "pt")
+
+    def test__update_sps_package_obj_updates_lang_if_it_is_not_set(self):
+        mk_sps_package = mock.Mock(
+            spec=SPS_Package,
+            aop_pid=None,
+            scielo_pid_v2="S0101-01012019000100003",
+            is_ahead_of_print=False,
+            original_language=None,
+            documents_bundle_pubdate=("2012", "01", "15",),
+            document_pubdate=("", "", "",),
+        )
+        pack_name = "1806-0013-test-01-01-0003"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[2], pack_name + ".xml"
+        )
+        self.assertEqual(result.original_language, "en")
+
+
 class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
 
     def setUp(self):
