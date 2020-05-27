@@ -136,6 +136,13 @@ class BuildPSPackage(object):
             else:
                 logger.debug('No AOP PID for document PID "%s"', f_pid)
 
+        if _has_attr_to_set("original_language"):
+            if f_lang:
+                logger.debug('Updating document "%s" with original language "%s"', f_pid, f_lang)
+                _sps_package.original_language = f_lang
+            else:
+                logger.debug('No original language for document PID "%s"', f_pid)
+
         # Verificar data de publicação e da coleção
         if not _sps_package.is_ahead_of_print:
             if _has_attr_to_set("documents_bundle_pubdate", 4):
