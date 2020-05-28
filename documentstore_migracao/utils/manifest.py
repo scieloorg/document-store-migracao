@@ -21,7 +21,7 @@ def get_document_manifest(
         raise ValueError("A creation date is required") from None
 
     _creation_date = parse_date(
-        "-".join([date_part for date_part in date if date_part])
+        "-".join([date_part for date_part in date])
     )
 
     _renditions = []
