@@ -84,7 +84,7 @@ class BuildPSPackage(object):
         except errors.ResourceNotFound as e:
             logger.error(e)
 
-    def _update_sps_package_obj(self, sps_package, pack_name, row, xml_target_path):
+    def _update_sps_package_obj(self, sps_package, pack_name, row, xml_target_path) -> SPS_Package:
         """
         Atualiza instancia SPS_Package com os dados de artigos do arquivo
         articles_data_reader, um CSV com os seguintes campos:
@@ -143,22 +143,35 @@ class BuildPSPackage(object):
             else:
                 logger.debug('No original language for document PID "%s"', f_pid)
 
-        # Verificar data de publicação e da coleção
-        if not _sps_package.is_ahead_of_print:
-            if _has_attr_to_set("documents_bundle_pubdate", 4):
-                dt_collection = _get_date_value("collection date", f_dt_collection)
-                if dt_collection:
-                    _sps_package.documents_bundle_pubdate = dt_collection
+        if _sps_package.is_ahead_of_print:
+            return _sps_package
 
-            if _has_attr_to_set("document_pubdate", 8):
-                if len(_sps_package.documents_bundle_pubdate[0]) > 0:
+        collection_pubdate = _sps_package.documents_bundle_pubdate or ""
+        collection_pubdate_from_csv = f_dt_collection or ""
+        document_pubdate = _sps_package.document_pubdate or ""
+        document_pubdate_from_csv = f_dt_created or f_dt_updated or ""
 
-                    date_value = _get_date_value("first date", f_dt_created)
-                    if not date_value:
-                        date_value = _get_date_value(
-                            "update date", f_dt_updated)
-                    if date_value:
-                        _sps_package.document_pubdate = date_value
+        # Atualiza a data da coleção
+        if (
+            len(collection_pubdate) > 0
+            and len(collection_pubdate[0]) < 4
+            and len(collection_pubdate_from_csv) >= 4
+        ):
+            _sps_package.documents_bundle_pubdate = _parse_date(f_dt_collection)
+            logger.debug(
+                "[%s] Updating document collection date with '%s'.",
+                f_pid,
+                _parse_date(f_dt_collection),
+            )
+
+        # Atualiza a data de publicação do documento
+        if any(document_pubdate) is False and len(document_pubdate_from_csv) >= 4:
+            _sps_package.document_pubdate = _parse_date(document_pubdate_from_csv)
+            logger.debug(
+                "[%s] Updating document publication date with '%s'.",
+                f_pid,
+                _parse_date(document_pubdate_from_csv),
+            )
 
         return _sps_package
 

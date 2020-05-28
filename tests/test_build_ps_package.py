@@ -307,6 +307,116 @@ class TestBuildSPSPackageLang(TestBuildSPSPackageBase):
         self.assertEqual(result.original_language, "en")
 
 
+class TestBuildSPSPackageUpdateDates(TestBuildSPSPackageBase):
+
+    def setUp(self):
+        super(TestBuildSPSPackageUpdateDates, self).setUp()
+        self.sample_xml_string = b"""<?xml version='1.0' encoding='utf-8'?>
+            <!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="en" article-type="research-article">
+                <front>
+                    <article-meta><volume>10</volume><issue>3</issue></article-meta>
+                </front>
+            </article>"""
+        _, _, _, self.collection_date, self.created_date, self.updated_date, *last = self.rows[1]
+
+        self.xmltree = etree.fromstring(self.sample_xml_string)
+        self.result_sps_package = self.builder._update_sps_package_obj(
+            SPS_Package(self.xmltree), "random-package-name", self.rows[1], "random-package-name.xml"
+        )
+
+    def test_update_collection_pubdate_if_it_is_empty(self):
+        self.assertIsNotNone(self.result_sps_package.xmltree.find(".//pub-date[@date-type='collection']"))
+        self.assertEqual(self.result_sps_package.xmltree.find(".//pub-date[@date-type='collection']/year").text, self.collection_date[0:4])
+        self.assertEqual(self.result_sps_package.xmltree.find(".//pub-date[@date-type='collection']/month").text, self.collection_date[4:6])
+        self.assertIsNone(self.result_sps_package.xmltree.find(".//pub-date[@date-type='collection']/day"))
+
+    def test_update_document_pubdate_if_it_is_empty(self):
+        self.assertIsNotNone(self.result_sps_package.xmltree.find(".//pub-date[@date-type='pub']"))
+        self.assertEqual(self.result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/year").text, self.created_date[0:4])
+        self.assertEqual(self.result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/month").text, self.created_date[4:6])
+        self.assertEqual(self.result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/day").text, self.created_date[6:])
+
+    def test_collection_date_should_not_be_updated_if_some_part_already_exists_into_xml(self):
+
+        xmltree = etree.fromstring(b"""<?xml version='1.0' encoding='utf-8'?>
+            <!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="en" article-type="research-article">
+                <front>
+                    <article-meta>
+                    <volume>10</volume><issue>3</issue>
+                    <pub-date publication-format="electronic" date-type="collection"><day>20</day><month>01</month><year>2020</year></pub-date>
+                    </article-meta>
+                </front>
+            </article>""")
+
+        result_sps_package = self.builder._update_sps_package_obj(
+            SPS_Package(xmltree), "random-package-name", self.rows[1], "random-package-name.xml"
+        )
+
+        self.assertIsNotNone(result_sps_package.xmltree.find(".//pub-date[@date-type='collection']"))
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='collection']/year").text, "2020")
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='collection']/month").text, "01")
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='collection']/day").text, "20")
+
+    def test_document_date_should_not_be_updated_if_it_already_exists_into_xml(self):
+
+        xmltree = etree.fromstring(b"""<?xml version='1.0' encoding='utf-8'?>
+            <!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="en" article-type="research-article">
+                <front>
+                    <article-meta>
+                    <volume>10</volume><issue>3</issue>
+                    <pub-date publication-format="electronic" date-type="pub"><day>99</day><month>99</month><year>2099</year></pub-date>
+                    </article-meta>
+                </front>
+            </article>""")
+
+        result_sps_package = self.builder._update_sps_package_obj(
+            SPS_Package(xmltree), "random-package-name", self.rows[1], "random-package-name.xml"
+        )
+
+        self.assertIsNotNone(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']"))
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/year").text, "2099")
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/month").text, "99")
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/day").text, "99")
+
+    def test_document_date_should_not_be_updated_if_at_least_one_part_already_exists_into_xml(self):
+
+        xmltree = etree.fromstring(b"""<?xml version='1.0' encoding='utf-8'?>
+            <!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" dtd-version="1.1" xml:lang="en" article-type="research-article">
+                <front>
+                    <article-meta>
+                    <volume>10</volume><issue>3</issue>
+                    <pub-date publication-format="electronic" date-type="pub"><year>2099</year></pub-date>
+                    </article-meta>
+                </front>
+            </article>""")
+
+        result_sps_package = self.builder._update_sps_package_obj(
+            SPS_Package(xmltree), "random-package-name", self.rows[1], "random-package-name.xml"
+        )
+
+        self.assertIsNotNone(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']"))
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/year").text, "2099")
+        self.assertIsNone(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/month"))
+        self.assertIsNone(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/day"))
+
+    def test_document_date_should_be_updated_with_updated_csv_date_if_created_csv_date_does_not_exists(self):
+        row = self.rows[1]
+        row[4] = None
+
+        result_sps_package = self.builder._update_sps_package_obj(
+            SPS_Package(self.xmltree), "random-package-name", row, "random-package-name.xml"
+        )
+
+        self.assertIsNotNone(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']"))
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/year").text, self.updated_date[0:4])
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/month").text, self.updated_date[4:6])
+        self.assertEqual(result_sps_package.xmltree.find(".//pub-date[@date-type='pub']/day").text, self.updated_date[6:])
+
+
 class TestBuildSPSPackageRollingPassDocumentPubDate(TestBuildSPSPackageBase):
 
     def setUp(self):
