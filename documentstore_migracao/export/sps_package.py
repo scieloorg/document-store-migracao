@@ -454,7 +454,7 @@ class SPS_Package:
             if pubdate is not None:
                 return pubdate
 
-    def _set_pub_date(self, attrs_by_version, value):
+    def _set_pub_date(self, attrs_by_version: tuple, value: tuple) -> None:
         sps_version = self.xmltree.xpath('/article/@specific-use')
         if len(sps_version) > 0 and attrs_by_version.get(sps_version[0]) is not None:
             attrs = attrs_by_version[sps_version[0]]
@@ -468,10 +468,22 @@ class SPS_Package:
                 new_node = etree.Element(tag)
                 new_node.text = val
                 pubdate_node.append(new_node)
-        existing_pubdate = self.article_meta.find("pub-date")
 
-        if existing_pubdate is not None:
-            existing_pubdate.addnext(pubdate_node)
+        attr_query = " and ".join(
+            [f"@{k}='{v}'" for k, v in attrs]
+        )  # -> "@pub-type='epub' and @attr='value'"
+        already_existing_nodes = self.article_meta.xpath(f"pub-date[{attr_query}]")
+
+        if len(already_existing_nodes) == 0:
+            self.article_meta.append(pubdate_node)
+            return None
+
+        for pubdate_element in already_existing_nodes:
+            parent = pubdate_element.getparent()
+            index = parent.index(pubdate_element)
+            parent.insert(index, pubdate_node)
+            parent.remove(pubdate_element)
+            
 
     @property
     def document_pubdate(self) -> Tuple[str, str, str]:
