@@ -34,6 +34,23 @@ class TestXyloseDateConverter(unittest.TestCase):
     def test_only_year_case(self):
         self.assertEqual("2019-01-01T00:00:00.000000Z", parse_date("2019"))
 
+    def test_parse_date_should_convert_month_locales_abbreviated_name(self):
+        self.assertEqual("2020-06-03T00:00:00.000000Z", parse_date("2020-Jun-03"))
+
+    def test_parse_date_should_convert_month_locales_full_name(self):
+        self.assertEqual("2020-07-03T00:00:00.000000Z", parse_date("2020-July-03"))
+
+    def test_parse_date_should_use_the_last_month_when_it_is_a_range_of_months(self):
+        self.assertEqual("2020-12-01T00:00:00.000000Z", parse_date("2020-Oct-Dec"))
+
+    def test_date_parse_should_discart_invalid_day(self):
+        self.assertEqual("2020-06-01T00:00:00.000000Z", parse_date("2020-06-40"))
+
+    def test_date_parse_should_use_only_the_year_if_month_is_invalid_and_day_is_not(
+        self,
+    ):
+        self.assertEqual("2020-01-01T00:00:00.000000Z", parse_date("2020-30-03"))
+
 
 class TestXyloseJournalConverter(unittest.TestCase):
     def setUp(self):
