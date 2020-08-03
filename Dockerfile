@@ -3,6 +3,8 @@ FROM python:3.7-alpine
  COPY . /app
 RUN apk add --no-cache --virtual .build-deps \
         make gcc libxml2-dev libxslt-dev musl-dev g++ git openjdk8 \
+        jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev \
+        tiff-dev tk-dev tcl-dev \
     && apk add libxml2 libxslt \
     && pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /app/requirements.txt \
@@ -14,4 +16,4 @@ ENV PYTHONUNBUFFERED 1
  RUN chown -R nobody:nogroup /app
 USER nobody
 
- CMD ["/bin/sh"]  
+ CMD ["/bin/sh"]
