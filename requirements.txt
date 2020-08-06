@@ -69,5 +69,5 @@ SQLAlchemy==1.3.13
 click==7.1.1
 construct==2.10.56
 ioisis==0.3.0
-JPype1==0.7.2
+JPype1==1.0.1
 ujson==2.0.3
