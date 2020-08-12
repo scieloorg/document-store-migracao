@@ -1,4 +1,5 @@
-"""  """
+# coding: utf-8
+
 import logging
 import argparse
 
@@ -151,6 +152,15 @@ def migrate_articlemeta_parser(sargs):
         metavar="",
         help=f"""Entry path to import SPS packages. The default path
         is: {config.get("SPS_PKG_PATH")}""",
+    )
+
+    import_parser.add_argument(
+        "--xc_pid_database_dsn",
+        default=config.get("XC_PID_DATABASE_DSN"),
+        dest="xc_pid_database_dsn",
+        required=True,
+        help="""Adicionar o DSN para checagem do PID V3 na base de dados do XC, \
+        formatos de DSN suportados: https://docs.sqlalchemy.org/en/13/core/engines.html"""
     )
 
     import_parser.add_argument("--output", required=True, help="The output file path")
