@@ -324,10 +324,13 @@ def import_documents_to_kernel(session_db, xc_database_engine, storage, folder, 
                 exception,
             )
 
+        # O param executor por padrão é concurrent.futures.ThreadPoolExecutor.
+        # É possível e ganhamos velocidade quando utilizamos concurrent.futures.Executor,
+        # porém é necessário saber dos por menores que envolve essa alteração, é possível
+        # verificar isso em: https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor
         DoJobsConcurrently(
             register_document,
             jobs=jobs,
-            executor=concurrent.futures.ProcessPoolExecutor,
             max_workers=int(config.get("PROCESSPOOL_MAX_WORKERS")),
             success_callback=write_result_to_file,
             exception_callback=exception_callback,
