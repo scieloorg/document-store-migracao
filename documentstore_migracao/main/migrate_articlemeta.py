@@ -19,6 +19,8 @@ from documentstore_migracao.processing import (
 from documentstore_migracao.object_store import minio
 from documentstore import adapters as ds_adapters
 
+from sqlalchemy import create_engine
+
 
 logger = logging.getLogger(__name__)
 
@@ -311,6 +313,8 @@ def migrate_articlemeta_parser(sargs):
         mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
         DB_Session = ds_adapters.Session.partial(mongo)
 
+        xc_database_engine = create_engine(args.xc_pid_database_dsn)
+
         storage = minio.MinioStorage(
             minio_host=args.minio_host,
             minio_access_key=args.minio_access_key,
@@ -319,7 +323,8 @@ def migrate_articlemeta_parser(sargs):
         )
 
         inserting.import_documents_to_kernel(
-            session_db=DB_Session(), storage=storage, folder=args.folder, output_path=args.output
+            session_db=DB_Session(), xc_database_engine=xc_database_engine, storage=storage,
+            folder=args.folder, output_path=args.output
         )
 
     elif args.command == "link_documents_issues":

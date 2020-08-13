@@ -14,12 +14,14 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def article_xml_constructor(file_xml_path: str, dest_path: str, in_place: bool) -> None:
+def article_xml_constructor(file_xml_path: str, dest_path: str, xc_database_engine, in_place: bool) -> None:
 
     logger.debug("file: %s", file_xml_path)
 
     parsed_xml = xml.loadToXML(file_xml_path)
     xml_sps = SPS_Package(parsed_xml)
+
+    # VERIFICA A EXISTÊNCIA DO PID V3 NO XC
 
     # CONSTROI O SCIELO-id NO XML CONVERTIDO
     xml_sps.create_scielo_id()
