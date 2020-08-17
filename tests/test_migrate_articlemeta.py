@@ -71,12 +71,12 @@ class TestMigrateProcess(unittest.TestCase):
                 "minio123",
                 "--output",
                 "/tmp/docs.json",
-                "--xc_pid_database_dsn",
+                "--pid_database_dsn",
                 "sqlite:///pid_manager_database.db"
             ]
         )
         mk_import_documents_to_kernel.assert_called_once_with(
-            session_db=ANY, xc_database_engine=ANY, storage=ANY, folder=ANY, output_path=ANY
+            session_db=ANY, pid_database_engine=ANY, storage=ANY, folder=ANY, output_path=ANY
         )
 
     @patch("documentstore_migracao.processing.inserting.register_documents_in_documents_bundle")

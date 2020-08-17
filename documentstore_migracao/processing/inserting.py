@@ -205,7 +205,7 @@ def get_article_result_dict(sps: SPS_Package) -> dict:
     return dict(article_metadata)
 
 
-def register_document(folder: str, session, storage, xc_database_engine, poison_pill=PoisonPill()) -> None:
+def register_document(folder: str, session, storage, pid_database_engine, poison_pill=PoisonPill()) -> None:
     """Registra registra pacotes SPS em uma instância do Kernel e seus
     ativos digitais em um object storage."""
 
@@ -224,7 +224,7 @@ def register_document(folder: str, session, storage, xc_database_engine, poison_
         ) from None
 
     xml_path = os.path.join(folder, xmls[0])
-    constructor.article_xml_constructor(xml_path, folder, xc_database_engine, False)
+    constructor.article_xml_constructor(xml_path, folder, pid_database_engine, False)
 
     try:
         obj_xml = xml.loadToXML(xml_path)
@@ -297,12 +297,12 @@ def create_aop_bundle(session_db, issn):
     return session_db.documents_bundles.fetch(bundle.id())
 
 
-def import_documents_to_kernel(session_db, xc_database_engine, storage, folder, output_path) -> None:
+def import_documents_to_kernel(session_db, pid_database_engine, storage, folder, output_path) -> None:
     """Armazena os arquivos do pacote SPS em um object storage, registra o documento
     no banco de dados do Kernel e por fim associa-o ao seu `document bundle`"""
 
     jobs = [
-        {"folder": package_folder, "session": session_db, "storage": storage, "xc_database_engine": xc_database_engine}
+        {"folder": package_folder, "session": session_db, "storage": storage, "pid_database_engine": pid_database_engine}
         for package_folder, _, files in os.walk(folder)
         if files is not None and len(files) > 0
     ]

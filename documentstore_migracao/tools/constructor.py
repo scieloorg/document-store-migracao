@@ -14,7 +14,7 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def article_xml_constructor(file_xml_path: str, dest_path: str, xc_database_engine, in_place: bool) -> None:
+def article_xml_constructor(file_xml_path: str, dest_path: str, pid_database_engine, in_place: bool) -> None:
 
     logger.debug("file: %s", file_xml_path)
 
@@ -24,18 +24,18 @@ def article_xml_constructor(file_xml_path: str, dest_path: str, xc_database_engi
     pid_v2 = xml_sps.scielo_pid_v2
 
     # VERIFICA A EXISTÊNCIA DO PID V3 NO XC ATRAVES DO PID V2
-    if not pid_manager.check_pid_v3_by_v2(xc_database_engine, pid_v2):
+    if not pid_manager.check_pid_v3_by_v2(pid_database_engine, pid_v2):
 
         # CONSTROI O SCIELO-id NO XML CONVERTIDO
         xml_sps.create_scielo_id()
 
         # CRIA O PID V2 E V3 NA BASE DE DADOS DO XC
-        pid_manager.create_pid(xc_database_engine, pid_v2, xml_sps.scielo_pid_v3)
+        pid_manager.create_pid(pid_database_engine, pid_v2, xml_sps.scielo_pid_v3)
 
     else:
 
         # SE CASO EXISTA O PID NO VERSÃO 3 NA BASE DO XC É PRECISO ADICIONAR NO XML
-        pid_v3 = pid_manager.get_pid_v3_by_v2(xc_database_engine, pid_v2)
+        pid_v3 = pid_manager.get_pid_v3_by_v2(pid_database_engine, pid_v2)
 
         xml_sps.scielo_pid_v3(pid_v3)
 

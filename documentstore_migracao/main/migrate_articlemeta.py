@@ -157,9 +157,9 @@ def migrate_articlemeta_parser(sargs):
     )
 
     import_parser.add_argument(
-        "--xc_pid_database_dsn",
-        default=config.get("XC_PID_DATABASE_DSN"),
-        dest="xc_pid_database_dsn",
+        "--pid_database_dsn",
+        default=config.get("PID_DATABASE_DSN"),
+        dest="pid_database_dsn",
         required=True,
         help="""Adicionar o DSN para checagem do PID V3 na base de dados do XC, \
         formatos de DSN suportados: https://docs.sqlalchemy.org/en/13/core/engines.html"""
@@ -313,7 +313,7 @@ def migrate_articlemeta_parser(sargs):
         mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
         DB_Session = ds_adapters.Session.partial(mongo)
 
-        xc_database_engine = create_engine(args.xc_pid_database_dsn)
+        pid_database_engine = create_engine(args.pid_database_dsn)
 
         storage = minio.MinioStorage(
             minio_host=args.minio_host,
@@ -323,7 +323,7 @@ def migrate_articlemeta_parser(sargs):
         )
 
         inserting.import_documents_to_kernel(
-            session_db=DB_Session(), xc_database_engine=xc_database_engine, storage=storage,
+            session_db=DB_Session(), pid_database_engine=pid_database_engine, storage=storage,
             folder=args.folder, output_path=args.output
         )
 
