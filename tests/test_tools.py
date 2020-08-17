@@ -25,10 +25,12 @@ class TestMainTools(unittest.TestCase):
 
 class TestProcessingConstructor(unittest.TestCase):
     @patch("documentstore_migracao.tools.constructor.xml.objXML2file")
-    def test_article_xml_constructor(self, mk_write_file):
+    @patch("documentstore_migracao.utils.pid_manager")
+    @patch("documentstore_migracao.export.sps_package.SPS_Package.scielo_pid_v3")
+    def test_article_xml_constructor(self, mk_xml_sps, mk_pid_manager, mk_write_file):
 
         constructor.article_xml_constructor(
-            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), "/tmp", False
+            os.path.join(SAMPLES_PATH, "S0044-59672003000300001.pt.xml"), "/tmp", mk_pid_manager,  False
         )
         mk_write_file.assert_called_with(
             "/tmp/S0044-59672003000300001.pt.xml", ANY, pretty=True

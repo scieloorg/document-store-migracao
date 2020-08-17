@@ -1,4 +1,5 @@
-"""  """
+# coding: utf-8
+
 import logging
 import argparse
 
@@ -17,6 +18,8 @@ from documentstore_migracao.processing import (
 )
 from documentstore_migracao.object_store import minio
 from documentstore import adapters as ds_adapters
+
+from sqlalchemy import create_engine
 
 
 logger = logging.getLogger(__name__)
@@ -151,6 +154,15 @@ def migrate_articlemeta_parser(sargs):
         metavar="",
         help=f"""Entry path to import SPS packages. The default path
         is: {config.get("SPS_PKG_PATH")}""",
+    )
+
+    import_parser.add_argument(
+        "--pid_database_dsn",
+        default=config.get("PID_DATABASE_DSN"),
+        dest="pid_database_dsn",
+        required=True,
+        help="""Adicionar o DSN para checagem do PID V3 na base de dados do XC, \
+        formatos de DSN suportados: https://docs.sqlalchemy.org/en/13/core/engines.html"""
     )
 
     import_parser.add_argument("--output", required=True, help="The output file path")
@@ -301,6 +313,8 @@ def migrate_articlemeta_parser(sargs):
         mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
         DB_Session = ds_adapters.Session.partial(mongo)
 
+        pid_database_engine = create_engine(args.pid_database_dsn)
+
         storage = minio.MinioStorage(
             minio_host=args.minio_host,
             minio_access_key=args.minio_access_key,
@@ -309,7 +323,8 @@ def migrate_articlemeta_parser(sargs):
         )
 
         inserting.import_documents_to_kernel(
-            session_db=DB_Session(), storage=storage, folder=args.folder, output_path=args.output
+            session_db=DB_Session(), pid_database_engine=pid_database_engine, storage=storage,
+            folder=args.folder, output_path=args.output
         )
 
     elif args.command == "link_documents_issues":

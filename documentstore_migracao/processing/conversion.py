@@ -88,9 +88,6 @@ def convert_article_xml(file_xml_path: str, poison_pill=PoisonPill()):
     document_pubdate, issue_pubdate = get_article_dates(article)
     xml_sps.complete_pub_date(document_pubdate, issue_pubdate)
 
-    # CONSTROI O SCIELO-id NO XML CONVERTIDO
-    xml_sps.create_scielo_id()
-
     # Remove a TAG <counts> do XML
     xml_sps.transform_article_meta_count()
 
