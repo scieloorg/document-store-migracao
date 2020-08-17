@@ -37,7 +37,7 @@ def article_xml_constructor(file_xml_path: str, dest_path: str, pid_database_eng
         # SE CASO EXISTA O PID NO VERSÃO 3 NA BASE DO XC É PRECISO ADICIONAR NO XML
         pid_v3 = pid_manager.get_pid_v3_by_v2(pid_database_engine, pid_v2)
 
-        xml_sps.scielo_pid_v3(pid_v3)
+        xml_sps.scielo_pid_v3 = pid_v3
 
     if in_place:
         new_file_xml_path = file_xml_path
