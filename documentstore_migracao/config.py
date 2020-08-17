@@ -48,7 +48,7 @@ _default = dict(
     VALIDATE_ALL="FALSE",
     THREADPOOL_MAX_WORKERS=os.cpu_count() * 5,
     PROCESSPOOL_MAX_WORKERS=os.cpu_count(),
-    XC_PID_DATABASE_DSN="sqlite:///pid_manager_database.db",
+    PID_DATABASE_DSN="sqlite:///pid_manager_database.db",
 )
 
 
