@@ -25,6 +25,7 @@ requires = [
     "fs",
     "opac_schema",
     "sqlalchemy",
+    "psycopg2-binary~=2.8",
 ]
 
 tests_require = [

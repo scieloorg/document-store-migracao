@@ -71,3 +71,4 @@ construct==2.10.56
 ioisis==0.3.0
 JPype1==1.0.1
 ujson==2.0.3
+psycopg2-binary==2.8.5
