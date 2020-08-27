@@ -5,14 +5,14 @@ import argparse
 import functools
 import json
 import logging
-import sys
 import re
-
+import sys
 from enum import Enum
-from typing import Optional, Dict, List, Callable
+from io import TextIOWrapper
+from typing import Callable, Dict, List, Optional, Union
 
-logging.basicConfig(format=u"%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s",)
-LOGGER = logging.getLogger()
+LOGGER_FORMAT = u"%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s"
+LOGGER = logging.getLogger(__name__)
 
 ASSET_NOT_FOUND_REGEX = re.compile(
     r".*ERROR.*\[(?P<pid>S\d{4}-.*)\].*Could not find asset "
@@ -37,16 +37,28 @@ XML_MISSING_METADATA_REGEX = re.compile(
 )
 
 
-def jsonl_formatter_stdout(errors: List[Optional[Dict]], stream) -> None:
+def jsonl_formatter(errors: List[Optional[Dict]]) -> List[str]:
     """Imprime linha a linha da lista de entrada, convertendo o conteúdo para
     JSON. É esperado então que uma lista de dados seja transformada no formato
     JSONL."""
+
+    result = []
     for error in errors:
-        json.dump(error, stream)
+        result.append(json.dumps(error))
+
+    return result
+
+
+FORMATTERS = {"jsonl": jsonl_formatter}
+
+
+def output_lines_to(lines: List[str], stream: TextIOWrapper) -> None:
+    """Escreve resultado do parser em um arquivo caminho determinado.
+    O stream de dados deve implementar a interface TextIOWrapper"""
+
+    for line in lines:
+        stream.write(line)
         stream.write("\n")
-
-
-FORMATTERS = {"jsonl": jsonl_formatter_stdout}
 
 
 class ErrorEnum(Enum):
@@ -140,6 +152,7 @@ def parse_pack_from_site_errors(
     documents_errors: Dict[str, Dict] = {}
 
     for line in lines:
+        line = line.strip()
 
         for parser in parsers:
             data = parser(line)
@@ -161,7 +174,9 @@ def parse_pack_from_site_errors(
                 break
         else:
             # Linha que não foi identificada como erro de empacotamento
-            pass
+            LOGGER.debug(
+                "Cannot parse line '%s', maybe it need an specific parser.", line
+            )
 
     documents_errors_values = list(documents_errors.values())
     errors.extend(documents_errors_values)
@@ -180,13 +195,32 @@ def main():
         choices=FORMATTERS.keys(),
         default="jsonl",
     )
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="Write the parse result to a file. If this option"
+        " is not choose, the default output will be the STDOUT",
+        type=argparse.FileType("w"),
+    )
+    parser.add_argument(
+        "--loglevel",
+        help="Defines the loglevel of script. The default level is WARNING.",
+        default="WARNING",
+    )
     args = parser.parse_args()
+
+    logging.basicConfig(
+        format=LOGGER_FORMAT, level=getattr(logging, args.loglevel.upper())
+    )
     lines = args.input.readlines()
     formatter = FORMATTERS.get(args.formatter)
     parsed_errors = parse_pack_from_site_errors(lines)
+    formatted_errors = formatter(parsed_errors)
 
-    if formatter is not None:
-        formatter(parsed_errors, stream=sys.stdout)
+    if args.output is not None:
+        output_lines_to(formatted_errors, args.output)
+    else:
+        output_lines_to(formatted_errors, sys.stdout)
 
 
 if __name__ == "__main__":
