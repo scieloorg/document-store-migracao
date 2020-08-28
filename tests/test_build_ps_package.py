@@ -150,7 +150,7 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
         mock_copy.assert_called_once_with(
             "/data/pdfs/abc/v1n1/bla.pdf", "/data/output/abc/v1n1/bla"
         )
-        self.assertEqual(result, [("pt", "bla.pdf")])
+        self.assertEqual(result, {"pt": "bla.pdf"})
 
     @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
     def test_collect_renditions_for_document_with_translations_in_en_and_es(self, mock_copy):
@@ -174,12 +174,23 @@ class TestBuildSPSPackage(TestBuildSPSPackageBase):
             ),
         ]
         self.assertEqual(
-            result,
-            [
-                ("pt", "bla.pdf"),
-                ("en", "bla-en.pdf"),
-                ("es", "bla-es.pdf"),
-            ]
+            result, {"pt": "bla.pdf", "en": "en_bla.pdf", "es": "es_bla.pdf"}
+        )
+
+    @mock.patch("documentstore_migracao.utils.build_ps_package.shutil.copy")
+    def test_collect_renditions_for_document_with_translation_using_prefix(self, mock_copy):
+        mock_copy.side_effect = [None, FileNotFoundError, None]
+        result = self.builder.collect_renditions(
+            "/data/output/abc/v1n1/bla",
+            "abc",
+            "v1n1",
+            "bla",
+            ["pt", "en"],
+            "S0101-02022020000010001",
+        )
+
+        self.assertEqual(
+            result, {"pt": "bla.pdf", "en": "bla-en.pdf"}
         )
 
     @mock.patch("documentstore_migracao.utils.build_ps_package.open")

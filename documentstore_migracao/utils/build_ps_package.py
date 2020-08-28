@@ -223,36 +223,56 @@ class BuildPSPackage(object):
         return xml_target_path
 
     def collect_renditions(
-        self,
-        target_path,
-        acron,
-        issue_folder,
-        pack_name,
-        langs,
-        pid,
+        self, target_path, acron, issue_folder, pack_name, langs, pid,
     ):
+        """Coleta as manifestações em formato PDF por meio de um caminho
+        produzido a partir de `pasta-dos-pdfs/acronimo/issue-volume-numbero/nome-do-pacote`.
+
+        Este método funciona da seguinte forma:
+        1) Dado que um documento possua um idioma padrão e uma tradução (pt, en);
+        2) Que o nome do pacote seja `pacote-2020-abc`;
+        3) Que o idioma principal seja `pt` e a tradução `en`;
+        4) As seguintes tentativas de cópia serão feitas:
+        4.1) Arquivo `pacote-2020-abc.pdf` -> `destino/pacote-2020-abc.pdf`
+        4.2) Arquivo `en_pacote-2020-abc.pdf` -> `destino/en_pacote-2020-abc.pdf`
+        4.3) Se o ponto 4.2 falhar uma próxima tentativa para o idioma `en` será feita;
+        4.4) Arquivo `pacote-2020-abc-en.pdf` -> `destino/pacote-2020-abc-en.pdf`;
+
+        Caso o documento possua apenas um idioma (pt), apenas o passo 4.1
+        será realizado."""
+
         source_path = os.path.join(self.pdf_folder, acron, issue_folder)
-        renditions = []
-        renditions_files = [(pack_name+".pdf", pack_name+".pdf")]
+        filename_formats = ["{lang}_{name}.pdf", "{name}-{lang}.pdf"]
+
+        manifest = {}
+        renditions_to_search = {langs[0]: [pack_name + ".pdf"]}
+
         for lang in langs[1:]:
-            renditions_files.append(
-                (lang + "_" + pack_name + ".pdf",
-                    pack_name + "-" + lang + ".pdf"))
-        for source, dest in renditions_files:
-            logger.debug('Collecting PDF "%s" for XML "%s.xml"', source, pack_name)
-            file_path = os.path.join(source_path, source)
-            try:
-                shutil.copy(file_path, target_path)
-            except FileNotFoundError:
-                logger.error(
-                    "[%s] - Could not find rendition '%s' during packing XML '%s.xml'.",
-                    pid,
-                    file_path,
-                    pack_name,
+            renditions_to_search.setdefault(lang, [])
+
+            for filename in filename_formats:
+                renditions_to_search[lang].append(
+                    filename.format(name=pack_name, lang=lang)
                 )
-            else:
-                renditions.append(dest)
-        return list(zip(langs, renditions))
+
+        for lang, renditions in renditions_to_search.items():
+            for rendition in renditions:
+                source_file_path = os.path.join(source_path, rendition)
+
+                try:
+                    shutil.copy(source_file_path, target_path)
+                except FileNotFoundError:
+                    logger.error(
+                        "[%s] - Could not find rendition '%s' during packing XML '%s.xml'.",
+                        pid,
+                        source_file_path,
+                        pack_name,
+                    )
+                else:
+                    manifest[lang] = rendition
+                    break
+
+        return manifest
 
     def save_renditions_manifest(self, target_path, metadata):
         if len(metadata) > 0:
