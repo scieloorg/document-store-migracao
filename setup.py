@@ -26,6 +26,8 @@ requires = [
     "opac_schema",
     "sqlalchemy",
     "psycopg2-binary~=2.8",
+    "grequests==0.6.0",
+    "json-logging==1.2.8"
 ]
 
 tests_require = [
