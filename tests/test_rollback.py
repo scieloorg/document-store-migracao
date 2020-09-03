@@ -3,9 +3,11 @@ from unittest.mock import Mock, MagicMock
 
 import pymongo
 from documentstore import exceptions as ds_exceptions
+from documentstore import domain as ds_domain
 
 from documentstore_migracao import exceptions
 from documentstore_migracao.processing import rollback
+from tests import SAMPLES_PATH
 
 
 class TestDocumentStore(TestCase):
@@ -85,6 +87,100 @@ class TestRollbackSession(TestCase):
 
     def test_documents(self):
         self.assertIsInstance(self.session.documents, rollback.DocumentStore)
+
+
+class TestRollbackBundle(TestCase):
+
+    def setUp(self):
+        self.session = Mock(spec=rollback.RollbackSession)
+        self.fake_journals = rollback.get_journals_from_json(
+            SAMPLES_PATH + "/base-isis-sample/title/title.json"
+        )
+
+    def test_raises_error_if_document_issn_not_found(self):
+        doc_info = {
+            "pid_v3": "document-id",
+            "eissn": "2179-8087",
+            "pissn": "1415-0980",
+            "issn": "1415-0980",
+            "pid": "document-pid-v2",
+            "year": "2020",
+            "volume": "1",
+            "number": "2",
+        }
+
+        with self.assertRaises(exceptions.RollbackError) as exc_info:
+            rollback.rollback_bundle(doc_info, self.session, self.fake_journals)
+        self.assertEqual(
+            'could not get journal for document "document-id"', str(exc_info.exception)
+        )
+
+    def test_raises_error_if_bundle_not_found(self):
+        self.session.documents_bundles.fetch.side_effect = ds_exceptions.DoesNotExist
+        doc_info = {
+            "pid_v3": "document-id",
+            "eissn": "2317-6326",
+            "pissn": "0102-6720",
+            "issn": "0102-6720",
+            "pid": "document-pid-v2",
+            "year": "2020",
+            "volume": "1",
+            "number": "2",
+        }
+
+        with self.assertRaises(exceptions.RollbackError) as exc_info:
+            rollback.rollback_bundle(doc_info, self.session, self.fake_journals)
+        self.assertEqual(
+            'could not get bundle id "0102-6720-2020-v1-n2"', str(exc_info.exception)
+        )
+
+    def test_raises_error_if_aop_bundle_not_found(self):
+        self.session.documents_bundles.fetch.side_effect = ds_exceptions.DoesNotExist
+        doc_info = {
+            "pid_v3": "document-id",
+            "eissn": "2317-6326",
+            "pissn": "0102-6720",
+            "issn": "0102-6720",
+            "pid": "document-pid-v2",
+            "year": "2020",
+        }
+
+        with self.assertRaises(exceptions.RollbackError) as exc_info:
+            rollback.rollback_bundle(doc_info, self.session, self.fake_journals)
+        self.assertEqual(
+            'could not get bundle id "0102-6720-aop"', str(exc_info.exception)
+        )
+
+    def test_update_bundle_without_rolledback_document(self):
+        fake_bundle_manifest = {
+            "_id" : "0102-6720-2020-v1-n2",
+            "id" : "0102-6720-2020-v1-n2",
+            "created" : "2020-08-09T06:49:55.118012Z",
+            "updated" : "2020-08-09T06:49:55.118245Z",
+            "items" : [
+                {"id": "document-id", "order" : "00123"},
+                {"id": "document-2", "order" : "00321"},
+            ],
+            "metadata" : {}
+        }
+        fake_bundle = ds_domain.DocumentsBundle(manifest=fake_bundle_manifest)
+        self.session.documents_bundles.fetch.return_value = fake_bundle
+        doc_info = {
+            "pid_v3": "document-id",
+            "eissn": "2317-6326",
+            "pissn": "0102-6720",
+            "issn": "0102-6720",
+            "pid": "document-pid-v2",
+            "year": "2020",
+            "volume": "1",
+            "number": "2",
+        }
+
+        rollback.rollback_bundle(doc_info, self.session, self.fake_journals)
+        self.session.documents_bundles.update.assert_called_once_with(fake_bundle)
+        self.assertNotIn(
+            {"id": "document-id", "order" : "00123"}, fake_bundle.documents
+        )
 
 
 class TestRollbackDocument(TestCase):
