@@ -11,6 +11,8 @@ from enum import Enum
 from io import TextIOWrapper
 from typing import Callable, Dict, List, Optional, Union
 
+import click
+
 LOGGER_FORMAT = u"%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s"
 LOGGER = logging.getLogger(__name__)
 
@@ -183,42 +185,37 @@ def parse_pack_from_site_errors(
     return errors
 
 
-def main():
-    """Ponto de entrada para o programa"""
+@click.command()
+@click.argument('input', type=click.File("r"),
+                required=True)
+@click.option('-f', '--formatter', default="jsonl", type=click.Choice(FORMATTERS.keys()),
+              help="Choose a formater to convert the log parser")
+@click.option('--loglevel', default="WARNING", type=click.Choice(
+              ['NOTSET', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']),
+              help="Defines the loglevel of script. The default level is WARNING.")
+@click.argument('output', type=click.File("w"), required=False)
+def main(input, formatter, output, loglevel):
+    """
+        Document Store Migration (DSM) - Log Analyzer
 
-    parser = argparse.ArgumentParser("DSM - Log Analyzer")
-    parser.add_argument("input", help="Input a log file", type=argparse.FileType("r"))
-    parser.add_argument(
-        "-f",
-        "--formatter",
-        help="Choose a formater to convert the log parser",
-        choices=FORMATTERS.keys(),
-        default="jsonl",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        help="Write the parse result to a file. If this option"
-        " is not choose, the default output will be the STDOUT",
-        type=argparse.FileType("w"),
-    )
-    parser.add_argument(
-        "--loglevel",
-        help="Defines the loglevel of script. The default level is WARNING.",
-        default="WARNING",
-    )
-    args = parser.parse_args()
+        Realiza a leitura dos arquivo de log da fase de empacotamento e importação
+        da migração dos artigos do DSM.
+
+        O resultado final desse analisador é um arquivo no formato JSONL onde nós
+        permite realizar consultas com mais expressividade nos logs.
+
+    """
 
     logging.basicConfig(
-        format=LOGGER_FORMAT, level=getattr(logging, args.loglevel.upper())
+        format=LOGGER_FORMAT, level=getattr(logging, loglevel.upper())
     )
-    lines = args.input.readlines()
-    formatter = FORMATTERS.get(args.formatter)
+    lines = input.readlines()
+    formatter = FORMATTERS.get(formatter)
     parsed_errors = parse_pack_from_site_errors(lines)
     formatted_errors = formatter(parsed_errors)
 
-    if args.output is not None:
-        output_lines_to(formatted_errors, args.output)
+    if output is not None:
+        output_lines_to(formatted_errors, output)
     else:
         output_lines_to(formatted_errors, sys.stdout)
 
