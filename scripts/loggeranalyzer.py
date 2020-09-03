@@ -1,3 +1,5 @@
+# Coding: utf-8
+
 """Script para analisar, agrupar dados provenientes dos logs da ferramenta
 de migração das coleções SciELO."""
 
@@ -42,7 +44,25 @@ XML_MISSING_METADATA_REGEX = re.compile(
 def jsonl_formatter(errors: List[Optional[Dict]]) -> List[str]:
     """Imprime linha a linha da lista de entrada, convertendo o conteúdo para
     JSON. É esperado então que uma lista de dados seja transformada no formato
-    JSONL."""
+    JSONL.
+
+    Args:
+        errors: Lista de dicionários contendo os erro semânticamente identificado.
+
+    Retornos:
+
+        Retorna um JSONL correspondente a cada dicionário do argumento errors,
+        example:
+
+        {"uri": "jbn/nahead/2175-8239-jbn-2019-0218.xml", "error": "xml-not-found"}
+        {"uri": "jbn/nahead/2175-8239-jbn-2020-0025.xml", "error": "xml-not-found"}
+        {"uri": "jbn/nahead/2175-8239-jbn-2019-0236.xml", "error": "xml-not-found"}
+        {"uri": "jbn/nahead/2175-8239-jbn-2020-0050.xml", "error": "xml-not-found"}
+        {"uri": "jbn/nahead/2175-8239-jbn-2020-0014.xml", "error": "xml-not-found"}
+
+    Exceções:
+        Não lança exceções.
+    """
 
     result = []
     for error in errors:
@@ -56,7 +76,18 @@ FORMATTERS = {"jsonl": jsonl_formatter}
 
 def output_lines_to(lines: List[str], stream: TextIOWrapper) -> None:
     """Escreve resultado do parser em um arquivo caminho determinado.
-    O stream de dados deve implementar a interface TextIOWrapper"""
+    A sequência de caracteres de dados deve implementar a interface TextIOWrapper
+
+    Args:
+        lines: Lista de linhas contento sequência de caracteres.
+        stream: Uma sequência de caracteres, deve implementar a interface textIOWrapper
+    Retornos:
+        Não há retorno
+
+    Exceções:
+        Não lança exceções.
+
+    """
 
     for line in lines:
         stream.write(line)
@@ -64,8 +95,13 @@ def output_lines_to(lines: List[str], stream: TextIOWrapper) -> None:
 
 
 class ErrorEnum(Enum):
-    """Enum para agrupar nomes de erros utilizados
-    na saída do script"""
+    """Enumerador para agrupar nomes de erros utilizados na saída.
+
+    Classe enumeradora.
+
+    Atributos:
+        Não há atributos.
+    """
 
     RESOURCE_NOT_FOUND = "resource-not-found"
     NOT_UPDATED = "xml-not-update"
@@ -76,8 +112,32 @@ class ErrorEnum(Enum):
 def general_parser(
     line: str, regex: re.Pattern, error: ErrorEnum, group: str = None
 ) -> Optional[Dict]:
-    """Parser de formato geral utilizado para verificar padrões por meio
-    de regex. Retorna o tipo de formato especificado na chamada."""
+    """Analise do formato utilizado para verificar padrões por meio
+    de expressões regulares. Retorna o tipo de formato especificado na chamada.
+
+    Args:
+        line: Linha a ser analisada.
+        regex: Expressão regular que será utilizada.
+        error: Um enumerador, instância de classe ErroEnum, para qualificar o erro.
+        group: Um classificador para o erro.
+
+    Retorno:
+        Um dicionário contendo a analise da linha com um seperação semântica.
+
+        Exemplo:
+
+            {
+             'pid': 'S0066-782X2020000500001',
+             'uri': 'bases/pdf/abc/v114n4s1/pt_0066-782X-abc-20180130.pdf',
+             'xml': '0066-782X-abc-20180130.xml',
+             'error': 'resource-not-found',
+             'group': 'renditions'
+            }
+
+    Exceções:
+        Não lança exceções.
+
+    """
 
     match = regex.match(line)
 
@@ -110,7 +170,9 @@ parse_xml_not_found_error = functools.partial(
 )
 
 parse_missing_metadata_error = functools.partial(
-    general_parser, regex=XML_MISSING_METADATA_REGEX, error=ErrorEnum.MISSING_METADATA,
+    general_parser,
+    regex=XML_MISSING_METADATA_REGEX,
+    error=ErrorEnum.MISSING_METADATA,
 )
 
 PACK_FROM_SITE_PARSERS: List[Callable] = [
@@ -177,7 +239,8 @@ def parse_pack_from_site_errors(
         else:
             # Linha que não foi identificada como erro de empacotamento
             LOGGER.debug(
-                "Cannot parse line '%s', maybe it need an specific parser.", line
+                "Não foi possível analisar a linha '%s', talvés seja necessário especificar um analisador.",
+                line,
             )
 
     documents_errors_values = list(documents_errors.values())
@@ -186,29 +249,34 @@ def parse_pack_from_site_errors(
 
 
 @click.command()
-@click.argument('input', type=click.File("r"),
-                required=True)
-@click.option('-f', '--formatter', default="jsonl", type=click.Choice(FORMATTERS.keys()),
-              help="Choose a formater to convert the log parser")
-@click.option('--loglevel', default="WARNING", type=click.Choice(
-              ['NOTSET', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']),
-              help="Defines the loglevel of script. The default level is WARNING.")
-@click.argument('output', type=click.File("w"), required=False)
+@click.argument("input", type=click.File("r"), required=True)
+@click.option(
+    "-f",
+    "--formatter",
+    default="jsonl",
+    type=click.Choice(FORMATTERS.keys()),
+    help="Escolha um formato de conversão para o analisador",
+)
+@click.option(
+    "--loglevel",
+    default="WARNING",
+    type=click.Choice(["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
+    help="Defini o nível de log de excecução. Padrão é WARNING.",
+)
+@click.argument("output", type=click.File("w"), required=False)
 def main(input, formatter, output, loglevel):
     """
-        Document Store Migration (DSM) - Log Analyzer
+    Document Store Migration (DSM) - Log Analyzer
 
-        Realiza a leitura dos arquivo de log da fase de empacotamento e importação
-        da migração dos artigos do DSM.
+    Realiza a leitura dos arquivo de log da fase de empacotamento e importação
+    da migração dos artigos do DSM.
 
-        O resultado final desse analisador é um arquivo no formato JSONL onde nós
-        permite realizar consultas com mais expressividade nos logs.
+    O resultado final desse analisador é um arquivo no formato JSONL onde nós
+    permite realizar consultas com mais expressividade nos logs.
 
     """
 
-    logging.basicConfig(
-        format=LOGGER_FORMAT, level=getattr(logging, loglevel.upper())
-    )
+    logging.basicConfig(format=LOGGER_FORMAT, level=getattr(logging, loglevel.upper()))
     lines = input.readlines()
     formatter = FORMATTERS.get(formatter)
     parsed_errors = parse_pack_from_site_errors(lines)
