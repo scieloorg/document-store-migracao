@@ -234,7 +234,7 @@ def rollback_kernel_documents(
                 f.write(json.dumps(result) + "\n")
 
         def exception_callback(exception, job, logger=logger):
-            logger.error(
+            logger.exception(
                 "Could not roll back document '%s'. The following exception "
                 "was raised: '%s'.",
                 job["doc_info"].get("pid_v3"),
