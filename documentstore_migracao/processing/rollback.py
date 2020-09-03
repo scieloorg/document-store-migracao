@@ -73,6 +73,19 @@ class RollbackSession(ds_adapters.Session):
 
 
 def get_journals_from_json(journals_file_path: str) -> dict:
+    """Obtem dicionário à partir dos dados extraídos da base ISIS Title, presentes no
+    arquivo `journals_file_path`, para facilitar a obtenção do ISSN ID do periódico. Para
+    cada ISSN, sendo impresso ou eletrônico, apontará para o ISSN ID.
+    Exemplo: Dado periódico com PRINT ISSN `0101-0101`, ONLINE ISSN `0101-0X02` e ISSN
+    ID `0101-0X02`, seus dados estarão da seguinte maneira no dicionário de saída:
+        {
+            ...
+            "0101-0X02": "0101-0X02",
+            "0101-0101": "0101-0X02",
+            ...
+        }
+    """
+
     with open(journals_file_path) as journals_file:
         journals = json.load(journals_file)
         data_journal = {}
@@ -88,6 +101,12 @@ def get_journals_from_json(journals_file_path: str) -> dict:
 
 
 def get_issn_by_document(journals: dict, document: dict):
+    """Recupera o ISSN ID do Periódico em `journals` ao qual o documento pertence, 
+    através dos ISSNs em `document`.
+        `journals`: dicionário obtido por `get_journals_from_json()`
+        `document`: dados de um registro do arquivo JSON resultado da importação
+    """
+
     for issn_type in ("eissn", "pissn", "issn"):
         if document.get(issn_type) is not None:
             issn_value = document[issn_type].strip()
@@ -101,6 +120,12 @@ def get_issn_by_document(journals: dict, document: dict):
 
 
 def get_bundle_id(issn_id: str, doc_info: dict) -> None:
+    """Obtém o bundle ID através dos dados presentes em `doc_info`, utilizando funções 
+    do módulo scielo_ids_generator.
+        `issn_id`: ISSN ID do Periódico
+        `doc_info`: dados de um registro do arquivo JSON resultado da importação
+    """
+
     if doc_info.get("volume") or doc_info.get("number"):
         return scielo_ids_generator.issue_id(
             issn_id,
@@ -114,6 +139,8 @@ def get_bundle_id(issn_id: str, doc_info: dict) -> None:
 
 
 def rollback_bundle(doc_info: dict, session: object, journals: dict) -> str:
+    """Reverte a inserção do documento no bundle."""
+
     _issn_id = get_issn_by_document(journals, doc_info)
     if not _issn_id:
         raise exceptions.RollbackError(
