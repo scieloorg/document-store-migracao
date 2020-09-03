@@ -1,7 +1,10 @@
 """ module to rollback imported data """
+import json
+
 import pymongo
 from documentstore import adapters as ds_adapters
 from documentstore import exceptions as ds_exceptions
+from xylose.scielodocument import Journal
 
 
 class DSMBaseStore(ds_adapters.BaseStore):
@@ -55,4 +58,29 @@ class RollbackSession(ds_adapters.Session):
     @property
     def changes(self):
         return ChangesStore(self._mongodb_client.changes)
+
+
+def get_journals_from_json(journals_file_path: str) -> dict:
+    with open(journals_file_path) as journals_file:
+        journals = json.load(journals_file)
+        data_journal = {}
+        for journal in journals:
+            o_journal = Journal(journal)
+            if o_journal.print_issn:
+                data_journal[o_journal.print_issn] = o_journal.scielo_issn
+            if o_journal.electronic_issn:
+                data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
+            if o_journal.scielo_issn:
+                data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
+        return data_journal
+
+
+def rollback_kernel_documents(
+    extracted_title_path: str,
+) -> None:
+    """
+    Baseado no arquivo `output_path`, desfaz o import dos documentos, o relacionamento 
+    no `document bundle`s e o registro de mudança"""
+
+    journals = get_journals_from_json(extracted_title_path)
 
