@@ -151,6 +151,33 @@ class TestRollbackBundle(TestCase):
             'could not get bundle id "0102-6720-aop"', str(exc_info.exception)
         )
 
+    def test_error_if_no_document_in_bundle(self):
+        fake_bundle_manifest = {
+            "_id" : "0102-6720-2020-v1-n2",
+            "id" : "0102-6720-2020-v1-n2",
+            "created" : "2020-08-09T06:49:55.118012Z",
+            "updated" : "2020-08-09T06:49:55.118245Z",
+            "items" : [
+                {"id": "document-2", "order" : "00321"},
+            ],
+            "metadata" : {}
+        }
+        fake_bundle = ds_domain.DocumentsBundle(manifest=fake_bundle_manifest)
+        self.session.documents_bundles.fetch.return_value = fake_bundle
+        doc_info = {
+            "pid_v3": "document-id",
+            "eissn": "2317-6326",
+            "pissn": "0102-6720",
+            "issn": "0102-6720",
+            "pid": "document-pid-v2",
+            "year": "2020",
+            "volume": "1",
+            "number": "2",
+        }
+
+        _result = rollback.rollback_bundle(doc_info, self.session, self.fake_journals)
+        self.assertIsNone(_result)
+
     def test_update_bundle_without_rolledback_document(self):
         fake_bundle_manifest = {
             "_id" : "0102-6720-2020-v1-n2",
@@ -176,11 +203,12 @@ class TestRollbackBundle(TestCase):
             "number": "2",
         }
 
-        rollback.rollback_bundle(doc_info, self.session, self.fake_journals)
+        _result = rollback.rollback_bundle(doc_info, self.session, self.fake_journals)
         self.session.documents_bundles.update.assert_called_once_with(fake_bundle)
         self.assertNotIn(
             {"id": "document-id", "order" : "00123"}, fake_bundle.documents
         )
+        self.assertEqual(_result, "0102-6720-2020-v1-n2")
 
 
 @patch.object(rollback, "rollback_bundle")
@@ -219,4 +247,21 @@ class TestRollbackDocument(TestCase):
         rollback.rollback_document(self.doc_info, self.session, self.fake_journals)
         mock_rollback_bundle.assert_called_once_with(
             self.doc_info, self.session, self.fake_journals
+        )
+
+    def test_return_without_bundle(self, mock_rollback_bundle):
+        mock_rollback_bundle.return_value = None
+        _result = rollback.rollback_document(
+            self.doc_info, self.session, self.fake_journals
+        )
+        self.assertEqual(_result, {"pid_v3": "document-id", "status": "ROLLEDBACK"})
+
+    def test_return_with_bundle(self, mock_rollback_bundle):
+        mock_rollback_bundle.return_value = "bundle-id"
+        _result = rollback.rollback_document(
+            self.doc_info, self.session, self.fake_journals
+        )
+        self.assertEqual(
+            _result,
+            {"pid_v3": "document-id", "bundle": "bundle-id", "status": "ROLLEDBACK"}
         )

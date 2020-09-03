@@ -113,7 +113,7 @@ def get_bundle_id(issn_id: str, doc_info: dict) -> None:
     return scielo_ids_generator.aops_bundle_id(issn_id)
 
 
-def rollback_bundle(doc_info: dict, session: object, journals: dict):
+def rollback_bundle(doc_info: dict, session: object, journals: dict) -> str:
     _issn_id = get_issn_by_document(journals, doc_info)
     if not _issn_id:
         raise exceptions.RollbackError(
@@ -129,8 +129,17 @@ def rollback_bundle(doc_info: dict, session: object, journals: dict):
         logger.debug(
             'Removing document "%s" from bundle "%s"', doc_info["pid_v3"], _bundle_id
         )
-        _bundle.remove_document(doc_info["pid_v3"])
-        session.documents_bundles.update(_bundle)
+        try:
+            _bundle.remove_document(doc_info["pid_v3"])
+        except ds_exceptions.DoesNotExist as exc:
+            logger.info(
+                'Document "%s" is not published in bundle id "%s"',
+                doc_info["pid_v3"],
+                _bundle_id,
+            )
+        else:
+            session.documents_bundles.update(_bundle)
+            return _bundle_id
 
 
 def rollback_document(
@@ -155,10 +164,14 @@ def rollback_document(
         # Rollback Document
         session.documents.rollback(pid_v3)
 
-        # Rollback DocumentsBundle
-        rollback_bundle(doc_info, session, journals)
+        _rolledback_result = {"pid_v3": doc_info["pid_v3"], "status": "ROLLEDBACK"}
 
-        return {"pid_v3": doc_info["pid_v3"], "status": "ROLLEDBACK"}
+        # Rollback DocumentsBundle
+        _rolledback_bundle_id = rollback_bundle(doc_info, session, journals)
+        if _rolledback_bundle_id:
+            _rolledback_result["bundle"] = _rolledback_bundle_id
+
+        return _rolledback_result
 
 
 def rollback_kernel_documents(
