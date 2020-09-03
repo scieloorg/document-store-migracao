@@ -5,11 +5,14 @@ import logging
 import pymongo
 from documentstore import adapters as ds_adapters
 from documentstore import exceptions as ds_exceptions
+from tqdm import tqdm
 from xylose.scielodocument import Journal
 
 from documentstore_migracao import exceptions, config
 from documentstore_migracao.utils import (
     scielo_ids_generator,
+    DoJobsConcurrently,
+    PoisonPill,
 )
 
 
@@ -159,7 +162,10 @@ def rollback_document(
 
 
 def rollback_kernel_documents(
+    session_db: object,
+    import_output_path: str,
     extracted_title_path: str,
+    output_path: str,
 ) -> None:
     """
     Baseado no arquivo `output_path`, desfaz o import dos documentos, o relacionamento 
@@ -167,3 +173,39 @@ def rollback_kernel_documents(
 
     journals = get_journals_from_json(extracted_title_path)
 
+    with open(import_output_path) as f:
+        jobs = [
+            {
+                "doc_info": json.loads(doc_info),
+                "session": session_db,
+                "journals": journals,
+            }
+            for doc_info in f.readlines()
+            if doc_info
+        ]
+
+    with tqdm(total=len(jobs)) as pbar:
+
+        def update_bar(pbar=pbar):
+            pbar.update(1)
+
+        def write_result_to_file(result, path=output_path):
+            with open(path, "a") as f:
+                f.write(json.dumps(result) + "\n")
+
+        def exception_callback(exception, job, logger=logger):
+            logger.error(
+                "Could not roll back document '%s'. The following exception "
+                "was raised: '%s'.",
+                job["doc_info"].get("pid_v3"),
+                exception,
+            )
+
+        DoJobsConcurrently(
+            rollback_document,
+            jobs=jobs,
+            max_workers=int(config.get("PROCESSPOOL_MAX_WORKERS")),
+            success_callback=write_result_to_file,
+            exception_callback=exception_callback,
+            update_bar=update_bar,
+        )
