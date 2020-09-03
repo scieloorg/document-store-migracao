@@ -75,6 +75,29 @@ def get_journals_from_json(journals_file_path: str) -> dict:
         return data_journal
 
 
+def rollback_document(
+    doc_info: dict, session: object, journals: dict, poison_pill=PoisonPill()
+) -> None:
+    """Desfaz documento de uma instância do Kernel como se não tivesse sido inserido,
+    removendo registros feitos durante o processo de importação."""
+
+    if poison_pill.poisoned:
+        return
+
+    try:
+        pid_v3 = doc_info["pid_v3"]
+    except KeyError:
+        raise exceptions.RollbackError("could not get PID V3 from doc info.")
+    else:
+        logger.debug("Starting the rollback step for document PID V3 '%s'...", pid_v3)
+
+        # Rollback Document changes
+        session.changes.rollback(pid_v3)
+
+        # Rollback Document
+        session.documents.rollback(pid_v3)
+
+
 def rollback_kernel_documents(
     extracted_title_path: str,
 ) -> None:

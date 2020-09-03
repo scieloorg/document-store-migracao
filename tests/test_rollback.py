@@ -4,6 +4,7 @@ from unittest.mock import Mock, MagicMock
 import pymongo
 from documentstore import exceptions as ds_exceptions
 
+from documentstore_migracao import exceptions
 from documentstore_migracao.processing import rollback
 
 
@@ -84,3 +85,22 @@ class TestRollbackSession(TestCase):
 
     def test_documents(self):
         self.assertIsInstance(self.session.documents, rollback.DocumentStore)
+
+
+class TestRollbackDocument(TestCase):
+
+    def setUp(self):
+        self.session = Mock(spec=rollback.RollbackSession)
+
+    def test_raises_error_if_no_pid_v3(self):
+        with self.assertRaises(exceptions.RollbackError) as exc_info:
+            rollback.rollback_document({}, self.session, {})
+        self.assertEqual("could not get PID V3 from doc info.", str(exc_info.exception))
+    
+    def test_rollback_changes(self):
+        rollback.rollback_document({"pid_v3": "document-id"}, self.session, {})
+        self.session.changes.rollback.assert_called_once_with("document-id")
+    
+    def test_rollback_documents(self):
+        rollback.rollback_document({"pid_v3": "document-id"}, self.session, {})
+        self.session.documents.rollback.assert_called_once_with("document-id")
