@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock, MagicMock, patch
 
 import pymongo
 from documentstore import exceptions as ds_exceptions
@@ -183,20 +183,40 @@ class TestRollbackBundle(TestCase):
         )
 
 
+@patch.object(rollback, "rollback_bundle")
 class TestRollbackDocument(TestCase):
 
     def setUp(self):
         self.session = Mock(spec=rollback.RollbackSession)
+        self.fake_journals = rollback.get_journals_from_json(
+            SAMPLES_PATH + "/base-isis-sample/title/title.json"
+        )
+        self.doc_info = {
+            "pid_v3": "document-id",
+            "eissn": "2317-6326",
+            "pissn": "0102-6720",
+            "issn": "0102-6720",
+            "pid": "document-pid-v2",
+            "year": "2020",
+            "volume": "1",
+            "number": "2",
+        }
 
-    def test_raises_error_if_no_pid_v3(self):
+    def test_raises_error_if_no_pid_v3(self, mock_rollback_bundle):
         with self.assertRaises(exceptions.RollbackError) as exc_info:
-            rollback.rollback_document({}, self.session, {})
+            rollback.rollback_document({}, self.session, self.fake_journals)
         self.assertEqual("could not get PID V3 from doc info.", str(exc_info.exception))
-    
-    def test_rollback_changes(self):
-        rollback.rollback_document({"pid_v3": "document-id"}, self.session, {})
+
+    def test_rollback_changes(self, mock_rollback_bundle):
+        rollback.rollback_document(self.doc_info, self.session, self.fake_journals)
         self.session.changes.rollback.assert_called_once_with("document-id")
-    
-    def test_rollback_documents(self):
-        rollback.rollback_document({"pid_v3": "document-id"}, self.session, {})
+
+    def test_rollback_documents(self, mock_rollback_bundle):
+        rollback.rollback_document(self.doc_info, self.session, self.fake_journals)
         self.session.documents.rollback.assert_called_once_with("document-id")
+
+    def test_rollback_bundle(self, mock_rollback_bundle):
+        rollback.rollback_document(self.doc_info, self.session, self.fake_journals)
+        mock_rollback_bundle.assert_called_once_with(
+            self.doc_info, self.session, self.fake_journals
+        )

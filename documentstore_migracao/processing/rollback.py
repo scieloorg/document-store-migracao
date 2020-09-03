@@ -152,6 +152,11 @@ def rollback_document(
         # Rollback Document
         session.documents.rollback(pid_v3)
 
+        # Rollback DocumentsBundle
+        rollback_bundle(doc_info, session, journals)
+
+        return {"pid_v3": doc_info["pid_v3"], "status": "ROLLEDBACK"}
+
 
 def rollback_kernel_documents(
     extracted_title_path: str,
