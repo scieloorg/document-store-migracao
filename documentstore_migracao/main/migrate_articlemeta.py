@@ -15,6 +15,7 @@ from documentstore_migracao.processing import (
     validation,
     packing,
     inserting,
+    rollback,
 )
 from documentstore_migracao.object_store import minio
 from documentstore import adapters as ds_adapters
@@ -181,6 +182,22 @@ def migrate_articlemeta_parser(sargs):
         "journals", help="JSON file de journals result, e.g: ~/json/journal.json"
     )
 
+    # ROLLBACK
+    rollback_parser = subparsers.add_parser(
+        "rollback",
+        help="Rollback of import process, deleting data registered on Kernel and MinIO",
+        parents=[mongodb_parser(sargs)],
+    )
+    rollback_parser.add_argument(
+        "imported_documents", help="The output file path of import command execution"
+    )
+    rollback_parser.add_argument(
+        "extracted_title", help="ISIS Title extracted to JSON file, e.g: ~/json/title-today.json"
+    )
+    rollback_parser.add_argument(
+        "--output", required=True, dest="output", help="The output file path",
+    )
+
     # Referências
     example_text = """Usage:
 
@@ -334,6 +351,17 @@ def migrate_articlemeta_parser(sargs):
         inserting.register_documents_in_documents_bundle(
             session_db=DB_Session(), file_documents=args.documents, file_journals=args.journals
         )
+
+    elif args.command == "rollback":
+        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
+
+        rollback.rollback_kernel_documents(
+            session_db=rollback.RollbackSession(mongo),
+            import_output_path=args.imported_documents,
+            extracted_title_path=args.extracted_title,
+            output_path=args.output,
+        )
+
     elif args.command == "mixed-citations":
         from documentstore_migracao.processing import pipeline
 
