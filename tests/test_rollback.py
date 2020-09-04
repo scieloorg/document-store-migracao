@@ -1,5 +1,6 @@
 from unittest import TestCase
 from unittest.mock import Mock, MagicMock, patch
+from datetime import datetime
 
 import pymongo
 from documentstore import exceptions as ds_exceptions
@@ -254,14 +255,20 @@ class TestRollbackDocument(TestCase):
         _result = rollback.rollback_document(
             self.doc_info, self.session, self.fake_journals
         )
-        self.assertEqual(_result, {"pid_v3": "document-id", "status": "ROLLEDBACK"})
+        self.assertEqual(_result.get("pid_v3"), "document-id")
+        self.assertEqual(_result.get("status"), "ROLLEDBACK")
+        self.assertIsInstance(
+            datetime.fromisoformat(_result.get("timestamp")), datetime
+        )
 
     def test_return_with_bundle(self, mock_rollback_bundle):
         mock_rollback_bundle.return_value = "bundle-id"
         _result = rollback.rollback_document(
             self.doc_info, self.session, self.fake_journals
         )
-        self.assertEqual(
-            _result,
-            {"pid_v3": "document-id", "bundle": "bundle-id", "status": "ROLLEDBACK"}
+        self.assertEqual(_result.get("pid_v3"), "document-id")
+        self.assertEqual(_result.get("bundle"), "bundle-id")
+        self.assertEqual(_result.get("status"), "ROLLEDBACK")
+        self.assertIsInstance(
+            datetime.fromisoformat(_result.get("timestamp")), datetime
         )
