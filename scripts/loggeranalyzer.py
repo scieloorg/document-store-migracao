@@ -83,11 +83,11 @@ PACK_FROM_SITE_PARSERS_PARAMS = [{
 
 class LoggerAnalyzer(object):
 
-    def __init__(self, in_file, out_file=None, log_format=None):
+    def __init__(self, in_file, out_file=None, out_format=None):
         self.in_file = in_file
         self.out_file = out_file
         self.content = ""
-        self.format = LoggerAnalyzer.formatters()
+        self.format = self.set_formatter(out_format)
 
     @classmethod
     def formatters(cls) -> Optional[Dict]:
@@ -270,7 +270,7 @@ class LoggerAnalyzer(object):
         return result
 
     def set_formatter(self, format) -> formatters:
-        return self.format.get(format, self.jsonl_formatter)
+        return LoggerAnalyzer.formatters().get(format, self.jsonl_formatter)
 
 
 @click.command()
@@ -306,7 +306,7 @@ def main(input, formatter, output, loglevel):
     if not output:
         output = sys.stdout
 
-    parser = LoggerAnalyzer(input, output)
+    parser = LoggerAnalyzer(input, output, formatter)
     parser.parse()
 
 
