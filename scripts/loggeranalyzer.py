@@ -309,17 +309,6 @@ def main(input, formatter, output, loglevel):
     parser = LoggerAnalyzer(input, output)
     parser.parse()
 
-    # lines = input.readlines()
-
-    # formatter = FORMATTERS.get(formatter)
-    # parsed_errors = parse_pack_from_site_errors(lines)
-    # formatted_errors = formatter(parsed_errors)
-
-    # if output is not None:
-    #     output_lines_to(formatted_errors, output)
-    # else:
-    #     output_lines_to(formatted_errors, sys.stdout)
-
 
 if __name__ == "__main__":
     main()
