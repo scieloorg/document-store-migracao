@@ -1,6 +1,7 @@
 """ module to rollback imported data """
 import json
 import logging
+from datetime import datetime
 
 import pymongo
 from documentstore import adapters as ds_adapters
@@ -191,7 +192,11 @@ def rollback_document(
         # Rollback Document
         session.documents.rollback(pid_v3)
 
-        _rolledback_result = {"pid_v3": doc_info["pid_v3"], "status": "ROLLEDBACK"}
+        _rolledback_result = {
+            "pid_v3": doc_info["pid_v3"],
+            "status": "ROLLEDBACK",
+            "timestamp": datetime.utcnow().isoformat(),
+        }
 
         # Rollback DocumentsBundle
         _rolledback_bundle_id = rollback_bundle(doc_info, session, journals)
@@ -241,10 +246,11 @@ def rollback_kernel_documents(
                 exception,
             )
 
+        # Manter como max_workers=1 até que o controle transacional seja implementado
         DoJobsConcurrently(
             rollback_document,
             jobs=jobs,
-            max_workers=int(config.get("PROCESSPOOL_MAX_WORKERS")),
+            max_workers=1,
             success_callback=write_result_to_file,
             exception_callback=exception_callback,
             update_bar=update_bar,
