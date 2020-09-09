@@ -18,13 +18,14 @@ import click
 LOGGER_FORMAT = u"%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s"
 LOGGER = logging.getLogger(__name__)
 
+# PACKAGE_FROM_SITE REGEX
 ASSET_NOT_FOUND_REGEX = re.compile(
-    r".*ERROR.*\[(?P<pid>S\d{4}-.*)\].*Could not find asset "
+    r".*\[(?P<pid>S\d{4}-.*)\].*Could not find asset "
     r"'(?P<uri>[^']+)'.*'(?P<xml>[^']+)'.?$",
     re.IGNORECASE,
 )
 RENDITION_NOT_FOUND_REGEX = re.compile(
-    r".*ERROR.*\[(?P<pid>S\d{4}-.*)\].*Could not find rendition "
+    r".*\[(?P<pid>S\d{4}-.*)\].*Could not find rendition "
     r"'(?P<uri>[^']+)'.*'(?P<xml>[^']+)'.?$",
     re.IGNORECASE,
 )
@@ -38,6 +39,32 @@ XML_NOT_UPDATED_REGEX = re.compile(
 )
 XML_MISSING_METADATA_REGEX = re.compile(
     r".*Missing \"(?P<metadata>[\w\s]+)\".* \"(?P<uri>[^']+)\"", re.IGNORECASE
+)
+
+# IMPORT_REGEX
+MANIFEST_NOT_FOUND = re.compile(
+    r".*No such file or directory: '(?P<file_path>[^']+)'",
+    re.IGNORECASE,
+)
+XML_NOT_INTO_PACKAGE = re.compile(
+    r".*There is no XML file into package '(?P<package_path>[^']+)",
+    re.IGNORECASE,
+)
+XML_PARSER_ERROR = re.compile(
+    r".*Could not parse the '(?P<file_path>[^']+)' file",
+    re.IGNORECASE,
+)
+BUNDLE_NOT_FOUND = re.compile(
+    r".*The bundle '(?P<bundle>[^']+)' was not updated.",
+    re.IGNORECASE,
+)
+ISSN_NOT_FOUND = re.compile(
+    r".*No ISSN in document '(?P<pid>[^']+)'",
+    re.IGNORECASE,
+)
+PACKAGE_NOT_FOUND = re.compile(
+    r".*Could not import package'(?P<package_path>[^']+)'",
+    re.IGNORECASE,
 )
 
 
@@ -54,60 +81,106 @@ class ErrorEnum(Enum):
     NOT_UPDATED = "xml-not-update"
     XML_NOT_FOUND = "xml-not-found"
     MISSING_METADATA = "missing-metadata"
+    MISSING_MANIFEST = "missing-manifest"
+    XML_PARSER_ERROR = "xml-parser-error"
+    BUNDLE_NOT_FOUND = "bundle-not-found"
+    ISSN_NOT_FOUND = "issn-not-found"
+    PACKAGE_NOT_FOUND = "package-not-found"
 
 
-PACK_FROM_SITE_PARSERS_PARAMS = [{
-    'regex': ASSET_NOT_FOUND_REGEX,
-    'error': ErrorEnum.RESOURCE_NOT_FOUND,
-    'group': "renditions",
+PACK_FROM_SITE_PARSERS_PARAMS = [
+    {
+        "regex": ASSET_NOT_FOUND_REGEX,
+        "error": ErrorEnum.RESOURCE_NOT_FOUND,
+        "group": "renditions",
     },
     {
-    'regex': RENDITION_NOT_FOUND_REGEX,
-    'error': ErrorEnum.RESOURCE_NOT_FOUND,
-    'group': "renditions",
+        "regex": RENDITION_NOT_FOUND_REGEX,
+        "error": ErrorEnum.RESOURCE_NOT_FOUND,
+        "group": "renditions",
     },
-    {
-    'regex': XML_NOT_UPDATED_REGEX,
-    'error': ErrorEnum.NOT_UPDATED
-    },
-    {
-    'regex': XML_NOT_FOUND_REGEX,
-    'error': ErrorEnum.XML_NOT_FOUND
-    },
-    {
-    'regex': XML_MISSING_METADATA_REGEX,
-    'error': ErrorEnum.MISSING_METADATA
-    }
+    {"regex": XML_NOT_UPDATED_REGEX, "error": ErrorEnum.NOT_UPDATED},
+    {"regex": XML_NOT_FOUND_REGEX, "error": ErrorEnum.XML_NOT_FOUND},
+    {"regex": XML_MISSING_METADATA_REGEX, "error": ErrorEnum.MISSING_METADATA},
+]
+
+
+IMPORT_PARSERS_PARAMS = [
+    {"regex": MANIFEST_NOT_FOUND, "error": ErrorEnum.MISSING_MANIFEST},
+    {"regex": XML_NOT_INTO_PACKAGE, "error": ErrorEnum.XML_NOT_FOUND},
+    {"regex": XML_PARSER_ERROR, "error": ErrorEnum.XML_PARSER_ERROR},
+    {"regex": BUNDLE_NOT_FOUND, "error": ErrorEnum.BUNDLE_NOT_FOUND},
+    {"regex": ISSN_NOT_FOUND, "error": ErrorEnum.ISSN_NOT_FOUND},
+    {"regex": PACKAGE_NOT_FOUND, "error": ErrorEnum.PACKAGE_NOT_FOUND},
 ]
 
 
 class LoggerAnalyzer(object):
-
-    def __init__(self, in_file, out_file=None, out_format=None):
+    def __init__(self, in_file, out_file=None, log_format=None, out_formatter=None):
         self.in_file = in_file
         self.out_file = out_file
         self.content = ""
-        self.format = self.set_formatter(out_format)
+        self.out_formatter = self.set_formatter(out_formatter)
+        self.log_format = (
+            log_format if log_format else "<date> <time> <level> <module> <message>"
+        )
 
     @classmethod
     def formatters(cls) -> Optional[Dict]:
         return {"jsonl": cls.jsonl_formatter}
 
+    def logformat_regex(self):
+        """
+        Método responsável por criar uma expressão regular para dividir as
+        menssagens de log semanticamente.
+
+        Args:
+            format: formato de saída que será utilizado.
+
+        Retornos:
+            header, regex
+            header: cabeçalho do formato do log.
+            regex: expressão regular do formato.
+
+        Exemplo:
+
+            re.compile('^(?P<Date>.*?)
+                       \\s+(?P<Time>.*?)
+                       \\s+(?P<Error>.*?)
+                       \\s+(?P<Module>.*?)
+                       \\s+(?P<Message>.*?)$')
+
+        Exceções:
+            Não lança exceções.
+        """
+        headers = []
+        splitters = re.split(r"(<[^<>]+>)", self.log_format)
+        regex = ""
+        for k in range(len(splitters)):
+            if k % 2 == 0:
+                splitter = re.sub(" +", "\\\s+", splitters[k])
+                regex += splitter
+            else:
+                header = splitters[k].strip("<").strip(">")
+                regex += "(?P<%s>.*?)" % header
+                headers.append(header)
+        regex = re.compile("^" + regex + "$")
+        return headers, regex
+
     def load(self) -> None:
         """
         Realiza a leitura do conteúdo do arquivo.
-
-        Talves esse método deva lançar uma exceção.
         """
         if isinstance(self.in_file, IOBase):
             self.content = self.in_file.readlines()
 
-    def parse(self, format=None) -> None:
+    def parse(self, parsers, format=None) -> None:
         """
         Método realiza a análise.
 
         Args:
             format: formato de saída que será utilizado.
+            parser: expressões regulares.
 
         Retornos:
             Não há retorno
@@ -118,7 +191,7 @@ class LoggerAnalyzer(object):
         """
         self.load()
         formatter = self.set_formatter(format)
-        tokenized_lines = self.tokenize()
+        tokenized_lines = self.tokenize(extra_parsers=parsers)
         lines = formatter(tokenized_lines)
         self.dump(lines)
 
@@ -160,7 +233,7 @@ class LoggerAnalyzer(object):
         return dict(match.groupdict(), **{"error": error.value, "group": group})
 
     def tokenize(
-        self, parsers: List[Callable] = PACK_FROM_SITE_PARSERS_PARAMS
+        self, extra_parsers: List[Callable] = None
     ) -> List[Optional[Dict]]:
         """Fachada que realiza o parser do arquivo de log do processo de
         empacotamento de xml nativos do utilitário `document-store-migracao`.
@@ -193,14 +266,24 @@ class LoggerAnalyzer(object):
         for line in self.content:
             line = line.strip()
 
-            for params in PACK_FROM_SITE_PARSERS_PARAMS:
+            _, regex = self.logformat_regex()
 
-                data = self.parser(line, **params)
+            match = regex.match(line)
+
+            format_dict = match.groupdict()
+
+            for params in extra_parsers:
+
+                data = self.parser(format_dict['message'], **params)
 
                 if data is not None:
                     pid: Optional[str] = data.get("pid")
                     error: ErrorEnum = data.get("error")
                     uri: Optional[str] = data.get("uri")
+                    level: Optional[str] = format_dict.get("level")
+                    time: Optional[str] = format_dict.get("time")
+                    date: Optional[str] = format_dict.get("date")
+                    exception: Optional[str] = format_dict.get("exception")
                     group = data.pop("group", error)
 
                     if pid is not None:
@@ -209,13 +292,19 @@ class LoggerAnalyzer(object):
                         documents_errors[pid][group].append(uri)
                         documents_errors[pid]["pid"] = pid
                         documents_errors[pid]["error"] = error
+                        documents_errors[pid]["level"] = level
+                        documents_errors[pid]["time"] = time
+                        documents_errors[pid]["date"] = date
                     elif error != ErrorEnum.RESOURCE_NOT_FOUND:
+                        data["level"] = level
+                        data["time"] = time
+                        data["date"] = date
                         errors.append(data)
                     break
             else:
                 # Linha que não foi identificada como erro de empacotamento
                 LOGGER.debug(
-                    "Não foi possível analisar a linha '%s', talvés seja necessário especificar um analisador.",
+                    "Não foi possível analisar a linha '%s', talves seja necessário especificar um analisador.",
                     line,
                 )
 
@@ -283,13 +372,26 @@ class LoggerAnalyzer(object):
     help="Escolha um formato de conversão para o analisador",
 )
 @click.option(
-    "--loglevel",
+    "-s",
+    "--step",
+    required=True,
+    type=click.Choice(['pack_from_site', 'import']),
+    help="Escolha um formato de conversão para o analisador",
+)
+@click.option(
+    "--log_format",
+    default="<date> <time> <level> <module> <message>",
+    type=click.STRING,
+    help="Define o formato do log. Padrão: <date> <time> <level> <module> <message>.",
+)
+@click.option(
+    "--log_level",
     default="WARNING",
     type=click.Choice(["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
-    help="Defini o nível de log de excecução. Padrão é WARNING.",
+    help="Defini o nível de log de excecução. Padrão WARNING.",
 )
 @click.argument("output", type=click.File("w"), required=False)
-def main(input, formatter, output, loglevel):
+def main(input, step, formatter, log_format, output, log_level):
     """
     Document Store Migration (DSM) - Log Analyzer
 
@@ -301,13 +403,17 @@ def main(input, formatter, output, loglevel):
 
     """
 
-    logging.basicConfig(format=LOGGER_FORMAT, level=getattr(logging, loglevel.upper()))
+    logging.basicConfig(format=LOGGER_FORMAT, level=getattr(logging, log_level.upper()))
 
     if not output:
         output = sys.stdout
 
-    parser = LoggerAnalyzer(input, output, formatter)
-    parser.parse()
+    parser = LoggerAnalyzer(input, output, log_format, out_formatter=formatter)
+
+    if step == 'import':
+        parser.parse(IMPORT_PARSERS_PARAMS)
+    elif step == 'pack_from_site':
+        parser.parse(PACK_FROM_SITE_PARSERS_PARAMS)
 
 
 if __name__ == "__main__":
