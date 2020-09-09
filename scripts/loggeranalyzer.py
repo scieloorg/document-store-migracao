@@ -129,7 +129,7 @@ class LoggerAnalyzer(object):
     def formatters(cls) -> Optional[Dict]:
         return {"jsonl": cls.jsonl_formatter}
 
-    def logformat_regex(self):
+    def logformat_regex(self) -> (List[str], re.Pattern):
         """
         Método responsável por criar uma expressão regular para dividir as
         menssagens de log semanticamente.
