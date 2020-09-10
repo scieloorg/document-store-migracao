@@ -270,37 +270,38 @@ class LoggerAnalyzer(object):
 
             match = regex.match(line)
 
-            format_dict = match.groupdict()
+            if match:
+                format_dict = match.groupdict()
 
-            for params in extra_parsers:
+                for params in extra_parsers:
 
-                data = self.parser(format_dict['message'], **params)
+                    data = self.parser(format_dict['message'], **params)
 
-                if data is not None:
-                    pid: Optional[str] = data.get("pid")
-                    error: ErrorEnum = data.get("error")
-                    uri: Optional[str] = data.get("uri")
-                    level: Optional[str] = format_dict.get("level")
-                    time: Optional[str] = format_dict.get("time")
-                    date: Optional[str] = format_dict.get("date")
-                    exception: Optional[str] = format_dict.get("exception")
-                    group = data.pop("group", error)
+                    if data is not None:
+                        pid: Optional[str] = data.get("pid")
+                        error: ErrorEnum = data.get("error")
+                        uri: Optional[str] = data.get("uri")
+                        level: Optional[str] = format_dict.get("level")
+                        time: Optional[str] = format_dict.get("time")
+                        date: Optional[str] = format_dict.get("date")
+                        exception: Optional[str] = format_dict.get("exception")
+                        group = data.pop("group", error)
 
-                    if pid is not None:
-                        documents_errors.setdefault(pid, {})
-                        documents_errors[pid].setdefault(group, [])
-                        documents_errors[pid][group].append(uri)
-                        documents_errors[pid]["pid"] = pid
-                        documents_errors[pid]["error"] = error
-                        documents_errors[pid]["level"] = level
-                        documents_errors[pid]["time"] = time
-                        documents_errors[pid]["date"] = date
-                    elif error != ErrorEnum.RESOURCE_NOT_FOUND:
-                        data["level"] = level
-                        data["time"] = time
-                        data["date"] = date
-                        errors.append(data)
-                    break
+                        if pid is not None:
+                            documents_errors.setdefault(pid, {})
+                            documents_errors[pid].setdefault(group, [])
+                            documents_errors[pid][group].append(uri)
+                            documents_errors[pid]["pid"] = pid
+                            documents_errors[pid]["error"] = error
+                            documents_errors[pid]["level"] = level
+                            documents_errors[pid]["time"] = time
+                            documents_errors[pid]["date"] = date
+                        elif error != ErrorEnum.RESOURCE_NOT_FOUND:
+                            data["level"] = level
+                            data["time"] = time
+                            data["date"] = date
+                            errors.append(data)
+                        break
             else:
                 # Linha que não foi identificada como erro de empacotamento
                 LOGGER.debug(
