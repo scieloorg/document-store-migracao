@@ -127,7 +127,7 @@ class LoggerAnalyzer(object):
 
     @classmethod
     def formatters(cls) -> Optional[Dict]:
-        return {"jsonl": cls.jsonl_formatter}
+        return {"jsonl": cls.json_formatter}
 
     def logformat_regex(self) -> (List[str], re.Pattern):
         """
@@ -171,6 +171,7 @@ class LoggerAnalyzer(object):
         """
         Realiza a leitura do conteúdo do arquivo.
         """
+
         if isinstance(self.in_file, IOBase):
             self.content = self.in_file.readlines()
 
@@ -224,7 +225,6 @@ class LoggerAnalyzer(object):
             Não lança exceções.
 
         """
-
         match = regex.match(line)
 
         if match is None:
@@ -252,7 +252,7 @@ class LoggerAnalyzer(object):
         utilizado para atualizar o XML em questão.
 
         Exemplo de uso desta função:
-        >>> parse_pack_from_site_errors([
+        >>> tokenize([
                 "2020-05-08 11:43:38 ERROR [documentstore_migracao.utils.build_ps_package] "
                 "[S1981-38212017000200203] - Could not find asset 'imagem.tif' during packing XML "
                 "'/1981-3821-bpsr-1981-3821201700020001.xml'"
@@ -305,7 +305,7 @@ class LoggerAnalyzer(object):
             else:
                 # Linha que não foi identificada como erro de empacotamento
                 LOGGER.debug(
-                    "Não foi possível analisar a linha '%s', talves seja necessário especificar um analisador.",
+                    "Não foi possível analisar a linha '%s', talvez seja necessário especificar um analisador.",
                     line,
                 )
 
@@ -330,17 +330,16 @@ class LoggerAnalyzer(object):
             self.out_file.write(line)
             self.out_file.write("\n")
 
-    def jsonl_formatter(self, errors: List[Optional[Dict]]) -> List[str]:
+    def json_formatter(self, errors: List[Optional[Dict]]) -> List[str]:
         """Imprime linha a linha da lista de entrada, convertendo o conteúdo para
-        JSON. É esperado então que uma lista de dados seja transformada no formato
-        JSONL.
+        JSON.
 
         Args:
             errors: Lista de dicionários contendo os erro semânticamente identificado.
 
         Retornos:
 
-            Retorna um JSONL correspondente a cada dicionário do argumento errors,
+            Retorna um JSON correspondente a cada dicionário do argumento errors,
             example:
 
             {"uri": "jbn/nahead/2175-8239-jbn-2019-0218.xml", "error": "xml-not-found"}
@@ -360,7 +359,7 @@ class LoggerAnalyzer(object):
         return result
 
     def set_formatter(self, format) -> formatters:
-        return LoggerAnalyzer.formatters().get(format, self.jsonl_formatter)
+        return LoggerAnalyzer.formatters().get(format, self.json_formatter)
 
 
 @click.command()
