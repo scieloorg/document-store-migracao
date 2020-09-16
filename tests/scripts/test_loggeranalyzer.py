@@ -38,6 +38,12 @@ class TestLoggerAnalyzer(unittest.TestCase):
         parser = loggeranalyzer.LoggerAnalyzer(self.log_file)
 
         self.assertIsInstance(parser.json_formatter(errors), list)
+        expected_list = ['{"uri": "cadbto/nahead/2526-8910-cadbto-2526-8910ctoAO1930.xml", "error": "xml-not-found", "level": "ERROR", "time": "14:49:55", "date": "2020-08-26"}',
+                         '{"renditions": ["bases/pdf/abc/v114n4s1/pt_0066-782X-abc-20180130.pdf"], "pid": "S0066-782X2020000500001", "error": "resource-not-found", "level": "ERROR", "time": "13:46:05", "date": "2020-08-26"}',
+                         '{"renditions": ["bases/pdf/esa/v25n3/1809-4457-esa-s1413-41522020137661.pdf"], "pid": "S1413-41522020000300451", "error": "resource-not-found", "level": "ERROR", "time": "13:57:25", "date": "2020-08-26"}',
+                         '{"renditions": ["htdocs/img/revistas/jbpneu/v46n6/1806-3713-jbpneu-46-6-e20190272-suppl01-en"], "pid": "S1806-37132020000600204", "error": "resource-not-found", "level": "ERROR", "time": "14:03:13", "date": "2020-08-26"}',
+                         '{"renditions": ["htdocs/img/revistas/rbmet/v35n1/0102-7786-rbmet-35-01-0004-fig02.tif", "htdocs/img/revistas/rbmet/v35n1/0102-7786-rbmet-35-01-0004-fig01.tif", "htdocs/img/revistas/rbmet/v35n1/0102-7786-rbmet-35-01-0004-fig06.tif", "htdocs/img/revistas/rbmet/v35n1/0102-7786-rbmet-35-01-0004-fig03.tif", "htdocs/img/revistas/rbmet/v35n1/0102-7786-rbmet-35-01-0004-fig07.tif"], "pid": "S0102-77862020000100089", "error": "resource-not-found", "level": "ERROR", "time": "14:22:50", "date": "2020-08-26"}']
+        self.assertEqual(parser.json_formatter(errors), expected_list)
 
     def test_json_formatter_if_each_is_json_unserialized(self):
         """
