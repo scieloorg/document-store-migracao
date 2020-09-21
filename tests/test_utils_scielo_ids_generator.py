@@ -60,3 +60,21 @@ class TestUtilsSciELOIDsGenerator_for_issue_bundle(unittest.TestCase):
             scielo_ids_generator.issue_id("ISSN", "YEAR", number="03"),
             "ISSN-YEAR-n3",
         )
+
+    def test_issue_id_returns_ISSN_YEAR_VOL_and_no_number_because_it_is_00(self):
+        self.assertEqual(
+            scielo_ids_generator.issue_id("ISSN", "YEAR", volume="19", number="00"),
+            "ISSN-YEAR-v19",
+        )
+
+    def test_issue_id_returns_ISSN_YEAR_NUM_and_no_vol_because_it_is_00(self):
+        self.assertEqual(
+            scielo_ids_generator.issue_id("ISSN", "YEAR", volume="00", number="19"),
+            "ISSN-YEAR-n19",
+        )
+
+    def test_issue_id_returns_ISSN_YEAR_because_vol_00_and_num_00(self):
+        self.assertEqual(
+            scielo_ids_generator.issue_id("ISSN", "YEAR", volume="00", number="00"),
+            "ISSN-YEAR",
+        )

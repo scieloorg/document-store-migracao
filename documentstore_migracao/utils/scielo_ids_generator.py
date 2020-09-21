@@ -31,6 +31,11 @@ def generate_scielo_pid():
 
 
 def issue_id(issn_id, year, volume=None, number=None, supplement=None):
+    if volume and volume.isdigit() and int(volume) == 0:
+        volume = None
+    if number and number.isdigit() and int(number) == 0:
+        number = None
+
     labels = ["issn_id", "year", "volume", "number", "supplement"]
     values = [issn_id, year, volume, number, supplement]
 
