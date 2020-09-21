@@ -283,6 +283,14 @@ class TestXyloseIssueConverter(unittest.TestCase):
             {"range": (1, 6)}, self.issue["metadata"]["publication_months"]
         )
 
+    def test_issue_has_number_returns(self):
+        issue_json = self.issue_json.copy()
+        issue_json["v32"] = [{"_": "ahead"}]
+        issue = Issue({"issue": issue_json})
+        _issue = issue_to_kernel(issue)
+        self.assertEqual("ahead", issue.number)
+        self.assertEqual("2448-167X-2019-nahead", _issue["id"])
+
 
 class TestFindDocumentBundles(unittest.TestCase):
     def setUp(self):
