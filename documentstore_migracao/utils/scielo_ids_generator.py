@@ -36,21 +36,11 @@ def issue_id(issn_id, year, volume=None, number=None, supplement=None):
     if number and number.isdigit() and int(number) == 0:
         number = None
 
-    labels = ["issn_id", "year", "volume", "number", "supplement"]
+    prefixes = ["", "", "v", "n", "s"]
     values = [issn_id, year, volume, number, supplement]
 
-    data = dict([(label, value) for label, value in zip(labels, values)])
-
-    labels = ["issn_id", "year"]
     _id = []
-    for label in labels:
-        value = data.get(label)
-        if value:
-            _id.append(value)
-
-    labels = [("volume", "v"), ("number", "n"), ("supplement", "s")]
-    for label, prefix in labels:
-        value = data.get(label)
+    for value, prefix in zip(values, prefixes):
         if value:
             if value.isdigit():
                 value = str(int(value))
