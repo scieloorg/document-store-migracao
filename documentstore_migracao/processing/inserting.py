@@ -377,22 +377,28 @@ def register_documents_in_documents_bundle(
                 if data_journal.get(issn_value) is not None:
                     return data_journal[issn_value]
 
-    def get_bundle_id(issn, document, is_issue):
-        """Gera o id do bundle onde o documento será adicionado. Se for um fascículo
-        regular, retorna ID do fascículo gerado. Caso contrário, retorna o ID de Ahead
-        of Print."""
+    def get_bundle_info(issn, document):
+        """
+        Obtém e retorna os dados do `bundle`: ID e se é um fascículo
 
-        if is_issue:
-            bundle_id = scielo_ids_generator.issue_id(
+        Args:
+            issn (str): ISSN
+            document (dict): Dados do documento
+
+        Returns:
+            tuple (bool, str):
+                True para é fascículoID do `bundle` de fascículo ou aop
+        """
+        bundle_id = scielo_ids_generator.issue_id(
                 issn,
                 document.get("year"),
                 document.get("volume"),
                 document.get("number"),
                 document.get("supplement"),
             )
-        else:
-            bundle_id = scielo_ids_generator.aops_bundle_id(issn)
-        return bundle_id
+        aops_bundle_id = scielo_ids_generator.aops_bundle_id(issn)
+        is_issue = bundle_id != aops_bundle_id
+        return is_issue, bundle_id
 
     err_filename = os.path.join(
         config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
@@ -409,8 +415,7 @@ def register_documents_in_documents_bundle(
             logger.error("No ISSN in document '%s'", document["pid_v3"])
             files.write_file(err_filename, document["pid_v3"] + "\n", "a")
             continue
-        is_issue = bool(document.get("volume") or document.get("number"))
-        bundle_id = get_bundle_id(issn_id, document, is_issue=is_issue)
+        is_issue, bundle_id = get_bundle_info(issn_id, document)
         documents_bundles.setdefault(bundle_id, {})
         documents_bundles[bundle_id].setdefault("items", [])
         documents_bundles[bundle_id]["items"].append(
