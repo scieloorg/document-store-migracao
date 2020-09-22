@@ -73,8 +73,36 @@ class TestUtilsSciELOIDsGenerator_for_issue_bundle(unittest.TestCase):
             "ISSN-YEAR-n19",
         )
 
-    def test_issue_id_returns_ISSN_YEAR_because_vol_00_and_num_00(self):
+    def test_issue_id_returns_ISSN_aop_because_vol_00_and_num_00(self):
         self.assertEqual(
-            scielo_ids_generator.issue_id("ISSN", "YEAR", volume="00", number="00"),
-            "ISSN-YEAR",
+            scielo_ids_generator.issue_id(
+                "ISSN", "YEAR", volume="00", number="00"),
+            "ISSN-aop",
         )
+
+
+class TestNormalizeVolumeAndNumber(unittest.TestCase):
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_empty_str(self):
+        result = scielo_ids_generator.normalize_volume_and_number("", "")
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_00(self):
+        result = scielo_ids_generator.normalize_volume_and_number("00", "00")
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_None(self):
+        result = scielo_ids_generator.normalize_volume_and_number(None, None)
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_number_ahead(self):
+        result = scielo_ids_generator.normalize_volume_and_number(None, "ahead")
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_volume_and_number(self):
+        result = scielo_ids_generator.normalize_volume_and_number("vol", "num")
+        self.assertEqual(result, ("vol", "num"))
+
+    def test_normalize_volume_and_number_returns_volume_and_number_no_zero_on_the_left(self):
+        result = scielo_ids_generator.normalize_volume_and_number("01", "009")
+        self.assertEqual(result, ("1", "9"))

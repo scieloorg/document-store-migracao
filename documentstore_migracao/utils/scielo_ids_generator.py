@@ -31,10 +31,23 @@ def generate_scielo_pid():
 
 
 def issue_id(issn_id, year, volume=None, number=None, supplement=None):
-    if volume and volume.isdigit() and int(volume) == 0:
-        volume = None
-    if number and number.isdigit() and int(number) == 0:
-        number = None
+    """
+    Retorna o `ID` de um `bundle`
+    Args:
+        issn_id (str): ISSN usado como ID
+        year (str): ano, 4 dígitos
+        volume (None or str): volume se aplicável
+        number (None or str): número se aplicável
+        supplement (None or str): suplemento se aplicável
+
+        Nota: se `number` é igual a `ahead`, equivale a `None`
+    Returns:
+        {ISSN_ID}[-{YEAR}][-v{VOLUME}][-n{NUMBER}][-s{SUPPL}] para fascículos
+        {ISSN_ID}-aop para `ahead of print`
+    """
+    volume, number = normalize_volume_and_number(volume, number)
+    if volume is None and number is None and supplement is None:
+        return aops_bundle_id(issn_id)
 
     prefixes = ["", "", "v", "n", "s"]
     values = [issn_id, year, volume, number, supplement]
@@ -51,3 +64,34 @@ def issue_id(issn_id, year, volume=None, number=None, supplement=None):
 
 def aops_bundle_id(issn_id):
     return issn_id + "-aop"
+
+
+def normalize_volume_and_number(volume, number):
+    """
+    Padroniza os valores de `volume` e `number`
+    Args:
+        volume (None or str): volume se aplicável
+        number (None or str): número se aplicável
+
+        Notas:
+        - se `number` é igual a `ahead`, equivale a `None`
+        - se `00`, equivale a `None`
+        - se `01`, equivale a `1`
+        - se `""`, equivale a `None`
+    Returns:
+        tuple (str or None, str or None)
+    """
+    if number == "ahead":
+        return None, None
+
+    if volume and volume.isdigit():
+        value = int(volume)
+        volume = str(value) if value > 0 else None
+    if number and number.isdigit():
+        value = int(number)
+        number = str(value) if value > 0 else None
+
+    volume = volume or None
+    number = number or None
+
+    return volume, number
