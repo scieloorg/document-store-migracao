@@ -254,7 +254,7 @@ def issue_to_kernel(issue):
 
     _metadata["publication_months"] = publication_months
 
-    _id = scielo_ids_generator.issue_id(
+    _id = scielo_ids_generator.any_bundle_id(
         issn_id, _year, issue.volume, issue.number, _supplement
     )
     _bundle["_id"] = _id

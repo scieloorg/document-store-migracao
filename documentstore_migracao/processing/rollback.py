@@ -128,8 +128,7 @@ def get_bundle_id(issn_id: str, doc_info: dict) -> None:
     Returns:
         str: ID do bundle de fascículo ou do bundle AOP
     """
-
-    return scielo_ids_generator.issue_id(
+    return scielo_ids_generator.any_bundle_id(
         issn_id,
         doc_info.get("year"),
         doc_info.get("volume"),

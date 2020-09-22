@@ -251,6 +251,7 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.assertIn("n1", self.issue["id"])
 
     def test_issue_has_supplement_when_supplement_volume_is_not_none(self):
+        self.issue_json["v31"] = [{"_": "4"}]
         self.issue_json["v131"] = [{"_": "3"}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual("3", self.issue["metadata"]["supplement"])
@@ -258,6 +259,7 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.assertIn("s3", self.issue["id"])
 
     def test_issue_has_supplement_when_supplement_number_is_not_none(self):
+        self.issue_json["v32"] = [{"_": "4"}]
         self.issue_json["v132"] = [{"_": "2"}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual("2", self.issue["metadata"]["supplement"])

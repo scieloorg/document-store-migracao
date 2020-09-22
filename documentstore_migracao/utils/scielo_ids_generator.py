@@ -6,6 +6,10 @@ DIGIT_CHARS = "bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ3456789"
 chars_map = {dig: idx for idx, dig in enumerate(DIGIT_CHARS)}
 
 
+class NotAnIssueError(Exception):
+    pass
+
+
 def uuid2str(value):
     result = []
     unevaluated = value.int
@@ -32,7 +36,7 @@ def generate_scielo_pid():
 
 def issue_id(issn_id, year, volume=None, number=None, supplement=None):
     """
-    Retorna o `ID` de um `bundle`
+    Retorna o `ID` de um `issue`
     Args:
         issn_id (str): ISSN usado como ID
         year (str): ano, 4 dígitos
@@ -46,8 +50,9 @@ def issue_id(issn_id, year, volume=None, number=None, supplement=None):
         {ISSN_ID}-aop para `ahead of print`
     """
     volume, number = normalize_volume_and_number(volume, number)
-    if volume is None and number is None and supplement is None:
-        return aops_bundle_id(issn_id)
+    if volume is None and number is None:
+        raise NotAnIssueError(
+            "Issue must have at least volume or number")
 
     prefixes = ["", "", "v", "n", "s"]
     values = [issn_id, year, volume, number, supplement]
@@ -64,6 +69,27 @@ def issue_id(issn_id, year, volume=None, number=None, supplement=None):
 
 def aops_bundle_id(issn_id):
     return issn_id + "-aop"
+
+
+def any_bundle_id(issn_id, year, volume=None, number=None, supplement=None):
+    """
+    Retorna o `ID` de um `bundle` (aop ou fascículo)
+    Args:
+        issn_id (str): ISSN usado como ID
+        year (str): ano, 4 dígitos
+        volume (None or str): volume se aplicável
+        number (None or str): número se aplicável
+        supplement (None or str): suplemento se aplicável
+
+        Nota: se `number` é igual a `ahead`, equivale a `None`
+    Returns:
+        {ISSN_ID}[-{YEAR}][-v{VOLUME}][-n{NUMBER}][-s{SUPPL}] para fascículos
+        {ISSN_ID}-aop para `ahead of print`
+    """
+    try:
+        return issue_id(issn_id, year, volume, number, supplement)
+    except NotAnIssueError:
+        return aops_bundle_id(issn_id)
 
 
 def normalize_volume_and_number(volume, number):

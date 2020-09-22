@@ -389,7 +389,7 @@ def register_documents_in_documents_bundle(
             tuple (bool, str):
                 True para é fascículoID do `bundle` de fascículo ou aop
         """
-        bundle_id = scielo_ids_generator.issue_id(
+        bundle_id = scielo_ids_generator.any_bundle_id(
                 issn,
                 document.get("year"),
                 document.get("volume"),
