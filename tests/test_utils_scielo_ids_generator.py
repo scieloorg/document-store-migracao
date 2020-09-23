@@ -60,3 +60,104 @@ class TestUtilsSciELOIDsGenerator_for_issue_bundle(unittest.TestCase):
             scielo_ids_generator.issue_id("ISSN", "YEAR", number="03"),
             "ISSN-YEAR-n3",
         )
+
+    def test_issue_id_returns_ISSN_YEAR_VOL_and_no_number_because_it_is_00(self):
+        self.assertEqual(
+            scielo_ids_generator.issue_id("ISSN", "YEAR", volume="19", number="00"),
+            "ISSN-YEAR-v19",
+        )
+
+    def test_issue_id_returns_ISSN_YEAR_NUM_and_no_vol_because_it_is_00(self):
+        self.assertEqual(
+            scielo_ids_generator.issue_id("ISSN", "YEAR", volume="00", number="19"),
+            "ISSN-YEAR-n19",
+        )
+
+    def test_issue_id_raises_value_error_because_vol_00_and_num_00(self):
+        with self.assertRaises(
+                scielo_ids_generator.NotAnIssueError):
+            scielo_ids_generator.issue_id(
+                "ISSN", "YEAR", volume="00", number="00"
+            )
+
+
+class TestNormalizeVolumeAndNumber(unittest.TestCase):
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_empty_str(self):
+        result = scielo_ids_generator.normalize_volume_and_number("", "")
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_00(self):
+        result = scielo_ids_generator.normalize_volume_and_number("00", "00")
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_None(self):
+        result = scielo_ids_generator.normalize_volume_and_number(None, None)
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_None_and_None_for_number_ahead(self):
+        result = scielo_ids_generator.normalize_volume_and_number(None, "ahead")
+        self.assertEqual(result, (None, None))
+
+    def test_normalize_volume_and_number_returns_volume_and_number(self):
+        result = scielo_ids_generator.normalize_volume_and_number("vol", "num")
+        self.assertEqual(result, ("vol", "num"))
+
+    def test_normalize_volume_and_number_returns_volume_and_number_no_zero_on_the_left(self):
+        result = scielo_ids_generator.normalize_volume_and_number("01", "009")
+        self.assertEqual(result, ("1", "9"))
+
+
+class TestUtilsSciELOIDsGenerator_for_any_bundle_id(unittest.TestCase):
+    def test_any_bundle_id_for_issn_year_volume_number_suppl(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id(
+                "ISSN", "YEAR", "VOLUME", "03", "SUPPL"
+            ),
+            "ISSN-YEAR-vVOLUME-n3-sSUPPL",
+        )
+
+    def test_any_bundle_id_for_issn_year_volume_number(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id("ISSN", "YEAR", "VOLUME", "03"),
+            "ISSN-YEAR-vVOLUME-n3",
+        )
+
+    def test_any_bundle_id_for_issn_year_volume_suppl(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id(
+                "ISSN", "YEAR", "VOLUME", supplement="SUPPL"
+            ),
+            "ISSN-YEAR-vVOLUME-sSUPPL",
+        )
+
+    def test_any_bundle_id_for_issn_year_volume(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id("ISSN", "YEAR", "VOLUME"),
+            "ISSN-YEAR-vVOLUME",
+        )
+
+    def test_any_bundle_id_for_issn_year_number(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id("ISSN", "YEAR", number="03"),
+            "ISSN-YEAR-n3",
+        )
+
+    def test_any_bundle_id_returns_ISSN_YEAR_VOL_and_no_number_because_it_is_00(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id("ISSN", "YEAR", volume="19", number="00"),
+            "ISSN-YEAR-v19",
+        )
+
+    def test_any_bundle_id_returns_ISSN_YEAR_NUM_and_no_vol_because_it_is_00(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id("ISSN", "YEAR", volume="00", number="19"),
+            "ISSN-YEAR-n19",
+        )
+
+    def test_any_bundle_id_returns_aops_bundle_id(self):
+        self.assertEqual(
+            scielo_ids_generator.any_bundle_id(
+                "ISSN", "YEAR", volume="00", number="00"),
+            "ISSN-aop"
+        )

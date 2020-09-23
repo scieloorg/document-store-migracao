@@ -53,6 +53,7 @@ setuptools.setup(
     install_requires=requires,
     dependency_links=[
         "git+https://github.com/scieloorg/opac_schema.git@v2.54#egg=opac_schema",
+        "git+https://github.com/scieloorg/kernel.git@v0.1rc11#egg=scielo-kernel",
     ],
     python_requires=">=3.6",
     test_suite="tests",
