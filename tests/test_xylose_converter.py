@@ -215,9 +215,16 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.assertIn("2448-167X", self.issue["id"])
         self.assertIn("2448-167X", self.issue["_id"])
 
-    def test_issue_has_year_in_id(self):
+    def test_issue_has_year_in_id_because_it_is_not_aop(self):
+        self.issue_json["v31"] = [{"_": "21"}]
+        self._issue = Issue({"issue": self.issue_json})
+        self.issue = issue_to_kernel(self._issue)
         self.assertIn("2019", self.issue["id"])
         self.assertIn("2019", self.issue["_id"])
+
+    def test_issue_has_no_year_in_id_because_it_is_aop(self):
+        self.assertNotIn("2019", self.issue["id"])
+        self.assertNotIn("2019", self.issue["_id"])
 
     def test_issue_should_be_created_date_equals_to_publication_date(self):
         self.assertEqual("2019-01-29T00:00:00.000000Z", self.issue["created"])
@@ -244,6 +251,7 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.assertIn("n1", self.issue["id"])
 
     def test_issue_has_supplement_when_supplement_volume_is_not_none(self):
+        self.issue_json["v31"] = [{"_": "4"}]
         self.issue_json["v131"] = [{"_": "3"}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual("3", self.issue["metadata"]["supplement"])
@@ -251,6 +259,7 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.assertIn("s3", self.issue["id"])
 
     def test_issue_has_supplement_when_supplement_number_is_not_none(self):
+        self.issue_json["v32"] = [{"_": "4"}]
         self.issue_json["v132"] = [{"_": "2"}]
         self.issue = issue_to_kernel(self._issue)
         self.assertEqual("2", self.issue["metadata"]["supplement"])
@@ -282,6 +291,14 @@ class TestXyloseIssueConverter(unittest.TestCase):
         self.assertEqual(
             {"range": (1, 6)}, self.issue["metadata"]["publication_months"]
         )
+
+    def test_issue_has_number_returns(self):
+        issue_json = self.issue_json.copy()
+        issue_json["v32"] = [{"_": "ahead"}]
+        issue = Issue({"issue": issue_json})
+        _issue = issue_to_kernel(issue)
+        self.assertEqual("ahead", issue.number)
+        self.assertEqual("2448-167X-aop", _issue["id"])
 
 
 class TestFindDocumentBundles(unittest.TestCase):

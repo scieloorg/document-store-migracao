@@ -125,18 +125,16 @@ def get_bundle_id(issn_id: str, doc_info: dict) -> None:
     do módulo scielo_ids_generator.
         `issn_id`: ISSN ID do Periódico
         `doc_info`: dados de um registro do arquivo JSON resultado da importação
+    Returns:
+        str: ID do bundle de fascículo ou do bundle AOP
     """
-
-    if doc_info.get("volume") or doc_info.get("number"):
-        return scielo_ids_generator.issue_id(
-            issn_id,
-            doc_info.get("year"),
-            doc_info.get("volume"),
-            doc_info.get("number"),
-            doc_info.get("supplement"),
-        )
-
-    return scielo_ids_generator.aops_bundle_id(issn_id)
+    return scielo_ids_generator.any_bundle_id(
+        issn_id,
+        doc_info.get("year"),
+        doc_info.get("volume"),
+        doc_info.get("number"),
+        doc_info.get("supplement"),
+    )
 
 
 def rollback_bundle(doc_info: dict, session: object, journals: dict) -> str:
