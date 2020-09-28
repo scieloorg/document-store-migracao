@@ -466,10 +466,6 @@ class TestDocumentManifest(unittest.TestCase):
     @patch("documentstore_migracao.object_store.minio.MinioStorage")
     def setUp(self, mock_minio_storage):
         self.package_path = os.path.join(SAMPLES_PATH, "0034-8910-rsp-47-02-0231")
-        self.renditions_names = [
-            "0034-8910-rsp-47-02-0231.pdf",
-            "0034-8910-rsp-47-02-0231-en.pdf",
-        ]
         self.renditions_urls_mock = [
             "prefix/0034-8910-rsp-47-02-0231.pdf.pdf",
             "prefix/0034-8910-rsp-47-02-0231.pdf-en.pdf",
@@ -488,7 +484,7 @@ class TestDocumentManifest(unittest.TestCase):
             )
 
         self.renditions = inserting.get_document_renditions(
-            self.package_path, self.renditions_names, "prefix", mock_minio_storage
+            self.package_path, "prefix", mock_minio_storage
         )
 
     def tearDown(self):
@@ -515,9 +511,18 @@ class TestDocumentManifest(unittest.TestCase):
     def test_renditon_should_contains_language(self):
         self.assertEqual("en", self.renditions[1]["lang"])
 
-    def test_rendtion_should_not_contains_language(self):
+    def test_rendition_should_not_contains_language(self):
         self.assertEqual("pt", self.renditions[0]["lang"])
 
+    def test_when_manifest_file_does_not_exist_it_should_return_an_empty_list(self):
+        os.unlink(self.json_manifest)
+        self.renditions = inserting.get_document_renditions(
+            self.package_path, "prefix", MagicMock()
+        )
+        self.assertEqual(0, len(self.renditions))
+
+        with open(self.json_manifest, "w") as f:
+            pass
 
 class TestDocumentRegister(unittest.TestCase):
     def setUp(self):
