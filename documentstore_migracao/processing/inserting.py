@@ -44,22 +44,14 @@ __all__ = ["import_documents_to_kernel", "register_documents_in_documents_bundle
 
 
 def get_document_renditions(
-    folder: str, renditions: List[str], file_prefix: str, storage: object
+    folder: str, file_prefix: str, storage: object
 ) -> List[dict]:
-    """Obtem informações sobre todos os `rendition` informados
-    e retorna um dicionário com informações relevantes sobre
-    os arquivos"""
-
-    def get_language(filename: str) -> str:
-        """Busca pelo idioma do rendition a partir do seu nome"""
-
-        try:
-            LANG_REGEX = re.compile(r".*-([a-zA-z-_]+)\.\w+")
-            return LANG_REGEX.findall(filename)[-1]
-        except:
-            return None
+    """Faz o envio das manifestações do pacote com base no arquivo
+    manifest.json e retorna o resultado do envio destas manifestações
+    para o object store."""
 
     mimetypes = MimeTypes()
+    _renditions = []
 
     try:
         _manifest_json = json.loads(
@@ -67,37 +59,25 @@ def get_document_renditions(
         )
     except Exception as exc:
         logger.error("Could not read manifest: %s", str(exc))
-        _manifest = {}
     else:
         _manifest = {lang: urlparse(url).path for lang, url in _manifest_json.items()}
         logger.debug("Renditions lang and legacy url: %s", _manifest)
 
-    _renditions = []
+        for lang, legacy_url in _manifest.items():
+            rendition = os.path.basename(legacy_url)
+            _mimetype = mimetypes.guess_type(rendition)[0]
+            _rendition_path = os.path.join(folder, rendition)
+            _rendition = {
+                "filename": rendition,
+                "url": storage.register(
+                    _rendition_path, file_prefix, _manifest.get(lang)
+                ),
+                "size_bytes": os.path.getsize(_rendition_path),
+                "mimetype": _mimetype,
+                "lang": lang,
+            }
 
-    for rendition in renditions:
-        _mimetype = mimetypes.guess_type(rendition)[0]
-        _rendition_path = os.path.join(folder, rendition)
-        _lang = get_language(rendition)
-        logger.debug('Rendition path "%s", lang: "%s"', _rendition_path, _lang)
-        if _lang is None:
-            for lang, legacy_url in _manifest.items():
-                if os.path.basename(legacy_url) == rendition:
-                    logger.debug(
-                        'Language "%s" detected to rendition "%s"', lang, rendition
-                    )
-                    _lang = lang
-
-        _rendition = {
-            "filename": rendition,
-            "url": storage.register(_rendition_path, file_prefix, _manifest.get(_lang)),
-            "size_bytes": os.path.getsize(_rendition_path),
-            "mimetype": _mimetype,
-        }
-
-        if _lang is not None:
-            _rendition["lang"] = _lang
-
-        _renditions.append(_rendition)
+            _renditions.append(_rendition)
 
     return _renditions
 
@@ -241,12 +221,11 @@ def register_document(folder: str, session, storage, pid_database_engine, poison
         obj_xml, package_files, folder
     )
     registered_assets = put_static_assets_into_storage(static_assets, prefix, storage)
-    renditions_file_names = [file for file in package_files if ".pdf" in file]
 
     for additional_path in static_additionals.values():
         storage.register(os.path.join(additional_path), prefix)
 
-    renditions = get_document_renditions(folder, renditions_file_names, prefix, storage)
+    renditions = get_document_renditions(folder, prefix, storage)
     document = Document(
         manifest=manifest.get_document_manifest(
             xml_sps, url_xml, registered_assets, renditions
