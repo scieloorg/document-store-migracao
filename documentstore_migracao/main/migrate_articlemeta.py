@@ -3,6 +3,7 @@
 import logging
 import argparse
 import urllib3
+import json
 
 from .base import base_parser, minio_parser, mongodb_parser
 
@@ -336,7 +337,7 @@ def migrate_articlemeta_parser(sargs):
         DB_Session = ds_adapters.Session.partial(mongo)
 
         pid_database_engine = create_engine(args.pid_database_dsn,
-                                            connect_args={'connect_timeout': config.get('POSTGRES_TIMEOUT')})
+                                            connect_args=json.loads(config.get('DATABASE_CONNECT_ARGS')))
 
         http_client = urllib3.PoolManager(
             timeout=config.get('MINIO_TIMEOUT'),
