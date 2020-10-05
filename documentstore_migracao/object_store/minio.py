@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class MinioStorage:
     def __init__(
-        self, minio_host, minio_access_key, minio_secret_key, minio_secure=True
+        self, minio_host, minio_access_key, minio_secret_key, minio_secure=True, minio_http_client=None
     ):
 
         self.bucket_name = "documentstore"
@@ -39,6 +39,7 @@ class MinioStorage:
         self.minio_access_key = minio_access_key
         self.minio_secret_key = minio_secret_key
         self.minio_secure = minio_secure
+        self.http_client = minio_http_client
         self._client_instance = None
 
     @property
@@ -53,6 +54,7 @@ class MinioStorage:
                 access_key=self.minio_access_key,
                 secret_key=self.minio_secret_key,
                 secure=self.minio_secure,
+                http_client=self.http_client
             )
             logger.debug(
                 "new Minio client created: <%s at %s>",

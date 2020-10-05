@@ -2,6 +2,7 @@
 
 import logging
 import argparse
+import urllib3
 
 from .base import base_parser, minio_parser, mongodb_parser
 
@@ -292,6 +293,10 @@ def migrate_articlemeta_parser(sargs):
     logger = logging.getLogger()
     logger.setLevel(level)
 
+    options = {'maxIdleTimeMS': config.get('MONGO_MAX_IDLE_TIME_MS'),
+               'socketTimeoutMS': config.get('MONGO_SOCKET_TIMEOUT_MS'),
+               'connectTimeoutMS': config.get('MONGO_CONNECT_TIMEOUT_MS')}
+
     if args.command == "extract":
         extracted.extract_all_data(args.file.readlines())
 
@@ -327,16 +332,28 @@ def migrate_articlemeta_parser(sargs):
         build_ps.run()
 
     elif args.command == "import":
-        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
+        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db, options=options)
         DB_Session = ds_adapters.Session.partial(mongo)
 
-        pid_database_engine = create_engine(args.pid_database_dsn)
+        pid_database_engine = create_engine(args.pid_database_dsn,
+                                            connect_args={'connect_timeout': config.get('POSTGRES_TIMEOUT')})
+
+        http_client = urllib3.PoolManager(
+            timeout=config.get('MINIO_TIMEOUT'),
+            maxsize=10,
+            cert_reqs='CERT_REQUIRED',
+            retries=urllib3.Retry(
+                total=5,
+                backoff_factor=0.2,
+                status_forcelist=[500, 502, 503, 504]
+            ))
 
         storage = minio.MinioStorage(
             minio_host=args.minio_host,
             minio_access_key=args.minio_access_key,
             minio_secret_key=args.minio_secret_key,
             minio_secure=args.minio_is_secure,
+            minio_http_client=http_client
         )
 
         inserting.import_documents_to_kernel(
@@ -345,7 +362,7 @@ def migrate_articlemeta_parser(sargs):
         )
 
     elif args.command == "link_documents_issues":
-        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
+        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db, options=options)
         DB_Session = ds_adapters.Session.partial(mongo)
 
         inserting.register_documents_in_documents_bundle(
@@ -353,7 +370,7 @@ def migrate_articlemeta_parser(sargs):
         )
 
     elif args.command == "rollback":
-        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db)
+        mongo = ds_adapters.MongoDB(uri=args.uri, dbname=args.db, options=options)
 
         rollback.rollback_kernel_documents(
             session_db=rollback.RollbackSession(mongo),
