@@ -49,6 +49,13 @@ _default = dict(
     THREADPOOL_MAX_WORKERS=os.cpu_count() * 5,
     PROCESSPOOL_MAX_WORKERS=os.cpu_count(),
     PID_DATABASE_DSN="sqlite:///pid_manager_database.db",
+    MONGO_MAX_IDLE_TIME_MS=20000,
+    MONGO_SOCKET_TIMEOUT_MS=20000,
+    MONGO_CONNECT_TIMEOUT_MS=20000,
+    MINIO_TIMEOUT=20000,
+
+    # DATABASE_CONNECT_ARGS must be a JSON String
+    DATABASE_CONNECT_ARGS='{"connect_timeout": 20000}'
 )
 
 
