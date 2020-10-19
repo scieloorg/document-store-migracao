@@ -444,25 +444,6 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -497,25 +478,6 @@ class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -549,25 +511,6 @@ class Test_SPS_Package_NumFpageLpage(unittest.TestCase):
 
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
-
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
 
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
@@ -611,25 +554,6 @@ class Test_SPS_Package_VolNumSpeFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -669,25 +593,6 @@ class Test_SPS_Package_VolSpeNumFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -723,25 +628,6 @@ class Test_SPS_Package_VolSpeFpageLpage(unittest.TestCase):
 
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
-
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
 
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
@@ -785,25 +671,6 @@ class Test_SPS_Package_VolSuplFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -845,25 +712,6 @@ class Test_SPS_Package_VolSuplAFpageLpage(unittest.TestCase):
 
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
-
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
 
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
@@ -907,25 +755,6 @@ class Test_SPS_Package_VolSuplSpeFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -968,25 +797,6 @@ class Test_SPS_Package_VolNumSuplFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -1028,24 +838,6 @@ class Test_SPS_Package_Vol2SuplAFpageLpage(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", "fpage"),
-                ("lpage", "lpage"),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "fpage", "lpage", ("2010", "", ""), ("", "", ""), ""),
-        )
 
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
@@ -1080,24 +872,6 @@ class Test_SPS_Package_Vol5Elocation(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, True)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", ""),
-                ("lpage", ""),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", "elocation"),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("", "", ""), "elocation"),
-        )
 
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
@@ -1135,25 +909,6 @@ class Test_SPS_Package_VolElocation(unittest.TestCase):
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, True)
 
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", ""),
-                ("lpage", ""),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", "elocation"),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("", "", ""), "elocation"),
-        )
-
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
 
@@ -1181,25 +936,6 @@ class Test_SPS_Package_Aop_HTML(unittest.TestCase):
 
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, True)
-
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", ""),
-                ("lpage", ""),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
-        )
 
     def test_is_ahead_of_print_true(self):
         self.assertTrue(self.sps_package.is_ahead_of_print)
@@ -1231,25 +967,6 @@ class Test_SPS_Package_Aop_XML(unittest.TestCase):
 
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, True)
-
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", ""),
-                ("lpage", ""),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
-        )
 
     def test_is_ahead_of_print_true(self):
         self.assertTrue(self.sps_package.is_ahead_of_print)
@@ -1288,25 +1005,6 @@ class Test_SPS_Package_Article_HTML(unittest.TestCase):
 
     def test_is_only_online_publication(self):
         self.assertEqual(self.sps_package.is_only_online_publication, False)
-
-    def test_order_meta(self):
-        self.assertEqual(
-            self.sps_package.order_meta,
-            (
-                ("other", "00006"),
-                ("fpage", ""),
-                ("lpage", ""),
-                ("documents_bundle_pubdate", ("2010", "", "")),
-                ("document_pubdate", ("", "", "")),
-                ("elocation-id", ""),
-            ),
-        )
-
-    def test_order(self):
-        self.assertEqual(
-            self.sps_package.order,
-            ("00006", "", "", ("2010", "", ""), ("", "", ""), ""),
-        )
 
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)

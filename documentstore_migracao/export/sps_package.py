@@ -419,27 +419,6 @@ class SPS_Package:
         return True
 
     @property
-    def order_meta(self):
-        def format(value):
-            if value and value.isdigit():
-                return value.zfill(5)
-            return value or ""
-
-        data = dict(self.parse_article_meta)
-        return (
-            ("other", format(data.get("other"))),
-            ("fpage", format(data.get("fpage"))),
-            ("lpage", format(data.get("lpage"))),
-            ("documents_bundle_pubdate", self.documents_bundle_pubdate),
-            ("document_pubdate", self.document_pubdate),
-            ("elocation-id", data.get("elocation-id", "")),
-        )
-
-    @property
-    def order(self):
-        return tuple(item[1] for item in self.order_meta)
-
-    @property
     def is_ahead_of_print(self):
         if not bool(self.volume) and not bool(self.number):
             return True
