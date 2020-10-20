@@ -18,60 +18,35 @@ import click
 LOGGER_FORMAT = u"%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s"
 LOGGER = logging.getLogger(__name__)
 
-# PACKAGE_FROM_SITE REGEX
-ASSET_NOT_FOUND_REGEX = re.compile(
-    r".*\[(?P<pid>S\d{4}-.*)\].*Could not find asset "
-    r"'(?P<uri>[^']+)'.*'(?P<xml>[^']+)'.?$",
-    re.IGNORECASE,
-)
-RENDITION_NOT_FOUND_REGEX = re.compile(
-    r".*\[(?P<pid>S\d{4}-.*)\].*Could not find rendition "
-    r"'(?P<uri>[^']+)'.*'(?P<xml>[^']+)'.?$",
-    re.IGNORECASE,
-)
-XML_NOT_FOUND_REGEX = re.compile(
-    r".*Could not find the XML file '(?P<uri>[^']+)'.?", re.IGNORECASE
-)
-XML_NOT_UPDATED_REGEX = re.compile(
-    r".*Could not update xml '(?P<uri>[^']+)'.?"
-    r"( The exception '(?P<exception>[^']+)')?",
-    re.IGNORECASE,
-)
-XML_MISSING_METADATA_REGEX = re.compile(
-    r".*Missing \"(?P<metadata>[\w\s]+)\".* \"(?P<uri>[^']+)\"", re.IGNORECASE
-)
-
-# IMPORT_REGEX
-MANIFEST_NOT_FOUND = re.compile(
-    r".*No such file or directory: '(?P<file_path>[^']+)'",
-    re.IGNORECASE,
-)
-XML_NOT_INTO_PACKAGE = re.compile(
-    r".*There is no XML file into package '(?P<package_path>[^']+)",
-    re.IGNORECASE,
-)
-XML_PARSER_ERROR = re.compile(
-    r".*Could not parse the '(?P<file_path>[^']+)' file",
-    re.IGNORECASE,
-)
-BUNDLE_NOT_FOUND = re.compile(
-    r".*The bundle '(?P<bundle>[^']+)' was not updated.",
-    re.IGNORECASE,
-)
-ISSN_NOT_FOUND = re.compile(
-    r".*No ISSN in document '(?P<pid>[^']+)'",
-    re.IGNORECASE,
-)
-PACKAGE_NOT_FOUND = re.compile(
-    r".*Could not import package'(?P<package_path>[^']+)'",
-    re.IGNORECASE,
-)
-
 
 class ErrorEnum(Enum):
     """Enumerador para agrupar nomes de erros utilizados na saída.
 
     Classe enumeradora.
+
+    Atributos:
+
+        `resource-not-found`: Quando algum asset ou rendition não é encontrado
+        durante o empacotamento.
+
+        `xml-not-found`: Quando um documento XML não é encontrado durante o
+        empacotamento.
+
+        `xml-not-update`: Quando um algum erro acontece durante a atualização do
+        xml em questão. Geralmente são erros ligados ao LXML.
+
+        `missing-metadata`: Quando algum metadado não existe no arquivo CSV
+        utilizado para atualizar o XML em questão.
+
+        `missing-manifest`: Quando não é econtrado o manifest no pacote.
+
+        `xml-parser-error`: Quando existe algum erro na análise do XML.
+
+        `bundle-not-found`: Quando não é encontrado o bundle para o documento.
+
+        `issn-not-fount`: Quando não é encontrado o ISSN no documento.
+
+        `package-not-import`: Quando o pacote não pode ser importado por qualquer erro.
 
     Atributos:
         Não há atributos.
@@ -85,37 +60,11 @@ class ErrorEnum(Enum):
     XML_PARSER_ERROR = "xml-parser-error"
     BUNDLE_NOT_FOUND = "bundle-not-found"
     ISSN_NOT_FOUND = "issn-not-found"
-    PACKAGE_NOT_FOUND = "package-not-found"
-
-
-PACK_FROM_SITE_PARSERS_PARAMS = [
-    {
-        "regex": ASSET_NOT_FOUND_REGEX,
-        "error": ErrorEnum.RESOURCE_NOT_FOUND,
-        "group": "renditions",
-    },
-    {
-        "regex": RENDITION_NOT_FOUND_REGEX,
-        "error": ErrorEnum.RESOURCE_NOT_FOUND,
-        "group": "renditions",
-    },
-    {"regex": XML_NOT_UPDATED_REGEX, "error": ErrorEnum.NOT_UPDATED},
-    {"regex": XML_NOT_FOUND_REGEX, "error": ErrorEnum.XML_NOT_FOUND},
-    {"regex": XML_MISSING_METADATA_REGEX, "error": ErrorEnum.MISSING_METADATA},
-]
-
-
-IMPORT_PARSERS_PARAMS = [
-    {"regex": MANIFEST_NOT_FOUND, "error": ErrorEnum.MISSING_MANIFEST},
-    {"regex": XML_NOT_INTO_PACKAGE, "error": ErrorEnum.XML_NOT_FOUND},
-    {"regex": XML_PARSER_ERROR, "error": ErrorEnum.XML_PARSER_ERROR},
-    {"regex": BUNDLE_NOT_FOUND, "error": ErrorEnum.BUNDLE_NOT_FOUND},
-    {"regex": ISSN_NOT_FOUND, "error": ErrorEnum.ISSN_NOT_FOUND},
-    {"regex": PACKAGE_NOT_FOUND, "error": ErrorEnum.PACKAGE_NOT_FOUND},
-]
+    PACKAGE_NOT_IMPORT = "package-not-import"
 
 
 class LoggerAnalyzer(object):
+
     def __init__(self, in_file, out_file=None, log_format=None, out_formatter=None):
         self.in_file = in_file
         self.out_file = out_file
@@ -132,7 +81,7 @@ class LoggerAnalyzer(object):
     def logformat_regex(self) -> (List[str], re.Pattern):
         """
         Método responsável por criar uma expressão regular para dividir as
-        menssagens de log semanticamente.
+        menssagens de log semânticamente.
 
         Args:
             format: formato de saída que será utilizado.
@@ -141,6 +90,7 @@ class LoggerAnalyzer(object):
             header, regex
             header: cabeçalho do formato do log.
             regex: expressão regular do formato.
+            None: em caso de não "casamento"
 
         Exemplo:
 
@@ -175,31 +125,14 @@ class LoggerAnalyzer(object):
         if isinstance(self.in_file, IOBase):
             self.content = self.in_file.readlines()
 
-    def parse(self, parsers, format=None) -> None:
-        """
-        Método realiza a análise.
-
-        Args:
-            format: formato de saída que será utilizado.
-            parser: expressões regulares.
-
-        Retornos:
-            Não há retorno
-
-        Exceções:
-            Não lança exceções.
-
-        """
-        self.load()
-        formatter = self.set_formatter(format)
-        tokenized_lines = self.tokenize(extra_parsers=parsers)
-        lines = formatter(tokenized_lines)
-        self.dump(lines)
+    def parse(self, format=None) -> None:
+        raise NotImplementedError("Uma instância de LoggerAnalyzer deve implementar o método parse.")
 
     def parser(
         self, line: str, regex: re.Pattern, error: ErrorEnum, group: str = None
     ) -> Optional[Dict]:
-        """Analise do formato utilizado para verificar padrões por meio
+        """
+        Analise do formato utilizado para verificar padrões por meio
         de expressões regulares. Retorna o tipo de formato especificado na chamada.
 
         Args:
@@ -235,29 +168,31 @@ class LoggerAnalyzer(object):
     def tokenize(
         self, extra_parsers: List[Callable] = None
     ) -> List[Optional[Dict]]:
-        """Fachada que realiza o parser do arquivo de log do processo de
-        empacotamento de xml nativos do utilitário `document-store-migracao`.
+        """
+        Realiza o parser do arquivo de log.
 
         Dado um arquivo de formato conhecido, esta função produz uma lista
         de dicionários. Os dicionários comportam ao menos quatro tipos de erros
-        registrados no LOG, são eles:
+        registrados no LOG.
 
-        1) `resource-not-found`: Quando algum asset ou rendition não é encontrado
-        durante o empacotamento.
-        2) `xml-not-found`: Quando um documento XML não é encontrado durante o
-        empacotamento.
-        3) `xml-update`: Quando um algum erro acontece durante a atualização do
-        xml em questão. Geralmente são erros ligados ao LXML.
-        4) `missing-metadata`: Quando algum metadado não existe no arquivo CSV
-        utilizado para atualizar o XML em questão.
+        Args:
+            extra_parsers = Lista de dicionário que contenha as chaves:
+            `regex` e `error `
 
-        Exemplo de uso desta função:
-        >>> tokenize([
-                "2020-05-08 11:43:38 ERROR [documentstore_migracao.utils.build_ps_package] "
-                "[S1981-38212017000200203] - Could not find asset 'imagem.tif' during packing XML "
-                "'/1981-3821-bpsr-1981-3821201700020001.xml'"
-            ])
-        >>> [{'assets': ['imagem.tif'], 'pid': 'S1981-38212017000200203', 'error': 'resource'}]
+        Exemplo de uso:
+            self.tokenize([
+                    {"regex": MANIFEST_NOT_FOUND, "error": ErrorEnum.MISSING_MANIFEST},
+                ])
+
+        Retorno:
+            Retorna uma lista de dicionário com a avaliação das linhas fornecida
+            pelo atributo de classe ``self.content`ˆ.
+
+            Exemplo de retorno:
+                >>> [{'assets': ['imagem.tif'], 'pid': 'S1981-38212017000200203', 'error': 'resource'}]
+
+        Exceções:
+            Não lança exceções.
         """
 
         errors: List[Optional[Dict]] = []
@@ -271,6 +206,7 @@ class LoggerAnalyzer(object):
             match = regex.match(line)
 
             if match:
+
                 format_dict = match.groupdict()
 
                 for params in extra_parsers:
@@ -311,6 +247,7 @@ class LoggerAnalyzer(object):
 
         documents_errors_values = list(documents_errors.values())
         errors.extend(documents_errors_values)
+
         return errors
 
     def dump(self, lines) -> None:
@@ -331,7 +268,8 @@ class LoggerAnalyzer(object):
             self.out_file.write("\n")
 
     def json_formatter(self, errors: List[Optional[Dict]]) -> List[str]:
-        """Imprime linha a linha da lista de entrada, convertendo o conteúdo para
+        """
+        Imprime linha a linha da lista de entrada, convertendo o conteúdo para
         JSON.
 
         Args:
@@ -362,6 +300,128 @@ class LoggerAnalyzer(object):
         return LoggerAnalyzer.formatters().get(format, self.json_formatter)
 
 
+class AnalyzerImport(LoggerAnalyzer):
+
+    # IMPORT_REGEX
+    manifest_not_found = re.compile(
+        r".*No such file or directory: '(?P<file_path>[^']+)'",
+        re.IGNORECASE,
+    )
+    xml_not_into_package = re.compile(
+        r".*There is no XML file into package '(?P<package_path>[^']+)",
+        re.IGNORECASE,
+    )
+    xml_parser_error = re.compile(
+        r".*Could not parse the '(?P<file_path>[^']+)' file",
+        re.IGNORECASE,
+    )
+    bundle_not_found = re.compile(
+        r".*The bundle '(?P<bundle>[^']+)' was not updated.",
+        re.IGNORECASE,
+    )
+    issn_not_found = re.compile(
+        r".*No ISSN in document '(?P<pid>[^']+)'",
+        re.IGNORECASE,
+    )
+    package_not_import = re.compile(
+        r".*Could not import package '(?P<package_path>[^']+).*'",
+        re.IGNORECASE,
+    )
+
+    def parse(self, format=None) -> None:
+        """
+        Método realiza a análise.
+
+        Args:
+            format: formato de saída que será utilizado.
+
+        Retornos:
+            Não há retorno
+
+        Exceções:
+            Não lança exceções.
+
+        """
+
+        parsers = [
+            {"regex": self.manifest_not_found, "error": ErrorEnum.MISSING_MANIFEST},
+            {"regex": self.xml_not_into_package, "error": ErrorEnum.XML_NOT_FOUND},
+            {"regex": self.xml_parser_error, "error": ErrorEnum.XML_PARSER_ERROR},
+            {"regex": self.bundle_not_found, "error": ErrorEnum.BUNDLE_NOT_FOUND},
+            {"regex": self.issn_not_found, "error": ErrorEnum.ISSN_NOT_FOUND},
+            {"regex": self.package_not_import, "error": ErrorEnum.PACKAGE_NOT_IMPORT},
+        ]
+
+        self.load()
+        formatter = self.set_formatter(format)
+        tokenized_lines = self.tokenize(extra_parsers=parsers)
+        lines = formatter(tokenized_lines)
+        self.dump(lines)
+
+
+class AnalyzerPack(LoggerAnalyzer):
+
+    # PACKAGE_FROM_SITE REGEX
+    asset_not_found_regex = re.compile(
+        r".*\[(?P<pid>S\d{4}-.*)\].*Could not find asset "
+        r"'(?P<uri>[^']+)'.*'(?P<xml>[^']+)'.?$",
+        re.IGNORECASE,
+    )
+    rendition_not_found_regex = re.compile(
+        r".*\[(?P<pid>S\d{4}-.*)\].*Could not find rendition "
+        r"'(?P<uri>[^']+)'.*'(?P<xml>[^']+)'.?$",
+        re.IGNORECASE,
+    )
+    xml_not_found_regex = re.compile(
+        r".*Could not find the XML file '(?P<uri>[^']+)'.?", re.IGNORECASE
+    )
+    xml_not_updated_regex = re.compile(
+        r".*Could not update xml '(?P<uri>[^']+)'.?"
+        r"( The exception '(?P<exception>[^']+)')?",
+        re.IGNORECASE,
+    )
+    xml_missing_metadata_regex = re.compile(
+        r".*Missing \"(?P<metadata>[\w\s]+)\".* \"(?P<uri>[^']+)\"", re.IGNORECASE
+    )
+
+    def parse(self, format=None) -> None:
+        """
+        Método realiza a análise.
+
+        Args:
+            format: formato de saída que será utilizado.
+
+        Retornos:
+            Não há retorno
+
+        Exceções:
+            Não lança exceções.
+
+        """
+
+        parsers = [
+            {
+                "regex": asset_not_found_regex,
+                "error": ErrorEnum.RESOURCE_NOT_FOUND,
+                "group": "renditions",
+            },
+            {
+                "regex": rendition_not_found_regex,
+                "error": ErrorEnum.RESOURCE_NOT_FOUND,
+                "group": "renditions",
+            },
+            {"regex": xml_not_updated_regex, "error": ErrorEnum.NOT_UPDATED},
+            {"regex": xml_not_found_regex, "error": ErrorEnum.XML_NOT_FOUND},
+            {"regex": xml_missing_metadata_regex, "error": ErrorEnum.MISSING_METADATA},
+        ]
+
+        self.load()
+        formatter = self.set_formatter(format)
+        tokenized_lines = self.tokenize(extra_parsers=parsers)
+        lines = formatter(tokenized_lines)
+        self.dump(lines)
+
+
 @click.command()
 @click.argument("input", type=click.File("r"), required=True)
 @click.option(
@@ -375,8 +435,8 @@ class LoggerAnalyzer(object):
     "-s",
     "--step",
     required=True,
-    type=click.Choice(['pack_from_site', 'import']),
-    help="Escolha um formato de conversão para o analisador",
+    type=click.Choice(['pack', 'import']),
+    help="Escolha o passo que deseja analisar",
 )
 @click.option(
     "--log_format",
@@ -408,12 +468,12 @@ def main(input, step, formatter, log_format, output, log_level):
     if not output:
         output = sys.stdout
 
-    parser = LoggerAnalyzer(input, output, log_format, out_formatter=formatter)
-
-    if step == 'import':
-        parser.parse(IMPORT_PARSERS_PARAMS)
-    elif step == 'pack_from_site':
-        parser.parse(PACK_FROM_SITE_PARSERS_PARAMS)
+    if step == 'pack':
+        parser = AnalyzerPack(input, output, log_format, out_formatter=formatter)
+        parser.parse()
+    elif step == 'import':
+        parser = AnalyzerImport(input, output, log_format, out_formatter=formatter)
+        parser.parse()
 
 
 if __name__ == "__main__":
