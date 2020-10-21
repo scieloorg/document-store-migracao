@@ -214,7 +214,7 @@ class SPS_Package:
         ]
         items = []
         for elem_name in elements:
-            xpath = ".//article-meta//{}".format(elem_name)
+            xpath = ".//article-meta/{}".format(elem_name)
             for node in self.xmltree.findall(xpath):
                 if node is not None:
                     content = node.text
@@ -483,7 +483,7 @@ class SPS_Package:
             index = parent.index(pubdate_element)
             parent.insert(index, pubdate_node)
             parent.remove(pubdate_element)
-            
+
 
     @property
     def document_pubdate(self) -> Tuple[str, str, str]:
