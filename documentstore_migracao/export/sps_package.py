@@ -419,6 +419,31 @@ class SPS_Package:
         return True
 
     @property
+    def fpage(self):
+        try:
+            return self.article_meta.findtext("fpage")
+        except AttributeError:
+            return None
+
+    @property
+    def article_id_which_id_type_is_other(self):
+        try:
+            return self.article_meta.xpath(
+                "article-id[@pub-id-type='other']")[0].text
+        except (AttributeError, IndexError):
+            return None
+
+    @property
+    def order(self):
+        for item in (
+                len(self.scielo_pid_v2 or "") == 23 and self.scielo_pid_v2[-5:],
+                self.article_id_which_id_type_is_other,
+                self.fpage,
+                ):
+            if item and item.isdigit() and len(item) <= 5:
+                return item.zfill(5)
+
+    @property
     def is_ahead_of_print(self):
         if not bool(self.volume) and not bool(self.number):
             return True
@@ -748,7 +773,7 @@ class DocumentsSorter:
             "volume": pkg.volume,
             "number": pkg.number,
             "supplement": pkg.supplement,
-            "order": format(data.get("other")) or format(data.get("fpage")),
+            "order": pkg.order,
         }
 
     def insert_documents(self, documents):

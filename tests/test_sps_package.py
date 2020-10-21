@@ -1834,3 +1834,151 @@ class TestGetRefItems(unittest.TestCase):
         _sps_package = self._get_sps_package(text)
         ref_items = _sps_package._get_ref_items(body)
         self.assertEqual(len(ref_items), 3)
+
+
+class Test_SPS_Package_Order(unittest.TestCase):
+    article_xml = """
+        <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9">
+        <front>
+        <journal-meta>
+        </journal-meta>
+        <article-meta>
+            {}
+        </article-meta>
+        </front>
+        </article>
+        """
+
+    def _get_sps_package(self, fpage=None, other=None, pid_v2=None):
+        items = (
+            fpage and "<fpage>{}</fpage>".format(fpage),
+            other and '<article-id pub-id-type="other">{}</article-id>'.format(
+                other),
+            pid_v2 and '<article-id specific-use="scielo-v2">{}</article-id>'.format(
+                pid_v2),
+        )
+        article_meta_xml = "".join((item for item in items if item))
+
+        xml = self.article_xml.format(article_meta_xml)
+        xmltree = etree.fromstring(xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_order_returns_none_because_none_is_set(self):
+        _sps_package = self._get_sps_package()
+        self.assertIsNone(_sps_package.order)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_none_because_fpage_has_more_than_five_digits(self):
+        _sps_package = self._get_sps_package(fpage="123456") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("123456", _sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_none_because_fpage_is_alpha(self):
+        _sps_package = self._get_sps_package(fpage="a") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("a", _sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_none_because_fpage_is_alphanum(self):
+        _sps_package = self._get_sps_package(fpage="a1") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("a1", _sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_none_because_other_has_more_than_five_digits(self):
+        _sps_package = self._get_sps_package(other="123456") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("123456", _sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_none_because_other_is_alpha(self):
+        _sps_package = self._get_sps_package(other="a") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("a", _sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_none_because_other_is_alphanum(self):
+        _sps_package = self._get_sps_package(other="a1") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("a1", _sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_none_because_pid_v2_length_is_not_23(self):
+        _sps_package = self._get_sps_package(pid_v2="1234512345123451234512345") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("1234512345123451234512345", _sps_package.scielo_pid_v2)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+
+    def test_order_returns_none_because_pid_v2_last_five_digits_is_alpha(self):
+        _sps_package = self._get_sps_package(pid_v2="123451234512345123ABCDE") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("123451234512345123ABCDE", _sps_package.scielo_pid_v2)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+
+    def test_order_returns_none_because_pid_v2_last_five_digits_is_alphanum(self):
+        _sps_package = self._get_sps_package(pid_v2="1234512345123451234512A") 
+        self.assertIsNone(_sps_package.order)
+        self.assertEqual("1234512345123451234512A", _sps_package.scielo_pid_v2)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+
+    def test_order_returns_pid_v2_last_five_digits(self):
+        _sps_package = self._get_sps_package(pid_v2="12345123451234512345123")
+        self.assertEqual("45123", _sps_package.order)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+
+    def test_order_returns_fpage(self):
+        _sps_package = self._get_sps_package(fpage="123")
+        self.assertEqual("00123", _sps_package.order)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+
+    def test_order_returns_other(self):
+        _sps_package = self._get_sps_package(other="623")
+        self.assertEqual("00623", _sps_package.order)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertEqual("623", _sps_package.article_id_which_id_type_is_other)
+
+    def test_order_returns_pid_v2_last_five_digits(self):
+        _sps_package = self._get_sps_package(pid_v2="12345123451234512345123")
+        self.assertEqual("45123", _sps_package.order)
+        self.assertIsNone(_sps_package.fpage)
+        self.assertIsNone(_sps_package.article_id_which_id_type_is_other)
+
+    def test_order_returns_pid_v2_last_five_digits_by_order_of_precedence(self):
+        # pid_v2 > other > fpage
+        _sps_package = self._get_sps_package(
+            pid_v2="12345123451234512345123", fpage="123", other="543")
+        self.assertEqual("45123", _sps_package.order)
+        self.assertEqual("123", _sps_package.fpage)
+        self.assertEqual("543", _sps_package.article_id_which_id_type_is_other)
+        self.assertEqual("12345123451234512345123", _sps_package.scielo_pid_v2)
+
+    def test_order_returns_other_by_order_of_precedence(self):
+        # pid_v2 > other > fpage
+        _sps_package = self._get_sps_package(fpage="123", other="543")
+        self.assertEqual("00543", _sps_package.order)
+        self.assertEqual("123", _sps_package.fpage)
+        self.assertEqual("543", _sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
+
+    def test_order_returns_fpage_by_order_of_precedence(self):
+        # pid_v2 > other > fpage
+        _sps_package = self._get_sps_package(fpage="123", other="543A")
+        self.assertEqual("00123", _sps_package.order)
+        self.assertEqual("123", _sps_package.fpage)
+        self.assertEqual("543A", _sps_package.article_id_which_id_type_is_other)
+        self.assertIsNone(_sps_package.scielo_pid_v2)
