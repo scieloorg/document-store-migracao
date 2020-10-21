@@ -231,7 +231,7 @@ class Test_MatchPubDate4(unittest.TestCase):
                 self.assertEqual(pubdate.findtext("day"), result[2])
 
 
-class Test_sps_package(unittest.TestCase):
+class Test_SPS_package(unittest.TestCase):
     def test_parse_value_num(self):
         self.assertEqual(parse_value("3"), "03")
 
@@ -465,6 +465,111 @@ class Test_SPS_Package_VolNumFpageLpage(unittest.TestCase):
 
     def test_is_ahead_of_print_false(self):
         self.assertFalse(self.sps_package.is_ahead_of_print)
+
+
+class Test_SPS_Package_FirstVolNumFpageLpageIssue(unittest.TestCase):
+    def setUp(self):
+        """
+        Cria um XML com o items repetidos no nó ``article-meta``.
+        """
+        article_meta_xml = """<volume>26</volume>
+                <issue>4</issue>
+                <fpage>1393</fpage>
+                <lpage>1395</lpage>
+                <product product-type="article">
+                    <article-title>EVIDÊNCIAS científicas em homeopatia</article-title>
+                    <source>Revista de Homeopatia</source>
+                    <publisher-loc>São Paulo</publisher-loc>
+                    <volume>80</volume>
+                    <season>1-2</season>
+                    <supplement>supl</supplement>
+                    <fpage>1</fpage>
+                    <lpage>122</lpage>
+                    <comment>Dossiê especial</comment>
+                    <year>2017</year>
+                    <alternatives>
+                    <inline-graphic xlink:href=""/>
+                    <inline-graphic xlink:href="https://minio.scielo.br/documentstore/1678-4758/hQXRCQk4CzrbtVs3FRvkGcB/dfe2bed30b02d90966b90deca3d1bfdbdd12a15b.jpg"/>
+                    </alternatives>
+                </product>
+            """
+        self.sps_package = sps_package(article_meta_xml)
+
+    def test_parse_article_get_first_volume(self):
+        """
+        Testa se a propriedade ``parse_article_meta`` garante que seja retornada
+        sempre o ``volume`` do nó ``article-meta``
+        """
+        self.assertEqual(
+            self.sps_package.parse_article_meta,
+            [
+                ("volume", "26"),
+                ("issue", "04"),
+                ("fpage", "1393"),
+                ("lpage", "1395"),
+                ("year", "2010"),
+                ("doi", "S0074-02761962000200006"),
+                ("publisher-id", "S0074-02761962000200006"),
+                ("other", "00006"),
+            ],
+        )
+
+    def test_parse_article_get_first_lpage(self):
+        """
+        Testa se a propriedade ``parse_article_meta`` garante que seja retornada
+        sempre o ``lpage`` do nó ``article-meta``
+        """
+        self.assertEqual(
+            self.sps_package.parse_article_meta,
+            [
+                ("volume", "26"),
+                ("issue", "04"),
+                ("fpage", "1393"),
+                ("lpage", "1395"),
+                ("year", "2010"),
+                ("doi", "S0074-02761962000200006"),
+                ("publisher-id", "S0074-02761962000200006"),
+                ("other", "00006"),
+            ],
+        )
+
+    def test_parse_article_get_first_fpage(self):
+        """
+        Testa se a propriedade ``parse_article_meta`` garante que seja retornada
+        sempre o ``fpage`` do nó ``article-meta``
+        """
+        self.assertEqual(
+            self.sps_package.parse_article_meta,
+            [
+                ("volume", "26"),
+                ("issue", "04"),
+                ("fpage", "1393"),
+                ("lpage", "1395"),
+                ("year", "2010"),
+                ("doi", "S0074-02761962000200006"),
+                ("publisher-id", "S0074-02761962000200006"),
+                ("other", "00006"),
+            ],
+        )
+
+    def test_parse_article_get_first_issue(self):
+        """
+        Testa se a propriedade ``parse_article_meta`` garante que seja retornada
+        sempre o ``issue`` do nó ``article-meta``
+        """
+        self.assertEqual(
+            self.sps_package.parse_article_meta,
+            [
+                ("volume", "26"),
+                ("issue", "04"),
+                ("fpage", "1393"),
+                ("lpage", "1395"),
+                ("year", "2010"),
+                ("doi", "S0074-02761962000200006"),
+                ("publisher-id", "S0074-02761962000200006"),
+                ("other", "00006"),
+            ],
+        )
 
 
 class Test_SPS_Package_VolFpageLpage(unittest.TestCase):
