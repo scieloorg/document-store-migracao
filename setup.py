@@ -26,6 +26,7 @@ requires = [
     "opac_schema",
     "sqlalchemy",
     "psycopg2-binary~=2.8",
+    "click==7.1.1",
 ]
 
 tests_require = [
