@@ -60,7 +60,7 @@ class ErrorEnum(Enum):
     XML_PARSER_ERROR = "xml-parser-error"
     BUNDLE_NOT_FOUND = "bundle-not-found"
     ISSN_NOT_FOUND = "issn-not-found"
-    PACKAGE_NOT_IMPORT = "package-not-import"
+    PACKAGE_NOT_IMPORTED = "package-not-import"
 
 
 class LoggerAnalyzer(object):
@@ -81,7 +81,7 @@ class LoggerAnalyzer(object):
     def logformat_regex(self) -> (List[str], re.Pattern):
         """
         Método responsável por criar uma expressão regular para dividir as
-        menssagens de log semânticamente.
+        menssagens de log semanticamente.
 
         Args:
             format: formato de saída que será utilizado.
@@ -323,7 +323,7 @@ class AnalyzerImport(LoggerAnalyzer):
         r".*No ISSN in document '(?P<pid>[^']+)'",
         re.IGNORECASE,
     )
-    package_not_import = re.compile(
+    package_not_imported = re.compile(
         r".*Could not import package '(?P<package_path>[^']+).*'",
         re.IGNORECASE,
     )
@@ -349,7 +349,7 @@ class AnalyzerImport(LoggerAnalyzer):
             {"regex": self.xml_parser_error, "error": ErrorEnum.XML_PARSER_ERROR},
             {"regex": self.bundle_not_found, "error": ErrorEnum.BUNDLE_NOT_FOUND},
             {"regex": self.issn_not_found, "error": ErrorEnum.ISSN_NOT_FOUND},
-            {"regex": self.package_not_import, "error": ErrorEnum.PACKAGE_NOT_IMPORT},
+            {"regex": self.package_not_imported, "error": ErrorEnum.PACKAGE_NOT_IMPORTED},
         ]
 
         self.load()
