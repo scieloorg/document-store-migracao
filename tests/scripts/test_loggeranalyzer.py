@@ -147,7 +147,7 @@ class TestLoggerAnalyzer(unittest.TestCase):
             {"regex": re.compile(r".*Could not parse the '(?P<file_path>[^']+)' file", re.IGNORECASE), "error": loggeranalyzer.ErrorEnum.XML_PARSER_ERROR},
             {"regex": re.compile(r".*The bundle '(?P<bundle>[^']+)' was not updated.", re.IGNORECASE), "error": loggeranalyzer.ErrorEnum.BUNDLE_NOT_FOUND},
             {"regex": re.compile(r".*No ISSN in document '(?P<pid>[^']+)'", re.IGNORECASE), "error": loggeranalyzer.ErrorEnum.ISSN_NOT_FOUND},
-            {"regex": re.compile(r".*Could not import package '(?P<package_path>[^']+).*'", re.IGNORECASE), "error": loggeranalyzer.ErrorEnum.PACKAGE_NOT_IMPORT},
+            {"regex": re.compile(r".*Could not import package '(?P<package_path>[^']+).*'", re.IGNORECASE), "error": loggeranalyzer.ErrorEnum.PACKAGE_NOT_IMPORTED},
           ]
 
         lines = ["2020-09-11 08:35:56 ERROR [documentstore_migracao.processing.inserting] The bundle '0036-3634-2009-v45-n4' was not updated. During executions this following exception was raised 'Nenhum documents_bundle encontrado 0036-3634-2009-v45-n4'.\n",
