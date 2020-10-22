@@ -16,6 +16,14 @@ from documentstore_migracao import exceptions
 logger = logging.getLogger(__name__)
 
 
+class NotAllowedtoChangeAttributeValueError(Exception):
+    pass
+
+
+class InvalidAttributeValueError(Exception):
+    pass
+
+
 def parse_date(_date):
     def format(value):
         if value and value.isdigit():
@@ -379,6 +387,13 @@ class SPS_Package:
         return self.documents_bundle_pubdate[0]
 
     @property
+    def fpage(self):
+        try:
+            return self.article_meta.findtext("fpage")
+        except AttributeError:
+            return None
+
+    @property
     def documents_bundle_id(self):
         items = []
         data = dict(self.journal_meta)
@@ -419,11 +434,14 @@ class SPS_Package:
         return True
 
     @property
-    def fpage(self):
-        try:
-            return self.article_meta.findtext("fpage")
-        except AttributeError:
-            return None
+    def order(self):
+        for item in (
+                len(self.scielo_pid_v2 or "") == 23 and self.scielo_pid_v2[-5:],
+                self.article_id_which_id_type_is_other,
+                self.fpage,
+                ):
+            if item and item.isdigit() and len(item) <= 5:
+                return item.zfill(5)
 
     @property
     def article_id_which_id_type_is_other(self):
@@ -433,15 +451,24 @@ class SPS_Package:
         except (AttributeError, IndexError):
             return None
 
-    @property
-    def order(self):
-        for item in (
-                len(self.scielo_pid_v2 or "") == 23 and self.scielo_pid_v2[-5:],
-                self.article_id_which_id_type_is_other,
-                self.fpage,
-                ):
-            if item and item.isdigit() and len(item) <= 5:
-                return item.zfill(5)
+    @article_id_which_id_type_is_other.setter
+    def article_id_which_id_type_is_other(self, value):
+        v = int(value)
+        if v > 99999:
+            raise ValueError(
+                "Not allowed to set article_id_which_id_type_is_other"
+                " with %s" % value)
+        value = value.zfill(5)
+        node = self.article_meta.find(
+            './/article-id[@publisher-id="other"]'
+        )
+        if node is None:
+            node = etree.Element("article-id")
+            node.set("pub-id-type", "other")
+            node.text = value
+            self.article_meta.insert(0, node)
+        else:
+            node.text = value
 
     @property
     def is_ahead_of_print(self):
@@ -739,6 +766,34 @@ class SPS_Package:
             updated.append(references.get(str(order)))
 
         return updated
+
+    def is_incorrect(self, attr_name):
+        if attr_name == "article_id_which_id_type_is_other":
+            try:
+                order = int(self.article_id_which_id_type_is_other or self.fpage)
+                if order > 99999:
+                    raise ValueError(
+                        "%s is invalid value for 'SPS_Package.order'" % order
+                        )
+                return False
+            except (ValueError, TypeError):
+                return True
+
+        if attr_name in ("scielo_pid_v2", "aop_pid", ):
+            return len(getattr(self, attr_name) or "") != 23
+        if attr_name in ("original_language", ):
+            return len(getattr(self, attr_name) or "") != 2
+
+        return False
+
+    def fix(self, attr_name, attr_new_value):
+        if not self.is_incorrect(attr_name):
+            raise NotAllowedtoChangeAttributeValueError(
+                "%s is correct. Not allowed to change its value", attr_name
+            )
+        if not attr_new_value:
+            raise InvalidAttributeValueError("Invalid value for %s", attr_name)
+        setattr(self, attr_name, attr_new_value)
 
 
 class DocumentsSorter:

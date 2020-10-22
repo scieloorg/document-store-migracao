@@ -7,7 +7,9 @@ from . import utils
 from documentstore_migracao.export.sps_package import (
     parse_value,
     parse_issue,
-    SPS_Package
+    SPS_Package,
+    NotAllowedtoChangeAttributeValueError,
+    InvalidAttributeValueError,
 )
 
 
@@ -1982,3 +1984,182 @@ class Test_SPS_Package_Order(unittest.TestCase):
         self.assertEqual("123", _sps_package.fpage)
         self.assertEqual("543A", _sps_package.article_id_which_id_type_is_other)
         self.assertIsNone(_sps_package.scielo_pid_v2)
+
+
+class Test_SPS_Package_SetAttrIfRequired_Sets_DATA(unittest.TestCase):
+
+    def setUp(self):
+        article_xml = """
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9">
+            <front>
+            <journal-meta>
+            </journal-meta>
+            <article-meta/>
+            </front>
+            </article>
+            """
+        xmltree = etree.fromstring(article_xml)
+        self._sps_package = SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_fix_sets_scielo_pid_v2(self):
+        self._sps_package.fix(
+            "scielo_pid_v2", "S0000-00002019000512345")
+        self.assertIn(
+            '<article-id pub-id-type="publisher-id" '
+            'specific-use="scielo-v2">S0000-00002019000512345</article-id>',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
+
+    def test_fix_sets_aop_pid(self):
+        self._sps_package.fix(
+            "aop_pid", "S0000-00002019000512345")
+        self.assertIn(
+            '<article-id pub-id-type="publisher-id" '
+            'specific-use="previous-pid">S0000-00002019000512345</article-id>',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
+
+    def test_fix_sets_article_id_which_id_type_is_other(self):
+        self._sps_package.fix(
+            "article_id_which_id_type_is_other", "12")
+        self.assertIn(
+            '<article-id pub-id-type="other">00012</article-id>',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
+
+    def test_fix_sets_original_language(self):
+        self._sps_package.fix(
+            "original_language", "es")
+        self.assertIn(
+            '<article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="es">',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
+
+
+class Test_SPS_Package_SetAttrIfRequired_Keeps_Original_DATA(unittest.TestCase):
+
+    article_xml = """
+        <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="xx">
+        <front>
+        <journal-meta>
+        </journal-meta>
+        <article-meta>
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v2">S0000-00002019000598765</article-id>
+            <article-id specific-use="previous-pid" pub-id-type="publisher-id">S0000-00002019000598765</article-id>
+            <article-id pub-id-type="other">98765</article-id>
+        </article-meta>
+        </front>
+        </article>
+        """
+
+    def _get_sps_package(self, article_meta_xml):
+        xml = self.article_xml.format(article_meta_xml)
+        xmltree = etree.fromstring(xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_fix_keeps_original_value_of_original_scielo_pid_v2(self):
+        article_meta_xml = (
+            '<article-id pub-id-type="publisher-id" specific-use="scielo-v2">'
+            'S0000-00002019000598765</article-id>'
+        )
+        _sps_package = self._get_sps_package(article_meta_xml)
+
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError):
+            _sps_package.fix(
+                "scielo_pid_v2", "S0000-00002019000512345")
+
+        self.assertIn(
+            '<article-id pub-id-type="publisher-id" '
+            'specific-use="scielo-v2">S0000-00002019000598765</article-id>',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+
+    def test_fix_keeps_original_value_of_original_aop_pid(self):
+        article_meta_xml = (
+            '<article-id specific-use="previous-pid" '
+            'pub-id-type="publisher-id">S0000-00002019000598765</article-id>'
+        )
+        _sps_package = self._get_sps_package(article_meta_xml)
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError):
+            _sps_package.fix("aop_pid", "S1518-87872019053000621")
+        self.assertIn(
+            '<article-id specific-use="previous-pid" '
+            'pub-id-type="publisher-id">S0000-00002019000598765</article-id>',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+
+    def test_fix_keeps_original_value_of_original_article_id_which_id_type_is_other(self):
+        article_meta_xml = """
+        <article-id pub-id-type="other">98765</article-id>
+        """
+        _sps_package = self._get_sps_package(article_meta_xml)
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError):
+            _sps_package.fix("article_id_which_id_type_is_other", "621")
+        self.assertIn(
+            '<article-id pub-id-type="other">98765</article-id>',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+
+    def test_fix_keeps_original_value_of_original_lang(self):
+        _sps_package = self._get_sps_package("")
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError):
+            _sps_package.fix("original_language", "pt")
+        self.assertIn(
+            '<article xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'specific-use="sps-1.9" xml:lang="xx">',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+
+
+class Test_SPS_Package_SetAttrIfRequired_Update_DATA(unittest.TestCase):
+    def setUp(self):
+        article_xml = """
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="incorrect">
+            <front>
+            <journal-meta>
+            </journal-meta>
+            <article-meta>
+                <article-id pub-id-type="publisher-id" specific-use="scielo-v2">incorrect</article-id>
+                <article-id specific-use="previous-pid" pub-id-type="publisher-id">incorrect</article-id>
+                <article-id pub-id-type="other">incorrect</article-id>
+            </article-meta>
+            </front>
+            </article>
+            """
+        xmltree = etree.fromstring(article_xml)
+        self._sps_package = SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_fix_replaces_value_of_scielo_pid_v2(self):
+        self._sps_package.fix(
+            "scielo_pid_v2", "S0000-00002019000512345")
+
+        self.assertIn(
+            '<article-id pub-id-type="publisher-id" '
+            'specific-use="scielo-v2">S0000-00002019000512345</article-id>',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
+
+    def test_fix_replaces_value_of_aop_pid(self):
+        self._sps_package.fix(
+            "aop_pid", "S1518-87872019053000621")
+        self.assertIn(
+            '<article-id specific-use="previous-pid" '
+            'pub-id-type="publisher-id">S1518-87872019053000621</article-id>',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
+
+    def test_fix_replaces_value_of_article_id_which_id_type_is_other(self):
+        self._sps_package.fix(
+            "article_id_which_id_type_is_other", "621")
+        self.assertIn(
+            '<article-id pub-id-type="other">00621</article-id>',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
+
+    def test_fix_replaces_value_of_original_lang(self):
+        self._sps_package.fix("original_language", "pt")
+        self.assertIn(
+            '<article xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'specific-use="sps-1.9" xml:lang="pt">',
+            str(etree.tostring(self._sps_package.xmltree))
+        )
