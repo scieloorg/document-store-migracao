@@ -316,12 +316,14 @@ def migrate_articlemeta_parser(sargs):
             )
 
     elif args.command == "pack":
+        # pack HTML
         if args.packFile:
             packing.pack_article_xml(args.packFile)
         else:
             packing.pack_article_ALLxml()
 
     elif args.command == "pack_from_site":
+        # pack XML
         build_ps = BuildPSPackage(
             args.xml_folder,
             args.img_folder,
