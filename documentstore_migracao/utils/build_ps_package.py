@@ -140,6 +140,10 @@ class BuildPSPackage(object):
         _fix_pid(_sps_package, "scielo_pid_v2", f_pid)
         _fix_attr(_sps_package, "aop_pid", f_pid_aop, f_pid, "AOP PID")
         _fix_attr(_sps_package, "original_language", f_lang, f_pid, "original language")
+        _fix_attr(
+            _sps_package, "article_id_which_id_type_is_other",
+            _sps_package.order, f_pid, "article-id[@pub-id-type='other']"
+        )
 
         if _sps_package.is_ahead_of_print:
             return _sps_package
