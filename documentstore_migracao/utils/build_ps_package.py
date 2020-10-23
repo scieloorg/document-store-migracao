@@ -20,6 +20,10 @@ from tqdm import tqdm
 from documentstore_migracao import config
 from documentstore_migracao.utils import xml, files, DoJobsConcurrently
 from documentstore_migracao.export.sps_package import SPS_Package
+from documentstore_migracao.export.sps_package import (
+    InvalidAttributeValueError,
+    NotAllowedtoChangeAttributeValueError,
+)
 
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.DEBUG)
@@ -98,13 +102,6 @@ class BuildPSPackage(object):
             - 'VOLNUM'
             - 'LANG'
         """
-        def _has_attr_to_set(attr, min_attr_len=1):
-            _sps_package_attr = getattr(_sps_package, attr) or ""
-            _has_attr = len("".join(_sps_package_attr)) >= min_attr_len
-            if _has_attr:
-                return False
-            return True
-
         def _parse_date(str_date):
             return (
                 str_date[:4] if int(str_date[:4]) > 0 else "",
@@ -122,26 +119,29 @@ class BuildPSPackage(object):
         _sps_package = deepcopy(sps_package)
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated, __, __, f_lang = row
         # Verificar se tem PID
-        if _has_attr_to_set("scielo_pid_v2"):
-            if f_pid:
-                logger.debug('Updating document with PID "%s"', f_pid)
-                _sps_package.scielo_pid_v2 = f_pid
-            else:
-                logger.error('Missing PID V2')
+        try:
+            _sps_package.fix("scielo_pid_v2", f_pid)
+            logger.debug('Updating document with PID "%s"', f_pid)
+        except NotAllowedtoChangeAttributeValueError:
+            pass
+        except InvalidAttributeValueError:
+            logger.error('Missing PID V2')
 
-        if _has_attr_to_set("aop_pid"):
-            if f_pid_aop:
-                logger.debug('Updating document "%s" with AOP PID "%s"', f_pid, f_pid_aop)
-                _sps_package.aop_pid = f_pid_aop
-            else:
-                logger.debug('No AOP PID for document PID "%s"', f_pid)
+        try:
+            _sps_package.fix("aop_pid", f_pid_aop)
+            logger.debug('Updating document "%s" with AOP PID "%s"', f_pid, f_pid_aop)
+        except NotAllowedtoChangeAttributeValueError:
+            pass
+        except InvalidAttributeValueError:
+            logger.debug('No AOP PID for document PID "%s"', f_pid)
 
-        if _has_attr_to_set("original_language"):
-            if f_lang:
-                logger.debug('Updating document "%s" with original language "%s"', f_pid, f_lang)
-                _sps_package.original_language = f_lang
-            else:
-                logger.debug('No original language for document PID "%s"', f_pid)
+        try:
+            _sps_package.fix("original_language", f_lang)
+            logger.debug('Updating document "%s" with original language "%s"', f_pid, f_lang)
+        except NotAllowedtoChangeAttributeValueError:
+            pass
+        except InvalidAttributeValueError:
+            logger.debug('No original language for document PID "%s"', f_pid)
 
         if _sps_package.is_ahead_of_print:
             return _sps_package
