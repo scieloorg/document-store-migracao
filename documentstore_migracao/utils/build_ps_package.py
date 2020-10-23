@@ -88,24 +88,6 @@ class BuildPSPackage(object):
         except errors.ResourceNotFound as e:
             logger.error(e)
 
-        def _fix_pid(_sps_package, attr_name, attr_value):
-            try:
-                _sps_package.fix(attr_name, attr_value)
-                logger.debug('Updating document with PID "%s"', attr_value)
-            except NotAllowedtoChangeAttributeValueError:
-                pass
-            except InvalidAttributeValueError:
-                logger.error('Missing PID V2')
-
-        def _fix_attr(_sps_package, attr_name, attr_value, f_pid, label):
-            try:
-                _sps_package.fix(attr_name, attr_value)
-                logger.debug('Updating document "%s" with %s "%s"', f_pid, label, attr_value)
-            except NotAllowedtoChangeAttributeValueError:
-                pass
-            except InvalidAttributeValueError:
-                logger.debug('No %s for document PID "%s"', label, f_pid)
-
     def _update_sps_package_obj(self, sps_package, pack_name, row, xml_target_path) -> SPS_Package:
         """
         Atualiza instancia SPS_Package com os dados de artigos do arquivo
@@ -133,6 +115,24 @@ class BuildPSPackage(object):
                 return _parse_date(date_value)
             else:
                 logger.debug('Missing "%s" into XML file "%s".', date_label, xml_target_path)
+
+        def _fix_pid(_sps_package, attr_name, attr_value):
+            try:
+                _sps_package.fix(attr_name, attr_value)
+                logger.debug('Updating document with PID "%s"', attr_value)
+            except NotAllowedtoChangeAttributeValueError:
+                pass
+            except InvalidAttributeValueError:
+                logger.error('Missing PID V2')
+
+        def _fix_attr(_sps_package, attr_name, attr_value, f_pid, label):
+            try:
+                _sps_package.fix(attr_name, attr_value)
+                logger.debug('Updating document "%s" with %s "%s"', f_pid, label, attr_value)
+            except NotAllowedtoChangeAttributeValueError:
+                pass
+            except InvalidAttributeValueError:
+                logger.debug('No %s for document PID "%s"', label, f_pid)
 
         _sps_package = deepcopy(sps_package)
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated, __, __, f_lang = row
