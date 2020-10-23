@@ -234,33 +234,31 @@ class TestBuildSPSPackagePIDUpdade(TestBuildSPSPackageBase):
 
 class TestBuildSPSPackageAOPPIDUpdade(TestBuildSPSPackageBase):
 
-    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
-    def test__update_sps_package_obj_updates_aop_pid_if_pid_is_none(self, mock_getattr):
-        mk_sps_package = mock.Mock(spec=SPS_Package, aop_pid=None, scielo_pid_v2=None)
-        pack_name = "1806-0013-test-01-01-0002"
-        mock_getattr.side_effect = [None, None, None]
-        result = self.builder._update_sps_package_obj(
-            mk_sps_package, pack_name, self.rows[1], pack_name + ".xml"
-        )
-        self.assertEqual(result.aop_pid, "S0101-01012019005000001")
-
-    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
-    def test__update_sps_package_obj_updates_aop_pid_if_pid_is_found(self, mock_getattr):
-        mock_getattr.side_effect = ["S0101-01012019000100002", None, None]
-        mk_sps_package = mock.Mock(
-            spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
-        )
+    def test__update_sps_package_obj_updates_aop_pid_if_pid_is_none(self):
+        mk_sps_package = self.get_sps_package("")
         pack_name = "1806-0013-test-01-01-0002"
         result = self.builder._update_sps_package_obj(
             mk_sps_package, pack_name, self.rows[1], pack_name + ".xml"
         )
         self.assertEqual(result.aop_pid, "S0101-01012019005000001")
 
-    @mock.patch("documentstore_migracao.utils.build_ps_package.getattr")
-    def test__update_sps_package_obj_does_not_update_aop_pid_if_it_is_not_aop(self, mock_getattr):
-        mock_getattr.side_effect = ["S0101-01012019000100002", None, None]
-        mk_sps_package = mock.Mock(
-            spec=SPS_Package, aop_pid=None, scielo_pid_v2="S0101-01012019000100002"
+    def test__update_sps_package_obj_updates_aop_pid_if_pid_is_found(self):
+        mk_sps_package = self.get_sps_package(
+            "<article-id specific-use='scielo-v2' pub-id-type='publisher-id'>"
+            "S0101-01012019000100002</article-id>"
+            "<article-id specific-use='previous-pid' pub-id-type='publisher-id'>"
+            "S0101-01012019005000001</article-id>"
+        )
+        pack_name = "1806-0013-test-01-01-0002"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[1], pack_name + ".xml"
+        )
+        self.assertEqual(result.aop_pid, "S0101-01012019005000001")
+
+    def test__update_sps_package_obj_does_not_update_aop_pid_if_it_is_not_aop(self):
+        mk_sps_package = self.get_sps_package(
+            "<article-id specific-use='scielo-v2' pub-id-type='publisher-id'>"
+            "S0101-01012019000100002</article-id>"
         )
         pack_name = "1806-0013-test-01-01-0001"
         result = self.builder._update_sps_package_obj(
