@@ -88,6 +88,16 @@ class BuildPSPackage(object):
         except errors.ResourceNotFound as e:
             logger.error(e)
 
+        def _fix_pid(_sps_package, attr_name, attr_value):
+            try:
+                _sps_package.fix(attr_name, attr_value)
+                logger.debug('Updating document with PID "%s"', attr_value)
+            except NotAllowedtoChangeAttributeValueError:
+                pass
+            except InvalidAttributeValueError:
+                logger.error('Missing PID V2')
+
+
     def _update_sps_package_obj(self, sps_package, pack_name, row, xml_target_path) -> SPS_Package:
         """
         Atualiza instancia SPS_Package com os dados de artigos do arquivo
@@ -119,13 +129,7 @@ class BuildPSPackage(object):
         _sps_package = deepcopy(sps_package)
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated, __, __, f_lang = row
         # Verificar se tem PID
-        try:
-            _sps_package.fix("scielo_pid_v2", f_pid)
-            logger.debug('Updating document with PID "%s"', f_pid)
-        except NotAllowedtoChangeAttributeValueError:
-            pass
-        except InvalidAttributeValueError:
-            logger.error('Missing PID V2')
+        _fix_pid(_sps_package, "scielo_pid_v2", f_pid)
 
         try:
             _sps_package.fix("aop_pid", f_pid_aop)
