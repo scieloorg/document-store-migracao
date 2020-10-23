@@ -314,6 +314,52 @@ class TestBuildSPSPackageLang(TestBuildSPSPackageBase):
         self.assertEqual(result.original_language, "en")
 
 
+class TestBuildSPSPackageOrder(TestBuildSPSPackageBase):
+
+    def test__update_sps_package_obj_does_not_update_order_if_it_is_set(self):
+        mk_sps_package = self.get_sps_package(
+            "<article-id specific-use='scielo-v2' pub-id-type='publisher-id'>"
+            "S0101-01012019000100003</article-id>"
+            "<article-id pub-id-type='other'>00003</article-id>"
+        )
+        pack_name = "1806-0013-test-01-01-0003"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[2], pack_name + ".xml"
+        )
+        self.assertEqual(result.order, "00003")
+        self.assertEqual(result.article_id_which_id_type_is_other, "00003")
+
+    def test__update_sps_package_obj_does_not_update_order_if_fpage_is_number(self):
+        mk_sps_package = self.get_sps_package(
+            "<article-id specific-use='scielo-v2' pub-id-type='publisher-id'>"
+            "S0101-01012019000100003</article-id>"
+            "<fpage>3</fpage>"
+        )
+        pack_name = "1806-0013-test-01-01-0003"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[2], pack_name + ".xml"
+        )
+        self.assertEqual(result.order, "00003")
+        self.assertIsNone(result.article_id_which_id_type_is_other)
+
+    def test__update_sps_package_obj_updates_order_if_fpage_is_not_number_and_other_is_none(self):
+        mk_sps_package = self.get_sps_package(
+            "<article-id specific-use='scielo-v2' pub-id-type='publisher-id'>"
+            "S0101-01012019000100003</article-id>"
+            "<fpage>3A</fpage>"
+        )
+        pack_name = "1806-0013-test-01-01-0003"
+        result = self.builder._update_sps_package_obj(
+            mk_sps_package, pack_name, self.rows[2], pack_name + ".xml"
+        )
+        self.assertEqual(result.order, "00003")
+        self.assertEqual(result.article_id_which_id_type_is_other, "00003")
+        self.assertIn(
+            '<article-id pub-id-type="other">00003</article-id>',
+            etree.tostring(result.xmltree).decode("utf-8")
+        )
+
+
 class TestBuildSPSPackageUpdateDates(TestBuildSPSPackageBase):
 
     def setUp(self):
