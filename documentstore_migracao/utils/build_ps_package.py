@@ -97,6 +97,14 @@ class BuildPSPackage(object):
             except InvalidAttributeValueError:
                 logger.error('Missing PID V2')
 
+        def _fix_attr(_sps_package, attr_name, attr_value, f_pid, label):
+            try:
+                _sps_package.fix(attr_name, attr_value)
+                logger.debug('Updating document "%s" with %s "%s"', f_pid, label, attr_value)
+            except NotAllowedtoChangeAttributeValueError:
+                pass
+            except InvalidAttributeValueError:
+                logger.debug('No %s for document PID "%s"', label, f_pid)
 
     def _update_sps_package_obj(self, sps_package, pack_name, row, xml_target_path) -> SPS_Package:
         """
@@ -130,22 +138,8 @@ class BuildPSPackage(object):
         f_pid, f_pid_aop, f_file, f_dt_collection, f_dt_created, f_dt_updated, __, __, f_lang = row
         # Verificar se tem PID
         _fix_pid(_sps_package, "scielo_pid_v2", f_pid)
-
-        try:
-            _sps_package.fix("aop_pid", f_pid_aop)
-            logger.debug('Updating document "%s" with AOP PID "%s"', f_pid, f_pid_aop)
-        except NotAllowedtoChangeAttributeValueError:
-            pass
-        except InvalidAttributeValueError:
-            logger.debug('No AOP PID for document PID "%s"', f_pid)
-
-        try:
-            _sps_package.fix("original_language", f_lang)
-            logger.debug('Updating document "%s" with original language "%s"', f_pid, f_lang)
-        except NotAllowedtoChangeAttributeValueError:
-            pass
-        except InvalidAttributeValueError:
-            logger.debug('No original language for document PID "%s"', f_pid)
+        _fix_attr(_sps_package, "aop_pid", f_pid_aop, f_pid, "AOP PID")
+        _fix_attr(_sps_package, "original_language", f_lang, f_pid, "original language")
 
         if _sps_package.is_ahead_of_print:
             return _sps_package
