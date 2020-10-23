@@ -114,9 +114,12 @@ class TestBuildSPSPackageBase(TestCase):
             </article>
         """
 
-    def get_sps_package(self, article_meta=""):
-        return SPS_Package(
-            etree.fromstring(self.article_meta_xml.format(article_meta)))
+    def get_sps_package(self, article_meta="", lang=""):
+        tree = etree.fromstring(self.article_meta_xml.format(article_meta))
+        if lang:
+            tree.find(".").set(
+                "{http://www.w3.org/XML/1998/namespace}lang", lang)
+        return SPS_Package(tree)
 
 
 class TestBuildSPSPackage(TestBuildSPSPackageBase):
@@ -289,14 +292,9 @@ class TestBuildSPSPackageAOPPubDate(TestBuildSPSPackageBase):
 class TestBuildSPSPackageLang(TestBuildSPSPackageBase):
 
     def test__update_sps_package_obj_does_not_update_lang_if_it_is_set(self):
-        mk_sps_package = mock.Mock(
-            spec=SPS_Package,
-            aop_pid=None,
-            scielo_pid_v2="S0101-01012019000100003",
-            is_ahead_of_print=False,
-            original_language="pt",
-            documents_bundle_pubdate=("2012", "01", "15",),
-            document_pubdate=("", "", "",),
+        mk_sps_package = self.get_sps_package(
+            "<article-id specific-use='scielo-v2' pub-id-type='publisher-id'>"
+            "S0101-01012019000100003</article-id>", "pt"
         )
         pack_name = "1806-0013-test-01-01-0003"
         result = self.builder._update_sps_package_obj(
@@ -305,14 +303,9 @@ class TestBuildSPSPackageLang(TestBuildSPSPackageBase):
         self.assertEqual(result.original_language, "pt")
 
     def test__update_sps_package_obj_updates_lang_if_it_is_not_set(self):
-        mk_sps_package = mock.Mock(
-            spec=SPS_Package,
-            aop_pid=None,
-            scielo_pid_v2="S0101-01012019000100003",
-            is_ahead_of_print=False,
-            original_language=None,
-            documents_bundle_pubdate=("2012", "01", "15",),
-            document_pubdate=("", "", "",),
+        mk_sps_package = self.get_sps_package(
+            "<article-id specific-use='scielo-v2' pub-id-type='publisher-id'>"
+            "S0101-01012019000100003</article-id>", ""
         )
         pack_name = "1806-0013-test-01-01-0003"
         result = self.builder._update_sps_package_obj(
