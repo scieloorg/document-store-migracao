@@ -16,7 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
-
+    """
+    Cria pacotes XML a partir dos documentos inseridos em HTML, ou seja,
+    metodologia clássica
+    """
     if poison_pill.poisoned:
         return
 
