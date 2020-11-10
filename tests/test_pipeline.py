@@ -7,6 +7,7 @@ import os
 from lxml import etree
 
 from documentstore_migracao.processing.pipeline import update_articles_mixed_citations
+from documentstore_migracao.utils.xml import create_mixed_citation_element
 
 
 class TestUpdateMixedCitations(unittest.TestCase):
@@ -77,3 +78,20 @@ class TestUpdateMixedCitations(unittest.TestCase):
             b"of Biogeography 28</bold>: 1-11.</mixed-citation>",
             etree.tostring(tree),
         )
+
+    def test_should_not_unscape_forbidden_characters_during_mixed_citation_update(self):
+        string = (
+            'AgricResServ (2004) Available at: "'
+            '&lt;<a href="http://some.website.com" target="_blank">'
+            '"http://some.website.com</a>&gt;.    "'
+        )
+
+        expected = (
+            "<mixed-citation>AgricResServ (2004) Available at: "
+            '"&lt;<ext-link xmlns:ns0="http://www.w3.org/1999/xlink" ext-link-type="uri" '
+            'ns0:href="http://some.website.com">"http://some.website.com</ext-link>&gt;.    '
+            '"</mixed-citation>'
+        )
+        result = etree.tostring(create_mixed_citation_element(string)).decode()
+        self.assertEqual(result, expected)
+        self.assertNotIn(result, "<http:>")
