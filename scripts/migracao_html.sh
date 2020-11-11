@@ -7,6 +7,14 @@ OUTPUT_DIR=$3
 
 #############
 #
+# COLORS
+#
+############
+NC='\033[0m' # No Color
+YELLOW='\033[1;33m'
+
+#############
+#
 # Functions
 #
 ############
@@ -45,7 +53,48 @@ convert_articles() {
 
 # Pack articles
 pack_articles() {
-    ds_migracao --loglevel DEBBUG pack >"$LOG_FOLDER_PATH/pack.log"
+    ds_migracao --loglevel DEBUG pack >"$LOG_FOLDER_PATH/pack.log"
+}
+
+#############
+#
+# Report functions
+#
+############
+
+# Generate the difference of pids from extract to convert
+get_diff_pids_from_extract_and_convert_steps() {
+    SOURCE_TEMP_FILE="/tmp/$(get_timestamp).s"
+    TARGET_TEMPFILE="/tmp/$(get_timestamp).t"
+    find "$SOURCE_PATH" -name "*.xml" -type f \
+        -exec basename {} \; | cut -d "." -f1 | sort -n >"$SOURCE_TEMP_FILE"
+    find "$CONVERSION_PATH" -name "*.xml" -type f \
+        -exec basename {} \; | cut -d "." -f1 | sort -n >"$TARGET_TEMPFILE"
+    diff "$SOURCE_TEMP_FILE" "$TARGET_TEMPFILE" >"$REPORT_FOLDER_PATH/extract-to-convertion.diff" || true
+
+    # Remove temporary files
+    rm "$SOURCE_TEMP_FILE" "$TARGET_TEMPFILE"
+}
+
+##
+# Generating diff from convertion to packing steps
+get_diff_pids_from_convert_and_pack_steps() {
+    SOURCE_TEMP_FILE="/tmp/$(get_timestamp).s"
+    TARGET_TEMPFILE="/tmp/$(get_timestamp).t"
+
+    find "$CONVERSION_PATH" -name "*.xml" -type f \
+        -exec basename {} \; | cut -d "." -f1 | sort -n >"$SOURCE_TEMP_FILE"
+
+    # getting all articles' pids
+    find "$SPS_PKG_PATH" -name "*.xml" -type f \
+        -exec awk -v tgt='scielo-v2' 's=index($0,tgt) {print substr($0, s+11, 23)}' {} \; |
+        sort -n >"$TARGET_TEMPFILE"
+
+    # doing the diff
+    diff "$SOURCE_TEMP_FILE" "$TARGET_TEMPFILE" >"$REPORT_FOLDER_PATH/convertion-to-pack.diff" || true
+
+    # Remove temporary files
+    rm "$SOURCE_TEMP_FILE" "$TARGET_TEMPFILE"
 }
 
 if [ "$#" -ne 3 ]; then
@@ -72,6 +121,7 @@ export INCOMPLETE_SPS_PKG_PATH="$SPS_PKG_PATH"
 export CACHE_PATH="$OUTPUT_ROOT_DIR/cache"
 export VALID_XML_PATH="$CONVERSION_PATH"
 LOG_FOLDER_PATH="$OUTPUT_ROOT_DIR/logs"
+REPORT_FOLDER_PATH="$OUTPUT_ROOT_DIR/reports"
 
 # Some platforms could crash if this was not defined
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
@@ -81,7 +131,8 @@ echo "$(formated_time) Creating work folders in $OUTPUT_ROOT_DIR."
 
 mkdir -p "$SOURCE_PATH" && mkdir -p "$CONVERSION_PATH" &&
     mkdir -p "$SPS_PKG_PATH" && mkdir -p "$INCOMPLETE_SPS_PKG_PATH" \
-    mkdir -p "$CACHE_PATH" && mkdir -p "$LOG_FOLDER_PATH"
+    mkdir -p "$CACHE_PATH" && mkdir -p "$LOG_FOLDER_PATH" &&
+    mkdir -p "$REPORT_FOLDER_PATH"
 
 #############
 #
@@ -168,3 +219,9 @@ if [ "$PACK_ARTICLES_ANSWER" != "${PACK_ARTICLES_ANSWER#[Yy]}" ]; then
 else
     echo "$(formated_time) Ignoring packing process."
 fi
+
+echo -e "$(formated_time)${YELLOW} Generating a diff file from PIDs in $SOURCE_PATH and $CONVERSION_PATH with output in $REPORT_FOLDER_PATH.${NC}"
+get_diff_pids_from_extract_and_convert_steps
+
+echo -e "$(formated_time)${YELLOW} Generating a diff file from PIDs in $CONVERSION_PATH and $SPS_PKG_PATH with output in $REPORT_FOLDER_PATH.${NC}"
+get_diff_pids_from_convert_and_pack_steps
