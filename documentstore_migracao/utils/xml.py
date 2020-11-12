@@ -19,6 +19,25 @@ CLEANUP_MIXED_CITATION = re.compile(
     CLEANUP_MIXED_CITATION.pattern + "|< *?font.*?>|< *?br.*?>"
 )
 
+_charref = re.compile(r'&(#[0-9]+;?'
+                    r'|#[xX][0-9a-fA-F]+;?'
+                    r'|[^\t\n\f <&#;]{1,32};?)')
+
+def html_safe_decode(string, forbidden=["&lt;", "&gt;", "&amp;", ";&#60;"]):
+    """
+    >>> "26. Cohen J. The Earth is Round (p.05&gt;Am Psychol 1994; 49: 997-1003"
+    >>> html_safe_decode("26. Cohen J. The Earth is Round (p.05&gt;Am Psychol 1994; 49: 997-1003")
+    """
+    if '&' not in string:
+        return string
+
+    def replace_charref(s):
+        s = "&" + s.group(1)
+        if s in forbidden:
+            return s
+        return html.unescape(s)
+
+    return _charref.sub(replace_charref, string)
 
 def str2objXML(_string):
     _string = string.normalize(_string)
@@ -135,7 +154,7 @@ def create_mixed_citation_element(citation_text: str) -> etree.Element:
             texto informado.
     """
     new_mixed_citation = etree.parse(
-        StringIO(html.unescape(citation_text)), parser=etree.HTMLParser()
+        StringIO(html_safe_decode(citation_text)), parser=etree.HTMLParser()
     )
 
     convert_html_tags_to_jats(new_mixed_citation)
