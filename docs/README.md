@@ -5,6 +5,7 @@ It is a tool specifically built to migrate your SciELO collection to a new platf
 ## Topics
 
 - [Usage](usage.md)
+- [HTML to XML Migration](001-html-migration.md)
 - [Quality assurance](quality-assurance.md)
 
 ### FAQ
