@@ -4,6 +4,7 @@ import html
 import os
 from copy import deepcopy
 import difflib
+import json
 
 import requests
 from lxml import etree
@@ -229,6 +230,180 @@ def matched_first_two_words(text_words, search_expr):
                 return True
 
 
+class Spy:
+
+    def __init__(self):
+        self.w_differ = DataDiffer(get_words_to_compare)
+        self.b_differ = DataDiffer(get_body_to_compare)
+
+    @property
+    def before(self):
+        pass
+
+    @property
+    def after(self):
+        pass
+
+    @before.setter
+    def before(self, data):
+        self.w_differ.before = data
+        self.b_differ.before = data
+
+    @after.setter
+    def after(self, data):
+        self.w_differ.after = data
+        self.b_differ.after = data
+
+    @property
+    def diff(self):
+        _diff = {}
+        if self.w_differ.ratio != 1:
+            _diff["words"] = 1 - self.w_differ.ratio
+        if self.w_differ.ratio != 1:
+            _diff["body"] = 1 - self.b_differ.ratio
+        return _diff
+
+
+class Dummy:
+
+    def __init__(self):
+        self.before = None
+        self.after = None
+        self.diff = False
+
+
+class BodyInfo:
+
+    def __init__(self, pid, index_body, ref_items=None, spy=None):
+        self.pid = pid
+        self.index_body = index_body
+        self.ref_items = ref_items
+        self.spy = (spy and Spy()) or Dummy()
+        self.diffs = []
+
+    @property
+    def data(self):
+        _data = {}
+        _data["pid"] = self.pid
+        _data["index_body"] = self.index_body
+        return _data
+
+    def register_diff(self, pipe):
+        if self.spy.diff:
+            data = self.data
+            data["pipe"] = pipe
+            data["diff"] = self.spy.diff
+            self.diffs.append(data)
+
+
+class XMLTexts:
+
+    def __init__(self, tree):
+        self.tree = tree
+
+    @staticmethod
+    def normalize(s):
+        return " ".join([c.strip() for c in s.strip().split() if c.strip()])
+
+    @property
+    def texts(self):
+        _texts = []
+        for node in self.tree.findall(".//*"):
+            for _text in [node.text, node.tail]:
+                _text = self.normalize(_text)
+                if _text:
+                    _texts.append(_text)
+        return _texts
+
+    @property
+    def body(self):
+        return " ".join(self.texts)
+
+    @property
+    def words(self):
+        w = []
+        for text in self.texts:
+            w.extend(text.split())
+        return w
+
+
+class DataDiffer:
+    def __init__(self, normalize_data_to_compare=None):
+        self._before = None
+        self._after = None
+        self.normalize_data_to_compare = (
+            normalize_data_to_compare or self._normalize_data_to_compare
+        )
+
+    def _normalize_data_to_compare(self, data):
+        return data
+
+    @property
+    def before(self):
+        return self._before
+
+    @before.setter
+    def before(self, data):
+        self._before = self.normalize_data_to_compare(data)
+
+    @property
+    def after(self):
+        return self._after
+
+    @after.setter
+    def after(self, data):
+        self._after = self.normalize_data_to_compare(data)
+
+    @property
+    def diff(self):
+        return not self._after == self._before
+
+    @property
+    def ratio(self):
+        try:
+            return difflib.SequenceMatcher(
+                None, self._before, self._after).ratio()
+        except TypeError:
+            return difflib.SequenceMatcher(
+                None, sorted(self._before), sorted(self._after)).ratio()
+
+
+def get_words_to_compare(data):
+    return set(XMLTexts(data).words)
+
+
+def get_body_to_compare(data):
+    return XMLTexts(data).body
+
+
+class ConversionPipe(plumber.Pipe):
+    def __init__(self, body_info):
+        super().__init__()
+        self.pipe = type(self).__name__
+        self.body_info = body_info
+        self.spy = body_info.spy
+
+    def _begin(self, data):
+        logger.debug("INICIO: %s" % self.pipe)
+        raw, xml = data
+        self.spy.before = xml
+
+    def _transform(self, data):
+        return data
+
+    def transform(self, data):
+        self._begin(data)
+        data = self._transform(data)
+        self._end(data)
+        return data
+
+    def _end(self, data):
+        raw, xml = data
+        self.spy.after = xml
+        self.body_info.register_diff(self.pipe)
+        logger.debug("FIM: %s" % self.pipe)
+
+
 class CustomPipe(plumber.Pipe):
     def __init__(self, super_obj=None, *args, **kwargs):
         self.super_obj = super_obj
@@ -236,12 +411,13 @@ class CustomPipe(plumber.Pipe):
 
 
 class HTML2SPSPipeline(object):
-    def __init__(self, pid="", ref_items=[], index_body=1):
+    def __init__(self, pid="", ref_items=[], index_body=1, spy=True):
         logger.debug(f"CONVERT: {pid}")
         self.pid = pid
         self.index_body = index_body
         self.ref_items = ref_items
         self.document = Document(None)
+        self.body_info = BodyInfo(pid, index_body, ref_items, spy)
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.SaveRawBodyPipe(super_obj=self),

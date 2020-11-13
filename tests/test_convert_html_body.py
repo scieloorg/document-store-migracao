@@ -2,7 +2,7 @@
 
 import os
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from lxml import etree
 
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
@@ -14,6 +14,14 @@ from documentstore_migracao.utils.convert_html_body import (
     _remove_tag,
     get_node_text,
     search_asset_node_backwards,
+    XMLTexts,
+    DataDiffer,
+    get_body_to_compare,
+    get_words_to_compare,
+    BodyInfo,
+    ConversionPipe,
+    Spy,
+    Dummy,
 )
 from . import SAMPLES_PATH
 
@@ -3480,3 +3488,277 @@ class TestFnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(unittest.Te
         text, xml = pipe.transform((text, xml))
         labels = xml.findall(".//label")
         self.assertEqual(labels[0].getprevious().tag, "fn")
+
+
+class TestXMLTexts(unittest.TestCase):
+
+    def test_normalize_removes_spaces(self):
+        expected = "a b c"
+        result = XMLTexts.normalize(" a   b    c  ")
+        self.assertEqual(expected, result)
+
+    def test_texts(self):
+        text = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        xml = etree.fromstring(text)
+        texts = XMLTexts(xml)
+        expected = ["*", "Corresponding author", "*", "Corresponding author"]
+        result = texts.texts
+        self.assertEqual(expected, result)
+
+    def test_body(self):
+        text = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        xml = etree.fromstring(text)
+        texts = XMLTexts(xml)
+        expected = "* Corresponding author * Corresponding author"
+        result = texts.body
+        self.assertEqual(expected, result)
+
+    def test_words(self):
+        text = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        xml = etree.fromstring(text)
+        texts = XMLTexts(xml)
+        expected = [
+            "*", "Corresponding", "author",
+            "*", "Corresponding", "author",
+        ]
+        result = texts.words
+        self.assertEqual(expected, result)
+
+
+class TestDataDiffer(unittest.TestCase):
+
+    def test_diff_returns_false(self):
+        diff = DataDiffer()
+        diff.before = "1111"
+        diff.after = "1111"
+        result = diff.diff
+        self.assertEqual(False, result)
+
+    def test_diff_returns_true(self):
+        diff = DataDiffer()
+        diff.before = "111"
+        diff.after = "1111"
+        result = diff.diff
+        self.assertEqual(True, result)
+
+    def test_ratio(self):
+        diff = DataDiffer()
+        diff.before = "1111"
+        diff.after = "1110"
+        result = diff.ratio
+        self.assertEqual(0.75, result)
+
+    def test_ratio_set(self):
+        diff = DataDiffer()
+        diff.before = {5, 3, 4, 1}
+        diff.after = {1, 3, 4, 5}
+        result = diff.ratio
+        self.assertEqual(1, result)
+
+    def test_ratio_set_is_diff(self):
+        diff = DataDiffer()
+        diff.before = {0, 3, 4, 1}
+        diff.after = {1, 3, 4, 5}
+        result = diff.ratio
+        self.assertEqual(0.75, result)
+
+
+class TestBodyDiffer(unittest.TestCase):
+
+    def setUp(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ = DataDiffer(get_body_to_compare)
+        self.differ.before = data
+
+    def test_diff_returns_false(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.diff
+        self.assertEqual(False, result)
+
+    def test_diff_returns_true(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author!
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.diff
+        self.assertEqual(True, result)
+
+    def test_ratio(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.ratio
+        self.assertLess(0.5, result)
+
+    def test_ratio_1(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.ratio
+        self.assertEqual(1, result)
+
+
+class TestWordsDiffer(unittest.TestCase):
+
+    def setUp(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ = DataDiffer(get_words_to_compare)
+        self.differ.before = data
+
+    def test_diff_returns_false(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.diff
+        self.assertEqual(False, result)
+
+    def test_diff_returns_true(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author!
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.diff
+        self.assertEqual(True, result)
+
+    def test_ratio(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.ratio
+        self.assertEqual(1, result)
+
+    def test_ratio_1(self):
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+        self.differ.after = data
+        result = self.differ.ratio
+        self.assertEqual(1, result)
+
+
+class TestConversionPipe(unittest.TestCase):
+
+    def test_conversion_pipe_with_spy_reports_no_diff(self):
+        body_info = BodyInfo("pid", 1, spy=True)
+
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        data = etree.fromstring(xml_string)
+
+        pipe = ConversionPipe(body_info)
+        _data = pipe.transform(data)
+        self.assertEqual(_data, data)
+        self.assertEqual(body_info.diffs, [])
+
+    def test_conversion_pipe_with_spy_reports_diff(self):
+
+        class AnyPipe(ConversionPipe):
+            def _transform(self, data):
+                raw, xml = data
+                xml.find(".//label").text = "novo"
+                return data
+
+        body_info = BodyInfo("pid", 1, spy=True)
+
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        xml = etree.fromstring(xml_string)
+
+        any_pipe = AnyPipe(body_info)
+
+        data = xml_string, xml
+        _data = any_pipe.transform(data)
+        self.assertEqual(len(body_info.diffs), 1)
+
+    def test_conversion_pipe_with_no_spy_does_not_report_diff(self):
+
+        class AnyPipe(ConversionPipe):
+            def _transform(self, data):
+                raw, xml = data
+                xml.find(".//label").text = "novo"
+                return data
+
+        body_info = BodyInfo("pid", 1, spy=False)
+
+        xml_string = """<root>
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        <label href="#home" xml_text="*" label-of="back">*</label>
+         Corresponding author
+        </root>"""
+        xml = etree.fromstring(xml_string)
+        any_pipe = AnyPipe(body_info)
+
+        data = xml_string, xml
+        _data = any_pipe.transform(data)
+        self.assertEqual(len(body_info.diffs), 0)
