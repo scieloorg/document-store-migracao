@@ -13,6 +13,28 @@ OUTPUT_DIR=$3
 NC='\033[0m' # No Color
 YELLOW='\033[1;33m'
 
+usage="$(basename "$0") [-h --help] - A simple script to help during migration process
+
+where:
+    -h --help       show this help text
+    year            set the year that will be migrated
+    file            set the file containing a list of HTML pids
+    folder          set the output folder where migration work files will be placed
+
+Example:
+    ./$(basename "$0") 2010 2010_html_pids.txt  /home/scielo/migration
+
+    This command above will setup the migration for the year of 2010
+    using the '2010_html_pids.txt' file and will produce the work files
+    inside the folder '/home/scielo/migration/2010'."
+
+if [ "$#" = 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$#" -lt 3 ]; then
+    echo "$usage"
+    exit 0
+fi
+
+set -u
+
 #############
 #
 # Functions
@@ -96,13 +118,6 @@ get_diff_pids_from_convert_and_pack_steps() {
     # Remove temporary files
     rm "$SOURCE_TEMP_FILE" "$TARGET_TEMPFILE"
 }
-
-if [ "$#" -ne 3 ]; then
-    echo "$(formated_time) Wrong number of parameters."
-    echo "$(formated_time) This program requires 3 parameters: 1) year 2) pids 3) file and output dir."
-    echo "$(formated_time) Example: ./migrate 2014 br_html_2014_pids.txt /root/html."
-    exit 1
-fi
 
 #############
 #
