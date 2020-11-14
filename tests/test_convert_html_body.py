@@ -642,7 +642,7 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_remove_or_move_style_tags(self):
         text = "<root><p><b></b></p><p><b>A</b></p><p><i><b/></i>Teste</p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
+            text, self.pipeline.RemoveOrMoveStyleTagsPipe(self.pipeline.body_info)
         )
         self.assertEqual(
             etree.tostring(transformed), b"<root><p/><p><b>A</b></p><p>Teste</p></root>"
@@ -651,7 +651,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_remove_or_move_style_tags_2(self):
         text = "<root><p><b><i>dado<u></u></i></b></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
+            text,
+            self.pipeline.RemoveOrMoveStyleTagsPipe(self.pipeline.body_info)
         )
         self.assertEqual(
             etree.tostring(transformed), b"<root><p><b><i>dado</i></b></p></root>"
@@ -660,7 +661,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_remove_or_move_style_tags_3(self):
         text = "<root><p><b>Titulo</b></p><p><b>Autor</b></p><p>Teste<i><b/></i></p></root>"
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
+            text,
+            self.pipeline.RemoveOrMoveStyleTagsPipe(self.pipeline.body_info)
         )
         self.assertEqual(
             etree.tostring(transformed),
@@ -673,7 +675,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b'<root><p>   <img src="x"/></p><p><b>Autor</b></p><p>Teste</p></root>'
         )
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveOrMoveStyleTagsPipe()
+            text,
+            self.pipeline.RemoveOrMoveStyleTagsPipe(self.pipeline.body_info)
         )
         self.assertEqual(etree.tostring(transformed), expected)
 
@@ -1471,7 +1474,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.SaveRawBodyPipe(pipeline.body_info),
             pipeline.DeprecatedHTMLTagsPipe(pipeline.body_info),
             pipeline.RemoveImgSetaPipe(pipeline.body_info),
-            pipeline.RemoveOrMoveStyleTagsPipe(),
+            pipeline.RemoveOrMoveStyleTagsPipe(pipeline.body_info),
             pipeline.RemoveEmptyPipe(),
             pipeline.RemoveStyleAttributesPipe(),
             pipeline.RemoveCommentPipe(pipeline.body_info),

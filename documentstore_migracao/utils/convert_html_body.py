@@ -491,7 +491,7 @@ class HTML2SPSPipeline(object):
             self.RemoveCommentPipe(self.body_info),
             self.DeprecatedHTMLTagsPipe(self.body_info),
             self.RemoveImgSetaPipe(self.body_info),
-            self.RemoveOrMoveStyleTagsPipe(),
+            self.RemoveOrMoveStyleTagsPipe(self.body_info),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
             self.AHrefPipe(),
@@ -587,7 +587,7 @@ class HTML2SPSPipeline(object):
             etree.strip_tags(xml, self.TAGS)
             return data
 
-    class RemoveOrMoveStyleTagsPipe(plumber.Pipe):
+    class RemoveOrMoveStyleTagsPipe(ConversionPipe):
         STYLE_TAGS = ("i", "b", "em", "strong", "u", "sup", "sub")
 
         def _move_style_tag_into_children(self, node):
@@ -630,11 +630,9 @@ class HTML2SPSPipeline(object):
                     self._move_style_tag_into_children(node)
                 etree.strip_tags(xml, "STRIPTAG")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             self._remove_or_move_style_tags(xml)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveEmptyPipe(plumber.Pipe):
