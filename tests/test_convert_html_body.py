@@ -2023,8 +2023,15 @@ class TestFixATagPipe(unittest.TestCase):
 
 
 class TestConvertRemote2LocalPipe(unittest.TestCase):
+    def setUp(self):
+        pipeline = HTML2SPSPipeline(
+            pid="S1234-56782018000100011",
+            index_body=1,
+            spy=False,
+        )
+        self.pipe = pipeline.ConvertRemote2LocalPipe(pipeline.body_info)
+
     def test_transform_imports_html_content(self):
-        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
         text = """<root><body>
         <p>
         <a href="/img/revistas/eq/v33n3/html/a05tab01.htm">Tables 1-5</a>
@@ -2032,7 +2039,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         </body></root>"""
         xml = etree.fromstring(text)
 
-        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        text, xml = self.pipe.transform((text, xml))
         self.assertEqual(xml.find(".//a[@name]").get("name"), "a05tab01")
 
         self.assertEqual(xml.find(".//a[@href]").get("href"), "#a05tab01")
@@ -2046,7 +2053,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         </body></root>"""
         xml = etree.fromstring(text)
 
-        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        text, xml = self.pipe.transform((text, xml))
         self.assertEqual(xml.find(".//a[@name]").get("name"), "05t1")
         self.assertEqual(
             xml.find(".//a[@name]/img").get("src"), "/img/revistas/rbs/v28n3/05t1.gif"
@@ -2054,7 +2061,6 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         self.assertEqual(xml.find(".//a[@href]").get("href"), "#05t1")
 
     def test_transform_imports_html_content_once(self):
-        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
         text = """<root><body>
         <p>
         <a href="/img/revistas/eq/v33n3/html/a05tab01.htm">Tables 1-5</a>
@@ -2065,7 +2071,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         </body></root>"""
         xml = etree.fromstring(text)
 
-        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        text, xml = self.pipe.transform((text, xml))
         self.assertEqual(xml.find(".//a[@name]").get("name"), "a05tab01")
         self.assertEqual(len(xml.findall(".//a[@name]")), 5)
         self.assertEqual(len(xml.findall(".//a[@href]")), 2)
@@ -2081,7 +2087,6 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         self, mk_get_html_body
     ):
         mk_get_html_body.return_value = None
-        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
         text = """<root><body>
         <p>
         <a href="/img/revistas/az/v99nspe/html/a10tab02.htm">Table 2</a>
@@ -2089,7 +2094,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         </body></root>"""
         xml = etree.fromstring(text)
 
-        text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+        text, xml = self.pipe.transform((text, xml))
         a_href_items = xml.findall(".//a[@href]")
         self.assertEqual(
             a_href_items[0].get("href"), "/img/revistas/az/v99nspe/html/a10tab02.htm"
@@ -2097,7 +2102,6 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
         self.assertEqual(a_href_items[0].get("link-type"), "asset-not-found")
 
     def test_transform_removes_repeated_imported_images(self):
-        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
         text = """<root><body>
         <p>
         <a href="/img/revistas/eq/v33n3/html/a05tab01.htm">Tables 1-5</a>
@@ -2120,7 +2124,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
             "documentstore_migracao.utils.convert_html_body.Remote2LocalConversion._get_html_body",
             new=stub_get_html_body,
         ):
-            text, xml = pipeline.ConvertRemote2LocalPipe().transform((text, xml))
+            text, xml = self.pipe.transform((text, xml))
 
             a_name_items = xml.findall(".//a[@name]")
             self.assertEqual(len(a_name_items), 2)

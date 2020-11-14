@@ -402,7 +402,7 @@ class ConversionPipe(plumber.Pipe):
         self.spy = body_info.spy
 
     def _begin(self, data):
-        logger.debug("INICIO: %s" % self.pipe)
+        logger.debug("INICIO: %s", self.pipe)
         raw, xml = data
         self.spy.before = xml
 
@@ -419,7 +419,7 @@ class ConversionPipe(plumber.Pipe):
         raw, xml = data
         self.spy.after = xml
         self.body_info.register_diff(self.pipe)
-        logger.debug("FIM: %s" % self.pipe)
+        logger.debug("FIM: %s", self.pipe)
 
 
 class CustomPipe(plumber.Pipe):
@@ -440,7 +440,7 @@ class HTML2SPSPipeline(object):
             self.SetupPipe(),
             self.SaveRawBodyPipe(self.body_info),
             self.FixATagPipe(self.body_info),
-            self.ConvertRemote2LocalPipe(),
+            self.ConvertRemote2LocalPipe(self.body_info),
             self.RemoveReferencesFromBodyPipe(super_obj=self),
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
@@ -526,13 +526,11 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[@src]", self._change_src_to_href)
             return data
 
-    class ConvertRemote2LocalPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class ConvertRemote2LocalPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             html_page = Remote2LocalConversion(xml)
             html_page.remote_to_local()
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class DeprecatedHTMLTagsPipe(plumber.Pipe):
