@@ -699,7 +699,10 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_remove_comments(self):
         text = """<root><!-- COMMENT 1 --><x>TEXT 1</x><y>TEXT 2 <!-- COMMENT 2 --></y></root>"""
-        raw, transformed = self._transform(text, self.pipeline.RemoveCommentPipe())
+        raw, transformed = self._transform(
+            text,
+            self.pipeline.RemoveCommentPipe(self.pipeline.body_info)
+        )
         self.assertEqual(
             etree.tostring(transformed), b"""<root><x>TEXT 1</x><y>TEXT 2 </y></root>"""
         )
@@ -1467,7 +1470,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.RemoveOrMoveStyleTagsPipe(),
             pipeline.RemoveEmptyPipe(),
             pipeline.RemoveStyleAttributesPipe(),
-            pipeline.RemoveCommentPipe(),
+            pipeline.RemoveCommentPipe(pipeline.body_info),
             pipeline.BRPipe(),
             pipeline.PPipe(),
             pipeline.DivPipe(),

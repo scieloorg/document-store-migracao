@@ -462,7 +462,7 @@ class HTML2SPSPipeline(object):
             self.FixATagPipe(self.body_info),
             self.ConvertRemote2LocalPipe(self.body_info),
             self.RemoveReferencesFromBodyPipe(self.body_info),
-            self.RemoveCommentPipe(),
+            self.RemoveCommentPipe(self.body_info),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
             self.RemoveOrMoveStyleTagsPipe(),
@@ -1343,9 +1343,8 @@ class HTML2SPSPipeline(object):
                         )
                         _remove_tag(references_header, True)
 
-    class RemoveCommentPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class RemoveCommentPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             comments = xml.xpath("//comment()")
             for comment in comments:
@@ -1355,8 +1354,7 @@ class HTML2SPSPipeline(object):
                     comment.addnext(etree.Element("REMOVE_COMMENT"))
                     parent.remove(comment)
             etree.strip_tags(xml, "REMOVE_COMMENT")
-            logger.debug("Total de %s 'comentarios' removidos", len(comments))
-            logger.debug("FIM: %s" % type(self).__name__)
+            logger.info("Total de %s 'comentarios' removidos", len(comments))
             return data
 
     class AHrefPipe(plumber.Pipe):
