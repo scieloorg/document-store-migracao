@@ -262,9 +262,9 @@ class Spy:
         _report = {}
         try:
             if self.w_differ.difference_ratio:
-                _report["words"] = self.w_differ.difference_ratio
+                _report["words"] = self.w_differ.info
             if self.b_differ.difference_ratio:
-                _report["body"] = self.b_differ.difference_ratio
+                _report["body"] = self.b_differ.info
         except UnableToCompareError:
             logger.info("Unable to compare")
         return _report
@@ -276,6 +276,17 @@ class Dummy:
         self.before = None
         self.after = None
         self.report = False
+
+
+CONTENT_CHANGER_PIPES = (
+    "RemoveReferencesFromBodyPipe",
+)
+
+
+def logger_action(pipe):
+    if pipe in CONTENT_CHANGER_PIPES:
+        return logger.warning
+    return logger.error
 
 
 class BodyInfo:
@@ -300,7 +311,7 @@ class BodyInfo:
         if self.spy.report:
             data["diff report"] = self.spy.report
             self.diffs.append(data)
-            logger.error(data)
+            logger_action(pipe)(data)
         else:
             logger.info("No difference: %s", data)
 
@@ -385,6 +396,15 @@ class DataDiffer:
     def difference_ratio(self):
         return 1 - self.similarity_ratio
 
+    @property
+    def info(self):
+        return {
+            "before length": len(self.before),
+            "after length": len(self.after),
+            "similarity ratio": self.similarity_ratio,
+            "difference ration": self.difference_ratio,
+        }
+
 
 def get_words_to_compare(data):
     return set(XMLTexts(data).words)
@@ -441,7 +461,7 @@ class HTML2SPSPipeline(object):
             self.SaveRawBodyPipe(self.body_info),
             self.FixATagPipe(self.body_info),
             self.ConvertRemote2LocalPipe(self.body_info),
-            self.RemoveReferencesFromBodyPipe(super_obj=self),
+            self.RemoveReferencesFromBodyPipe(self.body_info),
             self.RemoveCommentPipe(),
             self.DeprecatedHTMLTagsPipe(),
             self.RemoveImgSetaPipe(),
@@ -1264,13 +1284,12 @@ class HTML2SPSPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class RemoveReferencesFromBodyPipe(CustomPipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class RemoveReferencesFromBodyPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
-            if len(self.super_obj.ref_items) > 0:
+            if len(self.body_info.ref_items) > 0:
                 references_header, p_to_delete = self._mark_references(xml)
-                if len(self.super_obj.ref_items) == len(p_to_delete):
+                if len(self.body_info.ref_items) == len(p_to_delete):
                     self._delete_references_header(references_header)
                     for p in p_to_delete:
                         _remove_tag(p, True)
@@ -1279,9 +1298,8 @@ class HTML2SPSPipeline(object):
                         "Não removeu referências do body: "
                         "quantidades de parágrafos (%i) e referências (%i) "
                         "divergem.",
-                        len(p_to_delete), len(self.super_obj.ref_items)
+                        len(p_to_delete), len(self.body_info.ref_items)
                     )
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _mark_references(self, xml):

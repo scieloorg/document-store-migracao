@@ -2627,6 +2627,11 @@ class TestSupplementaryMaterial(unittest.TestCase):
 
 
 class TestRemoveReferencesFromBody(unittest.TestCase):
+    def setUp(self):
+        pipeline = HTML2SPSPipeline(
+            pid="S1234-56782018000100011", index_body=1)
+        self.pipe = pipeline.RemoveReferencesFromBodyPipe(pipeline.body_info)
+
     def test_remove_references_from_body_removes_references_from_body(self):
         text = """
         <body>
@@ -2660,11 +2665,10 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
         </article>
         """
         article = etree.fromstring(article_text)
-        ref_items = article.findall(".//ref")
+        self.pipe.body_info.ref_items = article.findall(".//ref")
 
         xml = etree.fromstring(text)
-        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011", ref_items=ref_items)
-        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline).transform(
+        text, xml = self.pipe.transform(
             (text, xml)
         )
         self.assertEqual(len(xml.findall(".//p")), 2)
@@ -2711,11 +2715,9 @@ class TestRemoveReferencesFromBody(unittest.TestCase):
         </article>
         """
         article = etree.fromstring(article_text)
-        ref_items = article.findall(".//ref")
-
+        self.pipe.body_info.ref_items = article.findall(".//ref")
         xml = etree.fromstring(text)
-        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011", ref_items=ref_items)
-        text, xml = pipeline.RemoveReferencesFromBodyPipe(pipeline).transform(
+        text, xml = self.pipe.transform(
             (text, xml)
         )
         self.assertEqual(len(xml.findall(".//p")), 8)
