@@ -336,8 +336,6 @@ class BodyInfo:
             data["diff report"] = self.spy.report
             self.diffs.append(data)
             logger_action(pipe)(data)
-        else:
-            logger.info("No difference: %s", data)
 
 
 class XMLTexts:
@@ -492,7 +490,7 @@ class HTML2SPSPipeline(object):
             self.RemoveReferencesFromBodyPipe(self.body_info),
             self.RemoveCommentPipe(self.body_info),
             self.DeprecatedHTMLTagsPipe(self.body_info),
-            self.RemoveImgSetaPipe(),
+            self.RemoveImgSetaPipe(self.body_info),
             self.RemoveOrMoveStyleTagsPipe(),
             self.RemoveEmptyPipe(),
             self.RemoveStyleAttributesPipe(),
@@ -1587,16 +1585,14 @@ class HTML2SPSPipeline(object):
             _, obj = convert.deploy(xml)
             return raw, obj
 
-    class RemoveImgSetaPipe(plumber.Pipe):
+    class RemoveImgSetaPipe(ConversionPipe):
         def parser_node(self, node):
             if "/seta." in node.find("img").attrib.get("src"):
                 _remove_tag(node.find("img"))
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "a[img]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveEmptyPAndEmptySectionPipe(plumber.Pipe):

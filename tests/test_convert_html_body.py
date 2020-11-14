@@ -1470,7 +1470,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
         pipes = (
             pipeline.SaveRawBodyPipe(pipeline.body_info),
             pipeline.DeprecatedHTMLTagsPipe(pipeline.body_info),
-            pipeline.RemoveImgSetaPipe(),
+            pipeline.RemoveImgSetaPipe(pipeline.body_info),
             pipeline.RemoveOrMoveStyleTagsPipe(),
             pipeline.RemoveEmptyPipe(),
             pipeline.RemoveStyleAttributesPipe(),
