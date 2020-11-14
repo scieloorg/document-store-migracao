@@ -1461,7 +1461,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
         xml = etree.fromstring(text)
         text, xml = pipeline.SetupPipe().transform(text)
         pipes = (
-            pipeline.SaveRawBodyPipe(pipeline),
+            pipeline.SaveRawBodyPipe(pipeline.body_info),
             pipeline.DeprecatedHTMLTagsPipe(),
             pipeline.RemoveImgSetaPipe(),
             pipeline.RemoveOrMoveStyleTagsPipe(),
@@ -1989,7 +1989,8 @@ class TestImgPipe(unittest.TestCase):
 class TestFixATagPipe(unittest.TestCase):
     def setUp(self):
         self.pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        self.pipe = self.pipeline.FixATagPipe()
+        body_info = BodyInfo("S1234-56782018000100011", 1, spy=False)
+        self.pipe = self.pipeline.FixATagPipe(body_info)
 
     def test_changes_existing_src_attrib_to_href(self):
         text = """
@@ -3560,21 +3561,21 @@ class TestDataDiffer(unittest.TestCase):
         diff = DataDiffer()
         diff.before = "1111"
         diff.after = "1110"
-        result = diff.ratio
+        result = diff.similarity_ratio
         self.assertEqual(0.75, result)
 
     def test_ratio_set(self):
         diff = DataDiffer()
         diff.before = {5, 3, 4, 1}
         diff.after = {1, 3, 4, 5}
-        result = diff.ratio
+        result = diff.similarity_ratio
         self.assertEqual(1, result)
 
     def test_ratio_set_is_diff(self):
         diff = DataDiffer()
         diff.before = {0, 3, 4, 1}
         diff.after = {1, 3, 4, 5}
-        result = diff.ratio
+        result = diff.similarity_ratio
         self.assertEqual(0.75, result)
 
 
@@ -3622,7 +3623,7 @@ class TestBodyDiffer(unittest.TestCase):
         </root>"""
         data = etree.fromstring(xml_string)
         self.differ.after = data
-        result = self.differ.ratio
+        result = self.differ.similarity_ratio
         self.assertLess(0.5, result)
 
     def test_ratio_1(self):
@@ -3634,7 +3635,7 @@ class TestBodyDiffer(unittest.TestCase):
         </root>"""
         data = etree.fromstring(xml_string)
         self.differ.after = data
-        result = self.differ.ratio
+        result = self.differ.similarity_ratio
         self.assertEqual(1, result)
 
 
@@ -3682,7 +3683,7 @@ class TestWordsDiffer(unittest.TestCase):
         </root>"""
         data = etree.fromstring(xml_string)
         self.differ.after = data
-        result = self.differ.ratio
+        result = self.differ.similarity_ratio
         self.assertEqual(1, result)
 
     def test_ratio_1(self):
@@ -3694,7 +3695,7 @@ class TestWordsDiffer(unittest.TestCase):
         </root>"""
         data = etree.fromstring(xml_string)
         self.differ.after = data
-        result = self.differ.ratio
+        result = self.differ.similarity_ratio
         self.assertEqual(1, result)
 
 

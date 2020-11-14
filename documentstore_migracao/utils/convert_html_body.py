@@ -229,6 +229,9 @@ def matched_first_two_words(text_words, search_expr):
             ):
                 return True
 
+class UnableToCompareError(Exception):
+    ...
+
 
 class Spy:
 
@@ -255,13 +258,16 @@ class Spy:
         self.b_differ.after = data
 
     @property
-    def diff(self):
-        _diff = {}
-        if self.w_differ.ratio != 1:
-            _diff["words"] = 1 - self.w_differ.ratio
-        if self.w_differ.ratio != 1:
-            _diff["body"] = 1 - self.b_differ.ratio
-        return _diff
+    def report(self):
+        _report = {}
+        try:
+            if self.w_differ.difference_ratio:
+                _report["words"] = self.w_differ.difference_ratio
+            if self.b_differ.difference_ratio:
+                _report["body"] = self.b_differ.difference_ratio
+        except UnableToCompareError:
+            logger.info("Unable to compare")
+        return _report
 
 
 class Dummy:
@@ -269,7 +275,7 @@ class Dummy:
     def __init__(self):
         self.before = None
         self.after = None
-        self.diff = False
+        self.report = False
 
 
 class BodyInfo:
@@ -289,11 +295,14 @@ class BodyInfo:
         return _data
 
     def register_diff(self, pipe):
-        if self.spy.diff:
-            data = self.data
-            data["pipe"] = pipe
-            data["diff"] = self.spy.diff
+        data = self.data
+        data["pipe"] = pipe
+        if self.spy.report:
+            data["diff report"] = self.spy.report
             self.diffs.append(data)
+            logger.error(data)
+        else:
+            logger.info("No difference: %s", data)
 
 
 class XMLTexts:
@@ -303,7 +312,8 @@ class XMLTexts:
 
     @staticmethod
     def normalize(s):
-        return " ".join([c.strip() for c in s.strip().split() if c.strip()])
+        if s:
+            return " ".join([c.strip() for c in s.strip().split() if c.strip()])
 
     @property
     def texts(self):
@@ -356,16 +366,24 @@ class DataDiffer:
 
     @property
     def diff(self):
-        return not self._after == self._before
+        if type(self._after) == type(self._before):
+            return not self._after == self._before
+        raise UnableToCompareError("Unable to compare")
 
     @property
-    def ratio(self):
+    def similarity_ratio(self):
+        if not type(self._after) == type(self._before):
+            raise UnableToCompareError("Unable to compare")
         try:
             return difflib.SequenceMatcher(
                 None, self._before, self._after).ratio()
         except TypeError:
             return difflib.SequenceMatcher(
                 None, sorted(self._before), sorted(self._after)).ratio()
+
+    @property
+    def difference_ratio(self):
+        return 1 - self.similarity_ratio
 
 
 def get_words_to_compare(data):
@@ -420,8 +438,8 @@ class HTML2SPSPipeline(object):
         self.body_info = BodyInfo(pid, index_body, ref_items, spy)
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
-            self.SaveRawBodyPipe(super_obj=self),
-            self.FixATagPipe(),
+            self.SaveRawBodyPipe(self.body_info),
+            self.FixATagPipe(self.body_info),
             self.ConvertRemote2LocalPipe(),
             self.RemoveReferencesFromBodyPipe(super_obj=self),
             self.RemoveCommentPipe(),
@@ -480,36 +498,32 @@ class HTML2SPSPipeline(object):
                 xml = data
             return text, xml
 
-    class SaveRawBodyPipe(CustomPipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class SaveRawBodyPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             root = xml.getroottree()
             root.write(
                 os.path.join(
                     "/tmp/",
-                    "%s.%s.xml" % (self.super_obj.pid, self.super_obj.index_body),
+                    "%s.%s.xml" % (self.body_info.pid, self.body_info.index_body),
                 ),
                 encoding="utf-8",
                 doctype=config.DOC_TYPE_XML,
                 xml_declaration=True,
                 pretty_print=True,
             )
-            logger.debug("FIM: %s" % type(self).__name__)
             return data, xml
 
-    class FixATagPipe(plumber.Pipe):
+    class FixATagPipe(ConversionPipe):
         def _change_src_to_href(self, node):
             href = node.attrib.get("href")
             src = node.attrib.get("src")
             if not href and src:
                 node.attrib["href"] = node.attrib.pop("src")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "a[@src]", self._change_src_to_href)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class ConvertRemote2LocalPipe(plumber.Pipe):
