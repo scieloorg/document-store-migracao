@@ -615,24 +615,28 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_remove_deprecated_small(self):
         text = "<root><p><bold><small>   Teste</small></bold></p></root>"
-        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        pipe = self.pipeline.DeprecatedHTMLTagsPipe(self.pipeline.body_info)
+        raw, transformed = self._transform(text, pipe)
         self.assertEqual(
             etree.tostring(transformed), b"<root><p><bold>   Teste</bold></p></root>"
         )
 
     def test_pipe_remove_deprecated_big(self):
         text = "<root><p><big>Teste</big></p></root>"
-        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        pipe = self.pipeline.DeprecatedHTMLTagsPipe(self.pipeline.body_info)
+        raw, transformed = self._transform(text, pipe)
         self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_pipe_remove_deprecated_dir(self):
         text = "<root><p><dir>Teste</dir></p></root>"
-        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        pipe = self.pipeline.DeprecatedHTMLTagsPipe(self.pipeline.body_info)
+        raw, transformed = self._transform(text, pipe)
         self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_pipe_remove_deprecated_font(self):
         text = "<root><p><font>Teste</font></p></root>"
-        raw, transformed = self._transform(text, self.pipeline.DeprecatedHTMLTagsPipe())
+        pipe = self.pipeline.DeprecatedHTMLTagsPipe(self.pipeline.body_info)
+        raw, transformed = self._transform(text, pipe)
         self.assertEqual(etree.tostring(transformed), b"<root><p>Teste</p></root>")
 
     def test_remove_or_move_style_tags(self):
@@ -1465,7 +1469,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
         text, xml = pipeline.SetupPipe().transform(text)
         pipes = (
             pipeline.SaveRawBodyPipe(pipeline.body_info),
-            pipeline.DeprecatedHTMLTagsPipe(),
+            pipeline.DeprecatedHTMLTagsPipe(pipeline.body_info),
             pipeline.RemoveImgSetaPipe(),
             pipeline.RemoveOrMoveStyleTagsPipe(),
             pipeline.RemoveEmptyPipe(),

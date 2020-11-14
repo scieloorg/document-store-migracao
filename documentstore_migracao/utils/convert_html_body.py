@@ -463,7 +463,7 @@ class HTML2SPSPipeline(object):
             self.ConvertRemote2LocalPipe(self.body_info),
             self.RemoveReferencesFromBodyPipe(self.body_info),
             self.RemoveCommentPipe(self.body_info),
-            self.DeprecatedHTMLTagsPipe(),
+            self.DeprecatedHTMLTagsPipe(self.body_info),
             self.RemoveImgSetaPipe(),
             self.RemoveOrMoveStyleTagsPipe(),
             self.RemoveEmptyPipe(),
@@ -553,17 +553,15 @@ class HTML2SPSPipeline(object):
             html_page.remote_to_local()
             return data
 
-    class DeprecatedHTMLTagsPipe(plumber.Pipe):
+    class DeprecatedHTMLTagsPipe(ConversionPipe):
         TAGS = ["font", "small", "big", "dir", "span", "s", "lixo", "center"]
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for tag in self.TAGS:
                 nodes = xml.findall(".//" + tag)
                 if len(nodes) > 0:
                     etree.strip_tags(xml, tag)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveOrMoveStyleTagsPipe(plumber.Pipe):
