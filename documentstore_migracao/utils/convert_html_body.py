@@ -229,6 +229,7 @@ def matched_first_two_words(text_words, search_expr):
             ):
                 return True
 
+
 class UnableToCompareError(Exception):
     ...
 
@@ -238,6 +239,7 @@ class Spy:
     def __init__(self):
         self.w_differ = DataDiffer(get_words_to_compare)
         self.b_differ = DataDiffer(get_body_to_compare)
+        self.text_differ = DataDiffer(remove_spaces)
 
     @property
     def before(self):
@@ -251,23 +253,45 @@ class Spy:
     def before(self, data):
         self.w_differ.before = data
         self.b_differ.before = data
+        self.text_differ.before = self.b_differ.before
 
     @after.setter
     def after(self, data):
         self.w_differ.after = data
         self.b_differ.after = data
+        self.text_differ.after = self.b_differ.after
 
     @property
     def report(self):
         _report = {}
         try:
-            if self.w_differ.difference_ratio:
-                _report["words"] = self.w_differ.info
-            if self.b_differ.difference_ratio:
-                _report["body"] = self.b_differ.info
+            if self.diff_in_spaces:
+                _report["spaces"] = self.diff_in_spaces
+            else:
+                if self.w_differ.difference_ratio:
+                    _report["words"] = self.w_differ.info
+                if self.b_differ.difference_ratio:
+                    _report["body"] = self.b_differ.info
         except UnableToCompareError:
             logger.info("Unable to compare")
         return _report
+
+    @property
+    def diff_in_spaces(self):
+        """
+        Retorna dict, se os textos antes e depois, sem os espaços,
+        são idênticos, mas havendo diferenças nos espaços
+        implicará em "palavras diferentes"
+            National ... , (3 "palavras") -> National..., (1 palavra)
+        """
+        if self.text_differ.similarity_ratio == 1:
+            spaces_before = self.b_differ.before.count(" ")
+            spaces_after = self.b_differ.after.count(" ")
+            if spaces_before != spaces_after:
+                return {
+                    "before": spaces_before,
+                    "after": spaces_after,
+                }
 
 
 class Dummy:
@@ -414,6 +438,10 @@ def get_body_to_compare(data):
     return XMLTexts(data).body
 
 
+def remove_spaces(data):
+    return data.replace(" ", "")
+
+
 class ConversionPipe(plumber.Pipe):
     def __init__(self, body_info):
         super().__init__()
@@ -558,10 +586,7 @@ class HTML2SPSPipeline(object):
 
         def _transform(self, data):
             raw, xml = data
-            for tag in self.TAGS:
-                nodes = xml.findall(".//" + tag)
-                if len(nodes) > 0:
-                    etree.strip_tags(xml, tag)
+            etree.strip_tags(xml, self.TAGS)
             return data
 
     class RemoveOrMoveStyleTagsPipe(plumber.Pipe):
