@@ -206,7 +206,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_empty_do_not_remove_img(self):
         text = '<root><p> <img align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <img align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(
+            text,
+            self.pipeline.RemoveEmptyPipe(self.pipeline.body_info))
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
             expected.replace(">", ">[BREAK]").split("[BREAK]"),
@@ -216,7 +218,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_empty_do_not_remove_a(self):
         text = '<root><p> <a align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <a align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(
+            text,
+            self.pipeline.RemoveEmptyPipe(self.pipeline.body_info))
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
             expected.replace(">", ">[BREAK]").split("[BREAK]"),
@@ -226,7 +230,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_empty_do_not_remove_hr(self):
         text = '<root><p> <hr align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <hr align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(
+            text,
+            self.pipeline.RemoveEmptyPipe(self.pipeline.body_info))
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
             expected.replace(">", ">[BREAK]").split("[BREAK]"),
@@ -236,7 +242,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_empty_do_not_remove_br(self):
         text = '<root><p> <br align="x" src="a04qdr04.gif"/> </p> </root>'
         expected = '<root><p> <br align="x" src="a04qdr04.gif"/> </p> </root>'
-        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(
+            text,
+            self.pipeline.RemoveEmptyPipe(self.pipeline.body_info))
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
             expected.replace(">", ">[BREAK]").split("[BREAK]"),
@@ -246,7 +254,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_empty_p(self):
         text = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p> <p/> </root>"
         expected = "<root><p>Colonização micorrízica e concentração de nutrientes em três cultivares de bananeiras em um latossolo amarelo da Amazônia central</p>  </root>"
-        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(
+            text,
+            self.pipeline.RemoveEmptyPipe(self.pipeline.body_info))
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
             expected.replace(">", ">[BREAK]").split("[BREAK]"),
@@ -256,7 +266,9 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_empty_bold(self):
         text = "<root><p>Colonização micorrízica e concentração de nutrientes <bold> </bold> em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
         expected = "<root><p>Colonização micorrízica e concentração de nutrientes   em três cultivares de bananeiras em um latossolo amarelo</p> </root>"
-        raw, transformed = self._transform(text, self.pipeline.RemoveEmptyPipe())
+        raw, transformed = self._transform(
+            text,
+            self.pipeline.RemoveEmptyPipe(self.pipeline.body_info))
 
         resultado = etree.tostring(transformed, encoding="unicode")
         self.assertEqual(
@@ -1475,7 +1487,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.DeprecatedHTMLTagsPipe(pipeline.body_info),
             pipeline.RemoveImgSetaPipe(pipeline.body_info),
             pipeline.RemoveOrMoveStyleTagsPipe(pipeline.body_info),
-            pipeline.RemoveEmptyPipe(),
+            pipeline.RemoveEmptyPipe(pipeline.body_info),
             pipeline.RemoveStyleAttributesPipe(),
             pipeline.RemoveCommentPipe(pipeline.body_info),
             pipeline.BRPipe(),

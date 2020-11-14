@@ -492,7 +492,7 @@ class HTML2SPSPipeline(object):
             self.DeprecatedHTMLTagsPipe(self.body_info),
             self.RemoveImgSetaPipe(self.body_info),
             self.RemoveOrMoveStyleTagsPipe(self.body_info),
-            self.RemoveEmptyPipe(),
+            self.RemoveEmptyPipe(self.body_info),
             self.RemoveStyleAttributesPipe(),
             self.AHrefPipe(),
             self.DivPipe(),
@@ -635,7 +635,7 @@ class HTML2SPSPipeline(object):
             self._remove_or_move_style_tags(xml)
             return data
 
-    class RemoveEmptyPipe(plumber.Pipe):
+    class RemoveEmptyPipe(ConversionPipe):
         EXCEPTIONS = ["a", "br", "img", "hr", "td", "body"]
 
         def _is_empty_element(self, node):
@@ -651,8 +651,7 @@ class HTML2SPSPipeline(object):
                             removed_tags.append(removed)
             return removed_tags
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             total_removed_tags = []
             remove = True
@@ -668,7 +667,6 @@ class HTML2SPSPipeline(object):
                     "Tags removidas:%s ",
                     ", ".join(sorted(list(set(total_removed_tags)))),
                 )
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveStyleAttributesPipe(plumber.Pipe):
