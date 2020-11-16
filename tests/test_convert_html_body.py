@@ -289,7 +289,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_hr(self):
         text = '<root><hr style="x" /></root>'
-        raw, transformed = self._transform(text, self.pipeline.HrPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.HrPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed), b'<root><p content-type="hr"/></root>'
         )
@@ -630,7 +631,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_td(self):
         text = '<root><td width="" height="" style="style"><p>Teste</p></td></root>'
-        raw, transformed = self._transform(text, self.pipeline.TdCleanPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.TdCleanPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b'<root><td style="style"><p>Teste</p></td></root>',
@@ -638,7 +640,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_blockquote(self):
         text = "<root><p><blockquote>Teste</blockquote></p></root>"
-        raw, transformed = self._transform(text, self.pipeline.BlockquotePipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.BlockquotePipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"<root><p><disp-quote>Teste</disp-quote></p></root>",
@@ -1523,10 +1526,10 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.BPipe(pipeline.body_info),
             pipeline.StrongPipe(pipeline.body_info),
             pipeline.ConvertElementsWhichHaveIdPipe(),
-            pipeline.TdCleanPipe(),
-            pipeline.TableCleanPipe(),
-            pipeline.BlockquotePipe(),
-            pipeline.HrPipe(),
+            pipeline.TdCleanPipe(pipeline.body_info),
+            pipeline.TableCleanPipe(pipeline.body_info),
+            pipeline.BlockquotePipe(pipeline.body_info),
+            pipeline.HrPipe(pipeline.body_info),
             pipeline.TagsHPipe(),
             pipeline.DispQuotePipe(),
             pipeline.GraphicChildrenPipe(),

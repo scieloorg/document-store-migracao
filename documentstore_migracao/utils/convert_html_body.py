@@ -490,10 +490,10 @@ class HTML2SPSPipeline(object):
             self.RemoveInvalidBRPipe(self.body_info),
             self.BRPipe(self.body_info),
             self.BR2PPipe(self.body_info),
-            self.TdCleanPipe(),
-            self.TableCleanPipe(),
-            self.BlockquotePipe(),
-            self.HrPipe(),
+            self.TdCleanPipe(self.body_info),
+            self.TableCleanPipe(self.body_info),
+            self.BlockquotePipe(self.body_info),
+            self.HrPipe(self.body_info),
             self.TagsHPipe(),
             self.DispQuotePipe(),
             self.GraphicChildrenPipe(),
@@ -951,7 +951,7 @@ class HTML2SPSPipeline(object):
             _process(xml, "strong", self.parser_node)
             return data
 
-    class TdCleanPipe(plumber.Pipe):
+    class TdCleanPipe(ConversionPipe):
         EXPECTED_INNER_TAGS = [
             "email",
             "ext-link",
@@ -1036,12 +1036,9 @@ class HTML2SPSPipeline(object):
             node.attrib.clear()
             node.attrib.update(_attrib)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "td", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class TableCleanPipe(TdCleanPipe):
@@ -1062,12 +1059,9 @@ class HTML2SPSPipeline(object):
             "xml:base",
         ]
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "table", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class EmPipe(ConversionPipe):
@@ -1090,30 +1084,24 @@ class HTML2SPSPipeline(object):
             _process(xml, "u", self.parser_node)
             return data
 
-    class BlockquotePipe(plumber.Pipe):
+    class BlockquotePipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "disp-quote"
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "blockquote", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class HrPipe(plumber.Pipe):
+    class HrPipe(ConversionPipe):
         def parser_node(self, node):
             node.attrib.clear()
             node.tag = "p"
             node.set("content-type", "hr")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "hr", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class TagsHPipe(plumber.Pipe):
