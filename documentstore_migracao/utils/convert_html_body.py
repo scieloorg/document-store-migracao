@@ -341,7 +341,12 @@ class XMLTexts:
 
     @property
     def text(self):
-        return "".join(self.words)
+        words = []
+        for node in self.tree.findall(".//*"):
+            for _text in [node.text, node.tail]:
+                if (_text or "").strip():
+                    words.extend([w.strip() for w in _text.split()])
+        return "".join(words)
 
 
 class DataDiffer:
