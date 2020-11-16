@@ -451,7 +451,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             <dl><dd>Milk</dd></dl>
             </root>
         """
-        raw, transformed = self._transform(text, self.pipeline.DefListPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.DefListPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//def-list")
         self.assertEqual(len(nodes), 2)
@@ -466,7 +467,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             <dl><dd>Milk</dd></dl>
             </root>
         """
-        raw, transformed = self._transform(text, self.pipeline.DefItemPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.DefItemPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//def-item")
         self.assertEqual(len(nodes), 2)
@@ -1501,8 +1503,8 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.LiPipe(pipeline.body_info),
             pipeline.OlPipe(pipeline.body_info),
             pipeline.UlPipe(pipeline.body_info),
-            pipeline.DefListPipe(),
-            pipeline.DefItemPipe(),
+            pipeline.DefListPipe(pipeline.body_info),
+            pipeline.DefItemPipe(pipeline.body_info),
             pipeline.IPipe(),
             pipeline.EmPipe(),
             pipeline.UPipe(),

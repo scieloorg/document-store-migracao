@@ -473,8 +473,8 @@ class HTML2SPSPipeline(object):
             self.LiPipe(self.body_info),
             self.OlPipe(self.body_info),
             self.UlPipe(self.body_info),
-            self.DefListPipe(),
-            self.DefItemPipe(),
+            self.DefListPipe(self.body_info),
+            self.DefItemPipe(self.body_info),
             self.IPipe(),
             self.EmPipe(),
             self.UPipe(),
@@ -894,30 +894,24 @@ class HTML2SPSPipeline(object):
             _process(xml, "ul", self.parser_node)
             return data
 
-    class DefListPipe(plumber.Pipe):
+    class DefListPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "def-list"
             node.attrib.clear()
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "dl", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class DefItemPipe(plumber.Pipe):
+    class DefItemPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "def-item"
             node.attrib.clear()
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "dd", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class IPipe(plumber.Pipe):
