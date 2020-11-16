@@ -12,6 +12,9 @@ OUTPUT_DIR=$3
 ############
 NC='\033[0m' # No Color
 YELLOW='\033[1;33m'
+LIGHTGRAY='\033[0,37m'
+RED='\033[0;31m'
+GREEN='\033[1;32m'
 
 usage="$(basename "$0") [-h --help] - A simple script to help during migration process
 
