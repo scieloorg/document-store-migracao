@@ -450,12 +450,15 @@ class HTML2SPSPipeline(object):
         self.ref_items = ref_items
         self.document = Document(None)
         self.body_info = BodyInfo(pid, index_body, ref_items, spy)
+        body_info_which_spy_is_false = BodyInfo(
+            pid, index_body, ref_items, spy=False)
+
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.SaveRawBodyPipe(self.body_info),
             self.FixATagPipe(self.body_info),
             self.ConvertRemote2LocalPipe(self.body_info),
-            self.RemoveReferencesFromBodyPipe(self.body_info),
+            self.RemoveReferencesFromBodyPipe(body_info_which_spy_is_false),
             self.RemoveCommentPipe(self.body_info),
             self.DeprecatedHTMLTagsPipe(self.body_info),
             self.RemoveImgSetaPipe(self.body_info),
