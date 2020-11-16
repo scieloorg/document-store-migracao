@@ -497,13 +497,13 @@ class HTML2SPSPipeline(object):
             self.TagsHPipe(self.body_info),
             self.DispQuotePipe(self.body_info),
             self.GraphicChildrenPipe(self.body_info),
-            self.BodySectionsPipe(),
-            self.AddParagraphsToSectionPipe(),
-            self.FixBodyChildrenPipe(),
-            self.RemovePWhichIsParentOfPPipe(),
-            self.RemoveEmptyPAndEmptySectionPipe(),
-            self.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(),
-            self.PPipe(),
+            self.BodySectionsPipe(self.body_info),
+            self.AddParagraphsToSectionPipe(self.body_info),
+            self.FixBodyChildrenPipe(self.body_info),
+            self.RemovePWhichIsParentOfPPipe(self.body_info),
+            self.RemoveEmptyPAndEmptySectionPipe(self.body_info),
+            self.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(self.body_info),
+            self.PPipe(self.body_info),
             self.RemoveRefIdPipe(),
             self.FixIdAndRidPipe(super_obj=self),
         )
@@ -782,7 +782,7 @@ class HTML2SPSPipeline(object):
             self._executa(xml)
             return data
 
-    class PPipe(plumber.Pipe):
+    class PPipe(ConversionPipe):
         TAGS = [
             "abstract",
             "ack",
@@ -827,11 +827,9 @@ class HTML2SPSPipeline(object):
             if parent.tag not in self.TAGS:
                 logger.debug("Tag `p` in `%s`", parent.tag)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "p", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class DivPipe(ConversionPipe):
@@ -1382,7 +1380,7 @@ class HTML2SPSPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class RemovePWhichIsParentOfPPipe(plumber.Pipe):
+    class RemovePWhichIsParentOfPPipe(ConversionPipe):
         def _tag_texts(self, xml):
             for node in xml.xpath(".//p[p]"):
                 if node.text and node.text.strip():
@@ -1435,15 +1433,13 @@ class HTML2SPSPipeline(object):
                 self._solve_open_p(xml)
                 node = xml.find(".//p[p]")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             self._solve_open_p_items(xml)
             # self._tag_texts(xml)
             # self._identify_extra_p_tags(xml)
             # self._tag_text_in_body(xml)
             etree.strip_tags(xml, "REMOVE_P")
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveRefIdPipe(plumber.Pipe):
@@ -1507,18 +1503,16 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[img]", self.parser_node)
             return data
 
-    class RemoveEmptyPAndEmptySectionPipe(plumber.Pipe):
+    class RemoveEmptyPAndEmptySectionPipe(ConversionPipe):
 
         def parser_node(self, node):
             if not get_node_text(node) and not node.getchildren():
                 _remove_tag(node, True)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "p", self.parser_node)
             _process(xml, "sec", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class ConvertElementsWhichHaveIdPipe(plumber.Pipe):
@@ -1530,10 +1524,9 @@ class HTML2SPSPipeline(object):
             _, obj = convert.deploy(xml)
             return raw, obj
 
-    class AfterOneSectionAllTheOtherElementsMustBeSectionPipe(plumber.Pipe):
+    class AfterOneSectionAllTheOtherElementsMustBeSectionPipe(ConversionPipe):
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             found_sec = False
             remove_items = []
@@ -1549,10 +1542,9 @@ class HTML2SPSPipeline(object):
             for item in remove_items:
                 p = item.getparent()
                 p.remove(item)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FixBodyChildrenPipe(plumber.Pipe):
+    class FixBodyChildrenPipe(ConversionPipe):
         ALLOWED_CHILDREN = [
             "address",
             "alternatives",
@@ -1585,8 +1577,7 @@ class HTML2SPSPipeline(object):
             "sig-block",
         ]
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             body = xml.find(".//body")
             if body is not None and body.tag == "body":
@@ -1601,15 +1592,13 @@ class HTML2SPSPipeline(object):
                         new_child.text = child.tail.strip()
                         child.tail = child.tail.replace(new_child.text, "")
                         child.addnext(new_child)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class BodySectionsPipe(plumber.Pipe):
+    class BodySectionsPipe(ConversionPipe):
         """
         Move os elementos `<sec/>` para o topo, para serem filhos de `<body>`.
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
 
             if xml.find(".//sec") is None:
@@ -1633,10 +1622,9 @@ class HTML2SPSPipeline(object):
                 for new_e in new_elements:
                     child.addprevious(new_e)
 
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class AddParagraphsToSectionPipe(plumber.Pipe):
+    class AddParagraphsToSectionPipe(ConversionPipe):
 
         def _create_children(self, node, last):
             remove_items = []
@@ -1656,13 +1644,11 @@ class HTML2SPSPipeline(object):
                 parent = item.getparent()
                 parent.remove(item)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             sections = xml.findall(".//body/sec")
             for sec in sections:
                 self._create_children(sec, sections[-1])
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
 

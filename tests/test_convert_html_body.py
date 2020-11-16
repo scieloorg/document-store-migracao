@@ -84,7 +84,7 @@ class TestConvertHMTLBodySearchAssetNodeBackwards(unittest.TestCase):
 class TestBodySectionsPipe(unittest.TestCase):
     def setUp(self):
         self.pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        self.pipe = self.pipeline.BodySectionsPipe()
+        self.pipe = self.pipeline.BodySectionsPipe(self.pipeline.body_info)
 
     def test_transform_moves_3_sections(self):
         raw = """<root>
@@ -370,7 +370,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_p(self):
         text = '<root><p align="x" id="y">bla</p><p baljlba="1"/></root>'
-        raw, transformed = self._transform(text, self.pipeline.PPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.PPipe(self.pipeline.body_info))
 
         self.assertEqual(
             etree.tostring(transformed), b'<root><p id="y">bla</p><p/></root>'
@@ -958,9 +959,11 @@ class Test_RemovePWhichIsParentOfPPipe_Case1(unittest.TestCase):
             </body>
             </root>"""
         self.xml = etree.fromstring(self.text)
-        self.pipe = HTML2SPSPipeline(
+        self.pipeline = HTML2SPSPipeline(
             pid="S1234-56782018000100011"
-        ).RemovePWhichIsParentOfPPipe()
+        )
+        self.pipe = self.pipeline.RemovePWhichIsParentOfPPipe(
+            self.pipeline.body_info)
 
     def _compare_tags_and_texts(self, transformed, expected):
         def normalize(xmltree):
@@ -1032,9 +1035,11 @@ class Test_RemovePWhichIsParentOfPPipe_Case2(unittest.TestCase):
             </body>
             </root>"""
         self.xml = etree.fromstring(self.text)
-        self.pipe = HTML2SPSPipeline(
+        self.pipeline = HTML2SPSPipeline(
             pid="S1234-56782018000100011"
-        ).RemovePWhichIsParentOfPPipe()
+        )
+        self.pipe = self.pipeline.RemovePWhichIsParentOfPPipe(
+            self.pipeline.body_info)
 
     def _compare_tags_and_texts(self, transformed, expected):
         def normalize(xmltree):
@@ -1136,9 +1141,11 @@ class Test_RemovePWhichIsParentOfPPipe_Case3(unittest.TestCase):
             </body>
             </root>"""
         self.xml = etree.fromstring(self.text)
-        self.pipe = HTML2SPSPipeline(
+        self.pipeline = HTML2SPSPipeline(
             pid="S1234-56782018000100011"
-        ).RemovePWhichIsParentOfPPipe()
+        )
+        self.pipe = self.pipeline.RemovePWhichIsParentOfPPipe(
+            self.pipeline.body_info)
 
     def _compare_tags_and_texts(self, transformed, expected):
         def normalize(xmltree):
@@ -1487,7 +1494,7 @@ class TestFixBodyChildrenPipe(unittest.TestCase):
         )
         xml = etree.fromstring(text)
         pl = HTML2SPSPipeline(pid="pid")
-        text, xml = pl.FixBodyChildrenPipe().transform((text, xml))
+        text, xml = pl.FixBodyChildrenPipe(pl.body_info).transform((text, xml))
         self.assertEqual(etree.tostring(xml, encoding="unicode"), expected)
 
     def test_fix_body_children_pipe_inserts_text_in_p(self):
@@ -1497,7 +1504,7 @@ class TestFixBodyChildrenPipe(unittest.TestCase):
         )
         xml = etree.fromstring(text)
         pl = HTML2SPSPipeline(pid="pid")
-        text, xml = pl.FixBodyChildrenPipe().transform((text, xml))
+        text, xml = pl.FixBodyChildrenPipe(pl.body_info).transform((text, xml))
         self.assertEqual(etree.tostring(xml), expected)
 
 
@@ -1521,7 +1528,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.RemoveStyleAttributesPipe(pipeline.body_info),
             pipeline.RemoveCommentPipe(pipeline.body_info),
             pipeline.BRPipe(pipeline.body_info),
-            pipeline.PPipe(),
+            pipeline.PPipe(pipeline.body_info),
             pipeline.DivPipe(pipeline.body_info),
             pipeline.LiPipe(pipeline.body_info),
             pipeline.OlPipe(pipeline.body_info),
@@ -1541,8 +1548,8 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.TagsHPipe(pipeline.body_info),
             pipeline.DispQuotePipe(pipeline.body_info),
             pipeline.GraphicChildrenPipe(pipeline.body_info),
-            pipeline.FixBodyChildrenPipe(),
-            pipeline.RemovePWhichIsParentOfPPipe(),
+            pipeline.FixBodyChildrenPipe(pipeline.body_info),
+            pipeline.RemovePWhichIsParentOfPPipe(pipeline.body_info),
             pipeline.SanitizationPipe(),
         )
         for pipe in pipes:
@@ -3266,7 +3273,7 @@ class TestAddParagraphsToSectionPipe(unittest.TestCase):
 
     def setUp(self):
         pl = HTML2SPSPipeline(pid="pid")
-        self.pipe = pl.AddParagraphsToSectionPipe()
+        self.pipe = pl.AddParagraphsToSectionPipe(pl.body_info)
 
     def test_transform_inserts_elements_in_sec_until_find_other_sec(self):
         text = """<root>
@@ -3323,7 +3330,8 @@ class TestAfterOneSectionAllTheOtherElementsMustBeSectionPipe(unittest.TestCase)
 
     def setUp(self):
         pl = HTML2SPSPipeline()
-        self.pipe = pl.AfterOneSectionAllTheOtherElementsMustBeSectionPipe()
+        self.pipe = pl.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(
+            pl.body_info)
 
     def test_transform_(self):
         text = """<root>
@@ -3354,7 +3362,7 @@ class TestRemoveEmptyPAndEmptySectionPipe(unittest.TestCase):
 
     def setUp(self):
         pl = HTML2SPSPipeline()
-        self.pipe = pl.RemoveEmptyPAndEmptySectionPipe()
+        self.pipe = pl.RemoveEmptyPAndEmptySectionPipe(pl.body_info)
 
     def test_transform_remove_element(self):
         text = """<root>
