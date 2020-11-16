@@ -312,22 +312,26 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_remove_invalid_br_removes_br_which_is_at_the_beginning(self):
         text = "<root><td><br/> texto 2</td></root>"
-        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveInvalidBRPipe(self.pipeline.body_info))
         self.assertEqual(etree.tostring(transformed), b"<root><td> texto 2</td></root>")
 
     def test_pipe_remove_invalid_br_removes_br_which_is_at_the_end(self):
         text = "<root><td>texto 2<br/></td></root>"
-        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveInvalidBRPipe(self.pipeline.body_info))
         self.assertEqual(etree.tostring(transformed), b"<root><td>texto 2</td></root>")
 
     def test_pipe_remove_invalid_br_removes_br_which_is_alone_in_a_element(self):
         text = "<root><td><br/></td></root>"
-        raw, transformed = self._transform(text, self.pipeline.RemoveInvalidBRPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.RemoveInvalidBRPipe(self.pipeline.body_info))
         self.assertEqual(etree.tostring(transformed), b"<root><td/></root>")
 
     def test_pipe_br_creates_break(self):
         text = "<root><td>texto 1<br/> texto 2</td></root>"
-        raw, transformed = self._transform(text, self.pipeline.BRPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.BRPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"<root><td>texto 1<break/> texto 2</td></root>",
@@ -335,14 +339,16 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_br_do_nothing(self):
         text = "<root><sec>texto 1<br/> texto 2</sec></root>"
-        raw, transformed = self._transform(text, self.pipeline.BRPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.BRPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed), b"<root><sec>texto 1<br/> texto 2</sec></root>"
         )
 
     def test_pipe_br_to_pipe_creates_p_for_each_item_which_is_separated_by_br(self):
         text = "<root><sec>texto 1<br/> texto 2</sec></root>"
-        raw, transformed = self._transform(text, self.pipeline.BR2PPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.BR2PPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b'<root><sec><p content-type="break">texto 1</p><p content-type="break"> texto 2</p></sec></root>',
@@ -352,7 +358,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
         self,
     ):
         text = '<root><p align="x">bla<br/> continua outra linha</p></root>'
-        raw, transformed = self._transform(text, self.pipeline.BR2PPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.BR2PPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"<root><p>bla</p><p> continua outra linha</p></root>",
@@ -1502,7 +1509,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.RemoveEmptyPipe(pipeline.body_info),
             pipeline.RemoveStyleAttributesPipe(pipeline.body_info),
             pipeline.RemoveCommentPipe(pipeline.body_info),
-            pipeline.BRPipe(),
+            pipeline.BRPipe(pipeline.body_info),
             pipeline.PPipe(),
             pipeline.DivPipe(pipeline.body_info),
             pipeline.LiPipe(pipeline.body_info),
@@ -2388,11 +2395,15 @@ class TestFnPipe(unittest.TestCase):
         </root>"""
         xml = etree.fromstring(text)
         text, xml = self.html_pl.AHrefPipe(self.html_pl.body_info).transform((text, xml))
-        text, xml = self.html_pl.BRPipe().transform((text, xml))
+        text, xml = self.html_pl.BRPipe(
+            self.html_pl.body_info).transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
-        text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
-        text, xml = self.html_pl.BRPipe().transform((text, xml))
-        text, xml = self.html_pl.BR2PPipe().transform((text, xml))
+        text, xml = self.html_pl.RemoveInvalidBRPipe(
+            self.html_pl.body_info).transform((text, xml))
+        text, xml = self.html_pl.BRPipe(
+            self.html_pl.body_info).transform((text, xml))
+        text, xml = self.html_pl.BR2PPipe(
+            self.html_pl.body_info).transform((text, xml))
 
         p = xml.findall(".//fn/p")
         self.assertEqual(xml.find(".//fn/label/bold").text, "Correspondence to:")

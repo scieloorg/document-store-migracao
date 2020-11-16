@@ -485,11 +485,11 @@ class HTML2SPSPipeline(object):
             self.UPipe(self.body_info),
             self.BPipe(self.body_info),
             self.StrongPipe(self.body_info),
-            self.RemoveInvalidBRPipe(),
+            self.RemoveInvalidBRPipe(self.body_info),
             self.ConvertElementsWhichHaveIdPipe(),
-            self.RemoveInvalidBRPipe(),
-            self.BRPipe(),
-            self.BR2PPipe(),
+            self.RemoveInvalidBRPipe(self.body_info),
+            self.BRPipe(self.body_info),
+            self.BR2PPipe(self.body_info),
             self.TdCleanPipe(),
             self.TableCleanPipe(),
             self.BlockquotePipe(),
@@ -679,7 +679,7 @@ class HTML2SPSPipeline(object):
             logger.debug("Total de %s tags com style", count)
             return data
 
-    class BRPipe(plumber.Pipe):
+    class BRPipe(ConversionPipe):
         ALLOWED_IN = [
             "aff",
             "alt-title",
@@ -697,17 +697,15 @@ class HTML2SPSPipeline(object):
             "trans-title",
         ]
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for node in xml.findall(".//*[br]"):
                 if node.tag in self.ALLOWED_IN:
                     for br in node.findall("br"):
                         br.tag = "break"
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class RemoveInvalidBRPipe(plumber.Pipe):
+    class RemoveInvalidBRPipe(ConversionPipe):
         def _remove_first_or_last_br(self, xml):
             """
             b'<bold><br/>Luis Huicho</bold>
@@ -728,13 +726,12 @@ class HTML2SPSPipeline(object):
                     break
             etree.strip_tags(xml, "REMOVEINVALIDBRPIPEREMOVETAG")
             
-        def transform(self, data):
+        def _transform(self, data):
             text, xml = data
             self._remove_first_or_last_br(xml)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class BR2PPipe(plumber.Pipe):
+    class BR2PPipe(ConversionPipe):
         def _create_p(self, node, nodes, text):
             if nodes or (text or "").strip():
                 p = etree.Element("p")
@@ -780,10 +777,9 @@ class HTML2SPSPipeline(object):
                     p.remove(node)
             etree.strip_tags(xml, "BRTOPPIPEREMOVETAG")
             
-        def transform(self, data):
+        def _transform(self, data):
             text, xml = data
             self._executa(xml)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class PPipe(plumber.Pipe):
