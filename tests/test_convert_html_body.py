@@ -489,7 +489,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             </ul>
             </root>
         """
-        raw, transformed = self._transform(text, self.pipeline.IPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.IPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//italic")
         self.assertEqual(len(nodes), 4)
@@ -517,7 +518,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             </ul>
             </root>
             """
-        raw, transformed = self._transform(text, self.pipeline.BPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.BPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//bold")
         self.assertEqual(len(nodes), 4)
@@ -545,7 +547,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             </ul>
             </root>
             """
-        raw, transformed = self._transform(text, self.pipeline.UPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.UPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//underline")
         self.assertEqual(len(nodes), 4)
@@ -573,7 +576,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             </ul>
             </root>
             """
-        raw, transformed = self._transform(text, self.pipeline.EmPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.EmPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//italic")
         self.assertEqual(len(nodes), 4)
@@ -601,7 +605,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             </ul>
             </root>
             """
-        raw, transformed = self._transform(text, self.pipeline.StrongPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.StrongPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//bold")
         self.assertEqual(len(nodes), 4)
@@ -1505,11 +1510,11 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.UlPipe(pipeline.body_info),
             pipeline.DefListPipe(pipeline.body_info),
             pipeline.DefItemPipe(pipeline.body_info),
-            pipeline.IPipe(),
-            pipeline.EmPipe(),
-            pipeline.UPipe(),
-            pipeline.BPipe(),
-            pipeline.StrongPipe(),
+            pipeline.IPipe(pipeline.body_info),
+            pipeline.EmPipe(pipeline.body_info),
+            pipeline.UPipe(pipeline.body_info),
+            pipeline.BPipe(pipeline.body_info),
+            pipeline.StrongPipe(pipeline.body_info),
             pipeline.ConvertElementsWhichHaveIdPipe(),
             pipeline.TdCleanPipe(),
             pipeline.TableCleanPipe(),

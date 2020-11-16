@@ -475,11 +475,11 @@ class HTML2SPSPipeline(object):
             self.UlPipe(self.body_info),
             self.DefListPipe(self.body_info),
             self.DefItemPipe(self.body_info),
-            self.IPipe(),
-            self.EmPipe(),
-            self.UPipe(),
-            self.BPipe(),
-            self.StrongPipe(),
+            self.IPipe(self.body_info),
+            self.EmPipe(self.body_info),
+            self.UPipe(self.body_info),
+            self.BPipe(self.body_info),
+            self.StrongPipe(self.body_info),
             self.RemoveInvalidBRPipe(),
             self.ConvertElementsWhichHaveIdPipe(),
             self.RemoveInvalidBRPipe(),
@@ -914,21 +914,18 @@ class HTML2SPSPipeline(object):
             _process(xml, "dd", self.parser_node)
             return data
 
-    class IPipe(plumber.Pipe):
+    class IPipe(ConversionPipe):
         def parser_node(self, node):
             etree.strip_tags(node, "break")
             node.tag = "italic"
             node.attrib.clear()
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "i", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class BPipe(plumber.Pipe):
+    class BPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "bold"
             etree.strip_tags(node, "break")
@@ -936,27 +933,21 @@ class HTML2SPSPipeline(object):
             etree.strip_tags(node, "p")
             node.attrib.clear()
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "b", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class StrongPipe(plumber.Pipe):
+    class StrongPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "bold"
             node.attrib.clear()
             etree.strip_tags(node, "span")
             etree.strip_tags(node, "p")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "strong", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class TdCleanPipe(plumber.Pipe):
@@ -1078,30 +1069,24 @@ class HTML2SPSPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class EmPipe(plumber.Pipe):
+    class EmPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "italic"
             node.attrib.clear()
             etree.strip_tags(node, "break")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "em", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class UPipe(plumber.Pipe):
+    class UPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "underline"
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "u", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class BlockquotePipe(plumber.Pipe):
