@@ -63,7 +63,8 @@ def get_article_dates(article):
     return document_pubdate, issue_pubdate
 
 
-def convert_article_xml(file_xml_path: str, poison_pill=PoisonPill()):
+def convert_article_xml(
+        file_xml_path: str, spy=False, poison_pill=PoisonPill()):
 
     if poison_pill.poisoned:
         return
@@ -77,7 +78,7 @@ def convert_article_xml(file_xml_path: str, poison_pill=PoisonPill()):
 
     xml_sps = SPS_Package(obj_xmltree)
     # CONVERTE O BODY DO AM PARA SPS
-    xml_sps.transform_body()
+    xml_sps.transform_body(spy)
     # Transforma XML em SPS 1.9
     xml_sps.transform_content()
     # Completa datas presentes na base artigo e ausente no XML
@@ -102,7 +103,7 @@ def convert_article_xml(file_xml_path: str, poison_pill=PoisonPill()):
     xml.objXML2file(new_file_xml_path, xml_sps.xmltree, pretty=True)
 
 
-def convert_article_ALLxml():
+def convert_article_ALLxml(spy=False):
     """Converte todos os arquivos HTML/XML que estão na pasta fonte."""
 
     logger.debug("Starting XML conversion, it may take sometime.")
@@ -117,7 +118,7 @@ def convert_article_ALLxml():
         for xml in files.xml_files_list(config.get("SOURCE_PATH"))
     ]
 
-    jobs = [{"file_xml_path": xml} for xml in xmls]
+    jobs = [{"file_xml_path": xml, "spy": spy} for xml in xmls]
 
     with tqdm(total=len(xmls)) as pbar:
 

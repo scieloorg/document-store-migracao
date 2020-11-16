@@ -443,11 +443,8 @@ class CustomPipe(plumber.Pipe):
 
 
 class HTML2SPSPipeline(object):
-    def __init__(self, pid="", ref_items=[], index_body=1, spy=True):
+    def __init__(self, pid="", ref_items=[], index_body=1, spy=False):
         logger.debug(f"CONVERT: {pid}")
-        self.pid = pid
-        self.index_body = index_body
-        self.ref_items = ref_items
         self.document = Document(None)
         self.body_info = BodyInfo(pid, index_body, ref_items, spy)
         body_info_which_spy_is_false = BodyInfo(

@@ -49,15 +49,22 @@ def migrate_articlemeta_parser(sargs):
         help="Arquivo com a lista de PIDs dos artigos a serem extraidos",
     )
 
-    # CONVERCAO
-    import_parser = subparsers.add_parser(
+    # CONVERSAO
+    conversion_parser = subparsers.add_parser(
         "convert", help="Converte o conteúdo da tag `body` dos XMLs extraídos"
     )
-    import_parser.add_argument(
+    conversion_parser.add_argument(
         "--file",
         dest="convertFile",
         metavar="",
         help="Converte apenas o arquivo XML imformado",
+    )
+
+    conversion_parser.add_argument(
+        "--spy",
+        action="store_true",
+        default=False,
+        help="Compara a versão do texto antes e depois de cada Pipe de conversão",
     )
 
     # VALIDACAO
@@ -303,9 +310,9 @@ def migrate_articlemeta_parser(sargs):
 
     elif args.command == "convert":
         if args.convertFile:
-            conversion.convert_article_xml(args.convertFile)
+            conversion.convert_article_xml(args.convertFile, spy=args.spy)
         else:
-            conversion.convert_article_ALLxml()
+            conversion.convert_article_ALLxml(args.spy)
 
     elif args.command == "validate":
         if args.validateFile:
