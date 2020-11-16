@@ -274,17 +274,6 @@ class Dummy:
         self.report = False
 
 
-CONTENT_CHANGER_PIPES = (
-    "RemoveReferencesFromBodyPipe",
-)
-
-
-def logger_action(pipe):
-    if pipe in CONTENT_CHANGER_PIPES:
-        return logger.warning
-    return logger.error
-
-
 class BodyInfo:
 
     def __init__(self, pid, index_body, ref_items=None, spy=None):
@@ -301,11 +290,11 @@ class BodyInfo:
         return _data
 
     def register_diff(self, pipe):
-        data = self.data
-        data["pipe"] = pipe
         if self.spy.report:
+            data = self.data.copy()
+            data["pipe"] = pipe
             data["diff report"] = self.spy.report
-            logger_action(pipe)(data)
+            logger.error(data)
 
 
 class XMLTexts:
