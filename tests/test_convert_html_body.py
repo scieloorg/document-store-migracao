@@ -718,7 +718,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_graphicChildren_sub_remove(self):
         text = """<root><p><sub><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></sub></p></root>"""
-        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.GraphicChildrenPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"""<root><p><sub><inline-graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></sub></p></root>""",
@@ -726,7 +727,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_graphicChildren_italic(self):
         text = """<root><p><italic>Essa foto<graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></italic></p></root>"""
-        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.GraphicChildrenPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"""<root><p><italic>Essa foto<inline-graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></italic></p></root>""",
@@ -734,7 +736,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_graphicChildren_bold(self):
         text = """<root><p><bold><p>nova imagem</p><graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></bold></p></root>"""
-        raw, transformed = self._transform(text, self.pipeline.GraphicChildrenPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.GraphicChildrenPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"""<root><p><bold><p>nova imagem</p><inline-graphic xmlns:ns2="http://www.w3.org/1999/xlink" ns2:href="/bul1.gif"/></bold></p></root>""",
@@ -1537,7 +1540,7 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.HrPipe(pipeline.body_info),
             pipeline.TagsHPipe(pipeline.body_info),
             pipeline.DispQuotePipe(pipeline.body_info),
-            pipeline.GraphicChildrenPipe(),
+            pipeline.GraphicChildrenPipe(pipeline.body_info),
             pipeline.FixBodyChildrenPipe(),
             pipeline.RemovePWhichIsParentOfPPipe(),
             pipeline.SanitizationPipe(),

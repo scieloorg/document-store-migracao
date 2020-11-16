@@ -496,7 +496,7 @@ class HTML2SPSPipeline(object):
             self.HrPipe(self.body_info),
             self.TagsHPipe(self.body_info),
             self.DispQuotePipe(self.body_info),
-            self.GraphicChildrenPipe(),
+            self.GraphicChildrenPipe(self.body_info),
             self.BodySectionsPipe(),
             self.AddParagraphsToSectionPipe(),
             self.FixBodyChildrenPipe(),
@@ -1176,7 +1176,7 @@ class HTML2SPSPipeline(object):
             _process(xml, "disp-quote", self.parser_node)
             return data
 
-    class GraphicChildrenPipe(plumber.Pipe):
+    class GraphicChildrenPipe(ConversionPipe):
         TAGS = (
             "alternatives",
             "app",
@@ -1214,12 +1214,9 @@ class HTML2SPSPipeline(object):
             if parent.tag not in self.TAGS:
                 node.tag = "inline-graphic"
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "graphic", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveReferencesFromBodyPipe(ConversionPipe):
