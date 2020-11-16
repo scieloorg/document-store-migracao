@@ -116,12 +116,24 @@ collection-migration/
     ├── reports
     │   ├── convertion-to-pack.diff
     │   └── extract-to-convertion.diff
+    │   └── report.txt
     └── source
         ├── S0044-59672004000100001.json
         └── S0044-59672004000100001.xml
 ```
 
 There you will found a `log` folder with messages occurred during the migration process, a `packaged` where live the final step result process (`XML converted SPS packages`) and the `reports` folder where you could found some useful informations about difference of PIDs in each step process, if you found any pid `diff` files it means you have problems during pipeline migration, so take a look in the log files.
+
+Inside the `reports` folder, you should look at the `report.txt` that contains a summary of that migration process. For example, you will see reports about failures and the total of bytes inside the `packaged` folder. You could see a `report.txt` example bellow:
+
+```txt
+TOTAL_BYTES=1672
+FAILED_TO_CONVERT=0
+FAILED_TO_PACK=0
+TOTAL_OF_FAILURES=0
+MIXED_CITATION_UPDATED=0
+```
+Keep in mind, if any of these counters are greater than `0` so you should look inside the `log` folder to see what happened during the migration process. 
 
 
 ### 4. What next?
