@@ -1359,19 +1359,6 @@ class HTML2SPSPipeline(object):
             _process(xml, "a[@href]", self.parser_node)
             return data
 
-    class HTMLEscapingPipe(plumber.Pipe):
-        def parser_node(self, node):
-            text = node.text
-            if text:
-                node.text = html.escape(text)
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-            _process(xml, "*", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
     class RemovePWhichIsParentOfPPipe(ConversionPipe):
         def _tag_texts(self, xml):
             for node in xml.xpath(".//p[p]"):

@@ -1570,25 +1570,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
                 self.assertIn("&lt;", resultado_unicode)
 
 
-class TestHTMLEscapingPipe(unittest.TestCase):
-    def test_pipe(self):
-        text = """<root>
-        <p>&#60;</p>
-        <p> a &lt; b</p>
-            <p>La nueva época de la revista
-            <italic>Salud Pública de México </italic>
-            </p></root>"""
-        pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        xml = etree.fromstring(text)
-        text, xml = pipeline.SetupPipe().transform(text)
-        text, xml = pipeline.HTMLEscapingPipe().transform((text, xml))
-        resultado_unicode = etree.tostring(xml, encoding="unicode")
-        resultado_b = etree.tostring(xml)
-        self.assertIn(b"&#233;poca", resultado_b)
-        self.assertIn("época", resultado_unicode)
-        self.assertIn("&amp;lt;", resultado_unicode)
-
-
 class TestConvertElementsWhichHaveIdPipeline(unittest.TestCase):
     def setUp(self):
         self.html_pl = HTML2SPSPipeline(pid="S1234-56782018000100011")
