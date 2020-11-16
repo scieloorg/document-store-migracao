@@ -1471,15 +1471,6 @@ class HTML2SPSPipeline(object):
                 value = value + "-body{}".format(self.body_info.index_body)
             return value.lower()
 
-    class SanitizationPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-
-            convert = DataSanitizationPipeline()
-            _, obj = convert.deploy(xml)
-            return raw, obj
-
     class RemoveImgSetaPipe(ConversionPipe):
         def parser_node(self, node):
             if "/seta." in node.find("img").attrib.get("src"):
@@ -1634,99 +1625,6 @@ class HTML2SPSPipeline(object):
             sections = xml.findall(".//body/sec")
             for sec in sections:
                 self._create_children(sec, sections[-1])
-            return data
-
-
-class DataSanitizationPipeline(object):
-    def __init__(self):
-        self._ppl = plumber.Pipeline(
-            self.SetupPipe(),
-            self.GraphicInExtLink(),
-            self.TableinBody(),
-            self.TableinP(),
-            self.AddPinFN(),
-            self.WrapNodeInDefItem(),
-        )
-
-    def deploy(self, raw):
-        transformed_data = self._ppl.run(raw, rewrap=True)
-        return next(transformed_data)
-
-    class SetupPipe(plumber.Pipe):
-        def transform(self, data):
-
-            new_obj = deepcopy(data)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data, new_obj
-
-    class GraphicInExtLink(plumber.Pipe):
-        def parser_node(self, node):
-
-            graphic = node.find("graphic")
-            graphic.tag = "inline-graphic"
-            wrap_node(graphic, "p")
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-
-            _process(xml, "ext-link[graphic]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class TableinBody(plumber.Pipe):
-        def parser_node(self, node):
-
-            table = node.find("table")
-            wrap_node(table, "table-wrap")
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-
-            _process(xml, "body[table]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class TableinP(TableinBody):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-
-            _process(xml, "p[table]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class AddPinFN(plumber.Pipe):
-        def parser_node(self, node):
-            if node.text:
-                wrap_content_node(node, "p")
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-
-            _process(xml, "fn", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
-            return data
-
-    class WrapNodeInDefItem(plumber.Pipe):
-        def parser_node(self, node):
-            text = node.text or ""
-            tail = node.tail or ""
-            if text.strip() or tail.strip():
-                wrap_content_node(node, "term")
-
-            for c_node in node.getchildren():
-                if c_node.tag not in ["term", "def"]:
-                    wrap_node(c_node, "def")
-
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-            raw, xml = data
-
-            _process(xml, "def-item", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
 

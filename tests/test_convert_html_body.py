@@ -1559,7 +1559,6 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.GraphicChildrenPipe(pipeline.body_info),
             pipeline.FixBodyChildrenPipe(pipeline.body_info),
             pipeline.RemovePWhichIsParentOfPPipe(pipeline.body_info),
-            pipeline.SanitizationPipe(),
         )
         for pipe in pipes:
             with self.subTest(str(pipe)):
