@@ -237,9 +237,7 @@ class UnableToCompareError(Exception):
 class Spy:
 
     def __init__(self):
-        self.w_differ = DataDiffer(get_words_to_compare)
-        self.b_differ = DataDiffer(get_body_to_compare)
-        self.text_differ = DataDiffer(remove_spaces)
+        self.text_differ = DataDiffer(get_text_to_compare)
 
     @property
     def before(self):
@@ -251,47 +249,21 @@ class Spy:
 
     @before.setter
     def before(self, data):
-        self.w_differ.before = data
-        self.b_differ.before = data
-        self.text_differ.before = self.b_differ.before
+        self.text_differ.before = data
 
     @after.setter
     def after(self, data):
-        self.w_differ.after = data
-        self.b_differ.after = data
-        self.text_differ.after = self.b_differ.after
+        self.text_differ.after = data
 
     @property
     def report(self):
         _report = {}
         try:
-            if self.diff_in_spaces:
-                _report["spaces"] = self.diff_in_spaces
-            else:
-                if self.w_differ.difference_ratio:
-                    _report["words"] = self.w_differ.info
-                if self.b_differ.difference_ratio:
-                    _report["body"] = self.b_differ.info
+            if self.text_differ.similarity_ratio < 1:
+                _report["text"] = self.text_differ.info
         except UnableToCompareError:
             logger.info("Unable to compare")
         return _report
-
-    @property
-    def diff_in_spaces(self):
-        """
-        Retorna dict, se os textos antes e depois, sem os espaços,
-        são idênticos, mas havendo diferenças nos espaços
-        implicará em "palavras diferentes"
-            National ... , (3 "palavras") -> National..., (1 palavra)
-        """
-        if self.text_differ.similarity_ratio == 1:
-            spaces_before = self.b_differ.before.count(" ")
-            spaces_after = self.b_differ.after.count(" ")
-            if spaces_before != spaces_after:
-                return {
-                    "before": spaces_before,
-                    "after": spaces_after,
-                }
 
 
 class Dummy:
@@ -320,7 +292,6 @@ class BodyInfo:
         self.index_body = index_body
         self.ref_items = ref_items
         self.spy = (spy and Spy()) or Dummy()
-        self.diffs = []
 
     @property
     def data(self):
@@ -334,7 +305,6 @@ class BodyInfo:
         data["pipe"] = pipe
         if self.spy.report:
             data["diff report"] = self.spy.report
-            self.diffs.append(data)
             logger_action(pipe)(data)
 
 
@@ -368,6 +338,10 @@ class XMLTexts:
         for text in self.texts:
             w.extend(text.split())
         return w
+
+    @property
+    def text(self):
+        return "".join(self.words)
 
 
 class DataDiffer:
@@ -436,8 +410,8 @@ def get_body_to_compare(data):
     return XMLTexts(data).body
 
 
-def remove_spaces(data):
-    return data.replace(" ", "")
+def get_text_to_compare(data):
+    return XMLTexts(data).text
 
 
 class ConversionPipe(plumber.Pipe):
@@ -493,9 +467,9 @@ class HTML2SPSPipeline(object):
             self.RemoveImgSetaPipe(self.body_info),
             self.RemoveOrMoveStyleTagsPipe(self.body_info),
             self.RemoveEmptyPipe(self.body_info),
-            self.RemoveStyleAttributesPipe(),
-            self.AHrefPipe(),
-            self.DivPipe(),
+            self.RemoveStyleAttributesPipe(self.body_info),
+            self.AHrefPipe(self.body_info),
+            self.DivPipe(self.body_info),
             self.LiPipe(),
             self.OlPipe(),
             self.UlPipe(),
@@ -669,7 +643,7 @@ class HTML2SPSPipeline(object):
                 )
             return data
 
-    class RemoveStyleAttributesPipe(plumber.Pipe):
+    class RemoveStyleAttributesPipe(ConversionPipe):
         EXCEPT_FOR = [
             "caption",
             "col",
@@ -684,8 +658,7 @@ class HTML2SPSPipeline(object):
             "tr",
         ]
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             count = 0
             for node in xml.xpath(".//*"):
@@ -699,7 +672,6 @@ class HTML2SPSPipeline(object):
                 node.attrib.clear()
                 node.attrib.update(_attrib)
             logger.debug("Total de %s tags com style", count)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class BRPipe(plumber.Pipe):
@@ -861,7 +833,7 @@ class HTML2SPSPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class DivPipe(plumber.Pipe):
+    class DivPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "p"
             _id = node.attrib.pop("id", None)
@@ -869,12 +841,9 @@ class HTML2SPSPipeline(object):
             if _id:
                 node.set("id", _id)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "div", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class LiPipe(plumber.Pipe):
@@ -1374,7 +1343,7 @@ class HTML2SPSPipeline(object):
             logger.info("Total de %s 'comentarios' removidos", len(comments))
             return data
 
-    class AHrefPipe(plumber.Pipe):
+    class AHrefPipe(ConversionPipe):
         def _create_ext_link(self, node, extlinktype="uri"):
             node.tag = "ext-link"
             href = node.attrib.get("href")
@@ -1446,11 +1415,9 @@ class HTML2SPSPipeline(object):
             if href and href.count(".") and href.replace(".", ""):
                 return self._create_ext_link(node)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "a[@href]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class HTMLEscapingPipe(plumber.Pipe):

@@ -279,7 +279,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
     def test_pipe_remove_attribute_style(self):
         text = '<root><p style="x">texto <b style="x"></b></p> <td style="bla"><caption style="x"/></td></root>'
         raw, transformed = self._transform(
-            text, self.pipeline.RemoveStyleAttributesPipe()
+            text,
+            self.pipeline.RemoveStyleAttributesPipe(self.pipeline.body_info)
         )
         self.assertEqual(
             etree.tostring(transformed),
@@ -367,7 +368,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_div(self):
         text = '<root><div align="x" id="intro">bla</div><div baljlba="1"/></root>'
-        raw, transformed = self._transform(text, self.pipeline.DivPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.DivPipe(self.pipeline.body_info))
 
         self.assertEqual(
             etree.tostring(transformed), b'<root><p id="intro">bla</p><p/></root>'
@@ -1488,11 +1490,11 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.RemoveImgSetaPipe(pipeline.body_info),
             pipeline.RemoveOrMoveStyleTagsPipe(pipeline.body_info),
             pipeline.RemoveEmptyPipe(pipeline.body_info),
-            pipeline.RemoveStyleAttributesPipe(),
+            pipeline.RemoveStyleAttributesPipe(pipeline.body_info),
             pipeline.RemoveCommentPipe(pipeline.body_info),
             pipeline.BRPipe(),
             pipeline.PPipe(),
-            pipeline.DivPipe(),
+            pipeline.DivPipe(pipeline.body_info),
             pipeline.LiPipe(),
             pipeline.OlPipe(),
             pipeline.UlPipe(),
@@ -1809,7 +1811,7 @@ class TestAHrefPipe(unittest.TestCase):
             self.xml_txt = f.read()
         self.etreeXML = etree.fromstring(self.xml_txt)
         self.pipeline = HTML2SPSPipeline(pid="S1234-56782018000100011")
-        self.pipe = self.pipeline.AHrefPipe()
+        self.pipe = self.pipeline.AHrefPipe(self.pipeline.body_info)
 
     def test_a_href_pipe_create_ext_link_for_uri(self):
         expected = {
@@ -2375,7 +2377,7 @@ class TestFnPipe(unittest.TestCase):
           </p>
         </root>"""
         xml = etree.fromstring(text)
-        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
+        text, xml = self.html_pl.AHrefPipe(self.html_pl.body_info).transform((text, xml))
         text, xml = self.html_pl.BRPipe().transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
         text, xml = self.html_pl.RemoveInvalidBRPipe().transform((text, xml))
@@ -2446,7 +2448,7 @@ class TestFnPipe(unittest.TestCase):
         <email>chrisg@vortex.ufrgs.br</email>
         </p></fn></root>"""
         xml = etree.fromstring(text)
-        text, xml = self.html_pl.AHrefPipe().transform((text, xml))
+        text, xml = self.html_pl.AHrefPipe(self.html_pl.body_info).transform((text, xml))
         text, xml = self.html_pl.ConvertElementsWhichHaveIdPipe().transform((text, xml))
         self.assertEqual(xml.find(".//xref/sup").text, "*")
         self.assertEqual(xml.find(".//fn/label").text, "*")
