@@ -384,16 +384,11 @@ class DataDiffer:
                 None, sorted(self._before), sorted(self._after)).ratio()
 
     @property
-    def difference_ratio(self):
-        return 1 - self.similarity_ratio
-
-    @property
     def info(self):
         return {
             "before length": len(self.before),
             "after length": len(self.after),
             "similarity ratio": self.similarity_ratio,
-            "difference ratio": self.difference_ratio,
         }
 
 
