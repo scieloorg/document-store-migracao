@@ -470,9 +470,9 @@ class HTML2SPSPipeline(object):
             self.RemoveStyleAttributesPipe(self.body_info),
             self.AHrefPipe(self.body_info),
             self.DivPipe(self.body_info),
-            self.LiPipe(),
-            self.OlPipe(),
-            self.UlPipe(),
+            self.LiPipe(self.body_info),
+            self.OlPipe(self.body_info),
+            self.UlPipe(self.body_info),
             self.DefListPipe(),
             self.DefItemPipe(),
             self.IPipe(),
@@ -846,7 +846,7 @@ class HTML2SPSPipeline(object):
             _process(xml, "div", self.parser_node)
             return data
 
-    class LiPipe(plumber.Pipe):
+    class LiPipe(ConversionPipe):
         ALLOWED_CHILDREN = ("label", "title", "p", "def-list", "list")
 
         def parser_node(self, node):
@@ -868,40 +868,30 @@ class HTML2SPSPipeline(object):
                 node.insert(0, p)
                 node.text = ""
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "li", self.parser_node)
-
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class OlPipe(plumber.Pipe):
+    class OlPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "list"
             node.set("list-type", "order")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "ol", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class UlPipe(plumber.Pipe):
+    class UlPipe(ConversionPipe):
         def parser_node(self, node):
             node.tag = "list"
             node.set("list-type", "bullet")
             node.attrib.pop("list", None)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "ul", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class DefListPipe(plumber.Pipe):

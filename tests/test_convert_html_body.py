@@ -2,7 +2,7 @@
 
 import os
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, call
 from lxml import etree
 
 from documentstore_migracao.utils.convert_html_body_inferer import Inferer
@@ -388,7 +388,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             b"<list-item><p><b>Texto dentro de 3</b></p></list-item>",
             b"<list-item><p>Texto dentro de 4</p></list-item>",
         ]
-        raw, transformed = self._transform(text, self.pipeline.LiPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.LiPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//list-item")
         self.assertEqual(len(nodes), 4)
@@ -410,7 +411,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             </ol>
             </root>
         """
-        raw, transformed = self._transform(text, self.pipeline.OlPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.OlPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//list")
         self.assertEqual(len(nodes), 2)
@@ -432,7 +434,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
             </ul>
             </root>
         """
-        raw, transformed = self._transform(text, self.pipeline.UlPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.UlPipe(self.pipeline.body_info))
 
         nodes = transformed.findall(".//list")
         self.assertEqual(len(nodes), 2)
@@ -1495,9 +1498,9 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.BRPipe(),
             pipeline.PPipe(),
             pipeline.DivPipe(pipeline.body_info),
-            pipeline.LiPipe(),
-            pipeline.OlPipe(),
-            pipeline.UlPipe(),
+            pipeline.LiPipe(pipeline.body_info),
+            pipeline.OlPipe(pipeline.body_info),
+            pipeline.UlPipe(pipeline.body_info),
             pipeline.DefListPipe(),
             pipeline.DefItemPipe(),
             pipeline.IPipe(),
@@ -3729,9 +3732,10 @@ class TestWordsDiffer(unittest.TestCase):
         self.assertEqual(1, result)
 
 
+@patch("documentstore_migracao.utils.convert_html_body.logger")
 class TestConversionPipe(unittest.TestCase):
 
-    def test_conversion_pipe_with_spy_reports_no_diff(self):
+    def test_conversion_pipe_with_spy_reports_no_diff(self, mock_logger):
         body_info = BodyInfo("pid", 1, spy=True)
 
         xml_string = """<root>
@@ -3745,9 +3749,9 @@ class TestConversionPipe(unittest.TestCase):
         pipe = ConversionPipe(body_info)
         _data = pipe.transform(data)
         self.assertEqual(_data, data)
-        self.assertEqual(body_info.diffs, [])
+        self.assertEqual(len(mock_logger.call_args_list), 0)
 
-    def test_conversion_pipe_with_spy_reports_diff(self):
+    def test_conversion_pipe_with_spy_reports_diff(self, mock_logger):
 
         class AnyPipe(ConversionPipe):
             def _transform(self, data):
@@ -3769,9 +3773,10 @@ class TestConversionPipe(unittest.TestCase):
 
         data = xml_string, xml
         _data = any_pipe.transform(data)
-        self.assertEqual(len(body_info.diffs), 1)
 
-    def test_conversion_pipe_with_no_spy_does_not_report_diff(self):
+        self.assertEqual(len(mock_logger.call_args_list), 0)
+
+    def test_conversion_pipe_with_no_spy_does_not_report_diff(self, mock_logger):
 
         class AnyPipe(ConversionPipe):
             def _transform(self, data):
@@ -3792,4 +3797,4 @@ class TestConversionPipe(unittest.TestCase):
 
         data = xml_string, xml
         _data = any_pipe.transform(data)
-        self.assertEqual(len(body_info.diffs), 0)
+        self.assertEqual(len(mock_logger.call_args_list), 0)
