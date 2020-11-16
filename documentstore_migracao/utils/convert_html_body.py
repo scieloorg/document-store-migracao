@@ -236,16 +236,16 @@ class UnableToCompareError(Exception):
 
 class Spy:
 
-    def __init__(self):
-        self.text_differ = DataDiffer(get_text_to_compare)
+    def __init__(self, data_differ=None):
+        self.text_differ = data_differ or DataDiffer(get_text_to_compare)
 
     @property
     def before(self):
-        pass
+        return self.text_differ.before
 
     @property
     def after(self):
-        pass
+        return self.text_differ.after
 
     @before.setter
     def before(self, data):
@@ -271,7 +271,7 @@ class Dummy:
     def __init__(self):
         self.before = None
         self.after = None
-        self.report = False
+        self.report = {}
 
 
 class BodyInfo:
@@ -281,6 +281,7 @@ class BodyInfo:
         self.index_body = index_body
         self.ref_items = ref_items
         self.spy = (spy and Spy()) or Dummy()
+        self.initial_text = None
 
     @property
     def data(self):
@@ -392,7 +393,7 @@ class DataDiffer:
             "before length": len(self.before),
             "after length": len(self.after),
             "similarity ratio": self.similarity_ratio,
-            "difference ration": self.difference_ratio,
+            "difference ratio": self.difference_ratio,
         }
 
 
@@ -452,6 +453,7 @@ class HTML2SPSPipeline(object):
 
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
+            self.SaveInitialTextPipe(self.body_info),
             self.SaveRawBodyPipe(self.body_info),
             self.FixATagPipe(self.body_info),
             self.ConvertRemote2LocalPipe(self.body_info),
@@ -495,11 +497,31 @@ class HTML2SPSPipeline(object):
             self.PPipe(self.body_info),
             self.RemoveRefIdPipe(self.body_info),
             self.FixIdAndRidPipe(self.body_info),
+            self.CheckDiffPipe(self.body_info),
         )
 
     def deploy(self, raw):
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
+
+    class SaveInitialTextPipe(ConversionPipe):
+        def transform(self, data):
+            raw, xml = data
+            self.body_info.initial_text = get_text_to_compare(xml)
+            return data
+
+    class CheckDiffPipe(ConversionPipe):
+        def transform(self, data):
+            raw, xml = data
+            diff = Spy(DataDiffer())
+            diff.before = self.body_info.initial_text
+            diff.after = get_text_to_compare(xml)
+            if diff.report:
+                msg = self.body_info.data.copy()
+                msg["pipe"] = "final"
+                msg["diff report"] = diff.report
+                logger.error(msg)
+            return data
 
     class SetupPipe(plumber.Pipe):
         def transform(self, data):
