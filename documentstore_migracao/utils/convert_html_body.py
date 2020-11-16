@@ -493,8 +493,8 @@ class HTML2SPSPipeline(object):
             self.RemoveEmptyPAndEmptySectionPipe(self.body_info),
             self.AfterOneSectionAllTheOtherElementsMustBeSectionPipe(self.body_info),
             self.PPipe(self.body_info),
-            self.RemoveRefIdPipe(),
-            self.FixIdAndRidPipe(super_obj=self),
+            self.RemoveRefIdPipe(self.body_info),
+            self.FixIdAndRidPipe(self.body_info),
         )
 
     def deploy(self, raw):
@@ -1431,27 +1431,22 @@ class HTML2SPSPipeline(object):
             etree.strip_tags(xml, "REMOVE_P")
             return data
 
-    class RemoveRefIdPipe(plumber.Pipe):
+    class RemoveRefIdPipe(ConversionPipe):
         def parser_node(self, node):
             node.attrib.pop("xref_id", None)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "*[@xref_id]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FixIdAndRidPipe(CustomPipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class FixIdAndRidPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for node in xml.findall(".//*[@rid]"):
                 self._update(node, "rid")
             for node in xml.findall(".//*[@id]"):
                 self._update(node, "id")
-            logger.debug("FIM: %s" % type(self).__name__)
             return data, xml
 
         def _update(self, node, attr_name):
