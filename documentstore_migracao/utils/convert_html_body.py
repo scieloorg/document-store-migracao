@@ -276,7 +276,7 @@ class Dummy:
 
 class BodyInfo:
 
-    def __init__(self, pid, index_body, ref_items=None, spy=None):
+    def __init__(self, pid, index_body=1, ref_items=None, spy=None):
         self.pid = pid
         self.index_body = index_body
         self.ref_items = ref_items
@@ -475,7 +475,7 @@ class HTML2SPSPipeline(object):
             self.BPipe(self.body_info),
             self.StrongPipe(self.body_info),
             self.RemoveInvalidBRPipe(self.body_info),
-            self.ConvertElementsWhichHaveIdPipe(),
+            self.ConvertElementsWhichHaveIdPipe(self.body_info),
             self.RemoveInvalidBRPipe(self.body_info),
             self.BRPipe(self.body_info),
             self.BR2PPipe(self.body_info),
@@ -1464,8 +1464,8 @@ class HTML2SPSPipeline(object):
                     value = value[value.find(tag[0]) :]
                 else:
                     value = tag[:3] + value
-            if self.super_obj.index_body > 1:
-                value = value + "-body{}".format(self.super_obj.index_body)
+            if self.body_info.index_body > 1:
+                value = value + "-body{}".format(self.body_info.index_body)
             return value.lower()
 
     class SanitizationPipe(plumber.Pipe):
@@ -1499,12 +1499,10 @@ class HTML2SPSPipeline(object):
             _process(xml, "sec", self.parser_node)
             return data
 
-    class ConvertElementsWhichHaveIdPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class ConvertElementsWhichHaveIdPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
-
-            convert = ConvertElementsWhichHaveIdPipeline()
+            convert = ConvertElementsWhichHaveIdPipeline(self.body_info)
             _, obj = convert.deploy(xml)
             return raw, obj
 
@@ -1730,63 +1728,62 @@ class DataSanitizationPipeline(object):
 
 
 class ConvertElementsWhichHaveIdPipeline(object):
-    def __init__(self):
+    def __init__(self, body_info):
+        self.body_info = body_info
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
-            self.AssetThumbnailInLayoutTableAndLinkInMessage(),
-            self.AssetThumbnailInLayoutTableAndLinkInThumbnail(),
-            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(),
-            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(),
-            self.AssetThumbnailInLinkAndAnchorAndCaption(),
-            self.AssetThumbnailInLayoutImgAndCaptionAndMessage(),
-            self.RemoveThumbImgPipe(),
-            self.CompleteElementAWithNameAndIdPipe(),
-            self.CompleteElementAWithXMLTextPipe(),
-            self.SwitchElementsAPipe(),
-            self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(),
-            self.DeduceAndSuggestConversionPipe(),
-            self.ApplySuggestedConversionPipe(),
-            self.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(),
-            self.CreateSectionElemetWithSectionTitlePipe(),
-            self.RemoveEmptyPAndEmptySectionPipe(),
-            self.AssetElementFixPositionPipe(),
-            self.CreateDispFormulaPipe(),
-            self.AssetElementAddContentPipe(),
-            self.FixOutSideTablePipe(),
-            self.AssetElementIdentifyLabelAndCaptionPipe(),
-            self.AssetElementFixPipe(),
-            self.CreateInlineFormulaPipe(),
-            self.AppendixPipe(),
-            self.TablePipe(),
-            self.SupplementaryMaterialPipe(),
-            self.FnMovePipe(),
-            self.FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(),
-            self.MoveSuffixAndPrefixIntoLabelPipe(),
-            self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(),
-            self.FnPipe_AddContentToEmptyFn(),
-            self.FnIdentifyLabelAndPPipe(),
-            self.FnFixLabel(),
-            self.GetPFromFnParentNextPipe(),
-            self.RemoveFnWhichHasOnlyXref(),
-            self.RemoveXMLAttributesPipe(),
-            self.ImgPipe(),
+            self.AssetThumbnailInLayoutTableAndLinkInMessage(self.body_info),
+            self.AssetThumbnailInLayoutTableAndLinkInThumbnail(self.body_info),
+            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(self.body_info),
+            self.RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(self.body_info),
+            self.AssetThumbnailInLinkAndAnchorAndCaption(self.body_info),
+            self.AssetThumbnailInLayoutImgAndCaptionAndMessage(self.body_info),
+            self.RemoveThumbImgPipe(self.body_info),
+            self.CompleteElementAWithNameAndIdPipe(self.body_info),
+            self.CompleteElementAWithXMLTextPipe(self.body_info),
+            self.SwitchElementsAPipe(self.body_info),
+            self.EvaluateElementAToDeleteOrMarkAsFnLabelPipe(self.body_info),
+            self.DeduceAndSuggestConversionPipe(self.body_info),
+            self.ApplySuggestedConversionPipe(self.body_info),
+            self.RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(self.body_info),
+            self.CreateSectionElemetWithSectionTitlePipe(self.body_info),
+            self.RemoveEmptyPAndEmptySectionPipe(self.body_info),
+            self.AssetElementFixPositionPipe(self.body_info),
+            self.CreateDispFormulaPipe(self.body_info),
+            self.AssetElementAddContentPipe(self.body_info),
+            self.FixOutSideTablePipe(self.body_info),
+            self.AssetElementIdentifyLabelAndCaptionPipe(self.body_info),
+            self.AssetElementFixPipe(self.body_info),
+            self.CreateInlineFormulaPipe(self.body_info),
+            self.AppendixPipe(self.body_info),
+            self.TablePipe(self.body_info),
+            self.SupplementaryMaterialPipe(self.body_info),
+            self.FnMovePipe(self.body_info),
+            self.FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(self.body_info),
+            self.MoveSuffixAndPrefixIntoLabelPipe(self.body_info),
+            self.FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(self.body_info),
+            self.FnPipe_AddContentToEmptyFn(self.body_info),
+            self.FnIdentifyLabelAndPPipe(self.body_info),
+            self.FnFixLabel(self.body_info),
+            self.GetPFromFnParentNextPipe(self.body_info),
+            self.RemoveFnWhichHasOnlyXref(self.body_info),
+            self.RemoveXMLAttributesPipe(self.body_info),
+            self.ImgPipe(self.body_info),
         )
 
     def deploy(self, raw):
         transformed_data = self._ppl.run(raw, rewrap=True)
         return next(transformed_data)
 
-    class RemoveEmptyPAndEmptySectionPipe(plumber.Pipe):
+    class RemoveEmptyPAndEmptySectionPipe(ConversionPipe):
 
         def parser_node(self, node):
             if not get_node_text(node) and not node.getchildren():
                 _remove_tag(node, True)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "p", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class SetupPipe(plumber.Pipe):
@@ -1795,7 +1792,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data, new_obj
 
-    class AssetThumbnailInLayoutImgAndCaptionAndMessage(plumber.Pipe):
+    class AssetThumbnailInLayoutImgAndCaptionAndMessage(ConversionPipe):
         """
         Converte o modelo de miniatura que fica dentro de uma tabela com duas
         colunas e uma linha.
@@ -1804,8 +1801,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         No parágrafo seguinte está o conteúdo que seria mostrado ao clicar em
         "View larger..."
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             done = False
             for p in xml.findall(".//p[@content-type='html']"):
@@ -1853,9 +1849,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent.remove(item)
             return True
 
-    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionSideBySide(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for table in xml.findall(".//table"):
                 tr = table.findall("tr")
@@ -1883,9 +1878,8 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for table in xml.findall(".//table"):
                 tr = table.findall("tr")
@@ -1919,7 +1913,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class AssetThumbnailInLayoutTableAndLinkInMessage(plumber.Pipe):
+    class AssetThumbnailInLayoutTableAndLinkInMessage(ConversionPipe):
         """
         Converte o modelo de miniatura que fica dentro de uma tabela com duas
         colunas e uma linha.
@@ -1928,8 +1922,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         No parágrafo seguinte está o conteúdo que seria mostrado ao clicar em
         "View larger..."
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             done = False
             for p in xml.findall(".//p[@content-type='html']"):
@@ -1941,7 +1934,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if p.text and "View larger" in p.text:
                         parent = p.getparent()
                         parent.remove(p)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _replace_table_and_view_larger_message(self, p):
@@ -1980,7 +1972,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent.remove(item)
             return True
 
-    class AssetThumbnailInLayoutTableAndLinkInThumbnail(plumber.Pipe):
+    class AssetThumbnailInLayoutTableAndLinkInThumbnail(ConversionPipe):
         """
         Converte o modelo de miniatura que fica dentro de uma tabela com duas
         colunas e uma linha.
@@ -1989,8 +1981,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
         Além disso na linha seguinte à tabela há a mensagem "View larger ..."
         sem link.
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             thumbnail = False
             for p in xml.findall(".//p[@content-type='html']"):
@@ -2028,7 +2019,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if p.text and "View larger" in p.text:
                         parent = p.getparent()
                         parent.remove(p)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _create_simpler_element(self, p, a_name, p_html_img):
@@ -2059,14 +2049,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
             table_parent.remove(table)
             table_parent.remove(p)
 
-    class AssetThumbnailInLinkAndAnchorAndCaption(plumber.Pipe):
+    class AssetThumbnailInLinkAndAnchorAndCaption(ConversionPipe):
         """
         Converte o modelo de miniatura que fica dentro de um link.
         No parágrafo seguinte, está a imagem ampliada + legenda.
         No parágrafo seguinte, está a âncora e a legenda.
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             thumbnail = False
             for p in xml.findall(".//p[@content-type='html']"):
@@ -2103,7 +2092,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if p.text and "View larger" in p.text:
                         parent = p.getparent()
                         parent.remove(p)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _create_new_a(self, p, link, a_name, p_html_img):
@@ -2145,7 +2133,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent = item.getparent()
                 parent.remove(item)
 
-    class RemoveThumbImgPipe(plumber.Pipe):
+    class RemoveThumbImgPipe(ConversionPipe):
         def parser_node(self, node):
             path = node.attrib.get("src") or ""
             if "thumb" in path:
@@ -2171,14 +2159,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
                             child.tail = ""
                     parent.text = label_text
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "img", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class CompleteElementAWithNameAndIdPipe(plumber.Pipe):
+    class CompleteElementAWithNameAndIdPipe(ConversionPipe):
         """Garante que todos os elemento a[@name] e a[@id] tenham @name e @id.
         Corrige id e name caso contenha caracteres nao alphanum.
         """
@@ -2204,16 +2190,14 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 node.attrib.pop("id")
                 node.attrib.pop("name")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             self._fix_a_href(xml)
             _process(xml, "a[@id]", self.parser_node)
             _process(xml, "a[@name]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class CompleteElementAWithXMLTextPipe(plumber.Pipe):
+    class CompleteElementAWithXMLTextPipe(ConversionPipe):
         """
         Adiciona o atributo @xml_text ao elemento a, com o valor completo
         de seu rótulo. Por exemplo, explicitar se <a href="#2">2</a> é
@@ -2280,15 +2264,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         if not n.get("xml_text"):
                             n.set("xml_text", xml_text)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             self.add_xml_text_to_a_href(xml)
             self.add_xml_text_to_other_a(xml)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class DeduceAndSuggestConversionPipe(plumber.Pipe):
+    class DeduceAndSuggestConversionPipe(ConversionPipe):
         """Este pipe analisa os dados dos elementos a[@href] e a[@name],
         deduz e sugere tag, id, ref-type para a conversão de elementos,
         adicionando aos elementos a, os atributos: @xml_tag, @xml_id,
@@ -2423,8 +2405,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if all([tag, reftype, new_id]):
                         self._update(img, tag, reftype, new_id, text)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             document = Document(xml)
             texts, file_paths = document.a_href_items
@@ -2434,10 +2415,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
             self._add_xml_attribs_to_a_name(names)
             self._add_xml_attribs_to_a_href_from_file_paths(file_paths)
             self._add_xml_attribs_to_img(images)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class EvaluateElementAToDeleteOrMarkAsFnLabelPipe(plumber.Pipe):
+    class EvaluateElementAToDeleteOrMarkAsFnLabelPipe(ConversionPipe):
         """
         No texto há âncoras (a[@name]) e referencias cruzada (a[@href]):
         TEXTO->NOTAS e NOTAS->TEXTO.
@@ -2556,8 +2536,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             if len(nodes) == 1 and nodes[0].attrib.get("href"):
                 _remove_tag(nodes[0])
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             grouped_by_id = self._grouped_by_same_name_and_href(xml)
             grouped_by_xml_text = self._grouped_by_same_xml_text(xml)
@@ -2568,10 +2547,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._convert_to_fn_label(fn_labels, grouped_by_xml_text)
                 self._exclude_invalid_unique_a_href(a_items)
             etree.strip_tags(xml, "_EXCLUDE_REMOVETAG")
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class SwitchElementsAPipe(plumber.Pipe):
+    class SwitchElementsAPipe(ConversionPipe):
         def parser_node(self, node):
             if (node.tail or "").strip():
                 return
@@ -2583,14 +2561,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     parent = node.getparent()
                     parent.remove(node)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "a[@href]", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class ApplySuggestedConversionPipe(plumber.Pipe):
+    class ApplySuggestedConversionPipe(ConversionPipe):
         """
         Converte os elementos a, para as tags correspondentes, considerando
         os valores dos atributos: @xml_tag, @xml_id, @xml_reftype, @xml_label,
@@ -2620,8 +2596,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 ahref.set("rid", new_id)
                 ahref.tag = "xref"
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             document = Document(xml)
             for name, a_name_and_hrefs in document.a_names.items():
@@ -2634,21 +2609,18 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     self._update_a_href_items(a_hrefs, new_id, reftype)
                 else:
                     self._remove_a(a_name, a_hrefs)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class RemoveXrefWhichRefTypeIsSecOrOrdinarySecPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for xref in xml.findall(".//xref[@ref-type='sec']"):
                 _remove_tag(xref, True)
             for xref in xml.findall(".//xref[@ref-type='ordinary-sec']"):
                 _remove_tag(xref, True)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class CreateSectionElemetWithSectionTitlePipe(plumber.Pipe):
+    class CreateSectionElemetWithSectionTitlePipe(ConversionPipe):
 
         def _create_title(self, node):
             title = node.getnext()
@@ -2674,17 +2646,15 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 node.set("sec-type", self._sectype(node))
             node.tag = "sec"
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for sec in xml.findall(".//sec"):
                 self._create_sec(sec)
             for sec in xml.findall(".//ordinary-sec"):
                 self._create_sec(sec)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class AssetElementFixPositionPipe(plumber.Pipe):
+    class AssetElementFixPositionPipe(ConversionPipe):
         """
         Move os elementos de ativos digitais, por exemplo:
         <p><fig/></p>
@@ -2720,8 +2690,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             parent.addnext(deepcopy(node))
             parent.remove(node)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             self._set_move_for_nodes(xml)
             while True:
@@ -2732,12 +2701,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 self._set_move_for_nodes(xml)
             for node in xml.xpath(".//*[@move]"):
                 node.attrib.pop("move")
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class AssetElementAddContentPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class AssetElementAddContentPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for tag in ASSET_TAGS:
                 for asset_node in xml.findall(".//{}".format(tag)):
@@ -2748,7 +2715,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                             p = component.getparent()
                             asset_node.append(deepcopy(component))
                             p.remove(component)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _is_complete(self, asset_node):
@@ -2870,10 +2836,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 node.set("content-type", tag)
                 return node
 
-    class FixOutSideTablePipe(plumber.Pipe):
+    class FixOutSideTablePipe(ConversionPipe):
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
 
             for node in xml.xpath(".//table-wrap"):
@@ -2888,16 +2853,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         if p_neighbor.tag == 'table':
                             node.append(deepcopy(p))
                             parent.getparent().remove(p)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class AssetElementIdentifyLabelAndCaptionPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class AssetElementIdentifyLabelAndCaptionPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for asset_node in xml.findall(".//*[@status='identify-content']"):
                 self._mark_label_and_caption(asset_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _add_nodes_to_element_title(self, nodes_for_title, n):
@@ -2994,11 +2956,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     p = n.getparent()
                     p.remove(n)
 
-    class AssetElementFixPipe(plumber.Pipe):
+    class AssetElementFixPipe(ConversionPipe):
         COMPONENT_TAGS = ("label", "caption", "img")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for asset_tag in ASSET_TAGS:
                 for asset in xml.findall(".//{}".format(asset_tag)):
@@ -3025,12 +2986,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     asset.addprevious(new_asset)
                     p = asset.getparent()
                     p.remove(asset)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class CreateDispFormulaPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class CreateDispFormulaPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for node in xml.findall(".//img[@xml_tag='disp-formula']"):
                 previous = node.getprevious()
@@ -3043,10 +3002,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         if attr.startswith("xml_"):
                             disp_formula.set(attr, value)
                     node.addprevious(disp_formula)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class CreateInlineFormulaPipe(plumber.Pipe):
+    class CreateInlineFormulaPipe(ConversionPipe):
         DISP_FORMULA_PARENTS = (
             "app",
             "app-group",
@@ -3118,8 +3076,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             "verse-line",
         )
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for node in xml.findall(".//disp-formula"):
                 parent = node.getparent()
@@ -3135,12 +3092,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     )
                 if inline:
                     node.tag = "inline-formula"
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class AppendixPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class AppendixPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             remove_items = []
             for node in xml.xpath(".//app"):
@@ -3169,12 +3124,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for item in remove_items:
                 parent = item.getparent()
                 parent.remove(item)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class TablePipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class TablePipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for node in xml.findall(".//fig"):
                 table = node.find(".//table")
@@ -3219,34 +3172,28 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         node.addnext(array)
                         parent = node.getparent()
                         parent.remove(node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class SupplementaryMaterialPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class SupplementaryMaterialPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for node in xml.findall(".//a[@link-type='pdf']"):
                 href = node.get("href")
                 node.tag = "inline-supplementary-material"
                 node.attrib.clear()
                 node.set("{http://www.w3.org/1999/xlink}href", href)
-
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class RemoveXMLAttributesPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class RemoveXMLAttributesPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for node in xml.findall(".//*[@xml_tag]"):
                 for k in node.attrib.keys():
                     if k.startswith("xml_") or k == "name":
                         node.attrib.pop(k)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class ImgPipe(plumber.Pipe):
+    class ImgPipe(ConversionPipe):
         common = (
                 'alternatives',
                 'disp-formula',
@@ -3352,20 +3299,16 @@ class ConvertElementsWhichHaveIdPipeline(object):
             node.attrib.clear()
             node.set("{http://www.w3.org/1999/xlink}href", src)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             _process(xml, "img", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FnMovePipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+    class FnMovePipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             self._move_fn_out_of_style_tags(xml)
             self._remove_p_if_fn_is_only_child(xml)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _move_fn_out_of_style_tags(self, xml):
@@ -3418,13 +3361,12 @@ class ConvertElementsWhichHaveIdPipeline(object):
             node.addnext(fn_copy)
             node.remove(fn)
 
-    class FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(plumber.Pipe):
+    class FnPipe_FindStyleTagWhichIsNextFromFnAndWrapItInLabel(ConversionPipe):
         """Encontra bold que é vizinho posterior de fn e 
         inclui dentro do elemento novo label, desconsidera o bold.tail
         """
-        def transform(self, data):
+        def _transform(self, data):
             STYLE_TAGS = ("bold", "sup", "italic")
-            logger.debug("INICIO: %s" % type(self).__name__)
             raw, xml = data
             for node in xml.findall(".//fn"):
                 next = node.getnext()
@@ -3436,13 +3378,10 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     label.append(style_elem)
                     node.addnext(label)
                     _remove_tag(next, True)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class MoveSuffixAndPrefixIntoLabelPipe(plumber.Pipe):
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-
+    class MoveSuffixAndPrefixIntoLabelPipe(ConversionPipe):
+        def _transform(self, data):
             raw, xml = data
             for label in xml.findall(".//label"):
                 label_child = None
@@ -3452,8 +3391,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         label_child = child
                 self._move_label_prefix_into_label_element(label, label_child)
                 self._move_label_suffix_into_label_element(label, label_child)
-
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _move_label_prefix_into_label_element(self, label, bold):
@@ -3500,14 +3437,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 else:
                     bold.text += suffix
 
-    class FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(plumber.Pipe):
+    class FnPipe_FindLabelOfAndCreateNewEmptyFnAsPreviousElemOfLabel(ConversionPipe):
         """Cria fn vazio como vizinho anterior de label[@label-of]
            Se há mais de um label[@label-of] com mesmo valor de @label-of,
            a primeira ocorrência é considerada que é o link para as notas de
            rodapé
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             label_of_values = [
                 label.get("label-of")
@@ -3536,18 +3472,16 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         fn = etree.Element("fn")
                         fn.set("id", label_of)
                         label.addprevious(fn)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FnPipe_AddContentToEmptyFn(plumber.Pipe):
+    class FnPipe_AddContentToEmptyFn(ConversionPipe):
         """
         Para os `<fn/>` vazios:
         Inserir fn.tail como fn.text.
         Inserir seus fn.getnext() dentro de `<fn/>` enquanto ausente label e p
         ou até que o próximo seja ou tenha `<fn/>` ou None
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for fn in xml.findall(".//fn"):
                 if not fn.getchildren():
@@ -3559,7 +3493,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 fn.set("status", "identify-content")
                 move_tail_into_node(fn)
                 self._add_next_into_fn(fn)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _add_next_into_fn(self, node):
@@ -3579,7 +3512,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 parent = _next.getparent()
                 parent.remove(_next)
 
-    class FnIdentifyLabelAndPPipe(plumber.Pipe):
+    class FnIdentifyLabelAndPPipe(ConversionPipe):
         """
         O elemento fn tem conteúdo, mas pode não ter identificado label nem p.
         Este pipe é para identificar label e p no conteúdo
@@ -3699,8 +3632,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
             parent = node.getparent()
             parent.remove(node)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for fn in xml.findall(".//fn"):
                 if fn.find(".//label") is None:
@@ -3721,18 +3653,14 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 for k, v in fn.attrib.items():
                     if k not in ["id", "label", "fn-type"]:
                         fn.attrib.pop(k)
-
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class FnFixLabel(plumber.Pipe):
+    class FnFixLabel(ConversionPipe):
         """
         Remove os atributos de fn//label e
         garante que seja o primeiro filho de fn
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
-
+        def _transform(self, data):
             raw, xml = data
             for fn in xml.findall(".//fn"):
                 label = fn.find(".//label")
@@ -3751,15 +3679,13 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     fn.insert(0, deepcopy(label))
                     _remove_tag(label, True)
 
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class GetPFromFnParentNextPipe(plumber.Pipe):
+    class GetPFromFnParentNextPipe(ConversionPipe):
         """
         Se fn não tem p, obter p de fn.getparent().next()
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
             for fn in xml.findall(".//fn[label]"):
                 children = fn.getchildren()
@@ -3774,26 +3700,22 @@ class ConvertElementsWhichHaveIdPipeline(object):
                         fn.append(deepcopy(fn_parent_next))
                         parent = fn_parent_next.getparent()
                         parent.remove(fn_parent_next)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class RemoveFnWhichHasOnlyXref(plumber.Pipe):
+    class RemoveFnWhichHasOnlyXref(ConversionPipe):
         """
         As âncoras que não identificadas como ativos digitais, seções etc,
         por exclusão são consideradas notas de rodapé (fn). No entanto, há
         padrões que podem desconsiderá-las notas de rodapé.
         Um fn que contém apenas xref, não é nota de rodapé
         """
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-            logger.debug("RemoveFnWhichHasOnlyXref")
             for p in xml.findall(".//fn/p[xref]"):
                 fn = p.getparent()
                 if get_node_text(fn) == get_node_text(p.find("xref")):
                     _remove_tag(p)
                     _remove_tag(fn)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
 
