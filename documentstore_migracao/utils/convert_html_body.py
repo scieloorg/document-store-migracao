@@ -494,8 +494,8 @@ class HTML2SPSPipeline(object):
             self.TableCleanPipe(self.body_info),
             self.BlockquotePipe(self.body_info),
             self.HrPipe(self.body_info),
-            self.TagsHPipe(),
-            self.DispQuotePipe(),
+            self.TagsHPipe(self.body_info),
+            self.DispQuotePipe(self.body_info),
             self.GraphicChildrenPipe(),
             self.BodySectionsPipe(),
             self.AddParagraphsToSectionPipe(),
@@ -1104,24 +1104,21 @@ class HTML2SPSPipeline(object):
             _process(xml, "hr", self.parser_node)
             return data
 
-    class TagsHPipe(plumber.Pipe):
+    class TagsHPipe(ConversionPipe):
         def parser_node(self, node):
             node.attrib.clear()
             org_tag = node.tag
             node.tag = "p"
             node.set("content-type", org_tag)
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             tags = ["h1", "h2", "h3", "h4", "h5", "h6"]
             for tag in tags:
                 _process(xml, tag, self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
-    class DispQuotePipe(plumber.Pipe):
+    class DispQuotePipe(ConversionPipe):
         TAGS = [
             "label",
             "title",
@@ -1174,12 +1171,9 @@ class HTML2SPSPipeline(object):
                 if c_node.tag not in self.TAGS:
                     wrap_node(c_node, "p")
 
-        def transform(self, data):
-            logger.debug("INICIO: %s" % type(self).__name__)
+        def _transform(self, data):
             raw, xml = data
-
             _process(xml, "disp-quote", self.parser_node)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class GraphicChildrenPipe(plumber.Pipe):

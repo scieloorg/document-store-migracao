@@ -297,7 +297,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe__tagsh__h1(self):
         text = "<root><h1>Titulo 1</h1></root>"
-        raw, transformed = self._transform(text, self.pipeline.TagsHPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.TagsHPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b'<root><p content-type="h1">Titulo 1</p></root>',
@@ -305,7 +306,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe__tagsh__h3(self):
         text = "<root><h3>Titulo 3</h3></root>"
-        raw, transformed = self._transform(text, self.pipeline.TagsHPipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.TagsHPipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b'<root><p content-type="h3">Titulo 3</p></root>',
@@ -750,7 +752,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_disp_quote(self):
         text = """<root><disp-quote>TEXT</disp-quote></root>"""
-        raw, transformed = self._transform(text, self.pipeline.DispQuotePipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.DispQuotePipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"""<root><disp-quote><p>TEXT</p></disp-quote></root>""",
@@ -758,7 +761,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_disp_quote_case2(self):
         text = """<root><disp-quote><p>TEXT 1</p>TEXT 2</disp-quote></root>"""
-        raw, transformed = self._transform(text, self.pipeline.DispQuotePipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.DispQuotePipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"""<root><disp-quote><p>TEXT 1</p><p>TEXT 2</p></disp-quote></root>""",
@@ -766,7 +770,8 @@ class TestHTML2SPSPipeline(unittest.TestCase):
 
     def test_pipe_disp_quote_case3(self):
         text = """<root><disp-quote><italic>TEXT 1</italic></disp-quote></root>"""
-        raw, transformed = self._transform(text, self.pipeline.DispQuotePipe())
+        raw, transformed = self._transform(
+            text, self.pipeline.DispQuotePipe(self.pipeline.body_info))
         self.assertEqual(
             etree.tostring(transformed),
             b"""<root><disp-quote><p><italic>TEXT 1</italic></p></disp-quote></root>""",
@@ -1530,8 +1535,8 @@ class Test_HTML2SPSPipeline(unittest.TestCase):
             pipeline.TableCleanPipe(pipeline.body_info),
             pipeline.BlockquotePipe(pipeline.body_info),
             pipeline.HrPipe(pipeline.body_info),
-            pipeline.TagsHPipe(),
-            pipeline.DispQuotePipe(),
+            pipeline.TagsHPipe(pipeline.body_info),
+            pipeline.DispQuotePipe(pipeline.body_info),
             pipeline.GraphicChildrenPipe(),
             pipeline.FixBodyChildrenPipe(),
             pipeline.RemovePWhichIsParentOfPPipe(),
