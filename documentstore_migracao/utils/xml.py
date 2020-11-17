@@ -19,6 +19,10 @@ CLEANUP_MIXED_CITATION = re.compile(
     CLEANUP_MIXED_CITATION.pattern + "|< *?font.*?>|< *?br.*?>"
 )
 
+REPLACE_TAGS_MIXED_CITATION = REPLACE_TAGS_MIXED_CITATION + (
+    (re.compile(r"w:st", re.IGNORECASE), "w-st",),
+)
+
 _charref = re.compile(r'&(#[0-9]+;?'
                     r'|#[xX][0-9a-fA-F]+;?'
                     r'|[^\t\n\f <&#;]{1,32};?)')
