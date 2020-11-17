@@ -457,8 +457,11 @@ class SPS_Package:
                 self.article_id_which_id_type_is_other,
                 self.fpage,
                 ):
-            if item and item.isdigit() and len(item) <= 5:
-                return item.zfill(5)
+            try:
+                if is_valid_value_for_order(item):
+                    return item.zfill(5)
+            except InvalidValueForOrderError:
+                continue
 
     @property
     def article_id_which_id_type_is_other(self):
