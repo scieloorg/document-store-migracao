@@ -143,8 +143,16 @@ def get_asset(old_path, new_fname, dest_path):
         return
 
     try:
-        source_path = config.get('SOURCE_PDF_FILE') if ext_m.endswith('pdf') else config.get('SOURCE_IMG_FILE')
-        content = files.read_file_binary(os.path.join(source_path, asset_path))
+        file_path = ''
+
+        for path in [
+            os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
+            os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
+        ]:
+            if os.path.exists(path):
+                file_path = os.path.join(path, asset_path)
+
+        content = files.read_file_binary(file_path)
     except IOError as e:
         try:
             msg = str(e)

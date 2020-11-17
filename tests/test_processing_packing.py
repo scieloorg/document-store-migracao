@@ -146,9 +146,10 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
 
         new_fname = "novo"
         dest_path = TEMP_TEST_PATH
-        self.dest_filename = os.path.join(dest_path, new_fname + ".gif")
-        if os.path.isfile(self.dest_filename):
-            os.unlink(self.dest_filename)
+        self.dest_filename_img = os.path.join(dest_path, new_fname + ".gif")
+        self.dest_filename_pdf = os.path.join(dest_path, new_fname + ".pdf")
+        if os.path.isfile(self.dest_filename_img):
+            os.unlink(self.dest_filename_img)
 
     def tearDown(self):
         shutil.rmtree(TEMP_TEST_PATH)
@@ -160,11 +161,43 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
         new_fname = "novo"
         dest_path = TEMP_TEST_PATH
 
-        self.assertFalse(os.path.isfile(self.dest_filename))
+        self.assertFalse(os.path.isfile(self.dest_filename_img))
         path = packing.get_asset(old_path, new_fname, dest_path)
         self.assertIsNone(path)
-        with open(self.dest_filename) as fp:
+        with open(self.dest_filename_img) as fp:
             self.assertTrue(fp.read(), b"conteudo")
+
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test_get_asset_in_img_folder(self, read_file_binary):
+        read_file_binary.return_value = b"conteudo img"
+        old_path = "/img/en/scielobre.gif"
+        new_fname = "novo"
+        dest_path = TEMP_TEST_PATH
+
+        self.assertFalse(os.path.isfile(self.dest_filename_img))
+
+        path = packing.get_asset(old_path, new_fname, dest_path)
+
+        self.assertIsNone(path)
+
+        with open(self.dest_filename_img) as fp:
+            self.assertTrue(fp.read(), b"conteudo img")
+
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test_get_asset_in_pdf_folder(self, read_file_binary):
+        read_file_binary.return_value = b"conteudo pdf"
+        old_path = "/pdf/en/asset.pdf"
+        new_fname = "novo"
+        dest_path = TEMP_TEST_PATH
+
+        self.assertFalse(os.path.isfile(self.dest_filename_img))
+
+        path = packing.get_asset(old_path, new_fname, dest_path)
+
+        self.assertIsNone(path)
+
+        with open(self.dest_filename_pdf) as fp:
+            self.assertTrue(fp.read(), b"conteudo pdf")
 
     @patch("documentstore_migracao.utils.files.read_file_binary")
     def test_get_asset_raise_IOError_exception(self, mk_read_file_binary):
