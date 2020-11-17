@@ -4,9 +4,8 @@ import logging
 import json
 
 from tqdm import tqdm
-from requests.compat import urljoin
-from lxml import etree
-from documentstore_migracao.utils import files, request, xml
+from urllib.parse import urlparse
+from documentstore_migracao.utils import files, xml
 from documentstore_migracao import config
 from documentstore_migracao.export.sps_package import SPS_Package
 from documentstore_migracao.processing.extracted import PoisonPill, DoJobsConcurrently
@@ -16,7 +15,25 @@ logger = logging.getLogger(__name__)
 
 
 def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
+    """Empacoda um xml e seus ativos digitais.
 
+    Args:
+        file_xml_path: Caminho para o XML
+        poison_pill: Injeta um PosionPill()
+
+    Retornos:
+        Sem retornos.
+
+        Persiste o XML no ``package_path``
+
+    Exemplo:
+        packing.pack_article_xml(
+                os.path.join("S0044-59672003000300002.xml")
+            )
+
+    Exceções:
+        Não lança exceções.
+    """
     if poison_pill.poisoned:
         return
 
@@ -30,7 +47,7 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     INCOMPLETE_SPS_PKG_PATH = config.get("INCOMPLETE_SPS_PKG_PATH")
 
     pkg_path = os.path.join(SPS_PKG_PATH, original_filename)
-    bad_pkg_path = os.path.join(INCOMPLETE_SPS_PKG_PATH, original_filename)
+    incomplete_pkg_path = os.path.join(INCOMPLETE_SPS_PKG_PATH, original_filename)
 
     asset_replacements = list(set(sps_package.replace_assets_names()))
     logger.debug("%s possui %s ativos digitais", file_xml_path, len(asset_replacements))
@@ -41,7 +58,7 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     package_path = packing_assets(
         asset_replacements + renditions,
         pkg_path,
-        bad_pkg_path,
+        incomplete_pkg_path,
         sps_package.package_name
     )
 
@@ -56,7 +73,22 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
 
 
 def pack_article_ALLxml():
-    """Cria pacotes SPS a partir de uma lista de XML."""
+    """Gera os pacotes SPS a partir de um lista de XML validos.
+
+    Args:
+       Não há argumentos
+
+    Retornos:
+        Sem retornos.
+
+        Persiste o XML no ``package_path``
+
+    Exemplo:
+        pack_article_ALLxml()
+
+    Exceções:
+        Não lança exceções.
+    """
 
     xmls = [
         os.path.join(config.get("VALID_XML_PATH"), xml)
@@ -78,30 +110,42 @@ def pack_article_ALLxml():
         )
 
 
-def download_asset(old_path, new_fname, dest_path):
-    """Returns msg, if error"""
+def get_asset(old_path, new_fname, dest_path):
+    """Obtém os ativos digitais no sistema de arquivo e realiza a persistência
+    no ``dest_path``.
+
+    Args:
+        old_path: Caminho do ativo
+        new_fname: Novo nome para o ativo
+        dest_path: Pasta de destino
+
+    Retornos:
+        Sem retornos.
+
+        Persiste o ativo no ``dest_path``
+
+    Exceções:
+        IOError
+        TypeError
+    """
     if old_path.startswith("http"):
-        location = old_path
+        asset_path = urlparse(old_path).path
     else:
-        try:
-            location = urljoin(config.get("STATIC_URL_FILE"), old_path.strip())
-        except ValueError as exc:
-            return 'cannot join URL parts "%s" and "%s": %s' % (
-                config.get("STATIC_URL_FILE"),
-                old_path,
-                exc,
-            )
+        asset_path = old_path
+
+    asset_path = asset_path.strip('/')
 
     # Verifica se o arquivo ja foi baixado anteriormente
     filename_m, ext_m = files.extract_filename_ext_by_path(old_path)
     dest_path_file = os.path.join(dest_path, "%s%s" % (new_fname.strip(), ext_m))
     if os.path.exists(dest_path_file):
-        logger.debug("Arquivo ja baixado: %s", dest_path_file)
+        logger.debug("Arquivo já armazenado na pasta de destino: %s", dest_path_file)
         return
 
     try:
-        request_file = request.get(location, timeout=int(config.get("TIMEOUT") or 10))
-    except request.HTTPGetError as e:
+        source_path = config.get('SOURCE_PDF_FILE') if ext_m.endswith('pdf') else config.get('SOURCE_IMG_FILE')
+        content = files.read_file(os.path.join(source_path, asset_path))
+    except IOError as e:
         try:
             msg = str(e)
         except TypeError:
@@ -109,36 +153,48 @@ def download_asset(old_path, new_fname, dest_path):
         logger.error(e)
         return msg
     else:
-        files.write_file_binary(dest_path_file, request_file.content)
+        files.write_file_binary(dest_path_file, content)
 
 
-def packing_assets(asset_replacements, pkg_path, bad_pkg_path, pkg_name):
-    """
-    Retorna o caminho do pacote (pkg_path ou bad_pkg_path)
+def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
+    """Tem a responsabilidade de ``empacotar`` os ativos digitais e retorna o
+    path do pacote.
+
+    Args:
+        asset_replacements: lista com os ativos
+        pkg_path: caminho do pacote
+        incomplete_pkg_path: caminho para os pacotes incompletos
+        pkg_name: nome do pacote
+
+    Retornos:
+        retorna o caminho ``pkg_path`` ou incomplete_pkg_path
+
+    Exceções:
+        Não lança exceções.
     """
     errors = []
     if not os.path.isdir(pkg_path):
         files.make_empty_dir(pkg_path)
 
     for old_path, new_fname in asset_replacements:
-        error = download_asset(old_path, new_fname, pkg_path)
+        error = get_asset(old_path, new_fname, pkg_path)
         if error:
             errors.append((old_path, new_fname, error))
 
     if len(errors) > 0:
         # garante que existe pastas diferentes para
         # pacotes completos e incompletos
-        if pkg_path == bad_pkg_path:
-            bad_pkg_path += "_INCOMPLETE"
+        if pkg_path == incomplete_pkg_path:
+            incomplete_pkg_path += "_INCOMPLETE"
         # move pacote incompleto para a pasta de pacotes incompletos
-        files.make_empty_dir(bad_pkg_path)
+        files.make_empty_dir(incomplete_pkg_path)
         for item in os.listdir(pkg_path):
-            shutil.move(os.path.join(pkg_path, item), bad_pkg_path)
+            shutil.move(os.path.join(pkg_path, item), incomplete_pkg_path)
         shutil.rmtree(pkg_path)
         # gera relatorio de erros
-        errors_filename = os.path.join(bad_pkg_path, "%s.err" % pkg_name)
+        errors_filename = os.path.join(incomplete_pkg_path, "%s.err" % pkg_name)
         if len(errors) > 0:
             error_messages = "\n".join(["%s %s %s" % _err for _err in errors])
             files.write_file(errors_filename, error_messages)
-        return bad_pkg_path
+        return incomplete_pkg_path
     return pkg_path
