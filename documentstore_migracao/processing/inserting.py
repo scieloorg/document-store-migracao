@@ -169,15 +169,8 @@ def get_article_result_dict(sps: SPS_Package) -> dict:
         ("volume", sps.volume),
         ("number", sps.number),
         ("supplement", sps.supplement),
-        (
-            "order",
-            str(
-                _format_str(article_meta.get("other"))
-                or _format_str(article_meta.get("fpage"))
-            ),
-        ),
+        ("order", sps.order),
     )
-
     for key, value in attributes:
         if value is not None:
             article_metadata[key] = "%s" % value
