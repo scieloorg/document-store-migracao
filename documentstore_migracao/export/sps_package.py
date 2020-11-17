@@ -24,6 +24,10 @@ class InvalidAttributeValueError(Exception):
     pass
 
 
+class InvalidValueForOrderError(Exception):
+    pass
+
+
 def parse_date(_date):
     def format(value):
         if value and value.isdigit():
@@ -67,6 +71,19 @@ def is_asset_href(href):
         and not href.startswith("www")
         and not href.startswith("http")
     )
+
+
+def is_valid_value_for_order(value):
+    try:
+        if not (0 < int(value) <= 99999):
+            raise ValueError
+    except (ValueError, TypeError):
+        raise InvalidValueForOrderError(
+            "Invalid value for 'order': %s",
+            value
+        )
+    else:
+        return True
 
 
 class SPS_Package:
@@ -769,6 +786,7 @@ class SPS_Package:
 
     def is_incorrect(self, attr_name):
         if attr_name == "article_id_which_id_type_is_other":
+
             try:
                 order = int(self.article_id_which_id_type_is_other or self.fpage)
                 if order > 99999:

@@ -10,6 +10,8 @@ from documentstore_migracao.export.sps_package import (
     SPS_Package,
     NotAllowedtoChangeAttributeValueError,
     InvalidAttributeValueError,
+    InvalidValueForOrderError,
+    is_valid_value_for_order,
 )
 
 
@@ -2268,3 +2270,25 @@ class Test_SPS_Package_SetAttrIfRequired_Update_DATA(unittest.TestCase):
             'specific-use="sps-1.9" xml:lang="pt">',
             str(etree.tostring(self._sps_package.xmltree))
         )
+
+
+class Test_is_valid_value_for_order(unittest.TestCase):
+    def test_raises_exception_because_value_is_none(self):
+        with self.assertRaises(InvalidValueForOrderError):
+            is_valid_value_for_order(None)
+
+    def test_raises_exception_because_value_is_str(self):
+        with self.assertRaises(InvalidValueForOrderError):
+            is_valid_value_for_order("x")
+
+    def test_raises_exception_because_value_is_zero(self):
+        with self.assertRaises(InvalidValueForOrderError):
+            is_valid_value_for_order("0")
+
+    def test_raises_exception_because_value_is_outofrange(self):
+        with self.assertRaises(InvalidValueForOrderError):
+            is_valid_value_for_order("999999")
+
+    def test_returns_true(self):
+        result = is_valid_value_for_order("6")
+        self.assertTrue(result)
