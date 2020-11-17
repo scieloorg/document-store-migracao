@@ -470,11 +470,7 @@ class SPS_Package:
 
     @article_id_which_id_type_is_other.setter
     def article_id_which_id_type_is_other(self, value):
-        v = int(value)
-        if v > 99999:
-            raise ValueError(
-                "Not allowed to set article_id_which_id_type_is_other"
-                " with %s" % value)
+        is_valid_value_for_order(value)
         value = value.zfill(5)
         node = self.article_meta.find(
             './/article-id[@publisher-id="other"]'
@@ -784,17 +780,13 @@ class SPS_Package:
 
         return updated
 
-    def is_incorrect(self, attr_name):
+    def _fixme(self, attr_name):
         if attr_name == "article_id_which_id_type_is_other":
-
             try:
-                order = int(self.article_id_which_id_type_is_other or self.fpage)
-                if order > 99999:
-                    raise ValueError(
-                        "%s is invalid value for 'SPS_Package.order'" % order
-                        )
+                order = self.article_id_which_id_type_is_other or self.fpage
+                is_valid_value_for_order(order)
                 return False
-            except (ValueError, TypeError):
+            except InvalidValueForOrderError:
                 return True
 
         if attr_name in ("scielo_pid_v2", "aop_pid", ):
@@ -805,7 +797,7 @@ class SPS_Package:
         return False
 
     def fix(self, attr_name, attr_new_value):
-        if not self.is_incorrect(attr_name):
+        if not self._fixme(attr_name):
             raise NotAllowedtoChangeAttributeValueError(
                 "%s is correct. Not allowed to change its value", attr_name
             )
