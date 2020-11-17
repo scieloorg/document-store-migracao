@@ -10,15 +10,15 @@ from . import utils, SAMPLES_PATH, TEMP_TEST_PATH, COUNT_SAMPLES_FILES
 
 class TestProcessingPacking(unittest.TestCase):
 
-    @patch("documentstore_migracao.utils.files.read_file")
-    def test_pack_article_xml_missing_media(self, mk_read_file):
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test_pack_article_xml_missing_media(self, mk_read_file_binary):
         with utils.environ(
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
         ):
 
-            mk_read_file.return_value = b"img content"
+            mk_read_file_binary.return_value = b"img content"
 
             packing.pack_article_xml(
                 os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_incompleto.xml")
@@ -153,9 +153,9 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(TEMP_TEST_PATH)
 
-    @patch("documentstore_migracao.utils.files.read_file")
-    def test_get_asset(self, read_file):
-        read_file.return_value = b"conteudo"
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test_get_asset(self, read_file_binary):
+        read_file_binary.return_value = b"conteudo"
         old_path = "/img/en/scielobre.gif"
         new_fname = "novo"
         dest_path = TEMP_TEST_PATH
@@ -166,9 +166,9 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
         with open(self.dest_filename) as fp:
             self.assertTrue(fp.read(), b"conteudo")
 
-    @patch("documentstore_migracao.utils.files.read_file")
-    def test_get_asset_raise_IOError_exception(self, mk_read_file):
-        mk_read_file.side_effect = IOError
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test_get_asset_raise_IOError_exception(self, mk_read_file_binary):
+        mk_read_file_binary.side_effect = IOError
         old_path = "/img/en/scielobre.gif"
         new_fname = "novo"
         dest_path = TEMP_TEST_PATH
@@ -196,8 +196,8 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(TEMP_TEST_PATH)
 
-    @patch("documentstore_migracao.utils.files.read_file")
-    def test__pack_incomplete_package(self, mk_read_file):
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test__pack_incomplete_package(self, mk_read_file_binary):
         asset_replacements = [
             ("/img/revistas/a01.gif", "f01"),
             ("/img/revistas/a02.gif", "f02"),
@@ -208,7 +208,7 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
         bad_pkg_path = self.bad_pkg_path
         pkg_name = "pacote_sps"
 
-        mk_read_file.side_effect = [IOError("Error"), m.return_value]
+        mk_read_file_binary.side_effect = [IOError("Error"), m.return_value]
         result_path = packing.packing_assets(
             asset_replacements, pkg_path, bad_pkg_path, pkg_name
         )
@@ -218,8 +218,8 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
         with open(os.path.join(bad_pkg_path, pkg_name + ".err")) as fp:
             self.assertEqual(fp.read(), "/img/revistas/a01.gif f01 Error")
 
-    @patch("documentstore_migracao.utils.files.read_file")
-    def test__pack_incomplete_package_same_dir(self, mk_read_file):
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test__pack_incomplete_package_same_dir(self, mk_read_file_binary):
         asset_replacements = [
             ("/img/revistas/a01.gif", "f01"),
             ("/img/revistas/a02.gif", "f02"),
@@ -230,7 +230,7 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
         bad_pkg_path = self.good_pkg_path
         renamed_path = pkg_path + "_INCOMPLETE"
         pkg_name = "pacote_sps"
-        mk_read_file.side_effect = [IOError("Error"), m.return_value]
+        mk_read_file_binary.side_effect = [IOError("Error"), m.return_value]
         result_path = packing.packing_assets(
             asset_replacements, pkg_path, bad_pkg_path, pkg_name
         )
@@ -240,21 +240,21 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
         with open(os.path.join(renamed_path, pkg_name + ".err")) as fp:
             self.assertEqual(fp.read(), "/img/revistas/a01.gif f01 Error")
 
-    @patch("documentstore_migracao.utils.files.read_file")
-    def test__pack_complete_package(self, mk_read_file):
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test__pack_complete_package(self, mk_read_file_binary):
         asset_replacements = [
             ("/img/revistas/a01.gif", "f01"),
             ("/img/revistas/a02.gif", "f02"),
         ]
-        mk_read_file_result1 = Mock()
-        mk_read_file_result1.return_value = b"conteudo"
-        mk_read_file_result2 = Mock()
-        mk_read_file_result2.return_value = b"conteudo"
+        mk_read_file_binary_result1 = Mock()
+        mk_read_file_binary_result1.return_value = b"conteudo"
+        mk_read_file_binary_result2 = Mock()
+        mk_read_file_binary_result2.return_value = b"conteudo"
 
         pkg_path = self.good_pkg_path
         bad_pkg_path = self.bad_pkg_path
         pkg_name = "pacote_sps"
-        mk_read_file.side_effect = [mk_read_file_result1.return_value, mk_read_file_result2.return_value]
+        mk_read_file_binary.side_effect = [mk_read_file_binary_result1.return_value, mk_read_file_binary_result2.return_value]
         result_path = packing.packing_assets(
             asset_replacements, pkg_path, bad_pkg_path, pkg_name
         )
