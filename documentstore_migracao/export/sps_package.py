@@ -825,11 +825,6 @@ class DocumentsSorter:
     def insert_document(self, document_id, document_xml):
         pkg = SPS_Package(document_xml, "none")
 
-        def format(value):
-            if value and value.isdigit():
-                return value.zfill(5)
-            return value or ""
-
         data = dict(pkg.parse_article_meta)
         self._documents_bundles[document_id] = {
             "eissn": dict(pkg.journal_meta).get("eissn"),
