@@ -340,7 +340,7 @@ class TestBuildSPSPackageOrder(TestBuildSPSPackageBase):
             mk_sps_package, pack_name, self.rows[2], pack_name + ".xml"
         )
         self.assertEqual(result.order, "00003")
-        self.assertIsNone(result.article_id_which_id_type_is_other)
+        self.assertEqual(result.article_id_which_id_type_is_other, "00003")
 
     def test__update_sps_package_obj_updates_order_if_fpage_is_not_number_and_other_is_none(self):
         mk_sps_package = self.get_sps_package(
