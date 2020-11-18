@@ -34,7 +34,7 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     sps_package = SPS_Package(obj_xml, original_filename)
     sps_package.fix(
         "article_id_which_id_type_is_other",
-        sps_package.scielo_pid_v2[-5:],
+        sps_package.scielo_pid_v2 and sps_package.scielo_pid_v2[-5:],
         silently=True
     )
 
