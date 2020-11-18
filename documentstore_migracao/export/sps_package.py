@@ -811,20 +811,6 @@ class SPS_Package:
 
         return updated
 
-    def _fixme(self, attr_name):
-        if attr_name == "article_id_which_id_type_is_other":
-            try:
-                order = self.article_id_which_id_type_is_other or self.fpage
-                is_valid_value_for_order(order)
-                return False
-            except InvalidValueForOrderError:
-                return True
-        if attr_name in ("scielo_pid_v2", "aop_pid", ):
-            return len(getattr(self, attr_name) or "") != 23
-        if attr_name in ("original_language", ):
-            return len(getattr(self, attr_name) or "") != 2
-        return False
-
     def fix(self, attr_name, attr_new_value, silently=False):
         """
         Conserta valor de atributo e silencia as exceções
