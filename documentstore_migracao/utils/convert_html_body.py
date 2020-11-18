@@ -407,12 +407,12 @@ def get_text_to_compare(data):
 class ConversionPipe(plumber.Pipe):
     def __init__(self, body_info):
         super().__init__()
-        self.pipe = type(self).__name__
+        self.pipe_name = type(self).__name__
         self.body_info = body_info
         self.spy = body_info.spy
 
     def _begin(self, data):
-        logger.debug("INICIO: %s", self.pipe)
+        logger.debug("INICIO: %s", self.pipe_name)
         raw, xml = data
         self.spy.before = xml
 
@@ -428,8 +428,8 @@ class ConversionPipe(plumber.Pipe):
     def _end(self, data):
         raw, xml = data
         self.spy.after = xml
-        self.body_info.register_diff(self.pipe)
-        logger.debug("FIM: %s", self.pipe)
+        self.body_info.register_diff(self.pipe_name)
+        logger.debug("FIM: %s", self.pipe_name)
 
 
 class CustomPipe(plumber.Pipe):
