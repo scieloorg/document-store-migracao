@@ -849,10 +849,7 @@ class SPS_Package:
             # não há nenhuma validação, então é permitido fazer a atualização
             return True
 
-        if attr_name == "article_id_which_id_type_is_other":
-            curr_value = self.article_id_which_id_type_is_other or self.fpage
-        else:
-            curr_value = getattr(self, attr_name)
+        curr_value = getattr(self, attr_name)
 
         if attr_new_value == curr_value:
             # desnecessario atualizar
