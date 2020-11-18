@@ -32,6 +32,11 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     obj_xml = xml.file2objXML(file_xml_path)
 
     sps_package = SPS_Package(obj_xml, original_filename)
+    sps_package.fix(
+        "article_id_which_id_type_is_other",
+        sps_package.scielo_pid_v2[-5:],
+        silently=True
+    )
 
     SPS_PKG_PATH = config.get("SPS_PKG_PATH")
     INCOMPLETE_SPS_PKG_PATH = config.get("INCOMPLETE_SPS_PKG_PATH")
