@@ -167,6 +167,34 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
         with open(self.dest_filename_img) as fp:
             self.assertTrue(fp.read(), b"conteudo")
 
+    def test_get_asset_img_path(self):
+        with utils.environ(
+            SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+        ):
+            old_path = "/img/sample.jpg"
+            new_fname = "novo"
+            dest_path = TEMP_TEST_PATH
+
+            self.assertFalse(os.path.isfile(self.dest_filename_img))
+            packing.get_asset(old_path, new_fname, dest_path)
+
+            img_new_path = os.path.join(dest_path, new_fname + ".jpg")
+            self.assertTrue(os.path.exists(img_new_path))
+
+    def test_get_asset_pdf_path(self):
+        with utils.environ(
+            SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+        ):
+            old_path = "/pdf/sample.pdf"
+            new_fname = "novo"
+            dest_path = TEMP_TEST_PATH
+
+            self.assertFalse(os.path.isfile(self.dest_filename_pdf))
+            packing.get_asset(old_path, new_fname, dest_path)
+
+            pdf_new_path = os.path.join(dest_path, new_fname + ".pdf")
+            self.assertTrue(os.path.exists(pdf_new_path))
+
     @patch("documentstore_migracao.utils.files.read_file_binary")
     def test_get_asset_in_img_folder(self, read_file_binary):
         read_file_binary.return_value = b"conteudo img"
