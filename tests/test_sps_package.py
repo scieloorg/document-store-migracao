@@ -2495,3 +2495,64 @@ class TestIsAllowedToUpdate_original_language(unittest.TestCase):
             "'original_language', 'None', 'espanhol'"
         )
         self.assertIn(expected, str(exc.exception))
+
+
+class Test_SPS_article_id_which_id_type_is_other(unittest.TestCase):
+
+    def _get_sps_package(self, other, fpage):
+        tag_other = ""
+        if other:
+            tag_other = f'<article-id pub-id-type="other">{other}</article-id>'
+        tag_fpage = ""
+        if fpage:
+            tag_fpage = f'<fpage>{fpage}</fpage>'
+        article_xml = f"""
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="incorrect">
+            <front>
+            <journal-meta>
+            </journal-meta>
+            <article-meta>
+                <article-id pub-id-type="publisher-id" specific-use="scielo-v2">incorrect</article-id>
+                <article-id specific-use="previous-pid" pub-id-type="publisher-id">incorrect</article-id>
+                {tag_other}
+                {tag_fpage}
+            </article-meta>
+            </front>
+            </article>
+            """
+        xmltree = etree.fromstring(article_xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_keeps_same_value(self):
+        sps_package = self._get_sps_package(other="1234", fpage="vii")
+        sps_package.article_id_which_id_type_is_other = "1234"
+        self.assertEqual(sps_package.article_id_which_id_type_is_other, "1234")
+
+    def test_update_with_new_value(self):
+        sps_package = self._get_sps_package(other=None, fpage="vii")
+        sps_package.article_id_which_id_type_is_other = "1234"
+        self.assertEqual(
+            sps_package.article_id_which_id_type_is_other, "01234")
+
+    def test_raises_exception_because_attr_has_already_a_valid_value(self):
+        sps_package = self._get_sps_package(other="1234", fpage="vii")
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            sps_package.article_id_which_id_type_is_other = "222"
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because current is valid', "
+            "'article_id_which_id_type_is_other', '1234', '222'"
+        )
+        self.assertIn(expected, str(exc.exception))
+
+    def test_raises_exception_because_new_value_is_invalid(self):
+        sps_package = self._get_sps_package(other=None, fpage="vii")
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            sps_package._is_allowed_to_update(
+                "article_id_which_id_type_is_other", "vIII")
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because new value is invalid', "
+            "'article_id_which_id_type_is_other', 'vii', 'vIII'"
+        )
+        self.assertIn(expected, str(exc.exception))

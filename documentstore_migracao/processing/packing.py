@@ -8,7 +8,11 @@ from requests.compat import urljoin
 from lxml import etree
 from documentstore_migracao.utils import files, request, xml
 from documentstore_migracao import config
-from documentstore_migracao.export.sps_package import SPS_Package
+from documentstore_migracao.export.sps_package import (
+    SPS_Package,
+    NotAllowedtoChangeAttributeValueError,
+    InvalidAttributeValueError
+)
 from documentstore_migracao.processing.extracted import PoisonPill, DoJobsConcurrently
 
 

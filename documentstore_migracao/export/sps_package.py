@@ -493,7 +493,9 @@ class SPS_Package:
 
     @article_id_which_id_type_is_other.setter
     def article_id_which_id_type_is_other(self, value):
-        is_valid_value_for_order(value)
+        if not self._is_allowed_to_update(
+                "article_id_which_id_type_is_other", value):
+            return
         value = value.zfill(5)
         node = self.article_meta.find(
             './/article-id[@publisher-id="other"]'
@@ -861,7 +863,7 @@ class SPS_Package:
             raise NotAllowedtoChangeAttributeValueError(
                 "Not allowed to update %s (%s) with %s, "
                 "because current is valid",
-                attr_name, curr_value, attr_new_value, curr_value)
+                attr_name, curr_value, attr_new_value)
         try:
             # valida o valor novo para o atributo
             validate_function(attr_new_value)
