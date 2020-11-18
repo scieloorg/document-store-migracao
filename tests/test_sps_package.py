@@ -2370,11 +2370,11 @@ class TestIsAllowedToUpdate_article_id_which_id_type_is_other(unittest.TestCase)
             sps_package._is_allowed_to_update(
                 "article_id_which_id_type_is_other", "222")
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because current is valid', "
-            "'article_id_which_id_type_is_other', '1234', '222'"
+            "Not allowed to update article_id_which_id_type_is_other "
+            "(1234) with 222, "
+            "because current is valid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
     def test_returns_raise_exception_because_new_value_is_invalid(self):
         sps_package = self._get_sps_package(other=None, fpage="vii")
@@ -2382,11 +2382,11 @@ class TestIsAllowedToUpdate_article_id_which_id_type_is_other(unittest.TestCase)
             sps_package._is_allowed_to_update(
                 "article_id_which_id_type_is_other", "vIII")
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because new value is invalid', "
-            "'article_id_which_id_type_is_other', 'vii', 'vIII'"
+            "Not allowed to update article_id_which_id_type_is_other "
+            "(None) with vIII, "
+            "because new value is invalid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
 
 class TestIsAllowedToUpdate_scielo_pid_v2(unittest.TestCase):
@@ -2427,22 +2427,22 @@ class TestIsAllowedToUpdate_scielo_pid_v2(unittest.TestCase):
         with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
             sps_package._is_allowed_to_update("scielo_pid_v2", "222")
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because current is valid', "
-            "'scielo_pid_v2', 'S0000-00002019000512345', '222'"
+            "Not allowed to update scielo_pid_v2 "
+            "(S0000-00002019000512345) with 222, "
+            "because current is valid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
     def test_returns_raise_exception_because_new_value_is_invalid(self):
         sps_package = self._get_sps_package(None)
         with self.assertRaises(InvalidAttributeValueError) as exc:
             sps_package._is_allowed_to_update("scielo_pid_v2", "vIII")
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because new value is invalid', "
-            "'scielo_pid_v2', None, 'vIII'"
+            "Not allowed to update scielo_pid_v2 "
+            "(None) with vIII, "
+            "because new value is invalid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
 
 class TestIsAllowedToUpdate_original_language(unittest.TestCase):
@@ -2479,22 +2479,22 @@ class TestIsAllowedToUpdate_original_language(unittest.TestCase):
         with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
             sps_package._is_allowed_to_update("original_language", "222")
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because current is valid', "
-            "'original_language', 'pt', '222'"
+            "Not allowed to update original_language "
+            "(pt) with 222, "
+            "because current is valid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
     def test_returns_raise_exception_because_new_value_is_invalid(self):
         sps_package = self._get_sps_package(None)
         with self.assertRaises(InvalidAttributeValueError) as exc:
             sps_package._is_allowed_to_update("original_language", "espanhol")
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because new value is invalid', "
-            "'original_language', 'None', 'espanhol'"
+            "Not allowed to update original_language "
+            "(None) with espanhol, "
+            "because new value is invalid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
 
 class Test_SPS_article_id_which_id_type_is_other(unittest.TestCase):
@@ -2539,11 +2539,11 @@ class Test_SPS_article_id_which_id_type_is_other(unittest.TestCase):
         with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
             sps_package.article_id_which_id_type_is_other = "222"
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because current is valid', "
-            "'article_id_which_id_type_is_other', '1234', '222'"
+            "Not allowed to update article_id_which_id_type_is_other "
+            "(1234) with 222, "
+            "because current is valid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
     def test_raises_exception_because_new_value_is_invalid(self):
         sps_package = self._get_sps_package(other=None, fpage="vii")
@@ -2551,11 +2551,11 @@ class Test_SPS_article_id_which_id_type_is_other(unittest.TestCase):
             sps_package._is_allowed_to_update(
                 "article_id_which_id_type_is_other", "vIII")
         expected = (
-            "'Not allowed to update %s (%s) with %s, "
-            "because new value is invalid', "
-            "'article_id_which_id_type_is_other', 'vii', 'vIII'"
+            "Not allowed to update article_id_which_id_type_is_other "
+            "(None) with vIII, "
+            "because new value is invalid"
         )
-        self.assertIn(expected, str(exc.exception))
+        self.assertEqual(expected, str(exc.exception))
 
 
 class Test_SPS_Package_Fix_Silently(unittest.TestCase):

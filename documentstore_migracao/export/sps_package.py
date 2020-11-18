@@ -79,7 +79,7 @@ def is_valid_value_for_order(value):
             raise ValueError
     except (ValueError, TypeError):
         raise InvalidValueForOrderError(
-            "Invalid value for 'order': %s",
+            "Invalid value for 'order': %s" %
             value
         )
     else:
@@ -870,8 +870,8 @@ class SPS_Package:
             # então não permitir atualização
             raise NotAllowedtoChangeAttributeValueError(
                 "Not allowed to update %s (%s) with %s, "
-                "because current is valid",
-                attr_name, curr_value, attr_new_value)
+                "because current is valid" %
+                (attr_name, curr_value, attr_new_value))
         try:
             # valida o valor novo para o atributo
             validate_function(attr_new_value)
@@ -879,8 +879,8 @@ class SPS_Package:
             # o valor novo é inválido, então não permitir atualização
             raise InvalidAttributeValueError(
                 "Not allowed to update %s (%s) with %s, "
-                "because new value is invalid",
-                attr_name, curr_value, attr_new_value)
+                "because new value is invalid" %
+                (attr_name, curr_value, attr_new_value))
         else:
             # o valor novo é válido, então não permitir atualização
             return True
