@@ -150,7 +150,7 @@ def get_asset(old_path, new_fname, dest_path):
             os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
         ]:
             if os.path.exists(path):
-                file_path = os.path.join(path, asset_path)
+                file_path = path
 
         content = files.read_file_binary(file_path)
     except IOError as e:
