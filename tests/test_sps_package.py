@@ -2556,3 +2556,75 @@ class Test_SPS_article_id_which_id_type_is_other(unittest.TestCase):
             "'article_id_which_id_type_is_other', 'vii', 'vIII'"
         )
         self.assertIn(expected, str(exc.exception))
+
+
+class Test_SPS_Package_Fix_Silently(unittest.TestCase):
+
+    article_xml = """
+        <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="xx">
+        <front>
+        <journal-meta>
+        </journal-meta>
+        <article-meta>
+            <article-id pub-id-type="publisher-id" specific-use="scielo-v2">S0000-00002019000598765</article-id>
+            <article-id specific-use="previous-pid" pub-id-type="publisher-id">S0000-00002019000598765</article-id>
+            <article-id pub-id-type="other">98765</article-id>
+        </article-meta>
+        </front>
+        </article>
+        """
+
+    def _get_sps_package(self, article_meta_xml):
+        xml = self.article_xml.format(article_meta_xml)
+        xmltree = etree.fromstring(xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_fix_raises_no_exception_and_does_not_update_scielo_pid_v2(self):
+        article_meta_xml = (
+            '<article-id pub-id-type="publisher-id" specific-use="scielo-v2">'
+            'S0000-00002019000598765</article-id>'
+        )
+        _sps_package = self._get_sps_package(article_meta_xml)
+
+        _sps_package.fix(
+                "scielo_pid_v2", "S0000-00002019000512345", silently=True)
+
+        self.assertIn(
+            '<article-id pub-id-type="publisher-id" '
+            'specific-use="scielo-v2">S0000-00002019000598765</article-id>',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+
+    def test_fix_raises_no_exception_and_does_not_update_aop_pid(self):
+        article_meta_xml = (
+            '<article-id specific-use="previous-pid" '
+            'pub-id-type="publisher-id">S0000-00002019000598765</article-id>'
+        )
+        _sps_package = self._get_sps_package(article_meta_xml)
+        _sps_package.fix("aop_pid", "S1518-87872019053000621", silently=True)
+        self.assertIn(
+            '<article-id specific-use="previous-pid" '
+            'pub-id-type="publisher-id">S0000-00002019000598765</article-id>',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+
+    def test_fix_raises_no_exception_and_does_not_update_article_id_which_id_type_is_other(self):
+        article_meta_xml = """
+        <article-id pub-id-type="other">98765</article-id>
+        """
+        _sps_package = self._get_sps_package(article_meta_xml)
+        _sps_package.fix("article_id_which_id_type_is_other", "621", silently=True)
+        self.assertIn(
+            '<article-id pub-id-type="other">98765</article-id>',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+
+    def test_fix_raises_no_exception_and_does_not_update_lang(self):
+        _sps_package = self._get_sps_package("")
+        _sps_package.fix("original_language", "pt", silently=True)
+        self.assertIn(
+            '<article xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'specific-use="sps-1.9" xml:lang="xx">',
+            str(etree.tostring(_sps_package.xmltree))
+        )
+

@@ -184,6 +184,8 @@ class SPS_Package:
 
     @scielo_pid_v2.setter
     def scielo_pid_v2(self, value):
+        if not self._is_allowed_to_update("scielo_pid_v2", value):
+            return
         self._set_scielo_pid(self.scielo_pid_v2, "scielo-v2", value)
 
     @property
@@ -205,6 +207,8 @@ class SPS_Package:
 
     @aop_pid.setter
     def aop_pid(self, value):
+        if not self._is_allowed_to_update("aop_pid", value):
+            return
         if self.aop_pid is None:
             pid_node = etree.Element("article-id")
             pid_node.set("pub-id-type", "publisher-id")
@@ -648,6 +652,8 @@ class SPS_Package:
     @original_language.setter
     def original_language(self, value):
         """Set language of the main document."""
+        if not self._is_allowed_to_update("original_language", value):
+            return
         article_tag = self.xmltree.xpath('/article')
         if article_tag:
             article_tag[0].set("{http://www.w3.org/XML/1998/namespace}lang", value)
@@ -813,22 +819,24 @@ class SPS_Package:
                 return False
             except InvalidValueForOrderError:
                 return True
-
         if attr_name in ("scielo_pid_v2", "aop_pid", ):
             return len(getattr(self, attr_name) or "") != 23
         if attr_name in ("original_language", ):
             return len(getattr(self, attr_name) or "") != 2
-
         return False
 
-    def fix(self, attr_name, attr_new_value):
-        if not self._fixme(attr_name):
-            raise NotAllowedtoChangeAttributeValueError(
-                "%s is correct. Not allowed to change its value", attr_name
-            )
-        if not attr_new_value:
-            raise InvalidAttributeValueError("Invalid value for %s", attr_name)
-        setattr(self, attr_name, attr_new_value)
+    def fix(self, attr_name, attr_new_value, silently=False):
+        """
+        Conserta valor de atributo e silencia as exceções
+        """
+        try:
+            setattr(self, attr_name, attr_new_value)
+        except (NotAllowedtoChangeAttributeValueError,
+                InvalidAttributeValueError) as exc:
+            if silently:
+                logging.debug("%s", str(exc))
+            else:
+                raise
 
     def _is_allowed_to_update(self, attr_name, attr_new_value):
         """
