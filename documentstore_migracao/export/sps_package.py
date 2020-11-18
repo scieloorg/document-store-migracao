@@ -86,6 +86,26 @@ def is_valid_value_for_order(value):
         return True
 
 
+def is_valid_value_for_pid_v2(value):
+    if len(value or "") != 23:
+        raise ValueError
+    return True
+
+
+def is_valid_value_for_language(value):
+    if len(value or "") != 2:
+        raise ValueError
+    return True
+
+
+VALIDATE_FUNCTIONS = dict((
+    ("article_id_which_id_type_is_other", is_valid_value_for_order),
+    ("scielo_pid_v2", is_valid_value_for_pid_v2),
+    ("aop_pid", is_valid_value_for_pid_v2),
+    ("original_language", is_valid_value_for_language),
+))
+
+
 class SPS_Package:
     def __init__(self, xmltree, _original_asset_name_prefix=None):
         self.xmltree = xmltree
@@ -807,6 +827,53 @@ class SPS_Package:
         if not attr_new_value:
             raise InvalidAttributeValueError("Invalid value for %s", attr_name)
         setattr(self, attr_name, attr_new_value)
+
+    def _is_allowed_to_update(self, attr_name, attr_new_value):
+        """
+        Se há uma função de validação associada com o atributo,
+        verificar se é permitido atualizar o atributo, dados seus valores
+        atual e/ou novo
+        """
+        validate_function = VALIDATE_FUNCTIONS.get(attr_name)
+        if validate_function is None:
+            # não há nenhuma validação, então é permitido fazer a atualização
+            return True
+
+        if attr_name == "article_id_which_id_type_is_other":
+            curr_value = self.article_id_which_id_type_is_other or self.fpage
+        else:
+            curr_value = getattr(self, attr_name)
+
+        if attr_new_value == curr_value:
+            # desnecessario atualizar
+            return False
+
+        try:
+            # valida o valor atual do atributo
+            validate_function(curr_value)
+        except (ValueError, InvalidValueForOrderError):
+            # o valor atual do atributo é inválido,
+            # então continuar para verificar o valor "novo"
+            pass
+        else:
+            # o valor atual do atributo é válido,
+            # então não permitir atualização
+            raise NotAllowedtoChangeAttributeValueError(
+                "Not allowed to update %s (%s) with %s, "
+                "because current is valid",
+                attr_name, curr_value, attr_new_value, curr_value)
+        try:
+            # valida o valor novo para o atributo
+            validate_function(attr_new_value)
+        except (ValueError, InvalidValueForOrderError):
+            # o valor novo é inválido, então não permitir atualização
+            raise InvalidAttributeValueError(
+                "Not allowed to update %s (%s) with %s, "
+                "because new value is invalid",
+                attr_name, curr_value, attr_new_value)
+        else:
+            # o valor novo é válido, então não permitir atualização
+            return True
 
 
 class DocumentsSorter:

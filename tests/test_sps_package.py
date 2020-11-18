@@ -2292,3 +2292,206 @@ class Test_is_valid_value_for_order(unittest.TestCase):
     def test_returns_true(self):
         result = is_valid_value_for_order("6")
         self.assertTrue(result)
+
+
+class Test_is_allowed_to_update(unittest.TestCase):
+    def _get_sps_package(self, other, fpage):
+        tag_other = ""
+        if other:
+            tag_other = f'<article-id pub-id-type="other">{other}</article-id>'
+        tag_fpage = ""
+        if fpage:
+            tag_fpage = f'<fpage>{fpage}</fpage>'
+        article_xml = f"""
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="incorrect">
+            <front>
+            <journal-meta>
+            </journal-meta>
+            <article-meta>
+                <article-id pub-id-type="publisher-id" specific-use="scielo-v2">incorrect</article-id>
+                <article-id specific-use="previous-pid" pub-id-type="publisher-id">incorrect</article-id>
+                {tag_other}
+                {tag_fpage}
+            </article-meta>
+            </front>
+            </article>
+            """
+        xmltree = etree.fromstring(article_xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_returns_true(self):
+        sps_package = self._get_sps_package(other=None, fpage="vii")
+        attr_name = "any_attribute"
+        result = sps_package._is_allowed_to_update(attr_name, "1234")
+        self.assertTrue(result)
+
+
+class TestIsAllowedToUpdate_article_id_which_id_type_is_other(unittest.TestCase):
+
+    def _get_sps_package(self, other, fpage):
+        tag_other = ""
+        if other:
+            tag_other = f'<article-id pub-id-type="other">{other}</article-id>'
+        tag_fpage = ""
+        if fpage:
+            tag_fpage = f'<fpage>{fpage}</fpage>'
+        article_xml = f"""
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="incorrect">
+            <front>
+            <journal-meta>
+            </journal-meta>
+            <article-meta>
+                <article-id pub-id-type="publisher-id" specific-use="scielo-v2">incorrect</article-id>
+                <article-id specific-use="previous-pid" pub-id-type="publisher-id">incorrect</article-id>
+                {tag_other}
+                {tag_fpage}
+            </article-meta>
+            </front>
+            </article>
+            """
+        xmltree = etree.fromstring(article_xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_returns_false(self):
+        sps_package = self._get_sps_package(other="1234", fpage="vii")
+        result = sps_package._is_allowed_to_update(
+            "article_id_which_id_type_is_other", "1234")
+        self.assertFalse(result)
+
+    def test_returns_true(self):
+        sps_package = self._get_sps_package(other=None, fpage="vii")
+        result = sps_package._is_allowed_to_update(
+            "article_id_which_id_type_is_other", "1234")
+        self.assertTrue(result)
+
+    def test_returns_raise_exception_because_attr_has_already_a_valid_value(self):
+        sps_package = self._get_sps_package(other="1234", fpage="vii")
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            sps_package._is_allowed_to_update(
+                "article_id_which_id_type_is_other", "222")
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because current is valid', "
+            "'article_id_which_id_type_is_other', '1234', '222'"
+        )
+        self.assertIn(expected, str(exc.exception))
+
+    def test_returns_raise_exception_because_new_value_is_invalid(self):
+        sps_package = self._get_sps_package(other=None, fpage="vii")
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            sps_package._is_allowed_to_update(
+                "article_id_which_id_type_is_other", "vIII")
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because new value is invalid', "
+            "'article_id_which_id_type_is_other', 'vii', 'vIII'"
+        )
+        self.assertIn(expected, str(exc.exception))
+
+
+class TestIsAllowedToUpdate_scielo_pid_v2(unittest.TestCase):
+
+    def _get_sps_package(self, pid_v2):
+        tag_pid_v2 = ""
+        if pid_v2:
+            tag_pid_v2 = f'<article-id pub-id-type="publisher-id" specific-use="scielo-v2">{pid_v2}</article-id>'
+        article_xml = f"""
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="incorrect">
+            <front>
+            <journal-meta>
+            </journal-meta>
+            <article-meta>
+                <article-id specific-use="previous-pid" pub-id-type="publisher-id">incorrect</article-id>
+                {tag_pid_v2}
+            </article-meta>
+            </front>
+            </article>
+            """
+        xmltree = etree.fromstring(article_xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_returns_false(self):
+        sps_package = self._get_sps_package("S0000-00002019000512345")
+        result = sps_package._is_allowed_to_update(
+            "scielo_pid_v2", "S0000-00002019000512345")
+        self.assertFalse(result)
+
+    def test_returns_true(self):
+        sps_package = self._get_sps_package(None)
+        result = sps_package._is_allowed_to_update(
+            "scielo_pid_v2", "S0000-00002019000512345")
+        self.assertTrue(result)
+
+    def test_returns_raise_exception_because_attr_has_already_a_valid_value(self):
+        sps_package = self._get_sps_package("S0000-00002019000512345")
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            sps_package._is_allowed_to_update("scielo_pid_v2", "222")
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because current is valid', "
+            "'scielo_pid_v2', 'S0000-00002019000512345', '222'"
+        )
+        self.assertIn(expected, str(exc.exception))
+
+    def test_returns_raise_exception_because_new_value_is_invalid(self):
+        sps_package = self._get_sps_package(None)
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            sps_package._is_allowed_to_update("scielo_pid_v2", "vIII")
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because new value is invalid', "
+            "'scielo_pid_v2', None, 'vIII'"
+        )
+        self.assertIn(expected, str(exc.exception))
+
+
+class TestIsAllowedToUpdate_original_language(unittest.TestCase):
+
+    def _get_sps_package(self, lang):
+        article_xml = f"""
+            <article xmlns:xlink="http://www.w3.org/1999/xlink" specific-use="sps-1.9" xml:lang="{lang}">
+            <front>
+            <journal-meta>
+            </journal-meta>
+            <article-meta>
+                <article-id specific-use="previous-pid" pub-id-type="publisher-id">incorrect</article-id>
+            </article-meta>
+            </front>
+            </article>
+            """
+        xmltree = etree.fromstring(article_xml)
+        return SPS_Package(xmltree, "nome-do-arquivo")
+
+    def test_returns_false(self):
+        sps_package = self._get_sps_package("pt")
+        result = sps_package._is_allowed_to_update(
+            "original_language", "pt")
+        self.assertFalse(result)
+
+    def test_returns_true(self):
+        sps_package = self._get_sps_package(None)
+        result = sps_package._is_allowed_to_update(
+            "original_language", "pt")
+        self.assertTrue(result)
+
+    def test_returns_raise_exception_because_attr_has_already_a_valid_value(self):
+        sps_package = self._get_sps_package("pt")
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            sps_package._is_allowed_to_update("original_language", "222")
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because current is valid', "
+            "'original_language', 'pt', '222'"
+        )
+        self.assertIn(expected, str(exc.exception))
+
+    def test_returns_raise_exception_because_new_value_is_invalid(self):
+        sps_package = self._get_sps_package(None)
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            sps_package._is_allowed_to_update("original_language", "espanhol")
+        expected = (
+            "'Not allowed to update %s (%s) with %s, "
+            "because new value is invalid', "
+            "'original_language', 'None', 'espanhol'"
+        )
+        self.assertIn(expected, str(exc.exception))
