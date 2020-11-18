@@ -35,6 +35,7 @@ class TestUpdateMixedCitations(unittest.TestCase):
                         <ref id="B2">
                             <mixed-citation>Second mixed citation</mixed-citation>
                         </ref>
+                        <ref id="B3"></ref>
                     </ref-list>
                 </back>
             </article>"""
@@ -95,3 +96,9 @@ class TestUpdateMixedCitations(unittest.TestCase):
         result = etree.tostring(create_mixed_citation_element(string)).decode()
         self.assertEqual(result, expected)
         self.assertNotIn(result, "<http:>")
+
+    def test_should_replace_the_w_namespace(self):
+        update_articles_mixed_citations(self.sample_xml, disable_bar=True)
+        tree = etree.parse(self.sample_xml)
+        self.assertNotIn(b"w:st", etree.tostring(tree))
+        self.assertIn(b"w-st", etree.tostring(tree))
