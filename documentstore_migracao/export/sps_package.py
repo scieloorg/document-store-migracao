@@ -24,6 +24,10 @@ class InvalidAttributeValueError(Exception):
     pass
 
 
+class InvalidValueForOrderError(Exception):
+    pass
+
+
 def parse_date(_date):
     def format(value):
         if value and value.isdigit():
@@ -67,6 +71,39 @@ def is_asset_href(href):
         and not href.startswith("www")
         and not href.startswith("http")
     )
+
+
+def is_valid_value_for_order(value):
+    try:
+        if not (0 < int(value) <= 99999):
+            raise ValueError
+    except (ValueError, TypeError):
+        raise InvalidValueForOrderError(
+            "Invalid value for 'order': %s" %
+            value
+        )
+    else:
+        return True
+
+
+def is_valid_value_for_pid_v2(value):
+    if len(value or "") != 23:
+        raise ValueError
+    return True
+
+
+def is_valid_value_for_language(value):
+    if len(value or "") != 2:
+        raise ValueError
+    return True
+
+
+VALIDATE_FUNCTIONS = dict((
+    ("article_id_which_id_type_is_other", is_valid_value_for_order),
+    ("scielo_pid_v2", is_valid_value_for_pid_v2),
+    ("aop_pid", is_valid_value_for_pid_v2),
+    ("original_language", is_valid_value_for_language),
+))
 
 
 class SPS_Package:
@@ -147,6 +184,8 @@ class SPS_Package:
 
     @scielo_pid_v2.setter
     def scielo_pid_v2(self, value):
+        if not self._is_allowed_to_update("scielo_pid_v2", value):
+            return
         self._set_scielo_pid(self.scielo_pid_v2, "scielo-v2", value)
 
     @property
@@ -168,6 +207,8 @@ class SPS_Package:
 
     @aop_pid.setter
     def aop_pid(self, value):
+        if not self._is_allowed_to_update("aop_pid", value):
+            return
         if self.aop_pid is None:
             pid_node = etree.Element("article-id")
             pid_node.set("pub-id-type", "publisher-id")
@@ -440,8 +481,11 @@ class SPS_Package:
                 self.article_id_which_id_type_is_other,
                 self.fpage,
                 ):
-            if item and item.isdigit() and len(item) <= 5:
-                return item.zfill(5)
+            try:
+                if is_valid_value_for_order(item):
+                    return item.zfill(5)
+            except InvalidValueForOrderError:
+                continue
 
     @property
     def article_id_which_id_type_is_other(self):
@@ -453,11 +497,9 @@ class SPS_Package:
 
     @article_id_which_id_type_is_other.setter
     def article_id_which_id_type_is_other(self, value):
-        v = int(value)
-        if v > 99999:
-            raise ValueError(
-                "Not allowed to set article_id_which_id_type_is_other"
-                " with %s" % value)
+        if not self._is_allowed_to_update(
+                "article_id_which_id_type_is_other", value):
+            return
         value = value.zfill(5)
         node = self.article_meta.find(
             './/article-id[@publisher-id="other"]'
@@ -610,6 +652,8 @@ class SPS_Package:
     @original_language.setter
     def original_language(self, value):
         """Set language of the main document."""
+        if not self._is_allowed_to_update("original_language", value):
+            return
         article_tag = self.xmltree.xpath('/article')
         if article_tag:
             article_tag[0].set("{http://www.w3.org/XML/1998/namespace}lang", value)
@@ -767,33 +811,62 @@ class SPS_Package:
 
         return updated
 
-    def is_incorrect(self, attr_name):
-        if attr_name == "article_id_which_id_type_is_other":
-            try:
-                order = int(self.article_id_which_id_type_is_other or self.fpage)
-                if order > 99999:
-                    raise ValueError(
-                        "%s is invalid value for 'SPS_Package.order'" % order
-                        )
-                return False
-            except (ValueError, TypeError):
-                return True
+    def fix(self, attr_name, attr_new_value, silently=False):
+        """
+        Conserta valor de atributo e silencia as exceções
+        """
+        try:
+            setattr(self, attr_name, attr_new_value)
+        except (NotAllowedtoChangeAttributeValueError,
+                InvalidAttributeValueError) as exc:
+            if silently:
+                logging.debug("%s", str(exc))
+            else:
+                raise
 
-        if attr_name in ("scielo_pid_v2", "aop_pid", ):
-            return len(getattr(self, attr_name) or "") != 23
-        if attr_name in ("original_language", ):
-            return len(getattr(self, attr_name) or "") != 2
+    def _is_allowed_to_update(self, attr_name, attr_new_value):
+        """
+        Se há uma função de validação associada com o atributo,
+        verificar se é permitido atualizar o atributo, dados seus valores
+        atual e/ou novo
+        """
+        validate_function = VALIDATE_FUNCTIONS.get(attr_name)
+        if validate_function is None:
+            # não há nenhuma validação, então é permitido fazer a atualização
+            return True
 
-        return False
+        curr_value = getattr(self, attr_name)
 
-    def fix(self, attr_name, attr_new_value):
-        if not self.is_incorrect(attr_name):
+        if attr_new_value == curr_value:
+            # desnecessario atualizar
+            return False
+
+        try:
+            # valida o valor atual do atributo
+            validate_function(curr_value)
+        except (ValueError, InvalidValueForOrderError):
+            # o valor atual do atributo é inválido,
+            # então continuar para verificar o valor "novo"
+            pass
+        else:
+            # o valor atual do atributo é válido,
+            # então não permitir atualização
             raise NotAllowedtoChangeAttributeValueError(
-                "%s is correct. Not allowed to change its value", attr_name
-            )
-        if not attr_new_value:
-            raise InvalidAttributeValueError("Invalid value for %s", attr_name)
-        setattr(self, attr_name, attr_new_value)
+                "Not allowed to update %s (%s) with %s, "
+                "because current is valid" %
+                (attr_name, curr_value, attr_new_value))
+        try:
+            # valida o valor novo para o atributo
+            validate_function(attr_new_value)
+        except (ValueError, InvalidValueForOrderError):
+            # o valor novo é inválido, então não permitir atualização
+            raise InvalidAttributeValueError(
+                "Not allowed to update %s (%s) with %s, "
+                "because new value is invalid" %
+                (attr_name, curr_value, attr_new_value))
+        else:
+            # o valor novo é válido, então não permitir atualização
+            return True
 
 
 class DocumentsSorter:
@@ -811,11 +884,6 @@ class DocumentsSorter:
 
     def insert_document(self, document_id, document_xml):
         pkg = SPS_Package(document_xml, "none")
-
-        def format(value):
-            if value and value.isdigit():
-                return value.zfill(5)
-            return value or ""
 
         data = dict(pkg.parse_article_meta)
         self._documents_bundles[document_id] = {
