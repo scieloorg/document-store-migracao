@@ -16,6 +16,8 @@ class TestProcessingPacking(unittest.TestCase):
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
+            SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+            SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "samples")
         ):
 
             mk_read_file_binary.return_value = b"img content"
@@ -55,6 +57,8 @@ class TestProcessingPacking(unittest.TestCase):
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
             SCIELO_COLLECTION="scl",
+            SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+            SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "samples")
         ):
             packing.pack_article_xml(
                 os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_completo.xml")
