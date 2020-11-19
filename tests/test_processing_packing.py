@@ -10,8 +10,7 @@ from . import utils, SAMPLES_PATH, TEMP_TEST_PATH, COUNT_SAMPLES_FILES
 
 class TestProcessingPacking(unittest.TestCase):
 
-    @patch("documentstore_migracao.utils.files.read_file_binary")
-    def test_pack_article_xml_missing_media(self, mk_read_file_binary):
+    def test_pack_article_xml_missing_media(self):
         with utils.environ(
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
@@ -19,8 +18,6 @@ class TestProcessingPacking(unittest.TestCase):
             SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "samples"),
             SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "samples")
         ):
-
-            mk_read_file_binary.return_value = b"img content"
 
             packing.pack_article_xml(
                 os.path.join(SAMPLES_PATH, "S0044-59672003000300002_sps_incompleto.xml")
