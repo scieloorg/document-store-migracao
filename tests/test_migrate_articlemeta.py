@@ -3,7 +3,7 @@ import os
 from unittest.mock import patch, ANY
 
 from documentstore_migracao.main.migrate_articlemeta import migrate_articlemeta_parser
-from . import SAMPLES_PATH
+from . import SAMPLES_PATH, utils
 
 
 class TestMigrateProcess(unittest.TestCase):
@@ -43,15 +43,26 @@ class TestMigrateProcess(unittest.TestCase):
 
     @patch("documentstore_migracao.processing.packing.pack_article_ALLxml")
     def test_command_pack_sps(self, mk_pack_article_ALLxml):
-
-        migrate_articlemeta_parser(["pack"])
-        mk_pack_article_ALLxml.assert_called_once_with()
+        with utils.environ(
+            SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+            SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+        ):
+            migrate_articlemeta_parser(["pack"])
+            mk_pack_article_ALLxml.assert_called_once_with()
 
     @patch("documentstore_migracao.processing.packing.pack_article_xml")
     def test_command_pack_sps_arg_pathFile(self, mk_pack_article_xml):
+        with utils.environ(
+            SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+            SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+        ):
+            migrate_articlemeta_parser(["pack", "--file", "/tmp/example.xml"])
+            mk_pack_article_xml.assert_called_once_with("/tmp/example.xml")
 
-        migrate_articlemeta_parser(["pack", "--file", "/tmp/example.xml"])
-        mk_pack_article_xml.assert_called_once_with("/tmp/example.xml")
+    @patch("sys.exit")
+    def test_command_pack_sps_without_source_pdf_and_img(self, mk_sys):
+        migrate_articlemeta_parser(["pack"])
+        mk_sys.assert_called_once_with()
 
     @patch("documentstore_migracao.processing.inserting.import_documents_to_kernel")
     def test_command_import(self, mk_import_documents_to_kernel):
