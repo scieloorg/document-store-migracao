@@ -81,6 +81,16 @@ def read_file(path):
     return text
 
 
+def read_file_binary(path):
+
+    logger.debug("Lendo arquivo em modo binário: %s", path)
+    text = ""
+    with open(path, mode="rb") as f:
+        text = f.read()
+
+    return text
+
+
 def write_file(path, source, mode="w"):
     logger.debug("Gravando arquivo: %s", path)
     with open(path, mode, encoding="utf-8") as f:

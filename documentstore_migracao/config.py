@@ -55,7 +55,9 @@ _default = dict(
     MINIO_TIMEOUT=20000,
 
     # DATABASE_CONNECT_ARGS must be a JSON String
-    DATABASE_CONNECT_ARGS='{"connect_timeout": 20000}'
+    DATABASE_CONNECT_ARGS='{"connect_timeout": 20000}',
+    SOURCE_PDF_FILE=os.path.join(BASE_PATH, "bases"),
+    SOURCE_IMG_FILE=os.path.join(BASE_PATH, "htdocs"),
 )
 
 
