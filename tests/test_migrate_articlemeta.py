@@ -61,8 +61,12 @@ class TestMigrateProcess(unittest.TestCase):
 
     @patch("sys.exit")
     def test_command_pack_sps_without_source_pdf_and_img(self, mk_sys):
-        migrate_articlemeta_parser(["pack"])
-        mk_sys.assert_called_once_with()
+        with utils.environ(
+            SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "nonexistent"),
+            SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "nonexistent"),
+        ):
+            migrate_articlemeta_parser(["pack"])
+            mk_sys.assert_called()
 
     @patch("documentstore_migracao.processing.inserting.import_documents_to_kernel")
     def test_command_import(self, mk_import_documents_to_kernel):
