@@ -1,9 +1,11 @@
 # coding: utf-8
 
+import os
+import sys
+import json
 import logging
 import argparse
 import urllib3
-import json
 
 from .base import base_parser, minio_parser, mongodb_parser
 
@@ -316,6 +318,19 @@ def migrate_articlemeta_parser(sargs):
             )
 
     elif args.command == "pack":
+
+        # verifica a existência da pasta PDF essencial para empacotamento.
+        pdf = config.get('SOURCE_PDF_FILE')
+        if not os.path.exists(pdf):
+            logger.error("A pasta para obter os PDFs para a fase de empacotamento, não está acessível: %s (revise o arquivo de configuração ``SOURCE_PDF_FILE``) ", pdf)
+            sys.exit()
+
+        # verifica a existência da pasta IMG essencial para empacotamento.
+        img = config.get('SOURCE_IMG_FILE')
+        if not os.path.exists(img):
+            logger.error("A pasta para obter os IMGs para a fase de empacotamento, não está acessível: %s (revise o arquivo de configuração ``SOURCE_IMG_FILE``) ", pdf)
+            sys.exit()
+
         # pack HTML
         if args.packFile:
             packing.pack_article_xml(args.packFile)
