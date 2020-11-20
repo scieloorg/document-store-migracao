@@ -6,7 +6,7 @@ This is the complete utilization guide for this tool, these next sections will e
 1. Obtaining HTML documents
 2. Converting HTML to XML documents
 3. [Updating documents' mixed citations](#3-\--updating-documents-mixed-citations)
-4. [Generating documents packages] (#4-\--Generating documents packages)
+4. [Generating documents packages](#4-\--Generating documents packages)
 5. Importing documents packages to the Publish Platform
 6. Committing the relationship between documents and issues
 
