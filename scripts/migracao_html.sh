@@ -12,6 +12,31 @@ OUTPUT_DIR=$3
 ############
 NC='\033[0m' # No Color
 YELLOW='\033[1;33m'
+LIGHTGRAY='\033[0,37m'
+RED='\033[0;31m'
+GREEN='\033[1;32m'
+
+usage="$(basename "$0") [-h --help] - A simple script to help during migration process
+
+where:
+    -h --help       show this help text
+    year            set the year that will be migrated
+    file            set the file containing a list of HTML pids
+    folder          set the output folder where migration work files will be placed
+
+Example:
+    ./$(basename "$0") 2010 2010_html_pids.txt  /home/scielo/migration
+
+    This command above will setup the migration for the year of 2010
+    using the '2010_html_pids.txt' file and will produce the work files
+    inside the folder '/home/scielo/migration/2010'."
+
+if [ "$#" = 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$#" -lt 3 ]; then
+    echo "$usage"
+    exit 0
+fi
+
+set -u
 
 #############
 #
@@ -56,6 +81,12 @@ pack_articles() {
     ds_migracao --loglevel DEBUG pack >"$LOG_FOLDER_PATH/pack.log"
 }
 
+# Returns a list of folder that articles import step failed
+get_import_errors() {
+    IMPORT_LOG=$1
+    grep ERROR <"$IMPORT_LOG" | grep "Could not import package" | cut -d "'" -f2
+}
+
 #############
 #
 # Report functions
@@ -97,12 +128,102 @@ get_diff_pids_from_convert_and_pack_steps() {
     rm "$SOURCE_TEMP_FILE" "$TARGET_TEMPFILE"
 }
 
-if [ "$#" -ne 3 ]; then
-    echo "$(formated_time) Wrong number of parameters."
-    echo "$(formated_time) This program requires 3 parameters: 1) year 2) pids 3) file and output dir."
-    echo "$(formated_time) Example: ./migrate 2014 br_html_2014_pids.txt /root/html."
-    exit 1
-fi
+##
+# Reports the size of packaged folder in bytes
+report_total_data_size_in_bytes() {
+    OUTPUT_FILE_ARG=${1:-""}
+
+    if [ ! -d "$SPS_PKG_PATH" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to calculate data size, there is no folder '$SPS_PKG_PATH'${NC}."
+    elif [ -z "$OUTPUT_FILE_ARG" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to calculate data size, there is no output file.${NC}"
+    else
+        _command=$(du -s "$SPS_PKG_PATH" | awk -F " " '{print $1}')
+        echo "TOTAL_BYTES=$_command" >>"$OUTPUT_FILE_ARG"
+        echo -e "$(formated_time) ${GREEN}[Report] - Total of bytes.${NC}"
+    fi
+}
+
+##
+# Reports the quantity of failures during import
+report_articles_failures_in_import() {
+    OUTPUT_FILE_ARG=${1:-""}
+    LOG_FILE_PATH_ARG=${2:-"$LOG_FOLDER_PATH/import.log"}
+
+    if [ -z "$OUTPUT_FILE_ARG" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to calculate failures at import, please inform a output file.${NC}"
+    elif [ ! -f "$LOG_FILE_PATH_ARG" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to calculate failures at import, there is no ${LOG_FILE_PATH_ARG} log file.${NC}"
+    else
+        QTY_ARTICLES_FAILED_AT_IMPORT=$(get_import_errors "$LOG_FILE_PATH_ARG" | wc -l | tr -d " ")
+        echo "FAILED_TO_IMPORT=$QTY_ARTICLES_FAILED_AT_IMPORT" >>"$OUTPUT_FILE_ARG"
+        echo -e "$(formated_time) ${GREEN}[Report] - Articles failures in import.${NC}"
+    fi
+}
+
+##
+# Reports the quantity of failures during conversion
+report_articles_failures_in_conversion() {
+    OUTPUT_FILE_ARG=${1:-""}
+    LOG_FILE_PATH_ARG=${2:-"$LOG_FOLDER_PATH/convert.log"}
+
+    if [ -z "$OUTPUT_FILE_ARG" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to calculate failures at conversion, there is no output file.${NC}"
+    elif [ ! -f "$LOG_FILE_PATH_ARG" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to calculate failures at conversion, there is no ${LOG_FILE_PATH_ARG} log file.${NC}"
+    else
+        QTY_ARTICLES_FAILED_AT_CONVERSION=$(grep "ERROR" <"$LOG_FILE_PATH_ARG" | grep -ic "could not convert file" | tr -d " ")
+        echo "FAILED_TO_CONVERT=$QTY_ARTICLES_FAILED_AT_CONVERSION" >>"$OUTPUT_FILE_ARG"
+        echo -e "$(formated_time) ${GREEN}[Report] - Articles failures in conversion.${NC}"
+    fi
+}
+
+##
+# Reports the quantity of failures during packing
+report_articles_failures_in_pack() {
+    OUTPUT_FILE_ARG=${1:-""}
+
+    if [ ! -f "$REPORT_FOLDER_PATH/convertion-to-pack.diff" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to calculate packing errors. There is no convertion-to-pack.diff${NC}"
+    else
+        QTY_ARTICLES_FAILED_AT_PACK=$(grep -c "<" <"$REPORT_FOLDER_PATH/convertion-to-pack.diff" | tr -d " ")
+        echo "FAILED_TO_PACK=$QTY_ARTICLES_FAILED_AT_PACK" >>"$OUTPUT_FILE_ARG"
+        echo -e "$(formated_time) ${GREEN}[Report] - Articles failures in pack.${NC}"
+    fi
+}
+
+##
+# Reports the quantity of failures during packing
+report_total_of_mixed_citations() {
+    OUTPUT_FILE_ARG=${1:-""}
+    LOG_FILE="$LOG_FOLDER_PATH/mixedcitations.log"
+
+    if [ ! -f "$LOG_FILE" ]; then
+        echo -e "$(formated_time) ${RED}[Report] - Skipping to mixed citations updates. There is no ${LOG_FILE} log file.${NC}"
+    else
+        QTY_MIXED_CITATION_UPDATED=$(grep -vic "Could not update file" <"$LOG_FILE" | tr -d " ")
+        echo "MIXED_CITATION_UPDATED=$QTY_MIXED_CITATION_UPDATED" >>"$OUTPUT_FILE_ARG"
+        echo -e "$(formated_time) ${GREEN}[Report] - Mixed citation updates.${NC}"
+    fi
+}
+
+##
+# Reports total of failures
+report_total_articles_failures() {
+    OUTPUT_FILE_ARG=${1:-""}
+    QTY_ARTICLES_FAILED_AT_CONVERSION=${QTY_ARTICLES_FAILED_AT_CONVERSION:-0}
+    QTY_ARTICLES_FAILED_AT_IMPORT=${QTY_ARTICLES_FAILED_AT_IMPORT:-0}
+    QTY_ARTICLES_FAILED_AT_PACK=${QTY_ARTICLES_FAILED_AT_PACK:-0}
+
+    if [ -z "$OUTPUT_FILE_ARG" ]; then
+        echo -e "$(formated_time) ${RED}Skipping to summaryze the total of failures, please inform the output file.${NC}"
+        exit 0
+    fi
+
+    TOTAL_OF_FAILURES=$((QTY_ARTICLES_FAILED_AT_CONVERSION + QTY_ARTICLES_FAILED_AT_IMPORT + QTY_ARTICLES_FAILED_AT_PACK))
+    echo "TOTAL_OF_FAILURES=${TOTAL_OF_FAILURES}" >>"$OUTPUT_FILE_ARG"
+    echo -e "$(formated_time) ${GREEN}[Report] - Total articles failures.${NC}"
+}
 
 #############
 #
@@ -122,6 +243,7 @@ export CACHE_PATH="$OUTPUT_ROOT_DIR/cache"
 export VALID_XML_PATH="$CONVERSION_PATH"
 LOG_FOLDER_PATH="$OUTPUT_ROOT_DIR/logs"
 REPORT_FOLDER_PATH="$OUTPUT_ROOT_DIR/reports"
+REPORT_FILE="$REPORT_FOLDER_PATH/report.txt"
 
 # Some platforms could crash if this was not defined
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
@@ -220,8 +342,26 @@ else
     echo "$(formated_time) Ignoring packing process."
 fi
 
+#############
+#
+# Reports
+#
+############
+
 echo -e "$(formated_time)${YELLOW} Generating a diff file from PIDs in $SOURCE_PATH and $CONVERSION_PATH with output in $REPORT_FOLDER_PATH.${NC}"
 get_diff_pids_from_extract_and_convert_steps
 
 echo -e "$(formated_time)${YELLOW} Generating a diff file from PIDs in $CONVERSION_PATH and $SPS_PKG_PATH with output in $REPORT_FOLDER_PATH.${NC}"
 get_diff_pids_from_convert_and_pack_steps
+
+if [ -f "${REPORT_FILE}" ]; then
+    echo -e "$(formated_time) Removing previous report file in '${LIGHTGRAY}${REPORT_FILE}${NC}'."
+    rm "${REPORT_FILE}" || true
+fi
+
+report_total_data_size_in_bytes "${REPORT_FILE}"
+report_articles_failures_in_conversion "${REPORT_FILE}"
+report_articles_failures_in_import "${REPORT_FILE}"
+report_articles_failures_in_pack "${REPORT_FILE}"
+report_total_articles_failures "${REPORT_FILE}"
+report_total_of_mixed_citations "${REPORT_FILE}"
