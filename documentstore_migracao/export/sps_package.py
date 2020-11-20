@@ -675,7 +675,7 @@ class SPS_Package:
             ref_items = body.getroottree().findall(".//ref")
         return ref_items
 
-    def transform_body(self):
+    def transform_body(self, spy=False):
 
         for index, body in enumerate(self.xmltree.xpath("//body"), start=1):
             logger.debug("Processando body numero: %s" % index)
@@ -684,7 +684,9 @@ class SPS_Package:
             convert = HTML2SPSPipeline(
                 pid=self.scielo_pid_v2,
                 ref_items=self._get_ref_items(body),
-                index_body=index)
+                index_body=index,
+                spy=spy,
+            )
             _, obj_html_body = convert.deploy(txt_body)
 
             # sobrecreve o html escapado anterior pelo novo xml tratado

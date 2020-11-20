@@ -21,13 +21,27 @@ class TestMigrateProcess(unittest.TestCase):
     def test_command_conversion(self, mk_convert_article_ALLxml):
 
         migrate_articlemeta_parser(["convert"])
-        mk_convert_article_ALLxml.assert_called_once_with()
+        mk_convert_article_ALLxml.assert_called_once_with(False)
+
+    @patch("documentstore_migracao.processing.conversion.convert_article_ALLxml")
+    def test_command_conversion_with_spy_true(self, mk_convert_article_ALLxml):
+
+        migrate_articlemeta_parser(["convert", "--spy"])
+        mk_convert_article_ALLxml.assert_called_once_with(True)
 
     @patch("documentstore_migracao.processing.conversion.convert_article_xml")
     def test_command_conversion_arg_pathFile(self, mk_convert_article_xml):
 
         migrate_articlemeta_parser(["convert", "--file", "/tmp/example.xml"])
-        mk_convert_article_xml.assert_called_once_with("/tmp/example.xml")
+        mk_convert_article_xml.assert_called_once_with(
+            "/tmp/example.xml", spy=False)
+
+    @patch("documentstore_migracao.processing.conversion.convert_article_xml")
+    def test_command_conversion_arg_pathFile_and_spy(self, mk_convert_article_xml):
+
+        migrate_articlemeta_parser(["convert", "--file", "/tmp/example.xml", "--spy"])
+        mk_convert_article_xml.assert_called_once_with(
+            "/tmp/example.xml", spy=True)
 
     @patch("documentstore_migracao.processing.validation.validate_article_ALLxml")
     def test_command_validation(self, mk_validate_article_ALLxml):
