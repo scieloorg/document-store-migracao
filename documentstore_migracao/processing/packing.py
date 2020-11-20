@@ -161,6 +161,7 @@ def get_asset(old_path, new_fname, dest_path):
             if os.path.exists(path):
                 file_path = path
 
+        logger.info("Lendo o arquivo %s: ", file_path)
         content = files.read_file_binary(file_path)
     except IOError as e:
         try:
