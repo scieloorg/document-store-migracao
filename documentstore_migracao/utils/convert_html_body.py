@@ -438,7 +438,7 @@ class ConversionPipe(plumber.Pipe):
 
     def get_msg(self, msg):
         data = self.body_info.data.copy()
-        data.update({"msg": msg})
+        data.update({"msg": "{}".format(msg)})
         return "%s" % data
 
 
@@ -1295,8 +1295,10 @@ class HTML2SPSPipeline(object):
                     text = text.upper()
                     if text.startswith("REF") or ">REF" in text:
                         logger.debug(
-                            "RemoveReferencesFromBodyPipe: Primeiro: %s"
-                            % etree.tostring(references_header)
+                            self.get_msg(
+                                "RemoveReferencesFromBodyPipe: Primeiro: %s"
+                                % etree.tostring(references_header)
+                            )
                         )
                         _remove_tag(references_header, True)
 
@@ -2413,15 +2415,18 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 xml_text = a_href.get("xml_text")
                 if get_node_text(a_href) and is_footnote_label(xml_text):
                     logger.debug(
-                        "Identifica como fn/label: %s" %
-                        etree.tostring(a_href))
+                        self.get_msg(
+                            "Identifica como fn/label: %s" %
+                            etree.tostring(a_href)
+                        )
+                    )
                     a_href.tag = "label"
                     group = grouped_by_xml_text.get(xml_text)
 
                     a = self._find_label_of(a_href, group)
                     if a is not None:
                         a_href.set("label-of", a.get("name"))
-                    logger.debug(etree.tostring(a_href))
+                    logger.debug(self.get_msg(etree.tostring(a_href)))
 
         def _evaluate_a_items(self, a_items):
             """
@@ -4101,7 +4106,7 @@ class Remote2LocalConversion:
             html_tree = etree.fromstring(
                 file_content, parser=etree.HTMLParser()
             )
-        except FileLocationError, lxml.etree.Error as e:
+        except (FileLocationError, lxml.etree.Error) as e:
             logger.error(
                 self.get_logging_msg(
                     str(e)
