@@ -266,8 +266,8 @@ class Spy:
         try:
             if self.text_differ.similarity_ratio < 1:
                 _report["text"] = self.text_differ.info
-        except UnableToCompareError:
-            logger.info("Unable to compare")
+        except UnableToCompareError as e:
+            logger.exception("Unable to compare %s", e)
         return _report
 
 
