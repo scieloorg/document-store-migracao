@@ -2085,7 +2085,7 @@ class TestConvertRemote2LocalPipe(unittest.TestCase):
     def setUp(self):
         pipeline = HTML2SPSPipeline(
             pid="S1234-56782018000100011",
-            index_body=1,
+            body_index=1,
             spy=False,
         )
         self.pipe = pipeline.ConvertRemote2LocalPipe(pipeline.body_info)
@@ -2706,7 +2706,7 @@ class TestSupplementaryMaterial(unittest.TestCase):
 class TestRemoveReferencesFromBody(unittest.TestCase):
     def setUp(self):
         pipeline = HTML2SPSPipeline(
-            pid="S1234-56782018000100011", index_body=1)
+            pid="S1234-56782018000100011", body_index=1)
         self.pipe = pipeline.RemoveReferencesFromBodyPipe(pipeline.body_info)
 
     def test_remove_references_from_body_removes_references_from_body(self):

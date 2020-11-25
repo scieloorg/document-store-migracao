@@ -281,9 +281,9 @@ class Dummy:
 
 class BodyInfo:
 
-    def __init__(self, pid, index_body=1, ref_items=None, spy=None):
+    def __init__(self, pid, body_index=1, ref_items=None, spy=None):
         self.pid = pid
-        self.index_body = index_body
+        self.body_index = body_index
         self.ref_items = ref_items
         self.spy = (spy and Spy()) or Dummy()
         self.initial_text = None
@@ -292,7 +292,7 @@ class BodyInfo:
     def data(self):
         _data = {}
         _data["pid"] = self.pid
-        _data["index_body"] = self.index_body
+        _data["body_index"] = self.body_index
         return _data
 
     def register_diff(self, pipe):
@@ -444,12 +444,12 @@ class CustomPipe(plumber.Pipe):
 
 
 class HTML2SPSPipeline(object):
-    def __init__(self, pid="", ref_items=[], index_body=1, spy=False):
+    def __init__(self, pid="", ref_items=[], body_index=1, spy=False):
         logger.debug(f"CONVERT: {pid}")
         self.document = Document(None)
-        self.body_info = BodyInfo(pid, index_body, ref_items, spy)
+        self.body_info = BodyInfo(pid, body_index, ref_items, spy)
         body_info_which_spy_is_false = BodyInfo(
-            pid, index_body, ref_items, spy=False)
+            pid, body_index, ref_items, spy=False)
 
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
@@ -541,7 +541,7 @@ class HTML2SPSPipeline(object):
             root.write(
                 os.path.join(
                     "/tmp/",
-                    "%s.%s.xml" % (self.body_info.pid, self.body_info.index_body),
+                    "%s.%s.xml" % (self.body_info.pid, self.body_info.body_index),
                 ),
                 encoding="utf-8",
                 doctype=config.DOC_TYPE_XML,
@@ -1248,7 +1248,7 @@ class HTML2SPSPipeline(object):
                     )
                     logger.warning("%s", {
                             "pid": self.body_info.pid,
-                            "body_index": self.body_info.index_body,
+                            "body_index": self.body_info.body_index,
                             "msg": msg,
                         }
                     )
@@ -1481,8 +1481,8 @@ class HTML2SPSPipeline(object):
                     value = value[value.find(tag[0]) :]
                 else:
                     value = tag[:3] + value
-            if self.body_info.index_body > 1:
-                value = value + "-body{}".format(self.body_info.index_body)
+            if self.body_info.body_index > 1:
+                value = value + "-body{}".format(self.body_info.body_index)
             return value.lower()
 
     class RemoveImgSetaPipe(ConversionPipe):
@@ -2905,7 +2905,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     "%s",
                     {
                         "pid": self.body_info.pid,
-                        "body_index": self.body_info.index_body,
+                        "body_index": self.body_info.body_index,
                         "asset_tag": asset_tag,
                         "asset_index": i,
                         "msg": "AssetElementFixPipe: unexpected content?",
@@ -3861,7 +3861,7 @@ class Remote2LocalConversion:
     def get_logging_msg(self, msg):
         return "%s" % {
             "pid": self.body_info.pid,
-            "body_index": self.body_info.index_body,
+            "body_index": self.body_info.body_index,
             "msg": msg,
         }
 
