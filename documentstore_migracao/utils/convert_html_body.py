@@ -515,7 +515,7 @@ class HTML2SPSPipeline(object):
                 msg = self.body_info.data.copy()
                 msg["pipe"] = "final"
                 msg["diff report"] = diff.report
-                logger.error(msg)
+                logger.warning(msg)
             return data
 
     class SetupPipe(plumber.Pipe):
