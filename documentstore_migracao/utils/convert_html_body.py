@@ -1704,7 +1704,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
     class SetupPipe(plumber.Pipe):
         def transform(self, data):
             new_obj = deepcopy(data)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data, new_obj
 
     class AssetThumbnailInLayoutImgAndCaptionAndMessage(ConversionPipe):
@@ -1728,7 +1727,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if p.text and "View larger" in p.text:
                         parent = p.getparent()
                         parent.remove(p)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _convert(self, p):
@@ -1790,7 +1788,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 table.addprevious(new_e)
                 parent = table.getparent()
                 parent.remove(table)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(ConversionPipe):
@@ -1825,7 +1822,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 table.addprevious(new_e)
                 parent = table.getparent()
                 parent.remove(table)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class AssetThumbnailInLayoutTableAndLinkInMessage(ConversionPipe):
