@@ -560,7 +560,7 @@ class HTML2SPSPipeline(object):
     class ConvertRemote2LocalPipe(ConversionPipe):
         def _transform(self, data):
             raw, xml = data
-            html_page = Remote2LocalConversion(xml)
+            html_page = Remote2LocalConversion(xml, self.body_info)
             html_page.remote_to_local()
             return data
 
@@ -1243,7 +1243,7 @@ class HTML2SPSPipeline(object):
                     )
                     logger.warning("%s", {
                             "pid": self.body_info.pid,
-                            "body_index": self.body_info.index,
+                            "body_index": self.body_info.index_body,
                             "msg": msg,
                         }
                     )
@@ -2900,7 +2900,7 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     "%s",
                     {
                         "pid": self.body_info.pid,
-                        "body_index": self.body_info.body_index,
+                        "body_index": self.body_info.index_body,
                         "asset_tag": asset_tag,
                         "asset_index": i,
                         "msg": "AssetElementFixPipe: unexpected content?",
@@ -3843,11 +3843,19 @@ class Remote2LocalConversion:
 
     IMG_EXTENSIONS = (".gif", ".jpg", ".jpeg", ".svg", ".png", ".tif", ".bmp")
 
-    def __init__(self, xml):
+    def __init__(self, xml, body_info):
         self.xml = xml
+        self.body_info = body_info
         self.body = self.xml.find(".//body")
         self._digital_assets_path = None
         self.imported_files = []
+
+    def get_logging_msg(self, msg):
+        return "%s" % {
+            "pid": self.body_info.pid,
+            "body_index": self.body_info.index_body,
+            "msg": msg,
+        }
 
     @property
     def img_src_in_original_body(self):
@@ -3900,7 +3908,11 @@ class Remote2LocalConversion:
             src = node.get("src")
             if ":" in src:
                 node.set("link-type", "external")
-                logger.debug("Added @link-type: %s" % etree.tostring(node))
+                logger.debug(
+                    self.get_logging_msg(
+                        "Added @link-type: %s" % etree.tostring(node)
+                    )
+                )
                 continue
 
             value = src.split("/")[0]
@@ -3915,7 +3927,11 @@ class Remote2LocalConversion:
                 else:
                     # pode ser URL
                     node.set("link-type", "external")
-                    logger.debug("Added @link-type: %s" % etree.tostring(node))
+                    logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(node)
+                        )
+                    )
                     continue
                 fix_img_revistas_path(node)
 
@@ -3930,12 +3946,20 @@ class Remote2LocalConversion:
 
                 if ":" in href:
                     a_href.set("link-type", "external")
-                    logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                    logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(a_href)
+                        )
+                    )
                     continue
 
                 if href and href[0] == "#":
                     a_href.set("link-type", "internal")
-                    logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                    logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(a_href)
+                        )
+                    )
                     continue
 
                 value = href.split("/")[0]
@@ -3950,7 +3974,11 @@ class Remote2LocalConversion:
                     else:
                         # pode ser URL
                         a_href.set("link-type", "external")
-                        logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                        logger.debug(
+                            self.get_logging_msg(
+                                "Added @link-type: %s" % etree.tostring(a_href)
+                            )
+                        )
                         continue
 
                 fix_img_revistas_path(a_href)
@@ -3965,7 +3993,11 @@ class Remote2LocalConversion:
                     a_href.set("link-type", "asset")
                 else:
                     a_href.set("link-type", "unknown")
-                logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(a_href)
+                        )
+                    )
 
     def _import_html_files(self):
         """
@@ -3997,7 +4029,10 @@ class Remote2LocalConversion:
                     new_p_items.append((bodychild, new_p))
         for bodychild, new_p in new_p_items[::-1]:
             logger.debug(
-                "Insere novo p com conteudo do HTML: %s" % etree.tostring(new_p)
+                self.get_logging_msg(
+                    "Insere novo p com conteudo do HTML: %s" %
+                    etree.tostring(new_p)
+                )
             )
             bodychild.addnext(new_p)
         return len(new_p_items)
@@ -4007,7 +4042,11 @@ class Remote2LocalConversion:
         Retorna novo elemento que representa o conteúdo do html importado,
         se aplicável
         """
-        logger.debug("Importar HTML de %s" % etree.tostring(a_link_type))
+        logger.debug(
+            self.get_logging_msg(
+                "Importar HTML de %s" % etree.tostring(a_link_type)
+            )
+        )
         href = a_link_type.get("href")
         if "#" in href:
             href, anchor = href.split("#")
@@ -4021,7 +4060,11 @@ class Remote2LocalConversion:
             self.imported_files.append(href)
             html_body = self._get_html_body(href)
             if html_body is None:
-                logger.debug("Alterando para link para asset-not-found")
+                logger.debug(
+                    self.get_logging_msg(
+                        "Alterando para link para asset-not-found"
+                    )
+                )
                 a_link_type.set("link-type", "asset-not-found")
             else:
                 self._update_a_href(a_link_type, new_href)
@@ -4061,7 +4104,11 @@ class Remote2LocalConversion:
                 if new_p is not None:
                     new_p_items.append((child, new_p))
         for bodychild, new_p in new_p_items[::-1]:
-            logger.debug("Insere novo p: %s" % etree.tostring(new_p))
+            logger.debug(
+                self.get_logging_msg(
+                    "Insere novo p: %s" % etree.tostring(new_p)
+                )
+            )
             bodychild.addnext(new_p)
         return len(new_p_items)
 
@@ -4070,7 +4117,11 @@ class Remote2LocalConversion:
         Retorna novo elemento que representa a imagem importada,
         se aplicável
         """
-        logger.debug("Converte %s" % etree.tostring(node_a))
+        logger.debug(
+            self.get_logging_msg(
+                "Converte %s" % etree.tostring(node_a)
+            )
+        )
         href = node_a.get("href")
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
@@ -4095,7 +4146,11 @@ class Remote2LocalConversion:
     def _update_a_href(self, a_href, new_href):
         a_href.set("href", "#" + new_href)
         a_href.set("link-type", "internal")
-        logger.debug("Atualiza a[@href]: %s" % etree.tostring(a_href))
+        logger.debug(
+            self.get_logging_msg(
+                "Atualiza a[@href]: %s" % etree.tostring(a_href)
+            )
+        )
 
     def _create_new_p(self, new_href, node_content, content_type):
         """
@@ -4115,8 +4170,11 @@ class Remote2LocalConversion:
         else:
             a_name.addnext(node_content)
 
-        logger.debug("Cria novo p: %s" % etree.tostring(new_p))
-
+        logger.debug(
+            self.get_logging_msg(
+                "Cria novo p: %s" % etree.tostring(new_p)
+            )
+        )
         return new_p
 
     def _create_new_element_for_imported_html_file(
@@ -4129,14 +4187,22 @@ class Remote2LocalConversion:
         body = deepcopy(html_body)
         body.tag = delete_tag
         for a in body.findall(".//a"):
-            logger.debug("Encontrado elem a no body importado: %s" % etree.tostring(a))
+            logger.debug(
+                self.get_logging_msg(
+                    "Encontrado elem a no body importado: %s" %
+                    etree.tostring(a)
+                )
+            )
             href = a.get("href")
             if href and href[0] == "#":
                 a.set("href", "#" + new_href + href[1:].replace("#", "X"))
             elif a.get("name"):
                 a.set("name", new_href + "X" + a.get("name"))
-            logger.debug("Atualiza elem a importado: %s" % etree.tostring(a))
-
+            logger.debug(
+                self.get_logging_msg(
+                    "Atualiza elem a importado: %s" % etree.tostring(a)
+                )
+            )
         for img in body.findall(".//img"):
             src = img.get("src")
             name, ext = os.path.splitext(os.path.basename(src))
