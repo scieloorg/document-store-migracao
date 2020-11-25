@@ -15,6 +15,11 @@ from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 
 import faulthandler
 
+
+class FileLocationError(Exception):
+    ...
+
+
 faulthandler.enable()
 
 logger = logging.getLogger(__name__)
@@ -3782,17 +3787,20 @@ class FileLocation:
                 return fp.read()
 
     def download(self):
-        logger.debug("Download %s" % self.remote)
-        r = requests.get(self.remote, timeout=TIMEOUT)
-        if r.status_code == 404:
-            logger.error(
-                "FAILURE. REQUIRES MANUAL INTERVENTION. Not found %s. " % self.remote
-            )
-            return
-        if not r.status_code == 200:
-            logger.error("%s: %s" % (self.remote, r.status_code))
-            return
-        return r.content
+        try:
+            r = requests.get(self.remote, timeout=TIMEOUT)
+        except requests.exceptions.RequestException as e:
+            raise FileLocationError(e)
+        else:
+            if r.status_code == 404:
+                raise FileLocationError(
+                    "Not found %s. " % self.remote
+                )
+            if not r.status_code == 200:
+                raise FileLocationError(
+                    "%s: %s" % (self.remote, r.status_code)
+                )
+            return r.content
 
     def save(self, content):
         dirname = os.path.dirname(self.local)
@@ -4083,12 +4091,19 @@ class Remote2LocalConversion:
         como um novo elemento
         """
         file_location = FileLocation(href)
-        if file_location.content:
+        try:
+            file_content = file_location.content
             html_tree = etree.fromstring(
-                file_location.content, parser=etree.HTMLParser()
+                file_content, parser=etree.HTMLParser()
             )
-            if html_tree is not None:
-                return html_tree.find(".//body")
+        except FileLocationError, lxml.etree.Error as e:
+            logger.error(
+                self.get_logging_msg(
+                    str(e)
+                )
+            )
+        else:
+            return html_tree.find(".//body")
 
     def _import_img_files(self):
         """
