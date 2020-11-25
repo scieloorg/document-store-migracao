@@ -2872,31 +2872,43 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def _transform(self, data):
             raw, xml = data
             for asset_tag in ASSET_TAGS:
-                for asset in xml.findall(".//{}".format(asset_tag)):
-                    new_asset = etree.Element(asset_tag)
-                    new_asset.set("id", asset.get("id"))
-                    new_asset.tail = asset.tail
-
-                    for tag in self.COMPONENT_TAGS:
-                        for component in asset.findall(".//{}".format(tag)):
-                            if component is not None:
-                                new_asset.append(deepcopy(component))
-
-                    new_asset_text = get_node_text(new_asset)
-                    extra_component = False
-                    for child in asset.getchildren():
-                        for node in child.findall(".//*"):
-                            if not node.getchildren():
-                                text = get_node_text(node)
-                                if text not in new_asset_text:
-                                    new_asset.append(child)
-                                    extra_component = True
-                    if extra_component:
-                        logger.error("AssetElementFixPipe: unexpected content?")
-                    asset.addprevious(new_asset)
-                    p = asset.getparent()
-                    p.remove(asset)
+                for i, asset in enumerate(xml.findall(".//{}".format(asset_tag))):
+                    self._transform_asset(data, asset_tag, asset, i)
             return data
+
+        def _transform_asset(self, data, asset_tag, asset, i):
+            new_asset = etree.Element(asset_tag)
+            new_asset.set("id", asset.get("id"))
+            new_asset.tail = asset.tail
+
+            for tag in self.COMPONENT_TAGS:
+                for component in asset.findall(".//{}".format(tag)):
+                    if component is not None:
+                        new_asset.append(deepcopy(component))
+
+            new_asset_text = get_node_text(new_asset)
+            extra_component = False
+            for child in asset.getchildren():
+                for node in child.findall(".//*"):
+                    if not node.getchildren():
+                        text = get_node_text(node)
+                        if text not in new_asset_text:
+                            new_asset.append(child)
+                            extra_component = True
+            if extra_component:
+                logger.warning(
+                    "%s",
+                    {
+                        "pid": self.body_info.pid,
+                        "body_index": self.body_info.body_index,
+                        "asset_tag": asset_tag,
+                        "asset_index": i,
+                        "msg": "AssetElementFixPipe: unexpected content?",
+                    }
+                )
+            asset.addprevious(new_asset)
+            p = asset.getparent()
+            p.remove(asset)
 
     class CreateDispFormulaPipe(ConversionPipe):
         def _transform(self, data):
