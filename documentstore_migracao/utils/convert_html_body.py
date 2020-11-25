@@ -436,6 +436,11 @@ class ConversionPipe(plumber.Pipe):
         self.body_info.register_diff(self.pipe_name)
         logger.debug("FIM: %s", self.pipe_name)
 
+    def get_msg(self, msg):
+        data = self.body_info.data.copy()
+        data.update({"msg": msg})
+        return "%s" % data
+
 
 class CustomPipe(plumber.Pipe):
     def __init__(self, super_obj=None, *args, **kwargs):
@@ -1306,7 +1311,11 @@ class HTML2SPSPipeline(object):
                     comment.addnext(etree.Element("REMOVE_COMMENT"))
                     parent.remove(comment)
             etree.strip_tags(xml, "REMOVE_COMMENT")
-            logger.info("Total de %s 'comentarios' removidos", len(comments))
+            logger.info(
+                self.get_msg(
+                    "Total de {} 'comentarios' removidos".format(
+                        len(comments)))
+                )
             return data
 
     class AHrefPipe(ConversionPipe):
