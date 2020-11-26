@@ -18,6 +18,10 @@ from documentstore_migracao.processing.extracted import PoisonPill, DoJobsConcur
 logger = logging.getLogger(__name__)
 
 
+class AssetNotFoundError(Exception):
+    ...
+
+
 def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     """Empacoda um xml e seus ativos digitais.
 
@@ -164,12 +168,7 @@ def get_asset(old_path, new_fname, dest_path):
         logger.info("Lendo o arquivo %s: ", file_path)
         content = files.read_file_binary(file_path)
     except IOError as e:
-        try:
-            msg = str(e)
-        except TypeError:
-            msg = "Unknown error"
-        logger.error(e)
-        return msg
+        raise AssetNotFoundError(e)
     else:
         files.write_file_binary(dest_path_file, content)
 
@@ -195,8 +194,10 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
         files.make_empty_dir(pkg_path)
 
     for old_path, new_fname in asset_replacements:
-        error = get_asset(old_path, new_fname, pkg_path)
-        if error:
+        try:
+            get_asset(old_path, new_fname, pkg_path)
+        except AssetNotFoundError as e:
+            error = str(e)
             errors.append((old_path, new_fname, error))
 
     if len(errors) > 0:

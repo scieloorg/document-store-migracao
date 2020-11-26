@@ -229,22 +229,26 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
             self.assertTrue(fp.read(), b"conteudo pdf")
 
     @patch("documentstore_migracao.utils.files.read_file_binary")
-    def test_get_asset_raise_IOError_exception(self, mk_read_file_binary):
+    def test_get_asset_raises_AssetNotFoundError_exception(self, mk_read_file_binary):
         mk_read_file_binary.side_effect = IOError
         old_path = "/img/en/scielobre.gif"
         new_fname = "novo"
         dest_path = TEMP_TEST_PATH
 
-        error = packing.get_asset(old_path, new_fname, dest_path)
-        self.assertIsNotNone(error)
+        with self.assertRaises(packing.AssetNotFoundError):
+            packing.get_asset(old_path, new_fname, dest_path)
 
-    def test_invalid_relative_URL_returns_error(self):
+    def test_invalid_relative_URL_raises_error(self):
         """
         Testa correção do bug:
         https://github.com/scieloorg/document-store-migracao/issues/158
         """
-        error = packing.get_asset("//www. [ <a href=", "novo", TEMP_TEST_PATH)
-        self.assertTrue(error.startswith("[Errno 2] No such file or directory"))
+        with self.assertRaises(packing.AssetNotFoundError) as exc:
+            packing.get_asset("//www. [ <a href=", "novo", TEMP_TEST_PATH)
+        self.assertIn(
+            "[Errno 2] No such file or directory",
+            str(exc.exception)
+        )
 
 
 class TestProcessingpack_PackingAssets(unittest.TestCase):
