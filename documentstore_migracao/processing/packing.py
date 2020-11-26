@@ -159,11 +159,12 @@ def get_asset(old_path, new_fname, dest_path):
         file_path = ''
 
         for path in [
-            os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
             os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
+            os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
         ]:
             if os.path.exists(path):
                 file_path = path
+                break
 
         logger.info("Lendo o arquivo %s: ", file_path)
         content = files.read_file_binary(file_path)
@@ -197,8 +198,7 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
         try:
             get_asset(old_path, new_fname, pkg_path)
         except AssetNotFoundError as e:
-            error = str(e)
-            errors.append((old_path, new_fname, error))
+            errors.append((old_path, new_fname, str(e)))
 
     if len(errors) > 0:
         # garante que existe pastas diferentes para
@@ -212,8 +212,7 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
         shutil.rmtree(pkg_path)
         # gera relatorio de erros
         errors_filename = os.path.join(incomplete_pkg_path, "%s.err" % pkg_name)
-        if len(errors) > 0:
-            error_messages = "\n".join(["%s %s %s" % _err for _err in errors])
-            files.write_file(errors_filename, error_messages)
+        error_messages = "\n".join(["%s %s %s" % _err for _err in errors])
+        files.write_file(errors_filename, error_messages)
         return incomplete_pkg_path
     return pkg_path
