@@ -229,22 +229,26 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
             self.assertTrue(fp.read(), b"conteudo pdf")
 
     @patch("documentstore_migracao.utils.files.read_file_binary")
-    def test_get_asset_raise_IOError_exception(self, mk_read_file_binary):
+    def test_get_asset_raises_AssetNotFoundError_exception(self, mk_read_file_binary):
         mk_read_file_binary.side_effect = IOError
         old_path = "/img/en/scielobre.gif"
         new_fname = "novo"
         dest_path = TEMP_TEST_PATH
 
-        error = packing.get_asset(old_path, new_fname, dest_path)
-        self.assertIsNotNone(error)
+        with self.assertRaises(packing.AssetNotFoundError):
+            packing.get_asset(old_path, new_fname, dest_path)
 
-    def test_invalid_relative_URL_returns_error(self):
+    def test_invalid_relative_URL_raises_error(self):
         """
         Testa correção do bug:
         https://github.com/scieloorg/document-store-migracao/issues/158
         """
-        error = packing.get_asset("//www. [ <a href=", "novo", TEMP_TEST_PATH)
-        self.assertTrue(error.startswith("[Errno 2] No such file or directory"))
+        with self.assertRaises(packing.AssetNotFoundError) as exc:
+            packing.get_asset("//www. [ <a href=", "novo", TEMP_TEST_PATH)
+        self.assertIn(
+            "Not found",
+            str(exc.exception)
+        )
 
 
 class TestProcessingpack_PackingAssets(unittest.TestCase):
@@ -272,13 +276,13 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
 
         mk_read_file_binary.side_effect = [IOError("Error"), m.return_value]
         result_path = packing.packing_assets(
-            asset_replacements, pkg_path, bad_pkg_path, pkg_name
+            asset_replacements, pkg_path, bad_pkg_path, pkg_name, "pid"
         )
         self.assertEqual(result_path, bad_pkg_path)
         self.assertFalse(os.path.isdir(pkg_path))
         self.assertEqual(["f02.gif", pkg_name + ".err"], os.listdir(bad_pkg_path))
         with open(os.path.join(bad_pkg_path, pkg_name + ".err")) as fp:
-            self.assertEqual(fp.read(), "/img/revistas/a01.gif f01 Error")
+            self.assertIn("/img/revistas/a01.gif f01 Not found", fp.read())
 
     @patch("documentstore_migracao.utils.files.read_file_binary")
     def test__pack_incomplete_package_same_dir(self, mk_read_file_binary):
@@ -294,13 +298,13 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
         pkg_name = "pacote_sps"
         mk_read_file_binary.side_effect = [IOError("Error"), m.return_value]
         result_path = packing.packing_assets(
-            asset_replacements, pkg_path, bad_pkg_path, pkg_name
+            asset_replacements, pkg_path, bad_pkg_path, pkg_name, "pid"
         )
         self.assertEqual(result_path, renamed_path)
         self.assertFalse(os.path.isdir(pkg_path))
         self.assertEqual(["f02.gif", pkg_name + ".err"], os.listdir(renamed_path))
         with open(os.path.join(renamed_path, pkg_name + ".err")) as fp:
-            self.assertEqual(fp.read(), "/img/revistas/a01.gif f01 Error")
+            self.assertIn("/img/revistas/a01.gif f01 Not found", fp.read())
 
     @patch("documentstore_migracao.utils.files.read_file_binary")
     def test__pack_complete_package(self, mk_read_file_binary):
@@ -318,7 +322,7 @@ class TestProcessingpack_PackingAssets(unittest.TestCase):
         pkg_name = "pacote_sps"
         mk_read_file_binary.side_effect = [mk_read_file_binary_result1.return_value, mk_read_file_binary_result2.return_value]
         result_path = packing.packing_assets(
-            asset_replacements, pkg_path, bad_pkg_path, pkg_name
+            asset_replacements, pkg_path, bad_pkg_path, pkg_name, "pid"
         )
         self.assertEqual(result_path, pkg_path)
         self.assertFalse(os.path.isdir(bad_pkg_path))

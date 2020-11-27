@@ -15,6 +15,11 @@ from documentstore_migracao.utils.convert_html_body_inferer import Inferer
 
 import faulthandler
 
+
+class FileLocationError(Exception):
+    ...
+
+
 faulthandler.enable()
 
 logger = logging.getLogger(__name__)
@@ -261,8 +266,8 @@ class Spy:
         try:
             if self.text_differ.similarity_ratio < 1:
                 _report["text"] = self.text_differ.info
-        except UnableToCompareError:
-            logger.info("Unable to compare")
+        except UnableToCompareError as e:
+            logger.exception("Unable to compare %s", e)
         return _report
 
 
@@ -276,9 +281,9 @@ class Dummy:
 
 class BodyInfo:
 
-    def __init__(self, pid, index_body=1, ref_items=None, spy=None):
+    def __init__(self, pid, body_index=1, ref_items=None, spy=None):
         self.pid = pid
-        self.index_body = index_body
+        self.body_index = body_index
         self.ref_items = ref_items
         self.spy = (spy and Spy()) or Dummy()
         self.initial_text = None
@@ -287,7 +292,7 @@ class BodyInfo:
     def data(self):
         _data = {}
         _data["pid"] = self.pid
-        _data["index_body"] = self.index_body
+        _data["body_index"] = self.body_index
         return _data
 
     def register_diff(self, pipe):
@@ -431,6 +436,11 @@ class ConversionPipe(plumber.Pipe):
         self.body_info.register_diff(self.pipe_name)
         logger.debug("FIM: %s", self.pipe_name)
 
+    def get_msg(self, msg):
+        data = self.body_info.data.copy()
+        data.update({"msg": "{}".format(msg)})
+        return "%s" % data
+
 
 class CustomPipe(plumber.Pipe):
     def __init__(self, super_obj=None, *args, **kwargs):
@@ -439,12 +449,12 @@ class CustomPipe(plumber.Pipe):
 
 
 class HTML2SPSPipeline(object):
-    def __init__(self, pid="", ref_items=[], index_body=1, spy=False):
+    def __init__(self, pid="", ref_items=[], body_index=1, spy=False):
         logger.debug(f"CONVERT: {pid}")
         self.document = Document(None)
-        self.body_info = BodyInfo(pid, index_body, ref_items, spy)
+        self.body_info = BodyInfo(pid, body_index, ref_items, spy)
         body_info_which_spy_is_false = BodyInfo(
-            pid, index_body, ref_items, spy=False)
+            pid, body_index, ref_items, spy=False)
 
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
@@ -515,7 +525,7 @@ class HTML2SPSPipeline(object):
                 msg = self.body_info.data.copy()
                 msg["pipe"] = "final"
                 msg["diff report"] = diff.report
-                logger.error(msg)
+                logger.warning(msg)
             return data
 
     class SetupPipe(plumber.Pipe):
@@ -536,7 +546,7 @@ class HTML2SPSPipeline(object):
             root.write(
                 os.path.join(
                     "/tmp/",
-                    "%s.%s.xml" % (self.body_info.pid, self.body_info.index_body),
+                    "%s.%s.xml" % (self.body_info.pid, self.body_info.body_index),
                 ),
                 encoding="utf-8",
                 doctype=config.DOC_TYPE_XML,
@@ -560,7 +570,7 @@ class HTML2SPSPipeline(object):
     class ConvertRemote2LocalPipe(ConversionPipe):
         def _transform(self, data):
             raw, xml = data
-            html_page = Remote2LocalConversion(xml)
+            html_page = Remote2LocalConversion(xml, self.body_info)
             html_page.remote_to_local()
             return data
 
@@ -1233,11 +1243,14 @@ class HTML2SPSPipeline(object):
                     for p in p_to_delete:
                         _remove_tag(p, True)
                 else:
-                    logger.error(
-                        "Não removeu referências do body: "
-                        "quantidades de parágrafos (%i) e referências (%i) "
-                        "divergem.",
-                        len(p_to_delete), len(self.body_info.ref_items)
+                    logger.warning("%s", {
+                            "pid": self.body_info.pid,
+                            "body_index": self.body_info.body_index,
+                            "total paragraphs": len(p_to_delete),
+                            "total references": len(self.body_info.ref_items),
+                            "msg": "References were not removed",
+
+                        }
                     )
             return data
 
@@ -1277,8 +1290,10 @@ class HTML2SPSPipeline(object):
                     text = text.upper()
                     if text.startswith("REF") or ">REF" in text:
                         logger.debug(
-                            "RemoveReferencesFromBodyPipe: Primeiro: %s"
-                            % etree.tostring(references_header)
+                            self.get_msg(
+                                "RemoveReferencesFromBodyPipe: Primeiro: %s"
+                                % etree.tostring(references_header)
+                            )
                         )
                         _remove_tag(references_header, True)
 
@@ -1293,7 +1308,11 @@ class HTML2SPSPipeline(object):
                     comment.addnext(etree.Element("REMOVE_COMMENT"))
                     parent.remove(comment)
             etree.strip_tags(xml, "REMOVE_COMMENT")
-            logger.info("Total de %s 'comentarios' removidos", len(comments))
+            logger.info(
+                self.get_msg(
+                    "Total de {} 'comentarios' removidos".format(
+                        len(comments)))
+                )
             return data
 
     class AHrefPipe(ConversionPipe):
@@ -1468,8 +1487,8 @@ class HTML2SPSPipeline(object):
                     value = value[value.find(tag[0]) :]
                 else:
                     value = tag[:3] + value
-            if self.body_info.index_body > 1:
-                value = value + "-body{}".format(self.body_info.index_body)
+            if self.body_info.body_index > 1:
+                value = value + "-body{}".format(self.body_info.body_index)
             return value.lower()
 
     class RemoveImgSetaPipe(ConversionPipe):
@@ -1691,7 +1710,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
     class SetupPipe(plumber.Pipe):
         def transform(self, data):
             new_obj = deepcopy(data)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data, new_obj
 
     class AssetThumbnailInLayoutImgAndCaptionAndMessage(ConversionPipe):
@@ -1715,7 +1733,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                     if p.text and "View larger" in p.text:
                         parent = p.getparent()
                         parent.remove(p)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
         def _convert(self, p):
@@ -1777,7 +1794,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 table.addprevious(new_e)
                 parent = table.getparent()
                 parent.remove(table)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class RemoveTableUsedToDisplayFigureAndLabelAndCaptionInTwoLines(ConversionPipe):
@@ -1812,7 +1828,6 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 table.addprevious(new_e)
                 parent = table.getparent()
                 parent.remove(table)
-            logger.debug("FIM: %s" % type(self).__name__)
             return data
 
     class AssetThumbnailInLayoutTableAndLinkInMessage(ConversionPipe):
@@ -2395,15 +2410,18 @@ class ConvertElementsWhichHaveIdPipeline(object):
                 xml_text = a_href.get("xml_text")
                 if get_node_text(a_href) and is_footnote_label(xml_text):
                     logger.debug(
-                        "Identifica como fn/label: %s" %
-                        etree.tostring(a_href))
+                        self.get_msg(
+                            "Identifica como fn/label: %s" %
+                            etree.tostring(a_href)
+                        )
+                    )
                     a_href.tag = "label"
                     group = grouped_by_xml_text.get(xml_text)
 
                     a = self._find_label_of(a_href, group)
                     if a is not None:
                         a_href.set("label-of", a.get("name"))
-                    logger.debug(etree.tostring(a_href))
+                    logger.debug(self.get_msg(etree.tostring(a_href)))
 
         def _evaluate_a_items(self, a_items):
             """
@@ -2864,31 +2882,43 @@ class ConvertElementsWhichHaveIdPipeline(object):
         def _transform(self, data):
             raw, xml = data
             for asset_tag in ASSET_TAGS:
-                for asset in xml.findall(".//{}".format(asset_tag)):
-                    new_asset = etree.Element(asset_tag)
-                    new_asset.set("id", asset.get("id"))
-                    new_asset.tail = asset.tail
-
-                    for tag in self.COMPONENT_TAGS:
-                        for component in asset.findall(".//{}".format(tag)):
-                            if component is not None:
-                                new_asset.append(deepcopy(component))
-
-                    new_asset_text = get_node_text(new_asset)
-                    extra_component = False
-                    for child in asset.getchildren():
-                        for node in child.findall(".//*"):
-                            if not node.getchildren():
-                                text = get_node_text(node)
-                                if text not in new_asset_text:
-                                    new_asset.append(child)
-                                    extra_component = True
-                    if extra_component:
-                        logger.error("AssetElementFixPipe: unexpected content?")
-                    asset.addprevious(new_asset)
-                    p = asset.getparent()
-                    p.remove(asset)
+                for i, asset in enumerate(xml.findall(".//{}".format(asset_tag))):
+                    self._transform_asset(data, asset_tag, asset, i)
             return data
+
+        def _transform_asset(self, data, asset_tag, asset, i):
+            new_asset = etree.Element(asset_tag)
+            new_asset.set("id", asset.get("id"))
+            new_asset.tail = asset.tail
+
+            for tag in self.COMPONENT_TAGS:
+                for component in asset.findall(".//{}".format(tag)):
+                    if component is not None:
+                        new_asset.append(deepcopy(component))
+
+            new_asset_text = get_node_text(new_asset)
+            extra_component = False
+            for child in asset.getchildren():
+                for node in child.findall(".//*"):
+                    if not node.getchildren():
+                        text = get_node_text(node)
+                        if text not in new_asset_text:
+                            new_asset.append(child)
+                            extra_component = True
+            if extra_component:
+                logger.warning(
+                    "%s",
+                    {
+                        "pid": self.body_info.pid,
+                        "body_index": self.body_info.body_index,
+                        "asset_tag": asset_tag,
+                        "asset_index": i,
+                        "msg": "AssetElementFixPipe: unexpected content?",
+                    }
+                )
+            asset.addprevious(new_asset)
+            p = asset.getparent()
+            p.remove(asset)
 
     class CreateDispFormulaPipe(ConversionPipe):
         def _transform(self, data):
@@ -3762,17 +3792,12 @@ class FileLocation:
                 return fp.read()
 
     def download(self):
-        logger.debug("Download %s" % self.remote)
-        r = requests.get(self.remote, timeout=TIMEOUT)
-        if r.status_code == 404:
-            logger.error(
-                "FAILURE. REQUIRES MANUAL INTERVENTION. Not found %s. " % self.remote
-            )
-            return
-        if not r.status_code == 200:
-            logger.error("%s: %s" % (self.remote, r.status_code))
-            return
-        return r.content
+        try:
+            r = requests.get(self.remote, timeout=TIMEOUT)
+        except requests.exceptions.HTTPError as e:
+            raise FileLocationError("%s: %s" % (self.remote, e))
+        else:
+            return r.content
 
     def save(self, content):
         dirname = os.path.dirname(self.local)
@@ -3823,11 +3848,19 @@ class Remote2LocalConversion:
 
     IMG_EXTENSIONS = (".gif", ".jpg", ".jpeg", ".svg", ".png", ".tif", ".bmp")
 
-    def __init__(self, xml):
+    def __init__(self, xml, body_info):
         self.xml = xml
+        self.body_info = body_info
         self.body = self.xml.find(".//body")
         self._digital_assets_path = None
         self.imported_files = []
+
+    def get_logging_msg(self, msg):
+        return "%s" % {
+            "pid": self.body_info.pid,
+            "body_index": self.body_info.body_index,
+            "msg": msg,
+        }
 
     @property
     def img_src_in_original_body(self):
@@ -3880,7 +3913,11 @@ class Remote2LocalConversion:
             src = node.get("src")
             if ":" in src:
                 node.set("link-type", "external")
-                logger.debug("Added @link-type: %s" % etree.tostring(node))
+                logger.debug(
+                    self.get_logging_msg(
+                        "Added @link-type: %s" % etree.tostring(node)
+                    )
+                )
                 continue
 
             value = src.split("/")[0]
@@ -3895,7 +3932,11 @@ class Remote2LocalConversion:
                 else:
                     # pode ser URL
                     node.set("link-type", "external")
-                    logger.debug("Added @link-type: %s" % etree.tostring(node))
+                    logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(node)
+                        )
+                    )
                     continue
                 fix_img_revistas_path(node)
 
@@ -3910,12 +3951,20 @@ class Remote2LocalConversion:
 
                 if ":" in href:
                     a_href.set("link-type", "external")
-                    logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                    logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(a_href)
+                        )
+                    )
                     continue
 
                 if href and href[0] == "#":
                     a_href.set("link-type", "internal")
-                    logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                    logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(a_href)
+                        )
+                    )
                     continue
 
                 value = href.split("/")[0]
@@ -3930,7 +3979,11 @@ class Remote2LocalConversion:
                     else:
                         # pode ser URL
                         a_href.set("link-type", "external")
-                        logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                        logger.debug(
+                            self.get_logging_msg(
+                                "Added @link-type: %s" % etree.tostring(a_href)
+                            )
+                        )
                         continue
 
                 fix_img_revistas_path(a_href)
@@ -3945,7 +3998,11 @@ class Remote2LocalConversion:
                     a_href.set("link-type", "asset")
                 else:
                     a_href.set("link-type", "unknown")
-                logger.debug("Added @link-type: %s" % etree.tostring(a_href))
+                logger.debug(
+                        self.get_logging_msg(
+                            "Added @link-type: %s" % etree.tostring(a_href)
+                        )
+                    )
 
     def _import_html_files(self):
         """
@@ -3977,7 +4034,10 @@ class Remote2LocalConversion:
                     new_p_items.append((bodychild, new_p))
         for bodychild, new_p in new_p_items[::-1]:
             logger.debug(
-                "Insere novo p com conteudo do HTML: %s" % etree.tostring(new_p)
+                self.get_logging_msg(
+                    "Insere novo p com conteudo do HTML: %s" %
+                    etree.tostring(new_p)
+                )
             )
             bodychild.addnext(new_p)
         return len(new_p_items)
@@ -3987,7 +4047,11 @@ class Remote2LocalConversion:
         Retorna novo elemento que representa o conteúdo do html importado,
         se aplicável
         """
-        logger.debug("Importar HTML de %s" % etree.tostring(a_link_type))
+        logger.debug(
+            self.get_logging_msg(
+                "Importar HTML de %s" % etree.tostring(a_link_type)
+            )
+        )
         href = a_link_type.get("href")
         if "#" in href:
             href, anchor = href.split("#")
@@ -4001,7 +4065,11 @@ class Remote2LocalConversion:
             self.imported_files.append(href)
             html_body = self._get_html_body(href)
             if html_body is None:
-                logger.debug("Alterando para link para asset-not-found")
+                logger.debug(
+                    self.get_logging_msg(
+                        "Alterando para link para asset-not-found"
+                    )
+                )
                 a_link_type.set("link-type", "asset-not-found")
             else:
                 self._update_a_href(a_link_type, new_href)
@@ -4020,12 +4088,19 @@ class Remote2LocalConversion:
         como um novo elemento
         """
         file_location = FileLocation(href)
-        if file_location.content:
+        try:
+            file_content = file_location.content
             html_tree = etree.fromstring(
-                file_location.content, parser=etree.HTMLParser()
+                file_content, parser=etree.HTMLParser()
             )
-            if html_tree is not None:
-                return html_tree.find(".//body")
+        except (FileLocationError, lxml.etree.Error) as e:
+            logger.error(
+                self.get_logging_msg(
+                    str(e)
+                )
+            )
+        else:
+            return html_tree.find(".//body")
 
     def _import_img_files(self):
         """
@@ -4041,7 +4116,11 @@ class Remote2LocalConversion:
                 if new_p is not None:
                     new_p_items.append((child, new_p))
         for bodychild, new_p in new_p_items[::-1]:
-            logger.debug("Insere novo p: %s" % etree.tostring(new_p))
+            logger.debug(
+                self.get_logging_msg(
+                    "Insere novo p: %s" % etree.tostring(new_p)
+                )
+            )
             bodychild.addnext(new_p)
         return len(new_p_items)
 
@@ -4050,7 +4129,11 @@ class Remote2LocalConversion:
         Retorna novo elemento que representa a imagem importada,
         se aplicável
         """
-        logger.debug("Converte %s" % etree.tostring(node_a))
+        logger.debug(
+            self.get_logging_msg(
+                "Converte %s" % etree.tostring(node_a)
+            )
+        )
         href = node_a.get("href")
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
@@ -4075,7 +4158,11 @@ class Remote2LocalConversion:
     def _update_a_href(self, a_href, new_href):
         a_href.set("href", "#" + new_href)
         a_href.set("link-type", "internal")
-        logger.debug("Atualiza a[@href]: %s" % etree.tostring(a_href))
+        logger.debug(
+            self.get_logging_msg(
+                "Atualiza a[@href]: %s" % etree.tostring(a_href)
+            )
+        )
 
     def _create_new_p(self, new_href, node_content, content_type):
         """
@@ -4095,8 +4182,11 @@ class Remote2LocalConversion:
         else:
             a_name.addnext(node_content)
 
-        logger.debug("Cria novo p: %s" % etree.tostring(new_p))
-
+        logger.debug(
+            self.get_logging_msg(
+                "Cria novo p: %s" % etree.tostring(new_p)
+            )
+        )
         return new_p
 
     def _create_new_element_for_imported_html_file(
@@ -4109,14 +4199,22 @@ class Remote2LocalConversion:
         body = deepcopy(html_body)
         body.tag = delete_tag
         for a in body.findall(".//a"):
-            logger.debug("Encontrado elem a no body importado: %s" % etree.tostring(a))
+            logger.debug(
+                self.get_logging_msg(
+                    "Encontrado elem a no body importado: %s" %
+                    etree.tostring(a)
+                )
+            )
             href = a.get("href")
             if href and href[0] == "#":
                 a.set("href", "#" + new_href + href[1:].replace("#", "X"))
             elif a.get("name"):
                 a.set("name", new_href + "X" + a.get("name"))
-            logger.debug("Atualiza elem a importado: %s" % etree.tostring(a))
-
+            logger.debug(
+                self.get_logging_msg(
+                    "Atualiza elem a importado: %s" % etree.tostring(a)
+                )
+            )
         for img in body.findall(".//img"):
             src = img.get("src")
             name, ext = os.path.splitext(os.path.basename(src))
