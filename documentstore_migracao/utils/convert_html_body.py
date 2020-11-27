@@ -3794,17 +3794,9 @@ class FileLocation:
     def download(self):
         try:
             r = requests.get(self.remote, timeout=TIMEOUT)
-        except requests.exceptions.RequestException as e:
-            raise FileLocationError(e)
+        except requests.exceptions.HTTPError as e:
+            raise FileLocationError("%s: %s" % (self.remote, e))
         else:
-            if r.status_code == 404:
-                raise FileLocationError(
-                    "Not found %s. " % self.remote
-                )
-            if not r.status_code == 200:
-                raise FileLocationError(
-                    "%s: %s" % (self.remote, r.status_code)
-                )
             return r.content
 
     def save(self, content):
