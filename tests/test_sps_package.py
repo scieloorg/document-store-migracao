@@ -267,13 +267,13 @@ class Test_SPS_package(unittest.TestCase):
 class Test_SPS_Package(unittest.TestCase):
     def setUp(self):
         article_xml = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
-                <inline-graphic xlink:href="a01tab01.gif"/>
-                <graphic xlink:href="a01f01.gif"/>
-                <ext-link xlink:href="a01tab02.gif"/>
-                <ext-link xlink:href="mailto:a01f02.gif"/>
-                <inline-supplementary-material xlink:href="a01tab03.gif"/>
-                <supplementary-material xlink:href="a01tab04.gif"/>
-                <media xlink:href="a01tab04.gif"/>
+            <inline-graphic xlink:href="a01tab01.gif"/>
+            <graphic xlink:href="a01f01.gif"/>
+            <ext-link xlink:href="a01tab02.gif"/>
+            <ext-link xlink:href="mailto:a01f02.gif"/>
+            <inline-supplementary-material xlink:href="a01tab03.gif"/>
+            <supplementary-material xlink:href="a01tab04.gif"/>
+            <media xlink:href="a01tab04.gif"/>
             </root>
             """
         self.sps_package = SPS_Package(etree.fromstring(article_xml), "a01")
@@ -312,46 +312,42 @@ class Test_SPS_Package(unittest.TestCase):
                 self.assertEqual(expected[i][0], item[0])
                 self.assertEqual(expected[i][1], item[1])
 
-    @mock.patch("documentstore_migracao.export.sps_package.article.get_article")
-    def test_get_renditions_metadata_no_renditions(self, mk_get_article):
-        mk_article = mock.Mock()
-        mk_article.fulltexts.return_value = {}
-        mk_get_article.return_value = mk_article
+    def test_get_renditions_metadata_no_renditions(self):
         renditions, renditions_metadata = self.sps_package.get_renditions_metadata()
         self.assertEqual(renditions, [])
         self.assertEqual(renditions_metadata, {})
 
-    @mock.patch("documentstore_migracao.export.sps_package.article.get_article")
-    def test_get_renditions_metadata(self, mk_get_article):
-        fulltexts = {
-            "pdf": {
-                "en": "http://www.scielo.br/pdf/aa/v1n1/a01.pdf",
-                "pt": "http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf",
-            },
-            "html": {
-                "en": "http://www.scielo.br/scielo.php?script=sci_arttext&tlng=en",
-                "pt": "http://www.scielo.br/scielo.php?script=sci_arttext&tlng=pt",
-            },
-        }
-        mk_article = mock.Mock()
-        mk_article.fulltexts.return_value = fulltexts
-        mk_get_article.return_value = mk_article
+    def test_get_renditions_metadata(self):
+        article_xml = """<root xmlns:xlink="http://www.w3.org/1999/xlink">
+            <article-meta>
+                <self-uri xlink:href="http://www.scielo.br/pdf/aa/v1n1/a01.pdf" xml:lang="en">Texto completo somente em PDF (EN)</self-uri>
+                <self-uri xlink:href="http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf" xml:lang="pt">Texto completo somente em PDF (PT)</self-uri>
+            </article-meta>
+            <inline-graphic xlink:href="a01tab01.gif"/>
+            <graphic xlink:href="a01f01.gif"/>
+            <ext-link xlink:href="a01tab02.gif"/>
+            <ext-link xlink:href="mailto:a01f02.gif"/>
+            <inline-supplementary-material xlink:href="a01tab03.gif"/>
+            <supplementary-material xlink:href="a01tab04.gif"/>
+            <media xlink:href="a01tab04.gif"/>
+            </root>
+            """
+        self.sps_package = SPS_Package(etree.fromstring(article_xml), "a01")
         renditions, renditions_metadata = self.sps_package.get_renditions_metadata()
-        for lang, link in fulltexts.get("pdf"):
-            self.assertEqual(
-                renditions,
-                [
-                    ('http://www.scielo.br/pdf/aa/v1n1/a01.pdf', 'a01'),
-                    ('http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf', 'pt_a01'),
-                ]
-            )
-            self.assertEqual(
-                renditions_metadata,
-                {
-                    'en': 'http://www.scielo.br/pdf/aa/v1n1/a01.pdf',
-                    'pt': 'http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf',
-                }
-            )
+        self.assertEqual(
+            renditions,
+            [
+                ('http://www.scielo.br/pdf/aa/v1n1/a01.pdf', 'a01'),
+                ('http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf', 'pt_a01'),
+            ]
+        )
+        self.assertEqual(
+            renditions_metadata,
+            {
+                'en': 'http://www.scielo.br/pdf/aa/v1n1/a01.pdf',
+                'pt': 'http://www.scielo.br/pdf/aa/v1n1/pt_a01.pdf',
+            }
+        )
 
 
 class Test_SPS_Package_No_Metadata(unittest.TestCase):

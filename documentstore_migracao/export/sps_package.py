@@ -384,12 +384,13 @@ class SPS_Package:
     def get_renditions_metadata(self):
         renditions = []
         metadata = {}
-        obj_article = article.get_article(self.scielo_pid_v2)
-        if obj_article:
-            metadata = obj_article.fulltexts().get("pdf", {})
-            for lang, url in metadata.items():
+        if self.article_meta is not None:
+            for node in self.article_meta.findall(".//self-uri"):
+                url = node.get("{http://www.w3.org/1999/xlink}href")
+                lang = node.get("{http://www.w3.org/XML/1998/namespace}lang")
                 filename, ext = files.extract_filename_ext_by_path(url)
                 renditions.append((url, filename))
+                metadata[lang] = url
         return renditions, metadata
 
     @property
