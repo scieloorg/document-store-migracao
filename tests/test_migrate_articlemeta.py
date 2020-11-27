@@ -1,6 +1,7 @@
 import unittest
 import os
-from unittest.mock import patch, ANY
+import sys
+from unittest.mock import patch, ANY, MagicMock
 
 from documentstore_migracao.main.migrate_articlemeta import migrate_articlemeta_parser
 from . import SAMPLES_PATH, utils
@@ -73,8 +74,9 @@ class TestMigrateProcess(unittest.TestCase):
             migrate_articlemeta_parser(["pack", "--file", "/tmp/example.xml"])
             mk_pack_article_xml.assert_called_once_with("/tmp/example.xml")
 
+    @patch("documentstore_migracao.processing.packing.pack_article_ALLxml")
     @patch("sys.exit")
-    def test_command_pack_sps_without_source_pdf_and_img(self, mk_sys):
+    def test_command_pack_sps_without_source_pdf_and_img(self, mk_sys, mock_pack_article_ALLxml):
         with utils.environ(
             SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "nonexistent"),
             SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "nonexistent"),

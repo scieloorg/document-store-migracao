@@ -18,6 +18,10 @@ from documentstore_migracao.processing.extracted import PoisonPill, DoJobsConcur
 logger = logging.getLogger(__name__)
 
 
+class AssetNotFoundError(Exception):
+    ...
+
+
 def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     """Empacoda um xml e seus ativos digitais.
 
@@ -68,14 +72,14 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
         asset_replacements + renditions,
         pkg_path,
         incomplete_pkg_path,
-        sps_package.package_name
+        sps_package.package_name,
+        sps_package.scielo_pid_v2,
     )
 
     files.write_file(
         os.path.join(package_path, "manifest.json"),
         json.dumps(renditions_metadata)
     )
-
     xml.objXML2file(
         os.path.join(package_path, "%s.xml" % (sps_package.package_name)), obj_xml
     )
@@ -152,29 +156,25 @@ def get_asset(old_path, new_fname, dest_path):
         return
 
     try:
-        file_path = ''
-
+        not_found = []
         for path in [
-            os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
             os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
+            os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
         ]:
             if os.path.exists(path):
-                file_path = path
+                break
+            else:
+                not_found.append(f"Not found {path}")
 
-        logger.info("Lendo o arquivo %s: ", file_path)
-        content = files.read_file_binary(file_path)
+        content = files.read_file_binary(path)
     except IOError as e:
-        try:
-            msg = str(e)
-        except TypeError:
-            msg = "Unknown error"
-        logger.error(e)
-        return msg
+        raise AssetNotFoundError(". ".join(not_found))
     else:
         files.write_file_binary(dest_path_file, content)
 
 
-def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
+def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name,
+                   scielo_pid_v2):
     """Tem a responsabilidade de ``empacotar`` os ativos digitais e retorna o
     path do pacote.
 
@@ -183,6 +183,7 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
         pkg_path: caminho do pacote
         incomplete_pkg_path: caminho para os pacotes incompletos
         pkg_name: nome do pacote
+        scielo_pid_v2: PID v2
 
     Retornos:
         retorna o caminho ``pkg_path`` ou incomplete_pkg_path
@@ -195,9 +196,18 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
         files.make_empty_dir(pkg_path)
 
     for old_path, new_fname in asset_replacements:
-        error = get_asset(old_path, new_fname, pkg_path)
-        if error:
-            errors.append((old_path, new_fname, error))
+        try:
+            get_asset(old_path, new_fname, pkg_path)
+        except AssetNotFoundError as e:
+            logger.error(
+                "%s", {
+                    "pid": scielo_pid_v2,
+                    "pkg_name": pkg_name,
+                    "old_path": old_path,
+                    "new_fname": new_fname,
+                    "msg": str(e),
+                })
+            errors.append((old_path, new_fname, str(e)))
 
     if len(errors) > 0:
         # garante que existe pastas diferentes para
@@ -211,8 +221,7 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name):
         shutil.rmtree(pkg_path)
         # gera relatorio de erros
         errors_filename = os.path.join(incomplete_pkg_path, "%s.err" % pkg_name)
-        if len(errors) > 0:
-            error_messages = "\n".join(["%s %s %s" % _err for _err in errors])
-            files.write_file(errors_filename, error_messages)
+        error_messages = "\n".join(["%s %s %s" % _err for _err in errors])
+        files.write_file(errors_filename, error_messages)
         return incomplete_pkg_path
     return pkg_path
