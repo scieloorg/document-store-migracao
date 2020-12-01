@@ -194,13 +194,27 @@ class BuildPSPackage(object):
         return sps_package
 
     def get_existing_xml_path(self, file_path, f_acron, f_volnum):
+        """
+        Verifica se ``file_path`` informado existe no diretório ``self.xml_folder`` e
+        retorna-o em caso positivo. Caso contrário, monta caminho relativo usando dados
+        f_acron e f_volnum para montar o path do XML.
+        """
         if file_path.find("\\") >= 0:
             # It is a Windows Path
-            xml_basename = pathlib.PureWindowsPath(file_path).name
+            xml_path = pathlib.PureWindowsPath(file_path)
         else:
             # It is a Posix Path
-            xml_basename = pathlib.PurePosixPath(file_path).name
-        xml_relative_path = pathlib.Path(f_acron.lower()) / f_volnum / xml_basename
+            xml_path = pathlib.PurePosixPath(file_path)
+
+        csv_file_path = pathlib.Path(self.xml_folder) / xml_path
+        if csv_file_path.is_file():
+            return str(file_path)
+
+        logger.debug(
+            "Filepath %s not found in %s. Trying to find path using CSV data.",
+            file_path, self.xml_folder
+        )
+        xml_relative_path = pathlib.Path(f_acron.lower()) / f_volnum / xml_path.name
         return str(xml_relative_path)
 
     def get_target_path(self, xml_relative_path):

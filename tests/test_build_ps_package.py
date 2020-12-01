@@ -787,6 +787,20 @@ class TestBuildSPSPackageCollectAssetAlternatives(TestBuildSPSPackageBase):
 class TestBuildSPSPackageGetExistingXMLPath(TestBuildSPSPackageBase):
     def setUp(self):
         super().setUp()
+        self.source_path = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.source_path)
+
+    def test_file_path_exists(self):
+        self.builder.xml_folder = self.source_path
+        test_xml_path = pathlib.Path(self.source_path) / "acron/v1n1/existing_doc.xml"
+        test_xml_path.parent.mkdir(parents=True)
+        test_xml_path.write_text("<article></article>")
+        result = self.builder.get_existing_xml_path(
+            "acron/v1n1/existing_doc.xml", "ACRON", "v1n1"
+        )
+        self.assertEqual(result, "acron/v1n1/existing_doc.xml")
 
     def test_file_path_ok(self):
         result = self.builder.get_existing_xml_path(
