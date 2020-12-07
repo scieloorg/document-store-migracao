@@ -2648,7 +2648,8 @@ class TestSourceJson(unittest.TestCase):
                     "en": "http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0004-282X2002000200003&tlng=en"
                 },
                 "pdf": {
-                    "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf"
+                    "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf",
+                    "es": "http://www.scielo.br/pdf/anp/v60n2a/es_a03v60n2.pdf"
                 }
             }
         }"""
@@ -2660,13 +2661,15 @@ class TestSourceJson(unittest.TestCase):
     def test_renditions_metadata_returns(self):
         source = SourceJson(self._json_content)
         expected = {
-            "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf"
+            "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf",
+            "es": "http://www.scielo.br/pdf/anp/v60n2a/es_a03v60n2.pdf"
         }
         self.assertEqual(expected, source.renditions_metadata)
 
     def test_fixed_renditions_metadata_returns(self):
         source = SourceJson(self._json_content)
         expected = {
-            "en": "http://www.scielo.br/pdf/anp/v60n2A/a03v60n2.pdf"
+            "en": "http://www.scielo.br/pdf/anp/v60n2A/a03v60n2.pdf",
+            "es": "http://www.scielo.br/pdf/anp/v60n2A/es_a03v60n2.pdf"
         }
         self.assertEqual(expected, source.fixed_renditions_metadata)
