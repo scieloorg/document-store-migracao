@@ -2642,9 +2642,24 @@ class TestSourceJson(unittest.TestCase):
                         "_": "60"
                     }
                 ]
+            },
+            "fulltexts": {
+                "html": {
+                    "en": "http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0004-282X2002000200003&tlng=en"
+                },
+                "pdf": {
+                    "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf"
+                }
             }
         }"""
 
     def test_issue_folder_returns(self):
         source = SourceJson(self._json_content)
         self.assertEqual("v60n2A", source.issue_folder)
+
+    def test_renditions_metadata_returns(self):
+        source = SourceJson(self._json_content)
+        expected = {
+            "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf"
+        }
+        self.assertEqual(expected, source.renditions_metadata)

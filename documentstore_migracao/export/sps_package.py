@@ -941,3 +941,10 @@ class SourceJson:
             if value:
                 label_parts.append(suffix + value[0]["_"])
         return "".join(label_parts)
+
+    @property
+    def renditions_metadata(self):
+        try:
+            return self.json_data["fulltexts"]["pdf"]
+        except KeyError:
+            return {}
