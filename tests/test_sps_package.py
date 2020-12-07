@@ -12,6 +12,7 @@ from documentstore_migracao.export.sps_package import (
     InvalidAttributeValueError,
     InvalidValueForOrderError,
     is_valid_value_for_order,
+    SourceJson,
 )
 
 
@@ -2624,3 +2625,26 @@ class Test_SPS_Package_Fix_Silently(unittest.TestCase):
             str(etree.tostring(_sps_package.xmltree))
         )
 
+
+class TestSourceJson(unittest.TestCase):
+
+    @property
+    def _json_content(self):
+        return """{
+            "article": {
+                "v32": [
+                    {
+                        "_": "2A"
+                    }
+                ],
+                "v31": [
+                    {
+                        "_": "60"
+                    }
+                ]
+            }
+        }"""
+
+    def test_issue_folder_returns(self):
+        source = SourceJson(self._json_content)
+        self.assertEqual("v60n2A", source.issue_folder)

@@ -1,6 +1,7 @@
 import os
 import itertools
 import logging
+import json
 from typing import Tuple
 
 from copy import deepcopy
@@ -918,3 +919,25 @@ class DocumentsSorter:
                 for k in sorted(docs_bundle["items"].keys(), reverse=self.reverse[dbid])
             ]
         return _documents_bundles
+
+
+class SourceJson:
+
+    def __init__(self, json_data):
+        self.json_data = json.loads(json_data)
+
+    @property
+    def issue_folder(self):
+        suffixes = [
+            ("v", "v31"),
+            ("s", "v131"),
+            ("n", "v32"),
+            ("s", "v132"),
+        ]
+        label_parts = []
+        article = self.json_data["article"]
+        for suffix, field in suffixes:
+            value = article.get(field)
+            if value:
+                label_parts.append(suffix + value[0]["_"])
+        return "".join(label_parts)
