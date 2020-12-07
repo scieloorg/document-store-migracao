@@ -2673,3 +2673,16 @@ class TestSourceJson(unittest.TestCase):
             "es": "http://www.scielo.br/pdf/anp/v60n2A/es_a03v60n2.pdf"
         }
         self.assertEqual(expected, source.fixed_renditions_metadata)
+
+    def test_get_renditions_metadata_returns(self):
+        source = SourceJson(self._json_content)
+        metadata = {
+            "en": "http://www.scielo.br/pdf/anp/v60n2A/a03v60n2.pdf",
+            "es": "http://www.scielo.br/pdf/anp/v60n2A/es_a03v60n2.pdf"
+        }
+        renditions = [
+            ("http://www.scielo.br/pdf/anp/v60n2A/a03v60n2.pdf", "a03v60n2"),
+            ("http://www.scielo.br/pdf/anp/v60n2A/es_a03v60n2.pdf", "es_a03v60n2"),
+        ]
+        expected = (renditions, metadata)
+        self.assertEqual(expected, source.get_renditions_metadata())

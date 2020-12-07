@@ -962,3 +962,10 @@ class SourceJson:
             if wrong_folder in path:
                 fixed[lang] = path.replace(wrong_folder, expected_issue_folder)
         return fixed
+
+    def get_renditions_metadata(self):
+        renditions = []
+        for lang, url in self.fixed_renditions_metadata.items():
+            filename, ext = files.extract_filename_ext_by_path(url)
+            renditions.append((url, filename))
+        return renditions, self.fixed_renditions_metadata
