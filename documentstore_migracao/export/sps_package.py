@@ -948,3 +948,17 @@ class SourceJson:
             return self.json_data["fulltexts"]["pdf"]
         except KeyError:
             return {}
+
+    @property
+    def fixed_renditions_metadata(self):
+        fixed = {}
+        for lang, path in self.renditions_metadata.items():
+
+            expected_issue_folder = "/{}/".format(self.issue_folder)
+            if expected_issue_folder in path:
+                return self.renditions_metadata
+
+            wrong_folder = expected_issue_folder.lower()
+            if wrong_folder in path:
+                fixed[lang] = path.replace(wrong_folder, expected_issue_folder)
+        return fixed
