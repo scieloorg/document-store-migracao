@@ -90,15 +90,15 @@ def extract_body(html, html_tag, remove_tags=[]):
 
     body = page.find('div', html_tag)
 
-    if remove_tags:
-        for rtag in remove_tags:
-            for _t in body.find_all(rtag.get('tag_name'), rtag.get('atrib')):
-                _t.extract()
-
     if body:
         ps = body.find_all('p')
     else:
         return ' '
+
+    if remove_tags:
+        for rtag in remove_tags:
+            for _t in body.find_all(rtag.get('tag_name'), rtag.get('atrib')):
+                _t.extract()
 
     return ' '.join([ps[i].text for i in range(len(ps)) if ps[i].text])
 
