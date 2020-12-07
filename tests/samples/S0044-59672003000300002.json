@@ -1,0 +1,22 @@
+{
+    "article": {
+        "v31": [
+            {
+                "_": "33"
+            }
+        ],
+        "v32": [
+            {
+                "_": "3"
+            }
+        ]
+    },
+    "fulltexts": {
+        "html": {
+            "es": "http://www.scielosp.org/scielo.php?script=sci_arttext&pid=S0036-36341997000100001&tlng=es"
+        },
+        "pdf": {
+            "es": "http://www.scielosp.org/pdf/aa/v33n3/v33n3a02.pdf"
+        }
+    }
+}
