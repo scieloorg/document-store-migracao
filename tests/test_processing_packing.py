@@ -12,6 +12,7 @@ class TestProcessingPacking(unittest.TestCase):
 
     def test_pack_article_xml_missing_media(self):
         with utils.environ(
+            SOURCE_PATH=SAMPLES_PATH,
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
@@ -50,6 +51,7 @@ class TestProcessingPacking(unittest.TestCase):
 
     def test_pack_article_xml_has_media(self):
         with utils.environ(
+            SOURCE_PATH=SAMPLES_PATH,
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
@@ -84,12 +86,13 @@ class TestProcessingPacking(unittest.TestCase):
             )
             self.assertEqual(12, len(files))
 
-    @patch("documentstore_migracao.processing.packing.SPS_Package.get_renditions_metadata")
+    @patch("documentstore_migracao.processing.packing.SourceJson.get_renditions_metadata")
     @patch("documentstore_migracao.processing.packing.get_asset")
     def test_pack_article_write_manifest_json_file_with_renditions(
         self, mk_get_asset, mk_get_renditions_metadata
     ):
         with utils.environ(
+            SOURCE_PATH=SAMPLES_PATH,
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
@@ -119,12 +122,15 @@ class TestProcessingPacking(unittest.TestCase):
                     }
                 )
 
-    def test_pack_article_xml_has_no_media(self):
+    @patch("documentstore_migracao.processing.packing.get_source_json")
+    def test_pack_article_xml_has_no_media(self, mock_get_source_json):
         with utils.environ(
+            SOURCE_PATH=SAMPLES_PATH,
             VALID_XML_PATH=SAMPLES_PATH,
             SPS_PKG_PATH=SAMPLES_PATH,
             INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
         ):
+            mock_get_source_json.return_value = packing.SourceJson("{}")
             packing.pack_article_xml(os.path.join(SAMPLES_PATH, "any.xml"))
             files = set(os.listdir(os.path.join(SAMPLES_PATH, "any")))
             self.assertEqual({"any.xml", "manifest.json"}, files)

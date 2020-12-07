@@ -9,6 +9,7 @@ from documentstore_migracao.utils import files, xml
 from documentstore_migracao import config
 from documentstore_migracao.export.sps_package import (
     SPS_Package,
+    SourceJson,
     NotAllowedtoChangeAttributeValueError,
     InvalidAttributeValueError
 )
@@ -20,6 +21,14 @@ logger = logging.getLogger(__name__)
 
 class AssetNotFoundError(Exception):
     ...
+
+
+def get_source_json(scielo_pid_v2):
+    SOURCE_PATH = config.get("SOURCE_PATH")
+    file_json_path = os.path.join(SOURCE_PATH, scielo_pid_v2 + ".json")
+    with open(file_json_path, "r") as fp:
+        json_content = fp.read()
+    return SourceJson(json_content)
 
 
 def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
@@ -65,7 +74,8 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
     asset_replacements = list(set(sps_package.replace_assets_names()))
     logger.debug("%s possui %s ativos digitais", file_xml_path, len(asset_replacements))
 
-    renditions, renditions_metadata = sps_package.get_renditions_metadata()
+    source_json = get_source_json(sps_package.scielo_pid_v2)
+    renditions, renditions_metadata = source_json.get_renditions_metadata()
     logger.debug("%s possui %s renditions", file_xml_path, len(renditions))
 
     package_path = packing_assets(
