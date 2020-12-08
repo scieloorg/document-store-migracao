@@ -63,23 +63,23 @@ _default = dict(
         {
             "name": "classic",
             "url": "http://www.scielo.br/scielo.php?script=sci_arttext&pid={}",
-            "html_body": {'id': 'article-body', 'class': 'body'},
-            "html_back": [{'id': 'article-back', 'class': 'back'}],
-            "remove_body_tags": [{'tag_name': 'sup', 'atrib': {}}],
-            "remove_back_tags": [{'tag_name': 'div', 'atrib': {'class': 'foot-notes'}}],
-            "remove_back_texts": ['REFERENCES', '[ Links ]']
+            "html": {'tag_name': 'div', 'atrib': {'xmlns': ''}},
+            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "div"],
+            "remove_tags": [{'tag_name': 'sup', 'atrib': {}},
+                            {'tag_name': 'div', 'atrib': {'class': 'foot-notes'}},
+                            {'tag_name': 'div', 'atrib': {'id': 'group'}},
+                            {'tag_name': 'script', 'atrib': {}}],
+            "remove_texts": ['REFERENCES', '[ Links ]']
         },
         {
             "name": "new",
             "url": "http://new.scielo.br/article/{}",
-            "html_body": {'class': 'articleSection', 'data-anchor': 'Text'},
-            "html_back": [{'class': 'articleSection', 'data-anchor': 'REFERENCES'},
-                          {'class': 'articleSection', 'data-anchor': 'REFERÊNCIAS BIBLIOGRÁFICAS'},
-                          {'class': 'articleSection', 'data-anchor': 'References'},
-                          {'class': 'articleSection', 'data-anchor': 'REFERÊNCIAS'}],
-            "remove_body_tags": [{'tag_name': 'span', 'atrib': {'class': 'ref'}}],
-            "remove_back_tags": [{'tag_name': 'ul', 'atrib': {'class': 'refList footnote'}}],
-            "remove_back_texts": ['REFERENCES', 'REFERÊNCIAS BIBLIOGRÁFICAS']
+            "html": {'tag_name': 'article', 'atrib': {'id': 'articleText'}},
+            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "div"],
+            "remove_tags": [{'tag_name': 'span', 'atrib': {'class': 'ref'}},
+                            {'tag_name': 'ul', 'atrib': {'class': 'refList footnote'}},
+                            {'tag_name': 'section', 'atrib': {'class': 'documentLicense'}}],
+            "remove_texts": ['REFERENCES', 'REFERÊNCIAS BIBLIOGRÁFICAS']
         },
     ]
 
