@@ -46,7 +46,6 @@ def sim_jaccard(text1, text2):
     Args:
         text1: string, texto para comparação.
         text2: string, texto para comparação.
-        convert_percentage: boolean, converte ou não para porcentagem.
 
     Returno:
         Retorna uma tupla (float, string) com o valor aritmético da similaridade
@@ -62,13 +61,18 @@ def sim_jaccard(text1, text2):
     try:
         sim = float(len(intersection)) / (len(union))
     except ZeroDivisionError as e:
-        logger.error("Erro: %s.", e)
-        return (0, '0.00%')
+        return (0, "0.00%")
 
-    return (sim, '{:.2%}'.format(sim))
+    return (sim, "{:.2%}".format(sim))
 
 
-def extract_body(html, html_tag, remove_tags=[]):
+def extract(
+    html,
+    html_tag,
+    remove_tags=[],
+    remove_texts=[],
+    compare_tags=["p", "li", "b", "i", "em", "sup", "br", "div"],
+):
     """
     Extrai o corpo do texto e remove as marcações em HTML.
 
@@ -78,72 +82,43 @@ def extract_body(html, html_tag, remove_tags=[]):
         obter o trecho ``corpo``.
         remove_tags: list, contento as tags HTML que deve ser removidos da extração
         convert_percentage: boolean, converte ou não para porcentagem.
+        compare_tags: list, lista de tags que será avaliado.
 
     Returno:
         Retorna o texto esperado da extração do HTML.
     """
 
     if not html:
-        return ' '
+        return ""
 
-    page = soup(html, 'html.parser')
+    page = soup(html, "html.parser")
 
-    body = page.find('div', html_tag)
+    body = page.find(html_tag.get("tag_name"), html_tag.get("atrib"))
 
-    if body:
-        ps = body.find_all('p')
-    else:
-        return ' '
+    if not body:
+        return ""
 
     if remove_tags:
         for rtag in remove_tags:
-            for _t in body.find_all(rtag.get('tag_name'), rtag.get('atrib')):
+            for _t in body.find_all(rtag.get("tag_name"), rtag.get("atrib")):
                 _t.extract()
 
-    return ' '.join([ps[i].text for i in range(len(ps)) if ps[i].text])
-
-
-def extract_back(html, html_tags, remove_tags=[], remove_texts=[]):
-    """
-    Extrai o corpo do texto e remove as marcações em HTML.
-
-    Args:
-        html: string, texto para comparação.
-        html_tag: dictionary, dicionário os atributos para
-        obter o trecho ``corpo``.
-        remove_tags: list, contento as tags HTML que deve ser removidos da extração
-        remove_texts: list, contento os textos que deve ser removidos da extração
-
-    Returno:
-        Retorna o texto esperado da extração do HTML.
-    """
-
-    if not html:
-        return ' '
-
-    page = soup(html, 'html.parser')
-
-    for html_tag in html_tags:
-        back = page.find('div', html_tag)
-
-        if back:
-            break
-
-    if not back:
-        return ' '
-
-    if remove_tags:
-        for rtag in remove_tags:
-            for _t in back.find_all(rtag.get('tag_name'), rtag.get('atrib')):
-                _t.extract()
-
-    text = back.text
+    text = ""
+    for tag in compare_tags:
+        inter_tag = body.find_all(tag)
+        text += " ".join(
+            [
+                inter_tag[i].get_text()
+                for i in range(len(inter_tag))
+                if inter_tag[i].get_text().strip()
+            ]
+        )
 
     if remove_texts:
         for rtext in remove_texts:
             text = text.replace(rtext, "")
 
-    return text
+    return text.strip().lower()
 
 
 def dump_jsonl(filename, lines):
@@ -158,23 +133,35 @@ def dump_jsonl(filename, lines):
     Exceções:
         Não lança exceções.
     """
-    with open(filename, 'a') as fp:
+    with open(filename, "a") as fp:
         for line in lines:
             fp.write(line)
             fp.write("\n")
 
 
-async def fetch_article(session, pid, instance_url):
+async def fetch_article(session, pid, url):
+    """
+    Obtém um artigo com acesso HTTP.
 
-    logger.info("Obtendo artigo com a url: %s" % instance_url.format(pid))
+    Args:
+        session: http session object(aiohttp), sessão http
+        pid: pid do artigo.
+        url: Endereço para URL contento uma posição de interpolação.
+        output_filepath: Caminho do arquivo de saída.
+    Retornos:
+        Retorno o corpo da resposta HTTP.
+    Exceções:
+        Trata a exceções de conexão com o endpoint HTTP.
+    """
+    logger.info("Obtendo artigo com a url: %s" % url.format(pid))
 
     try:
-        async with session.get(instance_url.format(pid)) as response:
+        async with session.get(url.format(pid)) as response:
             if response.status != 200:
                 logger.error(
-                    "Article not found '%s' in instance '%s'",
+                    "Artigo não encontrado '%s' na instância '%s'",
                     pid,
-                    instance_url.format(pid),
+                    url.format(pid),
                 )
                 return None
 
@@ -183,31 +170,72 @@ async def fetch_article(session, pid, instance_url):
         logger.error("Erro: %s.", e)
 
 
-async def fetch_articles(session, pid, output_filepath):
+async def fetch_articles(session, pid, cut_off_mark, output_filepath):
+    """
+    Obtém os artigos e gera um dicionário contendo as informação necessária para
+    saída em JSON.
+
+    A variável comp_data terá a seguinte estrutura:
+
+        {
+         'classic': 'Introduction One of the major current public health problems remains sepsis, which persists with hig',
+         'new': 'One of the major current public health problems remains sepsis, which persists with high hospital mo',
+         'url_classic': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-86502017000300175',
+         'url_new': 'http://new.scielo.br/article/S0102-86502017000300175',
+         'similarity': '72.22%',
+         'pid_v2': 'S0102-86502017000300175',
+         'similarity_technique': 'jaccard',
+         'cut_off_mark': 90,
+         'found_text_classic': true,
+         'found_text_new': false
+        }
+
+    Args:
+        session: http session object(aiohttp), sessão http
+        pid: pid do artigo.
+        cut_off_mark: Régua de similiridade.
+        output_filepath: Caminho do arquivo de saída.
+    Retornos:
+        Não há retorno
+    Exceções:
+        Não lança exceções.
+    """
     comp_list = []
     comp_data = {}
 
-    for inst in config.get('SITE_INSTANCES'):
-        html = await fetch_article(session, pid, inst.get('url'))
-        comp_data["%s_body" % inst.get('name')] = extract_body(html, inst.get('html_body'), inst.get('remove_body_tags'))
-        comp_data["%s_back" % inst.get('name')] = extract_back(html, inst.get('html_back'), inst.get('remove_back_tags'), inst.get('remove_back_texts'))
-        comp_data["url_%s" % inst.get('name')] = inst.get('url').format(pid)
+    for inst in config.get("SITE_INSTANCES"):
+        html = await fetch_article(session, pid, inst.get("url"))
+        comp_data["%s" % inst.get("name")] = extract(
+            html,
+            inst.get("html"),
+            inst.get("remove_tags"),
+            inst.get("remove_texts"),
+            inst.get("compare_tags"),
+        )
+        comp_data["url_%s" % inst.get("name")] = inst.get("url").format(pid)
 
-    sim, percent = sim_jaccard(normalize(comp_data['classic_body']), normalize(comp_data['new_body']))
-    comp_data['similarity_body'] = percent
+    sim, percent = sim_jaccard(
+        normalize(comp_data["classic"]), normalize(comp_data["new"])
+    )
+    comp_data["similarity"] = percent
 
-    sim, percent = sim_jaccard(normalize(comp_data['classic_back']), normalize(comp_data['new_back']))
-    comp_data['similarity_back'] = percent
+    comp_data["found_text_classic"] = bool(comp_data["classic"])
+    comp_data["found_text_new"] = bool(comp_data["new"])
 
-    comp_data['pid_v2'] = pid
-    comp_data['similarity_technique'] = 'jaccard'
+    if int(sim * 100) > cut_off_mark:
+        del comp_data["classic"]
+        del comp_data["new"]
+
+    comp_data["pid_v2"] = pid
+    comp_data["similarity_technique"] = "jaccard"
+    comp_data["cut_off_mark"] = cut_off_mark
 
     comp_list.append(json.dumps(comp_data))
 
     dump_jsonl(output_filepath, comp_list)
 
 
-async def bound_fetch(fetcher, session, pid, sem, output_filepath):
+async def bound_fetch(fetcher, session, pid, sem, cut_off_mark, output_filepath):
     """
     Responsável por envolver a função de obter os artigos por um semáforo.
 
@@ -216,10 +244,11 @@ async def bound_fetch(fetcher, session, pid, sem, output_filepath):
         session: http session object(aiohttp), sessão http
         pid: string, PID identificador do para URL
         sem: semaphore object, um objeto semáforo para envolver a função.
+        cut_off_mark: Régua de similiridade.
     """
 
     async with sem:
-        await fetcher(session, pid, output_filepath)
+        await fetcher(session, pid, cut_off_mark, output_filepath)
 
 
 async def main(
@@ -228,6 +257,7 @@ async def main(
     log_level="debug",
     ssl=False,
     semaphore_value=20,
+    cut_off_mark=90,
 ):
     """
     Compara o conteúdo do artigo entre o site novo e o site clássico - Compare articles
@@ -241,14 +271,16 @@ async def main(
     O resultado final desse comparador é um arquivo em formato `jsonl` com a seguinte estrutura:
 
         {
-         'classic_body': 'Introduction One of the major current public health problems remains sepsis, which persists with hig',
-         'new_body': 'One of the major current public health problems remains sepsis, which persists with high hospital mo',
+         'classic': 'Introduction One of the major current public health problems remains sepsis, which persists with hig',
+         'new': 'One of the major current public health problems remains sepsis, which persists with high hospital mo',
          'url_classic': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-86502017000300175',
          'url_new': 'http://new.scielo.br/article/S0102-86502017000300175',
-         'similarity_body': '72.22%',
-         'similarity_back': '100.00%',
+         'similarity': '72.22%',
          'pid_v2': 'S0102-86502017000300175',
-         'similarity_technique': 'jaccard'
+         'similarity_technique': 'jaccard',
+         'cut_off_mark': 90,
+         'found_text_classic': true,
+         'found_text_new': false
         }
 
     Args:
@@ -273,7 +305,16 @@ async def main(
         ) as session:
 
             for pid in pids:
-                tasks.append(bound_fetch(fetch_articles, session, pid.strip(), sem, output_filepath))
+                tasks.append(
+                    bound_fetch(
+                        fetch_articles,
+                        session,
+                        pid.strip(),
+                        sem,
+                        cut_off_mark,
+                        output_filepath,
+                    )
+                )
 
             if tasks:
                 logger.info("Quantidade de tarefas registradas: %s", len(tasks))
@@ -283,6 +324,7 @@ async def main(
     except Exception as e:
         logger.error("Erro: %s.", e)
         logger.exception(e)
+
 
 if __name__ == "__main__":
 
