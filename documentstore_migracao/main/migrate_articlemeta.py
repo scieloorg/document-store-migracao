@@ -315,6 +315,13 @@ def migrate_articlemeta_parser(sargs):
         dest="similarity_output",
     )
 
+    check_similarity.add_argument(
+        "--cut_off_mark",
+        default=90,
+        help="cut note to indicate items that are considered similar or not.",
+        dest="cut_off_mark",
+    )
+
     ################################################################################################
     args = parser.parse_args(sargs)
 
@@ -442,7 +449,8 @@ def migrate_articlemeta_parser(sargs):
         loop = asyncio.get_event_loop()
         results = loop.run_until_complete(compare_articles_sites.main(
                 input_filepath=args.similarity_input,
-                output_filepath=args.similarity_output
+                output_filepath=args.similarity_output,
+                cut_off_mark=args.cut_off_mark,
             ))
 
     else:
