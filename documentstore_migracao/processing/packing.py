@@ -2,6 +2,7 @@ import os
 import shutil
 import logging
 import json
+import difflib
 
 from tqdm import tqdm
 from urllib.parse import urlparse
@@ -235,3 +236,24 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name,
         files.write_file(errors_filename, error_messages)
         return incomplete_pkg_path
     return pkg_path
+
+
+def case_insensitive_find(word, words):
+    """
+    Obtém a palavra que seja mais similar possível dentre uma lista de palavras
+    A palavra obtida deve ser do mesmo tamanho
+    Mas pode ter variações entre maiúsculas e minúsculas
+    """
+    if word in words:
+        return word
+
+    _words = [w for w in words if len(w) == len(word)]
+
+    similar_items = difflib.get_close_matches(word, _words)
+    for item in similar_items:
+        if item.upper() == word.upper():
+            return item
+
+    for item in _words:
+        if item.upper() == word.upper():
+            return item
