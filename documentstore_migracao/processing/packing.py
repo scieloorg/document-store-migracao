@@ -167,19 +167,16 @@ def get_asset(old_path, new_fname, dest_path):
         return
 
     try:
-        not_found = []
         for path in [
             os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
             os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
         ]:
-            if os.path.exists(path):
+            path = find_file(path)
+            if path:
                 break
-            else:
-                not_found.append(f"Not found {path}")
-
         content = files.read_file_binary(path)
-    except IOError as e:
-        raise AssetNotFoundError(". ".join(not_found))
+    except (TypeError, FileNotFoundError, IOError):
+        raise AssetNotFoundError(f"Not found {old_path}")
     else:
         files.write_file_binary(dest_path_file, content)
 
