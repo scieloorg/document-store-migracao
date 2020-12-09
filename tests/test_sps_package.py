@@ -12,6 +12,7 @@ from documentstore_migracao.export.sps_package import (
     InvalidAttributeValueError,
     InvalidValueForOrderError,
     is_valid_value_for_order,
+    SourceJson,
 )
 
 
@@ -2624,3 +2625,64 @@ class Test_SPS_Package_Fix_Silently(unittest.TestCase):
             str(etree.tostring(_sps_package.xmltree))
         )
 
+
+class TestSourceJson(unittest.TestCase):
+
+    @property
+    def _json_content(self):
+        return """{
+            "article": {
+                "v32": [
+                    {
+                        "_": "2A"
+                    }
+                ],
+                "v31": [
+                    {
+                        "_": "60"
+                    }
+                ]
+            },
+            "fulltexts": {
+                "html": {
+                    "en": "http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0004-282X2002000200003&tlng=en"
+                },
+                "pdf": {
+                    "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf",
+                    "es": "http://www.scielo.br/pdf/anp/v60n2a/es_a03v60n2.pdf"
+                }
+            }
+        }"""
+
+    def test_issue_folder_returns(self):
+        source = SourceJson(self._json_content)
+        self.assertEqual("v60n2A", source.issue_folder)
+
+    def test_renditions_metadata_returns(self):
+        source = SourceJson(self._json_content)
+        expected = {
+            "en": "http://www.scielo.br/pdf/anp/v60n2a/a03v60n2.pdf",
+            "es": "http://www.scielo.br/pdf/anp/v60n2a/es_a03v60n2.pdf"
+        }
+        self.assertEqual(expected, source.renditions_metadata)
+
+    def test_fixed_renditions_metadata_returns(self):
+        source = SourceJson(self._json_content)
+        expected = {
+            "en": "http://www.scielo.br/pdf/anp/v60n2A/a03v60n2.pdf",
+            "es": "http://www.scielo.br/pdf/anp/v60n2A/es_a03v60n2.pdf"
+        }
+        self.assertEqual(expected, source.fixed_renditions_metadata)
+
+    def test_get_renditions_metadata_returns(self):
+        source = SourceJson(self._json_content)
+        metadata = {
+            "en": "http://www.scielo.br/pdf/anp/v60n2A/a03v60n2.pdf",
+            "es": "http://www.scielo.br/pdf/anp/v60n2A/es_a03v60n2.pdf"
+        }
+        renditions = [
+            ("http://www.scielo.br/pdf/anp/v60n2A/a03v60n2.pdf", "a03v60n2"),
+            ("http://www.scielo.br/pdf/anp/v60n2A/es_a03v60n2.pdf", "es_a03v60n2"),
+        ]
+        expected = (renditions, metadata)
+        self.assertEqual(expected, source.get_renditions_metadata())
