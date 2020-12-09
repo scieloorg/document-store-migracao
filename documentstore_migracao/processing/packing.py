@@ -238,6 +238,22 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name,
     return pkg_path
 
 
+def find_file(file_path):
+    """
+    A partir de um dado path, pega o nome de arquivo mais semelhante
+    """
+    dirname = os.path.dirname(file_path)
+    basename = os.path.basename(file_path)
+    try:
+        files = os.listdir(dirname)
+    except FileNotFoundError:
+        return None
+    else:
+        found = case_insensitive_find(basename, files)
+        if found:
+            return os.path.join(dirname, found)
+
+
 def case_insensitive_find(word, words):
     """
     Obtém a palavra que seja mais similar possível dentre uma lista de palavras

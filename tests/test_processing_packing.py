@@ -371,3 +371,36 @@ class TestCaseInsensitiveFind(unittest.TestCase):
         result = packing.case_insensitive_find("07t3.gif", words)
         self.assertEqual(expected, result)
 
+
+class TestFindFile(unittest.TestCase):
+
+    @patch("documentstore_migracao.processing.packing.os.listdir")
+    def test_find_file_a18tab02M(self, mock_listdir):
+        mock_listdir.return_value = [
+            'a16tab02.gif', 'a18tab02m.gif', 'a18tab01.gif',
+        ]
+        expected = "/tmp/a18tab02m.gif"
+        result = packing.find_file("/tmp/a18tab02M.gif")
+        self.assertEqual(expected, result)
+
+    @patch("documentstore_migracao.processing.packing.os.listdir")
+    def test_find_file_webannex(self, mock_listdir):
+        mock_listdir.return_value = ["WEBANNEX.pdf"]
+        expected = "/tmp/WEBANNEX.pdf"
+        result = packing.find_file("/tmp/webannex.pdf")
+        self.assertEqual(expected, result)
+
+    @patch("documentstore_migracao.processing.packing.os.listdir")
+    def test_find_file_en_v32n1a05_1216_t1(self, mock_listdir):
+        mock_listdir.return_value = ["en_v32n1a05_1216_t1.jpg"]
+        expected = "/tmp/en_v32n1a05_1216_t1.jpg"
+        result = packing.find_file("/tmp/en_v32n1a05_1216_t1.JPG")
+        self.assertEqual(expected, result)
+
+    @patch("documentstore_migracao.processing.packing.os.listdir")
+    def test_find_file_07t3(self, mock_listdir):
+        mock_listdir.return_value = ["07t03.gif"]
+        expected = None
+        result = packing.find_file("/tmp/07t3.gif")
+        self.assertEqual(expected, result)
+
