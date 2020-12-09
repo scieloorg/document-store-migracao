@@ -318,6 +318,7 @@ def migrate_articlemeta_parser(sargs):
     check_similarity.add_argument(
         "--cut_off_mark",
         default=90,
+        type=int,
         help="cut note to indicate items that are considered similar or not.",
         dest="cut_off_mark",
     )
