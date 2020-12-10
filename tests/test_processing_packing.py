@@ -256,6 +256,27 @@ class TestProcessingPackingGetAsset(unittest.TestCase):
             str(exc.exception)
         )
 
+    @patch("documentstore_migracao.processing.packing.find_file")
+    @patch("documentstore_migracao.utils.files.read_file_binary")
+    def test_get_asset_raises_AssetNotFoundError_exception(
+            self, mk_read_file_binary, mock_find_file):
+
+        with utils.environ(
+            SOURCE_PATH=SAMPLES_PATH,
+            VALID_XML_PATH=SAMPLES_PATH,
+            SPS_PKG_PATH=SAMPLES_PATH,
+            INCOMPLETE_SPS_PKG_PATH=SAMPLES_PATH,
+            SOURCE_PDF_FILE=os.path.join(os.path.dirname(__file__), "samples"),
+            SOURCE_IMG_FILE=os.path.join(os.path.dirname(__file__), "samples")
+        ):
+            mk_read_file_binary.return_value = b""
+            old_path = "/img/revistas/acron/volume/seta.gif"
+            new_fname = "novo"
+            dest_path = TEMP_TEST_PATH
+            path = packing.get_asset(old_path, new_fname, dest_path)
+            htdocs_path = os.path.join(os.path.dirname(__file__), "samples")
+            mock_find_file.assert_called_with(f"{htdocs_path}/img/seta.gif")
+
 
 class TestProcessingpack_PackingAssets(unittest.TestCase):
     def setUp(self):
