@@ -412,7 +412,7 @@ def register_documents_in_documents_bundle(
                 data["bundle_id"],
                 exc,
             )
-            with open(err_filename, "a") as f:
-                f.write(json.dumps({"issue": data["bundle_id"], "items": items}) + "\n")
+            content = json.dumps({"issue": data["bundle_id"], "items": items})
+            files.write_file(err_filename, content + "\n", "a")
         else:
             link_documents_bundles_with_documents(documents_bundle, items, session_db)
