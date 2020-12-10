@@ -113,7 +113,6 @@ class MinioStorage:
                 self.bucket_name,
                 object_name=object_name,
                 file_path=file_path,
-                metadata=metadata,
             )
 
         except NoSuchBucket as err:
