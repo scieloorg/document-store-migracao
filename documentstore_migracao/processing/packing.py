@@ -166,11 +166,17 @@ def get_asset(old_path, new_fname, dest_path):
         logger.debug("Arquivo já armazenado na pasta de destino: %s", dest_path_file)
         return
 
+    paths = [
+        os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
+        os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
+    ]
+    if (filename_m, ext_m) == ("seta", ".gif"):
+        seta_path = os.path.join(
+            config.get('SOURCE_IMG_FILE'), "img", "seta.gif")
+        paths.insert(0, seta_path)
+
     try:
-        for path in [
-            os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
-            os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
-        ]:
+        for path in paths:
             path = find_file(path)
             if path:
                 break
