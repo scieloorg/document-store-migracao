@@ -2,6 +2,7 @@ import os
 import shutil
 import logging
 import json
+import difflib
 
 from tqdm import tqdm
 from urllib.parse import urlparse
@@ -166,19 +167,16 @@ def get_asset(old_path, new_fname, dest_path):
         return
 
     try:
-        not_found = []
         for path in [
             os.path.join(config.get('SOURCE_IMG_FILE'), asset_path),
             os.path.join(config.get('SOURCE_PDF_FILE'), asset_path),
         ]:
-            if os.path.exists(path):
+            path = find_file(path)
+            if path:
                 break
-            else:
-                not_found.append(f"Not found {path}")
-
         content = files.read_file_binary(path)
-    except IOError as e:
-        raise AssetNotFoundError(". ".join(not_found))
+    except (TypeError, FileNotFoundError, IOError):
+        raise AssetNotFoundError(f"Not found {old_path}")
     else:
         files.write_file_binary(dest_path_file, content)
 
@@ -235,3 +233,40 @@ def packing_assets(asset_replacements, pkg_path, incomplete_pkg_path, pkg_name,
         files.write_file(errors_filename, error_messages)
         return incomplete_pkg_path
     return pkg_path
+
+
+def find_file(file_path):
+    """
+    A partir de um dado path, pega o nome de arquivo mais semelhante
+    """
+    dirname = os.path.dirname(file_path)
+    basename = os.path.basename(file_path)
+    try:
+        files = os.listdir(dirname)
+    except FileNotFoundError:
+        return None
+    else:
+        found = case_insensitive_find(basename, files)
+        if found:
+            return os.path.join(dirname, found)
+
+
+def case_insensitive_find(word, words):
+    """
+    Obtém a palavra que seja mais similar possível dentre uma lista de palavras
+    A palavra obtida deve ser do mesmo tamanho
+    Mas pode ter variações entre maiúsculas e minúsculas
+    """
+    if word in words:
+        return word
+
+    _words = [w for w in words if len(w) == len(word)]
+
+    similar_items = difflib.get_close_matches(word, _words)
+    for item in similar_items:
+        if item.upper() == word.upper():
+            return item
+
+    for item in _words:
+        if item.upper() == word.upper():
+            return item
