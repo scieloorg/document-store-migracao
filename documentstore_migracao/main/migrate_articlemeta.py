@@ -6,6 +6,7 @@ import json
 import logging
 import argparse
 import urllib3
+import asyncio
 
 from .base import base_parser, minio_parser, mongodb_parser
 
@@ -20,6 +21,7 @@ from documentstore_migracao.processing import (
     packing,
     inserting,
     rollback,
+    compare_articles_sites,
 )
 from documentstore_migracao.object_store import minio
 from documentstore import adapters as ds_adapters
@@ -295,6 +297,32 @@ def migrate_articlemeta_parser(sargs):
         help='Define an URL template for target Website (e.g "http://www.scielo.br/article/\$id"',
     )
 
+    check_similarity = subparsers.add_parser(
+        "check_similarity", help="Checks the similarity between the new and the old site.",
+    )
+
+    check_similarity.add_argument(
+        "--similarity_input",
+        required=True,
+        help="File containg a list of pids to check similarity.",
+        dest="similarity_input",
+    )
+
+    check_similarity.add_argument(
+        "--similarity_output",
+        required=True,
+        help="Path to the output file will write a jsonl file.",
+        dest="similarity_output",
+    )
+
+    check_similarity.add_argument(
+        "--cut_off_mark",
+        default=90,
+        type=int,
+        help="cut note to indicate items that are considered similar or not.",
+        dest="cut_off_mark",
+    )
+
     ################################################################################################
     args = parser.parse_args(sargs)
 
@@ -417,6 +445,15 @@ def migrate_articlemeta_parser(sargs):
         quality_checker.check_documents_availability_in_website(
             args.pids.readlines(), args.target, args.output
         )
+    elif args.command == "check_similarity":
+
+        loop = asyncio.get_event_loop()
+        results = loop.run_until_complete(compare_articles_sites.main(
+                input_filepath=args.similarity_input,
+                output_filepath=args.similarity_output,
+                cut_off_mark=args.cut_off_mark,
+            ))
+
     else:
         parser.print_help()
 

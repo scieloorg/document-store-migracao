@@ -58,6 +58,31 @@ _default = dict(
     DATABASE_CONNECT_ARGS='{"connect_timeout": 20000}',
     SOURCE_PDF_FILE=os.path.join(BASE_PATH, "bases"),
     SOURCE_IMG_FILE=os.path.join(BASE_PATH, "htdocs"),
+
+    SITE_INSTANCES=[
+        {
+            "name": "classic",
+            "url": "http://www.scielo.br/scielo.php?script=sci_arttext&pid={}",
+            "html": {'tag_name': 'div', 'atrib': {'xmlns': ''}},
+            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "div"],
+            "remove_tags": [{'tag_name': 'sup', 'atrib': {}},
+                            {'tag_name': 'div', 'atrib': {'class': 'foot-notes'}},
+                            {'tag_name': 'div', 'atrib': {'id': 'group'}},
+                            {'tag_name': 'script', 'atrib': {}}],
+            "remove_texts": ['REFERENCES', '[ Links ]']
+        },
+        {
+            "name": "new",
+            "url": "http://new.scielo.br/article/{}",
+            "html": {'tag_name': 'article', 'atrib': {'id': 'articleText'}},
+            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "div"],
+            "remove_tags": [{'tag_name': 'span', 'atrib': {'class': 'ref'}},
+                            {'tag_name': 'ul', 'atrib': {'class': 'refList footnote'}},
+                            {'tag_name': 'section', 'atrib': {'class': 'documentLicense'}}],
+            "remove_texts": ['REFERENCES', 'REFERÊNCIAS BIBLIOGRÁFICAS']
+        },
+    ]
+
 )
 
 
