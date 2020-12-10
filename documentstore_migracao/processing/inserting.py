@@ -336,12 +336,10 @@ def register_documents_in_documents_bundle(
         data_journal = {}
         for journal in journals:
             o_journal = Journal(journal)
-            if o_journal.print_issn:
-                data_journal[o_journal.print_issn] = o_journal.scielo_issn
-            if o_journal.electronic_issn:
-                data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
-            if o_journal.scielo_issn:
-                data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
+            for _issn in (o_journal.print_issn, o_journal.electronic_issn,
+                          o_journal.scielo_issn):
+                if _issn:
+                    data_journal[_issn] = o_journal.scielo_issn
 
         for issn_type in ("eissn", "pissn", "issn"):
             if document.get(issn_type) is not None:
