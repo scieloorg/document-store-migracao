@@ -208,6 +208,20 @@ def register_document(folder: str, session, storage, pid_database_engine, poison
         ) from None
 
     xml_sps = SPS_Package(obj_xml)
+
+    pid_v3 = xml_sps.scielo_pid_v3
+
+    try:
+        session.documents.fetch(id=pid_v3)
+    except DoesNotExist:
+        pass
+    else:
+        logger.debug(
+            "Document '%s' already exist in kernel. Returning article result information",
+            pid_v3,
+        )
+        return get_article_result_dict(xml_sps)
+
     prefix = xml_sps.media_prefix or ""
     url_xml = storage.register(xml_path, prefix)
     static_assets, static_additionals = get_document_assets_path(
