@@ -9,6 +9,7 @@ This is the complete utilization guide for this tool, these next sections will e
 4. [Generating documents packages](#4-\--generating-documents-packages)
 5. Importing documents packages to the Publish Platform
 6. Committing the relationship between documents and issues
+7. [Check similarity between sites](#7-\--check-similarity-between-sites)
 
 ## 2 - Converting HTML to XML documents
 
@@ -90,7 +91,7 @@ It may take some time depending on the quantity of XMLs you are updating. For co
 
 After the command finishes, you will have articles' mixed-citations updated if everything works as expected.
 
-### 3.3 - Troubleshooting 
+### 3.3 - Troubleshooting
 
 It is important to make sure if everything works and if all articles were updated for that you should pay attention to all error logging printed in the terminal or inside the migration log directory.
 
@@ -101,7 +102,7 @@ Look closer to messages like `file not found` or `access denied` during previous
 Documents Packages is the phase in which we create packages with all the necessary adjustments to be stored in a data store.
 
 This phase is also necessary so that the renditions and assets are all available and accessible via the xml file.
- 
+
 In order to run the `` packing`` phase, it is necessary to perform some predicted configurations, therefore, it is necessary to add two environment variables `` SOURCE_PDF_FILE`` and `` SOURCE_IMG_FILE``.
 
 By default, these variables have the values:
@@ -132,4 +133,23 @@ Help:
 
 ```shell
 ds_migracao --loglevel DEBUG pack -help
+```
+
+## 7 - Check similarity between sites
+
+
+Check_similarity command it is possible to make a comparison between the new site and the old site, in order to assess the similarity between the sites.
+
+In this command it is possible to determine a cut-off mark of how much it is considering an article similar to another.
+
+Example:
+
+```shell
+ds_migracao check_similarity --similarity_input pids.txt --similarity_output similarity.jsonl --cut_off_mark=99
+```
+
+This command outputs a json file where you can later evaluate the result, example:
+
+```shell
+cat similarity | jq 'select(.similarity[0:5]|tonumber>90)'
 ```

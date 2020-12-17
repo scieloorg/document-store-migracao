@@ -222,7 +222,7 @@ async def fetch_articles(session, pid, cut_off_mark, output_filepath):
     comp_data["found_text_classic"] = bool(comp_data["classic"])
     comp_data["found_text_new"] = bool(comp_data["new"])
 
-    if int(sim * 100) > cut_off_mark:
+    if (sim * 100) > cut_off_mark:
         del comp_data["classic"]
         del comp_data["new"]
 
