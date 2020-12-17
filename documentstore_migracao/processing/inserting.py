@@ -208,6 +208,20 @@ def register_document(folder: str, session, storage, pid_database_engine, poison
         ) from None
 
     xml_sps = SPS_Package(obj_xml)
+
+    pid_v3 = xml_sps.scielo_pid_v3
+
+    try:
+        session.documents.fetch(id=pid_v3)
+    except DoesNotExist:
+        pass
+    else:
+        logger.debug(
+            "Document '%s' already exist in kernel. Returning article result information",
+            pid_v3,
+        )
+        return get_article_result_dict(xml_sps)
+
     prefix = xml_sps.media_prefix or ""
     url_xml = storage.register(xml_path, prefix)
     static_assets, static_additionals = get_document_assets_path(
@@ -330,19 +344,17 @@ def link_documents_bundles_with_documents(
 def register_documents_in_documents_bundle(
     session_db, file_documents: str, file_journals: str
 ) -> None:
-    def get_issn(document):
-        """Recupera o ISSN ID do Periódico ao qual documento pertence"""
-        journals = reading.read_json_file(file_journals)
-        data_journal = {}
-        for journal in journals:
-            o_journal = Journal(journal)
-            if o_journal.print_issn:
-                data_journal[o_journal.print_issn] = o_journal.scielo_issn
-            if o_journal.electronic_issn:
-                data_journal[o_journal.electronic_issn] = o_journal.scielo_issn
-            if o_journal.scielo_issn:
-                data_journal[o_journal.scielo_issn] = o_journal.scielo_issn
+    journals = reading.read_json_file(file_journals)
+    data_journal = {}
+    for journal in journals:
+        o_journal = Journal(journal)
+        for _issn in (o_journal.print_issn, o_journal.electronic_issn,
+                      o_journal.scielo_issn):
+            if _issn:
+                data_journal[_issn] = o_journal.scielo_issn
 
+    def get_issn(document, data_journal=data_journal):
+        """Recupera o ISSN ID do Periódico ao qual documento pertence"""
         for issn_type in ("eissn", "pissn", "issn"):
             if document.get(issn_type) is not None:
                 issn_value = document[issn_type].strip()
@@ -414,6 +426,7 @@ def register_documents_in_documents_bundle(
                 data["bundle_id"],
                 exc,
             )
-            files.write_file(err_filename, data["bundle_id"] + "\n", "a")
+            content = json.dumps({"issue": data["bundle_id"], "items": items})
+            files.write_file(err_filename, content + "\n", "a")
         else:
             link_documents_bundles_with_documents(documents_bundle, items, session_db)

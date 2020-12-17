@@ -254,9 +254,13 @@ class TestProcessingInserting(unittest.TestCase):
             config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
         )
         self.assertEqual(os.path.isfile(err_filename), True)
+        expected = (
+            '{"issue": "0036-3634-2009-v45-n4", '
+            '"items": [{"id": "JwqGdMDrdcV3Z7MFHgtKvVk", "order": "00349"}]}\n'
+        )
         with open(err_filename) as fp:
             content = fp.read()
-            self.assertEqual(content, "0036-3634-2009-v45-n4\n")
+            self.assertEqual(content, expected)
 
     @patch("documentstore_migracao.processing.inserting.open")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")
@@ -299,9 +303,13 @@ class TestProcessingInserting(unittest.TestCase):
             config.get("ERRORS_PATH"), "insert_documents_in_bundle.err"
         )
         self.assertEqual(os.path.isfile(err_filename), True)
+        expected = (
+            '{"issue": "0036-3634-2009-v45-n4", '
+            '"items": [{"id": "JwqGdMDrdcV3Z7MFHgtKvVk", "order": "00349"}]}\n'
+        )
         with open(err_filename) as fp:
             content = fp.read()
-            self.assertEqual(content, "0036-3634-2009-v45-n4\n")
+            self.assertEqual(content, expected)
 
     @patch("documentstore_migracao.processing.inserting.open")
     @patch("documentstore_migracao.processing.inserting.reading.read_json_file")

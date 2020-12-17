@@ -401,18 +401,18 @@ class AnalyzerPack(LoggerAnalyzer):
 
         parsers = [
             {
-                "regex": asset_not_found_regex,
+                "regex": self.asset_not_found_regex,
                 "error": ErrorEnum.RESOURCE_NOT_FOUND,
                 "group": "renditions",
             },
             {
-                "regex": rendition_not_found_regex,
+                "regex": self.rendition_not_found_regex,
                 "error": ErrorEnum.RESOURCE_NOT_FOUND,
                 "group": "renditions",
             },
-            {"regex": xml_not_updated_regex, "error": ErrorEnum.NOT_UPDATED},
-            {"regex": xml_not_found_regex, "error": ErrorEnum.XML_NOT_FOUND},
-            {"regex": xml_missing_metadata_regex, "error": ErrorEnum.MISSING_METADATA},
+            {"regex": self.xml_not_updated_regex, "error": ErrorEnum.NOT_UPDATED},
+            {"regex": self.xml_not_found_regex, "error": ErrorEnum.XML_NOT_FOUND},
+            {"regex": self.xml_missing_metadata_regex, "error": ErrorEnum.MISSING_METADATA},
         ]
 
         self.load()
