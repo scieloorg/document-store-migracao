@@ -140,7 +140,7 @@ ds_migracao --loglevel DEBUG pack -help
 
 Check_similarity command it is possible to make a comparison between the new site and the old site, in order to assess the similarity between the sites.
 
-In this command it is possible to determine a cut note of how much it is considering an article similar to another.
+In this command it is possible to determine a cut-off mark of how much it is considering an article similar to another.
 
 Example:
 
