@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup as soup
 from documentstore_migracao import config
 
 import aiohttp
+from tenacity import retry, wait_exponential
 
 LOGGER_FORMAT = u"%(asctime)s %(levelname)-5.5s %(message)s"
 logger = logging.getLogger(__name__)
@@ -56,8 +57,8 @@ def sim_jaccard(text1, text2):
     set_text2 = set(text2.split())
 
     intersection = set_text1.intersection(set_text2)
-
     union = set_text1.union(set_text2)
+
     try:
         sim = float(len(intersection)) / (len(union))
     except ZeroDivisionError as e:
@@ -139,9 +140,14 @@ def dump_jsonl(filename, lines):
             fp.write("\n")
 
 
+@retry(wait=wait_exponential(multiplier=1, min=4, max=20))
 async def fetch_article(session, pid, url):
     """
     Obtém um artigo com acesso HTTP.
+
+    Retentativas: Aguarde 2 ^ x * 1 segundo entre cada nova tentativa,
+                  começando com 4 segundos, depois até 10 segundos e 10
+                  segundos depois
 
     Args:
         session: http session object(aiohttp), sessão http
@@ -166,8 +172,8 @@ async def fetch_article(session, pid, url):
                 return None
 
             return await response.content.read()
-    except aiohttp.ClientResponseError as e:
-        logger.error("Erro: %s.", e)
+    except Exception as e:
+        logger.error("Erro ao obter o artigo, pid: %s, retentando...., erro:%s" % (pid, e))
 
 
 async def fetch_articles(session, pid, cut_off_mark, output_filepath):
