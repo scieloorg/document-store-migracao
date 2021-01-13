@@ -63,28 +63,45 @@ _default = dict(
         {
             "name": "classic",
             "url": "http://www.scielo.br/scielo.php?script=sci_arttext&pid={}",
-            "html": {'tag_name': 'div', 'atrib': {'xmlns': ''}},
-            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "div"],
-            "remove_tags": [{'tag_name': 'sup', 'atrib': {}},
-                            {'tag_name': 'div', 'atrib': {'class': 'foot-notes'}},
+            "html": {'tag_name': 'div', 'atrib': {'class': 'content'}},
+            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "blockquote", "div"],
+            "remove_tags": [{'tag_name': 'script', 'atrib': {}},
+                            {'tag_name': 'div', 'atrib': {'class': 'footer'}},
                             {'tag_name': 'div', 'atrib': {'id': 'group'}},
-                            {'tag_name': 'script', 'atrib': {}}],
-            "remove_texts": ['REFERENCES', '[ Links ]']
+                            {'tag_name': 'div', 'atrib': {'class': 'license'}}, ],
+            "remove_texts": ['REFERENCES', 'References', '[ Links ]', 'abstract', 'abstracts',
+                             'ABSTRACT', 'ABSTRACTS', 'Abstract', 'Abstracts',
+                             'resumo', 'RESUMO', 'doi', 'thumbnail', 'Thumbnail',
+                             'http', 'https', 'version', 'Print', 'author',
+                             'AUHTOR', 'How', 'cite', 'Close', 'close', 'suppl', 'about', 'About', 'ABOUT',
+                             '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Copy', 'copy', 'pdf', 'PDF',
+                             'figures', 'Figures', 'FIGURES']
         },
         {
             "name": "new",
             "url": "http://new.scielo.br/article/{}",
-            "html": {'tag_name': 'article', 'atrib': {'id': 'articleText'}},
-            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "div"],
-            "remove_tags": [{'tag_name': 'span', 'atrib': {'class': 'ref'}},
-                            {'tag_name': 'ul', 'atrib': {'class': 'refList footnote'}},
+            "html": {'tag_name': 'div', 'atrib': {'id': 'standalonearticle'}},
+            "compare_tags": ["p", "li", "b", "i", "em", "sup", "br", "div", "h1", "h2", "h3", "h4", "h5", "h6", "table"],
+            "remove_tags": [{'tag_name': 'span', 'atrib': {'class': 'refCtt'}},
+                            {'tag_name': 'script', 'atrib': {}},
+                            {'tag_name': 'sup', 'atrib': {'class': 'big'}},
+                            {'tag_name': 'div', 'atrib': {'class': 'thumb'}},
+                            {'tag_name': 'ul', 'atrib': {'class': 'articleMenu'}},
+                            {'tag_name': 'div', 'atrib': {'data-anchor': 'Datas de Publicação '}},
+                            {'tag_name': 'div', 'atrib': {'data-anchor': 'Publication Dates'}},
                             {'tag_name': 'section', 'atrib': {'class': 'documentLicense'}}],
-            "remove_texts": ['REFERENCES', 'REFERÊNCIAS BIBLIOGRÁFICAS']
+            "remove_texts": ['REFERENCES', 'References', 'REFERÊNCIAS BIBLIOGRÁFICAS', 'references',
+                             'abstract', 'abstracts', 'Abstract', 'Abstracts',
+                             'ABSTRACT', 'ABSTRACTS', 'thumbnail', 'Thumbnail',
+                             'resumo', 'RESUMO', 'doi', 'http', 'https',
+                             'version', 'Print', 'author', 'AUHTOR', 'How',
+                             'cite', 'Close', 'close', 'suppl', 'about', 'About', 'ABOUT'
+                             '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Copy', 'copy', 'pdf', 'PDF',
+                             'figures', 'Figures', 'FIGURES']
         },
     ]
 
 )
-
 
 def get(config: str):
     """Recupera configurações do sistema, caso a configuração não
