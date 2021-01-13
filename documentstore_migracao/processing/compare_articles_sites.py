@@ -61,7 +61,6 @@ def sim_jaccard(text1, text2):
 
     try:
         sim = float(len(intersection)) / (len(union))
-        print(sim)
     except ZeroDivisionError as e:
         return (0, "0.00%")
 
