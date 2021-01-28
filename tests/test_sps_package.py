@@ -12,6 +12,7 @@ from documentstore_migracao.export.sps_package import (
     InvalidAttributeValueError,
     InvalidValueForOrderError,
     is_valid_value_for_order,
+    is_valid_value_for_issns,
     SourceJson,
 )
 
@@ -2686,3 +2687,31 @@ class TestSourceJson(unittest.TestCase):
         ]
         expected = (renditions, metadata)
         self.assertEqual(expected, source.get_renditions_metadata())
+
+
+class TestIsValidValueForIssns(unittest.TestCase):
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_value_is_empty_dict(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({})
+        self.assertIn("Expected at least one item", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_value_is_not_dict(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns(('a', 'b'))
+        self.assertIn("Expected dict", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_of_duplicated_values(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({"epub": 'x', "ppub": "x"})
+        self.assertIn("duplicated keys or values", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_of_invalid_key(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({"invalid_key": 'y', "ppub": "x"})
+        self.assertIn("Expected keys: 'epub' or 'ppub'", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_of_invalid_values(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({"ppub": 'y', "epub": "x"})
+        self.assertIn("is not an ISSN", str(exc.exception))

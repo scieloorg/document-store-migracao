@@ -99,11 +99,33 @@ def is_valid_value_for_language(value):
     return True
 
 
+def is_valid_value_for_issns(issns_dict):
+    """
+    Expected issns_dict is a dict
+    keys: 'epub' and/or 'ppub'
+    values: issn (1234-5678)
+    """
+    try:
+        if len(set(issns_dict.keys())) != len(set(issns_dict.values())):
+            raise ValueError(f"{issns_dict} has duplicated keys or values")
+        if not issns_dict:
+            raise ValueError(f"Expected at least one item")
+        if not set(issns_dict.keys()).issubset({'epub', 'ppub'}):
+            raise ValueError(
+                f"Expected keys: 'epub' or 'ppub'. Found: {issns_dict.keys()}")
+        for v in issns_dict.values():
+            if len(v) != 9 or v[4] != "-":
+                raise ValueError(f"{v} is not an ISSN")
+    except AttributeError:
+        raise ValueError(f"Expected dict. {issns_dict} is not dict")
+
+
 VALIDATE_FUNCTIONS = dict((
     ("article_id_which_id_type_is_other", is_valid_value_for_order),
     ("scielo_pid_v2", is_valid_value_for_pid_v2),
     ("aop_pid", is_valid_value_for_pid_v2),
     ("original_language", is_valid_value_for_language),
+    ("issns", is_valid_value_for_issns),
 ))
 
 
