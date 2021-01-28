@@ -2717,7 +2717,7 @@ class TestIsValidValueForIssns(unittest.TestCase):
         self.assertIn("is not an ISSN", str(exc.exception))
 
 
-class TestSPSPackageIssns(unittest.TestCase):
+class TestSPSPackageHasNoIssns(unittest.TestCase):
     def _sps_package(self, issns=''):
         xml = f"""<article>
         <journal-meta>{issns}</journal-meta>
@@ -2728,6 +2728,16 @@ class TestSPSPackageIssns(unittest.TestCase):
 
     def test_get_issns_returns_none_because_there_is_no_issn(self):
         self.assertIsNone(self._sps_package().issns)
+
+
+class TestSPSPackageHaIssns(unittest.TestCase):
+    def _sps_package(self, issns=''):
+        xml = f"""<article>
+        <journal-meta>{issns}</journal-meta>
+        <article-meta></article-meta>
+        </article>"""
+        xmltree = etree.fromstring(xml)
+        return SPS_Package(xmltree, None)
 
     def test_get_issns_returns_dict(self):
         issns = """
