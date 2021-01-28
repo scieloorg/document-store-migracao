@@ -50,6 +50,7 @@ class BuildPSPackage(object):
         self.pdf_folder = pdf_folder
         self.out_folder = out_folder
         self.articles_csvfile = articles_csvfile
+        self.issns = {}
 
     @property
     def xml_fs(self):
@@ -144,7 +145,9 @@ class BuildPSPackage(object):
             _sps_package, "article_id_which_id_type_is_other",
             _sps_package.order, f_pid, "article-id[@pub-id-type='other']"
         )
-
+        new_issns = self.issns and self.issns.get(f_pid[1:10])
+        if new_issns:
+            _fix_attr(_sps_package, "issns", new_issns, f_pid, "ISSNs")
         if _sps_package.is_ahead_of_print:
             return _sps_package
 

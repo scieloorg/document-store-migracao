@@ -1116,3 +1116,50 @@ class TestBuildSPSPackageXMLWEBOptimiser(TestBuildSPSPackageBase):
             self.assertIn("1234-5678-rctb-45-05-0110-e02.png", img_filenames)
             self.assertIn("1234-5678-rctb-45-05-0110-e04.tif", img_filenames)
             self.assertIn("1234-5678-rctb-45-05-0110-e04.png", img_filenames)
+
+
+class TestBuildSPSPackageHasISSNsToFix(TestCase):
+
+    def setUp(self):
+        xml = """<article>
+            <journal-meta>
+                <journal-id/>
+            </journal-meta>
+            <article-meta/>
+        </article>
+        """
+        xmltree = etree.fromstring(xml)
+        self._sps_package = SPS_Package(xmltree)
+        self.builder = build_ps_package.BuildPSPackage(
+            "/data/xmls",
+            "/data/imgs",
+            "/data/pdfs",
+            "/data/output",
+            "/data/article_data_file.csv",
+        )
+        self.pack_name = "1806-0013-test-01-01-0001"
+        self.row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,en,".split(",")
+
+    def test__update_sps_package_obj_updates_issns(self):
+        # issns data to complete sps_package
+        self.builder.issns = {
+            "0101-0101":
+                {"ppub": "0101-0101", "epub": "8888-0101"}
+        }
+        # self._sps_package has no ISSNs
+        result = self.builder._update_sps_package_obj(
+            self._sps_package, self.pack_name, self.row, self.pack_name + ".xml"
+        )
+        # self._sps_package.issns was updated
+        expected = {"ppub": "0101-0101", "epub": "8888-0101"}
+        self.assertEqual(expected, result.issns)
+
+    def test__update_sps_package_obj_does_not_update_issns(self):
+        # issns data to complete sps_package
+        self.builder.issns = {}
+        # self._sps_package has no ISSNs
+        result = self.builder._update_sps_package_obj(
+            self._sps_package, self.pack_name, self.row, self.pack_name + ".xml"
+        )
+        # self._sps_package.issns was not updated because there is no match
+        self.assertIsNone(result.issns)

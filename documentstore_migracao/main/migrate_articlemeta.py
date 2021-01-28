@@ -155,6 +155,14 @@ def migrate_articlemeta_parser(sargs):
         help="Article CSV data file from ISIS bases",
     )
 
+    pack_sps_parser_from_site.add_argument(
+        "-Issns-jsonfile",
+        "--issns-jsonfile",
+        dest="issns_jsonfile",
+        required=False,
+        help="ISSNs JSON data file",
+    )
+
     # IMPORTACAO
     import_parser = subparsers.add_parser(
         "import",
@@ -381,7 +389,9 @@ def migrate_articlemeta_parser(sargs):
             args.output_folder,
             args.articles_csvfile,
         )
-
+        if issns_jsonfile:
+            with open(issns_jsonfile) as fp:
+                build_ps.issns = json.loads(fp.read())
         build_ps.run()
 
     elif args.command == "import":
