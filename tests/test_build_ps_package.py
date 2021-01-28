@@ -1163,3 +1163,34 @@ class TestBuildSPSPackageHasISSNsToFix(TestCase):
         )
         # self._sps_package.issns was not updated because there is no match
         self.assertIsNone(result.issns)
+
+    def test__update_sps_package_obj_does_not_update_issns_because_issns_were_already_updated(self):
+        pack_name = "1806-0013-test-01-01-0001"
+        row = "S0101-01012019000100001,,test/v1n1/1806-0013-test-01-01-0001.xml,,,test,v1n1,en,".split(",")
+
+        self.builder.issns = {
+            "0101-0101":
+                {"ppub": "0101-0101", "epub": "8888-0101"}
+        }
+
+        # self._sps_package has no ISSN
+        sps_package_updated = self.builder._update_sps_package_obj(
+            self._sps_package, pack_name, row, pack_name + ".xml"
+        )
+        # sps_package_updated has ISSN now
+        expected = {"ppub": "0101-0101", "epub": "8888-0101"}
+        self.assertEqual(expected, sps_package_updated.issns)
+
+        # try to update sps_package_updated again with different values:
+        # {"ppub": "9999-9999", "epub": "8888-8888"}
+        self.builder.issns = {
+            "0101-0101":
+                {"ppub": "9999-9999", "epub": "8888-8888"}
+        }
+        result = self.builder._update_sps_package_obj(
+            sps_package_updated, pack_name, row, pack_name + ".xml"
+        )
+        # it is expected that result.issns will not be updated with
+        # {"ppub": "9999-9999", "epub": "8888-8888"}
+        expected = {"ppub": "0101-0101", "epub": "8888-0101"}
+        self.assertEqual(expected, result.issns)
