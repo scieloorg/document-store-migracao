@@ -2757,8 +2757,17 @@ class TestSPSPackageHasNoIssns(unittest.TestCase):
         self.assertNotIn(b'<issn pub-type="epub">XXXX-YYY</issn>', xml)
         self.assertNotIn(b'<issn pub-type="ppub">8888-879</issn>', xml)
 
+    def test_fix_does_not_raise_exception_because_is_silenced(self):
+        self._sps_package.fix('issns', 'invalid value', silently=True)
+        self.assertIsNone(self._sps_package.issns)
 
-class TestSPSPackageHaIssns(unittest.TestCase):
+    def test_fix_raises_exception_because_is_not_silenced(self):
+        new_value = 'invalid value'
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            self._sps_package.fix('issns', new_value, silently=False)
+
+
+class TestSPSPackageHasIssns(unittest.TestCase):
     def setUp(self):
         xml = f"""<article>
         <journal-meta>
@@ -2793,4 +2802,20 @@ class TestSPSPackageHaIssns(unittest.TestCase):
         xml = etree.tostring(self._sps_package.xmltree)
         self.assertIn(b'<issn pub-type="epub">1234-0987</issn>', xml)
         self.assertIn(b'<issn pub-type="ppub">1834-0987</issn>', xml)
+
+    def test_fix_does_not_raise_exception_because_is_silenced(self):
+        new_value = {
+            "epub": "1299-0987",
+            "ppub": "1899-0987",
+        }
+        self._sps_package.fix('issns', new_value, silently=True)
+        self.assertNotEqual(new_value, self._sps_package.issns)
+
+    def test_fix_raises_exception_because_is_not_silenced(self):
+        new_value = {
+            "epub": "1299-0987",
+            "ppub": "1899-0987",
+        }
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            self._sps_package.fix('issns', new_value, silently=False)
 
