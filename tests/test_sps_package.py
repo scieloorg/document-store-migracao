@@ -2745,6 +2745,18 @@ class TestSPSPackageHasNoIssns(unittest.TestCase):
         self.assertIn(b'<issn pub-type="epub">1209-8709</issn>', xml)
         self.assertIn(b'<issn pub-type="ppub">8809-8709</issn>', xml)
 
+    def test_set_issns_raises_exception_if_new_value_is_invalid(self):
+        expected = None
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            self._sps_package.issns = {
+                "epub": "XXXX-YYY",
+                "ppub": "8888-879",
+            }
+        self.assertEqual(expected, self._sps_package.issns)
+        xml = etree.tostring(self._sps_package.xmltree)
+        self.assertNotIn(b'<issn pub-type="epub">XXXX-YYY</issn>', xml)
+        self.assertNotIn(b'<issn pub-type="ppub">8888-879</issn>', xml)
+
 
 class TestSPSPackageHaIssns(unittest.TestCase):
     def setUp(self):
