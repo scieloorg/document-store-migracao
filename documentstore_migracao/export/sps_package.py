@@ -427,7 +427,12 @@ class SPS_Package:
 
     @property
     def year(self):
-        return self.documents_bundle_pubdate[0]
+        xpaths = (
+            'pub-date[@date-type="collection"]',
+            'pub-date[@pub-type="collection"]',
+            'pub-date[@pub-type="epub-ppub"]',
+        )
+        return parse_date(self._match_pubdate(xpaths))[0]
 
     @property
     def fpage(self):
