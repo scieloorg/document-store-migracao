@@ -118,6 +118,7 @@ def is_valid_value_for_issns(issns_dict):
                 raise ValueError(f"{v} is not an ISSN")
     except AttributeError:
         raise ValueError(f"Expected dict. {issns_dict} is not dict")
+    return True
 
 
 VALIDATE_FUNCTIONS = dict((
@@ -253,6 +254,30 @@ class SPS_Package:
             } or None
         except (TypeError, AttributeError):
             return None
+
+    @issns.setter
+    def issns(self, new_issns):
+        if len(self.issns or {}) > 0:
+            raise NotAllowedtoChangeAttributeValueError(
+                f"Not allowed to set ISSNs, because SPS_Package "
+                "has already ISSNS: {self.issns}")
+        try:
+            is_valid_value_for_issns(new_issns)
+
+            # https://jats.nlm.nih.gov/publishing/tag-library/1.2/element/journal-meta.html
+            previous_elem = (
+                self.xmltree.xpath(
+                    ".//journal-meta//journal-title-group") or
+                self.xmltree.xpath(".//journal-meta//journal-id")
+            )[-1]
+        except ValueError as e:
+            raise InvalidAttributeValueError(e)
+        else:
+            for t, v in sorted(new_issns.items(), reverse=True):
+                issn = etree.Element("issn")
+                issn.set("pub-type", t)
+                issn.text = v
+                previous_elem.addnext(issn)
 
     @property
     def journal_meta(self):
