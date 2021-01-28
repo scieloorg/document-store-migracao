@@ -245,6 +245,16 @@ class SPS_Package:
             pid_node.text = value
 
     @property
+    def issns(self):
+        try:
+            return {
+                issn.get("pub-type"): issn.text
+                for issn in self.xmltree.xpath('.//journal-meta//issn')
+            } or None
+        except (TypeError, AttributeError):
+            return None
+
+    @property
     def journal_meta(self):
         data = []
         issns = [

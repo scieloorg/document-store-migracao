@@ -2715,3 +2715,29 @@ class TestIsValidValueForIssns(unittest.TestCase):
         with self.assertRaises(ValueError) as exc:
             is_valid_value_for_issns({"ppub": 'y', "epub": "x"})
         self.assertIn("is not an ISSN", str(exc.exception))
+
+
+class TestSPSPackageIssns(unittest.TestCase):
+    def _sps_package(self, issns=''):
+        xml = f"""<article>
+        <journal-meta>{issns}</journal-meta>
+        <article-meta></article-meta>
+        </article>"""
+        xmltree = etree.fromstring(xml)
+        return SPS_Package(xmltree, None)
+
+    def test_get_issns_returns_none_because_there_is_no_issn(self):
+        self.assertIsNone(self._sps_package().issns)
+
+    def test_get_issns_returns_dict(self):
+        issns = """
+        <issn pub-type="epub">1234-0987</issn>
+        <issn pub-type="ppub">1834-0987</issn>
+
+        """
+        expected = {
+            "epub": "1234-0987",
+            "ppub": "1834-0987",
+        }
+        self.assertEqual(expected, self._sps_package(issns).issns)
+
