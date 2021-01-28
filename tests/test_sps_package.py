@@ -2718,36 +2718,37 @@ class TestIsValidValueForIssns(unittest.TestCase):
 
 
 class TestSPSPackageHasNoIssns(unittest.TestCase):
-    def _sps_package(self, issns=''):
+    def setUp(self):
         xml = f"""<article>
-        <journal-meta>{issns}</journal-meta>
+        <journal-meta>
+            <journal-title-group/>
+        </journal-meta>
         <article-meta></article-meta>
         </article>"""
         xmltree = etree.fromstring(xml)
-        return SPS_Package(xmltree, None)
+        self._sps_package = SPS_Package(xmltree, None)
 
     def test_get_issns_returns_none_because_there_is_no_issn(self):
-        self.assertIsNone(self._sps_package().issns)
+        self.assertIsNone(self._sps_package.issns)
 
 
 class TestSPSPackageHaIssns(unittest.TestCase):
-    def _sps_package(self, issns=''):
+    def setUp(self):
         xml = f"""<article>
-        <journal-meta>{issns}</journal-meta>
+        <journal-meta>
+            <journal-title-group/>
+            <issn pub-type="epub">1234-0987</issn>
+            <issn pub-type="ppub">1834-0987</issn>
+        </journal-meta>
         <article-meta></article-meta>
         </article>"""
         xmltree = etree.fromstring(xml)
-        return SPS_Package(xmltree, None)
+        self._sps_package = SPS_Package(xmltree, None)
 
     def test_get_issns_returns_dict(self):
-        issns = """
-        <issn pub-type="epub">1234-0987</issn>
-        <issn pub-type="ppub">1834-0987</issn>
-
-        """
+        
         expected = {
             "epub": "1234-0987",
             "ppub": "1834-0987",
         }
-        self.assertEqual(expected, self._sps_package(issns).issns)
-
+        self.assertEqual(expected, self._sps_package.issns)
