@@ -2731,6 +2731,20 @@ class TestSPSPackageHasNoIssns(unittest.TestCase):
     def test_get_issns_returns_none_because_there_is_no_issn(self):
         self.assertIsNone(self._sps_package.issns)
 
+    def test_set_issns_updates_issns(self):
+        expected = {
+            "epub": "1209-8709",
+            "ppub": "8809-8709",
+        }
+        self._sps_package.issns = {
+            "epub": "1209-8709",
+            "ppub": "8809-8709",
+        }
+        self.assertEqual(expected, self._sps_package.issns)
+        xml = etree.tostring(self._sps_package.xmltree)
+        self.assertIn(b'<issn pub-type="epub">1209-8709</issn>', xml)
+        self.assertIn(b'<issn pub-type="ppub">8809-8709</issn>', xml)
+
 
 class TestSPSPackageHaIssns(unittest.TestCase):
     def setUp(self):
