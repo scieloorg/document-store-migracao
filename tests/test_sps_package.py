@@ -2760,9 +2760,25 @@ class TestSPSPackageHaIssns(unittest.TestCase):
         self._sps_package = SPS_Package(xmltree, None)
 
     def test_get_issns_returns_dict(self):
-        
         expected = {
             "epub": "1234-0987",
             "ppub": "1834-0987",
         }
         self.assertEqual(expected, self._sps_package.issns)
+
+    def test_set_issns_raises_exception_and_does_not_allowed_update_issns(self):
+        expected = {
+            "epub": "1234-0987",
+            "ppub": "1834-0987",
+        }
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            self._sps_package.issns = {
+                "epub": "XXXX-YYYY",
+                "ppub": "8888-8709",
+            }
+        self.assertIn("Not allowed to set ISSNs", str(exc.exception))
+        self.assertEqual(expected, self._sps_package.issns)
+        xml = etree.tostring(self._sps_package.xmltree)
+        self.assertIn(b'<issn pub-type="epub">1234-0987</issn>', xml)
+        self.assertIn(b'<issn pub-type="ppub">1834-0987</issn>', xml)
+
