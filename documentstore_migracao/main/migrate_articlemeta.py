@@ -107,6 +107,14 @@ def migrate_articlemeta_parser(sargs):
         help="Gera o pacote `SPS` apenas para o documento XML imformado",
     )
 
+    pack_sps_parser.add_argument(
+        "-Issns-jsonfile",
+        "--issns-jsonfile",
+        dest="issns_jsonfile",
+        required=False,
+        help="ISSNs JSON data file",
+    )
+
     # GERACAO PACOTE SPS FROM SITE STRUTURE
     pack_sps_parser_from_site = subparsers.add_parser(
         "pack_from_site", help="Gera pacotes `SPS` a partir da estrutura do Site SciELO"
@@ -374,6 +382,10 @@ def migrate_articlemeta_parser(sargs):
             logger.error("A pasta para obter os IMGs para a fase de empacotamento, não está acessível: %s (revise o arquivo de configuração ``SOURCE_IMG_FILE``) ", pdf)
             sys.exit()
 
+        if args.issns_jsonfile:
+            with open(args.issns_jsonfile) as fp:
+                packing.ISSNs = json.loads(fp.read())
+
         # pack HTML
         if args.packFile:
             packing.pack_article_xml(args.packFile)
@@ -389,8 +401,8 @@ def migrate_articlemeta_parser(sargs):
             args.output_folder,
             args.articles_csvfile,
         )
-        if issns_jsonfile:
-            with open(issns_jsonfile) as fp:
+        if args.issns_jsonfile:
+            with open(args.issns_jsonfile) as fp:
                 build_ps.issns = json.loads(fp.read())
         build_ps.run()
 
