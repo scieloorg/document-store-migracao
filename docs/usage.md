@@ -129,10 +129,27 @@ Optionally it is possible to run the pack for only one xml, see:
 ds_migracao --loglevel DEBUG pack -f path
 ```
 
+Optionally it is possible add `<issn/>` to the packages which the `issn` elements are missing:
+
+```shell
+ds_migracao --loglevel DEBUG pack --issns-jsonfile issns.json
+```
+
+where `issns.json` content format is like:
+```json
+{
+  "1234-0987": {"epub":  "1234-0987", "ppub": "3456-0987"},
+  "3456-0987": {"epub":  "1234-0987", "ppub": "3456-0987"},
+  "1264-5900": {"epub":  "1264-5900", "ppub": "6456-5900"},
+  "6456-5900": {"epub":  "1264-5900", "ppub": "6456-5900"}
+}
+
+```
+
 Help:
 
 ```shell
-ds_migracao --loglevel DEBUG pack -help
+ds_migracao --loglevel DEBUG pack --help
 ```
 
 ## 7 - Check similarity between sites
