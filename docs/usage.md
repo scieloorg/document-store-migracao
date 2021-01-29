@@ -24,7 +24,7 @@ This is the complete utilization guide for this tool, these next sections will e
 
 The documents at this point are XML, but their body content is not XML, but escaped HTML, for example:
 
-```text
+```
 <body>
 &lt;text find=&quot;text_2&quot;&gt;This is the home page of SciELO Brasil Site.&lt;br&gt;
 			&lt;br&gt;The objective of the site is to implement an electronic virtual library, providing full access to a collection of serial titles, a collection of issues from individual serial titles, as well as to the full text of articles. The access to both serial titles and articles is available via indexes and search forms.&lt;br&gt;
