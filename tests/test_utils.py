@@ -201,3 +201,21 @@ class TestXMLUtilsRemoveElements(unittest.TestCase):
         xml.remove_element(self.xmltree.find(".//body"), ".//p")
         self.assertNotIn(b"<p>text</p>", etree.tostring(self.xmltree))
         self.assertIn(b"<p>second text</p>", etree.tostring(self.xmltree))
+
+
+class TestFixNamespacePrefixW(unittest.TestCase):
+    def test_fix_namespace_prefix_w_fixes_content(self):
+        content = ' w:atributo="abc"'
+        expected = ' w-atributo="abc"'
+        self.assertEqual(xml.fix_namespace_prefix_w(content), expected)
+
+    def test_fix_namespace_prefix_w_does_not_fix_content_because_it_does_not_match(self):
+        items = [
+            'w:attr= "abc"',
+            'w:attr ="abc"',
+            'w: attr="abc"',
+            'w :attr="abc"',
+        ]
+        for item in items:
+            with self.subTest(item):
+                self.assertEqual(xml.fix_namespace_prefix_w(item), item)
