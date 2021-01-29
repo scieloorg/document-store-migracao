@@ -1,14 +1,23 @@
 # Migration Tool Usage Instruction and Examples
 
-This is the complete utilization guide for this tool, these next sections will explain how this application works and how users can do a complete HTML migration to XML migration to the SciELO Publishing Framework.
+This is the complete utilization guide for this tool, these next sections will explain how this application works and how users can do a complete XML migration to the SciELO Publishing Framework.
+- Packing **synthetized** XML files or **native** XML files
+- Registering packages on the SPF
 
-## Topics
+## Generating and Packing Synthetized XML files
 1. Obtaining HTML documents
 2. [Converting HTML to XML documents](#2-\--converting-html-to-xml-documents)
 3. [Updating documents' mixed citations](#3-\--updating-documents-mixed-citations)
-4. [Generating documents packages](#4-\--generating-documents-packages)
+4. [Packing synthetized XML files](#4-\--packing-synthetized-xml-files)
+
+## Packing Native XML files
+1. [Packing Native XML files](#1-\--packing-native-xml-files)
+
+## Registering packages on the SPF
 5. Importing documents packages to the Publish Platform
 6. Committing the relationship between documents and issues
+   
+## Checking migration
 7. [Check similarity between sites](#7-\--check-similarity-between-sites)
 
 ## 2 - Converting HTML to XML documents
@@ -97,7 +106,7 @@ It is important to make sure if everything works and if all articles were update
 
 Look closer to messages like `file not found` or `access denied` during previous commands.
 
-## 4 - Generating documents packages
+## 4 - Packing synthetized XML files
 
 Documents Packages is the phase in which we create packages with all the necessary adjustments to be stored in a data store.
 
