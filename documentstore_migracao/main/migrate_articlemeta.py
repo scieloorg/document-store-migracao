@@ -97,7 +97,7 @@ def migrate_articlemeta_parser(sargs):
 
     # GERACAO PACOTE SPS
     pack_sps_parser = subparsers.add_parser(
-        "pack", help="Gera pacotes `SPS` a partir de XMLs válidos"
+        "pack", help="Gera pacotes `SPS` a partir de XMLs sintetizados"
     )
     pack_sps_parser.add_argument(
         "--file",
@@ -117,7 +117,7 @@ def migrate_articlemeta_parser(sargs):
 
     # GERACAO PACOTE SPS FROM SITE STRUTURE
     pack_sps_parser_from_site = subparsers.add_parser(
-        "pack_from_site", help="Gera pacotes `SPS` a partir da estrutura do Site SciELO"
+        "pack_from_site", help="Gera pacotes `SPS` dos XML nativos"
     )
     pack_sps_parser_from_site.add_argument(
         "-a", "--acrons", dest="acrons", nargs="+", help="journal acronyms."
