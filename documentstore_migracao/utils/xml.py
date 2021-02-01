@@ -116,7 +116,8 @@ def loadToXML(file):
 
     parser = etree.XMLParser(remove_blank_text=True, no_network=True)
     try:
-        xml = etree.parse(file, parser)
+        content = get_fixed_xml_content(file)
+        xml = etree.parse(StringIO(content), parser)
     except (etree.XMLSyntaxError, GetFixedXMLContentError) as exc:
         raise LoadToXMLError(exc)
     else:
