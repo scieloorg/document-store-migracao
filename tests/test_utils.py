@@ -112,9 +112,9 @@ class TestUtilsXML(unittest.TestCase):
         obj = xml.file2objXML(file_path)
         self.assertIn(expected_text, str(etree.tostring(obj)))
 
-    def test_file2objXML_raise_OSError_for_filenotfound(self):
+    def test_file2objXML_raise_LoadToXMLError_for_filenotfound(self):
         file_path = os.path.join(SAMPLES_PATH, "none.xml")
-        with self.assertRaises(OSError):
+        with self.assertRaises(xml.LoadToXMLError):
             xml.file2objXML(file_path)
 
     def test_file2objXML_raise_XMLSyntaxError_for_filenotfound(self):

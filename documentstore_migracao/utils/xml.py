@@ -4,7 +4,7 @@ import re
 import logging
 import itertools
 import html
-from io import StringIO
+from io import StringIO, BytesIO
 from lxml import etree
 from xml.dom.minidom import parseString
 
@@ -117,7 +117,7 @@ def loadToXML(file):
     parser = etree.XMLParser(remove_blank_text=True, no_network=True)
     try:
         content = get_fixed_xml_content(file)
-        xml = etree.parse(StringIO(content), parser)
+        xml = etree.parse(BytesIO(content.encode("utf-8")), parser)
     except (etree.XMLSyntaxError, GetFixedXMLContentError) as exc:
         raise LoadToXMLError(exc)
     else:
