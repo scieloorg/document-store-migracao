@@ -106,18 +106,17 @@ def is_valid_value_for_issns(issns_dict):
     values: issn (1234-5678)
     """
     try:
-        if len(set(issns_dict.keys())) != len(set(issns_dict.values())):
-            raise ValueError(f"{issns_dict} has duplicated keys or values")
-        if not issns_dict:
-            raise ValueError(f"Expected at least one item")
-        if not set(issns_dict.keys()).issubset({'epub', 'ppub'}):
+        if len(issns_dict) == 0 or not set(issns_dict.keys()).issubset({'epub', 'ppub'}):
             raise ValueError(
-                f"Expected keys: 'epub' or 'ppub'. Found: {issns_dict.keys()}")
+                f"Expected dict which keys are 'epub' and/or 'ppub'. Found {issns_dict}")
+        if len(issns_dict.keys()) != len(set(issns_dict.values())):
+            raise ValueError(f"{issns_dict} has duplicated values")
         for v in issns_dict.values():
             if len(v) != 9 or v[4] != "-":
                 raise ValueError(f"{v} is not an ISSN")
     except AttributeError:
-        raise ValueError(f"Expected dict. {issns_dict} is not dict")
+        raise ValueError(
+            f"Expected dict which keys are 'epub' and/or 'ppub'. Found {issns_dict}")
     return True
 
 

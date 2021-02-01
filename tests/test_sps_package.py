@@ -2694,7 +2694,7 @@ class TestIsValidValueForIssns(unittest.TestCase):
     def test_is_valid_value_for_issns_raises_is_exception_because_value_is_empty_dict(self):
         with self.assertRaises(ValueError) as exc:
             is_valid_value_for_issns({})
-        self.assertIn("Expected at least one item", str(exc.exception))
+        self.assertIn("'epub' and/or 'ppub'", str(exc.exception))
 
     def test_is_valid_value_for_issns_raises_is_exception_because_value_is_not_dict(self):
         with self.assertRaises(ValueError) as exc:
@@ -2704,12 +2704,12 @@ class TestIsValidValueForIssns(unittest.TestCase):
     def test_is_valid_value_for_issns_raises_is_exception_because_of_duplicated_values(self):
         with self.assertRaises(ValueError) as exc:
             is_valid_value_for_issns({"epub": 'x', "ppub": "x"})
-        self.assertIn("duplicated keys or values", str(exc.exception))
+        self.assertIn("duplicated values", str(exc.exception))
 
     def test_is_valid_value_for_issns_raises_is_exception_because_of_invalid_key(self):
         with self.assertRaises(ValueError) as exc:
             is_valid_value_for_issns({"invalid_key": 'y', "ppub": "x"})
-        self.assertIn("Expected keys: 'epub' or 'ppub'", str(exc.exception))
+        self.assertIn("Expected dict which keys are 'epub' and/or 'ppub'.", str(exc.exception))
 
     def test_is_valid_value_for_issns_raises_is_exception_because_of_invalid_values(self):
         with self.assertRaises(ValueError) as exc:
