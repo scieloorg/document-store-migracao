@@ -89,6 +89,10 @@ def fix_namespace_prefix_w(content):
     return content
 
 
+class LoadToXMLError(Exception):
+    ...
+
+
 def loadToXML(file):
     """Parses `file` to produce an etree instance.
 
@@ -102,7 +106,7 @@ def loadToXML(file):
     try:
         xml = etree.parse(file, parser)
     except etree.XMLSyntaxError as exc:
-        raise Exception(str(exc)) from None
+        raise LoadToXMLError(exc)
     else:
         return xml
 
