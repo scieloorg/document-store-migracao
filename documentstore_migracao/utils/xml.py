@@ -93,6 +93,18 @@ class LoadToXMLError(Exception):
     ...
 
 
+class GetFixedXMLContentError(Exception):
+    ...
+
+def get_fixed_xml_content(file):
+    try:
+        with open(file, "r") as fp:
+            content = fp.read()
+    except IOError as exc:
+        raise GetFixedXMLContentError("Unable to read file to fix its content: %s. %s" % (file, exc))
+    return fix_namespace_prefix_w(content)
+
+
 def loadToXML(file):
     """Parses `file` to produce an etree instance.
 
@@ -105,7 +117,7 @@ def loadToXML(file):
     parser = etree.XMLParser(remove_blank_text=True, no_network=True)
     try:
         xml = etree.parse(file, parser)
-    except etree.XMLSyntaxError as exc:
+    except (etree.XMLSyntaxError, GetFixedXMLContentError) as exc:
         raise LoadToXMLError(exc)
     else:
         return xml
