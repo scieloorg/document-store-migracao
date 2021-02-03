@@ -3,6 +3,7 @@ import plumber
 import os
 from copy import deepcopy
 import difflib
+from urllib.parse import urljoin
 
 import requests
 from lxml import etree
@@ -3762,7 +3763,7 @@ class FileLocation:
         file_path = self.href
         if file_path.startswith("/"):
             file_path = file_path[1:]
-        return os.path.join(config.get("STATIC_URL_FILE"), file_path)
+        return urljoin(config.get("STATIC_URL_FILE"), file_path)
 
     @property
     def local(self):
