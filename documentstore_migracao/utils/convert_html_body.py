@@ -1,10 +1,8 @@
 import logging
 import plumber
-import html
 import os
 from copy import deepcopy
 import difflib
-import json
 
 import requests
 from lxml import etree
@@ -455,7 +453,6 @@ class HTML2SPSPipeline(object):
         self.body_info = BodyInfo(pid, body_index, ref_items, spy)
         body_info_which_spy_is_false = BodyInfo(
             pid, body_index, ref_items, spy=False)
-
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.SaveInitialTextPipe(self.body_info),
@@ -504,6 +501,7 @@ class HTML2SPSPipeline(object):
             self.FixIdAndRidPipe(self.body_info),
             self.CheckDiffPipe(self.body_info),
         )
+
 
     def deploy(self, raw):
         transformed_data = self._ppl.run(raw, rewrap=True)
@@ -4093,7 +4091,7 @@ class Remote2LocalConversion:
             html_tree = etree.fromstring(
                 file_content, parser=etree.HTMLParser()
             )
-        except (FileLocationError, lxml.etree.Error) as e:
+        except (FileLocationError, etree.Error) as e:
             logger.error(
                 self.get_logging_msg(
                     str(e)

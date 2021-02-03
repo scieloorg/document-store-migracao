@@ -4,7 +4,7 @@ import re
 import logging
 import itertools
 import html
-from io import StringIO
+from io import StringIO, BytesIO
 from lxml import etree
 from xml.dom.minidom import parseString
 
@@ -75,6 +75,36 @@ def prettyPrint_format(xml_string):
     return parseString(xml_string).toprettyxml()
 
 
+def fix_namespace_prefix_w(content):
+    """
+    Convert os textos cujo padrão é `w:st="` em `w-st="`
+    """
+    pattern = r"\bw:[a-z]{1,}=\""
+    found_items = re.findall(pattern, content)
+    logger.debug("Found %i namespace prefix w", len(found_items))
+    for item in set(found_items):
+        new_namespace = item.replace(":", "-")
+        logger.debug("%s -> %s" % (item, new_namespace))
+        content = content.replace(item, new_namespace)
+    return content
+
+
+class LoadToXMLError(Exception):
+    ...
+
+
+class GetFixedXMLContentError(Exception):
+    ...
+
+def get_fixed_xml_content(file):
+    try:
+        with open(file, "r") as fp:
+            content = fp.read()
+    except IOError as exc:
+        raise GetFixedXMLContentError("Unable to read file to fix its content: %s. %s" % (file, exc))
+    return fix_namespace_prefix_w(content)
+
+
 def loadToXML(file):
     """Parses `file` to produce an etree instance.
 
@@ -86,9 +116,10 @@ def loadToXML(file):
 
     parser = etree.XMLParser(remove_blank_text=True, no_network=True)
     try:
-        xml = etree.parse(file, parser)
-    except etree.XMLSyntaxError as exc:
-        raise Exception(str(exc)) from None
+        content = get_fixed_xml_content(file)
+        xml = etree.parse(BytesIO(content.encode("utf-8")), parser)
+    except (etree.XMLSyntaxError, GetFixedXMLContentError) as exc:
+        raise LoadToXMLError(str(exc)) from None
     else:
         return xml
 
