@@ -1,4 +1,3 @@
-import re
 import logging
 import plumber
 import os
@@ -4092,7 +4091,7 @@ class Remote2LocalConversion:
             html_tree = etree.fromstring(
                 file_content, parser=etree.HTMLParser()
             )
-        except (FileLocationError, lxml.etree.Error) as e:
+        except (FileLocationError, etree.Error) as e:
             logger.error(
                 self.get_logging_msg(
                     str(e)

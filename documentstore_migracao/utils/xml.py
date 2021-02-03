@@ -119,7 +119,7 @@ def loadToXML(file):
         content = get_fixed_xml_content(file)
         xml = etree.parse(BytesIO(content.encode("utf-8")), parser)
     except (etree.XMLSyntaxError, GetFixedXMLContentError) as exc:
-        raise LoadToXMLError(exc)
+        raise LoadToXMLError(str(exc)) from None
     else:
         return xml
 
