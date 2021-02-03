@@ -3220,6 +3220,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
             'table-wrap')
 
         def parser_node(self, node):
+            if not node.attrib.get("src"):
+                return
+
             parent = node.getparent()
             tag = "graphic"
             if parent.tag in self.only_inline:
