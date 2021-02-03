@@ -1,21 +1,30 @@
 # Migration Tool Usage Instruction and Examples
 
-This is the complete utilization guide for this tool, these next sections will explain how this application works and how users can do a complete HTML migration to XML migration to the SciELO Publishing Framework.
+This is the complete utilization guide for this tool, these next sections will explain how this application works and how users can do a complete XML migration to the SciELO Publishing Framework.
+- Packing **synthetized** XML files or **native** XML files
+- Registering packages on the SPF
 
-## Topics
+## Generating and Packing Synthetized XML files
 1. Obtaining HTML documents
 2. [Converting HTML to XML documents](#2-\--converting-html-to-xml-documents)
 3. [Updating documents' mixed citations](#3-\--updating-documents-mixed-citations)
-4. [Generating documents packages](#4-\--generating-documents-packages)
+4. [Packing synthetized XML files](#4-\--packing-synthetized-xml-files)
+
+## Packing Native XML files
+1. [Packing Native XML files](#1-\--packing-native-xml-files)
+
+## Registering packages on the SPF
 5. Importing documents packages to the Publish Platform
 6. Committing the relationship between documents and issues
+   
+## Checking migration
 7. [Check similarity between sites](#7-\--check-similarity-between-sites)
 
 ## 2 - Converting HTML to XML documents
 
 The documents at this point are XML, but their body content is not XML, but escaped HTML, for example:
 
-```xml
+```
 <body>
 &lt;text find=&quot;text_2&quot;&gt;This is the home page of SciELO Brasil Site.&lt;br&gt;
 			&lt;br&gt;The objective of the site is to implement an electronic virtual library, providing full access to a collection of serial titles, a collection of issues from individual serial titles, as well as to the full text of articles. The access to both serial titles and articles is available via indexes and search forms.&lt;br&gt;
@@ -97,7 +106,7 @@ It is important to make sure if everything works and if all articles were update
 
 Look closer to messages like `file not found` or `access denied` during previous commands.
 
-## 4 - Generating documents packages
+## 4 - Packing synthetized XML files
 
 Documents Packages is the phase in which we create packages with all the necessary adjustments to be stored in a data store.
 
@@ -107,14 +116,16 @@ In order to run the `` packing`` phase, it is necessary to perform some predicte
 
 By default, these variables have the values:
 
-SOURCE_IMG_FILE = "bases"
-SOURCE_PDF_FILE = "htdocs"
+```text
+SOURCE_IMG_FILE="bases"
+SOURCE_PDF_FILE="htdocs"
+```
 
 You can change these values by creating the following environment variables:
 
 ```shell
-export SOURCE_IMG_FILE = path
-export SOURCE_PDF_FILE = path
+export SOURCE_IMG_FILE=path
+export SOURCE_PDF_FILE=path
 ```
 
 To run the packing, it is possible with the following command:
@@ -129,10 +140,27 @@ Optionally it is possible to run the pack for only one xml, see:
 ds_migracao --loglevel DEBUG pack -f path
 ```
 
+Optionally it is possible add `<issn/>` to the packages which the `issn` elements are missing:
+
+```shell
+ds_migracao --loglevel DEBUG pack --issns-jsonfile issns.json
+```
+
+where `issns.json` content format is like:
+```json
+{
+  "1234-0987": {"epub":  "1234-0987", "ppub": "3456-0987"},
+  "3456-0987": {"epub":  "1234-0987", "ppub": "3456-0987"},
+  "1264-5900": {"epub":  "1264-5900", "ppub": "6456-5900"},
+  "6456-5900": {"epub":  "1264-5900", "ppub": "6456-5900"}
+}
+
+```
+
 Help:
 
 ```shell
-ds_migracao --loglevel DEBUG pack -help
+ds_migracao --loglevel DEBUG pack --help
 ```
 
 ## 7 - Check similarity between sites

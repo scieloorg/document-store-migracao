@@ -19,6 +19,8 @@ from documentstore_migracao.processing.extracted import PoisonPill, DoJobsConcur
 
 logger = logging.getLogger(__name__)
 
+ISSNs = {}
+
 
 class AssetNotFoundError(Exception):
     ...
@@ -65,6 +67,9 @@ def pack_article_xml(file_xml_path, poison_pill=PoisonPill()):
         sps_package.scielo_pid_v2 and sps_package.scielo_pid_v2[-5:],
         silently=True
     )
+    new_issns = ISSNs and ISSNs.get(sps_package.scielo_pid_v2[1:10])
+    if new_issns:
+        sps_package.fix("issns", new_issns, silently=True)
 
     SPS_PKG_PATH = config.get("SPS_PKG_PATH")
     INCOMPLETE_SPS_PKG_PATH = config.get("INCOMPLETE_SPS_PKG_PATH")
