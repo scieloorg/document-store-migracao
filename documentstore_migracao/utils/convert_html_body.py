@@ -2158,7 +2158,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for c in _string:
                 if not c.isdigit():
                     break
-                number += c
+                if c.isdecimal():
+                    number += c
+                else:
+                    superscript = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
+                    number += c.translate(superscript)
             return int(number)
 
         def _is_a_sequence(self, previous, next):
