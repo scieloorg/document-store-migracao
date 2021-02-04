@@ -4053,7 +4053,7 @@ class Remote2LocalConversion:
         )
         href = a_link_type.get("href")
         if "#" in href:
-            href, anchor = href.split("#")
+            href = href.split("#")[0]
 
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
