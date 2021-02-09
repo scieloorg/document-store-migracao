@@ -131,10 +131,18 @@ def pack_article_ALLxml():
         def update_bar(pbar=pbar):
             pbar.update(1)
 
+        def log_exceptions(exception, job, logger=logger):
+            logger.error(
+                "Could not pack file '%s'. The exception '%s' was raised.",
+                job["file_xml_path"],
+                exception,
+            )
+
         DoJobsConcurrently(
             pack_article_xml,
             jobs=jobs,
             max_workers=int(config.get("THREADPOOL_MAX_WORKERS")),
+            exception_callback=log_exceptions,
             update_bar=update_bar,
         )
 
