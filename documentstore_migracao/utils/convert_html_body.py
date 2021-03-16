@@ -1,10 +1,9 @@
 import logging
 import plumber
-import html
 import os
 from copy import deepcopy
 import difflib
-import json
+from urllib.parse import urljoin
 
 import requests
 from lxml import etree
@@ -455,7 +454,6 @@ class HTML2SPSPipeline(object):
         self.body_info = BodyInfo(pid, body_index, ref_items, spy)
         body_info_which_spy_is_false = BodyInfo(
             pid, body_index, ref_items, spy=False)
-
         self._ppl = plumber.Pipeline(
             self.SetupPipe(),
             self.SaveInitialTextPipe(self.body_info),
@@ -504,6 +502,7 @@ class HTML2SPSPipeline(object):
             self.FixIdAndRidPipe(self.body_info),
             self.CheckDiffPipe(self.body_info),
         )
+
 
     def deploy(self, raw):
         transformed_data = self._ppl.run(raw, rewrap=True)
@@ -2159,7 +2158,11 @@ class ConvertElementsWhichHaveIdPipeline(object):
             for c in _string:
                 if not c.isdigit():
                     break
-                number += c
+                if c.isdecimal():
+                    number += c
+                else:
+                    superscript = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
+                    number += c.translate(superscript)
             return int(number)
 
         def _is_a_sequence(self, previous, next):
@@ -3217,6 +3220,9 @@ class ConvertElementsWhichHaveIdPipeline(object):
             'table-wrap')
 
         def parser_node(self, node):
+            if not node.attrib.get("src"):
+                return
+
             parent = node.getparent()
             tag = "graphic"
             if parent.tag in self.only_inline:
@@ -3764,7 +3770,7 @@ class FileLocation:
         file_path = self.href
         if file_path.startswith("/"):
             file_path = file_path[1:]
-        return os.path.join(config.get("STATIC_URL_FILE"), file_path)
+        return urljoin(config.get("STATIC_URL_FILE"), file_path)
 
     @property
     def local(self):
@@ -4054,7 +4060,7 @@ class Remote2LocalConversion:
         )
         href = a_link_type.get("href")
         if "#" in href:
-            href, anchor = href.split("#")
+            href = href.split("#")[0]
 
         f, ext = os.path.splitext(href)
         new_href = os.path.basename(f)
@@ -4093,7 +4099,7 @@ class Remote2LocalConversion:
             html_tree = etree.fromstring(
                 file_content, parser=etree.HTMLParser()
             )
-        except (FileLocationError, lxml.etree.Error) as e:
+        except (FileLocationError, etree.Error) as e:
             logger.error(
                 self.get_logging_msg(
                     str(e)

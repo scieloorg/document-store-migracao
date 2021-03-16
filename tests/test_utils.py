@@ -112,9 +112,9 @@ class TestUtilsXML(unittest.TestCase):
         obj = xml.file2objXML(file_path)
         self.assertIn(expected_text, str(etree.tostring(obj)))
 
-    def test_file2objXML_raise_OSError_for_filenotfound(self):
+    def test_file2objXML_raise_LoadToXMLError_for_filenotfound(self):
         file_path = os.path.join(SAMPLES_PATH, "none.xml")
-        with self.assertRaises(OSError):
+        with self.assertRaises(xml.LoadToXMLError):
             xml.file2objXML(file_path)
 
     def test_file2objXML_raise_XMLSyntaxError_for_filenotfound(self):
@@ -201,3 +201,21 @@ class TestXMLUtilsRemoveElements(unittest.TestCase):
         xml.remove_element(self.xmltree.find(".//body"), ".//p")
         self.assertNotIn(b"<p>text</p>", etree.tostring(self.xmltree))
         self.assertIn(b"<p>second text</p>", etree.tostring(self.xmltree))
+
+
+class TestFixNamespacePrefixW(unittest.TestCase):
+    def test_fix_namespace_prefix_w_fixes_content(self):
+        content = ' w:atributo="abc"'
+        expected = ' w-atributo="abc"'
+        self.assertEqual(xml.fix_namespace_prefix_w(content), expected)
+
+    def test_fix_namespace_prefix_w_does_not_fix_content_because_it_does_not_match(self):
+        items = [
+            'w:attr= "abc"',
+            'w:attr ="abc"',
+            'w: attr="abc"',
+            'w :attr="abc"',
+        ]
+        for item in items:
+            with self.subTest(item):
+                self.assertEqual(xml.fix_namespace_prefix_w(item), item)

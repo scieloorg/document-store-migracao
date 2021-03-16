@@ -99,11 +99,33 @@ def is_valid_value_for_language(value):
     return True
 
 
+def is_valid_value_for_issns(issns_dict):
+    """
+    Expected issns_dict is a dict
+    keys: 'epub' and/or 'ppub'
+    values: issn (1234-5678)
+    """
+    try:
+        if len(issns_dict) == 0 or not set(issns_dict.keys()).issubset({'epub', 'ppub'}):
+            raise ValueError(
+                f"Expected dict which keys are 'epub' and/or 'ppub'. Found {issns_dict}")
+        if len(issns_dict.keys()) != len(set(issns_dict.values())):
+            raise ValueError(f"{issns_dict} has duplicated values")
+        for v in issns_dict.values():
+            if len(v) != 9 or v[4] != "-":
+                raise ValueError(f"{v} is not an ISSN")
+    except AttributeError:
+        raise ValueError(
+            f"Expected dict which keys are 'epub' and/or 'ppub'. Found {issns_dict}")
+    return True
+
+
 VALIDATE_FUNCTIONS = dict((
     ("article_id_which_id_type_is_other", is_valid_value_for_order),
     ("scielo_pid_v2", is_valid_value_for_pid_v2),
     ("aop_pid", is_valid_value_for_pid_v2),
     ("original_language", is_valid_value_for_language),
+    ("issns", is_valid_value_for_issns),
 ))
 
 
@@ -221,6 +243,40 @@ class SPS_Package:
                 './/article-id[@specific-use="previous-pid" and @pub-id-type="publisher-id"]'
             )[0]
             pid_node.text = value
+
+    @property
+    def issns(self):
+        try:
+            return {
+                issn.get("pub-type"): issn.text
+                for issn in self.xmltree.xpath('.//journal-meta//issn')
+            } or None
+        except (TypeError, AttributeError):
+            return None
+
+    @issns.setter
+    def issns(self, new_issns):
+        if len(self.issns or {}) > 0:
+            raise NotAllowedtoChangeAttributeValueError(
+                f"Not allowed to set ISSNs, because SPS_Package "
+                "has already ISSNS: {self.issns}")
+        try:
+            is_valid_value_for_issns(new_issns)
+
+            # https://jats.nlm.nih.gov/publishing/tag-library/1.2/element/journal-meta.html
+            previous_elem = (
+                self.xmltree.xpath(
+                    ".//journal-meta//journal-title-group") or
+                self.xmltree.xpath(".//journal-meta//journal-id")
+            )[-1]
+        except ValueError as e:
+            raise InvalidAttributeValueError(e)
+        else:
+            for t, v in sorted(new_issns.items(), reverse=True):
+                issn = etree.Element("issn")
+                issn.set("pub-type", t)
+                issn.text = v
+                previous_elem.addnext(issn)
 
     @property
     def journal_meta(self):

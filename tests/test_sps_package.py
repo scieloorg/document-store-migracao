@@ -12,6 +12,7 @@ from documentstore_migracao.export.sps_package import (
     InvalidAttributeValueError,
     InvalidValueForOrderError,
     is_valid_value_for_order,
+    is_valid_value_for_issns,
     SourceJson,
 )
 
@@ -2686,3 +2687,135 @@ class TestSourceJson(unittest.TestCase):
         ]
         expected = (renditions, metadata)
         self.assertEqual(expected, source.get_renditions_metadata())
+
+
+class TestIsValidValueForIssns(unittest.TestCase):
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_value_is_empty_dict(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({})
+        self.assertIn("'epub' and/or 'ppub'", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_value_is_not_dict(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns(('a', 'b'))
+        self.assertIn("Expected dict", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_of_duplicated_values(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({"epub": 'x', "ppub": "x"})
+        self.assertIn("duplicated values", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_of_invalid_key(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({"invalid_key": 'y', "ppub": "x"})
+        self.assertIn("Expected dict which keys are 'epub' and/or 'ppub'.", str(exc.exception))
+
+    def test_is_valid_value_for_issns_raises_is_exception_because_of_invalid_values(self):
+        with self.assertRaises(ValueError) as exc:
+            is_valid_value_for_issns({"ppub": 'y', "epub": "x"})
+        self.assertIn("is not an ISSN", str(exc.exception))
+
+
+class TestSPSPackageHasNoIssns(unittest.TestCase):
+    def setUp(self):
+        xml = f"""<article>
+        <journal-meta>
+            <journal-title-group/>
+        </journal-meta>
+        <article-meta></article-meta>
+        </article>"""
+        xmltree = etree.fromstring(xml)
+        self._sps_package = SPS_Package(xmltree, None)
+
+    def test_get_issns_returns_none_because_there_is_no_issn(self):
+        self.assertIsNone(self._sps_package.issns)
+
+    def test_set_issns_updates_issns(self):
+        expected = {
+            "epub": "1209-8709",
+            "ppub": "8809-8709",
+        }
+        self._sps_package.issns = {
+            "epub": "1209-8709",
+            "ppub": "8809-8709",
+        }
+        self.assertEqual(expected, self._sps_package.issns)
+        xml = etree.tostring(self._sps_package.xmltree)
+        self.assertIn(b'<issn pub-type="epub">1209-8709</issn>', xml)
+        self.assertIn(b'<issn pub-type="ppub">8809-8709</issn>', xml)
+
+    def test_set_issns_raises_exception_if_new_value_is_invalid(self):
+        expected = None
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            self._sps_package.issns = {
+                "epub": "XXXX-YYY",
+                "ppub": "8888-879",
+            }
+        self.assertEqual(expected, self._sps_package.issns)
+        xml = etree.tostring(self._sps_package.xmltree)
+        self.assertNotIn(b'<issn pub-type="epub">XXXX-YYY</issn>', xml)
+        self.assertNotIn(b'<issn pub-type="ppub">8888-879</issn>', xml)
+
+    def test_fix_does_not_raise_exception_because_is_silenced(self):
+        self._sps_package.fix('issns', 'invalid value', silently=True)
+        self.assertIsNone(self._sps_package.issns)
+
+    def test_fix_raises_exception_because_is_not_silenced(self):
+        new_value = 'invalid value'
+        with self.assertRaises(InvalidAttributeValueError) as exc:
+            self._sps_package.fix('issns', new_value, silently=False)
+
+
+class TestSPSPackageHasIssns(unittest.TestCase):
+    def setUp(self):
+        xml = f"""<article>
+        <journal-meta>
+            <journal-title-group/>
+            <issn pub-type="epub">1234-0987</issn>
+            <issn pub-type="ppub">1834-0987</issn>
+        </journal-meta>
+        <article-meta></article-meta>
+        </article>"""
+        xmltree = etree.fromstring(xml)
+        self._sps_package = SPS_Package(xmltree, None)
+
+    def test_get_issns_returns_dict(self):
+        expected = {
+            "epub": "1234-0987",
+            "ppub": "1834-0987",
+        }
+        self.assertEqual(expected, self._sps_package.issns)
+
+    def test_set_issns_raises_exception_and_does_not_allowed_update_issns(self):
+        expected = {
+            "epub": "1234-0987",
+            "ppub": "1834-0987",
+        }
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            self._sps_package.issns = {
+                "epub": "XXXX-YYYY",
+                "ppub": "8888-8709",
+            }
+        self.assertIn("Not allowed to set ISSNs", str(exc.exception))
+        self.assertEqual(expected, self._sps_package.issns)
+        xml = etree.tostring(self._sps_package.xmltree)
+        self.assertIn(b'<issn pub-type="epub">1234-0987</issn>', xml)
+        self.assertIn(b'<issn pub-type="ppub">1834-0987</issn>', xml)
+
+    def test_fix_does_not_raise_exception_because_is_silenced(self):
+        new_value = {
+            "epub": "1299-0987",
+            "ppub": "1899-0987",
+        }
+        self._sps_package.fix('issns', new_value, silently=True)
+        self.assertNotEqual(new_value, self._sps_package.issns)
+
+    def test_fix_raises_exception_because_is_not_silenced(self):
+        new_value = {
+            "epub": "1299-0987",
+            "ppub": "1899-0987",
+        }
+        with self.assertRaises(NotAllowedtoChangeAttributeValueError) as exc:
+            self._sps_package.fix('issns', new_value, silently=False)
+

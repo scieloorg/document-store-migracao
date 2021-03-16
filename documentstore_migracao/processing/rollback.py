@@ -185,10 +185,16 @@ def rollback_document(
         logger.debug("Starting the rollback step for document PID V3 '%s'...", pid_v3)
 
         # Rollback Document changes
-        session.changes.rollback(pid_v3)
+        try:
+            session.changes.rollback(pid_v3)
+        except ds_exceptions.DoesNotExist as exc:
+            logger.info('Document "%s" changes not fount', pid_v3)
 
         # Rollback Document
-        session.documents.rollback(pid_v3)
+        try:
+            session.documents.rollback(pid_v3)
+        except ds_exceptions.DoesNotExist as exc:
+            logger.info('Document "%s" not fount', pid_v3)
 
         _rolledback_result = {
             "pid_v3": doc_info["pid_v3"],
@@ -197,9 +203,13 @@ def rollback_document(
         }
 
         # Rollback DocumentsBundle
-        _rolledback_bundle_id = rollback_bundle(doc_info, session, journals)
-        if _rolledback_bundle_id:
-            _rolledback_result["bundle"] = _rolledback_bundle_id
+        try:
+            _rolledback_bundle_id = rollback_bundle(doc_info, session, journals)
+        except exceptions.RollbackError as exc:
+            logger.info(exc)
+        else:
+            if _rolledback_bundle_id:
+                _rolledback_result["bundle"] = _rolledback_bundle_id
 
         return _rolledback_result
 
