@@ -17,7 +17,7 @@ def check_documents_availability_in_website(
 
     """ Dada uma lista de pids, esta função verifica no site informado quais
     pids não estão disponíveis.
-    
+
     Params:
         pids (List[str]): Lista de pids para verificar.
         target_string (str): Endereço da página de artigo no site algo.
@@ -50,13 +50,13 @@ def check_documents_availability_in_website(
                 response.status_code,
             )
 
-            if output is not None:
-                try:
-                    output.write(url + "\n")
-                except IOError as exc:
-                    logger.error(
-                        "Cannot write in the file. The exception '%s' was raided ", exc
-                    )
+        if output is not None:
+            try:
+                output.write('%s %s \n' % (url, response.status_code))
+            except IOError as exc:
+                logger.error(
+                    "Cannot write in the file. The exception '%s' was raided ", exc
+                )
 
     jobs = [
         {"url": template.substitute({"id": pid.strip()}), "output": output}
