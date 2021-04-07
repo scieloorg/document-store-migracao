@@ -109,6 +109,18 @@ import_articles() {
     fi
 }
 
+link_articles_to_bundles() {
+    local mongodb_uri="$1"
+    local kernel_db="$2"
+    local imported_articles_link_file="$SPS_LINK_FILE"
+    local title_json_file="$XML_LINKING_TITLE_JSON_FILE"
+
+    ds_migracao link_documents_issues "$imported_articles_link_file" \
+        "$title_json_file" \
+        --uri "$mongodb_uri" \
+        --db "$kernel_db" >"$LOG_FOLDER_PATH/link.log"
+}
+
 # Validating the enviroment file
 
 if [ ! -e "$ENV_FILE" ]; then
@@ -148,11 +160,13 @@ XML_MIGRATION_ISSN_JOURNALS_FILE=${XML_MIGRATION_ISSN_JOURNALS_FILE:-""}
 XML_IMPORTING_MONGODB_URI=${XML_IMPORTING_MONGODB_URI:-""}
 XML_IMPORTING_PID_DATABASE_DSN=${XML_IMPORTING_PID_DATABASE_DSN:-""}
 XML_IMPORTING_KERNEL_DABATASE=${XML_IMPORTING_KERNEL_DABATASE:-""}
-
 XML_IMPORTING_MINIO_HOST=${XML_IMPORTING_MINIO_HOST:-""}
 XML_IMPORTING_MINIO_ACCESS_KEY=${XML_IMPORTING_MINIO_ACCESS_KEY:-""}
 XML_IMPORTING_MINIO_SECRET_KEY=${XML_IMPORTING_MINIO_SECRET_KEY:-""}
 XML_IMPORTING_MINIO_IS_SECURE=${XML_IMPORTING_MINIO_IS_SECURE:-""}
+
+# Linking variables
+XML_LINKING_TITLE_JSON_FILE=${XML_LINKING_TITLE_JSON_FILE:-""}
 
 declare -a CONFIGURED_VARIABLES=(
     XML_MIGRATION_XML_SOURCE_FOLDER
@@ -164,7 +178,8 @@ declare -a CONFIGURED_VARIABLES=(
     XML_IMPORTING_KERNEL_DABATASE
     XML_IMPORTING_MINIO_HOST
     XML_IMPORTING_MINIO_ACCESS_KEY
-    XML_IMPORTING_MINIO_SECRET_KEY)
+    XML_IMPORTING_MINIO_SECRET_KEY
+    XML_LINKING_TITLE_JSON_FILE)
 
 # Verify configuration variables
 for variable in "${CONFIGURED_VARIABLES[@]}"; do
@@ -214,6 +229,11 @@ read -r -e -p "$(formated_time) Do you wanna import the previous packaged articl
 IMPORT_ARTICLES_ANSWER=${IMPORT_ARTICLES_ANSWER:-0}
 
 ###
+# Import articles question
+read -r -e -p "$(formated_time) Do you wanna link the previous imported articles? (y/N)" LINK_ARTICLES_ANSWER
+LINK_ARTICLES_ANSWER=${LINK_ARTICLES_ANSWER:-0}
+
+###
 # Package block
 if [ "$PACK_XML_ARTICLES_ANSWER" != "${PACK_XML_ARTICLES_ANSWER#[Yy]}" ]; then
     echo "$(formated_time) Starting the Packing process for $PROCESSING_YEAR with output in $SPS_PKG_PATH."
@@ -240,4 +260,15 @@ if [ "$IMPORT_ARTICLES_ANSWER" != "${IMPORT_ARTICLES_ANSWER#[Yy]}" ]; then
     echo "$(formated_time) Finishing importing process."
 else
     echo "$(formated_time) Ignoring importing process."
+fi
+
+###
+# Linking block
+if [ "$LINK_ARTICLES_ANSWER" != "${LINK_ARTICLES_ANSWER#[Yy]}" ]; then
+    echo "$(formated_time) Starting the linking process for $PROCESSING_YEAR."
+    link_articles_to_bundles "$XML_IMPORTING_MONGODB_URI" \
+        "$XML_IMPORTING_KERNEL_DABATASE"
+    echo "$(formated_time) Finishing linking process."
+else
+    echo "$(formated_time) Ignoring linking process."
 fi
