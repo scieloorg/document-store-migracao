@@ -92,7 +92,7 @@ def extract(
     if not html:
         return ""
 
-    page = soup(html, "html.parser")
+    page = soup(html)
 
     body = page.find(html_tag.get("tag_name"), html_tag.get("atrib"))
 
@@ -206,7 +206,6 @@ async def fetch_articles(session, pid, cut_off_mark, output_filepath):
     Exceções:
         Não lança exceções.
     """
-    comp_list = []
     comp_data = {}
 
     for inst in config.get("SITE_INSTANCES"):
@@ -236,9 +235,7 @@ async def fetch_articles(session, pid, cut_off_mark, output_filepath):
     comp_data["similarity_technique"] = "jaccard"
     comp_data["cut_off_mark"] = cut_off_mark
 
-    comp_list.append(json.dumps(comp_data))
-
-    dump_jsonl(output_filepath, comp_list)
+    dump_jsonl(output_filepath, [json.dumps(comp_data)])
 
 
 async def bound_fetch(fetcher, session, pid, sem, cut_off_mark, output_filepath):
