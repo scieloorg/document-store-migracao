@@ -14,13 +14,7 @@ from documentstore_migracao import config
 logger = logging.getLogger(__name__)
 
 
-def article_xml_constructor(file_xml_path: str, dest_path: str, pid_database_engine, in_place: bool) -> None:
-
-    logger.debug("file: %s", file_xml_path)
-
-    parsed_xml = xml.loadToXML(file_xml_path)
-    xml_sps = SPS_Package(parsed_xml)
-
+def register_pid_v3(pid_database_engine, xml_sps):
     pid_v2 = xml_sps.scielo_pid_v2
 
     # VERIFICA A EXISTÊNCIA DO PID V3 NO XC ATRAVES DO PID V2
@@ -38,6 +32,16 @@ def article_xml_constructor(file_xml_path: str, dest_path: str, pid_database_eng
         pid_v3 = pid_manager.get_pid_v3_by_v2(pid_database_engine, pid_v2)
 
         xml_sps.scielo_pid_v3 = pid_v3
+
+
+def article_xml_constructor(file_xml_path: str, dest_path: str, pid_database_engine, in_place: bool) -> None:
+
+    logger.debug("file: %s", file_xml_path)
+
+    parsed_xml = xml.loadToXML(file_xml_path)
+    xml_sps = SPS_Package(parsed_xml)
+
+    register_pid_v3(pid_database_engine, xml_sps)
 
     if in_place:
         new_file_xml_path = file_xml_path
