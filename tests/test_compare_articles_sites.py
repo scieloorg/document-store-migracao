@@ -170,7 +170,7 @@ class TestCompareArticlesSite(TestCase):
         """
         html_body = compare_articles_sites.extract(html, {'class': 'articleSection', 'data-anchor': 'Text'})
 
-        self.assertEqual("", html_body)
+        self.assertEqual("qualquer texto no body", html_body)
 
     def test_extractwith_empty_text_must_return_none(self):
         """

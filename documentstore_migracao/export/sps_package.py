@@ -9,7 +9,7 @@ from lxml import etree
 
 from documentstore_migracao.export import article
 from documentstore_migracao.utils import files, string
-from documentstore_migracao.utils import scielo_ids_generator, xml
+from documentstore_migracao.utils import xml
 from documentstore_migracao.utils.convert_html_body import HTML2SPSPipeline
 from documentstore_migracao import exceptions
 
