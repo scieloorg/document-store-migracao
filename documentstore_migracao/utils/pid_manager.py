@@ -59,6 +59,23 @@ def get_pid_v3_by_v2(engine, pid_v2):
     return sqrs.first()[2]
 
 
+def get_record(engine, pid_v2, pid_v3):
+    """
+    Obtém o pid da versão pid_v2.
+
+    param: engine é uma instância de sqlachemy:create_engine
+
+    param: pid_v2 é uma string Ex: S0006-87051956000100002
+    """
+    conn = get_conn(engine)
+
+    sqrs = conn.execute(
+        "SELECT * FROM pid_versions WHERE v2='%s' and v3='%s'" %
+        (pid_v2, pid_v3)
+    )
+    return sqrs.first()
+
+
 def create_pid(engine, pid_v2, pid_v3):
     """
     Adiciona o pid_v2 e pid_v3 no tabela de pids.
