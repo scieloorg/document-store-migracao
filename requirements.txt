@@ -70,7 +70,7 @@ click==7.1.1
 construct==2.10.56
 ioisis==0.3.0
 JPype1==1.0.1
-ujson==2.0.3
+ujson==5.2.0
 psycopg2-binary==2.8.5
 aiohttp==3.7.3
 tenacity==6.3.1
